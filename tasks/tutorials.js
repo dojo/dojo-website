@@ -49,7 +49,7 @@ module.exports = function (grunt) {
 
 			// We assume that any top-level markdown file is a tutorial.
 			// We record disabled tutorials to hide those from the menu
-			var names = grunt.file.expand({cwd: self.data.src}, ['*.md']),
+			var names = grunt.file.expand({cwd: self.data.src}, ['**/*.md']),
 				tutorials = names.map(function (name) {
 					return {
 						title: name.replace(/_/g, ' ').replace('.md', '').replace(/^\d+-/, ''),

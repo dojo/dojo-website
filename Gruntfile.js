@@ -25,7 +25,7 @@ module.exports = function (grunt) {
 		tutorials: {
 			all: {
 				options: ejsOptions,
-				src: 'src/documentation/**/*',
+				src: 'src/documentation/tutorials/',
 				dest: 'dist/documentation/tutorials/',
 				template: 'src/templates/tutorial.ejs'
 			}
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
 		stylus: {
 			options: {'include css': true},
 			index: {
-				files: {'dist/css/index.css': 'src/css/index.styl'}
+				files: {'dist/css/index.css': 'src/css/index.styl', 'dist/css/tutorials.css': 'src/css/tutorials.styl'}
 			}
 		},
 		connect: {
@@ -71,7 +71,7 @@ module.exports = function (grunt) {
 				tasks: ['stylus', 'copy:images']
 			},
 			md: {
-				files: ['src/tutorials/*.md'],
+				files: ['src/documentation/tutorials/*.md'],
 				tasks: ['tutorials']
 			}
 		},
