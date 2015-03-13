@@ -25,8 +25,8 @@ module.exports = function (grunt) {
 		tutorials: {
 			all: {
 				options: ejsOptions,
-				src: 'src/tutorials/',
-				dest: 'dist/tutorials/',
+				src: 'src/documentation/**/*',
+				dest: 'dist/documentation/tutorials/',
 				template: 'src/templates/tutorial.ejs'
 			}
 		},
@@ -41,9 +41,6 @@ module.exports = function (grunt) {
 			options: {'include css': true},
 			index: {
 				files: {'dist/css/index.css': 'src/css/index.styl'}
-			},
-			tutorials: {
-				files: {'dist/css/tutorials.css': 'src/css/tutorials.styl'}
 			}
 		},
 		connect: {
@@ -62,14 +59,6 @@ module.exports = function (grunt) {
 					dest: 'dist',
 					expand: true
 				}]
-			},
-			tutorialDemos: {
-				files: [{
-					cwd: 'src/tutorials',
-					src: ['demo/**', 'images/**'],
-					dest: 'dist/tutorials',
-					expand: true
-				}]
 			}
 		},
 		watch: {
@@ -84,10 +73,6 @@ module.exports = function (grunt) {
 			md: {
 				files: ['src/tutorials/*.md'],
 				tasks: ['tutorials']
-			},
-			tutorialDemos: {
-				files: ['src/tutorials/demo/**/*.html'],
-				tasks: ['copy:tutorialDemos']
 			}
 		},
 		clean: ['dist']
