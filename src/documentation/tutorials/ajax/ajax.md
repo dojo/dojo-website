@@ -1,3 +1,11 @@
+## Ajax with dojo/request
+
+[dojo/request](http://dojotoolkit.org/reference-guide/1.10/dojo/request.html) is a new API (introduced in Dojo 1.8) for making requests to a server from the client.  This tutorial introduces the `dojo/request` API:  you'll learn how to request a text file from the server, handle errors if they occur, post information to the server, take advantage of the notify API, and use the registry to use the same code to request data from different locations.
+
+*   <span>Difficulty:</span> Beginner
+*   <span>Dojo Version:</span> 1.10
+
+
 ### Getting Started
 
 `dojo/request` allows you to send and receive data to and from the server without reloading the page
@@ -22,6 +30,7 @@ require(["dojo/request"], function(request){
 		}
 	);
 });</pre>
+
 
 In a browser, the code above will execute an HTTP GET request using an `XMLHttpRequest` to
 `helloworld.txt` and return a
@@ -76,6 +85,7 @@ require(["dojo/request"], function(request){
 });
 </pre>
 
+
 This example executes an HTTP POST request to `post-content.php`; a simple object (`data`)
 is also serialized and sent as POST data with the request as well as an "X-Something" header. When the server
 responds, the payload is used as the value of the promise returned from `request.post`.
@@ -112,6 +122,7 @@ require(["dojo/dom", "dojo/on", "dojo/request", "dojo/domReady!"],
 );
 
 </pre>
+
 [View Demo](demo/dojo-request-xhr.php)
 
 #### Login demo
@@ -147,6 +158,7 @@ require(["dojo/dom", "dojo/on", "dojo/request", "dojo/dom-form"],
 );
 
 </pre>
+
 [View Demo](demo/dojo-request-xhr-post.php)
 
 #### Headers demo
@@ -199,6 +211,7 @@ require(["dojo/dom", "dojo/on", "dojo/request", "dojo/dom-form"],
 );
 
 </pre>
+
 [View Demo](demo/dojo-request-xhr-header.php)
 
 ### JSON (JavaScript Object Notation)
@@ -223,6 +236,7 @@ require(["dojo/dom", "dojo/on", "dojo/request", "dojo/dom-form"],
 		"value":false
 	}]
 }</pre>
+
 
 When `handleAs` is set to `"json"`, `dojo/request` treats the response payload
 as JSON data and parses it into a JavaScript object.
@@ -266,6 +280,7 @@ require(["dojo/dom", "dojo/request", "dojo/json",
 );
 </pre>
 
+
 In addition to the encoding the data as JSON in the response, set the [Content-Type](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17) header to _application/json_, either using server configuration such as [Apache's AddType](http://httpd.apache.org/docs/2.0/mod/mod_mime.html#addtype) or adding it to the header with the server side code.
 
 [View Demo](demo/dojo-request-json.php)
@@ -307,6 +322,7 @@ require(["dojo/dom", "dojo/on", "dojo/request/script",
 	});
 });
 </pre>
+
 
 Since the response is JavaScript, not JSON, the **Content-Type** header on the response should be _application/javascript_.
 
@@ -350,6 +366,7 @@ require(["dojo/dom", "dojo/on", "dojo/request/script",
 	});
 });
 </pre>
+
 [View Demo](demo/dojo-request-script-pulls.php)
 
 ### Reporting Status
@@ -414,6 +431,7 @@ require(["dojo/dom", "dojo/request", "dojo/request/notify",
 	}
 );
 </pre>
+
 [View Demo](demo/dojo-request-notify.php)
 
 ### dojo/request/registry
@@ -425,6 +443,7 @@ require(["dojo/dom", "dojo/request", "dojo/request/notify",
 <pre class="brush: js; html-script: false;">
 request.register(url, provider, first);
 </pre>
+
 
 #### dojo/request/registry parameters
 
@@ -499,6 +518,7 @@ require(["dojo/request/registry", "dojo/request/script", "dojo/dom",
 	}
 );
 </pre>
+
 [View Demo](demo/dojo-request-registry.php)
 
 ### Best Practices
@@ -515,3 +535,14 @@ Best practices for using `dojo/request` include:
 ### Conclusion
 
 `dojo/request` provides a cross-browser compliant AJAX interface for requests to the current domain and others, including graceful error handling, support for notification, and request routing based on URL.  The promise returned by `dojo/request` is a [promise](/reference-guide/1.10/dojo/promise/Promise.html), allowing a series of requests to be issued and the responses processed asynchronously.  Pages can include content from multiple sources and use the data from each request as soon as it is available.  Turbocharge your pages with `dojo/request`!
+
+### Resources
+
+*   [dojo/request Documentation](/reference-guide/1.10/dojo/request.html)
+*   [Getting Jiggy with JSONP Tutorial](../jsonp)
+*   [Getting Started with Deferreds Tutorial](../deferreds)
+*   [Dojo Deferreds and Promises Tutorial](../promises)
+*   [JSON](http://json.org/) Introducing JSON
+*   [JSONP](http://json-p.org/) JSON-P Documentation
+*   [Comparison of GET and POST](http://www.diffen.com/difference/Get_vs_Post)
+*   [Future and Promises](http://en.wikipedia.org/wiki/Futures_and_promises) Wikipedia article

@@ -62,8 +62,9 @@ module.exports = function (grunt) {
 			// parsing the markdown of each tutorial and rendering
 			// inside a tutorial template specified via the task config
 			names.forEach(function (name) {
+
 				var src = self.data.src + name,
-					dest = self.data.dest + name.replace('.md', '').replace(/^\d+-/, '').toLowerCase() + '.html';
+					dest = self.data.dest + name.split('/')[0].toLowerCase() + '/index.html';
 
 				grunt.file.copy(src, dest, {
 					process: function (src) {
