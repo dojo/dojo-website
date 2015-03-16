@@ -5,14 +5,16 @@ module.exports = function (grunt) {
 	// If this site is served from a subdirectory,
 	// it can be passed in using the --root=/subdir/path option
 	var root = grunt.option('root') || '/';
+	var currentDojoVersion = '1.10';
+	var refGuideVersion = grunt.option('dojo') || currentDojoVersion;
 
 	var ejsOptions = {
 		root: root,
-		githubUrl: 'https://github.com/SitePen/dojo-website',
-		documentationUrl: 'https://github.com/SitePen/dojo-website',
+		currentDojoVersion: currentDojoVersion,
+		githubUrl: 'https://github.com/dojo',
 		tutorialsUrl: root + 'documentation/tutorials',
-		downloadUrl: root + '#download',
-		latestArchiveUrl: 'https://github.com/SitePen/dstore/releases/latest'
+		refguideUrl: root + 'documentation/reference-guide/' + currentDojoVersion,
+		downloadUrl: root + '#download'
 	};
 
 	grunt.initConfig({
@@ -28,6 +30,13 @@ module.exports = function (grunt) {
 				src: 'src/documentation/tutorials/',
 				dest: 'dist/documentation/tutorials/',
 				template: 'src/templates/tutorial.ejs'
+			}
+		},
+		// Compile the reference guide
+		exec: {
+			refguide: {
+				cwd: 'src/documentation/reference-guide',
+				cmd: 'sphinx-build -b html -a -c source -d source/'+refGuideVersion+' source/'+refGuideVersion+' ../../../dist/documentation/reference-guide/'+refGuideVersion
 			}
 		},
 		ejs: {
@@ -87,9 +96,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-exec');
 	grunt.loadTasks('tasks');
 
 	grunt.registerTask('deploy', ['clean', 'ejs', 'stylus', 'copy', 'tutorials']);
 	grunt.registerTask('default', ['clean', 'ejs', 'stylus', 'copy', 'tutorials']);
+	grunt.registerTask('refguide',['exec']);
 	grunt.registerTask('develop', ['clean', 'ejs', 'stylus', 'copy', 'tutorials', 'connect', 'watch']);
 };

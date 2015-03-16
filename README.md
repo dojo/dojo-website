@@ -6,3 +6,15 @@
 2. `bower install`
 3. `grunt develop`
 4. Visit http://localhost:1337/
+
+
+
+## Building Reference Guide
+
+### Requirements
+
+* Sphinx
+
+1. `sudo easy_install pip`
+2. `sudo pip install sphinx`
+3. `grunt refguide`
