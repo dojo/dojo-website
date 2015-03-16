@@ -10,7 +10,7 @@ module.exports = function (grunt) {
 		root: root,
 		githubUrl: 'https://github.com/SitePen/dojo-website',
 		documentationUrl: 'https://github.com/SitePen/dojo-website',
-		tutorialsUrl: root + 'tutorials',
+		tutorialsUrl: root + 'documentation/tutorials',
 		downloadUrl: root + '#download',
 		latestArchiveUrl: 'https://github.com/SitePen/dstore/releases/latest'
 	};
@@ -25,16 +25,19 @@ module.exports = function (grunt) {
 		tutorials: {
 			all: {
 				options: ejsOptions,
-				src: 'src/documentation/tutorials/',
+				src: 'src/documentation/tutorials/**/*.md',
 				dest: 'dist/documentation/tutorials/',
 				template: 'src/templates/tutorial.ejs'
 			}
 		},
 		ejs: {
-			index: {
+			all: {
 				options: ejsOptions,
-				src: ['src/index.ejs'],
-				dest: 'dist/index.html'
+				cwd: 'src',
+				src: ['**/*.ejs', '!templates/**/*'],
+				dest: 'dist',
+				expand: true,
+				ext: '.html'
 			}
 		},
 		stylus: {
