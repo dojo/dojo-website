@@ -25,7 +25,7 @@ module.exports = function (grunt) {
 		tutorials: {
 			all: {
 				options: ejsOptions,
-				src: 'src/documentation/tutorials/**/*.md',
+				src: 'src/documentation/tutorials/',
 				dest: 'dist/documentation/tutorials/',
 				template: 'src/templates/tutorial.ejs'
 			}
@@ -74,7 +74,7 @@ module.exports = function (grunt) {
 				tasks: ['stylus', 'copy:images']
 			},
 			md: {
-				files: ['src/documentation/tutorials/*.md'],
+				files: ['src/documentation/tutorials/**/*.md'],
 				tasks: ['tutorials']
 			}
 		},

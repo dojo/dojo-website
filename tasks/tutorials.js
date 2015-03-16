@@ -45,6 +45,7 @@ module.exports = function (grunt) {
 
 
 		function generate() {
+			grunt.log.ok(self.data.src);
 			grunt.log.ok('Generating tutorials...');
 
 			// We assume that any top-level markdown file is a tutorial.
