@@ -1,0 +1,648 @@
+.. _releasenotes/1.5:
+
+======================
+Dojo 1.5 Release Notes
+======================
+
+.. contents ::
+   :depth: 3
+
+Browser support
+===============
+
+The following browsers are supported. If a browser is not supported, it still may work, but no effort is taken to test unsupported browsers and any specific fix for an unsupported browser is likely not to be done:
+
+
+* Firefox 3.5/3.6 (Dojo 1.5.2+ also supports Firefox 4-10)
+* Safari 4/Safari 5 and Chrome 5
+* IE6, IE7, IE8
+* Opera 10.50 and later (Dojo core only)
+
+
+Dojo Core
+=========
+
+Running Dojo in a Firefox extension
+-----------------------------------
+
+If you are using a source distribution of Dojo and want to use it inside a Firefox extension, be sure to set djConfig.hostEnv = "ff_ext" before including dojo.js for it to work correctly.
+
+dojo.cldr
+---------
+
+Updated cultural tables to use CLDR 1.8 (unicode.org/cldr) for formatting of numbers, currencies, and dates.
+
+dojo.Deferred, dojo.when
+------------------------
+
+dojo.Deferred was refactored for side effect free chaining, such that you can execute code like:
+
+.. js ::
+
+    var def = dojo.xhr(...);
+    def.then(...);
+    def.then(...);
+
+
+without worrying that the first then() call will affect the value passed to the second then call.
+
+It also allows chaining where each element in the chain does affect the value, like this:
+
+.. js ::
+
+      dojo.xhr(...).then(function(val){ return dojo.toJson(val); }).then(...);
+
+Finally, dojo.when() is a method that will take either a Deferred or a plain value and execute some code when that value is ready (for a Deferred) or immediately otherwise.
+
+.. js ::
+
+    // val might be a Deferred, or it could be (for example) a String
+    dojo.when(val, function(val){
+          ...
+    });
+
+See `blog post <http://www.sitepen.com/blog/2010/05/03/robust-promises-with-dojo-deferred-1-5/>`_ for more information.
+
+dojo.window, dojo.uacss
+-----------------------
+
+Some functions from dijit have been moved to dojo core (with stubs left in dijit for backwards compatibility).
+
+* dojo.require("dojo.uacss") will add classes to the <html> node like dj_ie, representing the browser, browser version, box model, etc.  Formerly dojo.require("dijit.sniff").
+* dojo.window.getBox() gets the viewport size.   Formerly dijit.getViewport().
+* dojo.window.get() converts a document to the corresponding window.   Formerly dijit.getDocumentWindow()
+* dojo.window.scrollIntoView(): scrolls a node into view, similar to node.scrollIntoView() but working around browser quirks.   Formerly dijit.scrollIntoView().
+
+dojo.Stateful
+-------------
+
+A new generic interface and base class for getting, setting, and watching for property changes (with getters and setters) in a consistent manner.
+
+See also:
+
+* :ref:`dojo.Stateful <dojo/Stateful>`
+* `Ticket #10839 <http://bugs.dojotoolkit.org/ticket/10839d>`_
+* `Stateful blog post <http://www.sitepen.com/blog/2010/05/04/consistent-interaction-with-stateful-objects-in-dojo/>`_
+
+
+Dijit
+=====
+
+Claro theme
+-----------
+A new theme for Dijit and the dojox.Grid is called Claro (nee Lucid).  The Claro theme has several aims:
+
+   - to deliver a modern and engaging visual style for rich internet applications using the Dojo Dijit library, with the visual enhancements of transparent gradient background images, drop shadows, and appropriate CSS animation (on webkit and mozilla);
+   - to deliver the 'fit and finish' professional quality with consistent padding, font treatment and alignment; and fix missing expected behavioral states (hover, active and selected) in widgets;
+   - to improve ease of customizing the theme CSS that allows designers to easily create their own theme by styling elements such as padding and color, without designing new background images.
+
+The Claro theme supports both left-to-right (LTR) and right-to-left (RTL) display, and all Dojo 1.5 supported browsers, albeit with graceful degradation of some styling: no 24 bit PNG's in IE6; and no rounded corners in IE6, 7 and 8.
+
+
+See :ref:`Themes and Theming <dijit/themes>` for more information on Dijit themes (Claro, Tundra, Nihilo and Soria)
+and 1.5 theme updates.
+
+Notes on switching from another theme to claro
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Claro's .dijitTreeIcon class doesn't specify a width/height.   If you are defining custom icons for tree folders (or for anything else, for that matter), be sure that they specify a width/height.
+
+Also, in TabContainer, tabs without icons will be <16px tall, which will cause a height disparity if some of your tabs have icons and others don't.  You can either add a min-height rule:
+
+.. css ::
+
+    .dijitTab .tabLabel {
+        min-height: 12px;
+    }
+
+or alternately specify a 1x16 blank icon for all of your "non-icon" tabs.
+
+ColorPalette
+------------
+
+The styling was changed to put a white border around each color swatch, so that it's clear when the dark swatches are being hovered or focused.   In addition, focus was decoupled from hovering.
+
+Additionally, ColorPalette now supports set("value", ...) and get("value"), and indicates the currently selected color via a thin black border around that color.   The editor's foreground and background color plugins also indicate the color of the currently selected text (or if no text is selected, the text around the caret).
+
+Dialog
+------
+
+The dialog widget now supports an "action bar", a gray bar at the bottom of the dialog with action buttons, typically OK and cancel.  Simply create your dialog as before but separate the dialog contents from the buttons like this:
+
+.. html ::
+
+    <div dojoType="dijit.Dialog" id="myDialog">
+        <div class="dijitDialogPaneContentArea">
+            ...
+        </div>
+
+        <div class="dijitDialogPaneActionBar">
+            <button dojoType="dijit.form.Button" type="submit" id="ok">OK</button>
+            <button dojoType="dijit.form.Button" type="button" onClick="dijit.byId('myDialog').onCancel();"
+                    id="cancel">Cancel</button>
+        </div>
+    </div>
+
+
+Input Widgets
+-------------
+
+new placeHolder parameter
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The HTML5 placeholder parameter (also known as a "hint") has been implemented for all TextBox based widgets.   Placeholder is gray example or hint text that the widget displays inside the input area of empty form fields, such as "John Doe" or "Your Name".   The text disappears when the user focuses the field.
+
+In order to use it, submit a parameter "placeHolder" to your widget:
+
+.. js ::
+
+   myTextBox = new dijit.form.TextBox({
+       name: "firstname",
+       value: "" /* no or empty value! */,
+       placeHolder: "type in your name"
+   }, "firstname");
+
+standardized width/height of input widgets
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Also, the width/height of the input widgets (TextBox, ValidationTextBox, ComboBox/FilteringSelect, NumberSpinner) has been standardized.   Previously the height or width of these widgets could differ by a few pixels making the UI look a little off.
+
+Bidi enhancements
+-----------------
+
+An app can now set text-rendering direction per-widget, via the dir attribute.  Possible settings are "ltr" (left-to-right, used by most languages) and "rtl" (for Arabic and Hebrew).   Previously all the widgets rendered in the same direction, the direction of the page. Note that this attribute can only be set at creation. For example:
+
+.. js ::
+
+    new dijit.Editor({dir: "rtl"}, srcNodeRef);
+    new dijit.Editor({dir: "ltr"}, srcNodeRef);
+
+
+Also, the parser has been refactored and now is cognizant of dir=rtl and dir=ltr settings on nodes (with or without dojoType specified).   If a node has a dir setting, then all the widgets beneath that node are created with that dir attribute specified. For example:
+
+.. html ::
+
+
+    <div dir="ltr">
+        <input dojoType="dijit.TextBox">
+        <input dojoType="dijit.TextBox">
+        <input dojoType="dijit.TextBox">
+    </div>
+    <div dir="rtl">
+        <input dojoType="dijit.TextBox">
+        <input dojoType="dijit.TextBox">
+        <input dojoType="dijit.TextBox">
+    </div>
+
+
+
+The parser can also take a flag specifying default dir and lang for inherited widgets:
+
+.. js ::
+
+      dojo.parser.parse({rootNode: ..., inherited: {dir: rtl, lang: "ar-eg"} });
+
+(In general though it's not necessary to specify, as the parser will pick up the documents default direction and language.)
+
+
+These two changes allow things like a portal page where different portlets are in different languages, or a page in an RTL language like Hebrew or Arabic but with one section in English.
+
+Tundra and Claro themes support mixed RTL and LTR pages.
+
+Internally, this feature is implemented by dir=rtl widgets applying a CSS class like dijitTextBoxRtl (the widget's baseClass + "Rtl") to the widget's root node, in addition to applying the plain baseClass like dijitTextBox.   The tundra and claro themes have been modified to reference those per widget CSS classes rather than referencing the dijitRtl class applied to the BODY node.
+
+Finally, note that although (as before) lang can be set on a per-widget basis, the translations used by dojo (default tooltips, loading messages, etc.) are still one language per page.
+
+_CssStateMixin
+--------------
+
+New mixin for widgets that set CSS classes on their nodes depending on hover/active/focused state, and also semantic state (checked, selected, disabled, etc.).  Most of the dijit widgets have been updated to use this mixin.   As a result, there are more selectors available than before, such as CSS classes for when the slider handle is hovered or when the increment button is depressed.
+
+For the following widgets, the behavioral states of hover, active (mouse down) and selected (focus), have been added:
+
+    | dijit.Calendar
+    | dijit.ColorPalette
+    | dijit.Dialog
+    | dijit.Editor
+    | dijit.InlineEditBox
+    | dijit.Menu
+    | dijit.MenuBar
+    | dijit.ProgressBar
+    | dijit.TitlePane
+    | dijit.Toolbar
+    | dijit.Tree
+    | dijit.layout.AccordionContainer
+    | dijit.layout.BorderContainer
+    | dijit.layout.ContentPane
+    | dijit.layout.TabContainer
+    | dojox.grid.EnhancedGrid
+    | dojox.grid.enhancedDataGrid
+
+
+To use this mixin in custom widgets:
+
+1. require _CssStateMixin and mix it in to the widget:
+
+   .. js ::
+
+       dojo.require("dijit._CssStateMixin");
+       ...
+       dojo.declare(myWidget, [ ..., dijit._CssStateMixin], ...
+
+   *Note that all form widgets already inherit _CssStateMixin through _FormWidget, so they should skip this step*
+
+
+2. set baseClass if not already set *(form widgets already set baseClass)*
+
+   .. js ::
+
+       baseClass: "dijitSlider",
+
+3. (If you want CSS class settings on widget subnodes, like the up/down buttons on the slider, then) set cssStateNodes attribute:
+
+   .. js ::
+
+       cssStateNodes: {
+          incrementButton: "dijitSliderIncrementButton",
+          decrementButton: "dijitSliderDecrementButton",
+          focusNode: "dijitSliderThumb"
+       }
+
+   The left side (ex: incrementButton) is the dojoAttachPoint name, and the right side ("dijitSliderIncrementButton") is used to construct the CSS class name to apply to the node.
+
+After the steps above, CSS classes will automatically be applied to the slider domNode (dijitSliderHover, dijitSliderFocused etc.) in addition to the specified sub nodes (this.incrementButton --> "dijitSliderIncrementButtonActive" CSS class etc.).
+
+Note that there's no event handling code for hover/active/focus CSS needed in the widget template
+
+
+
+Tree
+----
+
+Decoupled concepts of "focused node" and "selected node", so that:
+
+1. A tree doesn't start with any node mark as selected. App needs to call set("selectedItem", ...) or set("path", ...) to mark the currently selected node. Clicking a node will also select it, but not clicking the expando (plus-sign).
+
+2. Using arrow keys to navigate in a Tree will not change the selected item.
+
+
+
+new get()/set() and deprecated attr()
+-------------------------------------
+
+In order to make code clearer, Dojo Toolkit 1.5 will start to use the get()/set() pattern for code-controlled property access instead of the former used .attr()-Method, which has handled both gets and sets.
+
+Coming with this, the recommended way to set properties of Dijits changes from
+
+.. js ::
+
+   widget.attr('property', 'value'); // old way and now deprecated for Dijits
+
+to
+
+.. js ::
+
+   widget.set('property', 'value'); // new since 1.5
+
+The same for getting properties:
+
+.. js ::
+
+   widget.attr('property'); // old way and now deprecated for Dijits
+
+changes to
+
+.. js ::
+
+   widget.get('property'); // new since 1.5
+
+
+DojoX
+=====
+
+Charting
+--------
+
+Major update of charting themes:
+
+* Comprehensive support for space-based gradients.
+* Themes can specify arbitrary fills, including linear and radial gradients.
+* Unified theme overrides at the plot, series, and individual data value level.
+* Scatter plot implements a gradient field-style color-coding.
+* New utilities to build your own gradients, and gradient-based charting themes.
+* Brand new charting themes based on new facilities:
+
+  * Julie by Julie Santilli -- versatile clean theme with whopping 32 different gradients.
+  * Chris by Christopher Anderson -- bright crisp-looking presentation-ready theme.
+  * Tom by Tom Trenka -- designed for dark backgrounds this theme makes your data shine on a page.
+  * PrimaryColors -- subtle gradients balance bright colors refreshing this classic primary color based theme.
+  * ThreeD -- extends PrimaryColors by adding 3D cylinder look to all bar- and column-based plots, and subtle shadows to others.
+  * Electric by Tom Trenka -- present your data with bright neon colors on dark background.
+  * Charged by Tom Trenka -- a twin of Electric but for light backgrounds.
+  * Renkoo by Tom Trenka -- nostalgic pastel colors for dark backgrounds.
+
+General enhancements:
+
+* Several incremental enhancements to the DataPresentation widget, including support for custom tooltips, layout/wrapping options for the chart legend, ability to suppress the chart labels, and 'hooks' into the rendering.
+* Bar and Column-based charts now support objects as values (you can specify custom tooltips, colors, fills).
+* Charting animation (grow/zoom) for areas, lines and markers plot.
+* Support for missing values (nulls) across all plots.
+* Added new type of axis: the Invisible axis. While it is not drawn (like the empty axis), you can still affect plot's behavior by change geometric properties of this axis.
+* Added light-weight reordering of plots and series.
+* Event-related enhancements:
+
+  * "Indirect" events are sent to all subscribers to notify them that the other plot has an event in progress. It gives them a chance to update controlled visuals and UI elements.
+  * Programmatic events: fire existing events, or your own synthetic events causing actions to modify your plots dynamically.
+
+* Added DataSeries: a bridge for dojo.data stores. It can be used as a regular series, and supports all proper dojo.data APIs including the notifications updating a chart on the fly, when the underlying data is updated.
+* Added rotated axis labels.
+* Numerous bug fixes.
+
+CSS3
+----
+New dojo.style extension to support the transform and transform-origin properties:
+
+.. js ::
+
+   dojo.require("dojox.html.ext-dojo.style");
+   dojo.style("myNode", "transformOrigin", "0 0");
+   dojo.style("myNode", "transform", "skew(10deg) rotate(20deg");
+
+Internet Explorer 5.5+, Safari 3.1+, Firefox 3.5+, Chrome/Chromium and Opera 10.50+ are supported.
+
+DnD
+---
+
+New sub-project for dojo.dnd-related improvements. It introduces:
+
+* Selection using a bounding box.
+* Programmatic selection/deselection of DnD items.
+
+
+Editor
+------
+
+* Smiley plugin (existed in 1.4 but wasn't working; now it does)
+
+* :ref:`dojox.editor.plugins.CollapsibleToolbar <dojox/editor/plugins/CollapsibleToolbar>` -- A plugin that modifies the header of the grid and converts it to a collapsible toolbar.  This plugin has been well tested and is known to work well in all browsers supported by dojo.
+
+* :ref:`dojox.editor.plugins.Blockquote <dojox/editor/plugins/Blockquote>` -- A plugin that adds a blockquoting button to the toolbar.  All text that is part of a block of text will be wrapped in a blockquote tag when applied, or removed from a blockquote tag when untoggled.  It will also work across large selections, blockquoting each chunk of text and inline elements as a blockquote block.  This plugin has been well tested and is known to work well in all browsers supported by dojo.
+
+* :ref:`dojox.editor.plugins.PasteFromWord <dojox/editor/plugins/PasteFromWord>` -- A plugin that adds a 'paste from word' icon to the toolbar.  It opens a dialog where content from Word or similar programs can be pasted in, then filters are run against the input to remove extraneous HTML that causes the editor difficulty, leaving the injected content cleaner HTML.
+
+* :ref:`dojox.editor.plugins.InsertAnchor <dojox/editor/plugins/InsertAnchor>` -- A plugin that adds an 'insert anchor' icon to the toolbar.  An anchor is a specialized <a> tag used for linking to specific sections of a document.  The plugin highlights (makes visible), via css what is an anchor in the page.  It also allows for double-click editing of anchors.
+
+* :ref:`dojox.editor.plugins.FindReplace <dojox/editor/plugins/FindReplace>` -- This plugin was updated to improve its layout and keyboard interaction based on input from a user experience development team.  Feature-wise it remains the same.
+
+* :ref:`dojox.editor.plugins.TextColor <dojox/editor/plugins/TextColor>` - A plugin that implements color selectors for text color and background color of test using the dojox.widget.ColorPicker instead of dijit.ColorPalette.
+
+* :ref:`dojox.editor.plugins.NormalizeStyle <dojox/editor/plugins/NormalizeStyle>` -- An experimental headless plugin that adds pre and post filters to convert incoming and outgoing editor content into CSS styling (use of span with style attributes), or semantic (use of <b>, </i>, type tags), for common formatting options. The mode it uses for output is configurable. The mode it uses for input is determined by browser to try and use the right input mode so that the native browser commands operate reasonably well on the input.
+
+* :ref:`dojox.editor.plugins.StatusBar <dojox/editor/plugins/StatusBar>` --  An experimental plugin that adds a new footer bar to the editor that allows users to post status to the editor.  The posting can be done through direct setting of the value attribute of editor.statusBar, or via a topic.  It also has an optional 'resizer' handle for use when the editor is outside of a sizing content pane.
+
+
+Geo
+---
+
+New sub-project for geographical-related code. The first release introduces a map-based charting. The map of US states is included as an example.
+
+
+GFX
+---
+
+* VML renderer simulates linear gradients of SVG now.
+* SVGWeb (SVG on Flash) is supported as an option for SVG renderer. Useful if you stuck with supporting IE6-IE8 and don't want to use VML.
+* Batch support for SVG operations speeds up the creation time for big scenes.
+* Numerous bugfixes.
+
+Lang
+----
+
+Added new module: :ref:`dojox.lang.async <dojox/lang/async>`. It helps to arrange the order of asynchronous operations (the ones that return dojo.Deferred). Following arrangements are supported:
+
+* Sequentially: start the next operation, as soon as the previous one is finished successfully.
+* In parallel: start all operations at the same time and wait for all of them to finish.
+* Competitively: start all operations in parallel and wait until the first one finishes, then cancel the remaining ones.
+* Selectively: emulates the switch() statement --- run an operation asynchronously, and depending on its result select and run another one from an array of choices.
+* Selectively II: emulates the if() statement --- run an operation asynchronously, and depending on its result select and run another one from two choices.
+* Continuously: emulates the while() loop --- run an operation asynchronously, and depending on its result run another operation asynchronously, and repeats the loop, or break the loop.
+
+Adapter modules are provided for common asynchronous operations: events, topics, and timers.
+
+Using this module it is possible to build highly asynchronous complex operations using simple building blocks.
+
+Layout
+------
+
+GridContainer is revamped using `MDnD`_, GridContainerLite is introduced. The usage of GridContainer remains more or less the same, with the only change being the acceptTypes attribute.  Previously this accepted a comma separated list of class names, e.g. 'dojox.widget.Portlet,dijit.layout.ContentPane'.  This has changed to accept any arbitrary string, which should match up to the 'dndType' attribute on the child widgets, e.g. on the GridContainer, acceptTypes="Portlet,SomeCustomWidget" , and on the child widgets, dndType="Portlet" or dndType="SomeCustomWidget
+
+
+MDnD
+----
+
+dojox.mdnd implements Moveable DnD using an interface similar to dojo.dnd. You can move nodes between containers without using the avatar. This new facility is especially useful for organizing panel-based user interfaces.
+
+
+Mobile
+------
+
+dojox.mobile is set of lightweight widgets designed specifically for mobile plans, with themes for iPhone and android.   It supports buttons, on/off switch, lists "tab container", etc
+
+
+Util
+====
+
+Build System/buildscripts
+-------------------------
+
+* By default the copyTests option defaults to false instead of true now. This was done to help reduce the possibility of copying tests in their builds, extra files and more security concerns to worry about.
+* Updated cldr scripts to use CLDR version 1.8 (see dojo.cldr)
+
+
+Migration
+=========
+
+As usual dojo is API backwards-compatible with previous 1.x versions.   There were however some CSS changes, plus a few gotchas.
+
+
+get/set
+-------
+attr() is being phased out in favor of get() and set().   The old attr() is still supported (with a deprecation warning) so old code
+should continue to work.
+
+However, if you have classes that define custom get()/set() methods, they will conflict with the get()/set() methods added to _Widget, or
+with any class that extends dojo._Stateful.
+
+Also, dojo.connect() calls on attr() should be changed to connecting to set().
+
+dijit.popup
+-----------
+
+Dijit.popup shouldn't be shortcutted. This will work:
+
+.. js ::
+
+   dijit.popup.open({...});
+
+However, this will not:
+
+.. js ::
+
+   var open = dijit.popup.open;
+   open({...});
+
+
+_Container.getChildren()
+------------------------
+Code like
+
+.. js ::
+
+   myWidget.getChildren().forEach(...);
+
+should be changed to
+
+.. js ::
+
+   dojo.forEach(myWidget.getChildren(), ...);
+
+
+Although getChildren() was always documented as returning a plain array, in version 1.4 it actually returned an array with methods like forEach() and filter(), so some user code may be depending on that.
+
+
+form widgets
+------------
+If you have custom widgets extending _FormWidget, with templates referencing ${nameAttrSetting}, should change the reference to ${!nameAttrSetting}.  This is for issues with escaping special characters.
+
+
+TextBox
+-------
+The TextBox template was changed to be similar to ValidationTextBox, where the <input> is surrounded by a <div>.
+
+For a TextBox with id=foo, to apply styling to the <input>, as before, make a rule on #foo:
+
+.. css ::
+
+    #foo { font: ... }
+
+To apply styling to the outer node, make a rule on #widget_foo:
+
+.. css ::
+
+    #widget_foo { margin: 2em; }
+
+
+See `#11133 <http://bugs.dojotoolkit.org/ticket/11133>`_ for more details.
+
+Dijit CSS
+---------
+
+If you have modified widget templates to dijit widgets, you will probably have some onmouseenter/onmouseleave/onfocus/onblur handlers that should be removed.   In particular, _onMouse() has been removed from _FormWidget so you should remove calls to it from custom templates.
+
+In addition, if you have custom CSS rules, there were a few changes about form widget classes with nested buttons, seen in http://bugs.dojotoolkit.org/changeset/21117:
+
+To update CSS class names in your custom CSS rules, run the script dijitCss14to15.sed in util/migration.   (If you are running windows you'll need cygwin or some unix utilities):
+
+.. code-block:: sh
+
+    sed -f dojoPath/util/migration/dijitCss14to15.sed -i .bak $(find myCssDirectoryPath -name '*.css' -print)
+
+
+Alternately you can manually update the names as per the tables below.
+
+Spinner:
+
+====================================================== =============================================        ===========
+Old                                                    New                                                  Description
+====================================================== =============================================        ===========
+.dijitSpinnerUpArrowHover .dijitUpArrowButton          .dijitSpinner .dijitUpArrowButtonHover
+.dijitSpinnerUpArrowActive .dijitUpArrowButton         .dijitSpinner .dijitUpArrowButtonActive
+.dijitSpinnerDownArrowHover .dijitDownArrowButton      .dijitSpinner .dijitDownArrowButtonHover
+.dijitSpinnerDownArrowActive .dijitDownArrowButton     .dijitSpinner .dijitDownArrowButtonActive
+====================================================== =============================================        ===========
+
+ComboButton:
+
+====================================================== =============================================        ===========
+Old                                                    New                                                  Description
+====================================================== =============================================        ===========
+.dijitComboButtonHover .dijitButtonContents            .dijitComboButton .dijitButtonContentsHover
+.dijitComboButtonActive .dijitButtonContents           .dijitComboButton .dijitButtonContentsActive
+.dijitComboButtonDownArrowHover .dijitDownArrowButton  .dijitComboButton .dijitDownArrowButtonHover
+.dijitComboButtonDownArrowActive .dijitDownArrowButton .dijitComboButton .dijitDownArrowButtonActive
+====================================================== =============================================        ===========
+
+
+Other changes occurred to CSS selectors to standardize the names, as follows:
+
+Accordion:
+
+====================================================== =============================================        ===========
+Old                                                    New                                                  Description
+====================================================== =============================================        ===========
+.dijitAccordionFocused                                 .dijitAccordionTitleFocused                          The accordion title is focused, not the pane contents
+.dijitAccordionTitle-hover                             .dijitAccordionTitleHover
+.dijitAccordionTitle-selected                          .dijitAccordionTitleSelected
+====================================================== =============================================        ===========
+
+In addition, the accordion layout was changed so that every pane is surrounded by a dijitInnerAccordionContainer <div>, which holds the title and the content, similar to a TitlePane.   If you are subclassing AccordionContainer or doing something else related to the internals of AccordionContainer you may need to update your code.
+
+TabContainer:
+
+====================================================== =============================================        ===========
+Old                                                    New                                                  Description
+====================================================== =============================================        ===========
+.dijitTab .closeButton                                 .dijitTabCloseButton
+.dijitTab .closeButton-hover                           .dijitTabCloseButtonHover                            close button for individual tab
+.dijitTabBtnDisabled                                   .dijitTabDisabled                                    left and right scroll buttons on tab strip
+.dijitTab .closeImage                                  .dijitTabCloseIcon                                   icon inside of close button
+.dijitTab .closeText                                   .dijitTabCloseText                                   text inside of close button, for a11y
+.tabStripButton img                                    .dijitTabStripIcon                                   class for tabstrip's scroll-left, scroll-right, and menu icons
+.tabStripMenuButton img                                .dijitTabStripMenuIcon                               icon to show menu (listing all tabs)
+.tabStripSlideButtonLeft img                           .dijitTabStripSlideLeftIcon                          icon to scroll tabs to left
+.tabStripSlideButtonRight img                          .dijitTabStripSlideRightIcon                         icon to scroll tabs to right
+====================================================== =============================================        ===========
+
+Dialog:
+
+====================================================== =============================================        ===========
+Old                                                    New                                                  Description
+====================================================== =============================================        ===========
+.dijitDialogCloseIcon-hover                            .dijitDialogCloseIconHover
+====================================================== =============================================        ===========
+
+Tree:
+
+====================================================== =============================================        ===========
+Old                                                    New                                                  Description
+====================================================== =============================================        ===========
+.dijitTreeNodeHover                                    .dijitTreeRowHover                                   on the TreeNode.rowNode domNode
+.dijitTreeNodeSelected                                 .dijitTreeRowSelected
+====================================================== =============================================        ===========
+
+
+TitlePane:
+
+====================================================== =============================================        ===========
+Old                                                    New                                                  Description
+====================================================== =============================================        ===========
+.dijitTitlePaneTitle-hover                             .dijitTitlePaneTitleHover
+====================================================== =============================================        ===========
+
+
+InlineEditBox:
+
+====================================================== =============================================        ===========
+Old                                                    New                                                  Description
+====================================================== =============================================        ===========
+.dijitInlineEditBoxDisplayMode-hover                   .dijitInlineEditBoxDisplayModeHover
+.dijitInlineEditBoxDisplayMode-disabled                .dijitInlineEditBoxDisplayModeDisabled               equivalent to a plain <div> or <span>, clicking has no effect
+====================================================== =============================================        ===========
+
+Editor:
+
+====================================================== =============================================        ===========
+Old                                                    New                                                  Description
+====================================================== =============================================        ===========
+.RichTextEditable                                      .dijitEditor                                         editor's root node
+====================================================== =============================================        ===========

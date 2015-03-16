@@ -1,0 +1,600 @@
+.. _releasenotes/1.4:
+
+=======================
+Dojo 1.4 Release Notes
+=======================
+
+.. contents ::
+   :depth: 3
+
+Browser support
+===============
+
+The following browsers are supported. If a browser is not supported, it still may work, but no effort is taken to test unsupported browsers and any specific fix for an unsupported browser is likely not to be done:
+
+* Firefox 2 support dropped. Firefox 3.0 through 3.6 supported.
+* Safari 4 and Chrome 3/Chrome 4, but not previous versions.
+* IE6, IE7, IE8 all supported.
+* Latest Opera (Opera 10) (Dojo core only).
+* Keyboard now supported in all supported browsers (previously it didn't work on Safari and on Chrome)
+
+Dojo
+====
+
+IO Pipeline Topics
+------------------
+
+* Now there are topics that are published for the pipeline used to handle all IO operations. dojo.xhr, dojo.io.script and dojo.io.iframe all use the IO pipeline, so they can all publish the pipeline topics.
+* By default, the topics are turned off. To enable them, set **djConfig.ioPublish = true**. After they are globally enabled, you can disable them for specific IO requests by setting **ioPublish: false** in the arg object you pass to dojo.xhr*, dojo.io.script.get() or dojo.io.iframe.send().
+* See :ref:`IO Pipeline Topics <dojo/ioPipelineTopics>` for more information.
+
+dojo.addClass
+-------------
+
+* Added support for space-separated class names, and arrays of class names.
+* See :ref:`dojo.addClass <dojo/addClass>` for more information.
+
+dojo.addOnLoad
+--------------
+
+* There was a dojo.require/onload fix done for Firefox browsers (see `Ticket #8976 <http://bugs.dojotoolkit.org/ticket/8976>`_).
+* See also :ref:`dojo.addOnLoad <dojo/addOnLoad>`
+
+dojo.cache
+----------
+
+* A new method has been added for caching data from files. In particular it's used in templated widgets in conjunction with templateString, rather than templatePath.
+* See also :ref:`dojo.cache <dojo/cache>`
+
+dojo.cldr (Dojo i18n)
+---------------------
+
+* The cultural tables have been updated to version 1.7.1 of the Unicode CLDR http://unicode.org/cldr
+* See also :ref:`dojo.cldr <dojo/cldr>`
+
+dojo.contentHandlers
+--------------------
+
+* Exposed previously "private" dojo._contentHandlers as a public way to write custom XHR handleAs functions
+* See also :ref:`dojo.contentHandlers <dojo/contentHandlers>`
+
+dojo.coords
+-----------
+
+* This method in Dojo Base has been deprecated in Dojo 1.4. The returned object is a mixin of :ref:`dojo.position <dojo/position>` and :ref:`dojo.marginBox <dojo/marginBox>`. Because the x/y position is based on the border-box and the (w)idth/(h)eight attributes represent the margin-box, there was considerable confusion on correctly using the returned object. The new method :ref:`dojo.position <dojo/position>` performs much faster. Users needing the l/t/w/h attributes from this method can continue to use :ref:`dojo.marginBox <dojo/marginBox>`.
+* See also :ref:`dojo.position <dojo/position>`
+
+dojo.declare
+------------
+
+* A drop-in replacement is committed, which is generally faster, and introduces enhancements to the familiar functionality. The announcement link: http://groups.google.com/group/dojo-interest/msg/4a22b20587e91d27
+* See also :ref:`dojo.declare <dojo/declare>`
+
+dojo.fieldToObject
+------------------
+
+* A new method in Dojo Base (part of dojo.js) that is related to dojo.formToObject(), except instead of converting a whole form to an object, it just converts one form field. Pass it a DOM Node for the field, or the ID of the form field as a string. dojo.fieldToObject returns the value encoded in a form field as as a string or an array of strings. Disabled form elements and unchecked radio and checkboxes are skipped. Multi-select elements are returned as an array of string values.
+* See :ref:`dojo.fieldToObject <dojo/fieldToObject>` for more information.
+
+dojo.fx (Dojo Base FX)
+----------------------
+
+* Considerable performance increase and new API's
+* made dojo._Animation public: dojo.Animation
+* onEnd, beforeBegin functions are passed the node reference used in the Animation
+* start: and end: properties, when using a function, are passed the node reference for the animation
+* each property can now be a function, returning either a value, or and object to pass as the value
+* See also :ref:`dojo.fx <dojo/fx>`
+
+dojo.hash
+---------
+
+* A new method for monitoring, getting and setting the hash value. dojo.hash provides hashchange notification using a new published topic "/dojo/hashchange", enabling cross-browser back/forward support and bookmarkability in AJAX applications. The native HTML 5 onhashchange event is used behind the scenes in browsers that support it.
+* See also :ref:`dojo.hash <dojo/hash>`
+
+dojo.NodeList-traverse and dojo.NodeList-manipulate
+---------------------------------------------------
+
+* Two mixins for dojo.NodeList are now available. dojo.NodeLists are returned from dojo.query() calls.
+
+  * :ref:`dojo.NodeList-traverse <dojo/NodeList-traverse>`  adds methods:
+
+    * children
+    * closest
+    * parent
+    * parents
+    * siblings
+    * next
+    * nextAll
+    * prev
+    * prevAll
+    * andSelf
+    * first
+    * last
+    * even
+    * odd
+
+  * :ref:`dojo.NodeList-manipulate <dojo/NodeList-manipulate>`  adds methods:
+
+    * innerHTML
+    * html
+    * text
+    * val
+    * append
+    * appendTo
+    * prepend
+    * prependTo
+    * after
+    * insertAfter
+    * before
+    * insertBefore
+    * remove
+    * wrap
+    * wrapAll
+    * wrapInner
+    * replaceWith
+    * replaceAll
+    * clone
+
+* Both mixins are modeled after the jQuery APIs that have the same names.
+
+dojo.position
+-------------
+
+* A new method in Dojo Base (part of dojo.js) that returns the beginning x/y of a DOM node's border-box as well as its width and height. An optional boolean parameter can be specified to change the default coordinate origin point from the viewport to the document root.
+* See also :ref:`dojo.position <dojo/position>`
+
+dojo.ready
+----------
+
+* A new alias for :ref:`dojo.addOnLoad <dojo/addOnLoad>`.
+* See also :ref:`dojo.ready <dojo/ready>`
+
+dojo.removeClass
+----------------
+
+* Added support for space-separated class names, arrays of class names, and the ability to remove all classes, if no class was specified.
+* See :ref:`dojo.removeClass <dojo/removeClass>` for more information.
+
+dojo.replace
+------------
+
+* A new flexible facility for simple templating based on substitutions.
+* See :ref:`dojo.replace <dojo/replace>` for more information.
+
+dojo.safeMixin
+--------------
+
+* A companion for :ref:`dojo.declare <dojo/declare>`. It is similar to :ref:`dojo.mixin <dojo/mixin>` but decorates copied methods compatibly with :ref:`dojo.declare <dojo/declare>`.
+
+
+Dijit
+======
+
+top level widgets
+-----------------
+
+dijit.Calendar
+~~~~~~~~~~~~~~
+
+* The previously available widget dijit._Calendar was promoted to a public object and therefore renamed from dijit._Calendar to dijit.Calendar.
+* Calendar standalone widget now supports accessibility with ARIA and keyboard. Users can select a date in the calendar using arrow keys, and page-down/up for month navigation. There is also a dropdown at the month label to change the month. DateTextBox still relies on the input control for a11y and does not transfer focus to the calendar popup.
+* See also :ref:`dijit.Calendar <dijit/Calendar>`
+
+dijit.Editor
+~~~~~~~~~~~~
+
+* The RTE has had numerous bug fixes applied to it as well as some code cleanup to make it more extensible and better behaving on browsers such as Opera. It also had several new plugin modules added to dijit, as well as several new ones added to DojoX. For information on the DojoX modules, see the DojoX section of these release notes.
+
+  * **Updated Plugins**
+
+    * `LinkDialog <dijit/_editor/plugins/LinkDialog>`_:  The plugin that provides the dialog support for insert image and insert link have been considerably updated. Input is better validated, invalid values will disable set, and it will auto-append http:// if it believes you have typed only part of a url.
+
+  * **New Plugins**
+
+    * :ref:`FullScreen <dijit/_editor/plugins/FullScreen>`:  A plugin that adds the capability to the editor to take over the complete viewport containing the page running the editor.
+    * :ref:`ViewSource <dijit/_editor/plugins/ViewSource>`:  A plugin that lets you toggle the editor view between HTML source and RTE modes.
+    * :ref:`Print <dijit/_editor/plugins/Print>`:  A plugin that lets you print the contents of the editor frame.
+    * :ref:`NewPage <dijit/_editor/plugins/NewPage>`:  A plugin that lets you clear the content of the editor and set a new default content with a button click.
+
+* In addition to the new plugins, the editor icons have all been updated! They are much cleaner and professional.
+* See also :ref:`dijit.Editor <dijit/Editor>`
+
+dijit.Dialog
+~~~~~~~~~~~~
+
+* Multiple dialogs can now be shown (with one dialog launching over another).
+* Dialog supports aria-describedby to make it more accessible to screen readers.
+* Dialog now hides via ``display: none`` rather than using visibility and positioning.  While this should not cause problems within Dijit itself, it is possible it may lead to surprises in any custom code that may have relied on computed position of elements within a hidden Dialog.
+* See also :ref:`dijit.Dialog <dijit/Dialog>`
+
+dijit.Menu
+~~~~~~~~~~
+
+* Sliding the mouse diagonally from a vertical menu to a second vertical menu will no longer close the second menu if the mouse temporarily moves off of both menus. (This happens when the MenuItem in the second menu is below the bottom of the first Menu.) ( (`#6773 <http://bugs.dojotoolkit.org/ticket/6773>`_)
+* See also :ref:`dijit.Menu <dijit/Menu>`
+
+dijit.TitlePane
+~~~~~~~~~~~~~~~
+
+* toggleable attribute to control whether or not user can close the TitlePane. Useful for non-closable TitlePane's in a app that match the styling of the other TitlePanes (and other dijit components)
+* tooltip attribute to control tooltip on title bar
+* See also :ref:`dijit.TitlePane <dijit/TitlePane>`
+
+dijit.Tooltip
+~~~~~~~~~~~~~
+
+* addTarget()/removeTarget() methods to dynamically attach/detach the tooltip from various nodes.
+* See also :ref:`dijit.Tooltip <dijit/Tooltip>`
+
+dijit.Tree
+~~~~~~~~~~
+
+* dijit._tree.dndSource moved to dijit.tree.dndSource (since it's supposed to be used publicly)
+* Lots of cleanup and bug fixes around DnD related code
+* Multi-character search. Typing "al" will jump directly to first node starting with "al".
+* new Path and selectedItem attributes to get/set the current tree item (`#9339 <http://bugs.dojotoolkit.org/ticket/9339>`_)
+* Multi-parented items support. Tree can support items with multiple parents, as long as this doesn't cause a loop. (`#9361 <http://bugs.dojotoolkit.org/ticket/9361>`_)
+* Deferred child load option on TreeStoreModel. Option added to deferring calling loadItem() on a data store item until its children need to be read. Performance boost for JsonRestStore. (`#9575 <http://bugs.dojotoolkit.org/ticket/9575>`_)
+* getTooltip() method can set tooltip on each tree node
+* onLoad() event when tree is fully loaded
+* autoExpand=true flag to initially expand all nodes in the tree
+* ability to add a CSS class to the root node of a tree item.
+* See also :ref:`dijit.Tree <dijit/Tree>`
+
+dijit.layout
+------------
+
+dijit.layout.TabContainer / dijit.layout.AccordionContainer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* scrolling tab labels now supported (like on Firefox etc.) so that labels don't spill over to two rows when there isn't enough space
+* tab labels / pane titles can be changed via pane.attr('title', ...)
+* icons added, controlled via iconClass parameter (like for Buttons and MenuItems). To display only icons set showTitle=false.
+* tooltip attribute controls tooltip on tab labels or accordion pane titles
+* See also :ref:`dijit.layout.TabContainer <dijit/layout/TabContainer>`
+
+dijit.layout.ContentPane
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* ContentPane now acts as a full layout widget, calling resize() on its child widgets when (not before) it is made visible, avoiding problems with children being initialized while hidden.
+* Consequently ContentPane now defines isContainer and isLayoutContainer:
+     * isContainer's meaning was widened to include any widget that calls startup() on its children, not just widgets that extend dijit._Container
+     * isLayoutContainer's meaning was widened to include any widget that calls resize() on its children, not just widgets that extend dijit.layout._LayoutContainer
+* Fixes related to resizing and href loading, including avoiding premature href loading for ContentPanes in nested TabContainers
+* See also :ref:`dijit.layout.ContentPane <dijit/layout/ContentPane>`
+
+dijit.form
+----------
+
+onChange event handling
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Most dijit.form widgets fire the onChange event after a value change has been detected. With some widgets, this event fired synchronously before the attr('value',val) returned, while on other widgets, the event was asynchronous. In order to return control to the browser's UI thread sooner, and also to collapse onChange events that fire faster than the user handler can execute, the events will always fire asynchronously now, and consecutive, unprocessed onChange events will be collapsed into single events. User code that assumed onChange would always fire synchronously after a value change will have to be modified.
+
+attr("value", val, false)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+attr() (as a setter) has been enhanced to take optional arguments.   The most common case for this is attr("value", val, false) which sets the value of a form widget without calling onChange().   (The third argument is called priorityChange.) When priorityChange is true (default), onChange() will fire only when the new value is different than the value that the previous onChange() reported.
+
+dijit.form.Button
+~~~~~~~~~~~~~~~~~
+
+* Although not related to the Dojo 1.4 release per-se, note that to support IE8 all dijit.form.Button's declared in markup must have type=button (unless they are intended as submit buttons). This is to work around an IE8 problem where the parser can't distinguish between an explicit type=submit and an implicit one. (The default type for <button> tags is submit, according to the latest HTML spec.)
+
+dijit.form.ComboButton
+~~~~~~~~~~~~~~~~~~~~~~
+
+* A new parameter dropDownPosition was added.
+* The parameter controls where the drop down appears, as usual searching a list of positions until somewhere is found where the drop down fits.
+* Example: dropDownPosition="top,bottom"
+* See also :ref:`dijit.form.ComboButton <dijit/form/ComboButton>`
+
+dijit.form.DropDownButton
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* A new parameter dropDownPosition was added.
+* The parameter controls where the drop down appears, as usual searching a list of positions until somewhere is found where the drop down fits.
+* Example: dropDownPosition="top,bottom"
+* See also :ref:`dijit.form.DropDownButton <dijit/form/DropDownButton>`
+
+dijit.form.NumberSpinner
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* The NumberSpinner widget has changed the **required** attribute default value from true to false to more consistently allow for unspecified values within a FORM.
+* See also :ref:`dijit.form.NumberSpinner <dijit/form/NumberSpinner>`
+
+dijit.form.Select
+~~~~~~~~~~~~~~~~~
+
+* dojox.form.DropDownSelect has been moved to dijit.form.Select as a styled HTML <select> replacement.
+* See also :ref:`dijit.form.Select <dijit/form/Select>`
+
+dijit.form.TextBox
+~~~~~~~~~~~~~~~~~~
+
+* selectOnClick attribute added to :ref:`dijit.form.TextBox <dijit/form/TextBox>` and all descendant form widgets, selecting all the text in the field just by clicking.
+* This makes it easier for users to change the value: just click and type.
+* See also :ref:`dijit.form.TextBox <dijit/form/TextBox>`
+
+Dijit infrastructure changes
+----------------------------
+
+dijit._Widget
+~~~~~~~~~~~~~
+
+* widgets now support a subscribe/unsubscribe function - analogous to dojo.subscribe/unsubscribe which operates on the widget itself (and cleans itself up) in a similar way to _Widget.connect/disconnect.
+
+dijit._Templated
+~~~~~~~~~~~~~~~~
+
+* widgetsInTemplate widget lifecycle: lots of bug fixes around the lifecycle for widgets in templates. startup() is now called on widgets in templates when startup() is called on the main widget. Templated Layout widgets with widgets in their templates should call resize() on those widgets manually.
+* templatePath has been deprecated in favor of templateString used with dojo.cache(), see above.
+
+dijit.WidgetSet enhancements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* dijit.WidgetSet/dijit.registry now has a .length property, and new array-like functions:
+  * toArray,
+  * some,
+  * every,
+  * and map.
+* forEach now returns instance for chaining.
+* forEach, some, every, filter and map now accept a 'thisObj' as second or third param (after callback)
+
+
+dijit.popup
+~~~~~~~~~~~
+dijit.popup.prepare() was renamed to moveOffScreen() for clarity about what the function actually does.
+ 
+DojoX
+=====
+
+dojox.charting
+--------------
+
+* Added the simple animation for all bar- and column-based charts by Adam Jones and Dave Clark (IBM).
+* Now objects can be used with bar- and column-based charts. It means now we can have custom tooltip/color/fill/stroke for individual rectangles.
+* See also :ref:`dojox.charting <dojox/charting>`
+
+dojox.charting.DataChart
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* The new DataChart simplifies the task of connecting Data Stores to a Chart.
+* See also :ref:`dojox.charting.DataChart <dojox/charting/DataChart>`
+
+
+dojox.data.jsonPathStore
+------------------------
+
+* This widget was out of sync due to the more advanced dojox.json capabilities and has been removed.
+* There is an equivalent widget which uses dojox.json ref and query in dojoc/dmachi/data called JsonStore for those who still need this capability. While they are not drop in replacements of each other, they are pretty close and it should not take a significant amount of time to convert, and the benefits gained in performance and querying flexibility are worth it.
+
+dojox.date
+----------
+
+* Experimental time zone support via dojox.date.timezone. Based off of the fleegix timezone support by Matthew Eernise.
+* See also :ref:`dojox.date <dojox/date>`
+
+dojox.drawing
+-------------
+
+* A new drawing tool has landed in DojoX.
+* dojox.drawing is similar to Sketch, but with an extensible architecture that allows for plugins.
+* See also :ref:`dojox.drawing <dojox/drawing>`
+
+dojox.editor.plugins
+--------------------
+
+Several new plugins for the dijit.Editor RTE have been provided as dojox modules. Unless otherwise noted in their documentation, they are all generally well tested and work well across browsers.
+
+* :ref:`PrettyPrint <dojox/editor/plugins/PrettyPrint>`:  A plugin that formats the output from dijit.Editor more cleanly than the browsers defaults.
+* :ref:`PageBreak <dojox/editor/plugins/PageBreak>`:  A plugin that lets you insert CSS style page breaks so when printed, the document page breaks at the indicated spot.
+* :ref:`ShowBlockNodes <dojox/editor/plugins/ShowBlockNodes>`:  A plugin that lets you see in the editor what the block structure is that makes up the RTE document.
+* :ref:`Preview <dojox/editor/plugins/Preview>`:  A plugin that lets you preview the editor content in a separate window with different CSS styles and stylesheets applied than what are used in the editor.
+* :ref:`Save <dojox/editor/plugins/Save>`:  A plugin that simplifies adding a save toolbar action for posting editor content back to a specified url.
+* :ref:`ToolbarLineBreak <dojox/editor/plugins/ToolbarLineBreak>`:  A simple plugin that provides a way to break the editor toolbar into multiple lines.
+* :ref:`InsertEntity <dojox/editor/plugins/InsertEntity>`:  An **experimental** plugin that allows you to do 'symbol' inserts from a select list of entity symbols.
+* :ref:`NormalizeIndentOutdent <dojox/editor/plugins/NormalizeIndentOutdent>`:  An **experimental** plugin that tries to normalize indent and outdent behavior across browsers.
+* :ref:`FindReplace <dojox/editor/plugins/FindReplace>`:  An **experimental** plugin that adds a find/replace toolbar that can be toggled to appear underneath the main toolbar.  The plugin provides find and replace text capability to the editor.
+* :ref:`Breadcrumb <dojox/editor/plugins/Breadcrumb>`:  An **experimental** plugin that adds a footer toolbar that shows you what node you are in and all its ancestor nodes.  It also provides actions such as selecting all content, deleting the element, and moving the cursor to the start or end of the element contents.
+* See also :ref:`dojox.editor.plugins <dojox/editor/plugins>`
+
+dojox.encoding.crypto.RSAKey
+----------------------------
+
+* JavaScript implementation of RSA by Tom Wu. Ported as an experimental module.
+* See http://www-cs-students.stanford.edu/~tjw/jsbn/ for details.
+
+dojox.form
+----------
+
+dojox.form._HasDropDown
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* This widget has been moved to :ref:`dijit._HasDropDown <dijit/_HasDropDown>`.
+
+dojox.form._FormSelectWidget
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* This widget has been moved to :ref:`dijit.form._FormSelectWidget <dijit/form/_FormSelectWidget>`.
+
+
+dojox.form.DropDownSelect
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* This widget has been moved to :ref:`dijit.form.Select <dijit/form/Select>`.
+
+dojox.form.FileUploader
+~~~~~~~~~~~~~~~~~~~~~~~
+
+* The improved FileUploader actually landed in a "dot release", 1.3.1, but 1.4 adds some bug fixes. The new FileUploader adds many features, and the display is now quite robust. The Flash uploader is now an actual Flash button with an emulated HTML style, so that it can be used in cases where it was broken before, like in scrolling boxes. The HTML uploader too has been improved so that it is not floating on the page, allowing for more complex display cases and less UI breakage.
+* See also :ref:`dojox.form.FileUploader <dojox/form/FileUploader>`
+
+dojox.fx
+--------
+
+* API change to dojox.fx.style functions. dojox.fx.addClass/toggleClass/removeClass now match dojo.addClass/toggleClass/removeClass API's. Documentation added, still experimental.
+* Added dojox.fx.ext-dojo.NodeList-style module, mapping dojox.fx.style functions into dojo.NodeList
+
+dojox.gfx
+---------
+
+* dojox.gfx.utils.toSvg - serialize a dojox.gfx surface as a string in SVG format for all browsers (including IE).
+* New XSLT file (``dojox/gfx/resources/svg2gfx.xsl``) to transform bigger subset of SVG to the ``dojox.gfx`` JSON-based serialization format by Eric W. Brown.
+* Fixed the VML renderer to work on IE8 in the standards mode.
+
+dojox.grid
+----------
+
+dojox.grid.DataGrid
+~~~~~~~~~~~~~~~~~~~
+
+* Screen reader support has degraded when using JAWS 10 due to a change in the way ARIA (Accessible Rich Internet Applications) has been implemented in the grid. The grid column header cells no longer get actual focus since that was preventing proper scrolling via the mouse.
+* Due to this change, if focus is in a grid data cell and the user shift-tabs back to the column header, JAWS 10 will not speak the column header text.  This will be fixed with the next release of JAWS and Firefox which should provide better screen reader support for ARIA enabled grids.
+* See :ref:`dojox.grid.DataGrid <dojox/grid/DataGrid>` for more information.
+
+dojox.grid.EnhancedGrid
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The new Enhanced DataGrid extends the base grid in numerous useful ways.
+
+* Nested Sort:  The user can now concurrently sort on any number of columns.
+* Multiple Column/Row Selection: The user can now select multiple columns or rows through swipe-select or extended selection techniques.
+* Drag-drop Multiple Columns and Rows: The user can now move multiple columns or rows in the same action.
+* Indirect Selection: Rather than having to manually include radio buttons and check boxes for single and multiple selection models, the Enhanced DataGrid will do it automatically in response to the inclusion of simple attribute-value pairs, e.g., indirectSelection=true, on the grid's div tag.
+* Declarative Pop-up Menus: Rather than having to create and assign pop-up menus through scripts, the enhanced DataGrid allows you to specify these menus with straightforward markup.
+* See also :ref:`dojox.grid.EnhancedGrid <dojox/grid/EnhancedGrid>`
+
+dojox.grid.TreeGrid
+~~~~~~~~~~~~~~~~~~~
+
+* dojox.grid.TreeGrid - support for collapsible rows and model-based (:ref:`dijit.tree.ForestStoreModel <dijit/tree/ForestStoreModel>`) structure.
+* See also :ref:`dojox.grid.TreeGrid <dojox/grid/TreeGrid>`
+
+(old) compat grid
+~~~~~~~~~~~~~~~~~
+
+* compat grid (dojox.grid.Grid) is now bundled in the dojox/grid directory as a tarball archive for those who would like to continue using the deprecated (1.1) Grid.
+* :ref:`dojox.grid.DataGrid <dojox/grid/DataGrid>` is the replacement.
+
+dojox.html
+----------
+
+dojox.html.ellipsis
+~~~~~~~~~~~~~~~~~~~
+
+* The new dojox.html.ellipsis offers cross-browser support for text-overflow: ellipsis
+* See also :ref:`dojox.html.ellipsis <dojox/html/ellipsis>`
+
+dojox.html.entities
+~~~~~~~~~~~~~~~~~~~
+
+* Adds support for encoding and unencoding HTML/XML entity characters in text.
+* Also provides basic mappings of character to entity encoding for HTML and LATIN (8859-1), special characters.
+* See also :ref:`dojox.html.entities <dojox/html/entities>`
+
+dojox.html.format
+~~~~~~~~~~~~~~~~~
+
+* dojox.html.format is a new package which offers additional HTML helper functions for formatting HTML text.
+* See also :ref:`dojox.html.format <dojox/html/format>`
+
+dojox.image
+-----------
+
+dojox.image.Lightbox
+~~~~~~~~~~~~~~~~~~~~
+
+* Significant fixes and improvements in dojox.image.Lightbox. see: `[17205] <http://bugs.dojotoolkit.org/changeset/17205>`_
+* See also :ref:`dojox.image.Lightbox <dojox/image/Lightbox>`
+
+dojox.image.SlideShow
+~~~~~~~~~~~~~~~~~~~~~
+
+* Bug fixes for dojox.image.SlideShow to deal with autoLoad and autoStart issues. see `[20285] <http://bugs.dojotoolkit.org/changeset/20285>`_
+* See also :ref:`dojox.image.SlideShow <dojox/image/SlideShow>`
+
+dojox.image.LightboxNano
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Extended the dojox.image.LightboxNano to show more than one image with a single LBN instance.
+* See also :ref:`dojox.image.LightboxNano <dojox/image/LightboxNano>`
+
+dojox.jq
+--------
+
+* dojox.jq is a very experimental module aimed at trying to match the jQuery API as close as possible, but using Dojo underneath. It is still very rough, and there is no fx API support yet.
+
+dojox.layout
+------------
+
+* dojox.layout.ContentPane.attr('href', ...) now returns a dojo.Deferred rather than a dojox.layout.ContentPane.DeferredHandle custom class. The dojo.Deferred triggers when the load completes (or errors out).
+
+* dojo.layout.GridContainer styles changed, with red borders removed and theme-specific drop indicators added.
+
+dojox.math.BigInteger
+---------------------
+
+* Implementation of arbitrary large integer numbers by Tom Wu. Ported as an experimental module. See http://www-cs-students.stanford.edu/~tjw/jsbn/ for details.
+
+dojox.off
+---------
+
+* the dojox.off subproject was removed because it is no longer supported.  It is still available for download in Dojo 1.3.
+
+dojox.widget
+------------
+
+* dojox.widget.Portlet added. An extended version of the dijit.TitlePane, designed to be used with the dojox.layout.GridContainer.
+* Bug fixes for dojox.widget.Calendar3Pane, which now selects the correct year.
+
+dojox.widget.Rotator, AutoRotator and Co.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* The new :ref:`dojox.widget.Rotator <dojox/widget/Rotator>` is a lightweight non-dijit widget that rotates through child nodes.
+* The new :ref:`dojox.widget.AutoRotator <dojox/widget/AutoRotator>` is a rotator which automatically transitions between child nodes.
+* Both widgets have support for pan, slide, wipe, and fade transitions.
+* Includes :ref:`dojox.widget.rotator.Controller <dojox/widget/rotator/Controller>` for manipulating a rotator.
+
+dojox.widget.DataPresentation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* The new DataPresentation widget connects to a data store in a simple manner, and also provides some additional convenience mechanisms for connecting to common data sources without needing to explicitly construct a Dojo data store.
+* The widget can then present the data in several forms: as a graphical chart, as a tabular grid, or as display panels presenting meta-data (title, creation information, etc) from the data.
+* The widget can also create and manage several of these forms in one simple construction.
+* Animation support.  Optionally allows chart bars, columns and lines to animate into place as chart is initially being displayed.
+* See also :ref:`dojox.widget.DataPresentation <dojox/widget/DataPresentation>`
+
+
+Util
+====
+
+Build System/buildscripts
+-------------------------
+
+* Using Google's Closure Compiler is now supported in the build system. See the :ref:`Advanced Build Topics docs <build/index>`.
+* If/when Dojo 1.4.2 is released, by default the copyTests option defaults to false instead of true. This was done to help reduce the possibility of copying tests in their builds, extra files and more security concerns to worry about.
+
+Checkstyle
+----------
+
+* A Checkstyle tool has been added in util/checkstyle. This can be used to both flag style guide violations in either Dojo or custom JavaScript code, and also to fix the errors using an online tool.
+* See also :ref:`util.checkstyle <util/checkstyle>`
+
+
+Bug fixes
+=========
+
+The `full list of bug fixes <http://bugs.dojotoolkit.org/query?status=closed&group=component&order=priority&milestone=1.4&resolution=fixed&col=id&col=summary&col=type&col=priority>`_ is located in the bug database.
+
+
+Upgrading
+=========
+
+Here are some common issues people have had when upgrading (ie, migrating) from 1.3 to 1.4:
+
+1. if your widgets are using templatePath you should ideally update them to use templateString with dojo.cache() instead, or alternately, minimally, make sure that they set templateString to null (to override the templateString setting from a superclass).
+2. ContentPane acts more as a layout widget than before, defining isLayoutContainer: true. This may break some custom subclasses.
+3. the startup code for widgetsInTemplate has changed; if you have a custom widget that manually adds sub-widgets into its DOM, be sure to add those sub-widgets to this._startupWidgets[] and also this._supportingWidgets[]. Alternately you can set _earlyTemplatedStartup to true to get the 1.3 behavior
+4. If your TabContainer is too wide (you must have set width=100% in your markup?), specify controllerWidget=""dijit.layout.TabController" (see `Ticket #10495 <http://bugs.dojotoolkit.org/ticket/10495>`_).
