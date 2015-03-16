@@ -19,8 +19,7 @@ import sys, os
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
 # absolute, like shown here.
-#sys.path.append(os.path.join(os.path.dirname(__file__), "_ext"))
-sys.path.append(os.path.abspath(__file__ + "../../../_ext"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "_ext"))
 
 # General configuration
 # ---------------------
@@ -30,7 +29,7 @@ sys.path.append(os.path.abspath(__file__ + "../../../_ext"))
 extensions = ['sphinx.ext.todo', 'dojowiki']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['../../../templates/refguide']
+templates_path = ['../../templates/refguide']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
