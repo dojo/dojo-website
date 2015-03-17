@@ -53,7 +53,7 @@ module.exports = function (grunt) {
 		stylus: {
 			options: {'include css': true},
 			index: {
-				files: {'dist/css/index.css': 'src/css/index.styl', 'dist/css/tutorials.css': 'src/css/tutorials.styl', 'dist/css/api.css': 'src/css/api.styl'}
+				files: {'dist/css/index.css': 'src/css/index.styl', 'dist/css/tutorials.css': 'src/css/tutorials.styl', 'dist/css/api.css': 'src/css/api.styl', 'dist/css/guide.css': 'src/css/guide.styl'}
 			}
 		},
 		connect: {

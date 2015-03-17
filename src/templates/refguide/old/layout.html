@@ -1,0 +1,125 @@
+{% extends "!layout.html" %}
+{% set script_files = [] %}
+{%- block doctype -%}
+<!DOCTYPE html>
+{%- endblock %}
+
+{%- block sidebarsearch %}
+{%- if pagename != "search" %}
+    <div id="searchbox" style="display: none">
+        <h3>{{ _('Quick search') }}</h3>
+        <form class="search" action="{{ pathto('search') }}" method="get">
+            <input type="text" name="q" size="18" />
+            <input type="submit" value="{{ _('Go') }}" />
+            <input type="hidden" name="check_keywords" value="yes" />
+            <input type="hidden" name="area" value="default" />
+         </form>
+         <p class="searchtip" style="font-size: 90%">
+             {{ _('Enter search terms or a module, class or function name.') }}
+         </p>
+    </div>
+
+{%- endif %}
+{%- endblock %}
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{{ pathto('/css/guide.css', 1) }}">
+	<script type="text/javascript">
+		dojoConfig = {
+			async: true
+		};
+	</script>
+    <script type="text/javascript" src="{{ pathto('_static/js/dojo/dojo.js', 1) }}"></script>
+    <script type="text/javascript" src="{{ pathto('_static/js/docs/guide.js', 1 )}}"></script>
+{% endblock %}
+
+{%- block document %}
+    <div id="accessibilityNode">
+        <a href="#intro">Skip to Content</a> | <a href="#nav">Skip to Navigation</a>
+    </div>
+    <hr class="hide">
+    <div id="page" class="docPage">
+        <div id="header">
+            <div class="container">
+                <span id="logo"><a title="Home" href="http://dojotoolkit.org">
+                    <img alt="Dojo Toolkit" src="{{ pathto('_static/images/logo.png', 1) }}"></a>
+                </span>
+                <ul id="navigation">
+                    <li class="home"><a href="/"><span class="homeIcon"></span></a></li>
+                    <li class="download"><a href="/download/">Download</a></li>
+                    <li class="features"><a href="/features/">Features</a></li>
+                    <li class="docs active"><a href="/documentation/">Documentation</a></li>
+                    <li class="community"><a href="/community/">Community</a></li>
+                    <li class="about"><a href="/blog/">Blog</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="hide" />
+
+        <div id="main">
+            <div id="content" class="innerBox">
+                <div class="pageTitleContainer">
+                    <h1>Documentation</h1>
+                    <ul class="subnav">
+                        <li><a href="/documentation/"><span>Tutorials</span></a></li>
+                        <li class="active"><a href="/reference-guide/"><span>Reference Guide</span></a></li>
+                        <li><a href="/api/"><span>API Documentation</span></a></li>
+                    </ul>
+                </div>
+                <div class="line">
+                    <div class="unit size3of4 firstUnit">
+                        <div class="spacer">
+                            {% block body %} {% endblock %}
+                        </div>
+                    </div>
+                    <div class="sidebar unit size1of4 lastUnit">
+                        <h4>Reference Guide</h4>
+						<div id="dtkVersion">
+							<label for="refver">Dojo Version</label>
+							<select id="refver" name="refver">
+								<option value="1.6">1.6</option>
+								<option value="1.7">1.7</option>
+								<option value="1.8">1.8</option>
+								<option value="1.9">1.9</option>
+								<option value="1.10" selected="selected">1.10</option>
+							</select>
+						</div>
+                        <ul>
+                            <li><a href="{{ pathto("index") }}">Startpage</a></li>
+                            <li><a href="{{ pathto("dojo/index") }}">Dojo</a></li>
+                            <li><a href="{{ pathto("dijit/index") }}">Dijit</a></li>
+                            <li><a href="{{ pathto("dojox/index") }}">DojoX</a></li>
+                        </ul>
+                        {{ sidebar() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="hide" />
+        <div id="foot">
+            <div class="innerBox">
+                <script type="text/javascript">document.write('<a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=' + encodeURIComponent(window.location.href) + '">Error in the documentation? Can’t find what you are looking for? Let us know!</a>');</script>
+                <div class="footer">
+                    {%- if hasdoc('copyright') %}
+                      {% trans path=pathto('copyright'), copyright=copyright|e %}&copy; <a href="{{ path }}">Copyright</a> {{ copyright }}.{% endtrans %}
+                    {%- else %}
+                      {% trans copyright=copyright|e %}&copy; Copyright {{ copyright }}.{% endtrans %}
+                    {%- endif %}
+                    {%- if last_updated %}
+                      {% trans last_updated=last_updated|e %}Last updated on {{ last_updated }}.{% endtrans %}
+                    {%- endif %}
+                    {%- if show_sphinx %}
+                      {% trans sphinx_version=sphinx_version|e %}Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> {{ sphinx_version }}.{% endtrans %}
+                    {%- endif %}
+                </div>
+            </div>
+        </div>
+        <script src="http://www.google.com/jsapi?key=ABQIAAAAbTW5DVaTIHKHQe5Q75sB0BSaOaO_TgJ5c3mtQFnk5JO2zD5dZBSGHlRJ8HAPlCQCEO_FxSmyNAHSLw" type="text/javascript"></script>
+    </div>
+{%- endblock %}
+
+{%- block relbar1 %}{% endblock %}
+{%- block relbar2 %}{% endblock %}
+{%- block sidebar2 %}{% endblock %}
+{% block footer %}{% endblock %}
