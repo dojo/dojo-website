@@ -36,7 +36,7 @@ module.exports = function (grunt) {
 		exec: {
 			refguide: {
 				cwd: 'src/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -a -c source -d '+refGuideVersion+' '+refGuideVersion+' ../../dist/documentation/reference-guide/'+refGuideVersion
+				cmd: 'sphinx-build -b html -a -c ./ -d '+refGuideVersion+' '+refGuideVersion+' ../../dist/documentation/reference-guide/'+refGuideVersion
 			}
 		},
 		ejs: {
