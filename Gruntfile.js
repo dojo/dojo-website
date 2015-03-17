@@ -14,6 +14,7 @@ module.exports = function (grunt) {
 		githubUrl: 'https://github.com/dojo',
 		tutorialsUrl: root + 'documentation/tutorials',
 		refguideUrl: root + 'documentation/reference-guide/' + currentDojoVersion,
+		apiUrl: root + 'documentation/api/',
 		downloadUrl: root + '#download'
 	};
 
