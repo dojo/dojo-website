@@ -1,0 +1,45 @@
+if module.events
+    h2 Events
+    div.jsdoc-property-list
+        each event in module.events
+            - var klass = 'jsdoc-field'
+            - klass += (event.private == true ? " private" : "")
+            if event.inherited
+               - klass += ' inherited'
+            if event.extensionModule
+               - klass += ' extension-module'
+            div(class="#{klass}")
+                div.jsdoc-title
+                    - var name = (module.version + module.location + '_' +event.name).replace(/\/|\./g, "_")
+                    a(name='#{name}')
+                    span.functionIcon #{event.name}
+                    | <span class="parameters">(
+                    -  each parm, idx in event.parameters
+                        | #{parm.name}
+                        if idx < event.parameters.length-1
+                            | ,
+                    | )</span>
+                    if event.private
+                      span.jsdoc-private(title="private")
+                div.jsdoc-inheritance Defined by:&nbsp;
+                    a.jsdoc-link(href='#{config.contextPath}#{module.version}/#{event.from}') #{event.from}
+                    if event.extensionModule
+                        span.jsdoc-extension(title="Must manually require () " + event.from +" to access")
+                    else if event.inherited
+                        span.jsdoc-inherited(title='inherited')
+
+
+                if event.summary
+                    div.jsdoc-full-summary !{autoHyperlink(event.summary, config, module.version)}
+
+                if event.description
+                    div.jsdoc-full-summary !{autoHyperlink(event.description, config, module.version)}
+
+                if event.parameters
+                    params = event.parameters
+                returnTypes = event.returnTypes
+                returnDescription = event.returnDescription
+                include parametertable
+                if event.examples
+                    examples = event.examples
+                include examples

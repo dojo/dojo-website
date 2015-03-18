@@ -30,7 +30,7 @@ module.exports = function (grunt) {
 				options: ejsOptions,
 				src: 'src/documentation/tutorials/',
 				dest: 'dist/documentation/tutorials/',
-				template: 'src/templates/tutorial.ejs'
+				template: 'src/_templates/tutorial.ejs'
 			}
 		},
 		// Compile the reference guide
@@ -44,7 +44,7 @@ module.exports = function (grunt) {
 			all: {
 				options: ejsOptions,
 				cwd: 'src',
-				src: ['**/*.ejs', '!templates/**/*'],
+				src: ['**/*.ejs', '!_templates/**/*'],
 				dest: 'dist',
 				expand: true,
 				ext: '.html'
