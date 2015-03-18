@@ -1,7 +1,7 @@
 /** @module lib/tree */
 var fs = require('fs');
 var _trees = {}; // cached hash of tree versions
-var path = '../../src/documentation/api/data/'; // TODO: move back later to config
+var path = '../../src/documentation/api/'; // TODO: move back later to config
 /**
  * Get the tree json for the specified version. config object used to find the tree.json using config.apiDataPath
  * @param {String} version - version of the dojo API to lookup

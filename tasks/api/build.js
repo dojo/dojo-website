@@ -9,6 +9,10 @@ var fs = require('fs'),
     fsExtra = require('fs-extra'),
     staticFolder = '../../dist/documentation/api/';
 
+    fsExtra.ensureDir(staticFolder, function(err) {
+      console.log(err);
+    });
+
 // macro calls
 // fails with static generation - todo: FOR SOME REASON I NEED TO USE A GLOBAL so it works???
 convertType = generate.convertType;
@@ -54,13 +58,13 @@ config.spiderVersions.forEach(function (version) {
     var treehtml = fntree({ title : 'API Documentation', config: config, version: version, tree : treeitems});
 	var sitemapxml = fnsitemap({ title : 'API Documentation', config: config, version: version, tree : treeitems});
 
-    var detailsFile = "../../src/documentation/api/data/" + version + "/details.json";
+    var detailsFile = "../../src/documentation/api/" + version + "/details.json";
     var versionfolder = staticFolder  + version + "/";
     mkdirp.sync(versionfolder);
     fs.writeFileSync(versionfolder + "tree.html", treehtml);
 	fs.writeFileSync(versionfolder + "sitemap.xml", sitemapxml, {encoding : 'utf8'});
 
-    var dataFolder = staticFolder + 'data/' + version;
+    var dataFolder = staticFolder + version;
     mkdirp.sync(dataFolder);
     fs.writeFileSync(dataFolder + "/tree.json", JSON.stringify(treeitems));
 

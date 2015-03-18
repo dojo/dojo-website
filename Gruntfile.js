@@ -35,16 +35,21 @@ module.exports = function (grunt) {
 		},
 		// Compile the reference guide
 		exec: {
+			api: {
+				cwd: 'tasks/api',
+				cmd: 'node build'
+			},
 			refguide: {
 				cwd: 'src/documentation/reference-guide',
 				cmd: 'sphinx-build -b html -a -c ./ -d '+refGuideVersion+' '+refGuideVersion+' ../../../dist/documentation/reference-guide/'+refGuideVersion
-			}
+			},
+
 		},
 		ejs: {
 			all: {
 				options: ejsOptions,
 				cwd: 'src',
-				src: ['**/*.ejs', '!_templates/**/*'],
+				src: ['**/*.ejs', '!_templates/**/*', '!_partials/**/*'],
 				dest: 'dist',
 				expand: true,
 				ext: '.html'
@@ -68,7 +73,7 @@ module.exports = function (grunt) {
 			images: {
 				files: [{
 					cwd: 'src',
-					src: ['images/**'],
+					src: ['images/**', 'scripts/**'],
 					dest: 'dist',
 					expand: true
 				}]
@@ -100,8 +105,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-exec');
 	grunt.loadTasks('tasks');
 
-	grunt.registerTask('deploy', ['clean', 'ejs', 'stylus', 'copy', 'tutorials']);
+	grunt.registerTask('deploy', ['clean', 'ejs', 'stylus', 'copy', 'tutorials', 'exec']);
 	grunt.registerTask('default', ['clean', 'ejs', 'stylus', 'copy', 'tutorials']);
-	grunt.registerTask('refguide',['exec']);
+	grunt.registerTask('docs',['exec']);
 	grunt.registerTask('develop', ['ejs', 'stylus', 'copy', 'tutorials', 'connect', 'watch']);
 };
