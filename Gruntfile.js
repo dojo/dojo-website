@@ -35,15 +35,14 @@ module.exports = function (grunt) {
 		},
 		// Compile the reference guide
 		exec: {
-			api: {
-				cwd: 'tasks/api',
-				cmd: 'node build'
-			},
 			refguide: {
 				cwd: 'src/documentation/reference-guide',
 				cmd: 'sphinx-build -b html -a -c ./ -d '+refGuideVersion+' '+refGuideVersion+' ../../../dist/documentation/reference-guide/'+refGuideVersion
 			},
-
+			api: {
+				cwd: 'tasks/api',
+				cmd: 'node build'
+			}
 		},
 		ejs: {
 			all: {

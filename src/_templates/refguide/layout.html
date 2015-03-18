@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 {%- endblock %}
 
+{% block linktags %}
+{% endblock %}
 
 {% block extrahead %}
     <link rel="stylesheet" href="{{ pathto('/css/guide.css', 1) }}">
@@ -12,22 +14,18 @@
         async: true
       };
     </script>
-    <script type="text/javascript" src="{{ pathto('_static/js/dojo/dojo.js', 1) }}"></script>
-    <script type="text/javascript" src="{{ pathto('_static/js/docs/guide.js', 1 )}}"></script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="{{ pathto('/scripts/guide/docs/guide.js', 1 )}}"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
 {% endblock %}
 
 {%- block document %}
-  <div id="accessibilityNode">
-    <a href="#intro">Skip to Content</a> | <a href="#nav">Skip to Navigation</a>
-  </div>
 
   {% include "../../_partials/header.ejs" %}
-  <main>
+  <main class="refguide">
     <div class="row">
-      <div class="large-9 columns content tutorial">
-        {% block body %} {% endblock %}
-      </div>
-      <div class="large-3 columns content tutorial">
+
+      <div class="medium-3 columns sideNav">
         <h4>Reference Guide</h4>
         <div id="dtkVersion">
           <label for="refver">Dojo Version</label>
@@ -46,8 +44,8 @@
           <li><a href="{{ pathto("dojox/index") }}">DojoX</a></li>
         </ul>
         {{ toc }}
-        {%- block sidebarsearch %}
-        {%- if pagename != "search" %}
+        {% block sidebarsearch %}
+
             <div id="searchbox" style="display: none">
                 <h3>{{ _('Quick search') }}</h3>
                 <form class="search" action="{{ pathto('search') }}" method="get">
@@ -60,16 +58,26 @@
                      {{ _('Enter search terms or a module, class or function name.') }}
                  </p>
             </div>
-        {%- endif %}
+
         {%- endblock %}
-
       </div>
-      {{ footer }}
+      <div class="medium-9 columns content">
+        {% block body %} {% endblock %}
+      </div>
     </div>
-  </main>
 {%- endblock %}
 
-{%- block footer %}
-  <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
-  {% include "../../_partials/footer.ejs" %}
-{%- endblock %}
+  {% block footer %}
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        {% include "../../_partials/footer.ejs" %}
+    </div>
+  </div>
+  {% endblock %}
+</main>
+
+{% block relbar1 %}
+{% endblock %}
+{% block relbar2 %}
+{% endblock %}
