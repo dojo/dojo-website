@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/_base/declare &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/_base/declare</a><ul>
+<li><a class="reference internal" href="#dojo-declare">dojo/declare()</a><ul>
+<li><a class="reference internal" href="#defining-a-class">Defining a Class</a></li>
+<li><a class="reference internal" href="#using-mixin-in-a-class-constructor">Using mixin() in a Class Constructor</a></li>
+<li><a class="reference internal" href="#arrays-and-objects-as-member-variables">Arrays and Objects as Member Variables</a><ul>
+<li><a class="reference internal" href="#instance-objects">Instance Objects</a></li>
+<li><a class="reference internal" href="#static-objects">Static objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inheritance">Inheritance</a><ul>
+<li><a class="reference internal" href="#single-inheritance">Single Inheritance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calling-superclass-methods">Calling Superclass Methods</a></li>
+<li><a class="reference internal" href="#multiple-inheritance">Multiple Inheritance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#safemixin">safeMixin()</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notes">Notes</a><ul>
+<li><a class="reference internal" href="#common-conventions">Common Conventions</a></li>
+<li><a class="reference internal" href="#inheritance-info">Inheritance Info</a></li>
+<li><a class="reference internal" href="#chaining">Chaining</a></li>
+<li><a class="reference internal" href="#constructors">Constructors</a><ul>
+<li><a class="reference internal" href="#default-constructor-chaining">Default Constructor Chaining</a></li>
+<li><a class="reference internal" href="#manual-constructor-chaining">Manual Constructor Chaining</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#constructor-methods">Constructor Methods</a><ul>
+<li><a class="reference internal" href="#extend">extend()</a></li>
+<li><a class="reference internal" href="#createsubclass">createSubclass()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-methods">Class Methods</a><ul>
+<li><a class="reference internal" href="#inherited">inherited()</a></li>
+<li><a class="reference internal" href="#getinherited">getInherited()</a></li>
+<li><a class="reference internal" href="#isinstanceof">isInstanceOf()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-raw-classes">Using &#8220;Raw&#8221; Classes</a></li>
+<li><a class="reference internal" href="#meta-information">Meta-Information</a></li>
+<li><a class="reference internal" href="#safemixin-information">safeMixin() Information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-base-declare">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/_base/declare</a><a class="headerlink" href="#dojo-base-declare" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Eugene Lazutkin</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">0.9</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-base-declare" id="id2">dojo/_base/declare</a><ul>
+<li><a class="reference internal" href="#dojo-declare" id="id3">dojo/declare()</a><ul>
+<li><a class="reference internal" href="#defining-a-class" id="id4">Defining a Class</a></li>
+<li><a class="reference internal" href="#using-mixin-in-a-class-constructor" id="id5">Using mixin() in a Class Constructor</a></li>
+<li><a class="reference internal" href="#arrays-and-objects-as-member-variables" id="id6">Arrays and Objects as Member Variables</a></li>
+<li><a class="reference internal" href="#inheritance" id="id7">Inheritance</a></li>
+<li><a class="reference internal" href="#calling-superclass-methods" id="id8">Calling Superclass Methods</a></li>
+<li><a class="reference internal" href="#multiple-inheritance" id="id9">Multiple Inheritance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#safemixin" id="id10">safeMixin()</a><ul>
+<li><a class="reference internal" href="#usage" id="id11">Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notes" id="id12">Notes</a><ul>
+<li><a class="reference internal" href="#common-conventions" id="id13">Common Conventions</a></li>
+<li><a class="reference internal" href="#inheritance-info" id="id14">Inheritance Info</a></li>
+<li><a class="reference internal" href="#chaining" id="id15">Chaining</a></li>
+<li><a class="reference internal" href="#constructors" id="id16">Constructors</a></li>
+<li><a class="reference internal" href="#constructor-methods" id="id17">Constructor Methods</a></li>
+<li><a class="reference internal" href="#class-methods" id="id18">Class Methods</a></li>
+<li><a class="reference internal" href="#using-raw-classes" id="id19">Using &#8220;Raw&#8221; Classes</a></li>
+<li><a class="reference internal" href="#meta-information" id="id20">Meta-Information</a></li>
+<li><a class="reference internal" href="#safemixin-information" id="id21">safeMixin() Information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also" id="id22">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/_base/declare</strong> contains functions to define Dojo classes, which support standard Object Oriented concepts
+within Dojo.</p>
+<p>JavaScript uses <a class="reference external" href="http://en.wikipedia.org/wiki/Prototype-based_programming">prototype-based inheritance</a>, not class-based inheritance (which is used by most programming
+languages). Dojo provides the ability to simulate class-based inheritance using <code class="docutils literal"><span class="pre">dojo.declare</span></code>.</p>
+<div class="section" id="dojo-declare">
+<h2><a class="toc-backref" href="#id3">dojo/declare()</a><a class="headerlink" href="#dojo-declare" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="defining-a-class">
+<h3><a class="toc-backref" href="#id4">Defining a Class</a><a class="headerlink" href="#defining-a-class" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal"><span class="pre">my/Person.js</span></code>:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">,</span> <span class="nx">residence</span><span class="p">){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">age</span> <span class="o">=</span> <span class="nx">age</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">residence</span> <span class="o">=</span> <span class="nx">residence</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/declare&quot;], function(declare){
+  return declare(null, {
+    constructor: function(name, age, residence){
+      this.name = name;
+      this.age = age;
+      this.residence = residence;
+    }
+  });
+});</textarea></div><p>Using the class:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;my/Person&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Person</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">folk</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="s2">&quot;phiggins&quot;</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="s2">&quot;Tennessee&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;my/Person&quot;], function(Person){
+  var folk = new Person(&quot;phiggins&quot;, 42, &quot;Tennessee&quot;);
+});</textarea></div></div>
+<div class="section" id="using-mixin-in-a-class-constructor">
+<h3><a class="toc-backref" href="#id5">Using mixin() in a Class Constructor</a><a class="headerlink" href="#using-mixin-in-a-class-constructor" title="Permalink to this headline">¶</a></h3>
+<p>Define a class, &#8220;my/Person&#8221;, using an object for mixing in arguments instead of an argument list.</p>
+<p>In <code class="docutils literal"><span class="pre">my/Person.js</span></code>:</p>
+<div class="highlight"><pre><span class="c1">// in &quot;my/Person.js&quot;</span>
+<span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">lang</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Anonymous&quot;</span><span class="p">,</span>
+    <span class="nx">age</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">residence</span><span class="o">:</span> <span class="s2">&quot;Universe A&quot;</span><span class="p">,</span>
+
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="cm">/*Object*/</span> <span class="nx">kwArgs</span><span class="p">){</span>
+      <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">kwArgs</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">moveTo</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="cm">/*String*/</span> <span class="nx">residence</span><span class="p">){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">residence</span> <span class="o">=</span> <span class="nx">residence</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// in &quot;my/Person.js&quot;
+define([&quot;dojo/_base/declare&quot;, &quot;dojo/_base/lang&quot;], function(declare, lang){
+  return declare(null, {
+    name: &quot;Anonymous&quot;,
+    age: null,
+    residence: &quot;Universe A&quot;,
+
+    constructor: function(/*Object*/ kwArgs){
+      lang.mixin(this, kwArgs);
+    },
+
+    moveTo: function(/*String*/ residence){
+      this.residence = residence;
+    }
+  });
+});</textarea></div><p>Using the class:</p>
+<div class="highlight"><pre><span class="c1">// using the class elsewhere...</span>
+<span class="nx">require</span><span class="p">([</span><span class="s2">&quot;my/Person&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Person</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">anon</span>  <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(),</span>
+      <span class="nx">alice</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">({</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Alice&quot;</span><span class="p">,</span> <span class="nx">age</span><span class="o">:</span> <span class="mi">42</span><span class="p">,</span> <span class="nx">residence</span><span class="o">:</span> <span class="s2">&quot;Universe 1&quot;</span> <span class="p">});</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">anon</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="nx">alice</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// &quot;Anonymous&quot;, &quot;Alice&quot;</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">anon</span><span class="p">.</span><span class="nx">residence</span><span class="p">,</span> <span class="nx">alice</span><span class="p">.</span><span class="nx">residence</span><span class="p">);</span> <span class="c1">// &quot;Universe A&quot;, &quot;Universe 1&quot;</span>
+  <span class="nx">alice</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="s2">&quot;Universe 420&quot;</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">alice</span><span class="p">.</span><span class="nx">residence</span><span class="p">);</span> <span class="c1">// &quot;Universe 420&quot;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// using the class elsewhere...
+require([&quot;my/Person&quot;], function(Person){
+  var anon  = new Person(),
+      alice = new Person({ name: &quot;Alice&quot;, age: 42, residence: &quot;Universe 1&quot; });
+
+  console.log(anon.name, alice.name); // &quot;Anonymous&quot;, &quot;Alice&quot;
+  console.log(anon.residence, alice.residence); // &quot;Universe A&quot;, &quot;Universe 1&quot;
+  alice.moveTo(&quot;Universe 420&quot;);
+  console.log(alice.residence); // &quot;Universe 420&quot;
+});</textarea></div></div>
+<div class="section" id="arrays-and-objects-as-member-variables">
+<h3><a class="toc-backref" href="#id6">Arrays and Objects as Member Variables</a><a class="headerlink" href="#arrays-and-objects-as-member-variables" title="Permalink to this headline">¶</a></h3>
+<p>If your class contains arrays or other objects, they should be declared in the <code class="docutils literal"><span class="pre">constructor()</span></code> so that each instance
+gets its own copy. Simple types (strings, numbers, booleans, <code class="docutils literal"><span class="pre">null</span></code>) are fine to declare in the class directly
+because simple types are assigned by value, whereas objects are assigned by reference (in JavaScript, arrays are also
+considered objects).</p>
+<div class="section" id="instance-objects">
+<h4>Instance Objects<a class="headerlink" href="#instance-objects" title="Permalink to this headline">¶</a></h4>
+<p>Define a class, <code class="docutils literal"><span class="pre">my/Demo.js</span></code>, with instance objects:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;my/Foo&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">Foo</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">arr</span><span class="o">:</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">],</span> <span class="c1">// object. shared by all instances!</span>
+    <span class="nx">num</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>              <span class="c1">// non-object. not shared.</span>
+    <span class="nx">str</span><span class="o">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>       <span class="c1">// non-object. not shared.</span>
+    <span class="nx">obj</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Foo</span><span class="p">(),</span>      <span class="c1">// object. shared by all instances!</span>
+
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">];</span> <span class="c1">// per-instance object.</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Foo</span><span class="p">();</span>      <span class="c1">// per-instance object.</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/declare&quot;, &quot;my/Foo&quot;], function(declare, Foo){
+  return declare(null, {
+    arr: [ 1, 2, 3, 4 ], // object. shared by all instances!
+    num: 5,              // non-object. not shared.
+    str: &quot;string&quot;,       // non-object. not shared.
+    obj: new Foo(),      // object. shared by all instances!
+
+    constructor: function(){
+      this.arr = [ 1, 2, 3, 4 ]; // per-instance object.
+      this.obj = new Foo();      // per-instance object.
+    }
+  });
+});</textarea></div></div>
+<div class="section" id="static-objects">
+<h4>Static objects<a class="headerlink" href="#static-objects" title="Permalink to this headline">¶</a></h4>
+<p>Define a class, <code class="docutils literal"><span class="pre">my/Demo.js</span></code>, with &#8220;static&#8221; properties:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s1">&#39;dojo/_base/declare&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">Demo</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;this is Demo object #&quot;</span> <span class="o">+</span> <span class="nx">Demo</span><span class="p">.</span><span class="nx">counter</span><span class="o">++</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="nx">Demo</span><span class="p">.</span><span class="nx">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">return</span> <span class="nx">Demo</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define(['dojo/_base/declare'], function(declare){
+  var Demo = declare(null, {
+    constructor: function(){
+      console.debug(&quot;this is Demo object #&quot; + Demo.counter++);
+    }
+  });
+
+  Demo.counter = 0;
+
+  return Demo;
+});</textarea></div></div>
+</div>
+<div class="section" id="inheritance">
+<h3><a class="toc-backref" href="#id7">Inheritance</a><a class="headerlink" href="#inheritance" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">superclass</span></code> argument to the <code class="docutils literal"><span class="pre">dojo/declare()</span></code> function is used for extending classes by providing a parent
+class or classes to inherit from.</p>
+<div class="section" id="single-inheritance">
+<h4>Single Inheritance<a class="headerlink" href="#single-inheritance" title="Permalink to this headline">¶</a></h4>
+<p>Define a <code class="docutils literal"><span class="pre">my/Employee</span></code> class that extends the <code class="docutils literal"><span class="pre">my/Person</span></code> class from above.  In <code class="docutils literal"><span class="pre">my/Employee.js</span></code>:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;my/Person&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">Person</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">Person</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">,</span> <span class="nx">residence</span><span class="p">,</span> <span class="nx">salary</span><span class="p">){</span>
+      <span class="c1">// The &quot;constructor&quot; method is special: the parent class (Person)</span>
+      <span class="c1">// constructor is called automatically before this one.</span>
+
+      <span class="k">this</span><span class="p">.</span><span class="nx">salary</span> <span class="o">=</span> <span class="nx">salary</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">askForRaise</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">salary</span> <span class="o">*</span> <span class="mf">0.02</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/declare&quot;, &quot;my/Person&quot;], function(declare, Person){
+  return declare(Person, {
+    constructor: function(name, age, residence, salary){
+      // The &quot;constructor&quot; method is special: the parent class (Person)
+      // constructor is called automatically before this one.
+
+      this.salary = salary;
+    },
+
+    askForRaise: function(){
+      return this.salary * 0.02;
+    }
+  });
+});</textarea></div><p>In <code class="docutils literal"><span class="pre">my/Boss.js</span></code>:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s1">&#39;my/Employee&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">Employee</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">Employee</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">askForRaise</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">salary</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/declare&quot;, 'my/Employee'], function(declare, Employee){
+  return declare(Employee, {
+    askForRaise: function(){
+      return this.salary * 0.25;
+    }
+  });
+});</textarea></div><p>To use the classes:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;my/Employee&quot;</span><span class="p">,</span> <span class="s2">&quot;my/Boss&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Employee</span><span class="p">,</span> <span class="nx">Boss</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">kathryn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Boss</span><span class="p">(</span><span class="s2">&quot;Kathryn&quot;</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="s2">&quot;Minnesota&quot;</span><span class="p">,</span> <span class="mi">9000</span><span class="p">),</span>
+      <span class="nx">matt</span>    <span class="o">=</span> <span class="k">new</span> <span class="nx">Employee</span><span class="p">(</span><span class="s2">&quot;Matt&quot;</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="s2">&quot;California&quot;</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">kathryn</span><span class="p">.</span><span class="nx">askForRaise</span><span class="p">(),</span> <span class="nx">matt</span><span class="p">.</span><span class="nx">askForRaise</span><span class="p">());</span> <span class="c1">// 2250, 20</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;my/Employee&quot;, &quot;my/Boss&quot;], function(Employee, Boss){
+  var kathryn = new Boss(&quot;Kathryn&quot;, 26, &quot;Minnesota&quot;, 9000),
+      matt    = new Employee(&quot;Matt&quot;, 33, &quot;California&quot;, 1000);
+
+  console.log(kathryn.askForRaise(), matt.askForRaise()); // 2250, 20
+});</textarea></div></div>
+</div>
+<div class="section" id="calling-superclass-methods">
+<h3><a class="toc-backref" href="#id8">Calling Superclass Methods</a><a class="headerlink" href="#calling-superclass-methods" title="Permalink to this headline">¶</a></h3>
+<p>Superclass constructors are <em>always</em> called automatically, and <em>always</em> before the subclass constructor. This
+convention reduces boilerplate in 90% of cases. If it doesn’t fit your needs see <a class="reference internal" href="#manual-constructor-chaining">Manual Constructor Chaining</a> below.
+For all other methods, use <code class="docutils literal"><span class="pre">this.inherited(arguments)</span></code> to call the superclass method of the same name.</p>
+<p>In <code class="docutils literal"><span class="pre">my/Boss.js</span></code>:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;my/Employee&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">Employee</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">Employee</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">// override the askForRaise function from the Employee class</span>
+    <span class="nx">askForRaise</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">)</span> <span class="o">*</span> <span class="mi">20</span><span class="p">;</span> <span class="c1">// boss multiplier!</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/declare&quot;, &quot;my/Employee&quot;], function(declare, Employee){
+  return declare(Employee, {
+    // override the askForRaise function from the Employee class
+    askForRaise: function(){
+      return this.inherited(arguments) * 20; // boss multiplier!
+    }
+  });
+});</textarea></div><p>To use the class:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s1">&#39;my/Employee&#39;</span><span class="p">,</span> <span class="s1">&#39;my/Boss&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Employee</span><span class="p">,</span> <span class="nx">Boss</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">kathryn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Boss</span><span class="p">(</span><span class="s2">&quot;Kathryn&quot;</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="s2">&quot;Minnesota&quot;</span><span class="p">,</span> <span class="mi">9000</span><span class="p">),</span>
+      <span class="nx">matt</span>    <span class="o">=</span> <span class="k">new</span> <span class="nx">Employee</span><span class="p">(</span><span class="s2">&quot;Matt&quot;</span><span class="p">,</span> <span class="mi">33</span><span class="p">,</span> <span class="s2">&quot;California&quot;</span><span class="p">,</span> <span class="mi">1000</span><span class="p">);</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">kathryn</span><span class="p">.</span><span class="nx">askForRaise</span><span class="p">(),</span> <span class="nx">matt</span><span class="p">.</span><span class="nx">askForRaise</span><span class="p">());</span> <span class="c1">// 3600, 20</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require(['my/Employee', 'my/Boss'], function(Employee, Boss){
+  var kathryn = new Boss(&quot;Kathryn&quot;, 26, &quot;Minnesota&quot;, 9000),
+      matt    = new Employee(&quot;Matt&quot;, 33, &quot;California&quot;, 1000);
+
+  console.log(kathryn.askForRaise(), matt.askForRaise()); // 3600, 20
+});</textarea></div><p>Note that the first argument to <code class="docutils literal"><span class="pre">this.inherited()</span></code> is always literally <code class="docutils literal"><span class="pre">arguments</span></code>, a special JavaScript array-
+like pseudo-variable which holds all the arguments (like argv in C). If you want to override the arguments passed to
+the superclass, pass them in an array as a second argument:</p>
+<div class="highlight"><pre><span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="p">[</span> <span class="nx">customArg1</span><span class="p">,</span> <span class="nx">customArg2</span> <span class="p">]);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">this.inherited(arguments, [ customArg1, customArg2 ]);</textarea></div><p>See <a class="reference internal" href="#inherited">inherited()</a> for more details.</p>
+</div>
+<div class="section" id="multiple-inheritance">
+<h3><a class="toc-backref" href="#id9">Multiple Inheritance</a><a class="headerlink" href="#multiple-inheritance" title="Permalink to this headline">¶</a></h3>
+<p>Just as Dojo adds class-based inheritance to JavaScript, so it adds support for <em>multiple inheritance</em> using
+<a class="reference external" href="http://en.wikipedia.org/wiki/C3_linearization">C3 superclass linearization</a>. This algorithm is what Python and some other languages use for its implementation of
+multiple inheritance. You can learn more details in the <a class="reference external" href="http://www.python.org/download/releases/2.3/mro">Python 2.3 Method Resolution Order documentation</a>.</p>
+<p>In static languages like Java, you must use typecasts to make an object &#8220;act like&#8221; its mixed-in class (in Java, this
+is through interfaces). In Dojo, you can use the mixed-in properties directly.</p>
+<p>Define a <code class="docutils literal"><span class="pre">my/Blizzard</span></code> class using the base class <code class="docutils literal"><span class="pre">VanillaSoftServe</span></code> and mixins <code class="docutils literal"><span class="pre">OreoMixin</span></code> and
+<code class="docutils literal"><span class="pre">CookieDoughMixin</span></code>.  In <code class="docutils literal"><span class="pre">my/Blizzard.js</span></code>:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">VanillaSoftServe</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span> <span class="p">(</span><span class="s2">&quot;adding soft serve&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">OreoMixin</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;mixing in oreos&quot;</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="nx">kind</span><span class="o">:</span> <span class="s2">&quot;plain&quot;</span>
+      <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">CookieDoughMixin</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;mixing in cookie dough&quot;</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="nx">chunkSize</span><span class="o">:</span> <span class="s2">&quot;medium&quot;</span>
+      <span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">VanillaSoftServe</span><span class="p">,</span> <span class="nx">OreoMixin</span><span class="p">,</span> <span class="nx">CookieDoughMixin</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;A blizzard with &quot;</span> <span class="o">+</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">kind</span> <span class="o">+</span> <span class="s2">&quot; oreos and &quot;</span> <span class="o">+</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">chunkSize</span> <span class="o">+</span> <span class="s2">&quot;-sized chunks of cookie dough.&quot;</span>
+      <span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/declare&quot;], function(declare){
+  var VanillaSoftServe = declare(null, {
+        constructor: function(){
+          console.debug (&quot;adding soft serve&quot;);
+        }
+      });
+
+  var OreoMixin = declare(null, {
+        constructor: function(){
+          console.debug(&quot;mixing in oreos&quot;);
+        },
+        kind: &quot;plain&quot;
+      });
+
+  var CookieDoughMixin = declare(null, {
+        constructor: function(){
+          console.debug(&quot;mixing in cookie dough&quot;);
+        },
+        chunkSize: &quot;medium&quot;
+      });
+  };
+
+  return declare([VanillaSoftServe, OreoMixin, CookieDoughMixin], {
+    constructor: function(){
+      console.debug(&quot;A blizzard with &quot; +
+        this.kind + &quot; oreos and &quot; +
+        this.chunkSize + &quot;-sized chunks of cookie dough.&quot;
+      );
+    }
+  });
+});</textarea></div><p>To use the class:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;my/Blizzard&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Blizzard</span><span class="p">){</span>
+  <span class="c1">// This will print to console:</span>
+  <span class="c1">// &quot;adding soft serve&quot;,</span>
+  <span class="c1">// &quot;mixing in oreos&quot;,</span>
+  <span class="c1">// &quot;mixing in cookie dough&quot;,</span>
+  <span class="c1">// &quot;A blizzard with plain oreos and medium-sized chunks of cookie dough.&quot;</span>
+  <span class="kd">var</span> <span class="nx">yummyTreat</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blizzard</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;my/Blizzard&quot;], function(Blizzard){
+  // This will print to console:
+  // &quot;adding soft serve&quot;,
+  // &quot;mixing in oreos&quot;,
+  // &quot;mixing in cookie dough&quot;,
+  // &quot;A blizzard with plain oreos and medium-sized chunks of cookie dough.&quot;
+  var yummyTreat = new Blizzard();
+});</textarea></div><p>Only the first class passed for multiple inheritance is a true superclass. The rest are <em>mixins</em>, and are mixed into
+the child class to produce the inheritance chain we need. On a practical level, this means that the <code class="docutils literal"><span class="pre">instanceof</span></code>
+operator cannot be used for mixins, only for base classes. Instead, use the <a class="reference internal" href="#isinstanceof">isInstanceOf()</a> function.</p>
+</div>
+</div>
+<div class="section" id="safemixin">
+<span id="dojo-base-declare-safemixin"></span><h2><a class="toc-backref" href="#id10">safeMixin()</a><a class="headerlink" href="#safemixin" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">safeMixin()</span></code> is a function defined in <code class="docutils literal"><span class="pre">dojo/declare</span></code>. It has the same functionality as
+<a class="reference internal" href="lang.html#dojo-base-lang-mixin"><span>dojo/_base/lang::mixin()</span></a>, but additionally it annotates all copied methods compatibly
+with <code class="docutils literal"><span class="pre">dojo/declare</span></code>. This decoration can affect how <code class="docutils literal"><span class="pre">this.inherited()</span></code> works in mixed-in methods.</p>
+<div class="section" id="usage">
+<h3><a class="toc-backref" href="#id11">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<p>The function is usually used with classes and instances produced by <cite>dojo/declare</cite>. It takes two parameters (both
+objects): target and source of properties. Just like <a class="reference internal" href="lang.html#dojo-base-lang-mixin"><span>dojo/_base/lang::mixin()</span></a> it
+returns <code class="docutils literal"><span class="pre">target</span></code>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="cm">/*...*/</span> <span class="p">},</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="cm">/*...*/</span> <span class="p">},</span>
+    <span class="nx">m3</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="cm">/*...*/</span> <span class="p">},</span>
+    <span class="nx">m4</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="cm">/*...*/</span> <span class="p">},</span>
+    <span class="nx">m5</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="cm">/*...*/</span> <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">A</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// we can do that because m1 is annotated by dojo.declare()</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="c1">// calls A.m1</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="nx">B</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// we can do that because m2 is annotated by class.extend()</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="c1">// calls A.m2</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">B</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m3</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// we have to specify the name because</span>
+      <span class="c1">// this method is not annotated properly</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="s2">&quot;m3&quot;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span> <span class="c1">// calls A.m3</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">B</span><span class="p">();</span>
+
+  <span class="nx">declare</span><span class="p">.</span><span class="nx">safeMixin</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m4</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// we can do that because m4 is annotated by dojo.safeMixin()</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="c1">// calls A.m4</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m5</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// we have to specify the name because</span>
+      <span class="c1">// this method is not annotated properly</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="s2">&quot;m5&quot;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span> <span class="c1">// calls A.m5</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;, &quot;dojo/_base/lang&quot;], function(declare, lang){
+  var A = declare(null, {
+    m1: function(){ /*...*/ },
+    m2: function(){ /*...*/ },
+    m3: function(){ /*...*/ },
+    m4: function(){ /*...*/ },
+    m5: function(){ /*...*/ }
+  });
+
+  var B = declare(A, {
+    m1: function(){
+      // we can do that because m1 is annotated by dojo.declare()
+      return this.inherited(arguments); // calls A.m1
+    }
+  });
+
+  B.extend({
+    m2: function(){
+      // we can do that because m2 is annotated by class.extend()
+      return this.inherited(arguments); // calls A.m2
+    }
+  });
+
+  lang.extend(B, {
+    m3: function(){
+      // we have to specify the name because
+      // this method is not annotated properly
+      return this.inherited(&quot;m3&quot;, arguments); // calls A.m3
+  });
+
+  var x = new B();
+
+  declare.safeMixin(x, {
+    m4: function(){
+      // we can do that because m4 is annotated by dojo.safeMixin()
+      return this.inherited(arguments); // calls A.m4
+    }
+  });
+
+  lang.mixin(x, {
+    m5: function(){
+      // we have to specify the name because
+      // this method is not annotated properly
+      return this.inherited(&quot;m5&quot;, arguments); // calls A.m5
+  });
+});</textarea></div></div>
+</div>
+<div class="section" id="notes">
+<h2><a class="toc-backref" href="#id12">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="common-conventions">
+<h3><a class="toc-backref" href="#id13">Common Conventions</a><a class="headerlink" href="#common-conventions" title="Permalink to this headline">¶</a></h3>
+<p>There are some common conventions used in Dojo Toolkit which are not strictly mandated by the class system, but
+coupled with AMD make the creation of classes more manageable and portable:</p>
+<ul class="simple">
+<li>The class name (first argument of <code class="docutils literal"><span class="pre">declare()</span></code>) is omitted in new development.  This ensures that the global
+namespace does not become polluted with classes and reduces the chances of name collisions.  Classes in Dojo Toolkit
+introduced prior to Dojo 1.7 will include the class name for backwards compatibility reasons.</li>
+<li>The AMD Module ID (MID) becomes the commonly referred to class name.  This name is implied from the path to the file.
+For example <code class="docutils literal"><span class="pre">package/Class.js</span></code> would make the MID <code class="docutils literal"><span class="pre">package/Class</span></code>.</li>
+<li>Classes that can be instantiated are named in a UpperCamelCased format.</li>
+<li>&#8220;Private&#8221; classes and mixins, that are not intended to be instantiated directly by an end-developer are prefaced
+with a underscore (<code class="docutils literal"><span class="pre">_</span></code>).  For example <code class="docutils literal"><span class="pre">_MyPrivateClass</span></code>.</li>
+<li>Classes instantied have  1 to 1 relationship with modules and should constitute the return value of the <code class="docutils literal"><span class="pre">define()</span></code>
+callback.</li>
+<li>Classes that are private and do not need to be instantiated outside of the module should be declared as variables
+within the module.  For example in a file name <code class="docutils literal"><span class="pre">package/MyCollection.js</span></code>:</li>
+</ul>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">_MyPrivateItem</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">someProperty</span><span class="o">:</span> <span class="kc">null</span>
+  <span class="p">});</span>
+
+  <span class="k">return</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">item</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">item</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">_MyPRivateItem</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/declare&quot;], function(declare){
+  var _MyPrivateItem = declare(null, {
+    someProperty: null
+  });
+
+  return declare(null, {
+    item: null,
+
+    constructor: function(){
+      this.item = new _MyPRivateItem();
+    }
+  });
+});</textarea></div></div>
+<div class="section" id="inheritance-info">
+<h3><a class="toc-backref" href="#id14">Inheritance Info</a><a class="headerlink" href="#inheritance-info" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo/declare()</span></code> uses <a class="reference external" href="http://en.wikipedia.org/wiki/C3_linearization">C3 superclass linearization</a> to convert multiple inheritance to a linear list of
+superclasses. While it solves most thorny problems of inheritance, some configurations are impossible:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">C</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">]);</span>
+  <span class="kd">var</span> <span class="nx">D</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">B</span><span class="p">,</span> <span class="nx">A</span><span class="p">]);</span>
+  <span class="kd">var</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">C</span><span class="p">,</span> <span class="nx">D</span><span class="p">]);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  var A = declare(null);
+  var B = declare(null);
+  var C = declare([A, B]);
+  var D = declare([B, A]);
+  var E = declare([C, D]);
+});</textarea></div><p>As you can see <code class="docutils literal"><span class="pre">D</span></code> requires that <code class="docutils literal"><span class="pre">B</span></code> should go before <code class="docutils literal"><span class="pre">A</span></code>, and <code class="docutils literal"><span class="pre">C</span></code> requires that <code class="docutils literal"><span class="pre">A</span></code> go before <code class="docutils literal"><span class="pre">B</span></code>. It
+makes an inheritance chain for <code class="docutils literal"><span class="pre">E</span></code> impossible because these contradictory requirements cannot be satisfied.
+Obviously any other circular dependencies cannot be satisfied either. But any <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a> inheritance will be linearized
+correctly including the famous <a class="reference external" href="http://en.wikipedia.org/wiki/Diamond_problem">Diamond problem</a>.</p>
+<p>In same rare cases it is possible to build a linear chain, which cannot reuse the base class:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="c1">// the first batch</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">A</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">C</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">B</span><span class="p">);</span>
+
+  <span class="c1">// the second batch</span>
+  <span class="kd">var</span> <span class="nx">D</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">E</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">D</span><span class="p">,</span> <span class="nx">B</span><span class="p">]);</span>
+
+  <span class="c1">// the quirky case</span>
+  <span class="kd">var</span> <span class="nx">F</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">C</span><span class="p">,</span> <span class="nx">E</span><span class="p">]);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  // the first batch
+  var A = declare(null);
+  var B = declare(A);
+  var C = declare(B);
+
+  // the second batch
+  var D = declare(null);
+  var E = declare([D, B]);
+
+  // the quirky case
+  var F = declare([C, E]);
+});</textarea></div><p>Let&#8217;s look at <code class="docutils literal"><span class="pre">C</span></code> and <code class="docutils literal"><span class="pre">E</span></code> inheritance chains:</p>
+<div class="highlight-python"><div class="highlight"><pre>C -&gt; B -&gt; A
+E -&gt; B -&gt; D
+</pre></div>
+</div>
+<p>As you can see in one case <code class="docutils literal"><span class="pre">B</span></code> follows after <code class="docutils literal"><span class="pre">A</span></code> and in the other case it follows <code class="docutils literal"><span class="pre">D</span></code>. How does <code class="docutils literal"><span class="pre">F</span></code> look like?</p>
+<div class="highlight-python"><div class="highlight"><pre>F -&gt; C -&gt; B -&gt; D -&gt; A
+</pre></div>
+</div>
+<p>As you can see all dependency rules are satisfied, yet the chain's tail doesn't match <code class="docutils literal"><span class="pre">C</span></code> as we are accustomed to
+see. Obviously <code class="docutils literal"><span class="pre">instanceof</span></code> would be useless in this case, but <a class="reference internal" href="#isinstanceof">isInstanceOf()</a> will work just fine. So when in
+doubt use <a class="reference internal" href="#isinstanceof">isInstanceOf()</a>.</p>
+</div>
+<div class="section" id="chaining">
+<h3><a class="toc-backref" href="#id15">Chaining</a><a class="headerlink" href="#chaining" title="Permalink to this headline">¶</a></h3>
+<p>By default only constructors are chained automatically. In some cases user may want to chain other methods too (e.g.
+life-cycle methods), which govern how instances are created, modified, and destroy, or methods called for various
+events. Good example is <code class="docutils literal"><span class="pre">destroy()</span></code> method, which destroys external objects and references and can be used by all
+super classes of an object.</p>
+<p>While <code class="docutils literal"><span class="pre">this.inherited()</span></code> takes care of all scenarios, chaining has following benefits:</p>
+<ul class="simple">
+<li>It is much faster than using <code class="docutils literal"><span class="pre">this.inherited()</span></code>. On some browsers the difference can be more than an order of
+magnitude for simple methods.</li>
+<li>It is automatic. User cannot forget to call a superclass method.</li>
+<li>Less code to write, less code to worry about.</li>
+</ul>
+<p>Chained methods should not return values, all returned values are going to be ignored. They all be called with the
+same arguments. A good practice is to avoid modifications to the arguments. It will ensure that your classes play nice
+with others when used as superclasses.</p>
+<p>There are two ways to chain methods: <strong>after</strong> and <strong>before</strong> (<a class="reference external" href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a> terminology is used). <strong>after</strong> means that a
+method is called after its superclass' method. <strong>before</strong> means that a method is called before calling its superclass
+method. All chains are described in a special property named <code class="docutils literal"><span class="pre">-chains-</span></code>:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">domConst</span><span class="p">,</span> <span class="nx">win</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="s2">&quot;-chains-&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">init</span><span class="o">:</span>    <span class="s2">&quot;after&quot;</span><span class="p">,</span>
+      <span class="nx">destroy</span><span class="o">:</span> <span class="s2">&quot;before&quot;</span>
+    <span class="p">},</span>
+
+    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">token</span><span class="p">){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">initialized</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">token</span> <span class="o">=</span> <span class="nx">token</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">node</span> <span class="o">=</span> <span class="nx">domConst</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">());</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;A.init&quot;</span><span class="p">);</span>
+    <span class="p">},</span>
+
+    <span class="nx">destroy</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">domConst</span><span class="p">.</span><span class="nx">destroy</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">node</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">node</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;A.destroy&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">A</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">token</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;B.init&quot;</span><span class="p">);</span>
+      <span class="c1">// more code</span>
+    <span class="p">},</span>
+
+    <span class="nx">destroy</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;B.destroy&quot;</span><span class="p">);</span>
+      <span class="c1">// more code</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">B</span><span class="p">();</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">init</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">destroy</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="c1">// prints:</span>
+<span class="c1">// A.init</span>
+<span class="c1">// B.init</span>
+<span class="c1">// B.destroy</span>
+<span class="c1">// A.destroy</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/_base/window&quot;],
+function(declare, domConst, win){
+  var A = declare(null, {
+    &quot;-chains-&quot;: {
+      init:    &quot;after&quot;,
+      destroy: &quot;before&quot;
+    },
+
+    init: function(token){
+      this.initialized = true;
+      this.token = token;
+      this.node = domConst.create(&quot;div&quot;, null, win.body());
+      console.log(&quot;A.init&quot;);
+    },
+
+    destroy: function(){
+      domConst.destroy(this.node);
+      this.node = null;
+      console.log(&quot;A.destroy&quot;);
+    }
+  });
+
+  var B = declare(A, {
+    init: function(token){
+      console.log(&quot;B.init&quot;);
+      // more code
+    },
+
+    destroy: function(){
+      console.log(&quot;B.destroy&quot;);
+      // more code
+    }
+  });
+
+  var x = new B();
+  x.init(42);
+  x.destroy();
+});
+
+// prints:
+// A.init
+// B.init
+// B.destroy
+// A.destroy</textarea></div><p>Chain declarations are inherited. Chaining for individual methods can be overridden in child classes, but not advised.</p>
+<p>There is a special case: chain declaration for <code class="docutils literal"><span class="pre">constructor</span></code>. This method supports two chaining directives:
+<strong>after</strong>, and <strong>manual</strong>. See more details in <a class="reference internal" href="#constructors">Constructors</a>.</p>
+</div>
+<div class="section" id="constructors">
+<h3><a class="toc-backref" href="#id16">Constructors</a><a class="headerlink" href="#constructors" title="Permalink to this headline">¶</a></h3>
+<p>Constructor invocations are governed by <a class="reference internal" href="#chaining">Chaining</a>.</p>
+<div class="section" id="default-constructor-chaining">
+<h4>Default Constructor Chaining<a class="headerlink" href="#default-constructor-chaining" title="Permalink to this headline">¶</a></h4>
+<p>By default all constructors are chained using <strong>after</strong> algorithm (using <a class="reference external" href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a> terminology). It means that after the
+linearization for any given class its constructor is going to be called <em>after</em> its superclass constructors:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">A</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">C</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">B</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="k">new</span> <span class="nx">C</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="c1">// prints:</span>
+<span class="c1">// A</span>
+<span class="c1">// B</span>
+<span class="c1">// C</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  var A = declare(null, {
+    constructor: function(){ console.log(&quot;A&quot;); }
+  });
+
+  var B = declare(A, {
+    constructor: function(){ console.log(&quot;B&quot;); }
+  });
+
+  var C = declare(B, {
+    constructor: function(){ console.log(&quot;C&quot;); }
+  });
+
+  new C();
+});
+
+// prints:
+// A
+// B
+// C</textarea></div><p>The exact algorithm of an instance initialization for chained constructors:</p>
+<p>Notes:</p>
+<ul class="simple">
+<li>A good practice for constructors is to avoid modifications of its arguments. It ensures that other classes can
+access original values, and allows to play nice when the class is used as a building block for other classes.</li>
+<li>If you do need to modify arguments of superclass constructors consider <a class="reference internal" href="#manual-constructor-chaining">Manual Constructor Chaining</a> as a better
+alternative to <code class="docutils literal"><span class="pre">preamble()</span></code>.</li>
+<li>If a class doesn't use <code class="docutils literal"><span class="pre">preamble()</span></code> it switches the initialization to the fast path making an instantiation
+substantially faster.</li>
+<li>For historical reasons <code class="docutils literal"><span class="pre">preamble()</span></code> is called for classes without a constructor and even for the last class in the
+superclass list, which doesn't have a superclass.</li>
+</ul>
+</div>
+<div class="section" id="manual-constructor-chaining">
+<h4>Manual Constructor Chaining<a class="headerlink" href="#manual-constructor-chaining" title="Permalink to this headline">¶</a></h4>
+<p>In some cases users may want to redefine how initialization works. In this case the chaining should be turned off so
+<code class="docutils literal"><span class="pre">this.inherited()</span></code> can be used instead.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">A</span><span class="p">,</span> <span class="p">{</span>
+    <span class="s2">&quot;-chains-&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">constructor</span><span class="o">:</span> <span class="s2">&quot;manual&quot;</span>
+    <span class="p">},</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">C</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">B</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;C - 1&quot;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;C - 2&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">C</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="c1">// prints:</span>
+<span class="c1">// C - 1</span>
+<span class="c1">// B</span>
+<span class="c1">// C - 2</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  var A = declare(null, {
+    constructor: function(){
+      console.log(&quot;A&quot;);
+    }
+  });
+
+  var B = declare(A, {
+    &quot;-chains-&quot;: {
+      constructor: &quot;manual&quot;
+    },
+    constructor: function(){
+      console.log(&quot;B&quot;);
+    }
+  });
+
+  var C = declare(B, {
+    constructor: function(){
+      console.log(&quot;C - 1&quot;);
+      this.inherited(arguments);
+      console.log(&quot;C - 2&quot;);
+    }
+  });
+
+  var x = new C();
+});
+
+// prints:
+// C - 1
+// B
+// C - 2</textarea></div><p>The example above doesn't call the constructor of <code class="docutils literal"><span class="pre">A</span></code> at all, and runs some code before and after calling the
+constructor of <code class="docutils literal"><span class="pre">B</span></code>.</p>
+<p>The exact algorithm of an instance initialization for manual constructors:</p>
+<p>Notes:</p>
+<ul class="simple">
+<li>Prefer manual constructors to deprecated <code class="docutils literal"><span class="pre">preamble()</span></code>.</li>
+<li>As soon as you switch to manual constructors <strong>all</strong> constructors in your hierarchy should be called manually. Make
+sure that all constructors are wired for that.</li>
+<li>Chaining works faster than simulating it with <code class="docutils literal"><span class="pre">this.inherited()</span></code>. Know when to use it.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="constructor-methods">
+<h3><a class="toc-backref" href="#id17">Constructor Methods</a><a class="headerlink" href="#constructor-methods" title="Permalink to this headline">¶</a></h3>
+<p>Every constructor created by <code class="docutils literal"><span class="pre">dojo/declare()</span></code> defines some convenience methods.</p>
+<div class="section" id="extend">
+<h4>extend()<a class="headerlink" href="#extend" title="Permalink to this headline">¶</a></h4>
+<p>This constructor method adds new properties to the constructor's prototype the same way as
+<a class="reference internal" href="lang.html#dojo-base-lang-extend"><span>dojo/_base/lang::extend()</span></a> works. The difference is that it annotates function
+properties the same way <code class="docutils literal"><span class="pre">dojo/declare()</span></code> does. These changes will be propagated to all classes and object where this
+class constructor was a superclass.</p>
+<p>The method has one argument, an object to mix in. It returns the constructor itself, which can be used for chained
+calls. For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// ...</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="nx">A</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// this method will replace the original method</span>
+      <span class="c1">// ...</span>
+    <span class="p">},</span>
+
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// ...</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">A</span><span class="p">();</span>
+  <span class="nx">a</span><span class="p">.</span><span class="nx">m1</span><span class="p">();</span>
+  <span class="nx">a</span><span class="p">.</span><span class="nx">m2</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  var A = declare(null, {
+    m1: function(){
+      // ...
+    }
+  });
+
+  A.extend({
+    m1: function(){
+      // this method will replace the original method
+      // ...
+    },
+
+    m2: function(){
+      // ...
+    }
+  });
+
+  var x = new A();
+  a.m1();
+  a.m2();
+});</textarea></div><p>Internally this method uses <a class="reference internal" href="#safemixin">safeMixin()</a>.</p>
+<p><strong>Note</strong> Do not forget that <code class="docutils literal"><span class="pre">dojo/declare()</span></code> uses mixins to build a constructor from several bases. Remember that
+only the first base is the true superclass, the rest is mixed in by copying properties. It means that if you
+<code class="docutils literal"><span class="pre">extend()</span></code> a constructor's prototype that was already used as a mixin and its methods became top methods in the
+chain of inheritance, these top methods would not be replaced because they are already copied.  For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;A org&quot;</span><span class="p">);</span> <span class="p">},</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;A org&quot;</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;B org&quot;</span><span class="p">);</span> <span class="p">},</span>
+    <span class="nx">m3</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;B org&quot;</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">C</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m3</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;C org&quot;</span><span class="p">);</span> <span class="p">},</span>
+    <span class="nx">m4</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;C org&quot;</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">ABC</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">,</span> <span class="nx">C</span><span class="p">],</span> <span class="p">{});</span>
+
+  <span class="c1">// now A is the true base, B and C are mixed in</span>
+
+  <span class="kd">var</span> <span class="nx">abc</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ABC</span><span class="p">();</span>
+
+  <span class="nx">abc</span> <span class="k">instanceof</span> <span class="nx">A</span><span class="p">;</span> <span class="c1">// true</span>
+  <span class="nx">abc</span> <span class="k">instanceof</span> <span class="nx">B</span><span class="p">;</span> <span class="c1">// false</span>
+  <span class="nx">abc</span> <span class="k">instanceof</span> <span class="nx">C</span><span class="p">;</span> <span class="c1">// false</span>
+
+  <span class="c1">// use isInstanceOf() to check if you include</span>
+  <span class="c1">// proper mixins</span>
+
+  <span class="c1">// let&#39;s list top methods:</span>
+  <span class="c1">// m1 comes from A (inherited)</span>
+  <span class="c1">// m2 comes from B (copied)</span>
+  <span class="c1">// m3 comes from C (copied)</span>
+  <span class="c1">// m4 comes from D (copied)</span>
+
+  <span class="nx">abc</span><span class="p">.</span><span class="nx">m1</span><span class="p">();</span> <span class="c1">// A org</span>
+  <span class="nx">abc</span><span class="p">.</span><span class="nx">m2</span><span class="p">();</span> <span class="c1">// A org, B org</span>
+  <span class="nx">abc</span><span class="p">.</span><span class="nx">m3</span><span class="p">();</span> <span class="c1">// B org, C org</span>
+  <span class="nx">abc</span><span class="p">.</span><span class="nx">m4</span><span class="p">();</span> <span class="c1">// C org</span>
+
+  <span class="c1">// let&#39;s extend() all prototypes</span>
+
+  <span class="nx">A</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;A new&quot;</span><span class="p">);</span> <span class="p">},</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;A new&quot;</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="nx">B</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;B new&quot;</span><span class="p">);</span> <span class="p">},</span>
+    <span class="nx">m3</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;B new&quot;</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="nx">C</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">m3</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;C new&quot;</span><span class="p">);</span> <span class="p">},</span>
+    <span class="nx">m4</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;C new&quot;</span><span class="p">);</span> <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="c1">// observe that top copied methods are not changed</span>
+
+  <span class="nx">abc</span><span class="p">.</span><span class="nx">m1</span><span class="p">();</span> <span class="c1">// A new</span>
+  <span class="nx">abc</span><span class="p">.</span><span class="nx">m2</span><span class="p">();</span> <span class="c1">// A new, B org</span>
+  <span class="nx">abc</span><span class="p">.</span><span class="nx">m3</span><span class="p">();</span> <span class="c1">// B new, C org</span>
+  <span class="nx">abc</span><span class="p">.</span><span class="nx">m4</span><span class="p">();</span> <span class="c1">// C org</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  var A = declare(null, {
+    m1: function(){ console.log(&quot;A org&quot;); },
+    m2: function(){ console.log(&quot;A org&quot;); }
+  });
+
+  var B = declare(null, {
+    m2: function(){ this.inherited(arguments); console.log(&quot;B org&quot;); },
+    m3: function(){ this.inherited(arguments); console.log(&quot;B org&quot;); }
+  });
+
+  var C = declare(null, {
+    m3: function(){ this.inherited(arguments); console.log(&quot;C org&quot;); },
+    m4: function(){ this.inherited(arguments); console.log(&quot;C org&quot;); }
+  });
+
+  var ABC = declare([A, B, C], {});
+
+  // now A is the true base, B and C are mixed in
+
+  var abc = new ABC();
+
+  abc instanceof A; // true
+  abc instanceof B; // false
+  abc instanceof C; // false
+
+  // use isInstanceOf() to check if you include
+  // proper mixins
+
+  // let's list top methods:
+  // m1 comes from A (inherited)
+  // m2 comes from B (copied)
+  // m3 comes from C (copied)
+  // m4 comes from D (copied)
+
+  abc.m1(); // A org
+  abc.m2(); // A org, B org
+  abc.m3(); // B org, C org
+  abc.m4(); // C org
+
+  // let's extend() all prototypes
+
+  A.extend({
+    m1: function(){ console.log(&quot;A new&quot;); },
+    m2: function(){ console.log(&quot;A new&quot;); }
+  });
+
+  B.extend({
+    m2: function(){ this.inherited(arguments); console.log(&quot;B new&quot;); },
+    m3: function(){ this.inherited(arguments); console.log(&quot;B new&quot;); }
+  });
+
+  C.extend({
+    m3: function(){ this.inherited(arguments); console.log(&quot;C new&quot;); },
+    m4: function(){ this.inherited(arguments); console.log(&quot;C new&quot;); }
+  });
+
+  // observe that top copied methods are not changed
+
+  abc.m1(); // A new
+  abc.m2(); // A new, B org
+  abc.m3(); // B new, C org
+  abc.m4(); // C org
+});</textarea></div><p>You can see that copied methods were not replaced in <code class="docutils literal"><span class="pre">ABC</span></code> and <code class="docutils literal"><span class="pre">abc</span></code>.</p>
+</div>
+<div class="section" id="createsubclass">
+<h4>createSubclass()<a class="headerlink" href="#createsubclass" title="Permalink to this headline">¶</a></h4>
+<p>This constructor method creates a subclass of the constructor's class using a list of base classes.</p>
+<p>The method has two arguments, first an array of base classes to extend from, second an object to mix in into the newly created class. It returns the constructor of the newly created subclass. For example if you declare the following A, B and C classes:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+     <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){},</span>
+     <span class="nx">s1</span><span class="o">:</span> <span class="s2">&quot;bar&quot;</span>
+  <span class="p">});</span>
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){},</span>
+      <span class="nx">s2</span><span class="o">:</span> <span class="s2">&quot;foo&quot;</span>
+  <span class="p">});</span>
+  <span class="kd">var</span> <span class="nx">C</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  var A = declare(null, {
+     m1: function(){},
+     s1: &quot;bar&quot;
+  });
+  var B = declare(null, {
+      m2: function(){},
+      s2: &quot;foo&quot;
+  });
+  var C = declare(null, {});
+});</textarea></div><p>The following createSubclass call:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">D1</span> <span class="o">=</span> <span class="nx">A</span><span class="p">.</span><span class="nx">createSubclass</span><span class="p">([</span><span class="nx">B</span><span class="p">,</span> <span class="nx">C</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){},</span>
+    <span class="nx">d1</span><span class="o">:</span> <span class="mi">42</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">d1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">D1</span><span class="p">();</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var D1 = A.createSubclass([B, C], {
+    m1: function(){},
+    d1: 42
+});
+var d1 = new D1();</textarea></div><p>is equivalent to:</p>
+<div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">D2</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">,</span> <span class="nx">C</span><span class="p">],</span> <span class="p">{</span>
+      <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){},</span>
+      <span class="nx">d1</span><span class="o">:</span> <span class="mi">42</span>
+  <span class="p">});</span>
+  <span class="kd">var</span> <span class="nx">d2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">D2</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">  var D2 = declare([A, B, C], {
+      m1: function(){},
+      d1: 42
+  });
+  var d2 = new D2();
+});</textarea></div><p><strong>Note</strong> Do not forget that <code class="docutils literal"><span class="pre">dojo/declare()</span></code> uses mixins to build a constructor from several bases. Remember that
+only the first base is the true superclass, the rest is mixed in by copying properties.</p>
+</div>
+</div>
+<div class="section" id="class-methods">
+<h3><a class="toc-backref" href="#id18">Class Methods</a><a class="headerlink" href="#class-methods" title="Permalink to this headline">¶</a></h3>
+<p>Every prototype produced by <code class="docutils literal"><span class="pre">dojo/declare()</span></code> contains some convenience methods.</p>
+<div class="section" id="inherited">
+<h4>inherited()<a class="headerlink" href="#inherited" title="Permalink to this headline">¶</a></h4>
+<p>The method is used to call a superclass method. It accepts up to three arguments:</p>
+<ul class="simple">
+<li>Optional name of the method to call. Generally it should be specified when calling <code class="docutils literal"><span class="pre">this.inherited()</span></code> from an un-
+annotated method, otherwise it will be deduced from the method itself.</li>
+<li><code class="docutils literal"><span class="pre">arguments</span></code> - literally <code class="docutils literal"><span class="pre">arguments</span></code> pseudo-variable, which is used for introspection.</li>
+<li>Optional array of arguments, which will be used to call a superclass method. If it is not specified <code class="docutils literal"><span class="pre">arguments</span></code>
+are used. If this argument is a literal constant <code class="docutils literal"><span class="pre">true</span></code>, then the found super method is not executed but returned
+as a value (see <a class="reference internal" href="#getinherited">getInherited()</a>).</li>
+</ul>
+<p>It returns whatever value was returned by a superclass method that was called. If it turned out that there is no
+superclass method to call, <a class="reference internal" href="#inherited">inherited()</a> doesn't do anything and returns <code class="docutils literal"><span class="pre">undefined</span></code>. For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// ...</span>
+    <span class="p">},</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// ...</span>
+    <span class="p">},</span>
+    <span class="nx">m3</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// ...</span>
+    <span class="p">},</span>
+    <span class="nx">m4</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// ...</span>
+    <span class="p">},</span>
+    <span class="nx">m5</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// ...</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">A</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// simple super call with the same arguments</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+      <span class="c1">// super call with new arguments</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="c1">// extend B using extend()</span>
+  <span class="nx">B</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// this method is going to be properly annotated =&gt;</span>
+      <span class="c1">// we can use the same form of this.inherited() as</span>
+      <span class="c1">// normal methods:</span>
+      <span class="c1">// simple super call with the same arguments</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+      <span class="c1">// super call with new arguments</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="c1">// extend B using lang.extend()</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">B</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m3</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// this method is not annotated =&gt;</span>
+      <span class="c1">// we should supply its name when calling</span>
+      <span class="c1">// a superclass:</span>
+      <span class="c1">// simple super call with the same arguments</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="s2">&quot;m3&quot;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+      <span class="c1">// super call with new arguments</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="s2">&quot;m3&quot;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="c1">// let&#39;s create an instance</span>
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">B</span><span class="p">();</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m1</span><span class="p">();</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m2</span><span class="p">();</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m3</span><span class="p">();</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m4</span><span class="p">();</span> <span class="c1">// A.m4() is called</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m5</span><span class="p">();</span> <span class="c1">// A.m5() is called</span>
+
+  <span class="c1">// add a method on the fly using declare.safeMixin()</span>
+  <span class="nx">declare</span><span class="p">.</span><span class="nx">safeMixin</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m4</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// this method is going to be properly annotated =&gt;</span>
+      <span class="c1">// we can use the same form of this.inherited() as</span>
+      <span class="c1">// normal methods:</span>
+      <span class="c1">// simple super call with the same arguments</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+      <span class="c1">// super call with new arguments</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="c1">// add a method on the fly</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m5</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// this method is not annotated =&gt;</span>
+    <span class="c1">// we should supply its name when calling</span>
+    <span class="c1">// a superclass:</span>
+    <span class="c1">// simple super call with the same arguments</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="s2">&quot;m5&quot;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+    <span class="c1">// super call with new arguments</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="s2">&quot;m5&quot;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]);</span>
+  <span class="p">};</span>
+
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m4</span><span class="p">();</span> <span class="c1">// our instance-specific method is called</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m5</span><span class="p">();</span> <span class="c1">// our instance-specific method is called</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dojo/_base/declare&quot;], function(lang, declare){
+  var A = declare(null, {
+    m1: function(){
+      // ...
+    },
+    m2: function(){
+      // ...
+    },
+    m3: function(){
+      // ...
+    },
+    m4: function(){
+      // ...
+    },
+    m5: function(){
+      // ...
+    }
+  });
+
+  var B = declare(A, {
+    m1: function(){
+      // simple super call with the same arguments
+      this.inherited(arguments);
+      // super call with new arguments
+      this.inherited(arguments, [1, 2, 3]);
+    }
+  });
+
+  // extend B using extend()
+  B.extend({
+    m2: function(){
+      // this method is going to be properly annotated =&gt;
+      // we can use the same form of this.inherited() as
+      // normal methods:
+      // simple super call with the same arguments
+      this.inherited(arguments);
+      // super call with new arguments
+      this.inherited(arguments, [&quot;a&quot;]);
+    }
+  });
+
+  // extend B using lang.extend()
+  lang.extend(B, {
+    m3: function(){
+      // this method is not annotated =&gt;
+      // we should supply its name when calling
+      // a superclass:
+      // simple super call with the same arguments
+      this.inherited(&quot;m3&quot;, arguments);
+      // super call with new arguments
+      this.inherited(&quot;m3&quot;, arguments, [&quot;a&quot;]);
+    }
+  });
+
+  // let's create an instance
+  var x = new B();
+  x.m1();
+  x.m2();
+  x.m3();
+  x.m4(); // A.m4() is called
+  x.m5(); // A.m5() is called
+
+  // add a method on the fly using declare.safeMixin()
+  declare.safeMixin(x, {
+    m4: function(){
+      // this method is going to be properly annotated =&gt;
+      // we can use the same form of this.inherited() as
+      // normal methods:
+      // simple super call with the same arguments
+      this.inherited(arguments);
+      // super call with new arguments
+      this.inherited(arguments, [&quot;a&quot;]);
+    }
+  });
+
+  // add a method on the fly
+  x.m5 = function(){
+    // this method is not annotated =&gt;
+    // we should supply its name when calling
+    // a superclass:
+    // simple super call with the same arguments
+    this.inherited(&quot;m5&quot;, arguments);
+    // super call with new arguments
+    this.inherited(&quot;m5&quot;, arguments, [&quot;a&quot;]);
+  };
+
+  x.m4(); // our instance-specific method is called
+  x.m5(); // our instance-specific method is called
+});</textarea></div></div>
+<div class="section" id="getinherited">
+<h4>getInherited()<a class="headerlink" href="#getinherited" title="Permalink to this headline">¶</a></h4>
+<p>This is a companion method to <a class="reference internal" href="#inherited">inherited()</a>. The difference is that it doesn't execute the found method, but returns
+it. It is up to the user to call it with proper arguments.</p>
+<p>The method accepts up to two arguments:</p>
+<ul class="simple">
+<li>Optional name of the method to call. If it is specified it must match the name of the caller. Generally it should be
+specified when calling this method from an un-annotated method (the same rule as for <a class="reference internal" href="#inherited">inherited()</a>).</li>
+<li><code class="docutils literal"><span class="pre">arguments</span></code> - literally <code class="docutils literal"><span class="pre">arguments</span></code> pseudo-variable, which is used for introspection.</li>
+</ul>
+<p>The result is a superclass method or <code class="docutils literal"><span class="pre">undefined</span></code>, if it was not found. You can use the result as you wish. The most
+useful case is to pass it to some other function, which cannot use <a class="reference internal" href="#inherited">inherited()</a> directly for some reasons. For
+example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// ...</span>
+    <span class="p">},</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// ...</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">A</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">logAndCall</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">args</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Calling &quot;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span><span class="p">);</span>
+      <span class="nx">method</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;...done&quot;</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="kd">var</span> <span class="nx">supermethod</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getInherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">logAndCall</span><span class="p">(</span><span class="s2">&quot;A.m1&quot;</span><span class="p">,</span> <span class="nx">supermethod</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">B</span><span class="p">();</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// we need to use a name here because</span>
+    <span class="c1">// this method was not properly annotated:</span>
+    <span class="kd">var</span> <span class="nx">supermethod</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getInherited</span><span class="p">(</span><span class="s2">&quot;m2&quot;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">logAndCall</span><span class="p">(</span><span class="s2">&quot;A.m2&quot;</span><span class="p">,</span> <span class="nx">supermethod</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]);</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  var A = declare(null, {
+    m1: function(){
+      // ...
+    },
+    m2: function(){
+      // ...
+    }
+  });
+
+  var B = declare(A, {
+    logAndCall: function(name, method, args){
+      console.log(&quot;Calling &quot; + name + &quot;...&quot;);
+      method.apply(this, args);
+      console.log(&quot;...done&quot;);
+    },
+    m1: function(){
+      var supermethod = this.getInherited(arguments);
+      this.logAndCall(&quot;A.m1&quot;, supermethod, [1, 2]);
+    }
+  });
+
+  var x = new B();
+  x.m2 = function(){
+    // we need to use a name here because
+    // this method was not properly annotated:
+    var supermethod = this.getInherited(&quot;m2&quot;, arguments);
+    this.logAndCall(&quot;A.m2&quot;, supermethod, [1, 2]);
+  };
+});</textarea></div><p>Internally this method is a helper, which calls <a class="reference internal" href="#inherited">inherited()</a> with <code class="docutils literal"><span class="pre">true</span></code> as the last argument.</p>
+</div>
+<div class="section" id="isinstanceof">
+<h4>isInstanceOf()<a class="headerlink" href="#isinstanceof" title="Permalink to this headline">¶</a></h4>
+<p>This method checks if an instance is derived from a given class. It is modeled on <code class="docutils literal"><span class="pre">instanceof</span></code> operator. It is most
+useful when you have classes built with the multiple inheritance somewhere in your hierarchy.</p>
+<p>The method accepts one argument: class (constructor). It returns <code class="docutils literal"><span class="pre">true</span></code>/<code class="docutils literal"><span class="pre">false</span></code>.  For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">C</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+
+  <span class="kd">var</span> <span class="nx">D</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">]);</span>
+
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">D</span><span class="p">();</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span> <span class="k">instanceof</span> <span class="nx">A</span><span class="p">);</span>     <span class="c1">// true</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">isInstanceOf</span><span class="p">(</span><span class="nx">A</span><span class="p">));</span>  <span class="c1">// true</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span> <span class="k">instanceof</span> <span class="nx">B</span><span class="p">);</span>     <span class="c1">// false</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">isInstanceOf</span><span class="p">(</span><span class="nx">B</span><span class="p">));</span>  <span class="c1">// true</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span> <span class="k">instanceof</span> <span class="nx">C</span><span class="p">);</span>     <span class="c1">// false</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">isInstanceOf</span><span class="p">(</span><span class="nx">C</span><span class="p">));</span>  <span class="c1">// false</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span> <span class="k">instanceof</span> <span class="nx">D</span><span class="p">);</span>     <span class="c1">// true</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">isInstanceOf</span><span class="p">(</span><span class="nx">D</span><span class="p">));</span>  <span class="c1">// true</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  var A = declare(null);
+  var B = declare(null);
+  var C = declare(null);
+
+  var D = declare([A, B]);
+
+  var x = new D();
+
+  console.log(x instanceof A);     // true
+  console.log(x.isInstanceOf(A));  // true
+
+  console.log(x instanceof B);     // false
+  console.log(x.isInstanceOf(B));  // true
+
+  console.log(x instanceof C);     // false
+  console.log(x.isInstanceOf(C));  // false
+
+  console.log(x instanceof D);     // true
+  console.log(x.isInstanceOf(D));  // true
+});</textarea></div></div>
+</div>
+<div class="section" id="using-raw-classes">
+<h3><a class="toc-backref" href="#id19">Using &quot;Raw&quot; Classes</a><a class="headerlink" href="#using-raw-classes" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo/declare()</span></code> allows to use &quot;raw&quot; classes created by other means as a superclass. Such classes are considered to
+be monolithic (because their structure cannot be introspected) and they cannot use advanced features like
+<a class="reference internal" href="#inherited">inherited()</a>. But their methods will be called by <a class="reference internal" href="#inherited">inherited()</a> and all their methods can be chained (see <a class="reference internal" href="#chaining">Chaining</a>)
+including constructors. For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">declare</span><span class="p">){</span>
+  <span class="c1">// plain vanilla constructor</span>
+  <span class="kd">var</span> <span class="nx">A</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">a</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+  <span class="p">};</span>
+  <span class="nx">A</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">m1</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// ...</span>
+  <span class="p">};</span>
+
+  <span class="c1">// another plain vanilla constructor</span>
+  <span class="kd">var</span> <span class="nx">B</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">b</span> <span class="o">=</span> <span class="s2">&quot;abc&quot;</span><span class="p">;</span>
+  <span class="p">};</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">B</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// ...</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">C</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">A</span><span class="p">,</span> <span class="nx">B</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">m1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">m2</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">C</span><span class="p">();</span>
+  <span class="c1">// both A and B will be called at this point</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">isInstanceOf</span><span class="p">(</span><span class="nx">A</span><span class="p">));</span> <span class="c1">// true</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">isInstanceOf</span><span class="p">(</span><span class="nx">B</span><span class="p">));</span> <span class="c1">// true</span>
+
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m1</span><span class="p">();</span> <span class="c1">// A.m1 will be called via this.inherited()</span>
+  <span class="nx">x</span><span class="p">.</span><span class="nx">m2</span><span class="p">();</span> <span class="c1">// B.m2 will be called via this.inherited()</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dojo/_base/declare&quot;], function(lang, declare){
+  // plain vanilla constructor
+  var A = function(){
+    this.a = 42;
+  };
+  A.prototype.m1 = function(){
+    // ...
+  };
+
+  // another plain vanilla constructor
+  var B = function(){
+    this.b = &quot;abc&quot;;
+  };
+  lang.extend(B, {
+    m2: function(){
+      // ...
+    }
+  });
+
+  var C = declare([A, B], {
+    m1: function(){
+      return this.inherited(arguments);
+    },
+    m2: function(){
+      return this.inherited(arguments);
+    }
+  });
+
+  var x = new C();
+  // both A and B will be called at this point
+
+  console.log(x.isInstanceOf(A)); // true
+  console.log(x.isInstanceOf(B)); // true
+
+  x.m1(); // A.m1 will be called via this.inherited()
+  x.m2(); // B.m2 will be called via this.inherited()
+});</textarea></div></div>
+<div class="section" id="meta-information">
+<h3><a class="toc-backref" href="#id20">Meta-Information</a><a class="headerlink" href="#meta-information" title="Permalink to this headline">¶</a></h3>
+<p>All meta-information is a subject to change and should not be used in the course of normal coding. If you use it, be
+ready to update your code, when it changes.</p>
+<p>Every constructor produced with <code class="docutils literal"><span class="pre">dojo/declare()</span></code> carries a meta-information required for internal plumbing and for
+introspection. It is implemented as a property called <code class="docutils literal"><span class="pre">meta</span></code> on a constructor. <code class="docutils literal"><span class="pre">meta</span></code> has following properties:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">bases</span></code></dt>
+<dd>List of all superclasses produced by the C3 linearization algorithm (see <a class="reference internal" href="#inheritance">Inheritance</a> for more details). The very
+first item in the list is the class itself.</dd>
+<dt><code class="docutils literal"><span class="pre">hidden</span></code></dt>
+<dd>Copy of all own properties and methods of the class. It is the third argument (or the second argument, if class name
+was omitted) of <code class="docutils literal"><span class="pre">dojo/declare()</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">chains</span></code></dt>
+<dd>List of chains (see <a class="reference internal" href="#chaining">Chaining</a> for more details) augmented by all inherited chains.</dd>
+<dt><code class="docutils literal"><span class="pre">parents</span></code></dt>
+<dd>List of immediate parents. It is the second argument (or the first argument, if class name was omitted) of
+<code class="docutils literal"><span class="pre">dojo/declare()</span></code>.</dd>
+</dl>
+<p>Additionally a prototype has a special property named <code class="docutils literal"><span class="pre">declaredClass</span></code>, if the class was named when created by
+<code class="docutils literal"><span class="pre">dojo/declare()</span></code>. If it was an anonymous class, this property can be missing, or it can be a auto-generated name in
+the form of <code class="docutils literal"><span class="pre">uniqName_NNN</span></code>, where <code class="docutils literal"><span class="pre">NNN</span></code> is some unique number. This property is used internally to distinguish
+between different classes. It is not meant for end users, but it can be useful for debugging.</p>
+<p>Every instance created by a <code class="docutils literal"><span class="pre">dojo/declare()</span></code> class has a special property called <code class="docutils literal"><span class="pre">inherited</span></code>, which is used to
+speed up <a class="reference internal" href="#inherited">inherited()</a> calls. Please don't touch it.</p>
+<p>Every method mixed in by <code class="docutils literal"><span class="pre">dojo/declare()</span></code> or <a class="reference internal" href="#safemixin">safeMixin()</a> is annotated: a special property called <code class="docutils literal"><span class="pre">nom</span></code> is added.
+It contains a name of the method in question and used by <a class="reference internal" href="#inherited">inherited()</a> and <a class="reference internal" href="#getinherited">getInherited()</a> to deduce the name of a
+superclass method. See <a class="reference internal" href="#safemixin">safeMixin()</a> for more details.</p>
+</div>
+<div class="section" id="safemixin-information">
+<h3><a class="toc-backref" href="#id21">safeMixin() Information</a><a class="headerlink" href="#safemixin-information" title="Permalink to this headline">¶</a></h3>
+<p>While copying properties <code class="docutils literal"><span class="pre">safeMixin()</span></code> (and <a class="reference internal" href="#dojo-declare">dojo/declare()</a>) annotates methods. All other properties are copied
+unmodified. On any function it adds a single property: <code class="docutils literal"><span class="pre">nom</span></code>, which value is a name of the function property.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="nx">declare</span><span class="p">.</span><span class="nx">safeMixin</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">a</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="nx">b</span><span class="o">:</span> <span class="s2">&quot;two&quot;</span><span class="p">,</span>
+    <span class="nx">c</span><span class="o">:</span> <span class="p">{</span>
+       <span class="nx">x</span><span class="o">:</span> <span class="mi">42</span>
+    <span class="p">},</span>
+    <span class="nx">d</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){}</span>
+  <span class="p">});</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">d</span><span class="p">.</span><span class="nx">nom</span><span class="p">);</span> <span class="c1">// prints: d</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  var x = {};
+  declare.safeMixin(x, {
+    a: 1,
+    b: &quot;two&quot;,
+    c: {
+       x: 42
+    },
+    d: function(){}
+  });
+
+  console.log(x.d.nom); // prints: d
+});</textarea></div><p>This way <code class="docutils literal"><span class="pre">this.inherited()</span></code> and <code class="docutils literal"><span class="pre">this.getInherited()</span></code> know what superclass method to call. If this property is not
+there, you have to specify the name as the first argument in <code class="docutils literal"><span class="pre">this.inherited()</span></code> or <code class="docutils literal"><span class="pre">this.getInherited()</span></code>.</p>
+<p>JavaScript treats functions as objects (not values) and uses them by reference. It means that if you add a function to
+two (or more) objects, it will be annotated several times leading to wrong annotations in different contexts:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">fun</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">y</span> <span class="o">=</span> <span class="p">{};</span>
+
+  <span class="nx">declare</span><span class="p">.</span><span class="nx">safeMixin</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="p">{</span><span class="nx">doSomething</span><span class="o">:</span> <span class="nx">fun</span><span class="p">});</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fun</span><span class="p">.</span><span class="nx">nom</span><span class="p">);</span>            <span class="c1">// doSomething</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">doSomething</span><span class="p">.</span><span class="nx">nom</span><span class="p">);</span>  <span class="c1">// doSomething</span>
+
+  <span class="nx">declare</span><span class="p">.</span><span class="nx">safeMixin</span><span class="p">(</span><span class="nx">y</span><span class="p">,</span> <span class="p">{</span><span class="nx">anotherName</span><span class="o">:</span> <span class="nx">fun</span><span class="p">});</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fun</span><span class="p">.</span><span class="nx">nom</span><span class="p">);</span>            <span class="c1">// anotherName</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">y</span><span class="p">.</span> <span class="nx">anotherName</span><span class="p">.</span><span class="nx">nom</span><span class="p">);</span> <span class="c1">// anotherName</span>
+
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">.</span><span class="nx">doSomething</span><span class="p">.</span><span class="nx">nom</span><span class="p">);</span>  <span class="c1">// anotherName</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;], function(declare){
+  var fun = function(){
+    this.inherited(arguments);
+  };
+
+  var x = {}, y = {};
+
+  declare.safeMixin(x, {doSomething: fun});
+  console.log(fun.nom);            // doSomething
+  console.log(x.doSomething.nom);  // doSomething
+
+  declare.safeMixin(y, {anotherName: fun});
+  console.log(fun.nom);            // anotherName
+  console.log(y. anotherName.nom); // anotherName
+
+  console.log(x.doSomething.nom);  // anotherName
+});</textarea></div><p>As you can see we reused the same function as a method, and it was annotated twice. It will break <code class="docutils literal"><span class="pre">this.inherited()</span></code>
+and <code class="docutils literal"><span class="pre">this.getInherited()</span></code> in all objects but the last one.</p>
+<p>How to prevent this problem?</p>
+<ul class="simple">
+<li>Try to avoid these situations. In most cases it can be done easily because functions are frequently created from
+literals and not reused in this manner (99% of all cases).</li>
+<li>Use function wrappers. Downside: it introduces an extra function call, which may affect the performance of short
+fast methods.</li>
+<li>Use a name in calls to <code class="docutils literal"><span class="pre">this.inherited()</span></code> and <code class="docutils literal"><span class="pre">this.getInherited()</span></code>. Downside: you have to know the name, and it
+is not always possible.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id22">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://dojotoolkit.org/documentation/tutorials/1.7/declare/">Classy JavaScript with dojo/declare</a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

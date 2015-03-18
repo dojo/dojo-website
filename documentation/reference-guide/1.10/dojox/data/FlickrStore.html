@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.data.FlickrStore &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.data.FlickrStore</a><ul>
+<li><a class="reference internal" href="#brief-intro-to-the-flickr-api">Brief intro to the Flickr API</a><ul>
+<li><a class="reference internal" href="#query">Query</a></li>
+<li><a class="reference internal" href="#response">Response</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#flickrstore">FlickrStore</a><ul>
+<li><a class="reference internal" href="#constructor-parameters">Constructor Parameters</a></li>
+<li><a class="reference internal" href="#item-attributes">Item Attributes</a></li>
+<li><a class="reference internal" href="#query-syntax">Query Syntax</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#sample-1-listing-nature-pictures">Sample 1:  Listing nature pictures</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-data-flickrstore">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.data.FlickrStore</a><a class="headerlink" href="#dojox-data-flickrstore" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-data-flickrstore" id="id2">dojox.data.FlickrStore</a><ul>
+<li><a class="reference internal" href="#brief-intro-to-the-flickr-api" id="id3">Brief intro to the Flickr API</a><ul>
+<li><a class="reference internal" href="#query" id="id4">Query</a></li>
+<li><a class="reference internal" href="#response" id="id5">Response</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#flickrstore" id="id6">FlickrStore</a><ul>
+<li><a class="reference internal" href="#constructor-parameters" id="id7">Constructor Parameters</a></li>
+<li><a class="reference internal" href="#item-attributes" id="id8">Item Attributes</a></li>
+<li><a class="reference internal" href="#query-syntax" id="id9">Query Syntax</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples" id="id10">Examples</a><ul>
+<li><a class="reference internal" href="#sample-1-listing-nature-pictures" id="id11">Sample 1:  Listing nature pictures</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Dojo has several examples of browser in-memory stores, such as <a class="reference internal" href="../../dojo/data/ItemFileReadStore.html#dojo-data-itemfilereadstore"><span>dojo.data.ItemFileReadStore</span></a>, <a class="reference internal" href="CsvStore.html#dojox-data-csvstore"><span>dojox.data.CsvStore</span></a>, and <a class="reference internal" href="OpmlStore.html#dojox-data-opmlstore"><span>dojox.data.OpmlStore</span></a>. While these stores are useful and great examples of how data stores can be used to wrapper accessing data, they are not the only way data is served and processed. In many cases, data stores can wrapper external services. It is those services that perform the querying and filtering of data, and then provide only that as a subset back to the data store for presentation as items.</p>
+<p>FlickrStore is one such store. The purpose of FlickrStore is to wrapper the public photo feed of the Flickr service. Then by simply using the FlickrStore store, as you would any data store in Dojo, you now have access to querying the vast repository of public photos made available by others on the Web.</p>
+<p><strong>Note: While this store wraps making calls to the Flickr service, as a user, you should still verify that you agree to the terms and conditions by which you are using the public flickr photo service. Review their terms and conditions, and the API terms and conditions.</strong></p>
+<p>The Flickr service provides its data back in a wide variety of formats (for example, ATOM, RSS, and JSON) but FlickrStore only makes use of the JSON format. The following example shows a query that FlickrStore processes and the response:</p>
+<div class="section" id="brief-intro-to-the-flickr-api">
+<h2><a class="toc-backref" href="#id3">Brief intro to the Flickr API</a><a class="headerlink" href="#brief-intro-to-the-flickr-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="query">
+<h3><a class="toc-backref" href="#id4">Query</a><a class="headerlink" href="#query" title="Permalink to this headline">¶</a></h3>
+<p>Query (all pictures with tags animals, foxes, and cute):</p>
+<div class="highlight"><pre><span class="nx">http</span><span class="o">:</span><span class="c1">//api.flickr.com/services/feeds/photos_public.gne?tags=animals,bats,cute&amp;format=json&amp;tagmode=all</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">http://api.flickr.com/services/feeds/photos_public.gne?tags=animals,bats,cute&amp;format=json&amp;tagmode=all</textarea></div></div>
+<div class="section" id="response">
+<h3><a class="toc-backref" href="#id5">Response</a><a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="nx">jsonFlickrFeed</span><span class="p">({</span>
+      <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Photos from everyone tagged animals, foxes and cute&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;link&quot;</span><span class="o">:</span> <span class="s2">&quot;http://www.flickr.com/photos/&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;modified&quot;</span><span class="o">:</span> <span class="s2">&quot;2007-05-24T09:35:27Z&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;generator&quot;</span><span class="o">:</span> <span class="s2">&quot;http://www.flickr.com/&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;items&quot;</span><span class="o">:</span> <span class="p">[</span>
+         <span class="p">{</span>
+              <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Ceramic Figures&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;link&quot;</span><span class="o">:</span> <span class="s2">&quot;http://www.flickr.com/photos/36362445@N00/511998141/&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;media&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;m&quot;</span><span class="o">:</span><span class="s2">&quot;http://farm1.static.flickr.com/228/511998141_7b8398c3eb_m.jpg&quot;</span><span class="p">},</span>
+              <span class="s2">&quot;date_taken&quot;</span><span class="o">:</span> <span class="s2">&quot;2006-04-04T10:21:43-08:00&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;&lt;p&gt;&lt;a href=&quot;</span><span class="nx">http</span><span class="o">:</span><span class="c1">//www.flickr.com/people/36362445@N00/&quot;&gt;travellingcharl&lt;/a&gt; posted a photo:&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/36362445@N00/511998141/&quot; title=&quot;Ceramic Figures&quot;&gt;&lt;img src=&quot;http://farm1.static.flickr.com/228/511998141_7b8398c3eb_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;Ceramic Figures&quot; /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Ceramic figurines inside the Shinto shrine.&lt;/p&gt;&quot;,</span>
+              <span class="s2">&quot;published&quot;</span><span class="o">:</span> <span class="s2">&quot;2007-05-24T09:35:27Z&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;author&quot;</span><span class="o">:</span> <span class="s2">&quot;nobody@flickr.com (travellingcharl)&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;tags&quot;</span><span class="o">:</span> <span class="s2">&quot;cute animals japan ceramic geocaching coins toyko foxes naritatbstation3&quot;</span>
+         <span class="p">},</span>
+         <span class="p">{</span>
+              <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;Red Fox pup&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;link&quot;</span><span class="o">:</span> <span class="s2">&quot;http://www.flickr.com/photos/norwick/301289990/&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;media&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;m&quot;</span><span class="o">:</span><span class="s2">&quot;http://farm1.static.flickr.com/104/301289990_da7413890b_m.jpg&quot;</span><span class="p">},</span>
+              <span class="s2">&quot;date_taken&quot;</span><span class="o">:</span> <span class="s2">&quot;2005-06-09T16:17:49-08:00&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;&lt;p&gt;&lt;a href=&quot;</span><span class="nx">http</span><span class="o">:</span><span class="c1">//www.flickr.com/people/norwick/&quot;&gt;bluebird&#39;s&lt;/a&gt; posted a photo:&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/norwick/301289990/&quot; title=&quot;Red Fox pup&quot;&gt;&lt;img src=&quot;http://farm1.static.flickr.com/104/301289990_da7413890b_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;Red Fox pup&quot; /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Are you sure it&#39;s save to come out!&lt;/p&gt;&quot;,</span>
+              <span class="s2">&quot;published&quot;</span><span class="o">:</span> <span class="s2">&quot;2006-11-19T22:14:47Z&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;author&quot;</span><span class="o">:</span> <span class="s2">&quot;nobody@flickr.com (bluebird&#39;s)&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;tags&quot;</span><span class="o">:</span> <span class="s2">&quot;wild summer canada cute nature beauty field animals landscape tiere scenery jung wilde sommer wildlife natur young feld felder adorable peaceful canadian alberta summertime prairie aussicht prairies landschaft foxes alert tier countrylife predators kanada redfox perky okotoks junger rotfuchs kanadische foxpups roterfuchs&quot;</span>
+         <span class="p">}</span>
+      <span class="p">]</span>
+<span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">jsonFlickrFeed({
+      &quot;title&quot;: &quot;Photos from everyone tagged animals, foxes and cute&quot;,
+      &quot;link&quot;: &quot;http://www.flickr.com/photos/&quot;,
+      &quot;description&quot;: &quot;&quot;,
+      &quot;modified&quot;: &quot;2007-05-24T09:35:27Z&quot;,
+      &quot;generator&quot;: &quot;http://www.flickr.com/&quot;,
+      &quot;items&quot;: [
+         {
+              &quot;title&quot;: &quot;Ceramic Figures&quot;,
+              &quot;link&quot;: &quot;http://www.flickr.com/photos/36362445&#64;N00/511998141/&quot;,
+              &quot;media&quot;: {&quot;m&quot;:&quot;http://farm1.static.flickr.com/228/511998141_7b8398c3eb_m.jpg&quot;},
+              &quot;date_taken&quot;: &quot;2006-04-04T10:21:43-08:00&quot;,
+              &quot;description&quot;: &quot;&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/36362445&#64;N00/&quot;&gt;travellingcharl&lt;/a&gt; posted a photo:&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/36362445&#64;N00/511998141/&quot; title=&quot;Ceramic Figures&quot;&gt;&lt;img src=&quot;http://farm1.static.flickr.com/228/511998141_7b8398c3eb_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;Ceramic Figures&quot; /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Ceramic figurines inside the Shinto shrine.&lt;/p&gt;&quot;,
+              &quot;published&quot;: &quot;2007-05-24T09:35:27Z&quot;,
+              &quot;author&quot;: &quot;nobody&#64;flickr.com (travellingcharl)&quot;,
+              &quot;tags&quot;: &quot;cute animals japan ceramic geocaching coins toyko foxes naritatbstation3&quot;
+         },
+         {
+              &quot;title&quot;: &quot;Red Fox pup&quot;,
+              &quot;link&quot;: &quot;http://www.flickr.com/photos/norwick/301289990/&quot;,
+              &quot;media&quot;: {&quot;m&quot;:&quot;http://farm1.static.flickr.com/104/301289990_da7413890b_m.jpg&quot;},
+              &quot;date_taken&quot;: &quot;2005-06-09T16:17:49-08:00&quot;,
+              &quot;description&quot;: &quot;&lt;p&gt;&lt;a href=&quot;http://www.flickr.com/people/norwick/&quot;&gt;bluebird's&lt;/a&gt; posted a photo:&lt;/p&gt; &lt;p&gt;&lt;a href=&quot;http://www.flickr.com/photos/norwick/301289990/&quot; title=&quot;Red Fox pup&quot;&gt;&lt;img src=&quot;http://farm1.static.flickr.com/104/301289990_da7413890b_m.jpg&quot; width=&quot;240&quot; height=&quot;180&quot; alt=&quot;Red Fox pup&quot; /&gt;&lt;/a&gt;&lt;/p&gt; &lt;p&gt;Are you sure it's save to come out!&lt;/p&gt;&quot;,
+              &quot;published&quot;: &quot;2006-11-19T22:14:47Z&quot;,
+              &quot;author&quot;: &quot;nobody&#64;flickr.com (bluebird's)&quot;,
+              &quot;tags&quot;: &quot;wild summer canada cute nature beauty field animals landscape tiere scenery jung wilde sommer wildlife natur young feld felder adorable peaceful canadian alberta summertime prairie aussicht prairies landschaft foxes alert tier countrylife predators kanada redfox perky okotoks junger rotfuchs kanadische foxpups roterfuchs&quot;
+         }
+      ]
+})</textarea></div></div>
+</div>
+<div class="section" id="flickrstore">
+<h2><a class="toc-backref" href="#id6">FlickrStore</a><a class="headerlink" href="#flickrstore" title="Permalink to this headline">¶</a></h2>
+<p>FlickrStore&#8217;s role is to process the query parameters passed to the dojo.data.api.Read API and generate the appropriate service URL. It then processes the response from the service and handles accessing the items returned from the query. It also provides simple attribute access to all the values.</p>
+<div class="section" id="constructor-parameters">
+<h3><a class="toc-backref" href="#id7">Constructor Parameters</a><a class="headerlink" href="#constructor-parameters" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="59%" />
+<col width="18%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Attribute</strong></td>
+<td><strong>Description</strong></td>
+<td>Since</td>
+</tr>
+<tr class="row-even"><td>label</td>
+<td>The item attribute to use as the label of the Flickr item.
+Defaults to &#8216;title&#8217;</td>
+<td>Dojo 1.1</td>
+</tr>
+<tr class="row-odd"><td>urlPreventCache</td>
+<td>Flag controlling whether preventCache of dojo.io.script is used to
+prevent browser caching.  Default is true.</td>
+<td>Dojo 1.4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="item-attributes">
+<h3><a class="toc-backref" href="#id8">Item Attributes</a><a class="headerlink" href="#item-attributes" title="Permalink to this headline">¶</a></h3>
+<p>All items returned from FlickrStore have the following attributes that can be accessed using the dojo.data.api.Read API to retrieve data about the item:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>title</td>
+<td>The title of the photo.</td>
+</tr>
+<tr class="row-even"><td>author</td>
+<td>The person who published the photo to Flickr.</td>
+</tr>
+<tr class="row-odd"><td>description</td>
+<td>A description of the photo. This will generally contain HTML formatted text.</td>
+</tr>
+<tr class="row-even"><td>dateTaken</td>
+<td>A JavaScript date object representing the date the photo was taken.</td>
+</tr>
+<tr class="row-odd"><td>datePublished</td>
+<td>A JavaScript date object representing the date the photo was published to Flickr.</td>
+</tr>
+<tr class="row-even"><td>tags</td>
+<td>The tags that are assigned to this photo. flickrStore.getValue(item, &#8220;tags&#8221;) returns the first tag,
+flickrStore.getValues(item, &#8220;tags&#8221;) returns all tags.</td>
+</tr>
+<tr class="row-odd"><td>imageUrl</td>
+<td>A URL to the full resolution photo image.</td>
+</tr>
+<tr class="row-even"><td>imageUrlSmall</td>
+<td>A URL to the small (icon sized) resolution photo image.</td>
+</tr>
+<tr class="row-odd"><td>imageUrlMedium</td>
+<td>A URL to the mid resolution photo image.</td>
+</tr>
+<tr class="row-even"><td>link</td>
+<td>A URL linking to the Flickr page displaying the image.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="query-syntax">
+<h3><a class="toc-backref" href="#id9">Query Syntax</a><a class="headerlink" href="#query-syntax" title="Permalink to this headline">¶</a></h3>
+<p>The fetch method query syntax for FlickrStore is simple and straightforward. It allows the following attributes to be queried against:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>id</td>
+<td>Flickr userid to use to narrow the search scope. This is optional.</td>
+</tr>
+<tr class="row-even"><td>ids</td>
+<td>A comma separated list of IDs used to narrow search scope. This is optional.</td>
+</tr>
+<tr class="row-odd"><td>tags</td>
+<td>A comma separated list of tags to search for matches on. This is optional.</td>
+</tr>
+<tr class="row-even"><td>tagmode</td>
+<td>Indicates whether all tags must match from the list or any can match from the list. Valid values are all or any and the
+default is any.</td>
+</tr>
+<tr class="row-odd"><td>lang</td>
+<td>Specifies the language to return the results in. This is optional.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong> Unlike all the other example stores, the FlickrStore store cannot do wild-card matching of the attributes. This is because the Flickr public photo feed service cannot do it. In an ideal service implementation, the Flickr service would provide a mechanism by with to pass in wild cards as part of its query parameters. Also, the Flickr public feed API limits the number of returned photos to a maximum of twenty.</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id10">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sample-1-listing-nature-pictures">
+<h3><a class="toc-backref" href="#id11">Sample 1:  Listing nature pictures</a><a class="headerlink" href="#sample-1-listing-nature-pictures" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.data.FlickrStore&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.Button&quot;</span><span class="p">);</span>
+
+<span class="c1">// This function performs some basic dojo initialization.  In this case it connects the button</span>
+<span class="c1">// onClick to a function which invokes the fetch().  The fetch function queries for all items</span>
+<span class="c1">// and provides callbacks to use for completion of data retrieval or reporting of errors.</span>
+<span class="c1">// Set the init function to run when dojo loading and page parsing has completed.</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+   <span class="c1">// Function to perform a fetch on the datastore when a button is clicked</span>
+   <span class="kd">function</span> <span class="nx">getAllItems</span><span class="p">(){</span>
+
+     <span class="c1">// Callback to perform an action when the data items are starting to be returned:</span>
+     <span class="kd">function</span> <span class="nx">clearOldList</span><span class="p">(</span><span class="nx">size</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+       <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">);</span>
+       <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+         <span class="k">while</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">){</span>
+           <span class="nx">list</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">);</span>
+         <span class="p">}</span>
+       <span class="p">}</span>
+     <span class="p">}</span>
+
+     <span class="c1">// Callback for processing a returned list of items.</span>
+     <span class="kd">function</span> <span class="nx">gotItems</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+       <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">);</span>
+       <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+         <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+         <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+           <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+           <span class="kd">var</span> <span class="nx">image</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;img&quot;</span><span class="p">);</span>
+           <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">image</span><span class="p">);</span>
+           <span class="nx">image</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;src&quot;</span><span class="p">,</span> <span class="nx">flickrStore</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="s2">&quot;imageUrlMedium&quot;</span><span class="p">));</span>
+           <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+         <span class="p">}</span>
+       <span class="p">}</span>
+     <span class="p">}</span>
+
+     <span class="c1">// Callback for if the lookup fails.</span>
+     <span class="kd">function</span> <span class="nx">fetchFailed</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+       <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;lookup failed.&quot;</span><span class="p">);</span>
+     <span class="p">}</span>
+
+     <span class="c1">// Fetch the images.</span>
+     <span class="nx">flickrStore</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span><span class="nx">query</span><span class="o">:</span><span class="p">{</span> <span class="nx">tags</span><span class="o">:</span> <span class="s2">&quot;nature&quot;</span><span class="p">},</span> <span class="nx">onBegin</span><span class="o">:</span> <span class="nx">clearOldList</span><span class="p">,</span> <span class="nx">onComplete</span><span class="o">:</span> <span class="nx">gotItems</span><span class="p">,</span> <span class="nx">onError</span><span class="o">:</span> <span class="nx">fetchFailed</span><span class="p">});</span>
+   <span class="p">}</span>
+   <span class="c1">// Link the click event of the button to driving the fetch.</span>
+   <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="s2">&quot;onClick&quot;</span><span class="p">,</span> <span class="nx">getAllItems</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.data.FlickrStore&quot;);
+dojo.require(&quot;dijit.form.Button&quot;);
+
+// This function performs some basic dojo initialization.  In this case it connects the button
+// onClick to a function which invokes the fetch().  The fetch function queries for all items
+// and provides callbacks to use for completion of data retrieval or reporting of errors.
+// Set the init function to run when dojo loading and page parsing has completed.
+dojo.ready(function(){
+   // Function to perform a fetch on the datastore when a button is clicked
+   function getAllItems(){
+
+     // Callback to perform an action when the data items are starting to be returned:
+     function clearOldList(size, request){
+       var list = dojo.byId(&quot;list&quot;);
+       if(list){
+         while(list.firstChild){
+           list.removeChild(list.firstChild);
+         }
+       }
+     }
+
+     // Callback for processing a returned list of items.
+     function gotItems(items, request){
+       var list = dojo.byId(&quot;list&quot;);
+       if(list){
+         var i;
+         for(i = 0; i &lt; items.length; i++){
+           var item = items[i];
+           var image = document.createElement(&quot;img&quot;);
+           list.appendChild(image);
+           image.setAttribute(&quot;src&quot;, flickrStore.getValue(item, &quot;imageUrlMedium&quot;));
+           list.appendChild(document.createElement(&quot;br&quot;));
+         }
+       }
+     }
+
+     // Callback for if the lookup fails.
+     function fetchFailed(error, request){
+       alert(&quot;lookup failed.&quot;);
+     }
+
+     // Fetch the images.
+     flickrStore.fetch({query:{ tags: &quot;nature&quot;}, onBegin: clearOldList, onComplete: gotItems, onError: fetchFailed});
+   }
+   // Link the click event of the button to driving the fetch.
+   dojo.connect(button, &quot;onClick&quot;, getAllItems);
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.data.FlickrStore&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;flickrStore&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit.form.Button&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>Find nature pictures!<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;list&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/span&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dojox.data.FlickrStore&quot; data-dojo-id=&quot;flickrStore&quot;&gt;&lt;/div&gt;
+&lt;div data-dojo-type=&quot;dijit.form.Button&quot; data-dojo-id=&quot;button&quot;&gt;Find nature pictures!&lt;/div&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;span id=&quot;list&quot;&gt;
+&lt;/span&gt;</textarea></div></div></div></div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

@@ -1,0 +1,201 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.10/dojox/socket" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.10/dojox/socket.html</div>
+<h1 class="functionIcon36 jsdoc-title module-title">dojox/socket<span style="font-size:11px;color:#999;"> (version 1.10)</span></h1>
+<div class="jsdoc-full-summary"><p>Provides a simple socket connection using WebSocket, or alternate
+communication mechanisms in legacy browsers for comet-style communication. This is based
+on the WebSocket API and returns an object that implements the WebSocket interface:
+<a href="http://dev.w3.org/html5/websockets/#websocket">http://dev.w3.org/html5/websockets/#websocket</a></p>
+</div>
+<div class="jsdoc-full-summary"><p>Provides socket connections. This can be used with virtually any Comet protocol.</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature">socket<span class="parameters">(argsOrUrl);</span>
+  </div>
+</div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">argsOrUrl</td>
+    <td class="jsdoc-param-type">Object</td>
+    <td class="jsdoc-param-description"><p>This uses the same arguments as the other I/O functions in Dojo, or a
+URL to connect to. The URL should be a relative URL in order to properly
+work with WebSockets (it can still be host relative, like //other-site.org/endpoint)</p>
+
+    </td>
+  </tr>
+</table>
+<div><strong>Returns:</strong><span class="jsdoc-return-type">any | undefined</span></div>
+<div class="jsdoc-return-description"><p>An object that implements the WebSocket API</p>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><pre><code>dojo.require(&quot;dojox.socket&quot;);
+var socket = dojox.socket({&quot;url://comet-server/comet&quot;);
+// we could also add auto-reconnect support
+// now we can connect to standard HTML5 WebSocket-style events
+dojo.connect(socket, &quot;onmessage&quot;, function(event){
+   var message = event.data;
+   // do something with the message
+});
+// send something
+socket.send(&quot;hi there&quot;);
+whenDone(function(){
+  socket.close();
+});</code></pre>
+<p>You can also use the Reconnect module:
+
+
+</p>
+<pre><code>dojo.require(&quot;dojox.socket&quot;);
+dojo.require(&quot;dojox.socket.Reconnect&quot;);
+var socket = dojox.socket({url:&quot;/comet&quot;});
+// add auto-reconnect support
+socket = dojox.socket.Reconnect(socket);</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a href="#1_10dojox_socket_LongPoll">LongPoll</a><span class="parameters"></span><span class="parameters">(args) </span><span>Provides a simple long-poll based comet-style socket/connection to a server and returns an
+object implementing the WebSocket interface:
+http://dev.w3.org/html5/websockets/#websocket</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_socket_replace">replace</a><span class="parameters"></span><span class="parameters">(socket,newSocket,listenForOpen) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_socket_WebSocket">WebSocket</a><span class="parameters"></span><span class="parameters">(args,fallback) </span><span>A wrapper for WebSocket, than handles standard args and relative URLs</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_socket_LongPoll"></a><span class="functionIcon">LongPoll</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/socket" class="jsdoc-link">dojox/socket</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Provides a simple long-poll based comet-style socket/connection to a server and returns an
+object implementing the WebSocket interface:
+<a href="http://dev.w3.org/html5/websockets/#websocket">http://dev.w3.org/html5/websockets/#websocket</a></p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>This uses the same arguments as the other I/O functions in Dojo, with this addition:
+args.interval:
+Indicates the amount of time (in milliseconds) after a response was received
+before another request is made. By default, a request is made immediately
+after getting a response. The interval can be increased to reduce load on the
+server or to do simple time-based polling where the server always responds
+immediately.
+args.transport:
+Provide an alternate transport like dojo.io.script.get</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">any</span></div>
+        <div class="jsdoc-return-description"><p>An object that implements the WebSocket API</p>
+</div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>dojo.require(&quot;dojox.socket.LongPoll&quot;);
+var socket = dojox.socket.LongPoll({url:&quot;/comet&quot;});</code></pre>
+<p>or:
+
+
+</p>
+<pre><code>dojo.require(&quot;dojox.socket.LongPoll&quot;);
+dojox.socket.LongPoll.add();
+var socket = dojox.socket({url:&quot;/comet&quot;});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_socket_replace"></a><span class="functionIcon">replace</span><span class="parameters">(socket,newSocket,listenForOpen)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/socket" class="jsdoc-link">dojox/socket</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">socket</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">newSocket</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">listenForOpen</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_socket_WebSocket"></a><span class="functionIcon">WebSocket</span><span class="parameters">(args,fallback)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/socket" class="jsdoc-link">dojox/socket</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>A wrapper for WebSocket, than handles standard args and relative URLs</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">fallback</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.10/dojox/socket" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

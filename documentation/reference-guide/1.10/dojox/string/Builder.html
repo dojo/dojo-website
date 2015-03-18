@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.string.Builder &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.string.Builder</a></li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-string-builder">
+<span id="id1"></span><h1>dojox.string.Builder<a class="headerlink" href="#dojox-string-builder" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Tom Trenka</td>
+</tr>
+</tbody>
+</table>
+<p>The DojoX String Builder is a constructor designed to make working with large strings, particularly in the context of recursive functions, much more efficient and performant.  The basic idea (borrowed primarily from the .NET Framework and heavily optimized) is that you can pass around a single Builder object (since objects are passed by reference and not by value) to various functions, and have each function <em>append</em> string fragments to the Builder; when you are finished, you can simply add the Builder to an existing string or explicitly call the toString method.</p>
+<p>A simple example of using the Builder:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.string.Builder&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">string</span><span class="p">.</span><span class="nx">Builder</span><span class="p">();</span>
+
+<span class="kd">function</span> <span class="nx">addOne</span><span class="p">(</span><span class="nx">builder</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">getSomeString</span><span class="p">();</span>  <span class="c1">// imagine this is a function that returns a decent sized string</span>
+    <span class="nx">builder</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">builder</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">addTwo</span><span class="p">(</span><span class="nx">builder</span><span class="p">,</span> <span class="nx">str</span><span class="p">){</span>
+    <span class="nx">builder</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">str</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">builder</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">addOne</span><span class="p">(</span><span class="nx">sb</span><span class="p">);</span>
+<span class="nx">addTwo</span><span class="p">(</span><span class="nx">sb</span><span class="p">,</span> <span class="s2">&quot;The rain in spain falls mainly on the plain&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="s2">&quot;This is a builder test &quot;</span> <span class="o">+</span> <span class="nx">sb</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.string.Builder&quot;);
+var sb = new dojox.string.Builder();
+
+function addOne(builder){
+    var s = getSomeString();  // imagine this is a function that returns a decent sized string
+    builder.append(s);
+    return builder;
+}
+
+function addTwo(builder, str){
+    builder.append(str);
+    return builder;
+}
+
+addOne(sb);
+addTwo(sb, &quot;The rain in spain falls mainly on the plain&quot;);
+var output = &quot;This is a builder test &quot; + sb;</textarea></div><p>While the above example is pretty basic, it demonstrates the usage pretty well.</p>
+<p>Situations where using a string builder is handy are template systems and serialization systems; for instance, creating a simple table could be written so that it uses the Builder as opposed to recursively calling itself and returning/appending string fragments.  Here&#8217;s an example:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.string.Builder&quot;</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">buildRow</span><span class="p">(</span><span class="nx">builder</span><span class="p">){</span>
+    <span class="nx">builder</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;&lt;tr&gt;&quot;</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="mi">6</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="nx">buildCell</span><span class="p">(</span><span class="nx">builder</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">builder</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;&lt;/tr&gt;&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">buildCell</span><span class="p">(</span><span class="nx">builder</span><span class="p">){</span>
+    <span class="nx">builder</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;This is some content&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">buildTable</span><span class="p">(</span><span class="nx">builder</span><span class="p">){</span>
+    <span class="nx">builder</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;&lt;table&gt;&quot;</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="mi">6</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="nx">buildRow</span><span class="p">(</span><span class="nx">builder</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">builder</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&quot;&lt;/table&gt;&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">string</span><span class="p">.</span><span class="nx">Builder</span><span class="p">();</span>
+<span class="nx">buildTable</span><span class="p">(</span><span class="nx">sb</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sb</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.string.Builder&quot;);
+function buildRow(builder){
+    builder.append(&quot;&lt;tr&gt;&quot;);
+    for(var i=0; i&lt;6; i++){
+        buildCell(builder);
+    }
+    builder.append(&quot;&lt;/tr&gt;&quot;);
+}
+
+function buildCell(builder){
+    builder.append(&quot;&lt;td&gt;&quot;, &quot;This is some content&quot;, &quot;&lt;/td&gt;&quot;);
+}
+
+function buildTable(builder){
+    builder.append(&quot;&lt;table&gt;&quot;);
+    for(var i=0; i&lt;6; i++){
+        buildRow(builder);
+    }
+    builder.append(&quot;&lt;/table&gt;&quot;);
+}
+
+var sb = new dojox.string.Builder();
+buildTable(sb);
+console.log(sb.toString());</textarea></div><p>The string Builder has the following methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li>append</li>
+<li>concat</li>
+<li>appendArray</li>
+<li>clear</li>
+<li>replace</li>
+<li>remove</li>
+<li>insert</li>
+<li>toString</li>
+</ul>
+</div></blockquote>
+<p>In general, the only methods used are <em>append</em> and <em>toString</em>.  <em>concat</em> and <em>appendArray</em> are basically versions of <em>append</em>; <em>clear</em> cleans out the internal string buffer.</p>
+<p><em>replace</em>, <em>remove</em> and <em>insert</em> all work on existing internal string buffers; <em>replace</em> functions exactly like String.replace.  <em>remove</em> will pull N characters beginning at idx:</p>
+<div class="highlight"><pre><span class="nx">sb</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">numChars</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">sb.remove(index, numChars);</textarea></div><p><em>insert</em> will place a string at index:</p>
+<div class="highlight"><pre><span class="nx">sb</span><span class="p">.</span><span class="nx">insert</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="s2">&quot;The rain in Spain falls mainly on the plain&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">sb.insert(index, &quot;The rain in Spain falls mainly on the plain&quot;);</textarea></div><p>For a reference on how the Builder was optimized, please see</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="http://www.sitepen.com/blog/2008/05/09/string-performance-an-analysis/">http://www.sitepen.com/blog/2008/05/09/string-performance-an-analysis/</a></li>
+<li><a class="reference external" href="http://www.sitepen.com/blog/2008/06/09/string-performance-getting-good-performance-from-internet-explorer/">http://www.sitepen.com/blog/2008/06/09/string-performance-getting-good-performance-from-internet-explorer/</a>.</li>
+</ul>
+</div></blockquote>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

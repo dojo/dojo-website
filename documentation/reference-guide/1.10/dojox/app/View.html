@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox/app/View &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox/app/View</a></li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-app-view">
+<span id="id1"></span><h1>dojox/app/View<a class="headerlink" href="#dojox-app-view" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V1.7 (<code class="docutils literal"><span class="pre">dojox/app/view</span></code>)</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal"><span class="pre">dojox/app/View</span></code> module provides the default View for <code class="docutils literal"><span class="pre">dojox/app</span></code>. It supports the view definition logic and lifecycle (aka View controller) from <code class="docutils literal"><span class="pre">dojox/app/ViewBase</span></code> as well as a template rendering engine to load the view UI as a template and the ability to provide an internationalisation module for the view. For those who want to build their own views based on alternate templating system, or without a templating system they should directly extend <code class="docutils literal"><span class="pre">dojox/app/ViewBase</span></code>.</p>
+<p>Each View can have one parent view and optionally several children views. It provides a templated
+container to host the DOM nodes for the children views. Its purpose is to allow the layout of the view to be provided
+through an html template and to have a set of children views which the view transitions between. For example, to display a set of tabs, you would use a View with a child view for each tab. The view&#8217;s template would define where within the view the children views are displayed and where any tab buttons and such are displayed.
+In this case the  &#8220;template&#8221;, for the base View is pretty simple. It is a simple HTML content. However, nodes within the template can be tagged with data-app-constraint=&#8221;top&#8221; (bottom, left, right) to define where that node and its children should be displayed.</p>
+<p>The models (<code class="docutils literal"><span class="pre">dojox/mvc</span></code> based or not) loaded from the config are available through the <code class="docutils literal"><span class="pre">loadedModels</span></code> property on the view. And the stores loaded from the config are available through the <code class="docutils literal"><span class="pre">loadedStores</span></code> property on the view.  Similarly the loaded NLS will be available through the <code class="docutils literal"><span class="pre">nls</span></code> property. On a given view both the models, stores and the nls of the parent views (up to the application) are available as well.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span>  <span class="na">style=</span><span class="s">&quot;background:#c5ccd3;&quot;</span> <span class="na">class=</span><span class="s">&quot;view mblView&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">data-app-constraint=</span><span class="s">&quot;top&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Heading&quot;</span><span class="nt">&gt;</span>Tab View<span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;ul</span> <span class="na">data-app-constraint=</span><span class="s">&quot;top&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/TabBar&quot;</span> <span class="na">barType=</span><span class="s">&quot;segmentedControl&quot;</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;li</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/TabBarButton&quot;</span> <span class="na">icon1=</span><span class="s">&quot;images/tab-icon-16.png&quot;</span>
+                      <span class="na">icon2=</span><span class="s">&quot;images/tab-icon-16h.png&quot;</span>
+                      <span class="na">transitionOptions=</span><span class="s">&#39;{title:&quot;TabScene-Tab1&quot;,target:&quot;tabscene,tab1&quot;,url: &quot;#tabscene,tab1&quot;}&#39;</span>
+                      <span class="na">selected=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>Tab 1<span class="nt">&lt;/li&gt;</span>
+              <span class="nt">&lt;li</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/TabBarButton&quot;</span> <span class="na">icon1=</span><span class="s">&quot;images/tab-icon-15.png&quot;</span>
+                      <span class="na">icon2=</span><span class="s">&quot;images/tab-icon-15h.png&quot;</span>
+                      <span class="na">transitionOptions=</span><span class="s">&#39;{title:&quot;TabScene-Tab2&quot;,target:&quot;tabscene,tab2&quot;,url: &quot;#tabscene,tab2&quot;}&#39;</span><span class="nt">&gt;</span>Tab 2<span class="nt">&lt;/li&gt;</span>
+              <span class="nt">&lt;li</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/TabBarButton&quot;</span> <span class="na">icon1=</span><span class="s">&quot;images/tab-icon-10.png&quot;</span>
+                      <span class="na">icon2=</span><span class="s">&quot;images/tab-icon-10h.png&quot;</span>
+                      <span class="na">transitionOptions=</span><span class="s">&#39;{title:&quot;TabScene-Tab3&quot;,target:&quot;tabscene,tab3&quot;,url: &quot;#tabscene,tab3&quot;, duration: 1000}&#39;</span><span class="nt">&gt;</span>Tab 3<span class="nt">&lt;/li&gt;</span>
+      <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div  style=&quot;background:#c5ccd3;&quot; class=&quot;view mblView&quot;&gt;
+      &lt;div data-app-constraint=&quot;top&quot; data-dojo-type=&quot;dojox/mobile/Heading&quot;&gt;Tab View&lt;/div&gt;
+      &lt;ul data-app-constraint=&quot;top&quot; data-dojo-type=&quot;dojox/mobile/TabBar&quot; barType=&quot;segmentedControl&quot;&gt;
+              &lt;li data-dojo-type=&quot;dojox/mobile/TabBarButton&quot; icon1=&quot;images/tab-icon-16.png&quot;
+                      icon2=&quot;images/tab-icon-16h.png&quot;
+                      transitionOptions='{title:&quot;TabScene-Tab1&quot;,target:&quot;tabscene,tab1&quot;,url: &quot;#tabscene,tab1&quot;}'
+                      selected=&quot;true&quot;&gt;Tab 1&lt;/li&gt;
+              &lt;li data-dojo-type=&quot;dojox/mobile/TabBarButton&quot; icon1=&quot;images/tab-icon-15.png&quot;
+                      icon2=&quot;images/tab-icon-15h.png&quot;
+                      transitionOptions='{title:&quot;TabScene-Tab2&quot;,target:&quot;tabscene,tab2&quot;,url: &quot;#tabscene,tab2&quot;}'&gt;Tab 2&lt;/li&gt;
+              &lt;li data-dojo-type=&quot;dojox/mobile/TabBarButton&quot; icon1=&quot;images/tab-icon-10.png&quot;
+                      icon2=&quot;images/tab-icon-10h.png&quot;
+                      transitionOptions='{title:&quot;TabScene-Tab3&quot;,target:&quot;tabscene,tab3&quot;,url: &quot;#tabscene,tab3&quot;, duration: 1000}'&gt;Tab 3&lt;/li&gt;
+      &lt;/ul&gt;
+&lt;/div&gt;</textarea></div><p>This template for the tabs view defines two areas with region top, a header and the tab buttons. The will be placed at
+the top of this main view when rendered.</p>
+<p>Normally, when using a BorderContainer, one would also have a data-app-constraint=&#8221;center&#8221; section. In the case of a View however, the &#8220;center&#8221; region will be applied to the currently active view (the current tab for example).</p>
+<p>The application can also provide view definition modules to implement the View lifecycle APIs which include ( init(), beforeActivate(), afterActivate(), beforeDeactivate(), afterDeactivate(), and destroy()).</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">init()</span></code> is called once after the view is created before it is shown for the first time.</li>
+<li><code class="docutils literal"><span class="pre">beforeActivate(previousView,</span> <span class="pre">data)</span></code> is called before the view is shown each time it is being transitioned in.</li>
+<li><code class="docutils literal"><span class="pre">beforeDeactivate(nextView,</span> <span class="pre">data)</span></code> is called before the view is hidden each time it is being transitioned out.</li>
+<li><code class="docutils literal"><span class="pre">afterActivate(previousView,</span> <span class="pre">data)</span></code> is called after the view is shown each time it is being transitioned in.</li>
+<li><code class="docutils literal"><span class="pre">afterDeactivate(nextView,</span> <span class="pre">data)</span></code> is called after the view is hidden each time it is being transitioned out.</li>
+</ul>
+<p>This module can act as a view controller, synchronizing the data between the model and the view.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/registry&quot;</span><span class="p">],</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">registry</span><span class="p">){</span>
+
+      <span class="k">return</span> <span class="p">{</span>
+              <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+                      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot; init called&quot;</span><span class="p">);</span>
+                      <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;mywidget&quot;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;widgetEvent&quot;</span><span class="p">,</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">hitch</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">){</span>
+                              <span class="c1">// save the value back to the model</span>
+                              <span class="k">this</span><span class="p">.</span><span class="nx">loadedModels</span><span class="p">.</span><span class="nx">myModel</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="p">...;</span>
+                      <span class="p">}));</span>
+              <span class="p">},</span>
+
+              <span class="nx">beforeActivate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">previousView</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+                      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot; beforeActivate called&quot;</span><span class="p">);</span>
+                      <span class="c1">// set the model value on the view</span>
+                      <span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;mywidget&quot;</span><span class="p">);</span>
+                      <span class="nx">widget</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">loadedModels</span><span class="p">.</span><span class="nx">myModel</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+              <span class="p">},</span>
+
+              <span class="nx">afterActivate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">previousView</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+                      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot; afterActivate called&quot;</span><span class="p">);</span>
+              <span class="p">},</span>
+
+              <span class="nx">beforeDeactivate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nextView</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+                      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot; beforeDeactivate called&quot;</span><span class="p">);</span>
+              <span class="p">},</span>
+
+              <span class="nx">afterDeactivate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nextView</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+                      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="o">+</span><span class="s2">&quot; afterDeactivate called&quot;</span><span class="p">);</span>
+              <span class="p">}</span>
+      <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/lang&quot;, &quot;dojo/dom&quot;, &quot;dijit/registry&quot;],
+  function(lang, dom, registry){
+
+      return {
+              init: function(){
+                      console.log(this.name+&quot; init called&quot;);
+                      registry.byId(&quot;mywidget&quot;).on(&quot;widgetEvent&quot;, lang.hitch(this, function(evt){
+                              // save the value back to the model
+                              this.loadedModels.myModel.value = ...;
+                      }));
+              },
+
+              beforeActivate: function(previousView, data){
+                      console.log(this.name+&quot; beforeActivate called&quot;);
+                      // set the model value on the view
+                      var widget = registry.byId(&quot;mywidget&quot;);
+                      widget.set(&quot;value&quot;, this.loadedModels.myModel.value);
+              },
+
+              afterActivate: function(previousView, data){
+                      console.log(this.name+&quot; afterActivate called&quot;);
+              },
+
+              beforeDeactivate: function(nextView, data){
+                      console.log(this.name+&quot; beforeDeactivate called&quot;);
+              },
+
+              afterDeactivate: function(nextView, data){
+                      console.log(this.name+&quot; afterDeactivate called&quot;);
+              }
+      };
+});</textarea></div><p>The data received in the activation and deactivation methods are the data passed in the data attributes of the
+transition options of the transition that led to that view.</p>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

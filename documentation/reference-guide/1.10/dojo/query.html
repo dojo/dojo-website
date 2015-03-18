@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/query &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/query</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#selector-engines">Selector Engines</a><ul>
+<li><a class="reference internal" href="#specifying-the-selector-level">Specifying the Selector Level</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#selector-support">Selector Support</a><ul>
+<li><a class="reference internal" href="#standard-css2-selectors">Standard CSS2 Selectors</a></li>
+<li><a class="reference internal" href="#additional-selectors-supported-by-lite-engine">Additional Selectors Supported By Lite Engine</a></li>
+<li><a class="reference internal" href="#standard-css2-1-selectors">Standard CSS2.1 Selectors</a></li>
+<li><a class="reference internal" href="#standard-css3-selectors">Standard CSS3 Selectors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#alternate-selector-engines">Alternate Selector Engines</a><ul>
+<li><a class="reference internal" href="#note-for-cross-domain-legacy-api-usage">Note for cross-domain legacy API usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-selector-queries">Example Selector Queries</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-query">
+<span id="id1"></span><h1><a class="toc-backref" href="#id16">dojo/query</a><a class="headerlink" href="#dojo-query" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-query" id="id16">dojo/query</a><ul>
+<li><a class="reference internal" href="#introduction" id="id17">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id18">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id19">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id20">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><code class="docutils literal"><span class="pre">dojo/query</span></code> returns a list of DOM nodes based on a CSS selector.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id17">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="request.html#dojo-request"><span>dojo/request</span></a> and XHR is half of the AJAX story. Once you make a request for data and receive a response, you must change the page.  Being able to change the HTML is dependent on locating nodes.</p>
+<p>To select DOM nodes in JavaScript, you can use the browser&#8217;s native DOM API, but it&#8217;s verbose and hard to work with, slow and can differ across browser.  For example, retrieving all nodes with the class &#8220;progressIndicator&#8221; uses this code:</p>
+<div class="highlight"><pre><span class="c1">// list every node with the class &quot;progressIndicator&quot;:</span>
+<span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="kd">var</span> <span class="nx">nodes</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">);</span>
+<span class="c1">// iterate over every node in the document....SLOOOW</span>
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">nodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">){</span>
+  <span class="c1">// only nodes with the class &quot;progressIndicator&quot;:</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">nodes</span><span class="p">[</span><span class="nx">x</span><span class="p">].</span><span class="nx">className</span> <span class="o">==</span> <span class="s2">&quot;progressIndicator&quot;</span><span class="p">){</span>
+    <span class="c1">// add to array:</span>
+    <span class="nx">list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">nodes</span><span class="p">[</span><span class="nx">x</span><span class="p">]);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">list</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// list every node with the class &quot;progressIndicator&quot;:
+var list = [];
+var nodes = document.getElementsByTagName(&quot;*&quot;);
+// iterate over every node in the document....SLOOOW
+for(var x = 0; x &lt; nodes.length; x++){
+  // only nodes with the class &quot;progressIndicator&quot;:
+  if(nodes[x].className == &quot;progressIndicator&quot;){
+    // add to array:
+    list.push(nodes[x]);
+  }
+}
+console.log(list);</textarea></div><p><code class="docutils literal"><span class="pre">dojo/query</span></code> gives us a more compact way to do it, and it is often faster, particularly as we ask for more sophisticated kinds of relationships. The following is essentially equivalent to our first example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.progressIndicator&quot;</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;], function(query){
+  console.log(query(&quot;.progressIndicator&quot;));
+});</textarea></div></div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id18">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Requring in the module is all that is needed:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">nl</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someClass&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;], function(query){
+  var nl = query(&quot;.someClass&quot;);
+});</textarea></div><p><code class="docutils literal"><span class="pre">dojo/query</span></code> returns an instance of <a class="reference internal" href="NodeList.html#dojo-nodelist"><span>NodeList</span></a>, which is essentially a JavaScript Array that has been decorated with functions that make it easier to utilise.  There are extensions of the base <code class="docutils literal"><span class="pre">NodeList</span></code> that are available to provide additional functionality:</p>
+<ul class="simple">
+<li><a class="reference internal" href="NodeList-data.html#dojo-nodelist-data"><span>dojo/NodeList-data</span></a> - Allows the association of arbitrary data with items of a <code class="docutils literal"><span class="pre">NodeList</span></code>.</li>
+<li><a class="reference internal" href="NodeList-dom.html#dojo-nodelist-dom"><span>dojo/NodeList-dom</span></a> - DOM related functions that are similar functionality to the <code class="docutils literal"><span class="pre">dojo/dom-*</span></code> related modules.</li>
+<li><a class="reference internal" href="NodeList-fx.html#dojo-nodelist-fx"><span>dojo/NodeList-fx</span></a> - Adds base and core FX support to <code class="docutils literal"><span class="pre">NodeList</span></code>.</li>
+<li><a class="reference internal" href="NodeList-html.html#dojo-nodelist-html"><span>dojo/NodeList-html</span></a> - Adds advanced content setting functionality.</li>
+<li><a class="reference internal" href="NodeList-manipulate.html#dojo-nodelist-manipulate"><span>dojo/NodeList-manipulate</span></a> - Functions that allow for manipulation of DOM nodes in similar way to jQuery.</li>
+<li><a class="reference internal" href="NodeList-traverse.html#dojo-nodelist-traverse"><span>dojo/NodeList-traverse</span></a> - Advanced node traversal functions.</li>
+</ul>
+<p>The first argument is the <code class="docutils literal"><span class="pre">selector</span></code> which is a CSS selector string that identifies the nodes that need to be retrieved.  The second argument is an optional <code class="docutils literal"><span class="pre">context</span></code> which limits the scope of the selector and only children of the will be considered.  This can either be a string representing the node ID or a DOM node.  For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">nl</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someClass&quot;</span><span class="p">,</span> <span class="s2">&quot;someId&quot;</span><span class="p">);</span>
+  <span class="c1">// or</span>
+  <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;someId&quot;</span><span class="p">);</span>
+      <span class="nx">nl</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someClass&quot;</span><span class="p">,</span> <span class="nx">node</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;, &quot;dojo/dom&quot;], function(query, dom){
+  var nl = query(&quot;.someClass&quot;, &quot;someId&quot;);
+  // or
+  var node = dom.byId(&quot;someId&quot;);
+      nl = query(&quot;.someClass&quot;, node);
+});</textarea></div><p><code class="docutils literal"><span class="pre">dojo/query</span></code> and <code class="docutils literal"><span class="pre">NodeList</span></code> are specifically designed with chaining in mind.  Most functions on <code class="docutils literal"><span class="pre">NodeList</span></code> return an instance of <code class="docutils literal"><span class="pre">NodeList</span></code>.  For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/NodeList-dom&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;li&quot;</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">){</span>
+    <span class="nx">node</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;Something&quot;</span><span class="p">;</span>
+  <span class="p">}).</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fontSize&quot;</span><span class="p">,</span> <span class="s2">&quot;12px&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;, &quot;dojo/NodeList-dom&quot;], function(query){
+  query(&quot;li&quot;).forEach(function(node){
+    node.innerHTML = &quot;Something&quot;;
+  }).style(&quot;color&quot;, &quot;red&quot;)
+    .style(&quot;fontSize&quot;, &quot;12px&quot;);
+});</textarea></div><div class="section" id="selector-engines">
+<h3>Selector Engines<a class="headerlink" href="#selector-engines" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo/query</span></code> is responsible for loading the appropriate selector engine.  There are several different modes which <code class="docutils literal"><span class="pre">dojo/query</span></code> can run in:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">css2</span></code> (or <code class="docutils literal"><span class="pre">lite</span></code>) - This will always use the lite engine, which delegates to the native selector engine if
+available for anything but very simple queries (like id lookups). When a native selector engine is not available (
+IE7 and below), this supports simple, basic CSS2 level queries, consisting of elemental selectors: <code class="docutils literal"><span class="pre">.class</span></code>,
+<code class="docutils literal"><span class="pre">#id</span></code>, <code class="docutils literal"><span class="pre">tag</span></code>, and <code class="docutils literal"><span class="pre">*</span></code>, attribute selectors, and child (<code class="docutils literal"><span class="pre">&gt;</span></code>), descendant (space), and union (<code class="docutils literal"><span class="pre">,</span></code>)
+combinators.  If the native selector engine is, the engine does not support pseudo classes.</li>
+<li><code class="docutils literal"><span class="pre">css2.1</span></code> - This will always use the <code class="docutils literal"><span class="pre">lite</span></code> engine when a native selector engine is available. When a native
+selector engine is not available (IE7 and below), this will load <code class="docutils literal"><span class="pre">acme</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">css3</span></code> - This will always use the <code class="docutils literal"><span class="pre">lite</span></code> engine when a native selector engine with significant CSS3 support is
+available. When a CSS3 capable (supporting most features) native selector engine is not available (IE8 and below), this will load <code class="docutils literal"><span class="pre">acme</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">acme</span></code> - The <code class="docutils literal"><span class="pre">acme</span></code> selector engine with full CSS3 features will be used. This supports certain features that
+are not available in any native engine (albeit rarely used).</li>
+</ul>
+<p>When you are running Dojo in legacy mode (<code class="docutils literal"><span class="pre">async:</span> <span class="pre">false</span></code>), <code class="docutils literal"><span class="pre">dojo/query</span></code> will run in <code class="docutils literal"><span class="pre">acme</span></code> mode.  When you are
+running with <code class="docutils literal"><span class="pre">async:</span> <span class="pre">true</span></code> the default selector engine level is <code class="docutils literal"><span class="pre">css3</span></code>.</p>
+<p>The summarize, the two alternate selector engines included with Dojo have the following features (which can be
+selected explicitly or by the module&#8217;s CSS level needs):</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">acme</span></code> - Designed to have full CSS3 support, it is about 14KB (minified).</li>
+<li><code class="docutils literal"><span class="pre">lite</span></code> - Basic CSS2 level queries, consisting of elemental selectors: <code class="docutils literal"><span class="pre">.class</span></code>, <code class="docutils literal"><span class="pre">#id</span></code>, <code class="docutils literal"><span class="pre">tag</span></code>, and <code class="docutils literal"><span class="pre">*</span></code>,
+attribute selectors, and child (<code class="docutils literal"><span class="pre">&gt;</span></code>), descendant (space), and union (<code class="docutils literal"><span class="pre">,</span></code>) combinators. With a native selector
+engine, the <code class="docutils literal"><span class="pre">lite</span></code> engine does not support pseudo classes.  It is about 2KB (minified).</li>
+</ul>
+<div class="section" id="specifying-the-selector-level">
+<h4>Specifying the Selector Level<a class="headerlink" href="#specifying-the-selector-level" title="Permalink to this headline">¶</a></h4>
+<p>The selector level can be controlled though various mechanisms.  The default selector level can be specified in the build profile (see <a class="reference internal" href="../build/index.html#build-index"><span>Dojo Builder</span></a>).  The selector engine can be specified as part of your Dojo configuration:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">data-dojo-config=</span><span class="s">&quot;selectorEngine: &#39;css2.1&#39;, async: true&quot;</span> <span class="na">src=</span><span class="s">&quot;dojo/dojo.js&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script data-dojo-config=&quot;selectorEngine: 'css2.1', async: true&quot; src=&quot;dojo/dojo.js&quot;&gt;
+&lt;/script&gt;</textarea></div><p>Or:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+  <span class="kd">var</span> <span class="nx">dojoConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">selectorEngine</span><span class="o">:</span> <span class="s2">&quot;css2.1&quot;</span><span class="p">,</span>
+    <span class="nx">async</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">};</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;dojo/dojo.js&quot;</span><span class="nt">&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script type=&quot;text/javascript&quot;&gt;
+  var dojoConfig = {
+    selectorEngine: &quot;css2.1&quot;,
+    async: true
+  };
+&lt;/script&gt;
+&lt;script src=&quot;dojo/dojo.js&quot;&gt;</textarea></div><p>The selector engine level can be specificed as a loader plugin for each module.  For example, if the module needed to
+do a CSS3 level query, you could write:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/query!css3&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+    <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someClass:last-child&quot;</span><span class="p">).</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/query!css3&quot;], function(query){
+    query(&quot;.someClass:last-child&quot;).style(&quot;color&quot;, &quot;red&quot;);
+});</textarea></div><p>If Dojo had started with the <code class="docutils literal"><span class="pre">lite</span></code> engine, this will ensure that CSS3 support is available, and will load <code class="docutils literal"><span class="pre">acme</span></code> on older browsers.  It is recommended that you use this syntax for modules that explicitly need more complex queries.
+If your module is using a simpler query, then <code class="docutils literal"><span class="pre">&quot;dojo/query&quot;</span></code> or <code class="docutils literal"><span class="pre">&quot;dojo/query!css2.1&quot;</span></code> should be used.</p>
+</div>
+</div>
+<div class="section" id="selector-support">
+<h3>Selector Support<a class="headerlink" href="#selector-support" title="Permalink to this headline">¶</a></h3>
+<p>The following tables summerize selector engine levels and their support.</p>
+<div class="section" id="standard-css2-selectors">
+<h4>Standard CSS2 Selectors<a class="headerlink" href="#standard-css2-selectors" title="Permalink to this headline">¶</a></h4>
+<p>These selectors can be used with any selector engine.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="81%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Pattern</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>*</td>
+<td>any element</td>
+</tr>
+<tr class="row-odd"><td>E</td>
+<td>an element of type E</td>
+</tr>
+<tr class="row-even"><td>E F</td>
+<td>an F element descendant of an E element</td>
+</tr>
+<tr class="row-odd"><td>E &gt; F</td>
+<td>an F element child of an E element</td>
+</tr>
+<tr class="row-even"><td>E:link</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>E:visited</td>
+<td>an E element being the source anchor of a hyperlink of which the target is not yet visited
+(:link) or already visited (:visited)</td>
+</tr>
+<tr class="row-even"><td>E:active</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>E:hover</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>E:focus</td>
+<td>an E element during certain user actions</td>
+</tr>
+<tr class="row-odd"><td>E[foo]</td>
+<td>an E element with a &#8220;foo&#8221; attribute</td>
+</tr>
+<tr class="row-even"><td>E[foo=&#8221;bar&#8221;]</td>
+<td>an E element whose &#8220;foo&#8221; attribute value is exactly equal to &#8220;bar&#8221;</td>
+</tr>
+<tr class="row-odd"><td>E[foo~=&#8221;bar&#8221;]</td>
+<td>an E element whose &#8220;foo&#8221; attribute value is a list of space-separated values, one of which is
+exactly equal to &#8220;bar&#8221;</td>
+</tr>
+<tr class="row-even"><td>E[hreflang|=&#8221;en&#8221;]</td>
+<td>an E element whose &#8220;hreflang&#8221; attribute has a hyphen-separated list of values beginning (from
+the left) with &#8220;en&#8221;</td>
+</tr>
+<tr class="row-odd"><td>E:lang(fr)</td>
+<td>an element of type E in language &#8220;fr&#8221; (the document language specifies how language is
+determined)</td>
+</tr>
+<tr class="row-even"><td>E.warning</td>
+<td>an E element whose class is &#8220;warning&#8221; (the document language specifies how class is determined).</td>
+</tr>
+<tr class="row-odd"><td>E#myid</td>
+<td>an E element with ID equal to &#8220;myid&#8221;.</td>
+</tr>
+<tr class="row-even"><td>S1, S2</td>
+<td>union of two selectors, ex: div, span</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="additional-selectors-supported-by-lite-engine">
+<h4>Additional Selectors Supported By Lite Engine<a class="headerlink" href="#additional-selectors-supported-by-lite-engine" title="Permalink to this headline">¶</a></h4>
+<p>These selectors are not part of CSS2, but are supported by the lite engine, so effectively then can also be used with any specified selector engine.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Pattern</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>E[foo^=&#8221;bar&#8221;]</td>
+<td>an E element whose &#8220;foo&#8221; attribute value begins exactly with the string &#8220;bar&#8221;</td>
+</tr>
+<tr class="row-odd"><td>E[foo$=&#8221;bar&#8221;]</td>
+<td>an E element whose &#8220;foo&#8221; attribute value ends exactly with the string &#8220;bar&#8221;</td>
+</tr>
+<tr class="row-even"><td>E[foo*=&#8221;bar&#8221;]</td>
+<td>an E element whose &#8220;foo&#8221; attribute value contains the substring &#8220;bar&#8221;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="standard-css2-1-selectors">
+<h4>Standard CSS2.1 Selectors<a class="headerlink" href="#standard-css2-1-selectors" title="Permalink to this headline">¶</a></h4>
+<p>To use these selectors, you must specify the <code class="docutils literal"><span class="pre">css2.1</span></code>, <code class="docutils literal"><span class="pre">css3</span></code>, or <code class="docutils literal"><span class="pre">acme</span></code> selector engine.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Pattern</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>E:first-child</td>
+<td>an E element, first child of its parent</td>
+</tr>
+<tr class="row-odd"><td>E + F</td>
+<td>an F element immediately preceded by an E element</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="standard-css3-selectors">
+<h4>Standard CSS3 Selectors<a class="headerlink" href="#standard-css3-selectors" title="Permalink to this headline">¶</a></h4>
+<p>To use these selectors, you must specify the <code class="docutils literal"><span class="pre">css3</span></code> or <code class="docutils literal"><span class="pre">acme</span></code> selector engine.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Pattern</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>E ~ F</td>
+<td>an F element preceded by an E element</td>
+</tr>
+<tr class="row-odd"><td>E:nth-child(n)</td>
+<td>an E element, the n-th child of its parent</td>
+</tr>
+<tr class="row-even"><td>E:checked</td>
+<td>a user interface element E which is checked (for instance a radio-button or checkbox)</td>
+</tr>
+<tr class="row-odd"><td>E:empty</td>
+<td>an E element that has no children (including text nodes)</td>
+</tr>
+<tr class="row-even"><td>E:root</td>
+<td>an E element, root of the document</td>
+</tr>
+<tr class="row-odd"><td>E:nth-last-child(n)</td>
+<td>an E element, the n-th child of its parent, counting from the last one</td>
+</tr>
+<tr class="row-even"><td>E:nth-of-type(n)</td>
+<td>an E element, the n-th sibling of its type</td>
+</tr>
+<tr class="row-odd"><td>E:nth-last-of-type(n)</td>
+<td>an E element, the n-th sibling of its type, counting from the last one</td>
+</tr>
+<tr class="row-even"><td>E:last-child</td>
+<td>an E element, last child of its parent</td>
+</tr>
+<tr class="row-odd"><td>E:first-of-type</td>
+<td>an E element, first sibling of its type</td>
+</tr>
+<tr class="row-even"><td>E:last-of-type</td>
+<td>an E element, last sibling of its type</td>
+</tr>
+<tr class="row-odd"><td>E:only-child</td>
+<td>an E element, only child of its parent</td>
+</tr>
+<tr class="row-even"><td>E:only-of-type</td>
+<td>an E element, only sibling of its type</td>
+</tr>
+<tr class="row-odd"><td>E:target</td>
+<td>an E element being the target of the referring URI</td>
+</tr>
+<tr class="row-even"><td>E:enabled</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>E:disabled</td>
+<td>a user interface element E which is enabled or disabled</td>
+</tr>
+<tr class="row-even"><td>E::first-line</td>
+<td>the first formatted line of an E element</td>
+</tr>
+<tr class="row-odd"><td>E::first-letter</td>
+<td>the first formatted letter of an E element</td>
+</tr>
+<tr class="row-even"><td>E::selection</td>
+<td>the portion of an E element that is currently selected/highlighted by the user</td>
+</tr>
+<tr class="row-odd"><td>E::before</td>
+<td>generated content before an E element</td>
+</tr>
+<tr class="row-even"><td>E::after</td>
+<td>generated content after an E element</td>
+</tr>
+<tr class="row-odd"><td>E:not(s)</td>
+<td>an E element that does not match simple selector s</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="alternate-selector-engines">
+<h3>Alternate Selector Engines<a class="headerlink" href="#alternate-selector-engines" title="Permalink to this headline">¶</a></h3>
+<p>We can also use other selector engine levels.  Both Sizzle and Slick are excellent selector engines that work with
+<code class="docutils literal"><span class="pre">dojo/query</span></code>.  AMD/Dojo compatible versions (just wrapped with AMD) are available here:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/kriszyp/sizzle">https://github.com/kriszyp/sizzle</a></li>
+<li><a class="reference external" href="https://github.com/kriszyp/slick">https://github.com/kriszyp/slick</a></li>
+</ul>
+<p>Once installed, you can use the selector engine module id as specified selector engine level. We could set Sizzle as the query engine for our page:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">data-dojo-config=</span><span class="s">&quot;selectorEngine: &#39;sizzle/sizzle&#39;&quot;</span> <span class="na">src=</span><span class="s">&quot;dojo/dojo.js&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script data-dojo-config=&quot;selectorEngine: 'sizzle/sizzle'&quot; src=&quot;dojo/dojo.js&quot;&gt;
+&lt;/script&gt;</textarea></div><p>or set Slick as the engine for a particular module:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/query!slick/Source/slick&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someClass:custom-pseudo&quot;</span><span class="p">).</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/query!slick/Source/slick&quot;], function(query){
+  query(&quot;.someClass:custom-pseudo&quot;).style(&quot;color&quot;, &quot;red&quot;);
+});</textarea></div><div class="section" id="note-for-cross-domain-legacy-api-usage">
+<h4>Note for cross-domain legacy API usage<a class="headerlink" href="#note-for-cross-domain-legacy-api-usage" title="Permalink to this headline">¶</a></h4>
+<p>This use case should be quite rare, but presents a wrinkle worth noting.</p>
+<p>When loading <code class="docutils literal"><span class="pre">dojo.js</span></code> cross-domain and electing to use an alternate selector engine not included in <code class="docutils literal"><span class="pre">dojo.js</span></code>
+itself, legacy APIs will not immediately work, since Dojo base does not finish loading until the selector engine is
+pulled in asynchronously.  In this case, it will be necessary to use <code class="docutils literal"><span class="pre">require</span></code>.  In a pinch, legacy code can simply
+be wrapped like so:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dojo</span><span class="p">){</span>
+  <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="cm">/* ... */</span><span class="p">);</span>
+  <span class="c1">// etc...</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo&quot;], function(dojo){
+  dojo.require(/* ... */);
+  // etc...
+});</textarea></div><p>Again, this issue <em>only</em> affects use of legacy APIs when a selector engine is used which is not baked into <code class="docutils literal"><span class="pre">dojo.js</span></code>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id19">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-selector-queries">
+<h3>Example Selector Queries<a class="headerlink" href="#example-selector-queries" title="Permalink to this headline">¶</a></h3>
+<p>The following tables provide example selector queries and what sort of nodes they would select.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Query</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">h3</span></code></td>
+<td>All nodes that are heading level 3</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">h3:first-child</span></code></td>
+<td>All nodes that are the first children of a <code class="docutils literal"><span class="pre">&lt;h3&gt;</span></code> header</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">#main</span></code></td>
+<td>A node with <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code> <a class="footnote-reference" href="#id15" id="id2">[1]</a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">h3</span></code></td>
+<td>All <code class="docutils literal"><span class="pre">&lt;h3&gt;</span></code> nodes that are contained by a node with <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code> <a class="footnote-reference" href="#id15" id="id3">[1]</a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">div#main</span></code></td>
+<td>Only select a node with <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code> if it is a <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">div#main</span> <span class="pre">h3</span></code></td>
+<td>All nodes that are <code class="docutils literal"><span class="pre">&lt;h3&gt;</span></code> contained in a <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code> with an <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">div</span> <span class="pre">&gt;</span> <span class="pre">h3</span></code></td>
+<td>All <code class="docutils literal"><span class="pre">&lt;h3&gt;</span></code> nodes that are immediate children of a <code class="docutils literal"><span class="pre">&lt;div&gt;</span></code> contained
+within a node that has <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code> <a class="footnote-reference" href="#id15" id="id4">[1]</a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">.foo</span></code></td>
+<td>All nodes with a <code class="docutils literal"><span class="pre">class=&quot;foo&quot;</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">.foo.bar</span></code></td>
+<td>All nodes that have both <code class="docutils literal"><span class="pre">foo</span></code> and <code class="docutils literal"><span class="pre">bar</span></code> classes</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">&gt;</span> <span class="pre">h3</span></code></td>
+<td>All <code class="docutils literal"><span class="pre">&lt;h3&gt;</span></code> nodes that are immediate children of a node with <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code>
+<a class="footnote-reference" href="#id15" id="id5">[1]</a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">&gt;</span> <span class="pre">*</span></code></td>
+<td>All immediate children of a node with <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code> <a class="footnote-reference" href="#id15" id="id6">[1]</a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">.foo</span> <span class="pre">&gt;</span> <span class="pre">*</span></code></td>
+<td>All immediate children of a nodes with a <code class="docutils literal"><span class="pre">class=&quot;foo&quot;</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">.foo,</span> <span class="pre">.bar</span></code></td>
+<td>All nodes with a <code class="docutils literal"><span class="pre">class=&quot;foo&quot;</span></code> or a <code class="docutils literal"><span class="pre">class=&quot;bar&quot;</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">[foo]</span></code></td>
+<td>All nodes with an attribute of <code class="docutils literal"><span class="pre">foo</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">[foo$=\&quot;thud\&quot;]</span></code></td>
+<td>All nodes with an attribute of <code class="docutils literal"><span class="pre">foo</span></code> where the value ends in <code class="docutils literal"><span class="pre">thud</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">[foo$=thud]</span></code></td>
+<td>All nodes with an attribute of <code class="docutils literal"><span class="pre">foo</span></code> where the value ends in <code class="docutils literal"><span class="pre">thud</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">[foo$=\&quot;thudish\&quot;]</span></code></td>
+<td>All nodes with an attribute of <code class="docutils literal"><span class="pre">foo</span></code> where the value ends in <code class="docutils literal"><span class="pre">thudish</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">[foo$=thud]</span></code></td>
+<td>All nodes with an attribute of <code class="docutils literal"><span class="pre">foo</span></code> where the value ends in <code class="docutils literal"><span class="pre">thud</span></code> that
+are contained within a node with an <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code> <a class="footnote-reference" href="#id15" id="id7">[1]</a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">[</span> <span class="pre">title</span> <span class="pre">$=</span> <span class="pre">thud</span> <span class="pre">]</span></code></td>
+<td>All nodes with an attribute of <code class="docutils literal"><span class="pre">title</span></code> where the value ends in <code class="docutils literal"><span class="pre">thud</span></code>
+that are contained within a node with an <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code> <a class="footnote-reference" href="#id15" id="id8">[1]</a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">span[</span> <span class="pre">title</span> <span class="pre">$=</span> <span class="pre">thud</span> <span class="pre">]</span></code></td>
+<td>All <code class="docutils literal"><span class="pre">&lt;span&gt;</span></code> nodes with an attribute of <code class="docutils literal"><span class="pre">title</span></code> where the value ends in <code class="docutils literal"><span class="pre">thud</span></code> that are contained within a node with an <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code> <a class="footnote-reference" href="#id15" id="id9">[1]</a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">[foo|=\&quot;bar\&quot;]</span></code></td>
+<td>All nodes with an attribute of <code class="docutils literal"><span class="pre">foo</span></code> where the value contains <code class="docutils literal"><span class="pre">bar</span></code> in a
+dash seperated list (e.g. <code class="docutils literal"><span class="pre">foo=&quot;baz-bar-qat&quot;</span></code>)</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">[foo|=\&quot;bar-baz\&quot;]</span></code></td>
+<td>All nodes with an attribute of <code class="docutils literal"><span class="pre">foo</span></code> where the value contains <code class="docutils literal"><span class="pre">bar-baz</span></code>
+in a dash seperated list (e.g. <code class="docutils literal"><span class="pre">foo=&quot;qat-bar-baz-qip&quot;</span></code>)</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">.foo:nth-child(2)</span></code></td>
+<td>The 2nd children of nodes with a <code class="docutils literal"><span class="pre">style=&quot;foo&quot;</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&gt;</span></code></td>
+<td>All immediate childen</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">&gt;</span> <span class="pre">*</span></code></td>
+<td>All immediate children</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">&gt;</span> <span class="pre">[qux]</span></code></td>
+<td>All immediate children that have an attribute of <code class="docutils literal"><span class="pre">qux</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">.foo</span> <span class="pre">+</span> <span class="pre">span</span></code></td>
+<td>All nodes that are a <code class="docutils literal"><span class="pre">&lt;span&gt;</span></code> that are directly after a node with a
+<code class="docutils literal"><span class="pre">style=&quot;foo&quot;</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">.foo</span> <span class="pre">~</span> <span class="pre">span</span></code></td>
+<td>All nodes that are a <code class="docutils literal"><span class="pre">&lt;span&gt;</span></code> that are siblings that follow a node with a
+<code class="docutils literal"><span class="pre">style=&quot;foo&quot;</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">#foo</span> <span class="pre">~</span> <span class="pre">*</span></code></td>
+<td>All nodes that are siblings that follow a node with an <code class="docutils literal"><span class="pre">id=&quot;foo&quot;</span></code> <a class="footnote-reference" href="#id15" id="id10">[1]</a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">#foo</span> <span class="pre">~</span></code></td>
+<td>All nodes that are siblings that follow a node with an <code class="docutils literal"><span class="pre">id=&quot;foo&quot;</span></code> <a class="footnote-reference" href="#id15" id="id11">[1]</a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">span.foo:not(span:first-child)</span></code></td>
+<td>All nodes that are a <code class="docutils literal"><span class="pre">&lt;span&gt;</span></code> with a <code class="docutils literal"><span class="pre">class=&quot;foo&quot;</span></code> but not a <code class="docutils literal"><span class="pre">&lt;span&gt;</span></code>
+and the first child of a node with an <code class="docutils literal"><span class="pre">id=&quot;foo&quot;</span></code>.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">span.foo:not(:first-child)</span></code></td>
+<td>All nodes that are a <code class="docutils literal"><span class="pre">&lt;span&gt;</span></code> with a <code class="docutils literal"><span class="pre">class=&quot;foo&quot;</span></code> but not the first
+child of a node with an <code class="docutils literal"><span class="pre">id=&quot;foo&quot;</span></code>. <a class="footnote-reference" href="#id15" id="id12">[1]</a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">&gt;</span> <span class="pre">h3:nth-child(odd)</span></code></td>
+<td>All nodes that are <code class="docutils literal"><span class="pre">&lt;h3&gt;</span></code> and the odd immediate children of a node with an
+<code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code> <a class="footnote-reference" href="#id15" id="id13">[1]</a></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">h3:nth-child(odd)</span></code></td>
+<td>All nodes that are <code class="docutils literal"><span class="pre">&lt;h3&gt;</span></code> and are odd children contained within a node
+with an <code class="docutils literal"><span class="pre">id=&quot;main&quot;</span></code> <a class="footnote-reference" href="#id15" id="id14">[1]</a></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">h3:nth-child(2n+1)</span></code></td>
+<td>All nodes that are <code class="docutils literal"><span class="pre">&lt;h3&gt;</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">h3:nth-child(even)</span></code></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">#main</span> <span class="pre">h3:nth-child(2n)</span></code></td>
+<td>Every other nodes that are <code class="docutils literal"><span class="pre">&lt;h3&gt;</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">#main2</span> <span class="pre">&gt;</span> <span class="pre">:checked</span></code></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">#main2</span> <span class="pre">&gt;</span> <span class="pre">input[type=checkbox]:checked</span></code></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">#main2</span> <span class="pre">&gt;</span> <span class="pre">input[type=radio]:checked</span></code></td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id15" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id3">2</a>, <a class="fn-backref" href="#id4">3</a>, <a class="fn-backref" href="#id5">4</a>, <a class="fn-backref" href="#id6">5</a>, <a class="fn-backref" href="#id7">6</a>, <a class="fn-backref" href="#id8">7</a>, <a class="fn-backref" href="#id9">8</a>, <a class="fn-backref" href="#id10">9</a>, <a class="fn-backref" href="#id11">10</a>, <a class="fn-backref" href="#id12">11</a>, <a class="fn-backref" href="#id13">12</a>, <a class="fn-backref" href="#id14">13</a>)</em> It is usually less performant to utilize the selector query to select a node by ID and is only used here to faciliate the examples.  It is much better to pass the node name as a string or a node object as the second argument in the <code class="docutils literal"><span class="pre">dojo/query</span></code> call.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id20">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="NodeList-data.html#dojo-nodelist-data"><span>dojo/NodeList-data</span></a> - Allows the association of arbitrary data with items of a
+<code class="docutils literal"><span class="pre">NodeList</span></code>.</li>
+<li><a class="reference internal" href="NodeList-dom.html#dojo-nodelist-dom"><span>dojo/NodeList-dom</span></a> - DOM related functions that are similar functionality to the
+<code class="docutils literal"><span class="pre">dojo/dom-*</span></code> related modules.</li>
+<li><a class="reference internal" href="NodeList-fx.html#dojo-nodelist-fx"><span>dojo/NodeList-fx</span></a> - Adds base and core FX support to <code class="docutils literal"><span class="pre">NodeList</span></code>.</li>
+<li><a class="reference internal" href="NodeList-html.html#dojo-nodelist-html"><span>dojo/NodeList-html</span></a> - Adds advanced content setting functionality.</li>
+<li><a class="reference internal" href="NodeList-manipulate.html#dojo-nodelist-manipulate"><span>dojo/NodeList-manipulate</span></a> - Functions that allow for manipulation of DOM nodes in
+similar way to jQuery.</li>
+<li><a class="reference internal" href="NodeList-traverse.html#dojo-nodelist-traverse"><span>dojo/NodeList-traverse</span></a> - Advanced node traversal functions.</li>
+<li><a class="reference internal" href="selector/lite.html#dojo-selector-lite"><span>dojo/selector/lite</span></a> - The Dojo Lite selector.</li>
+<li><a class="reference internal" href="selector/acme.html#dojo-selector-acme"><span>dojo/selector/acme</span></a> - The Dojo Acme selector.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

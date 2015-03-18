@@ -1,0 +1,460 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojo/_base/connect" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojo/_base/connect.html</div>
+<h1 class="objectIcon36 jsdoc-title module-title">dojo/_base/connect<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-full-summary"><p>This module defines the dojo.connect API.
+This modules also provides keyboard event handling helpers.
+This module exports an extension event for emulating Firefox&#39;s keypress handling.
+However, this extension event exists primarily for backwards compatibility and
+is not recommended. WebKit and IE uses an alternate keypress handling (only
+firing for printable characters, to distinguish from keydown events), and most
+consider the WebKit/IE behavior more desirable.</p>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_9dojo__base_connect__keypress">_keypress</a><span class="parameters"></span><span class="parameters">(object,listener) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo__base_connect_connect">connect</a><span class="parameters"></span><span class="parameters">(obj,event,context,method,dontFix) </span><span>dojo.connect is a deprecated event handling and delegation method in
+Dojo.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo__base_connect_connectPublisher">connectPublisher</a><span class="parameters"></span><span class="parameters">(topic,obj,event) </span><span>Ensure that every time obj.event() is called, a message is published
+on the topic.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo__base_connect_disconnect">disconnect</a><span class="parameters"></span><span class="parameters">(handle) </span><span>Remove a link created by dojo.connect.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo__base_connect_isCopyKey">isCopyKey</a><span class="parameters"></span><span class="parameters">(e) </span><span>Checks an event for the copy key (meta on Mac, and ctrl anywhere else)</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo__base_connect_publish">publish</a><span class="parameters"></span><span class="parameters">(topic,args) </span><span>Invoke all listener method subscribed to topic.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo__base_connect_subscribe">subscribe</a><span class="parameters"></span><span class="parameters">(topic,context,method) </span><span>Attach a listener to a named topic.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo__base_connect_unsubscribe">unsubscribe</a><span class="parameters"></span><span class="parameters">(handle) </span><span>Remove a topic listener.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojo__base_connect__keypress"></a><span class="functionIcon">_keypress</span><span class="parameters">(object,listener)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/_base/connect" class="jsdoc-link">dojo/_base/connect</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">object</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">listener</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo__base_connect_connect"></a><span class="functionIcon">connect</span><span class="parameters">(obj,event,context,method,dontFix)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/_base/connect" class="jsdoc-link">dojo/_base/connect</a>
+        </div>
+        <div class="jsdoc-full-summary"><p><code>dojo.connect</code> is a deprecated event handling and delegation method in
+Dojo. It allows one function to &quot;listen in&quot; on the execution of
+any other, triggering the second whenever the first is called. Many
+listeners may be attached to a function, and source functions may
+be either regular function calls or DOM events.
+</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Connects listeners to actions, so that after event fires, a
+listener is called with the same arguments passed to the original
+function.
+
+</p>
+<p>Since <code>dojo.connect</code> allows the source of events to be either a
+&quot;regular&quot; JavaScript function or a DOM event, it provides a uniform
+interface for listening to all the types of events that an
+application is likely to deal with though a single, unified
+interface. DOM programmers may want to think of it as
+&quot;addEventListener for everything and anything&quot;.
+
+</p>
+<p>When setting up a connection, the <code>event</code> parameter must be a
+string that is the name of the method/event to be listened for. If
+<code>obj</code> is null, <code>kernel.global</code> is assumed, meaning that connections
+to global methods are supported but also that you may inadvertently
+connect to a global by passing an incorrect object name or invalid
+reference.
+
+</p>
+<p><code>dojo.connect</code> generally is forgiving. If you pass the name of a
+function or method that does not yet exist on <code>obj</code>, connect will
+not fail, but will instead set up a stub method. Similarly, null
+arguments may simply be omitted such that fewer than 4 arguments
+may be required to set up a connection See the examples for details.
+
+</p>
+<p>The return value is a handle that is needed to
+remove this connection with <code>dojo.disconnect</code>.
+</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">obj</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>The source object for the event function.
+Defaults to <code>kernel.global</code> if null.
+If obj is a DOM node, the connection is delegated
+to the DOM event manager (unless dontFix is true).
+</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">event</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>String name of the event function in obj.
+I.e. identifies a property <code>obj[event]</code>.
+</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">context</td>
+            <td class="jsdoc-param-type">Object | null</td>
+            <td class="jsdoc-param-description"><p>The object that method will receive as &quot;this&quot;.
+
+</p>
+<p>If context is null and method is a function, then method
+inherits the context of event.
+
+</p>
+<p>If method is a string then context must be the source
+object object for method (context[method]). If context is null,
+kernel.global is used.
+</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">method</td>
+            <td class="jsdoc-param-type">String | Function</td>
+            <td class="jsdoc-param-description"><p>A function reference, or name of a function in context.
+The function identified by method fires after event does.
+method receives the same arguments as the event.
+See context argument comments for information on method&#39;s scope.
+</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">dontFix</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>If obj is a DOM node, set dontFix to true to prevent delegation
+of this connection to the DOM event manager.
+</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><p>When obj.onchange(), do ui.update():
+
+</p>
+<pre><code>dojo.connect(obj, &quot;onchange&quot;, ui, &quot;update&quot;);
+dojo.connect(obj, &quot;onchange&quot;, ui, ui.update); // same</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 2</h3><p>Using return value for disconnect:
+
+</p>
+<pre><code>var link = dojo.connect(obj, &quot;onchange&quot;, ui, &quot;update&quot;);
+...
+dojo.disconnect(link);</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 3</h3><p>When onglobalevent executes, watcher.handler is invoked:
+
+</p>
+<pre><code>dojo.connect(null, &quot;onglobalevent&quot;, watcher, &quot;handler&quot;);</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 4</h3><p>When ob.onCustomEvent executes, customEventHandler is invoked:
+
+</p>
+<pre><code>dojo.connect(ob, &quot;onCustomEvent&quot;, null, &quot;customEventHandler&quot;);
+dojo.connect(ob, &quot;onCustomEvent&quot;, &quot;customEventHandler&quot;); // same</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 5</h3><p>When ob.onCustomEvent executes, customEventHandler is invoked
+with the same scope (this):
+
+</p>
+<pre><code>dojo.connect(ob, &quot;onCustomEvent&quot;, null, customEventHandler);
+dojo.connect(ob, &quot;onCustomEvent&quot;, customEventHandler); // same</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 6</h3><p>When globalEvent executes, globalHandler is invoked
+with the same scope (this):
+
+</p>
+<pre><code>dojo.connect(null, &quot;globalEvent&quot;, null, globalHandler);
+dojo.connect(&quot;globalEvent&quot;, globalHandler); // same</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo__base_connect_connectPublisher"></a><span class="functionIcon">connectPublisher</span><span class="parameters">(topic,obj,event)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/_base/connect" class="jsdoc-link">dojo/_base/connect</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Ensure that every time obj.event() is called, a message is published
+on the topic. Returns a handle which can be passed to
+dojo.disconnect() to disable subsequent automatic publication on
+the topic.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">topic</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the topic to publish.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">obj</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>The source object for the event function. Defaults to kernel.global
+if null.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">event</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the event function in obj.
+I.e. identifies a property obj[event].</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>dojo.connectPublisher(&quot;/ajax/start&quot;, dojo, &quot;xhrGet&quot;);</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo__base_connect_disconnect"></a><span class="functionIcon">disconnect</span><span class="parameters">(handle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/_base/connect" class="jsdoc-link">dojo/_base/connect</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Remove a link created by dojo.connect.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Removes the connection between event and the method referenced by handle.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">Handle</td>
+            <td class="jsdoc-param-description"><p>the return value of the dojo.connect call that created the connection.</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo__base_connect_isCopyKey"></a><span class="functionIcon">isCopyKey</span><span class="parameters">(e)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/_base/connect" class="jsdoc-link">dojo/_base/connect</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Checks an event for the copy key (meta on Mac, and ctrl anywhere else)</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">e</td>
+            <td class="jsdoc-param-type">Event</td>
+            <td class="jsdoc-param-description"><p>Event object to examine</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo__base_connect_publish"></a><span class="functionIcon">publish</span><span class="parameters">(topic,args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/_base/connect" class="jsdoc-link">dojo/_base/connect</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Invoke all listener method subscribed to topic.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">topic</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the topic to publish.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">Array</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>An array of arguments. The arguments will be applied
+to each topic subscriber (as first class parameters, via apply).</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>dojo.subscribe(&quot;alerts&quot;, null, function(caption, message){ alert(caption + &quot;\n&quot; + message); };
+dojo.publish(&quot;alerts&quot;, [ &quot;read this&quot;, &quot;hello world&quot; ]);</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo__base_connect_subscribe"></a><span class="functionIcon">subscribe</span><span class="parameters">(topic,context,method)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/_base/connect" class="jsdoc-link">dojo/_base/connect</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Attach a listener to a named topic. The listener function is invoked whenever the
+named topic is published (see: dojo.publish).
+Returns a handle which is needed to unsubscribe this listener.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">topic</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The topic to which to subscribe.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">context</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>Scope in which method will be invoked, or null for default scope.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">method</td>
+            <td class="jsdoc-param-type">String | Function</td>
+            <td class="jsdoc-param-description"><p>The name of a function in context, or a function reference. This is the function that
+is invoked when topic is published.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>dojo.subscribe(&quot;alerts&quot;, null, function(caption, message){ alert(caption + &quot;\n&quot; + message); });
+dojo.publish(&quot;alerts&quot;, [ &quot;read this&quot;, &quot;hello world&quot; ]);</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo__base_connect_unsubscribe"></a><span class="functionIcon">unsubscribe</span><span class="parameters">(handle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/_base/connect" class="jsdoc-link">dojo/_base/connect</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Remove a topic listener.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">Handle</td>
+            <td class="jsdoc-param-description"><p>The handle returned from a call to subscribe.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var alerter = dojo.subscribe(&quot;alerts&quot;, null, function(caption, message){ alert(caption + &quot;\n&quot; + message); };
+...
+dojo.unsubscribe(alerter);</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojo/_base/connect" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Dojo Build System &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">The Dojo Build System</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#overview">Overview</a><ul>
+<li><a class="reference internal" href="#road-map">Road Map</a></li>
+<li><a class="reference internal" href="#extra-features">Extra Features</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#assumptions-for-examples">Assumptions for Examples</a></li>
+<li><a class="reference internal" href="#invoking-the-build-system">Invoking the Build System</a></li>
+<li><a class="reference internal" href="#command-line-switches">Command Line Switches</a></li>
+<li><a class="reference internal" href="#profile-basics">Profile Basics</a><ul>
+<li><a class="reference internal" href="#profile-resources">Profile Resources</a></li>
+<li><a class="reference internal" href="#configuration-resources">Configuration Resources</a></li>
+<li><a class="reference internal" href="#package-json-resources">package.json Resources</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#specifying-resources">Specifying Resources</a><ul>
+<li><a class="reference internal" href="#trees-dirs-and-files">Trees, Dirs, and Files</a></li>
+<li><a class="reference internal" href="#relative-paths">Relative Paths</a></li>
+<li><a class="reference internal" href="#using-a-package-configuration">Using a Package Configuration</a></li>
+<li><a class="reference internal" href="#leveraging-package-json-resources">Leveraging package.json Resources</a></li>
+<li><a class="reference internal" href="#mixing-multiple-profile-sources">Mixing Multiple Profile Sources</a></li>
+<li><a class="reference internal" href="#advice">Advice</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resource-tags">Resource Tags</a></li>
+<li><a class="reference internal" href="#transforms">Transforms</a></li>
+<li><a class="reference internal" href="#applying-transforms">Applying Transforms</a></li>
+<li><a class="reference internal" href="#command-line-and-profile-property-reference">Command Line and Profile Property Reference</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="the-dojo-build-system">
+<span id="build-buildsystem"></span><h1><a class="toc-backref" href="#id1">The Dojo Build System</a><a class="headerlink" href="#the-dojo-build-system" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Rawld Gill</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#the-dojo-build-system" id="id1">The Dojo Build System</a><ul>
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#overview" id="id3">Overview</a></li>
+<li><a class="reference internal" href="#assumptions-for-examples" id="id4">Assumptions for Examples</a></li>
+<li><a class="reference internal" href="#invoking-the-build-system" id="id5">Invoking the Build System</a></li>
+<li><a class="reference internal" href="#command-line-switches" id="id6">Command Line Switches</a></li>
+<li><a class="reference internal" href="#profile-basics" id="id7">Profile Basics</a></li>
+<li><a class="reference internal" href="#specifying-resources" id="id8">Specifying Resources</a></li>
+<li><a class="reference internal" href="#resource-tags" id="id9">Resource Tags</a></li>
+<li><a class="reference internal" href="#transforms" id="id10">Transforms</a></li>
+<li><a class="reference internal" href="#applying-transforms" id="id11">Applying Transforms</a></li>
+<li><a class="reference internal" href="#command-line-and-profile-property-reference" id="id12">Command Line and Profile Property Reference</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>This document describes the Dojo build system as of v1.7. Historical documentation describing the build system prior
+version 1.7 is available</em> <a class="reference internal" href="pre17/build.html#build-pre17-build"><span>here</span></a>.</p>
+<p><em>See</em> <a class="reference internal" href="index.html#build-index"><span>The Dojo Build System</span></a> <em>for a complete list of build system documentation resources.</em></p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The Dojo build system is a general-purpose program for transforming a set of resources. It was built to solve the
+problem of transforming a set of resources that comprise an application in order to improve the performance of that
+application. For this particular purpose, two kinds of transformations are typical:</p>
+<ul class="simple">
+<li>The content of a resource is analyzed and those portions not required are removed. An example is removing dead code
+branches as indicated by has.js feature values known at build time.</li>
+<li>Several resources may be bundled into a single resource so that a single server transaction results in downloading
+those resources. An example is combining several AMD module definitions into a single resource.</li>
+</ul>
+<p>The first transform results in smaller resources which decreases transmission time. Even better, depending upon the
+environment, the reduction in resource size may result in the user agent caching the resource, thereby completely
+eliminating download time. The second transform results in fewer server transactions which, independent of bandwidth,
+reduces the latency costs of loading an application. This effect is particularly noticeable when the organization of the
+program results in a serial chain of downloads (for example, module A requires module B, but the program doesn&#8217;t know
+this until module A is evaluated). Using these techniques to optimize non-trivial applications often results in
+improving load times by a factor of 10 or more.</p>
+<p>These kind of optimizations are termed &#8220;deployment optimizations&#8221;, and the build system includes a rich set of such
+optimizations that may be applied to an application prior to deployment. However, the build system is not limited to
+these kinds of transforms. At its core, the build system is an engine for applying an ordered, synchronized, configurable
+set of transforms to a configurable input set. Examples of other usages include document generators, style checkers,
+code formatters, lint checkers, and many more. In some ways it is like a make program, except the external processes
+that typical make programs execute can be implemented within its pluggable transform infrastructure. Of course external
+processes can be executed as well.</p>
+<p>This document describes using the build system for deployment optimizations. See xxx for information about writing your
+own custom transforms and configuring the build system for other uses.</p>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id3">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The design of the system is somewhat complex. It &#8220;discovers&#8221; a set of resources and then applies a synchronized, ordered set of
+resource-dependent transforms to those resources. Both the discovery process and the transforms are controlled by a
+user-configurable JavaScript object termed a &#8220;profile&#8221;.</p>
+<p>When a resource is discovered, it is tagged with one or more flags that help identify the role of that resource. For
+example, an AMD module may be tagged &#8220;AMD&#8221;. The profile controls how resources are tagged. After a resource is
+discovered and tagged, the system assigns a set of transforms that are to be applied to that resource. This assignment
+is based on the resource tags and/or filename and is also controlled by the profile. Then the system takes over and
+automatically applies each assigned transform. Once all assigned transforms have been applied to all discovered
+resources the program terminates.</p>
+<p>Let&#8217;s look at a couple of examples. The simplest transform is to do nothing&#8211;don&#8217;t read the resource, don&#8217;t write the
+resource, don&#8217;t do anything. Such a &#8220;noop&#8221; may be applied to version control files, backup files, and other such files
+that should not be moved to the deployment tree.</p>
+<p>A slightly more interesting example is a resource that is copied from the development tree to the deployment
+tree. Notice the build system to &#8220;know&#8221; that the deployment tree will contain the resource. This knowledge may be used
+by other transforms that ensure requisite files exist. For example, a CSS style sheet checker could check to see that
+all referenced images exist.</p>
+<p>Perhaps the most important transform for resource deployment is dependency scanning JavaScript modules and then bundling
+dependencies into a single resource to reduce the HTTP transactions required to load a resource.</p>
+<div class="section" id="road-map">
+<h3>Road Map<a class="headerlink" href="#road-map" title="Permalink to this headline">¶</a></h3>
+<p>The remainder of this document describes how use the build system for deployment optimization. The following topics are
+covered in order:</p>
+<ol class="arabic simple">
+<li>How to invoke the system.</li>
+<li>How to control the build system with command line switches.</li>
+<li>How to configure profiles to indicate what resources to discover and where to output the transformed resources.</li>
+<li>What set of transforms are available and the kinds of resources those transforms are applied to.</li>
+</ol>
+</div>
+<div class="section" id="extra-features">
+<h3>Extra Features<a class="headerlink" href="#extra-features" title="Permalink to this headline">¶</a></h3>
+<p>These are discussed in separate documents as follows:</p>
+<ul class="simple">
+<li><a class="reference internal" href="transforms/writeDojo.html#build-transforms-writedojo"><span>Transform writeDojo</span></a> describes how to build a custom dojo.js with a nonstandard set of
+modules.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="assumptions-for-examples">
+<h2><a class="toc-backref" href="#id4">Assumptions for Examples</a><a class="headerlink" href="#assumptions-for-examples" title="Permalink to this headline">¶</a></h2>
+<p>This document contains several examples. It assumes the source distribution of the Dojo Toolkit, version 1.7 or greater,
+is installed at ~/dev/dtk/. If you are a Windows user, &#8220;~&#8221; is shorthand for the user&#8217;s home directory; substitute
+whatever directory is convenient for you. For all users, there is nothing special about ~/dev/. We are just using it to
+indicate the root that holds the Dojo Toolkit source distribution.</p>
+<p>Unless specifically stated otherwise, all examples assume the current working directory is
+~/dev/dtk/util/buildscripts. As we&#8217;ll see, this is not a requirement of the build system, but rather a convenience
+so you don&#8217;t have to path to the build system executable.</p>
+</div>
+<div class="section" id="invoking-the-build-system">
+<h2><a class="toc-backref" href="#id5">Invoking the Build System</a><a class="headerlink" href="#invoking-the-build-system" title="Permalink to this headline">¶</a></h2>
+<p>The build system is a JavaScript program comprised of a set of AMD modules that may be executed by node.js or Rhino. The
+program is distributed with the source version of the Dojo Toolkit. The source tree resides at util/build/. Dojo can be
+used to execute console-based JavaScript programs in node by issuing the following command:</p>
+<div class="highlight-text"><div class="highlight"><pre>node.js path/to/dojo.js load=path/to/startup-module.js &lt;program arguments&gt;
+</pre></div>
+</div>
+<p>Traditionally, the dojo build system is executed from the /util/buildscripts/ directory. For example, assuming the source
+version of the Dojo Toolkit is installed at ~/dev/dtk/, in order to invoke the build system and print the help
+message, issue the command:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts&gt; node.js ../../dojo/dojo.js load=build --help
+</pre></div>
+</div>
+<p>Rhino may also be used. Owing to the requisite Java noise, its command is more complicated:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts&gt; java -Xms256m -Xmx256m \
+-cp ../shrinksafe/js.jar:../closureCompiler/compiler.jar:../shrinksafe/shrinksafe.jar org.mozilla.javascript.tools.shell.Main \
+ ../../dojo/dojo.js baseUrl=../../dojo&quot; --help
+</pre></div>
+</div>
+<p>In order to ease this pain, util/buildscripts/ includes a batch program for Windows and a shell script for non-Windows
+environments. For the shell script, issue the command</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts&gt; ./build.sh --help
+</pre></div>
+</div>
+<p>And for Windows:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts&gt; ./build.bat --help
+</pre></div>
+</div>
+<p>The shell script will prefer node.js if it is available. If you would rather use Rhino, you can use the command line
+switch <code class="docutils literal"><span class="pre">--java</span></code> like this:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts&gt; ./build.sh --java --help
+</pre></div>
+</div>
+<p>The Windows batch file always uses Rhino, but includes some hints about how to use node.js if you have a node.js
+installed.</p>
+<p>Although the legacy build system could be executed when /util/buildscripts/ was <em>not</em> the current working directory, to
+do so required a carefully constructed profile. Indeed, many profiles provided with Dojo source distributions won't work
+unless /util/buildscripts/ is the current working directory. The current build system has no such restriction.</p>
+</div>
+<div class="section" id="command-line-switches">
+<h2><a class="toc-backref" href="#id6">Command Line Switches</a><a class="headerlink" href="#command-line-switches" title="Permalink to this headline">¶</a></h2>
+<p>The build system is controlled by a JavaScript object termed a &quot;profile&quot; which instructs the system what files to
+process and how to process them. The profile itself is constructed from one or more inputs:</p>
+<p>1. Zero or more JavaScript resources that contain a profile object, as specified by the command line switch
+<code class="docutils literal"><span class="pre">--profile</span></code>. This switch requires a filename argument that points to a profile resource.</p>
+<p>2. Zero or more loader configuration variables (<code class="docutils literal"><span class="pre">dojoConfig</span></code> or <code class="docutils literal"><span class="pre">require</span></code>), as specified by the command line switches
+<code class="docutils literal"><span class="pre">--require</span></code> or <code class="docutils literal"><span class="pre">--dojoConfig</span></code>. These switches require a filename argument that points to a JavaScript resource that contains a
+loader configuration.</p>
+<p>3. Zero or more package.json resources that describe a CommonJS package, as specified by the command line switch
+<code class="docutils literal"><span class="pre">--package</span></code>. This switch requires a path that points to a directory that contains a package.json resource.</p>
+<ol class="arabic simple" start="4">
+<li>Zero or more other command line switches that give (profile-property-name, profile-property-value) pairs.</li>
+</ol>
+<p>The build system processes each resource described above (Items 1-3) in the order provided on the command line; if two
+or more resources attempt to set the same profile property, then the last input wins. Some profile properties are more
+deeply; see xxx for a description about how each profile property is mixed. The command line switches in Item 4 are
+processed last, so they will always override any existing profile property.</p>
+<p>Command line switches have the form</p>
+<blockquote>
+<div>-<em>variable</em> <em>value</em></div></blockquote>
+<p>Or...</p>
+<blockquote>
+<div>--<em>long-variable-name</em> <em>value</em></div></blockquote>
+<p>Not all switches have short-name (single-dash) variants. See xxx for a complete list of command line switches.</p>
+<p>The build system also supports switches to have the form</p>
+<blockquote>
+<div><em>variable*=*value</em></div></blockquote>
+<p>This was the form required by the legacy build system released with Dojo v1.6-; it is deprecated in favor of the
+more-traditional form.</p>
+<p>The build system includes the command switch <code class="docutils literal"><span class="pre">--check-args</span></code> which processes the command line, reads all profile,
+dojoConfig, require, and package resources, and then prints out the raw input. This switch is a great tool for
+understanding and debugging how a particular build system invocation is consuming the command line. For example,</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts:./build.sh --v1 someValue --v2 123 --true true --false false --null null --check-args
+running under node.js
+{
+    false:false,
+    null:null,
+    profiles:[],
+    true:true,
+    v1:&quot;someValue&quot;,
+    v2:123
+}
+</pre></div>
+</div>
+<p>This example points out that number, true, false, and null values are not stored as strings but rather are converted to
+JavaScript numbers, booleans, and null.</p>
+</div>
+<div class="section" id="profile-basics">
+<h2><a class="toc-backref" href="#id7">Profile Basics</a><a class="headerlink" href="#profile-basics" title="Permalink to this headline">¶</a></h2>
+<p>As described above, the profile used for any particular invocation of the build system is constructed as the aggregate
+of one or more resources specified on the command line. Usually, either a profile resource or a loader configuration
+resource is used as the basis for the aggregate.</p>
+<div class="section" id="profile-resources">
+<h3>Profile Resources<a class="headerlink" href="#profile-resources" title="Permalink to this headline">¶</a></h3>
+<p>A profile resource is a JavaScript resource that defines the variable <code class="docutils literal"><span class="pre">profile</span></code>, which must be a JavaScript
+object. Typically, a profile resource is given the file type
+&quot;.profile.js&quot;. /util/build/examples/simple1.profile.js contains a trivial example; here are the contents of that
+resource:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">someProperty</span><span class="o">:</span><span class="s2">&quot;someValue&quot;</span><span class="p">,</span>
+  <span class="nx">someOtherProperty</span><span class="o">:</span><span class="s2">&quot;someOtherValue&quot;</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var profile = {
+  someProperty:&quot;someValue&quot;,
+  someOtherProperty:&quot;someOtherValue&quot;
+};</textarea></div><p>If we invoke the build system with the <code class="docutils literal"><span class="pre">profile</span></code> switch indicating that profile and dump the result with the
+<code class="docutils literal"><span class="pre">check-args</span></code> switch, this is what you'll see:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts:./build.sh --profile ../build/examples/simple1 --check-args
+running under node.js
+processing profile resource /home/rcgill/dev/dtk/util/build/examples/simple1.profile.js
+{profiles:[{
+   basePath:&quot;/home/rcgill/dev/dtk/util/build/examples&quot;,
+     someOtherProperty:&quot;someOtherValue&quot;,
+   someProperty:&quot;someValue&quot;
+}]}
+</pre></div>
+</div>
+<p>Notice the build system automatically appends the &quot;.profile.js&quot; suffix to the profile argument if that argument does not
+contain a file type. When a profile argument is given with no file type, <em>and</em> the profile argument contains no path
+segments, <em>and</em> the profile resource does not exist in the current working directory, then the build system will try to
+find the profile in the /util/buildscripts/profiles directory after appending the file type &quot;.profile.js&quot;. It is
+possible to specify a profile with a file type different than &quot;.profile.js&quot; by including the file type in the profile
+argument. Of course you can give the &quot;.profile.js&quot; type explicitly as well.</p>
+<p>Notice that the property <code class="docutils literal"><span class="pre">basePath</span></code> was automatically added to the profile object and set to the path at which the
+profile resides. If the profile contains the property <code class="docutils literal"><span class="pre">basePath</span></code> and the value of that property is a relative
+path, then the build system will automatically resolve that path with respect to the directory in which the profile
+resources resides--<em>not</em> the current working directory. For example, /util/build/examples/relative-base-path.profile.profile.js
+has contents:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">basePath</span><span class="o">:</span><span class="s2">&quot;.&quot;</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var profile = {
+    basePath:&quot;.&quot;
+};</textarea></div><p>Which causes the following <code class="docutils literal"><span class="pre">basePath</span></code> initialization:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts:./build.sh --profile ../build/examples/relative-base-path --check-args
+running under node.js
+processing profile resource /home/rcgill/dev/dtk/util/build/examples/relative-base-path.profile.js
+{profiles:[{basePath:&quot;/home/rcgill/dev/dtk/util/build/examples&quot;}]}
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">basePath</span></code> is used as the reference path when resolving relative source paths. This design allows the semantics of
+relative paths contained within the profile resource te be independent of both the location of the package hierarchy
+within the greater file system and the current working directory at the time the build program is invoked.</p>
+<p>Profile resources are JavaScript resources that are evaluated by the build system. They are not restricted to hold
+JSON. They can, and often will, contain functions. For example, /util/build/examples/profile-with-code.profile.js
+has contents:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">timestamp</span><span class="p">(){</span>
+    <span class="c1">// this function isn&#39;t really necessary...</span>
+    <span class="c1">// just using it to show you can call a function to get a profile property value</span>
+    <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getDate</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;-&quot;</span> <span class="o">+</span>
+        <span class="nx">d</span><span class="p">.</span><span class="nx">getHours</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nx">d</span><span class="p">.</span><span class="nx">getSeconds</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">basePath</span><span class="o">:</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="nx">buildTimestamp</span><span class="o">:</span><span class="nx">timestamp</span><span class="p">()</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">function timestamp(){
+    // this function isn't really necessary...
+    // just using it to show you can call a function to get a profile property value
+    var d = new Date();
+    return d.getFullYear() + '-' + (d.getMonth()+1) + &quot;-&quot; + d.getDate() + &quot;-&quot; +
+        d.getHours() + ':' + d.getMinutes() + &quot;:&quot; + d.getSeconds();
+}
+
+var profile = {
+    basePath:&quot;.&quot;,
+    buildTimestamp:timestamp()
+};</textarea></div><p>When exercised with the <code class="docutils literal"><span class="pre">check-args</span></code> switch, you should see something like this:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts:./build.sh --profile ../build/examples/profile-with-code --check-args
+running under node.js
+processing profile resource /home/rcgill/dev/dtk/util/build/examples/profile-with-code.profile.js
+{profiles:[{
+     basePath:&quot;/home/rcgill/dev/dtk/util/build/examples&quot;,
+     buildTimestamp:&quot;2011-9-29-21:34:2&quot;
+}]}
+</pre></div>
+</div>
+</div>
+<div class="section" id="configuration-resources">
+<h3>Configuration Resources<a class="headerlink" href="#configuration-resources" title="Permalink to this headline">¶</a></h3>
+<p>The command switch <code class="docutils literal"><span class="pre">dojoConfig</span></code> causes the build system to read a configuration as given by a variable <code class="docutils literal"><span class="pre">dojoConfig</span></code> as
+if it was an ordinary profile. The next section describes how the build system consumes configurations. Also note that
+the dojo loader will simply ignore any configuration variable that it does not define. These two features combine to
+allow all or part of an application's build profile to be contained within the application configuration. For example,
+/util/build/examples/dojoConfig.js has contents:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">dojoConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">packages</span><span class="o">:</span><span class="p">[{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;dojo&quot;</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;../../../dojo&quot;</span>
+    <span class="p">},{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;dijit&quot;</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;../../../dijit&quot;</span>
+    <span class="p">}]</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var dojoConfig = {
+    packages:[{
+        name:&quot;dojo&quot;,
+        location:&quot;../../../dojo&quot;
+    },{
+        name:&quot;dijit&quot;,
+        location:&quot;../../../dijit&quot;
+    }]
+};</textarea></div><p>When exercised with the <code class="docutils literal"><span class="pre">check-args</span></code> switch, you should see something like this:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts:./build.sh --dojoConfig ../build/examples/dojoConfig.js --check-args
+running under node.js
+processing dojoConfig resource /home/rcgill/dev/dtk/util/build/examples/dojoConfig.js
+{profiles:[{
+     basePath:&quot;/home/rcgill/dev/dtk/util/build/examples&quot;,
+     packages:[
+             {
+                     location:&quot;../../../dojo&quot;,
+                     name:&quot;dojo&quot;
+             },
+             {
+                     location:&quot;../../../dijit&quot;,
+                     name:&quot;dijit&quot;
+             }
+     ]
+}]}
+</pre></div>
+</div>
+<p>Notice that basePath, as automatically provided by the build system, when combined with the package locations, give the
+correct locations of the dojo and dijit packages. Also take note that you must provide the complete filename, including
+the file type (if any).</p>
+<p>The command switch <code class="docutils literal"><span class="pre">require</span></code> is similar to <code class="docutils literal"><span class="pre">dojoConfig</span></code>, but processes a configuration argument applied to the
+global AMD require function. For example, /util/build/examples/require.js has contents:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">({</span>
+    <span class="nx">packages</span><span class="o">:</span><span class="p">[{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;dojo&quot;</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;../../../dojo&quot;</span>
+    <span class="p">},{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;dijit&quot;</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;../../../dijit&quot;</span>
+    <span class="p">}]</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require({
+    packages:[{
+        name:&quot;dojo&quot;,
+        location:&quot;../../../dojo&quot;
+    },{
+        name:&quot;dijit&quot;,
+        location:&quot;../../../dijit&quot;
+    }]
+});</textarea></div><p>When exercised with the <code class="docutils literal"><span class="pre">check-args</span></code> switch, you should see something like this:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts:./build.sh --require ../build/examples/require.js --check-args
+running under node.js
+processing require resource /home/rcgill/dev/dtk/util/build/examples/require.js
+{profiles:[{
+     basePath:&quot;/home/rcgill/dev/dtk/util/build/examples&quot;,
+     packages:[
+         {
+                 location:&quot;../../../dojo&quot;,
+                 name:&quot;dojo&quot;
+         },
+         {
+                 location:&quot;../../../dijit&quot;,
+                 name:&quot;dijit&quot;
+         }
+     ]
+}]}
+</pre></div>
+</div>
+<p>As usual, if absent or relative, basePath is automatically computed. Just like <code class="docutils literal"><span class="pre">dojoConfig</span></code>, you must provide the
+complete filename.</p>
+</div>
+<div class="section" id="package-json-resources">
+<h3>package.json Resources<a class="headerlink" href="#package-json-resources" title="Permalink to this headline">¶</a></h3>
+<p>The command switch <code class="docutils literal"><span class="pre">package</span></code> indicates a package.json file or files, and works slightly differently than the others
+discussed so far. First, since the filename is fixed (&quot;package.json&quot;), the file path at which the package.json file
+resides is given, absent the explicit name &quot;package.json&quot;. Second, more than one package.json files may be given by
+providing a comma-separated list of file paths.</p>
+<p>As each package.json resource is processed, a profile object is manufactured with the following contents (the variable
+<code class="docutils literal"><span class="pre">packageJson</span></code> in the code that follows represents the package.json object):</p>
+<div class="highlight-text"><div class="highlight"><pre>{
+    basePath:
+    packages:[{
+        name:packageJson.progName || packageJson.name,
+        packageJson:{
+            __selfFilename:&lt;path at which the package.Json file resides&gt;
+            &lt;remaining packageJson properties&gt;
+        }
+    }]
+}
+</pre></div>
+</div>
+<p>Notice that the package.json object is embedded in a package configuration object that the package.json object
+represents. Also notice that the property <cite>selfFilename</cite> is set the absolute path at which the package.Json file
+resides and is added to the package.Json object. This gives the reference path for any relative paths found in the
+package.json object, the <code class="docutils literal"><span class="pre">directories.lib</span></code> path in particular.</p>
+</div>
+</div>
+<div class="section" id="specifying-resources">
+<h2><a class="toc-backref" href="#id8">Specifying Resources</a><a class="headerlink" href="#specifying-resources" title="Permalink to this headline">¶</a></h2>
+<p>The build system &quot;discovers&quot; the set of resources to process by traversing a set of file system trees, individual
+directories, and/or individual files. There are two ways to specify which trees, directories, and/or files to
+discover:</p>
+<ul class="simple">
+<li>provide an explicit list of trees, directories, and/or filenames by providing values for the profile properties
+<code class="docutils literal"><span class="pre">trees</span></code>, <code class="docutils literal"><span class="pre">dirs</span></code>, and <code class="docutils literal"><span class="pre">files</span></code>.</li>
+<li>provide a loader configuration that includes one or more package configurations. All resources in the tree implied by
+the package configuration <code class="docutils literal"><span class="pre">location</span></code> property will be discovered; further, each package configuration may contain
+it's own set of <code class="docutils literal"><span class="pre">trees</span></code>, <code class="docutils literal"><span class="pre">dirs</span></code>, and <code class="docutils literal"><span class="pre">files</span></code> properties.</li>
+</ul>
+<div class="section" id="trees-dirs-and-files">
+<h3>Trees, Dirs, and Files<a class="headerlink" href="#trees-dirs-and-files" title="Permalink to this headline">¶</a></h3>
+<p>The profile properties <code class="docutils literal"><span class="pre">trees</span></code>, <code class="docutils literal"><span class="pre">dirs</span></code>, and <code class="docutils literal"><span class="pre">files</span></code> all have the same format: an array of (source,
+destination [,ignore]) pairs or triples. The source and destination are path names for <code class="docutils literal"><span class="pre">trees</span></code> and <code class="docutils literal"><span class="pre">dirs</span></code> and
+filenames for <code class="docutils literal"><span class="pre">files</span></code>. In each case the properties say where to discover resources and where to output the
+discovered resources after they have been transformed.</p>
+<p>The optional ignore value is a regular expression that solves for resources that should be ignored. As each resource is
+discovered, the full filename (including the complete path), is tested against the regular expression; if the regular
+expression is satisfied, then the resource is not entered into the transform process. The ignore parameter should not be
+used with <code class="docutils literal"><span class="pre">files</span></code>, since this property gives a specific set of filenames to discover; after all, if you want to ignore
+a specific filename, then just don't put it into the <code class="docutils literal"><span class="pre">files</span></code> property to begin with. Typically, the ignore regular
+expression is used to exclude files such as version control files and editor backup files that ought not be part of a
+deployment. A common ignore regular expression is <code class="docutils literal"><span class="pre">/(\/\.)|(~$)/</span></code>.</p>
+<p>In the case of <code class="docutils literal"><span class="pre">trees</span></code>, the discover process discovers all files in the file system hierarchy rooted at each given
+source path and schedules those resources for writing to the same relative location in the hierarchy rooted at the
+associated destination path. <code class="docutils literal"><span class="pre">dirs</span></code> works the same except that only each single directory is processed--the tree is
+not traversed. Lastly, <code class="docutils literal"><span class="pre">files</span></code> simply lists a set of specific files to discover.</p>
+</div>
+<div class="section" id="relative-paths">
+<h3>Relative Paths<a class="headerlink" href="#relative-paths" title="Permalink to this headline">¶</a></h3>
+<p>Typically, profiles should <em>not</em> contain absolute paths. Instead all paths should be relative which allows project
+trees to be copied to different environments without affecting location semantics. All relative source paths (for example,
+a relative source value in a <code class="docutils literal"><span class="pre">trees</span></code> item) are computed with respect to the profile property <code class="docutils literal"><span class="pre">basePath</span></code>. Recall
+from the previous section that the build system will automatically resolve a relative <code class="docutils literal"><span class="pre">basePath</span></code> value with respect
+to the path in which the profile resides, and if missing, <code class="docutils literal"><span class="pre">basePath</span></code> defaults to <code class="docutils literal"><span class="pre">&quot;.&quot;</span></code>.</p>
+<p>Relative destination paths are computed with respect to the profile property <code class="docutils literal"><span class="pre">releaseDir</span></code>, optionally with a
+concatenated path segment given by profile property <code class="docutils literal"><span class="pre">releaseName</span></code>. If <code class="docutils literal"><span class="pre">releaseDir</span></code> is relative, then it
+is taken to be relative to <code class="docutils literal"><span class="pre">basePath</span></code>; if <code class="docutils literal"><span class="pre">releaseDir</span></code> is missing, then it defaults to <code class="docutils literal"><span class="pre">&quot;./release&quot;</span></code>. The result
+of normalizing <code class="docutils literal"><span class="pre">releaseDir</span></code> (if necessary) and appending <code class="docutils literal"><span class="pre">releaseName</span></code> (if any) is termed &quot;destBasePath&quot;.</p>
+<p>Let's look at an example. Consider the following file hierarchy (note: the Dojo Toolkit is distributed with
+the package.json and profile files indicated below--these are a good source of examples):</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev
+    /dtk
+        /dojo
+            package.json
+            dojo.profile.js
+        /dijit
+            package.json
+            dijit.profile.js
+        /dojox
+        /util
+            /doh
+                package.json
+                doh.profile.js
+    /myapp
+        main.html
+        config.js
+        app.profile.js
+        /lib
+            package.json
+    /myapp-deploy
+        /lib
+            /dojo
+            /dijit
+            /myapp
+</pre></div>
+</div>
+<p>Let's assume the myapp directory holds an application and it is desired to write the built resource hierarchy for the
+application to the directory ~/dev/myapp-deploy. In this case, the myapp profile file at ~/dev/myapp/app.profile.js
+might look like this:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// point basePath to ~/dev</span>
+    <span class="nx">basePath</span><span class="o">:</span><span class="s2">&quot;..&quot;</span><span class="p">,</span>
+
+    <span class="nx">releaseDir</span><span class="o">:</span><span class="s2">&quot;./myapp-deploy&quot;</span><span class="p">,</span>
+    <span class="nx">trees</span><span class="o">:</span><span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;./dtk/dojo&quot;</span><span class="p">,</span> <span class="s2">&quot;./lib/dojo&quot;</span><span class="p">]</span>
+        <span class="p">[</span><span class="s2">&quot;./dtk/dijit&quot;</span><span class="p">,</span> <span class="s2">&quot;./lib/dijit&quot;</span><span class="p">]</span>
+        <span class="p">[</span><span class="s2">&quot;./myapp/lib&quot;</span><span class="p">,</span> <span class="s2">&quot;./lib/myapp&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var profile = {
+    // point basePath to ~/dev
+    basePath:&quot;..&quot;,
+
+    releaseDir:&quot;./myapp-deploy&quot;,
+    trees:[
+        [&quot;./dtk/dojo&quot;, &quot;./lib/dojo&quot;]
+        [&quot;./dtk/dijit&quot;, &quot;./lib/dijit&quot;]
+        [&quot;./myapp/lib&quot;, &quot;./lib/myapp&quot;]
+}</textarea></div><p>Caution: this is not the best way to express this profile; in a moment we'll see how package configurations should be
+used instead. However, this example illustrates three key points:</p>
+<ol class="arabic simple">
+<li>Paths can usually be relative. When they can be relative, they should be relative.</li>
+<li>Resources can be discovered anywhere within the reachable file system.</li>
+<li>The tree layout can be changed between source and destination locations.</li>
+</ol>
+</div>
+<div class="section" id="using-a-package-configuration">
+<h3>Using a Package Configuration<a class="headerlink" href="#using-a-package-configuration" title="Permalink to this headline">¶</a></h3>
+<p>Recall a package configuration includes the property <code class="docutils literal"><span class="pre">location</span></code> that gives the root of all package resources. If
+<code class="docutils literal"><span class="pre">location</span></code> is missing, then it defaults to the package name. If <code class="docutils literal"><span class="pre">location</span></code> is <em>not</em> an absolute URL (the
+usual case), then it is prefixed with the loader configuration property <code class="docutils literal"><span class="pre">baseUrl</span></code>. Since <code class="docutils literal"><span class="pre">baseUrl</span></code> makes little
+sense in the context of the build system which is executed with respect to the local file system rather than an HTTP
+server, the build system uses the profile property <code class="docutils literal"><span class="pre">basePath</span></code> in place of <code class="docutils literal"><span class="pre">baseUrl</span></code> when resolving relative
+paths. With the exception of substituting <code class="docutils literal"><span class="pre">basePath</span></code> for <code class="docutils literal"><span class="pre">baseUrl</span></code> the build system consumes package
+configurations just like the loader. Here is the previous example expressed using this feature:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// point basePath to ~/dev</span>
+    <span class="nx">basePath</span><span class="o">:</span><span class="s2">&quot;..&quot;</span><span class="p">,</span>
+
+    <span class="c1">// point releaseDir to ~/dev/myapp-deploy</span>
+    <span class="nx">releaseDir</span><span class="o">:</span><span class="s2">&quot;./myapp-deploy&quot;</span>
+
+    <span class="c1">// now a typical loader packages configuration</span>
+    <span class="nx">packages</span><span class="o">:</span><span class="p">[{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;dojo&quot;</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./dtk/dojo&quot;</span>
+    <span class="p">},{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;dijit&quot;</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./dtk/dijit&quot;</span>
+    <span class="p">},{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;myapp&quot;</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./myapp/lib&quot;</span>
+    <span class="p">}],</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var profile = {
+    // point basePath to ~/dev
+    basePath:&quot;..&quot;,
+
+    // point releaseDir to ~/dev/myapp-deploy
+    releaseDir:&quot;./myapp-deploy&quot;
+
+    // now a typical loader packages configuration
+    packages:[{
+        name:&quot;dojo&quot;,
+        location:&quot;./dtk/dojo&quot;
+    },{
+        name:&quot;dijit&quot;,
+        location:&quot;./dtk/dijit&quot;
+    },{
+        name:&quot;myapp&quot;,
+        location:&quot;./myapp/lib&quot;
+    }],
+}</textarea></div><p>The destination location of each package may be given explicitly in the optional, per-package <code class="docutils literal"><span class="pre">destLocation</span></code>
+property. If it is missing, then it defaults to the package name, a child of the release directory.</p>
+<p>The real power of this feature is not expressing these package hierarchies in a profile, but rather using the
+application configuration to get the hierarchies for free. For example, assume the myapp application expressed its
+configuration in the resource ~/dev/myapp/config.js like this:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">dojoConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// loader configuration...</span>
+    <span class="nx">packages</span><span class="o">:</span><span class="p">[{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">dojo</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./dtk/dojo&quot;</span>
+    <span class="p">},{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">dijit</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./dtk/dijit&quot;</span>
+    <span class="p">},{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">myapp</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./myapp/lib&quot;</span>
+    <span class="p">}],</span>
+    <span class="nx">deps</span><span class="o">:</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var dojoConfig = {
+    // loader configuration...
+    packages:[{
+        name:dojo,
+        location:&quot;./dtk/dojo&quot;
+    },{
+        name:dijit,
+        location:&quot;./dtk/dijit&quot;
+    },{
+        name:myapp,
+        location:&quot;./myapp/lib&quot;
+    }],
+    deps:[&quot;main&quot;]
+}</textarea></div><p>This configuration may be used to load the application, maybe something like this in the &lt;head&gt; element in
+~/dev/myapp/main.html.</p>
+<div class="highlight"><pre><span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;./config.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../dtk/dojo/dojo.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="c">&lt;!-- other stuff...maybe --&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;head&gt;
+    &lt;script src=&quot;./config.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;../dtk/dojo/dojo.js&quot;&gt;&lt;/script&gt;
+    &lt;!-- other stuff...maybe --&gt;
+&lt;/head&gt;</textarea></div><p>Given this, the profile at ~/dev/myapp/app.profile.js could be rewritten like this:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// point basePath to ~/dev</span>
+    <span class="nx">basePath</span><span class="o">:</span><span class="s2">&quot;..&quot;</span><span class="p">,</span>
+    <span class="nx">releaseDir</span><span class="o">:</span><span class="s2">&quot;./myapp-deploy&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var profile = {
+    // point basePath to ~/dev
+    basePath:&quot;..&quot;,
+    releaseDir:&quot;./myapp-deploy&quot;,
+}</textarea></div><p>Finally, both the config.js and profile must be provided to the build system to get the desired effect</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts:./build.sh --dojoConfig ../../myapp/config.js --profile ../../myapp/app --release
+</pre></div>
+</div>
+<p>(Call this example &quot;config and profile&quot; it is equivalent to the example &quot;config with embedded profile&quot; described below.)</p>
+<p>This idea of leveraging a loader config can be taken further. Since the dojo loader will simply ignore properties that
+it does not define, you can put profile properties directly in the loader configuration. For example,
+~/dev/myapp/config.js could be written as follows:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">dojoConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// loader configuration...</span>
+    <span class="nx">packages</span><span class="o">:</span><span class="p">[{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">dojo</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./dtk/dojo&quot;</span>
+    <span class="p">},{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">dijit</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./dtk/dijit&quot;</span>
+    <span class="p">},{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">myapp</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./myapp/lib&quot;</span>
+    <span class="p">}],</span>
+    <span class="nx">deps</span><span class="o">:</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">],</span>
+
+    <span class="c1">// now for some profile properties...</span>
+
+    <span class="c1">// point basePath to ~/dev</span>
+    <span class="nx">basePath</span><span class="o">:</span><span class="s2">&quot;..&quot;</span><span class="p">,</span>
+
+    <span class="c1">// point releaseDir to ~/dev/myapp-deploy</span>
+    <span class="nx">releaseDir</span><span class="o">:</span><span class="s2">&quot;./myapp-deploy&quot;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var dojoConfig = {
+    // loader configuration...
+    packages:[{
+        name:dojo,
+        location:&quot;./dtk/dojo&quot;
+    },{
+        name:dijit,
+        location:&quot;./dtk/dijit&quot;
+    },{
+        name:myapp,
+        location:&quot;./myapp/lib&quot;
+    }],
+    deps:[&quot;main&quot;],
+
+    // now for some profile properties...
+
+    // point basePath to ~/dev
+    basePath:&quot;..&quot;,
+
+    // point releaseDir to ~/dev/myapp-deploy
+    releaseDir:&quot;./myapp-deploy&quot;
+}</textarea></div><p>This eliminates the need for the profile resource completely.</p>
+<p>The build system recognizes the property <code class="docutils literal"><span class="pre">build</span></code> which may hold a profile object that is mixed into the configuration
+object as if the profile object was specified on the command line following the configuration resource. This design
+serves two purposes:</p>
+<p>1. It keeps all build-time profile properties nicely bundled under a single property in what is otherwise a loader
+configuration object.</p>
+<ol class="arabic simple" start="2">
+<li>It provides a method to make changes to some of the loader configuration when it is consumed as a build profile.</li>
+</ol>
+<p>For example, the previous loader configuration could be rewritten as follows:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">dojoConfig</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1">// loader configuration...</span>
+    <span class="nx">packages</span><span class="o">:</span><span class="p">[{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">dojo</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./dtk/dojo&quot;</span>
+    <span class="p">},{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">dijit</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./dtk/dijit&quot;</span>
+    <span class="p">},{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="nx">myapp</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;./myapp/lib&quot;</span>
+    <span class="p">}],</span>
+    <span class="nx">deps</span><span class="o">:</span><span class="p">[</span><span class="s2">&quot;main&quot;</span><span class="p">],</span>
+
+    <span class="c1">// now for some profile properties...</span>
+    <span class="nx">build</span><span class="o">:</span><span class="p">{</span>
+        <span class="c1">// point basePath to ~/dev</span>
+            <span class="nx">basePath</span><span class="o">:</span><span class="s2">&quot;..&quot;</span><span class="p">,</span>
+
+        <span class="c1">// point releaseDir to ~/dev/myapp-deploy</span>
+        <span class="nx">releaseDir</span><span class="o">:</span><span class="s2">&quot;./myapp-deploy&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var dojoConfig = {
+    // loader configuration...
+    packages:[{
+        name:dojo,
+        location:&quot;./dtk/dojo&quot;
+    },{
+        name:dijit,
+        location:&quot;./dtk/dijit&quot;
+    },{
+        name:myapp,
+        location:&quot;./myapp/lib&quot;
+    }],
+    deps:[&quot;main&quot;],
+
+    // now for some profile properties...
+    build:{
+        // point basePath to ~/dev
+            basePath:&quot;..&quot;,
+
+        // point releaseDir to ~/dev/myapp-deploy
+        releaseDir:&quot;./myapp-deploy&quot;
+    }
+}</textarea></div><p>And used to execute a build like this:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts:./build.sh --dojoConfig ../../myapp/config.js --release
+</pre></div>
+</div>
+<p>(Call this example &quot;config with embedded profile&quot;; it is equivalent to the example &quot;config and profile&quot; described above.)</p>
+<p>Notice how this design eliminates the need to repeat resource location information. Since the development version of the
+application has already specified (and debugged!) this information; there is no reason to force an independent
+specification for the build profile.</p>
+<p>There are a few additional details about package configurations when they are consumed by the build system. First, they
+can specify different values for all package config object properties as follows:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">name</span></code> may be changed by giving a value for <code class="docutils literal"><span class="pre">destName</span></code></li>
+<li><code class="docutils literal"><span class="pre">location</span></code> may be changed by giving a value for <code class="docutils literal"><span class="pre">destLocation</span></code></li>
+<li><code class="docutils literal"><span class="pre">main</span></code> may be changed by giving a value for <code class="docutils literal"><span class="pre">destMain</span></code></li>
+<li><code class="docutils literal"><span class="pre">packageMap</span></code> may be changed by giving a value for <code class="docutils literal"><span class="pre">destPackageMap</span></code></li>
+</ul>
+<p>If <code class="docutils literal"><span class="pre">destName</span></code> is not provided, then it defaults to <code class="docutils literal"><span class="pre">name</span></code>. The same applies for the other properties. <code class="docutils literal"><span class="pre">location</span></code>,
+if relative, is computed with respect to <code class="docutils literal"><span class="pre">basePath</span></code>; relative <code class="docutils literal"><span class="pre">destLocation</span></code> is computed with respect to the
+computed destBasePath.</p>
+<p>Second, package configurations can include the <code class="docutils literal"><span class="pre">trees</span></code>, <code class="docutils literal"><span class="pre">dirs</span></code>, and <code class="docutils literal"><span class="pre">files</span></code> properties. Relative source paths are
+computed with respect to the package <code class="docutils literal"><span class="pre">location</span></code> property; relative destination paths are computed with respect to the
+package <code class="docutils literal"><span class="pre">destLocation</span></code> property. The tree</p>
+<div class="highlight"><pre><span class="p">[</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="sr">/(\/\.)|(~$)/</span><span class="p">]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">[&quot;.&quot;, &quot;.&quot;, /(\/\.)|(~$)/]</textarea></div><p>is automatically provided. You can change the ignore value by giving an explicit tree item with source and destination
+paths of &quot;.&quot;.</p>
+</div>
+<div class="section" id="leveraging-package-json-resources">
+<h3>Leveraging package.json Resources<a class="headerlink" href="#leveraging-package-json-resources" title="Permalink to this headline">¶</a></h3>
+<p>The build system can use a package.json resource to discover the location of resources and find a default profile for a
+particular package. Recall, you can provide a package configuration that includes the property <code class="docutils literal"><span class="pre">packageJson</span></code> by
+specifying a package.json resource with the command line switch <code class="docutils literal"><span class="pre">--package</span></code>. When the build system encounters such a
+package config, it will consume the following properties of that object:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">directories.lib</span></code>, indicating the packages <code class="docutils literal"><span class="pre">location</span></code> property value.</li>
+<li><code class="docutils literal"><span class="pre">main</span></code>, indicating the package's <code class="docutils literal"><span class="pre">main</span></code> property value</li>
+<li><code class="docutils literal"><span class="pre">version</span></code>, indicating the package's version</li>
+<li><code class="docutils literal"><span class="pre">dojoBuild</span></code>, indicating the default profile associated with the package</li>
+</ul>
+<p>Relative paths are computed with respect to the path at which the package.json resource resides.</p>
+<p>Given this design, you could build the myapp example <em>without</em> mentioning the dojo or dijit packages in the profile,
+instead supplying the command line argument <code class="docutils literal"><span class="pre">--package</span> <span class="pre">../../dojo,../../dijit</span></code>. In practice, this technique is
+typically used to execute the default profile of a package. For example, the default profile for dojo can be build like
+this:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts:./build.sh --package .../../dojo
+</pre></div>
+</div>
+<p>This is possible because of the dojo package.json resource contains the property dojoBuild which indicates the
+default profile for the package. As usual, it should be a relative filename and is computed with respect to the path at
+which the package.json resource resides.</p>
+<p>The design of the <code class="docutils literal"><span class="pre">dojoBuild</span></code> property is quite handy. For example, the authors of the myapp program may not be
+experts on how best to build dojo or dijit. The idea of a default profile as indicated by the <code class="docutils literal"><span class="pre">dojoBuild</span></code> property
+solves this problem even when the package.json resource is not mentioned explicitly. Here's how it works.</p>
+<p>When the build system is given a profile that contains a set of packages, it automatically attempts to find and consume
+each package's package.json resource. The system looks for the file &quot;package.json&quot; in the directory given by the package
+configuration <code class="docutils literal"><span class="pre">location</span></code> property. If a package.json resource is found and that resource contains a <code class="docutils literal"><span class="pre">dojoBuild</span></code>
+property, then the build system automatically consumes that default profile for that package. The build system will use
+any properties in the default profile that are not explicitly mentioned a profile provided at the command line; this
+allows an easy way to selectively override profile property values found in the default profile for a particular
+package or build scenario.</p>
+</div>
+<div class="section" id="mixing-multiple-profile-sources">
+<h3>Mixing Multiple Profile Sources<a class="headerlink" href="#mixing-multiple-profile-sources" title="Permalink to this headline">¶</a></h3>
+<p>Profiles and profile properties can come from many sources:</p>
+<ul class="simple">
+<li>profile resources</li>
+<li>dataConfig and/or require configuration resources</li>
+<li>package.json resources</li>
+<li>default profiles as given by package.json resources</li>
+<li>individual profile property values can be given directly on the command line</li>
+</ul>
+<p>This begs the question, what happens when multiple sources try to set the same package property? The answer: generally,
+properties are mixed so that properties that come from sources specified later on the command line overwrite properties
+from sources specified earlier. Profile properties are mixed on a per-property basis except for the properties
+<code class="docutils literal"><span class="pre">packages</span></code>, <code class="docutils literal"><span class="pre">paths</span></code>, <code class="docutils literal"><span class="pre">plugins</span></code>, <code class="docutils literal"><span class="pre">messages</span></code>, <code class="docutils literal"><span class="pre">transforms</span></code>, and <code class="docutils literal"><span class="pre">staticHasFeatures</span></code> which are mixed
+differently. <code class="docutils literal"><span class="pre">packages</span></code> are mixed on a per-package-property basis. See xxx for details about how these other
+properties are mixed. Let's look at an example; consider the following two profiles:</p>
+<p><em>profile-1.profile.js</em></p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">propA</span><span class="o">:</span><span class="s2">&quot;A&quot;</span><span class="p">,</span>
+    <span class="nx">propB</span><span class="o">:</span><span class="s2">&quot;B&quot;</span><span class="p">,</span>
+    <span class="nx">propC</span><span class="o">:</span><span class="s2">&quot;C&quot;</span><span class="p">,</span>
+    <span class="nx">packages</span><span class="o">:</span><span class="p">[{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;myPackage&quot;</span><span class="p">,</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;../packages&quot;</span><span class="p">,</span>
+        <span class="nx">destLocation</span><span class="o">:</span><span class="s2">&quot;./lib&quot;</span>
+    <span class="p">}]</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var profile = {
+    propA:&quot;A&quot;,
+    propB:&quot;B&quot;,
+    propC:&quot;C&quot;,
+    packages:[{
+        name:&quot;myPackage&quot;,
+        location:&quot;../packages&quot;,
+        destLocation:&quot;./lib&quot;
+    }]
+}</textarea></div><p><em>profile-2.profile.js</em></p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">propB</span><span class="o">:</span><span class="s2">&quot;profile-2-B&quot;</span><span class="p">,</span>
+    <span class="nx">propC</span><span class="o">:</span><span class="s2">&quot;C&quot;</span><span class="p">,</span>
+    <span class="nx">propD</span><span class="o">:</span><span class="s2">&quot;D&quot;</span><span class="p">,</span>
+    <span class="nx">packages</span><span class="o">:</span><span class="p">[{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;myPackage&quot;</span><span class="p">,</span>
+        <span class="nx">destLocation</span><span class="o">:</span><span class="s2">&quot;./packages&quot;</span>
+    <span class="p">}]</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var profile = {
+    propB:&quot;profile-2-B&quot;,
+    propC:&quot;C&quot;,
+    propD:&quot;D&quot;,
+    packages:[{
+        name:&quot;myPackage&quot;,
+        destLocation:&quot;./packages&quot;
+    }]
+}</textarea></div><p>If the build system was instructed to consume profile-1 followed by profile-2 like this:</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts:./build.sh --profile path/to/profile-1 --profile path/to/profile-2
+</pre></div>
+</div>
+<p>Then the following profile object would be computed:</p>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="nx">propA</span><span class="o">:</span><span class="s2">&quot;A&quot;</span><span class="p">,</span>                    <span class="c1">// from profile-1</span>
+    <span class="nx">propB</span><span class="o">:</span><span class="s2">&quot;profile-2-B&quot;</span><span class="p">,</span>          <span class="c1">// overwrite form profile-2</span>
+    <span class="nx">propC</span><span class="o">:</span><span class="s2">&quot;C&quot;</span><span class="p">,</span>                    <span class="c1">// overwrite from profile-2 that happens to be the same as profile-1</span>
+    <span class="nx">propD</span><span class="o">:</span><span class="s2">&quot;D&quot;</span><span class="p">,</span>                    <span class="c1">// from profile-2</span>
+    <span class="nx">packages</span><span class="o">:</span><span class="p">[{</span>
+        <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;myPackage&quot;</span><span class="p">,</span>         <span class="c1">// from profile-2</span>
+        <span class="nx">location</span><span class="o">:</span><span class="s2">&quot;../packages&quot;</span><span class="p">,</span>   <span class="c1">// from profile-2</span>
+        <span class="nx">destLocation</span><span class="o">:</span><span class="s2">&quot;./packages&quot;</span> <span class="c1">// overwrite form profile-2</span>
+    <span class="p">}]</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{
+    propA:&quot;A&quot;,                    // from profile-1
+    propB:&quot;profile-2-B&quot;,          // overwrite form profile-2
+    propC:&quot;C&quot;,                    // overwrite from profile-2 that happens to be the same as profile-1
+    propD:&quot;D&quot;,                    // from profile-2
+    packages:[{
+        name:&quot;myPackage&quot;,         // from profile-2
+        location:&quot;../packages&quot;,   // from profile-2
+        destLocation:&quot;./packages&quot; // overwrite form profile-2
+    }]
+}</textarea></div><p>Lastly, any profile property given on the command line will overwrite any value for that property as computed by mixing
+various other profile resources.</p>
+</div>
+<div class="section" id="advice">
+<h3>Advice<a class="headerlink" href="#advice" title="Permalink to this headline">¶</a></h3>
+<p>Clearly, there are a lot of ways to specify profiles in general and how resources are discovered in particular. Build
+scenarios can be trivial or complex, depending upon the particular application. If you've got a tricky use case, the
+design described above can almost-certainly handle it. To put a fine point on this, the build system can discover
+resources from any reachable path and similarly write transformed resources to any reachable path. There are no
+assumptions, restrictions, or requirements imposed by where and how the Dojo Toolkit hierarchy is installed.</p>
+<p>Typically, the best way to organize a profile for an application is as follows:</p>
+<ol class="arabic simple">
+<li>Install all dependency packages as per their instructions. Don't fight other package authors.</li>
+<li>Organize the source code for the application into one or more packages as is appropriate for the design.</li>
+<li>Construct a JavaScript resource that contains the loader configuration necessary to develop the application. Don't
+worry about build issues while developing the application. This resource should be included in appropriate HTML
+resources via a script element before including the dojo loader. Typically, the configuration should reside at the
+root of the application hierarchy, but this is not required.</li>
+<li>When it comes time to optimize the application for deployment, construct a profile for the application, but do not
+use the profile to specify resources already specified in the configuration constructed in Step 3. Instead, use the
+profile to modify <em>some</em> properties in the configuration (if necessary at all) as well as to specify various profile
+properties that control the transforms.</li>
+</ol>
+<p>Alternatives/extensions to this general procedure include:</p>
+<ul class="simple">
+<li>Providing a default profile for each package the application defines.</li>
+<li>Including all build profile values in the loader configuration resource (they will simply be ignored by the loader).</li>
+<li>Making the configuration configurable, typically depending on a URL query parameter or build switch.</li>
+</ul>
+<p>Don't be concerned about the need to download an extra resource to configure the application. As well see in xxx,
+the writeDojo transform allows a customized configuration to be embedded in the loader resource and the replacements
+transform allows chunks of resources, like the configuration script element, to be replaced--perhaps with nothing.</p>
+</div>
+</div>
+<div class="section" id="resource-tags">
+<h2><a class="toc-backref" href="#id9">Resource Tags</a><a class="headerlink" href="#resource-tags" title="Permalink to this headline">¶</a></h2>
+<p>The most fundamental attribute of a resource used to indicate which transforms to apply is its file type. Unfortunately
+this usually isn't enough. For example, it may be desirable to not apply any transforms to test resources. The build
+system includes machinery to &quot;tag&quot; resources with various flags that may be used to signal which transforms to apply.</p>
+<p>A profile and each package configuration may contain the property <code class="docutils literal"><span class="pre">resourceTags</span></code>, a hash from tag name to
+function. Each function takes two arguments, filename and module-id, and returns true if a given resource should be
+tagged with the associated tag or false otherwise. All tag tests are applied to every resource and any single resource
+may be tagged with several tag names. See the resources dojo/dojo.profile.js for an example.</p>
+<p>The dojo build system decides which transforms to apply to a particular resource based its file type and the following
+tags:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">test</span></code></dt>
+<dd>The resource is part of the test code for the package.</dd>
+<dt><code class="docutils literal"><span class="pre">copyOnly</span></code></dt>
+<dd>The resource should be copied to the destination location and otherwise left unaltered.</dd>
+<dt><code class="docutils literal"><span class="pre">amd</span></code></dt>
+<dd>The resource is an AMD module.</dd>
+<dt><code class="docutils literal"><span class="pre">declarative</span></code></dt>
+<dd>The resource should be scanned for declarative dependencies, pending inclusion in a layer.</dd>
+<dt><code class="docutils literal"><span class="pre">miniExclude</span></code></dt>
+<dd>The resource should not be copied to the destination if the profile property &quot;mini&quot; is truthy.</dd>
+</dl>
+</div>
+<div class="section" id="transforms">
+<h2><a class="toc-backref" href="#id10">Transforms</a><a class="headerlink" href="#transforms" title="Permalink to this headline">¶</a></h2>
+<p>The Dojo Toolkit includes the deployment optimization transforms listed below. See individual transform reference pages
+for complete documentation.</p>
+<ul class="simple">
+<li><a class="reference internal" href="transforms/copy.html#build-transforms-copy"><span>copy</span></a>: Copies a resource from a source location to a destination location.</li>
+<li><a class="reference internal" href="transforms/depsDeclarative.html#build-transforms-depsdeclarative"><span>depsDeclarative</span></a>: Scans declarative resources for dependencies and replaces the resource in any layer with any discovered dependencies.</li>
+<li><a class="reference internal" href="transforms/depsDump.html#build-transforms-depsdump"><span>depsDump</span></a>: Prints the module dependency graph of one or more modules.</li>
+<li><a class="reference internal" href="transforms/depsScan.html#build-transforms-depsscan"><span>depsScan</span></a>: Determines a module's dependencies and interns legacy dojo.cache string resources.</li>
+<li><a class="reference internal" href="transforms/dojoPragmas.html#build-transforms-dojopragmas"><span>dojoPragmas</span></a>: Applies dojo pragmas to a resource.</li>
+<li><a class="reference internal" href="transforms/dojoReport.html#build-transforms-dojoreport"><span>dojoReport</span></a>: Outputs a report describing a single run of the deployment optimization transforms.</li>
+<li><a class="reference internal" href="transforms/hasFindAll.html#build-transforms-hasfindall"><span>hasFindAll</span></a>: Finds and optionally reports all has.js feature test usages.</li>
+<li><a class="reference internal" href="transforms/hasFixup.html#build-transforms-hasfixup"><span>hasFixup</span></a>: Trims dead code branches consequent to has feature values known at build time.</li>
+<li><a class="reference internal" href="transforms/hasReport.html#build-transforms-hasreport"><span>hasReport</span></a>: Outputs a report describing the name and location of all has.js feature tests.</li>
+<li><a class="reference internal" href="transforms/insertSymbols.html#build-transforms-insertsymbols"><span>insertSymbols</span></a>: Inserts debugging symbols into JavaScript resources.</li>
+<li><a class="reference internal" href="transforms/optimizeCss.html#build-transforms-optimizecss"><span>optimizeCss</span></a>: Inlines CSS imports and/or removes comments from CSS files.</li>
+<li><a class="reference internal" href="transforms/read.html#build-transforms-read"><span>read</span></a>: Reads a resource from the file system.</li>
+<li><a class="reference internal" href="transforms/write.html#build-transforms-write"><span>write</span></a>: Writes a resource to the file system.</li>
+<li><a class="reference internal" href="transforms/writeAmd.html#build-transforms-writeamd"><span>writeAmd</span></a>: Writes an AMD module to the file system.</li>
+<li><a class="reference internal" href="transforms/writeDojo.html#build-transforms-writedojo"><span>writeDojo</span></a>: Outputs a module that includes the dojo loader; this transform is responsible for writing dojo.js.</li>
+<li><a class="reference internal" href="transforms/writeOptimized.html#build-transforms-writeoptimized"><span>writeOptimized</span></a>: Processes a resource with shrinksafe, closure, or uglifyjs (version 1.x) compiler and writes the result to the file system.</li>
+</ul>
+</div>
+<div class="section" id="applying-transforms">
+<h2><a class="toc-backref" href="#id11">Applying Transforms</a><a class="headerlink" href="#applying-transforms" title="Permalink to this headline">¶</a></h2>
+<p>As each resource is discovered, it is submitted to a set of
+transforms. The build system decides which transforms to apply by testing each resource against the conditions listed
+below, in the order listed. The first test that passes indicates the transforms to apply.</p>
+<ol class="arabic simple">
+<li>Tagged <code class="docutils literal"><span class="pre">ignore</span></code></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Do nothing; the resource is not read or written</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Tagged <code class="docutils literal"><span class="pre">miniExclude</span></code> and <code class="docutils literal"><span class="pre">profile.mini</span></code> is true</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Same as [1]</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>Tagged <code class="docutils literal"><span class="pre">test</span></code> and <code class="docutils literal"><span class="pre">profile.copyTests</span></code> is false</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Same as [1]</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>Tagged <code class="docutils literal"><span class="pre">copyOnly</span></code></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Copy resource from source location to destination location (copy).</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="5">
+<li>The module <code class="docutils literal"><span class="pre">&quot;dojo/dojo&quot;</span></code></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Read the resource (read)</li>
+<li>Apply dojo pragmas (dojoPragmas)</li>
+<li>Find all has.js applications (hasFindAll)</li>
+<li>Trim dead code branches as given by static, build-time has feature values (hasFixup)</li>
+<li>Write the processed loader module to the destination with a configuration (writeDojo)</li>
+<li>Optimize the module with shrinksafe, closure, or uglifyjs (version 1.x) compiler and write the optimized module to the destination (writeOptimized).</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="6">
+<li>Modules with the segment <code class="docutils literal"><span class="pre">&quot;/nls/&quot;</span></code> in their module identifier</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Read the resource (read)</li>
+<li>Apply dojo progras (dojoPragmas)</li>
+<li>Find all has.js applications (hasFindAll)</li>
+<li>Find all dependencies for the module (depsScan)</li>
+<li>Write the processed  module to the destination (writeAmd)</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="7">
+<li>resources  with <code class="docutils literal"><span class="pre">&quot;/nls/&quot;</span></code> in their filename and the filetype of &quot;.js&quot;</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Same as [6].</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="8">
+<li>Tagged <code class="docutils literal"><span class="pre">&quot;synthetic&quot;</span></code> and <code class="docutils literal"><span class="pre">&quot;amd&quot;</span></code></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Find all dependencies for the module (depsScan)</li>
+<li>Write the processed  module to the destination (writeAmd)</li>
+<li>Optimize the module with shrinksafe, closure, or uglifyjs (version 1.x) compiler and write the optimized module to the destination (writeOptimized).</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="9">
+<li>Tagged <code class="docutils literal"><span class="pre">&quot;amd&quot;</span></code></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Read the resource (read)</li>
+<li>Apply dojo progras (dojoPragmas)</li>
+<li>Find all has.js applications (hasFindAll)</li>
+<li>Insert debugging symbols (insertSymbols)</li>
+<li>Trim dead code branches as given by static, build-time has feature values (hasFixup)</li>
+<li>Find all dependencies for the module (depsScan)</li>
+<li>Write the processed  module to the destination (writeAmd)</li>
+<li>Optimize the module with shrinksafe, closure, or uglifyjs (version 1.x) compiler and write the optimized module to the destination (writeOptimized).</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="10">
+<li>Resource has a filetype of &quot;.js&quot; and is tagged <code class="docutils literal"><span class="pre">&quot;test&quot;</span></code> and <code class="docutils literal"><span class="pre">profile.copyTests</span></code> is build</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Same at [9].</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="11">
+<li>Resource has filetype of &quot;.js&quot; and is tagged is not tagged <code class="docutils literal"><span class="pre">&quot;test&quot;</span></code></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Same as [9].</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="12">
+<li>Tagged as <code class="docutils literal"><span class="pre">&quot;test&quot;</span></code></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Read the resource (read)</li>
+<li>Apply dojo progras (dojoPragmas)</li>
+<li>Write the processed  module to the destination (write)</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="13">
+<li>Resource has file type of &quot;.html&quot; or &quot;.htm&quot;</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Same at [12].</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="14">
+<li>Resource has file type of &quot;.css&quot;</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Read the resource (read)</li>
+<li>Optimize CSS (optimizeCss)</li>
+<li>Write the processed  module to the destination (write)</li>
+</ul>
+</div></blockquote>
+<ol class="arabic simple" start="15">
+<li>Any other resource</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>Copy resource from source location to destination location (copy).</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="command-line-and-profile-property-reference">
+<h2><a class="toc-backref" href="#id12">Command Line and Profile Property Reference</a><a class="headerlink" href="#command-line-and-profile-property-reference" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference internal" href="qref.html#build-qref"><span>Build Profile Quick Reference Guide</span></a></p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

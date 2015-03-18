@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/Deferred &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/Deferred</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-deferred">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/Deferred</a><a class="headerlink" href="#dojo-deferred" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">authors:</th><td class="field-body">Mark Wubben</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V1.8</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-deferred" id="id2">dojo/Deferred</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/Deferred</strong> manages the communication between asynchronous threads (callbacks). Previously it resided in Dojo
+Base, but in 1.8 it was rewritten based on the new Promise architecture and moved out of base. <code class="docutils literal"><span class="pre">dojo/Deferred</span></code>
+encapsulates a sequence of callbacks in response to a value that may not yet be available. All of <code class="docutils literal"><span class="pre">dojo/request</span></code>
+modules make use of this class.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><strong>dojo/Deferred</strong> is a class that is used as the foundation for managing asynchronous threads in Dojo.  Packages like <code class="docutils literal"><span class="pre">dojo/request</span></code> use this class to return a <em>promise</em> that gets <em>resolved</em> when the asynchronous thread is complete.  In order trigger a callback to occur when the thread is complete, the <code class="docutils literal"><span class="pre">.then()</span></code> method is used.  As well as the thread can be informed to cancel itself by using the <code class="docutils literal"><span class="pre">.cancel()</span></code> method.  If the thread has completed, then the <code class="docutils literal"><span class="pre">.then()</span></code> callback will be executed immediately.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Basic usage is instantiating a <code class="docutils literal"><span class="pre">dojo/Deferred</span></code> object, starting the thread and when it completes calling <code class="docutils literal"><span class="pre">.resolve()</span></code> with any results and returning the object to the consumer.  From a consumer perspective it is generally setting either a <code class="docutils literal"><span class="pre">.then()</span></code> callback with potentially an additional error callback as the second argument of then.  If the asynchronous process supports cancelling and it has been implemented, then the process can be cancelled via <code class="docutils literal"><span class="pre">.cancel()</span></code>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Deferred&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Deferred</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">reason</span><span class="p">){</span>
+    <span class="c1">// do something when the Deferred is cancelled</span>
+  <span class="p">});</span>
+
+  <span class="c1">// do something asynchronously</span>
+
+  <span class="c1">// provide an update on progress:</span>
+  <span class="nx">deferred</span><span class="p">.</span><span class="nx">progress</span><span class="p">(</span><span class="nx">update</span><span class="p">);</span>
+
+  <span class="c1">// when the process finishes:</span>
+  <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+
+  <span class="c1">// performing &quot;callbacks&quot; with the process:</span>
+  <span class="nx">deferred</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+    <span class="c1">// Do something when the process completes</span>
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+    <span class="c1">// Do something when the process errors out</span>
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">update</span><span class="p">){</span>
+    <span class="c1">// Do something when the process provides progress information</span>
+  <span class="p">});</span>
+
+  <span class="c1">// to cancel the asynchronous process:</span>
+  <span class="nx">deferred</span><span class="p">.</span><span class="nx">cancel</span><span class="p">(</span><span class="nx">reason</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Deferred&quot;], function(Deferred){
+  var deferred = new Deferred(function(reason){
+    // do something when the Deferred is cancelled
+  });
+
+  // do something asynchronously
+
+  // provide an update on progress:
+  deferred.progress(update);
+
+  // when the process finishes:
+  deferred.resolve(value);
+
+  // performing &quot;callbacks&quot; with the process:
+  deferred.then(function(value){
+    // Do something when the process completes
+  }, function(err){
+    // Do something when the process errors out
+  }, function(update){
+    // Do something when the process provides progress information
+  });
+
+  // to cancel the asynchronous process:
+  deferred.cancel(reason);
+});</textarea></div><p>Because <code class="docutils literal"><span class="pre">.then()</span></code> returns a new promise that is fulfilled when the callback completes, you can chain a Deferred like this:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Deferred&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Deferred</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">();</span>
+
+  <span class="nx">deferred</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+    <span class="c1">// do something</span>
+    <span class="k">return</span> <span class="nx">something</span><span class="p">;</span>
+  <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">something</span><span class="p">){</span>
+    <span class="c1">// do something else</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Deferred&quot;], function(Deferred){
+  var deferred = new Deferred();
+
+  deferred.then(function(value){
+    // do something
+    return something;
+  }).then(function(something){
+    // do something else
+  });
+});</textarea></div><p><code class="docutils literal"><span class="pre">dojo/Deferred</span></code> contains the following properties:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>promise</td>
+<td>Points to the <code class="docutils literal"><span class="pre">dojo/promise/Promise</span></code> object related to this object</td>
+</tr>
+<tr class="row-odd"><td>isResolved()</td>
+<td>Returns <code class="docutils literal"><span class="pre">true</span></code> if the Deferred is resolved</td>
+</tr>
+<tr class="row-even"><td>isRejected()</td>
+<td>Returns <code class="docutils literal"><span class="pre">true</span></code> if the Deferred is rejected</td>
+</tr>
+<tr class="row-odd"><td>isFulfilled()</td>
+<td>Returns <code class="docutils literal"><span class="pre">true</span></code> if the Deferred is fulfilled</td>
+</tr>
+<tr class="row-even"><td>isCanceled()</td>
+<td>Returns <code class="docutils literal"><span class="pre">true</span></code> if the Deferred is cancelled</td>
+</tr>
+<tr class="row-odd"><td>progress(update, strict)</td>
+<td>Called by the async process to provide progress updates.  The second argument, which
+is optional, if <code class="docutils literal"><span class="pre">true</span></code> means it will throw an error if the promise is fulfilled.
+Defaults to <code class="docutils literal"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="row-even"><td>resolve(value, strict)</td>
+<td>Called by the async process, when complete, providing any results to be passed to the
+callback.  The second argument, which is optional, if <code class="docutils literal"><span class="pre">true</span></code> means it will throw an
+error if the promise is fulfilled.  Defaults to <code class="docutils literal"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>reject(error, strict)</td>
+<td>Called by the async process to reject (error out) the deferred.  The second argument,
+which is optional, if <code class="docutils literal"><span class="pre">true</span></code> means it will throw an error if the promise is
+fulfilled.  Defaults to <code class="docutils literal"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="row-even"><td>then(callback, errback, progback)</td>
+<td>Used to set the callbacks for a Deferred.  <code class="docutils literal"><span class="pre">errback</span></code> and <code class="docutils literal"><span class="pre">progback</span></code> are optional
+functions that will be called if there is a rejection or a progress update,
+respectively.  <code class="docutils literal"><span class="pre">.then()</span></code> returns a new promise that will be fulfilled when the
+callback completes.  Anything that is returned from <code class="docutils literal"><span class="pre">progback</span></code> will be passed as
+the <code class="docutils literal"><span class="pre">value</span></code> to any callbacks to that promise, and any errors thrown by <code class="docutils literal"><span class="pre">errback</span></code> will be passed as the <code class="docutils literal"><span class="pre">error</span></code> to any of its errbacks.  If the Deferred is rejected and <code class="docutils literal"><span class="pre">errback</span></code> is called, but it does not throw an error, the new promise will be resolved with <code class="docutils literal"><span class="pre">value</span></code> being what was returned by <code class="docutils literal"><span class="pre">errback</span></code>.  This allows for chaining of callbacks, and for intermediate promises to handle errors for later ones.</td>
+</tr>
+<tr class="row-odd"><td>cancel(reason, strict)</td>
+<td>Signal the deferred that we&#8217;re no longer interested in the result. The deferred may
+subsequently cancel its operation and reject the promise. Can affect other promises
+that originate with the same deferred. Returns the rejection reason if the deferred
+was canceled normally. The second argument, which is optional, if <code class="docutils literal"><span class="pre">true</span></code> means it
+will throw an error if the promise is fulfilled.  Defaults to <code class="docutils literal"><span class="pre">false</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>This example provides a basic usage of Deferred, where we are creating an async process via the <code class="docutils literal"><span class="pre">setTimeout</span></code>
+function.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Deferred&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">Deferred</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="kd">function</span> <span class="nx">asyncProcess</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">();</span>
+
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;I&#39;m running...&quot;</span><span class="p">;</span>
+
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;startButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">process</span> <span class="o">=</span> <span class="nx">asyncProcess</span><span class="p">();</span>
+    <span class="nx">process</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">){</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;I&#39;m finished, and the result was: &quot;</span> <span class="o">+</span> <span class="nx">results</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Deferred&quot;, &quot;dojo/dom&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(Deferred, dom, on){
+  function asyncProcess(){
+    var deferred = new Deferred();
+
+    dom.byId(&quot;output&quot;).innerHTML = &quot;I'm running...&quot;;
+
+    setTimeout(function(){
+      deferred.resolve(&quot;success&quot;);
+    }, 1000);
+
+    return deferred.promise;
+  }
+
+  on(dom.byId(&quot;startButton&quot;), &quot;click&quot;, function(){
+    var process = asyncProcess();
+    process.then(function(results){
+      dom.byId(&quot;output&quot;).innerHTML = &quot;I'm finished, and the result was: &quot; + results;
+    });
+  });
+
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span>Output:<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;</span>Not yet started.<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;startButton&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;h1&gt;Output:&lt;/h1&gt;
+&lt;div id=&quot;output&quot;&gt;Not yet started.&lt;/div&gt;
+&lt;button type=&quot;button&quot; id=&quot;startButton&quot;&gt;Start&lt;/button&gt;</textarea></div></div></div><div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>This example shows how <code class="docutils literal"><span class="pre">.then()</span></code> can be chained.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Deferred&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">Deferred</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="kd">function</span> <span class="nx">asyncProcess</span><span class="p">(</span><span class="nx">msg</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">();</span>
+
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;I&#39;m running...&quot;</span><span class="p">;</span>
+
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;startButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">process</span> <span class="o">=</span> <span class="nx">asyncProcess</span><span class="p">(</span><span class="s2">&quot;first&quot;</span><span class="p">);</span>
+    <span class="nx">process</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">){</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;I&#39;m finished, and the result was: &quot;</span> <span class="o">+</span> <span class="nx">results</span><span class="p">;</span>
+      <span class="k">return</span> <span class="nx">asyncProcess</span><span class="p">(</span><span class="s2">&quot;second&quot;</span><span class="p">);</span>
+    <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">){</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;I&#39;m really finished now, and the result was: &quot;</span> <span class="o">+</span> <span class="nx">results</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Deferred&quot;, &quot;dojo/dom&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(Deferred, dom, on){
+  function asyncProcess(msg){
+    var deferred = new Deferred();
+
+    dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;I'm running...&quot;;
+
+    setTimeout(function(){
+      deferred.resolve(msg);
+    }, 1000);
+
+    return deferred.promise;
+  }
+
+  on(dom.byId(&quot;startButton&quot;), &quot;click&quot;, function(){
+    var process = asyncProcess(&quot;first&quot;);
+    process.then(function(results){
+      dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;I'm finished, and the result was: &quot; + results;
+      return asyncProcess(&quot;second&quot;);
+    }).then(function(results){
+      dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;I'm really finished now, and the result was: &quot; + results;
+    });
+  });
+
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span>Output:<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;</span>Not yet started.<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;startButton&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;h1&gt;Output:&lt;/h1&gt;
+&lt;div id=&quot;output&quot;&gt;Not yet started.&lt;/div&gt;
+&lt;button type=&quot;button&quot; id=&quot;startButton&quot;&gt;Start&lt;/button&gt;</textarea></div></div></div><div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>This example shows how <code class="docutils literal"><span class="pre">.progress()</span></code> and <code class="docutils literal"><span class="pre">.reject()</span></code> are used. You can see that while the <cite>.resolve()</cite> gets
+called, because the promise will already be fullfilled (by being rejected), the callback is never called.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Deferred&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">Deferred</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="kd">function</span> <span class="nx">asyncProcess</span><span class="p">(</span><span class="nx">msg</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">();</span>
+
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;I&#39;m running...&quot;</span><span class="p">;</span>
+
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">progress</span><span class="p">(</span><span class="s2">&quot;halfway&quot;</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s2">&quot;finished&quot;</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="s2">&quot;ooops&quot;</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">1500</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;startButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">process</span> <span class="o">=</span> <span class="nx">asyncProcess</span><span class="p">();</span>
+    <span class="nx">process</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">){</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;I&#39;m finished, and the result was: &quot;</span> <span class="o">+</span> <span class="nx">results</span><span class="p">;</span>
+    <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;I errored out with: &quot;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">;</span>
+    <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">progress</span><span class="p">){</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;I made some progress: &quot;</span> <span class="o">+</span> <span class="nx">progress</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Deferred&quot;, &quot;dojo/dom&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(Deferred, dom, on){
+  function asyncProcess(msg){
+    var deferred = new Deferred();
+
+    dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;I'm running...&quot;;
+
+    setTimeout(function(){
+      deferred.progress(&quot;halfway&quot;);
+    }, 1000);
+
+    setTimeout(function(){
+      deferred.resolve(&quot;finished&quot;);
+    }, 2000);
+
+    setTimeout(function(){
+      deferred.reject(&quot;ooops&quot;);
+    }, 1500);
+
+    return deferred.promise;
+  }
+
+  on(dom.byId(&quot;startButton&quot;), &quot;click&quot;, function(){
+    var process = asyncProcess();
+    process.then(function(results){
+      dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;I'm finished, and the result was: &quot; + results;
+    }, function(err){
+      dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;I errored out with: &quot; + err;
+    }, function(progress){
+      dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;I made some progress: &quot; + progress;
+    });
+  });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span>Output:<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;</span>Not yet started.<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;startButton&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;h1&gt;Output:&lt;/h1&gt;
+&lt;div id=&quot;output&quot;&gt;Not yet started.&lt;/div&gt;
+&lt;button type=&quot;button&quot; id=&quot;startButton&quot;&gt;Start&lt;/button&gt;</textarea></div></div></div><div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>In this example, we have implemented the ability to <code class="docutils literal"><span class="pre">.cancel()</span></code> a Deferred.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Deferred&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">Deferred</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="kd">function</span> <span class="nx">asyncProcess</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">timeout</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">reason</span><span class="p">){</span>
+      <span class="nx">clearTimeout</span><span class="p">(</span><span class="nx">timeout</span><span class="p">);</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;I was cancelled with reason: &quot;</span> <span class="o">+</span> <span class="nx">reason</span><span class="p">;</span>
+    <span class="p">});</span>
+
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;I&#39;m running...&quot;</span><span class="p">;</span>
+
+    <span class="nx">timeout</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;My process completed!&quot;</span><span class="p">;</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s2">&quot;finished&quot;</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;startButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">process</span> <span class="o">=</span> <span class="nx">asyncProcess</span><span class="p">();</span>
+    <span class="nx">process</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">){</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;I&#39;m finished, and the result was: &quot;</span> <span class="o">+</span> <span class="nx">results</span><span class="p">;</span>
+    <span class="p">});</span>
+
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">process</span><span class="p">.</span><span class="nx">cancel</span><span class="p">(</span><span class="s2">&quot;goodbye&quot;</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Deferred&quot;, &quot;dojo/dom&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(Deferred, dom, on){
+  function asyncProcess(){
+    var timeout;
+    var deferred = new Deferred(function(reason){
+      clearTimeout(timeout);
+      dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;I was cancelled with reason: &quot; + reason;
+    });
+
+    dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;I'm running...&quot;;
+
+    timeout = setTimeout(function(){
+      dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;My process completed!&quot;;
+      deferred.resolve(&quot;finished&quot;);
+    }, 2000);
+
+    return deferred.promise;
+  }
+
+  on(dom.byId(&quot;startButton&quot;), &quot;click&quot;, function(){
+    var process = asyncProcess();
+    process.then(function(results){
+      dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;I'm finished, and the result was: &quot; + results;
+    });
+
+    setTimeout(function(){
+      process.cancel(&quot;goodbye&quot;);
+    }, 1000);
+  });
+
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span>Output:<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;</span>Not yet started.<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;startButton&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;h1&gt;Output:&lt;/h1&gt;
+&lt;div id=&quot;output&quot;&gt;Not yet started.&lt;/div&gt;
+&lt;button type=&quot;button&quot; id=&quot;startButton&quot;&gt;Start&lt;/button&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="promise.html#dojo-promise"><span>dojo/promise</span></a> - The module that underpins <code class="docutils literal"><span class="pre">dojo/Deferred</span></code>.</li>
+<li><a class="reference internal" href="promise/Promise.html#dojo-promise-promise"><span>dojo/promise/Promise</span></a> - The underlying object used to provide the asynchronous thread
+communication.</li>
+<li><a class="reference internal" href="when.html#dojo-when"><span>dojo/when</span></a> - The module that allows transparent management of promises and non-promise values.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

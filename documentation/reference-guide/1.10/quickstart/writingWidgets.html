@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Writing Your Own Widget &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Writing Your Own Widget</a><ul>
+<li><a class="reference internal" href="#starting-from-scratch">Starting From Scratch</a></li>
+<li><a class="reference internal" href="#templated-widgets">Templated Widgets</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#declaring-attributes">Declaring attributes</a></li>
+<li><a class="reference internal" href="#mapping-widget-attributes-to-domnode-attributes">Mapping widget attributes to DOMNode attributes</a></li>
+<li><a class="reference internal" href="#custom-setters-getters">Custom setters/getters</a></li>
+<li><a class="reference internal" href="#life-cycle">Life cycle</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#containers">Containers</a></li>
+<li><a class="reference internal" href="#creating-extension-points">Creating extension points</a></li>
+<li><a class="reference internal" href="#useful-self-scoping-functions">Useful self-scoping functions</a></li>
+<li><a class="reference internal" href="#accessibility">Accessibility</a></li>
+<li><a class="reference internal" href="#alternate-templating-engines">Alternate Templating Engines</a></li>
+<li><a class="reference internal" href="#common-issues">Common Issues</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="writing-your-own-widget">
+<span id="quickstart-writingwidgets"></span><h1><a class="toc-backref" href="#id1">Writing Your Own Widget</a><a class="headerlink" href="#writing-your-own-widget" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#writing-your-own-widget" id="id1">Writing Your Own Widget</a><ul>
+<li><a class="reference internal" href="#starting-from-scratch" id="id2">Starting From Scratch</a></li>
+<li><a class="reference internal" href="#templated-widgets" id="id3">Templated Widgets</a></li>
+<li><a class="reference internal" href="#attributes" id="id4">Attributes</a></li>
+<li><a class="reference internal" href="#containers" id="id5">Containers</a></li>
+<li><a class="reference internal" href="#creating-extension-points" id="id6">Creating extension points</a></li>
+<li><a class="reference internal" href="#useful-self-scoping-functions" id="id7">Useful self-scoping functions</a></li>
+<li><a class="reference internal" href="#accessibility" id="id8">Accessibility</a></li>
+<li><a class="reference internal" href="#alternate-templating-engines" id="id9">Alternate Templating Engines</a></li>
+<li><a class="reference internal" href="#common-issues" id="id10">Common Issues</a></li>
+<li><a class="reference internal" href="#see-also" id="id11">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>It&#8217;s hard for you to leave well-enough alone. We give you widgets, and now you want to change them. Or you want to make your own.</p>
+<p>No problem! Dijit components are extensible, so you can make changes without touching the source code. In a way, you already do this by specifying your own attributes - e.g. sliders that go from 0-100 look different than those going from 0-200. But sometimes you need to go further. Maybe you need to create different behavior for onClick, or substitute a custom validation routine. This kind of modification uses extension points described in Common Attributes. You can add your own code to extension points through markup or through pure JavaScript calls to dojo.declare.</p>
+<p>You can also create Dijit classes from scratch. Again, you can do this either through markup - using the dijit.Declaration data-dojo-type attribute - or through dojo.declare.</p>
+<div class="section" id="starting-from-scratch">
+<h2><a class="toc-backref" href="#id2">Starting From Scratch</a><a class="headerlink" href="#starting-from-scratch" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s look at how to create a widget from scratch.</p>
+<p>Technically, a widget can be any JavaScript &#8220;class&#8221; that implements a constructor taking parameters and a srcNodeRef (a pointer to a source DOM node).</p>
+<div class="highlight"><pre><span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">params</span><span class="p">,</span> <span class="nx">srcNodeRef</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;creating widget with params &quot;</span> <span class="o">+</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">toJson</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; on node &quot;</span> <span class="o">+</span> <span class="nx">srcNodeRef</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">constructor: function(params, srcNodeRef){
+    console.log(&quot;creating widget with params &quot; + dojo.toJson(params) + &quot; on node &quot; + srcNodeRef);
+}</textarea></div><p>However, all the widgets in dijit and dojox, are built on top of the <a class="reference internal" href="../dijit/_WidgetBase.html#dijit-widgetbase"><span>dijit._WidgetBase</span></a> base class.</p>
+<p>The simplest widget you can create is a <em>behavioral</em> widget, i.e., a widget that just uses the DOM tree passed into it rather than creating a DOM tree.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>The widget definition</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+    <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/ready&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">parser</span><span class="p">,</span> <span class="nx">ready</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">){</span>
+
+    <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;MyFirstBehavioralWidget&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">_WidgetBase</span><span class="p">],</span> <span class="p">{</span>
+        <span class="c1">// put methods, attributes, etc. here</span>
+    <span class="p">});</span>
+    <span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">// Call the parser manually so it runs after our widget is defined, and page has finished loading</span>
+        <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+    &quot;dojo/_base/declare&quot;, &quot;dojo/parser&quot;, &quot;dojo/ready&quot;,
+    &quot;dijit/_WidgetBase&quot;,
+], function(declare, parser, ready, _WidgetBase){
+
+    declare(&quot;MyFirstBehavioralWidget&quot;, [_WidgetBase], {
+        // put methods, attributes, etc. here
+    });
+    ready(function(){
+        // Call the parser manually so it runs after our widget is defined, and page has finished loading
+        parser.parse();
+    });
+});</textarea></div><p>Instantiate the widget in markup</p>
+<div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">data-dojo-type=</span><span class="s">&quot;MyFirstBehavioralWidget&quot;</span><span class="nt">&gt;</span>hi<span class="nt">&lt;/span&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;span data-dojo-type=&quot;MyFirstBehavioralWidget&quot;&gt;hi&lt;/span&gt;</textarea></div></div></div><p>This is merely creating a JavaScript object (of type MyFirstBehavioralWidget) associated with the &lt;span&gt; in the original markup.  You would create a postCreate() method referencing this.domNode that did connections, etc. to do something interesting w/that DOM node.</p>
+<p>This kind of behavioral widget is useful in some cases, but it has severe limitations, namely that the widget user must supply a DOM tree.   Normally, widgets create their own DOM tree, replacing a simple &lt;span&gt; or &lt;button&gt; node with a complex DOM tree.  Note that sometimes, if the user just calls</p>
+<div class="highlight"><pre><span class="k">new</span> <span class="nx">MyWidget</span><span class="p">({})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">new MyWidget({})</textarea></div><p>there isn&#8217;t even a DOM node to replace at all.</p>
+<p>Here&#8217;s a simple example of a widget that creates it&#8217;s own DOM tree:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Define the widget and instantiate programmatically.   Note that the parser is not used, since that&#8217;s only needed if the widget is instantiated through markup.</p>
+<div class="highlight"><pre><span class="c1">// the parser is only needed, if you want</span>
+<span class="c1">// to instantiate the widget declaratively (in markup)</span>
+<span class="nx">require</span><span class="p">([</span>
+    <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/ready&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">domConstruct</span><span class="p">,</span> <span class="nx">ready</span><span class="p">,</span> <span class="nx">win</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">){</span>
+
+    <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;MyFirstWidget&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">_WidgetBase</span><span class="p">],</span> <span class="p">{</span>
+        <span class="nx">buildRendering</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="c1">// create the DOM for this widget</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">domNode</span> <span class="o">=</span> <span class="nx">domConstruct</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s2">&quot;button&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">innerHTML</span><span class="o">:</span> <span class="s2">&quot;push me&quot;</span><span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">// Create the widget programmatically and place in DOM</span>
+        <span class="p">(</span><span class="k">new</span> <span class="nx">MyFirstWidget</span><span class="p">()).</span><span class="nx">placeAt</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">());</span>
+    <span class="p">});</span>
+ <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// the parser is only needed, if you want
+// to instantiate the widget declaratively (in markup)
+require([
+    &quot;dojo/_base/declare&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/ready&quot;, &quot;dojo/_base/window&quot;,
+    &quot;dijit/_WidgetBase&quot;,
+], function(declare, domConstruct, ready, win, _WidgetBase){
+
+    declare(&quot;MyFirstWidget&quot;, [_WidgetBase], {
+        buildRendering: function(){
+            // create the DOM for this widget
+            this.domNode = domConstruct.create(&quot;button&quot;, {innerHTML: &quot;push me&quot;});
+        }
+    });
+
+    ready(function(){
+        // Create the widget programmatically and place in DOM
+        (new MyFirstWidget()).placeAt(win.body());
+    });
+ });</textarea></div></div></div><p>This widget doesn&#8217;t do much, but it does show the minimum requirement for a (non-behavioral) widget: create a DOM tree.</p>
+<p>Now let&#8217;s write a widget that performs some JavaScript.   We&#8217;ll setup an onclick handler on a button node which will increment a counter:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Define the widget</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+    <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/ready&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">domConstruct</span><span class="p">,</span> <span class="nx">parser</span><span class="p">,</span> <span class="nx">ready</span><span class="p">,</span><span class="nx">_WidgetBase</span><span class="p">){</span>
+    <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;Counter&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">_WidgetBase</span><span class="p">],</span> <span class="p">{</span>
+        <span class="c1">// counter</span>
+        <span class="nx">_i</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+
+        <span class="nx">buildRendering</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="c1">// create the DOM for this widget</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">domNode</span> <span class="o">=</span> <span class="nx">domConstruct</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s2">&quot;button&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">innerHTML</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_i</span><span class="p">});</span>
+        <span class="p">},</span>
+
+        <span class="nx">postCreate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="c1">// every time the user clicks the button, increment the counter</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">domNode</span><span class="p">,</span> <span class="s2">&quot;onclick&quot;</span><span class="p">,</span> <span class="s2">&quot;increment&quot;</span><span class="p">);</span>
+        <span class="p">},</span>
+
+        <span class="nx">increment</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">++</span><span class="k">this</span><span class="p">.</span><span class="nx">_i</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">// Call the parser manually so it runs after our widget is defined, and page has finished loading</span>
+        <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+    &quot;dojo/_base/declare&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/parser&quot;, &quot;dojo/ready&quot;,
+    &quot;dijit/_WidgetBase&quot;,
+], function(declare, domConstruct, parser, ready,_WidgetBase){
+    declare(&quot;Counter&quot;, [_WidgetBase], {
+        // counter
+        _i: 0,
+
+        buildRendering: function(){
+            // create the DOM for this widget
+            this.domNode = domConstruct.create(&quot;button&quot;, {innerHTML: this._i});
+        },
+
+        postCreate: function(){
+            // every time the user clicks the button, increment the counter
+            this.connect(this.domNode, &quot;onclick&quot;, &quot;increment&quot;);
+        },
+
+        increment: function(){
+            this.domNode.innerHTML = ++this._i;
+        }
+    });
+
+    ready(function(){
+        // Call the parser manually so it runs after our widget is defined, and page has finished loading
+        parser.parse();
+    });
+});</textarea></div><p>Instantiate declaratively</p>
+<div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">data-dojo-type=</span><span class="s">&quot;Counter&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;span data-dojo-type=&quot;Counter&quot;&gt;&lt;/span&gt;</textarea></div></div></div><p>postCreate() is called after buildRendering() is finished, and is typically used for connections etc. that can&#8217;t be done until the DOM tree has been created.</p>
+</div>
+<div class="section" id="templated-widgets">
+<h2><a class="toc-backref" href="#id3">Templated Widgets</a><a class="headerlink" href="#templated-widgets" title="Permalink to this headline">¶</a></h2>
+<p>OK, we&#8217;ve seen how to create a widget based directly on the <a class="reference internal" href="../dijit/_WidgetBase.html#dijit-widgetbase"><span>dijit._WidgetBase</span></a> class.  In practice though, this isn&#8217;t done very often, as it&#8217;s rather cumbersome to create a complicated DOM structure by hand.   There&#8217;s a mixin called <a class="reference internal" href="../dijit/_TemplatedMixin.html#dijit-templatedmixin"><span>dijit._TemplatedMixin</span></a> that makes all of this easier.  _TemplatedMixin implements buildRendering() for you, and all you have to do is specify a template i.e, an HTML fragment, that specifies the DOM for the widget.</p>
+<p>Let&#8217;s start using templates by expanding on our counter example, but making it a little more complicated.  The user will be able to specify a label for the button, and the count will be printed after the button.  The user will also be able to specify a label for the counter.</p>
+<p>The code to instantiate will look like this:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;FancyCounter&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;label:&#39;counter label&#39;&quot;</span><span class="nt">&gt;</span>button label<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;FancyCounter&quot; data-dojo-props=&quot;label:'counter label'&quot;&gt;button label&lt;/div&gt;</textarea></div><p>The first thing to do is to create some plain HTML to show you want the widget to look like:</p>
+<div class="highlight"><pre><span class="nt">&lt;div&gt;</span>
+  <span class="nt">&lt;button&gt;</span>press me<span class="nt">&lt;/button&gt;</span>
+  <span class="ni">&amp;nbsp;</span>count: <span class="nt">&lt;span&gt;</span>0<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div&gt;
+  &lt;button&gt;press me&lt;/button&gt;
+  &amp;nbsp;count: &lt;span&gt;0&lt;/span&gt;
+&lt;/div&gt;</textarea></div><p>Note that the template should have a single top level root node.</p>
+<p>Next, we modify the template above with some commands for _TemplatedMixin:</p>
+<div class="highlight"><pre><span class="nt">&lt;div&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">data-dojo-attach-event=</span><span class="s">&#39;onclick: increment&#39;</span><span class="nt">&gt;</span>press me<span class="nt">&lt;/button&gt;</span>
+  <span class="ni">&amp;nbsp;</span>count: <span class="nt">&lt;span</span> <span class="na">data-dojo-attach-point=</span><span class="s">&#39;counter&#39;</span><span class="nt">&gt;</span>0<span class="nt">&lt;/span&gt;</span>&quot;
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div&gt;
+  &lt;button data-dojo-attach-event='onclick: increment'&gt;press me&lt;/button&gt;
+  &amp;nbsp;count: &lt;span data-dojo-attach-point='counter'&gt;0&lt;/span&gt;&quot;
+&lt;/div&gt;</textarea></div><p>data-dojo-attach-point and data-dojo-attach-event are documented in detail on the <a class="reference internal" href="../dijit/_TemplatedMixin.html#dijit-templatedmixin"><span>dijit._TemplatedMixin</span></a> page, but the important thing to note is that data-dojo-attach-event sets up a listener for events on the DOM nodes, and data-dojo-attach-point sets up a pointer to the DOM nodes.</p>
+<p>So, putting that all together the source becomes:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+     <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/ready&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_TemplatedMixin&quot;</span>
+ <span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">parser</span><span class="p">,</span> <span class="nx">ready</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">){</span>
+
+     <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;FancyCounter&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">],</span> <span class="p">{</span>
+         <span class="c1">// counter</span>
+         <span class="nx">_i</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+
+         <span class="nx">templateString</span><span class="o">:</span> <span class="s2">&quot;&lt;div&gt;&quot;</span> <span class="o">+</span>
+             <span class="s2">&quot;&lt;button data-dojo-attach-event=&#39;onclick: increment&#39;&gt;press me&lt;/button&gt;&quot;</span> <span class="o">+</span>
+             <span class="s2">&quot;&amp;nbsp; count: &lt;span data-dojo-attach-point=&#39;counter&#39;&gt;0&lt;/span&gt;&quot;</span> <span class="o">+</span>
+             <span class="s2">&quot;&lt;/div&gt;&quot;</span><span class="p">,</span>
+
+         <span class="nx">increment</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+             <span class="k">this</span><span class="p">.</span><span class="nx">counter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">++</span><span class="k">this</span><span class="p">.</span><span class="nx">_i</span><span class="p">;</span>
+         <span class="p">}</span>
+     <span class="p">});</span>
+
+     <span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+         <span class="c1">// Call the parser manually so it runs after our widget is defined, and page has finished loading</span>
+         <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+     <span class="p">});</span>
+ <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+     &quot;dojo/_base/declare&quot;, &quot;dojo/parser&quot;, &quot;dojo/ready&quot;,
+     &quot;dijit/_WidgetBase&quot;, &quot;dijit/_TemplatedMixin&quot;
+ ], function(declare, parser, ready, _WidgetBase, _TemplatedMixin){
+
+     declare(&quot;FancyCounter&quot;, [_WidgetBase, _TemplatedMixin], {
+         // counter
+         _i: 0,
+
+         templateString: &quot;&lt;div&gt;&quot; +
+             &quot;&lt;button data-dojo-attach-event='onclick: increment'&gt;press me&lt;/button&gt;&quot; +
+             &quot;&amp;nbsp; count: &lt;span data-dojo-attach-point='counter'&gt;0&lt;/span&gt;&quot; +
+             &quot;&lt;/div&gt;&quot;,
+
+         increment: function(){
+             this.counter.innerHTML = ++this._i;
+         }
+     });
+
+     ready(function(){
+         // Call the parser manually so it runs after our widget is defined, and page has finished loading
+         parser.parse();
+     });
+ });</textarea></div><div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">data-dojo-type=</span><span class="s">&quot;FancyCounter&quot;</span><span class="nt">&gt;</span>press me<span class="nt">&lt;/span&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;span data-dojo-type=&quot;FancyCounter&quot;&gt;press me&lt;/span&gt;</textarea></div></div></div></div>
+<div class="section" id="attributes">
+<h2><a class="toc-backref" href="#id4">Attributes</a><a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<p>All widgets have attributes that can be set on widget creation, or changed during the use of the widget, much like DOM nodes have attributes.   The main difference is that to get/set widget attributes after creation, you need to call the set() and get() methods.</p>
+<p>But how do you as a widget writer make your widget have attributes, and handle when the caller changes their value?</p>
+<div class="section" id="declaring-attributes">
+<h3>Declaring attributes<a class="headerlink" href="#declaring-attributes" title="Permalink to this headline">¶</a></h3>
+<p>As a widget writer, you need to declare all your widget parameters in the prototype, along with a value.  The value serves both as a default value (if no value was specified on instantiation), and also tells the parser the data type of the parameter.  In this case we are declaring a string parameter:</p>
+<div class="highlight"><pre><span class="c1">// label: String</span>
+<span class="c1">//      Button label</span>
+<span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;push me&quot;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// label: String
+//      Button label
+label: &quot;push me&quot;</textarea></div><div class="highlight"><pre><span class="c1">// duration: Integer</span>
+<span class="c1">//      Milliseconds to fade in/out</span>
+<span class="nx">duration</span><span class="o">:</span> <span class="mi">100</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// duration: Integer
+//      Milliseconds to fade in/out
+duration: 100</textarea></div><div class="highlight"><pre><span class="c1">// open: Boolean</span>
+<span class="c1">//      Whether pane is visible or hidden</span>
+<span class="nx">open</span><span class="o">:</span> <span class="kc">true</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// open: Boolean
+//      Whether pane is visible or hidden
+open: true</textarea></div><p>Note that all the documentation for an attribute needs to go next
+to the attribute definition, even when you need special documentation about how set() performs for that
+widget.  For example:</p>
+<div class="highlight"><pre><span class="c1">// value: Date</span>
+<span class="c1">//     The date picked on the date picker, as a Date Object.</span>
+<span class="c1">//     When setting the date on initialization (ex: new DateTextBox({value: &quot;2008-1-1&quot;})</span>
+<span class="c1">//     or changing it (ex: set(&#39;value&#39;, &quot;2008-1-1&quot;)), you can specify either a Date object or</span>
+<span class="c1">//     a string in ISO format</span>
+<span class="nx">value</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// value: Date
+//     The date picked on the date picker, as a Date Object.
+//     When setting the date on initialization (ex: new DateTextBox({value: &quot;2008-1-1&quot;})
+//     or changing it (ex: set('value', &quot;2008-1-1&quot;)), you can specify either a Date object or
+//     a string in ISO format
+value: new Date()</textarea></div></div>
+<div class="section" id="mapping-widget-attributes-to-domnode-attributes">
+<h3>Mapping widget attributes to DOMNode attributes<a class="headerlink" href="#mapping-widget-attributes-to-domnode-attributes" title="Permalink to this headline">¶</a></h3>
+<p>Often widget attributes are mapped into the widget&#8217;s DOM.  For example, the tabIndex setting on a widget should map to that widget&#8217;s focusNode.</p>
+<p>This is not done by putting ${...} strings inside the widget&#8217;s template.   Actually, most of the time, the mapping happens automatically.   Standard DOMNode attributes like tabindex, alt, aria-labelledby, etc. are copied to the widget&#8217;s &#8220;focusNode&#8221; if it&#8217;s defined, or to the &#8220;domNode&#8221; otherwise.</p>
+<p>You can also explicitly specify mappings to DOM node attributes, innerHTML, or class, overriding the default behavior.   This allows more complicated mappings, like when TitlePane has a &#8220;title&#8221; parameter which becomes the innerHTML of the TitlePane.titleNode DOM node (where titleNode is defined as a data-dojo-attach-point, see above).</p>
+<p>That explanation is confusing, but an example will help.</p>
+<p>Here&#8217;s a simple widget for displaying a business card.  The widget has 3 parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>name</li>
+<li>phone number</li>
+<li>CSS class name to apply to name</li>
+</ul>
+</div></blockquote>
+<p>Each parameter has a corresponding _setXXXAttr to say how it relates to the template:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+     <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/ready&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_TemplatedMixin&quot;</span>
+ <span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">parser</span><span class="p">,</span> <span class="nx">ready</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">){</span>
+
+     <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;BusinessCard&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">],</span> <span class="p">{</span>
+         <span class="nx">templateString</span><span class="o">:</span>
+             <span class="s2">&quot;&lt;div class=&#39;businessCard&#39;&gt;&quot;</span> <span class="o">+</span>
+                 <span class="s2">&quot;&lt;div&gt;Name: &lt;span data-dojo-attach-point=&#39;nameNode&#39;&gt;&lt;/span&gt;&lt;/div&gt;&quot;</span> <span class="o">+</span>
+                 <span class="s2">&quot;&lt;div&gt;Phone #: &lt;span data-dojo-attach-point=&#39;phoneNode&#39;&gt;&lt;/span&gt;&lt;/div&gt;&quot;</span> <span class="o">+</span>
+             <span class="s2">&quot;&lt;/div&gt;&quot;</span><span class="p">,</span>
+
+         <span class="c1">// Attributes</span>
+         <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
+         <span class="nx">_setNameAttr</span><span class="o">:</span> <span class="p">{</span> <span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;nameNode&quot;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;innerHTML&quot;</span> <span class="p">},</span>
+
+         <span class="nx">nameClass</span><span class="o">:</span> <span class="s2">&quot;employeeName&quot;</span><span class="p">,</span>
+         <span class="nx">_setNameClassAttr</span><span class="o">:</span> <span class="p">{</span> <span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;nameNode&quot;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;class&quot;</span> <span class="p">},</span>
+
+         <span class="nx">phone</span><span class="o">:</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
+         <span class="nx">_setPhoneAttr</span><span class="o">:</span> <span class="p">{</span> <span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;phoneNode&quot;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;innerHTML&quot;</span> <span class="p">}</span>
+     <span class="p">});</span>
+
+     <span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+         <span class="c1">// Call the parser manually so it runs after our widget is defined, and page has finished loading</span>
+         <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+     <span class="p">});</span>
+ <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+     &quot;dojo/_base/declare&quot;, &quot;dojo/parser&quot;, &quot;dojo/ready&quot;,
+     &quot;dijit/_WidgetBase&quot;, &quot;dijit/_TemplatedMixin&quot;
+ ], function(declare, parser, ready, _WidgetBase, _TemplatedMixin){
+
+     declare(&quot;BusinessCard&quot;, [_WidgetBase, _TemplatedMixin], {
+         templateString:
+             &quot;&lt;div class='businessCard'&gt;&quot; +
+                 &quot;&lt;div&gt;Name: &lt;span data-dojo-attach-point='nameNode'&gt;&lt;/span&gt;&lt;/div&gt;&quot; +
+                 &quot;&lt;div&gt;Phone #: &lt;span data-dojo-attach-point='phoneNode'&gt;&lt;/span&gt;&lt;/div&gt;&quot; +
+             &quot;&lt;/div&gt;&quot;,
+
+         // Attributes
+         name: &quot;unknown&quot;,
+         _setNameAttr: { node: &quot;nameNode&quot;, type: &quot;innerHTML&quot; },
+
+         nameClass: &quot;employeeName&quot;,
+         _setNameClassAttr: { node: &quot;nameNode&quot;, type: &quot;class&quot; },
+
+         phone: &quot;unknown&quot;,
+         _setPhoneAttr: { node: &quot;phoneNode&quot;, type: &quot;innerHTML&quot; }
+     });
+
+     ready(function(){
+         // Call the parser manually so it runs after our widget is defined, and page has finished loading
+         parser.parse();
+     });
+ });</textarea></div><div class="highlight"><pre><span class="nc">.businessCard</span> <span class="p">{</span>
+    <span class="k">border</span><span class="o">:</span> <span class="m">3px</span> <span class="k">inset</span> <span class="nb">gray</span><span class="p">;</span>
+    <span class="k">margin</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.employeeName</span> <span class="p">{</span>
+    <span class="k">color</span><span class="o">:</span> <span class="nb">blue</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.specialEmployeeName</span> <span class="p">{</span>
+    <span class="k">color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">.businessCard {
+    border: 3px inset gray;
+    margin: 1em;
+}
+.employeeName {
+    color: blue;
+}
+.specialEmployeeName {
+    color: red;
+}</textarea></div><div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">data-dojo-type=</span><span class="s">&quot;BusinessCard&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;name:&#39;John Smith&#39;, phone:&#39;(800) 555-1212&#39;&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">data-dojo-type=</span><span class="s">&quot;BusinessCard&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;name:&#39;Jack Bauer&#39;, nameClass:&#39;specialEmployeeName&#39;, phone:&#39;(800) CALL-CTU&#39;&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;span data-dojo-type=&quot;BusinessCard&quot; data-dojo-props=&quot;name:'John Smith', phone:'(800) 555-1212'&quot;&gt;&lt;/span&gt;
+&lt;span data-dojo-type=&quot;BusinessCard&quot; data-dojo-props=&quot;name:'Jack Bauer', nameClass:'specialEmployeeName', phone:'(800) CALL-CTU'&quot;&gt;&lt;/span&gt;</textarea></div></div></div><p>To map a widget attribute to a DOM node attribute, you do:</p>
+<div class="highlight"><pre><span class="nx">_setDisabledAttr</span><span class="o">:</span> <span class="p">{</span><span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;focusNode&quot;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;attribute&quot;</span> <span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">_setDisabledAttr: {node: &quot;focusNode&quot;, type: &quot;attribute&quot; }</textarea></div><p>or alternately just</p>
+<div class="highlight"><pre><span class="nx">_setDisabledAttr</span><span class="o">:</span> <span class="s2">&quot;focusNode&quot;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">_setDisabledAttr: &quot;focusNode&quot;</textarea></div><p>Both code blocks copy the widget&#8217;s &#8220;disabled&#8221; attribute onto the focusNode DOM node in the template.</p>
+<p>A more complicated example to map an attribute called &#8220;img&#8221; to this.imageNode.src:</p>
+<div class="highlight"><pre><span class="nx">_setImgAttr</span><span class="o">:</span> <span class="p">{</span><span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;imageNode&quot;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;attribute&quot;</span><span class="p">,</span> <span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;src&quot;</span> <span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">_setImgAttr: {node: &quot;imageNode&quot;, type: &quot;attribute&quot;, attribute: &quot;src&quot; }</textarea></div></div>
+<div class="section" id="custom-setters-getters">
+<h3>Custom setters/getters<a class="headerlink" href="#custom-setters-getters" title="Permalink to this headline">¶</a></h3>
+<p>When you have an attribute where setting/getting it is more complicated than an object like above can
+handle, you need to write custom getters/setters methods for it.   Like above, the naming convention
+(for an attribute named foo) is _setFooAttr() and _getFooAttr().
+Set() and get() will automatically detect and call these custom setters.</p>
+<p>Here&#8217;s an example of a behavioral widget (it uses the DOM node from the supplied markup)
+that has an &#8220;open&#8221; attribute that controls whether the widget is hidden or shown:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+     <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-style&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/ready&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_TemplatedMixin&quot;</span>
+ <span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">domStyle</span><span class="p">,</span> <span class="nx">parser</span><span class="p">,</span> <span class="nx">ready</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">){</span>
+
+     <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;HidePane&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">_WidgetBase</span><span class="p">],</span> <span class="p">{</span>
+         <span class="c1">// parameters</span>
+         <span class="nx">open</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+
+         <span class="nx">_setOpenAttr</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="cm">/*Boolean*/</span> <span class="nx">open</span><span class="p">){</span>
+             <span class="k">this</span><span class="p">.</span><span class="nx">_set</span><span class="p">(</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="nx">open</span><span class="p">);</span>
+             <span class="nx">domStyle</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">domNode</span><span class="p">,</span> <span class="s2">&quot;display&quot;</span><span class="p">,</span> <span class="nx">open</span> <span class="o">?</span> <span class="s2">&quot;block&quot;</span> <span class="o">:</span> <span class="s2">&quot;none&quot;</span><span class="p">);</span>
+         <span class="p">}</span>
+     <span class="p">});</span>
+
+     <span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+         <span class="c1">// Call the parser manually so it runs after our widget is defined, and page has finished loading</span>
+         <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+     <span class="p">});</span>
+ <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+     &quot;dojo/_base/declare&quot;, &quot;dojo/dom-style&quot;, &quot;dojo/parser&quot;, &quot;dojo/ready&quot;,
+     &quot;dijit/_WidgetBase&quot;, &quot;dijit/_TemplatedMixin&quot;
+ ], function(declare, domStyle, parser, ready, _WidgetBase, _TemplatedMixin){
+
+     declare(&quot;HidePane&quot;, [_WidgetBase], {
+         // parameters
+         open: true,
+
+         _setOpenAttr: function(/*Boolean*/ open){
+             this._set(&quot;open&quot;, open);
+             domStyle.set(this.domNode, &quot;display&quot;, open ? &quot;block&quot; : &quot;none&quot;);
+         }
+     });
+
+     ready(function(){
+         // Call the parser manually so it runs after our widget is defined, and page has finished loading
+         parser.parse();
+     });
+ });</textarea></div><div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">data-dojo-type=</span><span class="s">&quot;HidePane&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;open:false&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;pane&quot;</span><span class="nt">&gt;</span>This pane is initially hidden<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;pane.set(&#39;open&#39;, true);&quot;</span><span class="nt">&gt;</span>show<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;pane.set(&#39;open&#39;, false);&quot;</span><span class="nt">&gt;</span>hide<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;span data-dojo-type=&quot;HidePane&quot; data-dojo-props=&quot;open:false&quot; data-dojo-id=&quot;pane&quot;&gt;This pane is initially hidden&lt;/span&gt;
+&lt;button onclick=&quot;pane.set('open', true);&quot;&gt;show&lt;/button&gt;
+&lt;button onclick=&quot;pane.set('open', false);&quot;&gt;hide&lt;/button&gt;</textarea></div></div></div><p>Custom setters are quite common. Usually you don&#8217;t need a custom getter (as the default action
+for get(&#8216;foo&#8217;) is to access Widget.foo), but for something like Editor where it&#8217;s impractical to constantly
+keep Editor.value up to date, writing a custom _getValueAttr() accessor makes sense.</p>
+<p>Note in the above example the use of this._set(&#8220;open&#8221;, open).    This saves the current value of the
+&#8220;open&#8221; attribute calling any handlers registered with watch(), to monitor attribute changes.</p>
+</div>
+<div class="section" id="life-cycle">
+<h3>Life cycle<a class="headerlink" href="#life-cycle" title="Permalink to this headline">¶</a></h3>
+<p>The custom setters specified above (both functions and mappings to DOMNodes) are applied
+at widget creation time for every attribute either specified to the widget constructor,
+or with a non-null non-blank non-zero default value.</p>
+<p>In addition the custom setters are called whenever someone calls set(&#8216;name&#8217;, value)).</p>
+<p>Note that the application happens after <code class="docutils literal"><span class="pre">buildRendering()</span></code> but before <code class="docutils literal"><span class="pre">postCreate()</span></code>, so
+you need to make sure that none of that code is dependent on something that happens
+in postCreate(), or later. This in particular is an issue for any widgets that depend on timeouts
+for setup, which need to have special code to handle when _setDisabledAttr() etc. is
+called during startup.</p>
+<p>eg:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;my.Thinger&quot;</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="p">{</span>
+
+     <span class="nx">value</span><span class="o">:</span><span class="mi">9</span><span class="p">,</span>
+
+     <span class="nx">buildRendering</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+          <span class="k">this</span><span class="p">.</span><span class="nx">multiplier</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+     <span class="p">},</span>
+
+     <span class="nx">_setValueAttr</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+         <span class="k">this</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">value</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">multiplier</span><span class="p">;</span>
+     <span class="p">}</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.declare(&quot;my.Thinger&quot;, _WidgetBase, {
+
+     value:9,
+
+     buildRendering: function(){
+          this.inherited(arguments);
+          this.multiplier = 3;
+     },
+
+     _setValueAttr: function(value){
+         this.value = value * this.multiplier;
+     }
+
+});</textarea></div><p>Had the <code class="docutils literal"><span class="pre">multiplier</span></code> member been defined in <code class="docutils literal"><span class="pre">postCreate</span></code>, the initial automated value setting done by set() would fail.</p>
+</div>
+</div>
+<div class="section" id="containers">
+<h2><a class="toc-backref" href="#id5">Containers</a><a class="headerlink" href="#containers" title="Permalink to this headline">¶</a></h2>
+<p>Often a widget declared in markup will have contents, i.e. it will contain some other DOM.   For example:</p>
+<div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span><span class="nt">&gt;</span>press me<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button data-dojo-type=&quot;dijit/form/Button&quot;&gt;press me&lt;/button&gt;</textarea></div><p>In the common case of non-behavioral widgets (that create a new DOM tree to replace the &lt;button&gt; node in the above example), the widgets need to copy the DOM tree inside of the &lt;button&gt; declaration to the widget&#8217;s new DOM tree.</p>
+<p>The attach point where that input is copied is called containerNode.   In other words, if you check myButton.containerNode.innerHTML in the above example, it will be &#8220;press me&#8221;.</p>
+<p>For widgets that mixin _TemplatedMixin, that is handled automatically, as long as the template specifies data-dojo-attach-point=&#8221;containerNode&#8221;.</p>
+<p>Having said all that, now we define the widget, referencing this template via the templateString attribute.
+Note that often the template is stored in a file,
+and in that case templateString should reference the file via the <a class="reference internal" href="../dojo/text.html#dojo-text"><span>dojo.text!</span></a> plugin.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+    <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/ready&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_TemplatedMixin&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">parser</span><span class="p">,</span> <span class="nx">ready</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">){</span>
+
+    <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;MyButton&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">],</span> <span class="p">{</span>
+            <span class="nx">templateString</span><span class="o">:</span>
+                <span class="s2">&quot;&lt;button data-dojo-attach-point=&#39;containerNode&#39;&gt;&lt;/button&gt;&quot;</span>
+    <span class="p">});</span>
+
+    <span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">// Call the parser manually so it runs after our widget is defined, and page has finished loading</span>
+        <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+    &quot;dojo/_base/declare&quot;, &quot;dojo/parser&quot;, &quot;dojo/ready&quot;,
+    &quot;dijit/_WidgetBase&quot;, &quot;dijit/_TemplatedMixin&quot;
+], function(declare, parser, ready, _WidgetBase, _TemplatedMixin){
+
+    declare(&quot;MyButton&quot;, [_WidgetBase, _TemplatedMixin], {
+            templateString:
+                &quot;&lt;button data-dojo-attach-point='containerNode'&gt;&lt;/button&gt;&quot;
+    });
+
+    ready(function(){
+        // Call the parser manually so it runs after our widget is defined, and page has finished loading
+        parser.parse();
+    });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">data-dojo-type=</span><span class="s">&quot;MyButton&quot;</span><span class="nt">&gt;</span>press me<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button data-dojo-type=&quot;MyButton&quot;&gt;press me&lt;/button&gt;</textarea></div></div></div></div>
+<div class="section" id="creating-extension-points">
+<h2><a class="toc-backref" href="#id6">Creating extension points</a><a class="headerlink" href="#creating-extension-points" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s say you&#8217;ve written a widget, and when the user clicks on it, something happens. What you want is for the programmer using the widget to be able to either <em>change</em> what happens, or have something happen in addition, without having to edit your widget.</p>
+<p>To see how to do this, let&#8217;s see how dijit/form/Button does it for clicking. Note that we need to distinguish between DOM events, which happen on DOM elements; and widget events, which fire when things happen in the widget. (To make this clearer: DOM onclick might fire on elements in your widget, but you would only want the widget&#8217;s onClick (Note: camelCase!) to fire when your widget is an &#8220;enabled&#8221; state.)</p>
+<ol class="arabic simple">
+<li>In your template html, on the html elements you want to have fire DOM events, add the attribute data-dojo-attach-event as follows. Here&#8217;s some of the dijit Button&#8217;s Button.html (with ... where I&#8217;ve left stuff out):</li>
+</ol>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;dijit dijitReset dijitLeft dijitInline&quot;</span>
+  <span class="na">data-dojo-attach-event=</span><span class="s">&quot;ondijitclick:_onButtonClick,onmouseenter:_onMouse,onmouseleave:_onMouse,onmousedown:_onMouse&quot;</span>
+<span class="err">...</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div class=&quot;dijit dijitReset dijitLeft dijitInline&quot;
+  data-dojo-attach-event=&quot;ondijitclick:_onButtonClick,onmouseenter:_onMouse,onmouseleave:_onMouse,onmousedown:_onMouse&quot;
+...</textarea></div><p>The onclick refers to the DOM event on this div. The _onButtonClick refers to a plain old js method in Button.js. By plain old js method, I mean it&#8217;s not a DOM event handler. It&#8217;s plain old js, written by some dijit programmer.</p>
+<ol class="arabic simple" start="2">
+<li>In your widget&#8217;s js file, define the plain old js method in data-dojo-attach-event, as well as an &#8220;extension point&#8221; method for your programmer to override.</li>
+</ol>
+<p>In Button.js you&#8217;ll find:</p>
+<div class="highlight"><pre><span class="nx">_onButtonClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="cm">/*Event*/</span> <span class="nx">e</span><span class="p">){</span>
+  <span class="p">...</span> <span class="c1">// Trust me, _onClick calls this._onClick</span>
+<span class="p">},</span>
+<span class="nx">_onClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span> <span class="cm">/*Event*/</span> <span class="nx">e</span><span class="p">){</span>
+  <span class="p">...</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">onClick</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+<span class="p">},</span>
+<span class="nx">onClick</span><span class="o">:</span> <span class="p">{</span> <span class="c1">// nothing here: the extension point!</span>
+
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">_onButtonClick: function( /*Event*/ e){
+  ... // Trust me, _onClick calls this._onClick
+},
+_onClick: function( /*Event*/ e){
+  ...
+  return this.onClick(e);
+},
+onClick: { // nothing here: the extension point!
+
+}</textarea></div><p>Here&#8217;s what&#8217;s going on. In step 1, all onClick events are redirected to the Button widget&#8217;s plain old js method _onButtonClick. This in turn calls plain old _onClick, which does stuff, which then calls plain old js method onClick.</p>
+<p>_onButtonClick does stuff that must always happen (and calls _onClick()).</p>
+<p>_onClick does stuff that must always happen (and calls onClick()).</p>
+<p>onClick does nothing! It&#8217;s empty!</p>
+<p>Why? Because it is here that the programmer using the widget can add their own function, for some custom action that should happen every time the DOM event onclick fires.</p>
+<p>Step 3 shows how the widget user can add their custom function, without having to edit the widget.</p>
+<ol class="arabic simple" start="3">
+<li>In some html page that is using (require-ing) the dijit Button widget, the user writes this:</li>
+</ol>
+<div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span> <span class="na">onClick=</span><span class="s">&quot;alert(&#39;Woohoo! I&#39;m using the extension point &quot;</span><span class="na">onClick</span><span class="err">&quot;!!&#39;);&quot;</span><span class="nt">&gt;</span>press me<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button data-dojo-type=&quot;dijit/form/Button&quot; onClick=&quot;alert('Woohoo! I'm using the extension point &quot;onClick&quot;!!');&quot;&gt;press me&lt;/button&gt;</textarea></div><p>or alternately this:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;dojo/method&quot;</span> <span class="na">data-dojo-event=</span><span class="s">&quot;onClick&quot;</span> <span class="na">data-dojo-args=</span><span class="s">&quot;evt&quot;</span><span class="nt">&gt;</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;Woohoo! I&#39;</span><span class="nx">m</span> <span class="nx">using</span> <span class="nx">the</span> <span class="nx">extension</span> <span class="nx">point</span> <span class="s2">&quot;onClick&quot;</span><span class="o">!!</span><span class="err">&#39;</span><span class="p">);</span>
+  <span class="nt">&lt;/script&gt;</span>
+   press me
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dijit/form/Button&quot;&gt;
+  &lt;script type=&quot;dojo/method&quot; data-dojo-event=&quot;onClick&quot; data-dojo-args=&quot;evt&quot;&gt;
+    alert('Woohoo! I'm using the extension point &quot;onClick&quot;!!');
+  &lt;/script&gt;
+   press me
+&lt;/div&gt;</textarea></div><p>Now, whenever someone in the browser clicks on the widget (ok, specifically inside it&#8217;s top-level div in this case), _onButtonClick and _onClick will execute, but so will the extra alert() statement.</p>
+<ol class="arabic simple" start="4">
+<li>What if you don&#8217;t want to override the extension point, but want it to execute and then have something custom execute? Just use type=&#8221;dojo/connect&#8221; instead of type=&#8221;dojo/method&#8221;.</li>
+</ol>
+<p>Closing words:</p>
+<ol class="arabic simple">
+<li>Despite the name of the attribute &#8220;data-dojo-event&#8221;, as in data-dojo-event=&#8221;onClick&#8221;, it&#8217;s value is not a DOM event. Remember: onClick is just a plain old js method. (Dojo is misleading here).</li>
+<li>How can you find the plain old js methods to override or &#8220;connect&#8221; to (in the dojo sense of dojo.connect)? Well, that can be painful. First, you have to look inside the widget. Or inside its ancestors/superclasses. Or theirs. Or theirs. Not fun. Second, they aren&#8217;t named consistently. Sometimes _ means private, sometimes it means protected. (TODO: move to separate page?)</li>
+</ol>
+</div>
+<div class="section" id="useful-self-scoping-functions">
+<h2><a class="toc-backref" href="#id7">Useful self-scoping functions</a><a class="headerlink" href="#useful-self-scoping-functions" title="Permalink to this headline">¶</a></h2>
+<p>There are two sets of functions available to all widgets which simplify connections with other widgets an DOM nodes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>connect/disconnect</li>
+<li><code class="docutils literal"><span class="pre">New</span> <span class="pre">in</span> <span class="pre">1.4</span></code> subscribe/unsubscribe</li>
+</ul>
+</div></blockquote>
+<p>These functions operate similar to their dojo.* counterparts - with two exceptions.  First, the target function will always be executed within the scope of the widget.  Second, these connections/subscriptions will be cleaned up during the destroy() lifecycle phase of the widget.</p>
+</div>
+<div class="section" id="accessibility">
+<h2><a class="toc-backref" href="#id8">Accessibility</a><a class="headerlink" href="#accessibility" title="Permalink to this headline">¶</a></h2>
+<p>These pages list how to make your widgets accessible to people with poor/no vision, etc.</p>
+<ul class="simple">
+<li><a class="reference internal" href="writingWidgets/a11y.html#quickstart-writingwidgets-a11y"><span>Creating Accessible Widgets</span></a></li>
+<li><a class="reference internal" href="writingWidgets/a11yTesting.html#quickstart-writingwidgets-a11ytesting"><span>Testing Widgets for Accessibility</span></a></li>
+</ul>
+</div>
+<div class="section" id="alternate-templating-engines">
+<h2><a class="toc-backref" href="#id9">Alternate Templating Engines</a><a class="headerlink" href="#alternate-templating-engines" title="Permalink to this headline">¶</a></h2>
+<p>There&#8217;s an alternate template syntax for widgets which lets you have conditional code in templates and other advanced features.</p>
+<ul class="simple">
+<li>DTL<ul>
+<li><a class="reference internal" href="../dojox/dtl.html#dojox-dtl"><span>DTL</span></a>  (currently the top page from the above link has been copied to)</li>
+</ul>
+</li>
+<li>Mustache<ul>
+<li><cite>just a proposal</cite></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="common-issues">
+<h2><a class="toc-backref" href="#id10">Common Issues</a><a class="headerlink" href="#common-issues" title="Permalink to this headline">¶</a></h2>
+<p>Having trouble adding support for widgets templates? Ensure that any mixins referenced (_TemplatedMixin, _WidgetsInTemplate) in the dependency list for the widget are listed after the _WidgetBase dependency. This ensures those mixins will extend methods provided by _WidgetBase, rather than the other way round.</p>
+<p>For example, the following sample:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_TemplatedMixin&quot;</span><span class="p">],</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">){</span>
+        <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;SomeModule&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">_TemplatedMixin</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">],</span> <span class="p">{</span>
+        <span class="p">});</span>
+ <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;, &quot;dijit/_WidgetBase&quot;, &quot;dijit/_TemplatedMixin&quot;],
+    function(declare, _WidgetBase, _TemplatedMixin){
+        declare(&quot;SomeModule&quot;, [_TemplatedMixin, _WidgetBase], {
+        });
+ });</textarea></div><p>Should be changed to:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_TemplatedMixin&quot;</span><span class="p">],</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">){</span>
+        <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;SomeModule&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">],</span> <span class="p">{</span>
+        <span class="p">});</span>
+ <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/declare&quot;, &quot;dijit/_WidgetBase&quot;, &quot;dijit/_TemplatedMixin&quot;],
+    function(declare, _WidgetBase, _TemplatedMixin){
+        declare(&quot;SomeModule&quot;, [_WidgetBase, _TemplatedMixin], {
+        });
+ });</textarea></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id11">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../dijit/Declaration.html#dijit-declaration"><span>Declaring a widget in markup</span></a></li>
+<li>Widgets in templates are discussed on the <a class="reference internal" href="../dijit/_WidgetsInTemplateMixin.html#dijit-widgetsintemplatemixin"><span>dijit._WidgetsInTemplateMixin</span></a> page</li>
+<li><a class="reference internal" href="writingWidgets/example.html#quickstart-writingwidgets-example"><span>Example: File Upload Dialog Box</span></a></li>
+<li><a class="reference internal" href="../dijit/popup.html#dijit-popup"><span>Dropdowns and Popups</span></a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

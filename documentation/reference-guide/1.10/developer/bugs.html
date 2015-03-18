@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Notes on how to use bug tracking &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Notes on how to use bug tracking</a><ul>
+<li><a class="reference internal" href="#logging-in">Logging In</a></li>
+<li><a class="reference internal" href="#getting-notified">Getting Notified</a></li>
+<li><a class="reference internal" href="#filing-tickets">Filing Tickets</a><ul>
+<li><a class="reference internal" href="#using-the-summary-for-good">Using the summary for good</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#owning-a-ticket">Owning a ticket</a></li>
+<li><a class="reference internal" href="#patches">Patches</a><ul>
+<li><a class="reference internal" href="#creating">Creating</a></li>
+<li><a class="reference internal" href="#merging">Merging</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#commit-messages">Commit Messages</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="notes-on-how-to-use-bug-tracking">
+<span id="developer-bugs"></span><h1><a class="toc-backref" href="#id1">Notes on how to use bug tracking</a><a class="headerlink" href="#notes-on-how-to-use-bug-tracking" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This document is incomplete.</p>
+</div>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#notes-on-how-to-use-bug-tracking" id="id1">Notes on how to use bug tracking</a><ul>
+<li><a class="reference internal" href="#logging-in" id="id2">Logging In</a></li>
+<li><a class="reference internal" href="#getting-notified" id="id3">Getting Notified</a></li>
+<li><a class="reference internal" href="#filing-tickets" id="id4">Filing Tickets</a><ul>
+<li><a class="reference internal" href="#using-the-summary-for-good" id="id5">Using the summary for good</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#owning-a-ticket" id="id6">Owning a ticket</a></li>
+<li><a class="reference internal" href="#patches" id="id7">Patches</a><ul>
+<li><a class="reference internal" href="#creating" id="id8">Creating</a></li>
+<li><a class="reference internal" href="#merging" id="id9">Merging</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#commit-messages" id="id10">Commit Messages</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>At the Dojo Project we use Trac for issue tracking.
+These are some notes about the conventions we use when filing, closing, updating, and triaging issues (tickets).</p>
+<div class="section" id="logging-in">
+<h2><a class="toc-backref" href="#id2">Logging In</a><a class="headerlink" href="#logging-in" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="http://bugs.dojotoolkit.org">bug tracker</a> uses the LDAP information from the overall <a class="reference external" href="http://dojofoundation.org">Dojo Foundation</a>. <a class="reference external" href="http://my.dojofoundation.org">Register for a Dojo Foundation account</a> and login to Trac via the auth dialog using those credentials. <strong>note</strong> this username/password combination will work on all Dojo Sites, eg: <a class="reference external" href="http://livedocs.dojotoolkit.org">http://livedocs.dojotoolkit.org</a></p>
+</div>
+<div class="section" id="getting-notified">
+<h2><a class="toc-backref" href="#id3">Getting Notified</a><a class="headerlink" href="#getting-notified" title="Permalink to this headline">¶</a></h2>
+<p>Trac maintains a separate mapping of usernames to email addresses, outside of LDAP.
+While unfortunate, it is very easy to remedy.
+Click &#8220;preferences&#8221; in the Trac header, and enter your email address into the appropriate field.
+If the name in the &#8220;Full Name&#8221; field is not your logged in username, make it so.
+When Trac sends out notification emails, it will look for usernames in the <code class="docutils literal"><span class="pre">CC:</span></code> field on the ticket and use the associated email address you&#8217;ve provided.</p>
+<p>You are notified if you are the a) owner of a ticket b) filer of a ticket or c) listed as a CSV item in the <code class="docutils literal"><span class="pre">CC:</span></code> filed on a ticket.</p>
+<p>Alternative, you can subscribe to the <code class="docutils literal"><span class="pre">dojo-checkins</span></code> mailing list, and be alerted for every change. (can be noisy some days)</p>
+</div>
+<div class="section" id="filing-tickets">
+<h2><a class="toc-backref" href="#id4">Filing Tickets</a><a class="headerlink" href="#filing-tickets" title="Permalink to this headline">¶</a></h2>
+<p>Please search for duplicates prior to filing a ticket.
+If no duplicate is found, start a new issue by clicking &#8220;New Ticket&#8221; in the header.
+Fill in the following fields:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">summary:</th><td class="field-body">Some short text describing the issue. Be concise and accurate. Sensational summaries like &#8220;The sky has fallen, dojo.io.script...&#8221;
+are often overlooked.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">reporter:</th><td class="field-body">Should be prefilled with your name</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">description:</th><td class="field-body">Long text description, including expansion on <code class="docutils literal"><span class="pre">summary</span></code> text, steps to reproduce, links to testcases, etc. Light wiki syntax
+is permitted in this field. Buttons above the field help to show what type of markdown is permitted.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">assign to:</th><td class="field-body">Unless otherwise asked, or are certain you know who the module owner is, leave this field blank. It will be populated based on the
+&#8220;Component&#8221; selection.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">priority:</th><td class="field-body">Unless life-threatening, leave as <code class="docutils literal"><span class="pre">normal</span></code>. Release blockers and regressions can be bumped higher.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">component:</th><td class="field-body">Dropdown to select the closest related subject matter for the ticket. eg: dojo.byId bug would be in &#8220;Dojo Core&#8221;, documentation
+bugs would be filed under &#8220;Documentation&#8221;. Some DojoX projects have Components of their own, eg: DojoX Grid.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">cc:</th><td class="field-body">Additional usernames to include in the notification. This can only be changed by non-committers at creation time. After filed,
+a committer must adjust the field.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type:</th><td class="field-body">One of Defect, Enhancement, Task. If it&#8217;s broken and needs fixed, Defect. If it&#8217;s a &#8220;nice to have&#8221; functionality, Enhancement.
+Everything else (such as writing this document) is a Task.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">milestone:</th><td class="field-body">Non-committers should leave this as <code class="docutils literal"><span class="pre">tbd</span></code>, or &#8220;To be determined&#8221;. This milestone indicates to the committers a particular bug
+has not been addressed and needs to. A target version will be set unless the ticket is closed as invalid/wontfix.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">version:</th><td class="field-body">Selects which version this bug appears in. Typically, all reports must come against a release version or trunk. If against a
+released version, a test to verify it is not still broken in trunk is needed.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">keywords:</th><td class="field-body">Useful tags to help in searching. Eg: dojox, layout, FloatingPane.</td>
+</tr>
+</tbody>
+</table>
+<p>If you have a patch, you should have indicated as such in the <code class="docutils literal"><span class="pre">summary</span></code> field.
+If you did, select the <cite>I have files to attach</cite> checkbox before continuing on to <cite>Create Ticket</cite>.</p>
+<div class="section" id="using-the-summary-for-good">
+<h3><a class="toc-backref" href="#id5">Using the summary for good</a><a class="headerlink" href="#using-the-summary-for-good" title="Permalink to this headline">¶</a></h3>
+<p>Various <code class="docutils literal"><span class="pre">[meta]</span></code> style tags can be added to the summary to assist in understanding the scope of the ticket.
+Some common tags are:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">[meta]:</th><td class="field-body">A generic ticket to track all of a type of commit. eg: &#8220;[meta] Expand inline documentation&#8221; to prevent needing to file individual
+tickets for repositories that require a post-commit ref.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">[patch]:</th><td class="field-body">Indicates a reported feature/bug has an associated patch file fixing the issue.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">[cla]:</th><td class="field-body">Used in conjunction with <code class="docutils literal"><span class="pre">[patch]</span></code>, indicates the attached patch is covered under an Individual CLA from the user.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">[ccla]:</th><td class="field-body">Used in conjunction with <code class="docutils literal"><span class="pre">[patch]</span></code>, indicates the attached patch is covered under a Corporate CLA</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">[regression]:</th><td class="field-body">Used to indicate the ticket reports a regressed bit of functionality.</td>
+</tr>
+</tbody>
+</table>
+<p>When working in DojoX, if no Component is more accurate than the top level <code class="docutils literal"><span class="pre">dojox</span></code>, use <code class="docutils literal"><span class="pre">dojox</span></code> and include a <code class="docutils literal"><span class="pre">[meta]</span></code> tag using the component name.
+Do this recursively in projects with components.
+eg: If a bug is against <code class="docutils literal"><span class="pre">dojox.layout.FloatingPane</span></code>, the Component would be <code class="docutils literal"><span class="pre">DojoX</span> <span class="pre">Layout</span></code> and the meta tag would be: <code class="docutils literal"><span class="pre">[FloatingPane]</span></code>, making the summary look something like:</p>
+<div class="highlight-python"><div class="highlight"><pre>[patch][cla][FloatingPane] Fails to start when created in an iframe
+</pre></div>
+</div>
+<p>This indicates to the <code class="docutils literal"><span class="pre">FloatingPane</span></code> owner a fix covered under CLA lives in this ticket.</p>
+<p>Dijit prefers the module name be included in the summary, when in the &quot;component&quot; <code class="docutils literal"><span class="pre">Dijit</span></code>, eg:</p>
+<div class="highlight-python"><div class="highlight"><pre>[regression] TabContainer: Title Heights collapse when ...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="owning-a-ticket">
+<h2><a class="toc-backref" href="#id6">Owning a ticket</a><a class="headerlink" href="#owning-a-ticket" title="Permalink to this headline">¶</a></h2>
+<p>There are two states for tickets.
+Every ticket is &quot;assigned to&quot; a user (though sometimes the user is listed as <code class="docutils literal"><span class="pre">anonymous</span></code>).
+Component owners are automatically &quot;assigned&quot; the ticket, with a milestone of <code class="docutils literal"><span class="pre">tbd</span></code>.
+If you have <code class="docutils literal"><span class="pre">tbd</span></code> tickets, they need to be examined.
+A cursory scan of a ticket can sometimes resolve issues very quickly.</p>
+<p>If the ticket indicates a bug, a working test case is required.
+Live links are discouraged, as they typically rot.
+Standalone html pages including the minimal steps to reproduce the issue should be attached.
+Leave in the <code class="docutils literal"><span class="pre">tbd</span></code> state, but request a followup from the user.</p>
+<p>If the ticket is a feature request, use your discretion.
+If the feature is reasonable and you are willing to create a patch (or the user has supplied a patch and documentation for said feature), mark the milestone to the next major version and close upon committing.
+New features <strong>do not</strong> go into branch releases, as they are reserved for critical bugs only.</p>
+<p>If the ticket is a feature request and is beyond the scope of the current version goals, requires further discussion or design, mark the ticket in whatever version you plan to complete the task, or the more generic <code class="docutils literal"><span class="pre">future</span></code> milestone.</p>
+<p><code class="docutils literal"><span class="pre">future</span></code> means: &quot;I like this idea but [for this reason] it can't happen now.&quot; Patches are <strong>always</strong> welcome, and greatly increase the likelihood of a request being filled.</p>
+<p>There should be <strong>absolutely no</strong> tickets in the <code class="docutils literal"><span class="pre">tbd</span></code> state when a major release is cut.
+This ensures we've <strong>at least</strong> inspected every incoming ticket to determine the severity of the report.</p>
+<p>Tickets assigned but not &quot;accepted&quot; are considered fair game.
+A patch submission can come from anywhere.
+A Component owner &quot;owns&quot; the tickets, but can simply reassign should another developer want to work on said ticket.</p>
+<p>When you &quot;accept&quot; a ticket for a given milestone, you are indicating you are or will be focused on that item.
+Unless the ticket requests further contribution, it is likely you will receive none.
+It is your duty to ensure all your &quot;accepted&quot; tickets are marked in an appropriate milestone prior to every major release.</p>
+</div>
+<div class="section" id="patches">
+<h2><a class="toc-backref" href="#id7">Patches</a><a class="headerlink" href="#patches" title="Permalink to this headline">¶</a></h2>
+<p>Patches should be attached to tickets in unified diff format, with a <code class="docutils literal"><span class="pre">.patch</span></code> or <code class="docutils literal"><span class="pre">.diff</span></code> extension.</p>
+<div class="section" id="creating">
+<h3><a class="toc-backref" href="#id8">Creating</a><a class="headerlink" href="#creating" title="Permalink to this headline">¶</a></h3>
+<p>To create a patch, use <cite>svn diff</cite>:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>svn up
+At revision <span class="o">[</span>xxxx<span class="o">]</span>.
+<span class="nv">$ </span>svn st
+M dojox/layout/FloatingPane.js
+<span class="nv">$ </span>svn diff &gt; floatingpane.patch
+</pre></div>
+</div>
+</div>
+<div class="section" id="merging">
+<h3><a class="toc-backref" href="#id9">Merging</a><a class="headerlink" href="#merging" title="Permalink to this headline">¶</a></h3>
+<p>To apply a user supplied patch (from commandline):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>svn up
+At revision <span class="o">[</span>xxxx<span class="o">]</span>
+<span class="nv">$ </span>patch &lt; floatingpane.patch
+</pre></div>
+</div>
+<p>Using the <code class="docutils literal"><span class="pre">-pN</span></code> command line argument allows you to strip paths from the original diff.
+For example, the above structure would require you strip two levels of the patch.
+This needs to align based on where you apply the patch from in the tree versus from where the user was when creating the patch.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>svn up
+At revision <span class="o">[</span>xxxx<span class="o">]</span>
+<span class="nv">$ </span><span class="nb">cd </span>dojox/layout
+<span class="nv">$ </span>patch -p <span class="m">2</span> &lt; floatingpane.patch
+</pre></div>
+</div>
+<p>Many IDE's have SVN integration and can easily apply patches from this format.</p>
+<p><code class="docutils literal"><span class="pre">TODOC:</span></code> anyone use an IDE to do this?</p>
+</div>
+</div>
+<div class="section" id="commit-messages">
+<h2><a class="toc-backref" href="#id10">Commit Messages</a><a class="headerlink" href="#commit-messages" title="Permalink to this headline">¶</a></h2>
+<p>All commit messages should be descriptive of the change. &quot;Fixed it&quot; is generally considered a bad commit message. &quot;Fixed layout regression in FooBar&quot; would suffice.</p>
+<p>The <code class="docutils literal"><span class="pre">dojo</span></code>, <code class="docutils literal"><span class="pre">dijit</span></code>, and <code class="docutils literal"><span class="pre">util</span></code> repositories require tickets to reference.
+When you commit with a <code class="docutils literal"><span class="pre">refs</span></code> keyword, the commit message will be put in a comment on the ticket with a link to the changeset.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>svn commit -m <span class="s2">&quot;refs #12345 - added updated thinger to the dohicky that was conflicting with DoHickyConflictr&quot;</span>
+</pre></div>
+</div>
+<p>To use a commit message to close a ticket, use the <code class="docutils literal"><span class="pre">fixes</span></code> keyword:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>svn commit -m <span class="s2">&quot;fixes #12345 - thanks for all the fish UserWhoSubmittedThePatch&quot;</span>
+</pre></div>
+</div>
+<p>This will mark the ticket as <code class="docutils literal"><span class="pre">closed</span></code> linking the changeset to the ticket as <code class="docutils literal"><span class="pre">refs</span></code> would.
+Do <strong>not</strong> close a ticket in a <code class="docutils literal"><span class="pre">tbd</span></code> milestone.</p>
+<p>A form of JSLint is being run as a pre-commit hook.
+Your commit will be denied if this linting fails.
+You can override this by including <code class="docutils literal"><span class="pre">!strict</span></code> in your commit message.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nv">$ </span>svn commit -m <span class="s2">&quot;refs #90210, the thing was broken before and apparently is very sloppy. lint is unhappy. \!strict&quot;</span>
+</pre></div>
+</div>
+<p>You may or may not have to escape the <code class="docutils literal"><span class="pre">!</span></code> depending on your terminal.</p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

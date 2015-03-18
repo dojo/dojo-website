@@ -1,0 +1,460 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.10/dojox/grid/enhanced/_PluginManager" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.10/dojox/grid/enhanced/_PluginManager.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/grid/enhanced/_PluginManager<span style="font-size:11px;color:#999;"> (version 1.10)</span></h1>
+<div class="jsdoc-full-summary"><p>Singleton plugin manager</p>
+</div>
+<div class="jsdoc-full-summary"><p>Plugin manager is responsible for:
+
+</p>
+<ol>
+<li>Loading required plugins</li>
+<li>Handling collaboration and dependencies among plugins</li>
+</ol>
+<p>Some plugin dependencies:
+
+</p>
+<ul>
+<li>&quot;columnReordering&quot; attribute won&#39;t work when either DnD or Indirect Selections plugin is on.</li>
+</ul>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new _PluginManager<span class="parameters">(inGrid);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager">dojox/grid/enhanced/_PluginManager</a></div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">inGrid</td>
+    <td class="jsdoc-param-type">undefined</td>
+    <td class="jsdoc-param-description">
+    </td>
+  </tr>
+</table>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="arrayIcon private"><a href="1_10dojox_grid_enhanced__PluginManager__connects">_connects</a>
+        </li><span>Connection list<span title="private" class="jsdoc-private"></span></span>
+        <li class="objectIcon private"><a href="1_10dojox_grid_enhanced__PluginManager__options">_options</a>
+        </li><span>Normalized plugin options<span title="private" class="jsdoc-private"></span></span>
+        <li class="arrayIcon private"><a href="1_10dojox_grid_enhanced__PluginManager__plugins">_plugins</a>
+        </li><span>Plugin list<span title="private" class="jsdoc-private"></span></span>
+        <li class="stringIcon public extension-module"><a href="1_10dojox_grid_enhanced__PluginManager_registry">registry</a>
+        </li><span><span title="Must manually require () dojox/grid/enhanced/plugins/AutoScroll to access" class="jsdoc-extension"></span></span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_10dojox_grid_enhanced__PluginManager__init">_init</a><span class="parameters"></span><span class="parameters">(pre) </span><span>Find appropriate plugins and load them</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_10dojox_grid_enhanced__PluginManager__initView">_initView</a><span class="parameters"></span><span class="parameters">(view) </span><span>Overwrite several default behavior for each views(including _RowSelector view)</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_10dojox_grid_enhanced__PluginManager__normalize">_normalize</a><span class="parameters"></span><span class="parameters">(p,plugins,registry,loading) </span><span>Normalize plugin properties especially the dependency chain</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_10dojox_grid_enhanced__PluginManager__parseProps">_parseProps</a><span class="parameters"></span><span class="parameters">(plugins) </span><span>Parse plugins properties</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_destroy">destroy</a><span class="parameters"></span><span class="parameters">() </span><span>Destroy all resources</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_forEach">forEach</a><span class="parameters"></span><span class="parameters">(func,args) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_getPlugin">getPlugin</a><span class="parameters"></span><span class="parameters">(name) </span><span>Get plugin(&quot;name&quot;)</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_getPluginClazz">getPluginClazz</a><span class="parameters"></span><span class="parameters">(clazz) </span><span>Load target plugin which must be already required (require(..))</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_isFixedCell">isFixedCell</a><span class="parameters"></span><span class="parameters">(cell) </span><span>See if target cell(column) is fixed or not.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_loadPlugin">loadPlugin</a><span class="parameters"></span><span class="parameters">(name) </span><span>Load required plugin(&quot;name&quot;)</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_pluginExisted">pluginExisted</a><span class="parameters"></span><span class="parameters">(name) </span><span>Check if plugin(&quot;name&quot;) existed</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_postInit">postInit</a><span class="parameters"></span><span class="parameters">() </span><span>Load plugins after DataGrid.postCreate() - the default phase when plugins are created
+See EnhancedGrid.postCreate()</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_preInit">preInit</a><span class="parameters"></span><span class="parameters">() </span><span>Load appropriate plugins before DataGrid.postCreate().</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_registerPlugin">registerPlugin</a><span class="parameters"></span><span class="parameters">(clazz,props) </span><span>Register plugins - TODO, a better way rather than global registry?</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced__PluginManager_startup">startup</a><span class="parameters"></span><span class="parameters">() </span><span></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager__connects"></a><span class="arrayIcon">_connects</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-summary"><p>Connection list</p>
+</div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager__options"></a><span class="objectIcon">_options</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-summary"><p>Normalized plugin options</p>
+</div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager__plugins"></a><span class="arrayIcon">_plugins</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-summary"><p>Plugin list</p>
+</div>
+      </div>
+      <div class="jsdoc-field public extension-module">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_registry"></a><span class="stringIcon">registry</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/plugins/AutoScroll" class="jsdoc-link">dojox/grid/enhanced/plugins/AutoScroll</a><span title="Must manually require () dojox/grid/enhanced/plugins/AutoScroll to access" class="jsdoc-extension"></span>
+        </div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager__init"></a><span class="functionIcon">_init</span><span class="parameters">(pre)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Find appropriate plugins and load them</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">pre</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description"><p>True - preInit | False - postInit(by default)</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager__initView"></a><span class="functionIcon">_initView</span><span class="parameters">(view)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Overwrite several default behavior for each views(including _RowSelector view)</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">view</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager__normalize"></a><span class="functionIcon">_normalize</span><span class="parameters">(p,plugins,registry,loading)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Normalize plugin properties especially the dependency chain</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">p</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Plugin name</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">plugins</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>Plugin properties set by user</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">registry</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>The global plugin registry</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">loading</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>Map for checking process state</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager__parseProps"></a><span class="functionIcon">_parseProps</span><span class="parameters">(plugins)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Parse plugins properties</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">plugins</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>Plugin properties defined by user</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_destroy"></a><span class="functionIcon">destroy</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Destroy all resources</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_forEach"></a><span class="functionIcon">forEach</span><span class="parameters">(func,args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">func</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_getPlugin"></a><span class="functionIcon">getPlugin</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Get plugin(&quot;name&quot;)</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Plugin name</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Object | undefined | null</span></div>
+        <div class="jsdoc-return-description"><p>Plugin instance</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_getPluginClazz"></a><span class="functionIcon">getPluginClazz</span><span class="parameters">(clazz)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Load target plugin which must be already required (require(..))</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">clazz</td>
+            <td class="jsdoc-param-type">Class | String</td>
+            <td class="jsdoc-param-description"><p>Plugin class</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Class|String | undefined</span></div>
+        <div class="jsdoc-return-description"><p>Plugin class</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_isFixedCell"></a><span class="functionIcon">isFixedCell</span><span class="parameters">(cell)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>See if target cell(column) is fixed or not.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">cell</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>Target cell(column)</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Boolean | undefined</span></div>
+        <div class="jsdoc-return-description"><p>True - fixed| False - not fixed</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_loadPlugin"></a><span class="functionIcon">loadPlugin</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Load required plugin(&quot;name&quot;)</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Plugin name</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Object | null | undefined</span></div>
+        <div class="jsdoc-return-description"><p>The newly loaded plugin</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_pluginExisted"></a><span class="functionIcon">pluginExisted</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Check if plugin(&quot;name&quot;) existed</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Plugin name</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Boolean | boolean</span></div>
+        <div class="jsdoc-return-description"><p>True - existed | False - not existed</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_postInit"></a><span class="functionIcon">postInit</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Load plugins after DataGrid.postCreate() - the default phase when plugins are created
+See EnhancedGrid.postCreate()</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_preInit"></a><span class="functionIcon">preInit</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Load appropriate plugins before DataGrid.postCreate().
+See EnhancedGrid.postCreate()</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_registerPlugin"></a><span class="functionIcon">registerPlugin</span><span class="parameters">(clazz,props)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Register plugins - TODO, a better way rather than global registry?</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">clazz</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Full class name, e.g. &quot;dojox.grid.enhanced.plugins.DnD&quot;</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">props</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>Plugin properties e.g. {&quot;dependency&quot;: [&quot;nestedSorting&quot;], ...}</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced__PluginManager_startup"></a><span class="functionIcon">startup</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="jsdoc-link">dojox/grid/enhanced/_PluginManager</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.10/dojox/grid/enhanced/_PluginManager" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

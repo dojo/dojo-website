@@ -1,0 +1,826 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.8/dojox/av/FLAudio" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.8/dojox/av/FLAudio.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/av/FLAudio<span style="font-size:11px;color:#999;"> (version 1.8)</span></h1>
+<div class="jsdoc-full-summary"><p>Play MP3 files through the Flash SWF built in the
+DEFT project.</p>
+</div>
+<div class="jsdoc-full-summary"><p>This class is brand new, so there is a lot of
+functionality not yet available. The initial
+purpose is for playing &quot;event&quot; sounds like button
+clicks, and for loading and controlling multiple
+sounds at once. As of yet, streaming is not supported
+and polling the sounds for events during playback
+may still be missing information. Markup is not
+supported, as it may not be needed.
+
+</p>
+<p>TODO:
+Streaming, playback events, crossdomain, CDN support,
+(alternate SWF location), global volume, ID3 tag,
+factor out doLater, onLoadStatus needs work,
+play(position) / seek()
+</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new FLAudio<span class="parameters">(options);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.8/dojox/av/FLAudio">dojox/av/FLAudio</a></div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">options</td>
+    <td class="jsdoc-param-type">Object</td>
+    <td class="jsdoc-param-description">
+    </td>
+  </tr>
+</table>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><pre><code>new dojox.av.FLAudio({
+    initialVolume:.7,
+    initialPan:0,
+    autoPlay:false
+});</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="objectIcon private"><a href="1_8dojox_av_FLAudio__swfPath">_swfPath</a>
+        </li><span>The path to the video player SWF resource<span title="private" class="jsdoc-private"></span></span>
+        <li class="stringIcon public"><a href="1_8dojox_av_FLAudio_allowNetworking">allowNetworking</a>
+        </li><span>Whether SWF is restricted to a domain</span>
+        <li class="stringIcon public"><a href="1_8dojox_av_FLAudio_allowScriptAccess">allowScriptAccess</a>
+        </li><span>Whether the SWF can access the container JS</span>
+        <li class="objectIcon public"><a href="1_8dojox_av_FLAudio_id">id</a>
+        </li><span>The id of this widget and the id of the SWF movie.</span>
+        <li class="numberIcon public"><a href="1_8dojox_av_FLAudio_initialPan">initialPan</a>
+        </li><span>From -1 to 1 (-1 is left, 1 is right, 0 is middle)
+Sets pan for all files unless changed with play
+or setPan</span>
+        <li class="numberIcon public"><a href="1_8dojox_av_FLAudio_initialVolume">initialVolume</a>
+        </li><span>From 0-1
+Sets volume for all files unless changed with doPlay
+or setVolume</span>
+        <li class="objectIcon public"><a href="1_8dojox_av_FLAudio_isDebug">isDebug</a>
+        </li><span>Setting to true tells the SWF to output log messages to Firebug.</span>
+        <li class="numberIcon public"><a href="1_8dojox_av_FLAudio_statusInterval">statusInterval</a>
+        </li><span>How often in milliseconds that the status of the
+player is checked - both load and play</span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_8dojox_av_FLAudio__normalizeUrl">_normalizeUrl</a><span class="parameters"></span><span class="parameters">(_url) </span><span>Checks that path is relative to HTML file or
+converts it to an absolute path.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_8dojox_av_FLAudio__normalizeVolume">_normalizeVolume</a><span class="parameters"></span><span class="parameters">(vol) </span><span>Ensures volume is less than one</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_8dojox_av_FLAudio__sub">_sub</a><span class="parameters"></span><span class="parameters">(topic,method) </span><span>helper for subscribing to topics</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_destroy">destroy</a><span class="parameters"></span><span class="parameters">() </span><span>destroys flash</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_doPlay">doPlay</a><span class="parameters"></span><span class="parameters">(options) </span><span>Tell media to play, based on
+the options passed.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_getPan">getPan</a><span class="parameters"></span><span class="parameters">(options) </span><span>Set media pan, based on identifier in
+the options passed.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_getPosition">getPosition</a><span class="parameters"></span><span class="parameters">(options) </span><span>Get the current time.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_getVolume">getVolume</a><span class="parameters"></span><span class="parameters">(options) </span><span>Get media volume, based on identifier in
+the options passed.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_init">init</a><span class="parameters"></span><span class="parameters">() </span><span>Initialize the media.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_load">load</a><span class="parameters"></span><span class="parameters">(options) </span><span>Adds a media object to the playlist
+*This can be called repeatedly to add multiple items.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_pause">pause</a><span class="parameters"></span><span class="parameters">(options) </span><span>Tell media to pause, based on identifier in
+the options passed.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_setPan">setPan</a><span class="parameters"></span><span class="parameters">(options) </span><span>Set media pan, based on identifier in
+the options passed.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_setVolume">setVolume</a><span class="parameters"></span><span class="parameters">(options) </span><span>Set media volume, based on identifier in
+the options passed.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_av_FLAudio_stop">stop</a><span class="parameters"></span><span class="parameters">(options) </span><span>Tell media to stop, based on identifier in
+the options passed.</span>
+        </li>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Event Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a #{link}="#{link}">onAllLoaded</a><span class="parameters"></span><span>stub fired</span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onComplete</a><span class="parameters">
+            <events></events>,</span><span>Fired at the end of a media file.</span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onError</a><span class="parameters">
+            <msg></msg>,</span><span>stub fired when an error occurs</span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onID3</a><span class="parameters">
+            <evt></evt>,</span><span>Fired when the ID3 data is received.</span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onLoad</a><span class="parameters"></span><span>stub fired when SWF is ready</span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onLoadStatus</a><span class="parameters">
+            <events></events>,</span><span></span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onPlayStatus</a><span class="parameters">
+            <events></events>,</span><span></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio__swfPath"></a><span class="objectIcon">_swfPath</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-summary"><p>The path to the video player SWF resource</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_allowNetworking"></a><span class="stringIcon">allowNetworking</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-summary"><p>Whether SWF is restricted to a domain</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_allowScriptAccess"></a><span class="stringIcon">allowScriptAccess</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-summary"><p>Whether the SWF can access the container JS</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_id"></a><span class="objectIcon">id</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-summary"><p>The id of this widget and the id of the SWF movie.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_initialPan"></a><span class="numberIcon">initialPan</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-summary"><p>From -1 to 1 (-1 is left, 1 is right, 0 is middle)
+Sets pan for all files unless changed with play
+or setPan</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_initialVolume"></a><span class="numberIcon">initialVolume</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-summary"><p>From 0-1
+Sets volume for all files unless changed with doPlay
+or setVolume</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_isDebug"></a><span class="objectIcon">isDebug</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-summary"><p>Setting to true tells the SWF to output log messages to Firebug.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_statusInterval"></a><span class="numberIcon">statusInterval</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-summary"><p>How often in milliseconds that the status of the
+player is checked - both load and play</p>
+</div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio__normalizeUrl"></a><span class="functionIcon">_normalizeUrl</span><span class="parameters">(_url)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Checks that path is relative to HTML file or
+converts it to an absolute path.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">_url</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">string</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio__normalizeVolume"></a><span class="functionIcon">_normalizeVolume</span><span class="parameters">(vol)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Ensures volume is less than one
+</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">vol</td>
+            <td class="jsdoc-param-type">number</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">number</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio__sub"></a><span class="functionIcon">_sub</span><span class="parameters">(topic,method)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>helper for subscribing to topics</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">topic</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">method</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_destroy"></a><span class="functionIcon">destroy</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>destroys flash</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_doPlay"></a><span class="functionIcon">doPlay</span><span class="parameters">(options)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Tell media to play, based on
+the options passed.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><ul>
+<li>volume: Number:
+  Sets the volume</li>
+<li>pan: Number:
+  Sets left/right pan</li>
+<li>index:Number OR id:String OR url:String:
+  Choose one of the above to identify
+  the media you wish to control. id is
+  set by you. index is the order in which
+  media was added (zero based)
+  NOTE: lack of an identifier will default
+  to first (or only) item.</li>
+</ul>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_getPan"></a><span class="functionIcon">getPan</span><span class="parameters">(options)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Set media pan, based on identifier in
+the options passed.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_getPosition"></a><span class="functionIcon">getPosition</span><span class="parameters">(options)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Get the current time.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_getVolume"></a><span class="functionIcon">getVolume</span><span class="parameters">(options)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Get media volume, based on identifier in
+the options passed.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_init"></a><span class="functionIcon">init</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Initialize the media.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_load"></a><span class="functionIcon">load</span><span class="parameters">(options)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Adds a media object to the playlist
+<em>*</em>This can be called repeatedly to add multiple items.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><ul>
+<li>url: String:
+  (required) path to MP3 media
+  url must be absolute or relative to SWF,
+  not dojo or the html. An effort will be made
+  to fix incorrect paths.</li>
+<li>id: String:
+  (optional) an identifier to later determine
+  which media to control.</li>
+</ul>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">any | boolean | undefined</span></div>
+        <div class="jsdoc-return-description"><p>The normalized url, which can be used to identify the
+audio.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_pause"></a><span class="functionIcon">pause</span><span class="parameters">(options)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Tell media to pause, based on identifier in
+the options passed.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_setPan"></a><span class="functionIcon">setPan</span><span class="parameters">(options)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Set media pan, based on identifier in
+the options passed.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><ul>
+<li>pan:Number (from -1 to 1)</li>
+<li>index:Number OR id:String OR url:String (see doPlay())</li>
+</ul>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_setVolume"></a><span class="functionIcon">setVolume</span><span class="parameters">(options)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Set media volume, based on identifier in
+the options passed.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>volume: Number
+0 to 1
+index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_stop"></a><span class="functionIcon">stop</span><span class="parameters">(options)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Tell media to stop, based on identifier in
+the options passed.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <h2>Events</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_onAllLoaded"></a><span class="functionIcon">onAllLoaded</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>stub fired</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>new dojox.av.FLAudio({
+    initialVolume:.7,
+    initialPan:0,
+    autoPlay:false
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_onComplete"></a><span class="functionIcon">onComplete</span><span class="parameters">(events)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Fired at the end of a media file.</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>new dojox.av.FLAudio({
+    initialVolume:.7,
+    initialPan:0,
+    autoPlay:false
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_onError"></a><span class="functionIcon">onError</span><span class="parameters">(msg)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>stub fired when an error occurs</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>new dojox.av.FLAudio({
+    initialVolume:.7,
+    initialPan:0,
+    autoPlay:false
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_onID3"></a><span class="functionIcon">onID3</span><span class="parameters">(evt)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Fired when the ID3 data is received.</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>new dojox.av.FLAudio({
+    initialVolume:.7,
+    initialPan:0,
+    autoPlay:false
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_onLoad"></a><span class="functionIcon">onLoad</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>stub fired when SWF is ready</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>new dojox.av.FLAudio({
+    initialVolume:.7,
+    initialPan:0,
+    autoPlay:false
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_onLoadStatus"></a><span class="functionIcon">onLoadStatus</span><span class="parameters">(events)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>new dojox.av.FLAudio({
+    initialVolume:.7,
+    initialPan:0,
+    autoPlay:false
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_av_FLAudio_onPlayStatus"></a><span class="functionIcon">onPlayStatus</span><span class="parameters">(events)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/av/FLAudio" class="jsdoc-link">dojox/av/FLAudio</a>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">options</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>index:Number OR id:String OR url:String.
+See doPlay().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>new dojox.av.FLAudio({
+    initialVolume:.7,
+    initialPan:0,
+    autoPlay:false
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.8/dojox/av/FLAudio" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

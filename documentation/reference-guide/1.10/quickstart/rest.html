@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Implementing a RESTful Service Server-Side &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Implementing a RESTful Service Server-Side</a><ul>
+<li><a class="reference internal" href="#basics-of-restful-services">Basics of RESTful Services</a><ul>
+<li><a class="reference internal" href="#what-is-a-restful-service">What is a RESTful Service?</a></li>
+<li><a class="reference internal" href="#http-verbs">HTTP Verbs</a><ul>
+<li><a class="reference internal" href="#get">GET</a></li>
+<li><a class="reference internal" href="#post">POST</a></li>
+<li><a class="reference internal" href="#put">PUT</a></li>
+<li><a class="reference internal" href="#delete">DELETE</a></li>
+<li><a class="reference internal" href="#options">OPTIONS</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojo-and-rest">Dojo and REST</a><ul>
+<li><a class="reference internal" href="#dojo-store-jsonrest">dojo.store.JsonRest</a></li>
+<li><a class="reference internal" href="#dojox-data-jsonreststore">dojox.data.JsonRestStore</a></li>
+<li><a class="reference internal" href="#restful-conventions-the-dojo-way">RESTful Conventions the Dojo Way</a><ul>
+<li><a class="reference internal" href="#query">Query</a></li>
+<li><a class="reference internal" href="#sorting">Sorting</a></li>
+<li><a class="reference internal" href="#ranges">Ranges</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#json-the-dojo-way">JSON the Dojo Way</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#server-side-implementation">Server-Side Implementation</a><ul>
+<li><a class="reference internal" href="#general-structure">General Structure</a><ul>
+<li><a class="reference internal" href="#http-response-codes">HTTP Response Codes</a><ul>
+<li><a class="reference internal" href="#ok">200 OK</a></li>
+<li><a class="reference internal" href="#created">201 Created</a></li>
+<li><a class="reference internal" href="#accepted">202 Accepted</a></li>
+<li><a class="reference internal" href="#no-content">204 No Content</a></li>
+<li><a class="reference internal" href="#bad-request">400 Bad Request</a></li>
+<li><a class="reference internal" href="#not-found">404 Not Found</a></li>
+<li><a class="reference internal" href="#method-not-allowed">405 Method Not Allowed</a></li>
+<li><a class="reference internal" href="#not-acceptable">406 Not Acceptable</a></li>
+<li><a class="reference internal" href="#conflict">409 Conflict</a></li>
+<li><a class="reference internal" href="#internal-server-error">500 Internal Server Error</a></li>
+<li><a class="reference internal" href="#not-implemented">501 Not Implemented</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#http-headers-received">HTTP Headers Received</a><ul>
+<li><a class="reference internal" href="#range">Range</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#http-headers-sent">HTTP Headers Sent</a><ul>
+<li><a class="reference internal" href="#content-range">Content-Range</a></li>
+<li><a class="reference internal" href="#content-type">Content-Type</a></li>
+<li><a class="reference internal" href="#location">Location</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#converting-between-sql-and-rest">Converting between SQL and REST</a><ul>
+<li><a class="reference internal" href="#get-to-select">GET to SELECT</a></li>
+<li><a class="reference internal" href="#post-to-insert">POST to INSERT</a></li>
+<li><a class="reference internal" href="#put-to-update">PUT to UPDATE</a></li>
+<li><a class="reference internal" href="#delete-to-delete">DELETE to DELETE</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#combining-it-and-other-considerations">Combining It and Other Considerations</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#array-type-widgets">&#8220;Array&#8221; Type Widgets</a></li>
+<li><a class="reference internal" href="#tree-type-widgets">&#8220;Tree&#8221; Type Widgets</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="implementing-a-restful-service-server-side">
+<span id="quickstart-rest"></span><h1><a class="toc-backref" href="#id3">Implementing a RESTful Service Server-Side</a><a class="headerlink" href="#implementing-a-restful-service-server-side" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Kitson Kelly</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#implementing-a-restful-service-server-side" id="id3">Implementing a RESTful Service Server-Side</a><ul>
+<li><a class="reference internal" href="#basics-of-restful-services" id="id4">Basics of RESTful Services</a><ul>
+<li><a class="reference internal" href="#what-is-a-restful-service" id="id5">What is a RESTful Service?</a></li>
+<li><a class="reference internal" href="#http-verbs" id="id6">HTTP Verbs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojo-and-rest" id="id7">Dojo and REST</a><ul>
+<li><a class="reference internal" href="#dojo-store-jsonrest" id="id8">dojo.store.JsonRest</a></li>
+<li><a class="reference internal" href="#dojox-data-jsonreststore" id="id9">dojox.data.JsonRestStore</a></li>
+<li><a class="reference internal" href="#restful-conventions-the-dojo-way" id="id10">RESTful Conventions the Dojo Way</a></li>
+<li><a class="reference internal" href="#json-the-dojo-way" id="id11">JSON the Dojo Way</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#server-side-implementation" id="id12">Server-Side Implementation</a><ul>
+<li><a class="reference internal" href="#general-structure" id="id13">General Structure</a></li>
+<li><a class="reference internal" href="#converting-between-sql-and-rest" id="id14">Converting between SQL and REST</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#combining-it-and-other-considerations" id="id15">Combining It and Other Considerations</a><ul>
+<li><a class="reference internal" href="#examples" id="id16">Examples</a></li>
+<li><a class="reference internal" href="#array-type-widgets" id="id17">&#8220;Array&#8221; Type Widgets</a></li>
+<li><a class="reference internal" href="#tree-type-widgets" id="id18">&#8220;Tree&#8221; Type Widgets</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>Deprecated</em>  The information contained in this document is deprecated and likely out of date.</p>
+<p>You find yourself banging your head against the wall, because you hear all the &#8220;cool kids&#8221; are using REST and you see
+there is quite an extensive implementation of RESTful clients in dojo, and your boss says &#8220;I want some of that&#8221;.  Well,
+hopefully this tutorial can help you out.</p>
+<p>First you have to accept what REST is and isn&#8217;t.  Then you have to understand how Dojo uses REST and then finally you
+can consider what you need to do to implement REST on the server side.  While this tutorial will try to be generic, my
+current service side language of choice is PHP, so most of my server side explanations will likely be in the context of
+PHP.</p>
+<div class="section" id="basics-of-restful-services">
+<h2><a class="toc-backref" href="#id4">Basics of RESTful Services</a><a class="headerlink" href="#basics-of-restful-services" title="Permalink to this headline">¶</a></h2>
+<p>A lot of people stumble across RESTful services and expect to find a well fleshed out standard with some hard and fast
+rules.  That is the first thing you have to get over when it comes to REST.  REST is a convention or pattern. It is
+basically leveraging the HTTP protocol and methodology to provide hierarchical data services.  The fates of the
+provider and consumer are inexplicably linked.</p>
+<p>Personal commentary, is that standards like SOAP and XML-RPC and XML, which have driven technology for the past decade,
+have given us this false sense that any provider can talk to any other consumer without knowing an iota about each
+other.  This is simply silly.  Very few people implement a provider or consumer without some level of conversation or
+dialogue.  The technology community has heaped and layer upon layer of structure to protect providers from consumers
+and in my opinion, REST gets back to basics of implementing basic CRUD functions in a simple and logical way.</p>
+<p>The side affect of this simplicity, is that the provider and consumer need to know each other very well and they need to
+trust each other to a certain degree.  But this really was the way it was before, but other standards just pretended to
+save us from that, but were never fully realised.</p>
+<div class="section" id="what-is-a-restful-service">
+<h3><a class="toc-backref" href="#id5">What is a RESTful Service?</a><a class="headerlink" href="#what-is-a-restful-service" title="Permalink to this headline">¶</a></h3>
+<p>REST stands for Representational State Transfer.  It basically leverages the HTTP protocol and model to provide data
+services.  What REST should be is follow a client/server model, be stateless, cacheable, allow for a layered model and
+provide a uniform interface.</p>
+<p>All resources are identified by the use of a URI, and there are two types of URIs used, collection URIs and element
+URIs. For example, let&#8217;s assume we have a server that is providing data about users.  The following URI would refer to
+the users:</p>
+<div class="highlight"><pre>http://example.com/users/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">http://example.com/users/</textarea></div><p>Now if we wanted to refer to just a specific user, we would add the specific resource identifier to the URI.  For
+example:</p>
+<div class="highlight"><pre>http://example.com/users/1/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">http://example.com/users/1/</textarea></div><p>This would refer to the user who has an identity of <code class="docutils literal"><span class="pre">1</span></code>.</p>
+<p>Building on the resource identification, all the Create, Read, Update and Delete (CRUD) functions are available via the
+use of the HTTP protocol verbs.  The main ones being <code class="docutils literal"><span class="pre">GET</span></code>, <code class="docutils literal"><span class="pre">POST</span></code>, <code class="docutils literal"><span class="pre">PUT</span></code> and <code class="docutils literal"><span class="pre">DELETE</span></code>.  Different parts of a
+collection can be specified by adding another collection identifier after an element identifier in the URI.  Also, a
+provider could provide access to data in different ways in a fashion that is most logical.  For example, users might
+have a set of groups they belong to.  A provider could provide the groups the user belongs to by using the following
+URI:</p>
+<div class="highlight"><pre>http://example.com/users/1/groups/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">http://example.com/users/1/groups/</textarea></div><p>And provide all the possible groups via the URI:</p>
+<div class="highlight"><pre>http://example.com/groups/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">http://example.com/groups/</textarea></div><p>And even provide all the users that are part of a specific group:</p>
+<div class="highlight"><pre>http://example.com/groups/1/users/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">http://example.com/groups/1/users/</textarea></div><p>REST provides a fair amount of flexibility up to the provider to determine what and how they provide.</p>
+<p>One important thing to note is that REST is independent from the data that transports it.  It is expected that the
+server and the client will negotiate on how the data is represented.  The most common (especially in Dojo) way to
+return data is JSON, although XML, Text or any other data format could easily be used.  It will just be assumed here
+that JSON will be used without further explanation.</p>
+</div>
+<div class="section" id="http-verbs">
+<h3><a class="toc-backref" href="#id6">HTTP Verbs</a><a class="headerlink" href="#http-verbs" title="Permalink to this headline">¶</a></h3>
+<p>The HTTP protocol verbs in REST allow for traditional CRUD functions to happen. Each of the verbs and how they are used
+are detailed below.</p>
+<div class="section" id="get">
+<h4>GET<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h4>
+<p>The HTTP verb <code class="docutils literal"><span class="pre">GET</span></code> is used to list or retrieve resources.  For collections, the service should return an array of
+items that are members of the collection. These can be the full details, or just information on where to find the
+additional data about each resource.  So the following:</p>
+<div class="highlight"><pre>GET http://example.com/users/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">GET http://example.com/users/</textarea></div><p>Would retrieve something like:</p>
+<div class="highlight"><pre><span class="p">[</span>
+      <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;userName&quot;</span><span class="o">:</span> <span class="s2">&quot;jsmith&quot;</span><span class="p">,</span> <span class="s2">&quot;firstName&quot;</span><span class="o">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="s2">&quot;lastName&quot;</span><span class="o">:</span> <span class="s2">&quot;Smith&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;userName&quot;</span><span class="o">:</span> <span class="s2">&quot;jdoe&quot;</span><span class="p">,</span> <span class="s2">&quot;firstName&quot;</span><span class="o">:</span> <span class="s2">&quot;Jane&quot;</span><span class="p">,</span> <span class="s2">&quot;lastName&quot;</span><span class="o">:</span> <span class="s2">&quot;Doe&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;userName&quot;</span><span class="o">:</span> <span class="s2">&quot;bill&quot;</span><span class="p">,</span> <span class="s2">&quot;firstName&quot;</span><span class="o">:</span> <span class="s2">&quot;Bill&quot;</span><span class="p">,</span> <span class="s2">&quot;lastName&quot;</span><span class="o">:</span> <span class="s2">&quot;Keese&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">[
+      {&quot;id&quot;: 1, &quot;userName&quot;: &quot;jsmith&quot;, &quot;firstName&quot;: &quot;John&quot;, &quot;lastName&quot;: &quot;Smith&quot;},
+      {&quot;id&quot;: 2, &quot;userName&quot;: &quot;jdoe&quot;, &quot;firstName&quot;: &quot;Jane&quot;, &quot;lastName&quot;: &quot;Doe&quot;},
+      {&quot;id&quot;: 3, &quot;userName&quot;: &quot;bill&quot;, &quot;firstName&quot;: &quot;Bill&quot;, &quot;lastName&quot;: &quot;Keese&quot;}
+]</textarea></div><p>While requesting a specific resource like:</p>
+<div class="highlight"><pre>GET http://example.com/users/1/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">GET http://example.com/users/1/</textarea></div><p>Would return just the object:</p>
+<div class="highlight"><pre><span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;userName&quot;</span><span class="o">:</span> <span class="s2">&quot;jsmith&quot;</span><span class="p">,</span> <span class="s2">&quot;firstName&quot;</span><span class="o">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="s2">&quot;lastName&quot;</span><span class="o">:</span> <span class="s2">&quot;Smith&quot;</span><span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{&quot;id&quot;: 1, &quot;userName&quot;: &quot;jsmith&quot;, &quot;firstName&quot;: &quot;John&quot;, &quot;lastName&quot;: &quot;Smith&quot;}</textarea></div></div>
+<div class="section" id="post">
+<h4>POST<a class="headerlink" href="#post" title="Permalink to this headline">¶</a></h4>
+<p>The HTTP verb <code class="docutils literal"><span class="pre">POST</span></code> is used to create new resources.  Again, REST does not specify how the data is sent, it could be
+traditional form encoded data, but both the Dojo implementations of REST will <code class="docutils literal"><span class="pre">POST</span></code> new records, and expect the
+server to provide the appropriate location URI for the new resource.  The server should respond with a <code class="docutils literal"><span class="pre">Location:</span></code>
+response header like:</p>
+<div class="highlight"><pre>Location: http://www.example.com/users/4/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">Location: http://www.example.com/users/4/</textarea></div></div>
+<div class="section" id="put">
+<h4>PUT<a class="headerlink" href="#put" title="Permalink to this headline">¶</a></h4>
+<p>The HTTP verb <code class="docutils literal"><span class="pre">PUT</span></code> is used to &#8220;replace&#8221; the content of an existing object with the provided content.  If a collection
+URI is specified, the entire data set should be replaced with the provided one, where as an element URI would replace
+that specific element.</p>
+</div>
+<div class="section" id="delete">
+<h4>DELETE<a class="headerlink" href="#delete" title="Permalink to this headline">¶</a></h4>
+<p>The HTTP verb <code class="docutils literal"><span class="pre">DELETE</span></code> is used to delete resources.  If a collection URI is specified, the whole collection should be
+deleted.  If an element URI is specified, just that specific item should be deleted.</p>
+</div>
+<div class="section" id="options">
+<h4>OPTIONS<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h4>
+<p>While not currently implemented in either of the JSON REST consumers in Dojo, some RESTful implementations use the HTTP
+verb <code class="docutils literal"><span class="pre">OPTIONS</span></code> to provide information about what verbs can be supplied for a specific URI.  This would allow a
+consumer to determine if a resource could be added, updated or deleted.</p>
+</div>
+</div>
+</div>
+<div class="section" id="dojo-and-rest">
+<h2><a class="toc-backref" href="#id7">Dojo and REST</a><a class="headerlink" href="#dojo-and-rest" title="Permalink to this headline">¶</a></h2>
+<p>The Dojo RESTful consumers are fairly straight forward when it comes to REST, and there is essentially feature parity
+between both the <a class="reference internal" href="../dojo/store/JsonRest.html#dojo-store-jsonrest"><span>dojo.store.JsonRest</span></a> and the
+<a class="reference internal" href="../dojox/data/JsonRestStore.html#dojox-data-jsonreststore"><span>dojox.data.JsonRestStore</span></a>.  As Dojo moves away from the DataStore API to the new Store
+API, developers can expect that dojo.store.JsonRest will become the main focus of RESTful implementation in Dojo.
+Currently though, most data aware widgets only consume the DataStore API, although &#8220;wrapping&#8221; the dojo.store.JsonRest
+with the <a class="reference internal" href="../dojo/data/ObjectStore.html#dojo-data-objectstore"><span>dojo.data.ObjectStore</span></a> is possible.</p>
+<div class="section" id="dojo-store-jsonrest">
+<h3><a class="toc-backref" href="#id8">dojo.store.JsonRest</a><a class="headerlink" href="#dojo-store-jsonrest" title="Permalink to this headline">¶</a></h3>
+<p>Introduced in Dojo 1.6, the dojo.store.JsonRest is a good an efficient implementation of a RESTful consumer.  To make it
+have feature parity with the <a class="reference internal" href="../dojox/data/JsonRestStore.html#dojox-data-jsonreststore"><span>dojox.data.JsonRestStore</span></a>, the developer should wrap the
+store in <a class="reference internal" href="../dojo/store/Observable.html#dojo-store-observable"><span>dojo.store.Observable</span></a> and <a class="reference internal" href="../dojo/store/Cache.html#dojo-store-cache"><span>dojo.store.Cache</span></a>.</p>
+<p>The <a class="reference internal" href="../dojo/store/JsonRest.html#dojo-store-jsonrest"><span>dojo.store.JsonRest</span></a> defaults to assuming the identifier property of each element is
+<code class="docutils literal"><span class="pre">id</span></code>, therefore if your provider returns an elements identifier in that field, most developers simply need to specify
+the target URI for the collection.</p>
+<p>An example of programmatically creating a full featured store would be:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">userMemoryStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">Memory</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">userJsonRestStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">JsonRest</span><span class="p">({</span><span class="nx">target</span><span class="o">:</span> <span class="s2">&quot;/users/&quot;</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">userStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">store</span><span class="p">.</span><span class="nx">Cache</span><span class="p">(</span><span class="nx">userJsonRestStore</span><span class="p">,</span> <span class="nx">userMemoryStore</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var userMemoryStore = new dojo.store.Memory();
+var userJsonRestStore = new dojo.store.JsonRest({target: &quot;/users/&quot;});
+var userStore = new dojo.store.Cache(userJsonRestStore, userMemoryStore);</textarea></div><p>More details can be found in their respective Dojo documentation pages.</p>
+</div>
+<div class="section" id="dojox-data-jsonreststore">
+<h3><a class="toc-backref" href="#id9">dojox.data.JsonRestStore</a><a class="headerlink" href="#dojox-data-jsonreststore" title="Permalink to this headline">¶</a></h3>
+<p>Introduced in Dojo 1.2, the <a class="reference internal" href="../dojox/data/JsonRestStore.html#dojox-data-jsonreststore"><span>dojox.data.JsonRestStore</span></a> has been the &#8220;workhorse&#8221; of Dojo
+DataStores.  It provides the <a class="reference internal" href="../dojo/data/api/Read.html#dojo-data-api-read"><span>Read</span></a>, <a class="reference internal" href="../dojo/data/api/Identity.html#dojo-data-api-identity"><span>Identity</span></a>,
+<a class="reference internal" href="../dojo/data/api/Write.html#dojo-data-api-write"><span>Write</span></a> and <a class="reference internal" href="../dojo/data/api/Notification.html#dojo-data-api-notification"><span>Notification</span></a> dojo.data APIs.</p>
+<p>An example programmatic declaration would be:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">userDataStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">JsonRestStore</span><span class="p">({</span>
+  <span class="nx">target</span><span class="o">:</span> <span class="s2">&quot;/users/&quot;</span><span class="p">,</span>
+  <span class="nx">idAttribute</span><span class="o">:</span> <span class="s2">&quot;id&quot;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var userDataStore = new dojox.data.JsonRestStore({
+  target: &quot;/users/&quot;,
+  idAttribute: &quot;id&quot;
+});</textarea></div><p>An example of declarative would be:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/data/JsonRestStore&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;userDataStore&quot;</span>
+    <span class="na">data-dojo-props=</span><span class="s">&quot;target: &#39;/users/&#39;, idAttribute: &#39;id&#39;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dojox/data/JsonRestStore&quot; data-dojo-id=&quot;userDataStore&quot;
+    data-dojo-props=&quot;target: '/users/', idAttribute: 'id'&quot;&gt;&lt;/div&gt;</textarea></div><p><em>Note</em> it is necessary to use <code class="docutils literal"><span class="pre">data-dojo-id</span></code> with non-Widget (dijit) declarative objects, like DataStores in order to
+make available a JavaScript variable that can be passed to other declarative objects.  Also it should be noted that
+these objects do not get destroyed if their containing widget is destroyed and the variable is declared in a global
+scope.</p>
+</div>
+<div class="section" id="restful-conventions-the-dojo-way">
+<h3><a class="toc-backref" href="#id10">RESTful Conventions the Dojo Way</a><a class="headerlink" href="#restful-conventions-the-dojo-way" title="Permalink to this headline">¶</a></h3>
+<p>Both the <a class="reference internal" href="../dojo/store/JsonRest.html#dojo-store-jsonrest"><span>dojo.store.JsonRest</span></a> and <a class="reference internal" href="../dojox/data/JsonRestStore.html#dojox-data-jsonreststore"><span>dojox.data.JsonRestStore</span></a>
+provide some enhancements to the basic RESTful functionality.</p>
+<div class="section" id="query">
+<h4>Query<a class="headerlink" href="#query" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="sorting">
+<h4>Sorting<a class="headerlink" href="#sorting" title="Permalink to this headline">¶</a></h4>
+<p>Widgets can specify sorting and those are passed as part of the query string of the URI on the <code class="docutils literal"><span class="pre">GET</span></code>.  The sort is
+specified by the <cite>sort</cite> attribute in either the <code class="docutils literal"><span class="pre">store.get()</span></code> or <code class="docutils literal"><span class="pre">datastore.fetch()</span></code> function.  This gets converted
+into a query attribute named <code class="docutils literal"><span class="pre">sort</span></code> with a comma separated list of attributes with a <code class="docutils literal"><span class="pre">+</span></code> or <code class="docutils literal"><span class="pre">-</span></code> indicating if the
+attributes should be sorted ascending or descending.  For example, the following sort value:</p>
+<div class="highlight"><pre><span class="p">{</span><span class="nx">sort</span><span class="o">:</span> <span class="p">[</span>
+  <span class="p">{</span><span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;id&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;userName&quot;</span><span class="p">,</span> <span class="nx">descending</span><span class="o">:</span> <span class="kc">true</span><span class="p">}</span>
+<span class="p">]}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{sort: [
+  {attribute: &quot;id&quot;},
+  {attribute: &quot;userName&quot;, descending: true}
+]}</textarea></div><p>Would translate into the following:</p>
+<div class="highlight"><pre>GET http://example.com/users/?sort(+id,-userName)
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">GET http://example.com/users/?sort(+id,-userName)</textarea></div></div>
+<div class="section" id="ranges">
+<h4>Ranges<a class="headerlink" href="#ranges" title="Permalink to this headline">¶</a></h4>
+<p>Widgets can (and do) specify a <code class="docutils literal"><span class="pre">start</span></code> and <code class="docutils literal"><span class="pre">count</span></code> attributes when accessing data.  These get translated by the
+Store or DataStore specifying the <code class="docutils literal"><span class="pre">Range</span></code> HTTP header.</p>
+<p>For example, the following:</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="nx">start</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+  <span class="nx">count</span><span class="o">:</span> <span class="mi">10</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{
+  start: 5,
+  count: 10
+}</textarea></div><p>Would result in the following HTTP request header being sent:</p>
+<div class="highlight"><pre>Range: items=5-15
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">Range: items=5-15</textarea></div><p>Any server should respond by setting the <code class="docutils literal"><span class="pre">Content-Range</span></code> header with the value of the range of items being returned
+and a total counts of all of the items that could be returned based on the query.  Because the total possible items is
+returned, the downstream widgets will &#8220;know&#8221; there are more items which they can retrieve.  Also the provider should
+respond with the amount of items they are returning, even if more items are being requested.</p>
+<p>So, if a request was for a count of 10 items starting at 5, but there are only 10 items in total, the following HTTP
+response header should be set:</p>
+<div class="highlight"><pre>Content-Range: items 5-9/10
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">Content-Range: items 5-9/10</textarea></div><p><cite>Note</cite> <code class="docutils literal"><span class="pre">start</span></code> is 0 based, so starting at <code class="docutils literal"><span class="pre">5</span></code> means the 6th item.</p>
+</div>
+</div>
+<div class="section" id="json-the-dojo-way">
+<h3><a class="toc-backref" href="#id11">JSON the Dojo Way</a><a class="headerlink" href="#json-the-dojo-way" title="Permalink to this headline">¶</a></h3>
+<p>While JSON is a great way of describing arbitrary objects, it doesn&#8217;t have a standard for referencing.  The good news is
+that Dojo solves that via <a class="reference internal" href="../dojox/json/ref.html#dojox-json-ref"><span>dojox.json.ref</span></a> which provides everything you need.  It is also
+generally used by the rest of the framework, including the JSON REST datastores and stores.  This gives you quite a bit
+of flexibility in how you provide data.</p>
+<p>Mainly, it focuses on the attribute name <code class="docutils literal"><span class="pre">$ref</span></code> which provides a &#8220;pointer&#8221; to the rest of the data.  In a REST
+services, this is a URI.  When a client requests the data from the store, and the store doesn&#8217;t have it, it will
+attempt to fetch the data at the supplied URI.  The typical way this is used is on collection URIs to provide
+references to the full resource, when you only want to provide a portion of the data up front. For example, let&#8217;s
+assume you want to provide information about pages of a book and you have the following collection URI:</p>
+<div class="highlight"><pre>GET http://example.com/book/1/page/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">GET http://example.com/book/1/page/</textarea></div><p>Which returns an array that provides some basic information, but not the content of the page, but a reference to the
+item:</p>
+<div class="highlight"><pre><span class="p">[</span>
+  <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;page/1&quot;</span><span class="p">,</span> <span class="s2">&quot;chapter&quot;</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;$ref&quot;</span><span class="o">:</span> <span class="s2">&quot;page/1&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;page/2&quot;</span><span class="p">,</span> <span class="s2">&quot;chapter&quot;</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;$ref&quot;</span><span class="o">:</span> <span class="s2">&quot;page/2&quot;</span><span class="p">},</span>
+  <span class="p">{</span><span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;page/3&quot;</span><span class="p">,</span> <span class="s2">&quot;chapter&quot;</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;$ref&quot;</span><span class="o">:</span> <span class="s2">&quot;page/3&quot;</span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">[
+  {&quot;id&quot;: &quot;page/1&quot;, &quot;chapter&quot;: &quot;1&quot;, &quot;$ref&quot;: &quot;page/1&quot;},
+  {&quot;id&quot;: &quot;page/2&quot;, &quot;chapter&quot;: &quot;1&quot;, &quot;$ref&quot;: &quot;page/2&quot;},
+  {&quot;id&quot;: &quot;page/3&quot;, &quot;chapter&quot;: &quot;1&quot;, &quot;$ref&quot;: &quot;page/3&quot;}
+]</textarea></div><p>And then something tries to attempt to access an attribute of a page that isn&#8217;t loaded (like <code class="docutils literal"><span class="pre">text</span></code>) the store will
+attempt to do the following:</p>
+<div class="highlight"><pre>GET http://example.com/book/1/page/1/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">GET http://example.com/book/1/page/1/</textarea></div><p>Which could result in you returning the whole object, that would have been inefficient until the consumer needed the
+data:</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;chapter&quot;</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;text&quot;</span><span class="o">:</span> <span class="s2">&quot;...&quot;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{
+  &quot;id&quot;: &quot;1&quot;,
+  &quot;chapter&quot;: &quot;1&quot;,
+  &quot;text&quot;: &quot;...&quot;
+}</textarea></div><p>The other main way to use <code class="docutils literal"><span class="pre">$ref</span></code> in a REST environment is to specify children. Again, speaking about a book, we could
+provide a reference back when a request is made to a collection or resource URI:</p>
+<div class="highlight"><pre>GET http://example.com/book/1/
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">GET http://example.com/book/1/</textarea></div><p>Would return something like:</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;title&quot;</span><span class="o">:</span> <span class="s2">&quot;My Little Book of Dojo&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;author&quot;</span><span class="o">:</span> <span class="s2">&quot;Kitson Kelly&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;children&quot;</span><span class="o">:</span> <span class="p">{</span><span class="s2">&quot;$ref&quot;</span><span class="o">:</span><span class="s2">&quot;1/page&quot;</span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{
+  &quot;id&quot;: &quot;1&quot;,
+  &quot;title&quot;: &quot;My Little Book of Dojo&quot;,
+  &quot;author&quot;: &quot;Kitson Kelly&quot;,
+  &quot;children&quot;: {&quot;$ref&quot;:&quot;1/page&quot;}
+}</textarea></div><p>There is a lot more you can do with referencing, but viewing the <a class="reference internal" href="../dojox/json/ref.html#dojox-json-ref"><span>dojox.json.ref</span></a> page is the best
+way to get a complete picture.  Just remember that your references should contain a relative URI to the appropriate
+information.</p>
+</div>
+</div>
+<div class="section" id="server-side-implementation">
+<h2><a class="toc-backref" href="#id12">Server-Side Implementation</a><a class="headerlink" href="#server-side-implementation" title="Permalink to this headline">¶</a></h2>
+<p>As stated before, a lot of the structure of a provider&#8217;s data is based on its application and how it will be consumed.
+Some Widgets have specific expectations of how data is structured than can drive the need of how it is provided.  There
+are however some general concepts of how a JSON REST store expects things to be handled and some general good practices.</p>
+<div class="section" id="general-structure">
+<h3><a class="toc-backref" href="#id13">General Structure</a><a class="headerlink" href="#general-structure" title="Permalink to this headline">¶</a></h3>
+<p>However you implement your RESTful service, you need to provide some basic functionality:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Handle HTTP requests</li>
+<li>Provide HTTP responses</li>
+<li>Encode return data in JSON</li>
+<li>Decode POSTed and PUTed data from JSON</li>
+<li>Handle ranges, sorting and querying/filtering as almost every Widget expects one or all of these to be supported</li>
+</ul>
+</div></blockquote>
+<p>Other things you might want to consider:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Support compression, since you are returning data and most browsers support it, you can save a lot of bandwidth by
+supporting it.</li>
+<li>Support other content types other than JSON, so that other data can be retrieved from your RESTful service.</li>
+<li>Provide method invocation to perform a server side service.</li>
+<li>Error handling and logging</li>
+</ul>
+</div></blockquote>
+<p>The following sections deal with the main areas that your service should provide in order to interface properly with a
+consumer.</p>
+<div class="section" id="http-response-codes">
+<h4>HTTP Response Codes<a class="headerlink" href="#http-response-codes" title="Permalink to this headline">¶</a></h4>
+<p>There are a few key, important HTTP response codes that you should consider implementing in your service.  If you
+implement the response codes appropriately you will get the right behaviour out of the consumers.  While not
+exhaustive, the following sections describe the main response codes you should consider using.  Generally speaking, you
+should try your best to use a breadth of response codes, because at the very least it provides information to a
+consumer who maybe trying to debug why something isn&#8217;t working.  Even if you are the only developer, detailed response
+codes can be very beneficial in understanding what is going on.</p>
+<div class="section" id="ok">
+<h5>200 OK<a class="headerlink" href="#ok" title="Permalink to this headline">¶</a></h5>
+<p>This should be returned for a <code class="docutils literal"><span class="pre">GET</span></code> or another successful request where there isn&#8217;t an obvious other verb, but there
+is some content to return.  If there is no content to return, then <code class="docutils literal"><span class="pre">204</span> <span class="pre">No</span> <span class="pre">Content</span></code> should be used instead.</p>
+</div>
+<div class="section" id="created">
+<h5>201 Created<a class="headerlink" href="#created" title="Permalink to this headline">¶</a></h5>
+<p>This should be returned for a <code class="docutils literal"><span class="pre">POST</span></code> which has successfully created a new resource.  You can return content with this
+as well, but it should represent the created resource, potentially with a the unique key added to the structure.</p>
+<p>This could be coupled with setting the <code class="docutils literal"><span class="pre">Location:</span></code> header on the respond with the permanent URI for the resource.</p>
+</div>
+<div class="section" id="accepted">
+<h5>202 Accepted<a class="headerlink" href="#accepted" title="Permalink to this headline">¶</a></h5>
+<p>This could be returned when a request changes something on the server, like a <code class="docutils literal"><span class="pre">PUT</span></code> that updates a record.</p>
+</div>
+<div class="section" id="no-content">
+<h5>204 No Content<a class="headerlink" href="#no-content" title="Permalink to this headline">¶</a></h5>
+<p>This should be used whenever there is no content to send back, but the request was successful.  This is often the proper
+response for a successful <code class="docutils literal"><span class="pre">DELETE</span></code>, since the record no longer exists, so there is no data to return.  You shouldn&#8217;t
+confuse this with an empty result set.  If a <code class="docutils literal"><span class="pre">GET</span></code> does not return any records, it is more appropriate to return a
+<code class="docutils literal"><span class="pre">200</span> <span class="pre">Ok</span></code> and an empty array as the content:</p>
+<div class="highlight"><pre><span class="p">[]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">[]</textarea></div></div>
+<div class="section" id="bad-request">
+<h5>400 Bad Request<a class="headerlink" href="#bad-request" title="Permalink to this headline">¶</a></h5>
+<p>This response code could be used for situations where the consumer has made a request which your service cannot
+understand.  This could indicate a malformed URI in this services particular context, for example.</p>
+</div>
+<div class="section" id="not-found">
+<h5>404 Not Found<a class="headerlink" href="#not-found" title="Permalink to this headline">¶</a></h5>
+<p>This should be returned when a specific resource URI is not found.  This should not be used for an empty collection.  In
+this case an empty array should be returned, with a <code class="docutils literal"><span class="pre">200</span> <span class="pre">OK</span></code> response code.</p>
+</div>
+<div class="section" id="method-not-allowed">
+<h5>405 Method Not Allowed<a class="headerlink" href="#method-not-allowed" title="Permalink to this headline">¶</a></h5>
+<p>This could be used to indicate that a particular verb is not applicable for this service.</p>
+</div>
+<div class="section" id="not-acceptable">
+<h5>406 Not Acceptable<a class="headerlink" href="#not-acceptable" title="Permalink to this headline">¶</a></h5>
+<p>This could be used to indicate that a particular verb is not applicable for this service.</p>
+</div>
+<div class="section" id="conflict">
+<h5>409 Conflict<a class="headerlink" href="#conflict" title="Permalink to this headline">¶</a></h5>
+<p>This could be used to indicate that a <code class="docutils literal"><span class="pre">POST</span></code> or <code class="docutils literal"><span class="pre">PUT</span></code> cannot be completed due to a conflict of resources.  This
+could indicate to the consumer that they need to change something with the request in order to properly <code class="docutils literal"><span class="pre">POST</span></code> or
+<code class="docutils literal"><span class="pre">PUT</span></code> a resource.</p>
+</div>
+<div class="section" id="internal-server-error">
+<h5>500 Internal Server Error<a class="headerlink" href="#internal-server-error" title="Permalink to this headline">¶</a></h5>
+<p>This should be used in a situation where the requested URI cannot be responded to and there is no other more specific
+response code.  It could be used as the &#8220;default&#8221; response code until the request is processed and is replaced by a
+more appropriate response.</p>
+</div>
+<div class="section" id="not-implemented">
+<h5>501 Not Implemented<a class="headerlink" href="#not-implemented" title="Permalink to this headline">¶</a></h5>
+<p>This can be returned in cases where you don&#8217;t have a particular verb implemented, although this is more a convention
+than a requirement. <code class="docutils literal"><span class="pre">500</span> <span class="pre">Internal</span> <span class="pre">Server</span> <span class="pre">Error</span></code> is sufficient, but it might help in debugging of a consumer to know
+that what they are asking for is specifically not implemented, versus simply being a server error.</p>
+</div>
+</div>
+<div class="section" id="http-headers-received">
+<h4>HTTP Headers Received<a class="headerlink" href="#http-headers-received" title="Permalink to this headline">¶</a></h4>
+<p>There are some headers that your service is expected to handle.  If you don&#8217;t handle these headers properly than you can
+end up with unexpected results in the dojo consuming stores and any widgets that rely upon them.</p>
+<div class="section" id="range">
+<h5>Range<a class="headerlink" href="#range" title="Permalink to this headline">¶</a></h5>
+<p>This header will specify a range of results to return for a particular request. See <a class="reference internal" href="#ranges">Ranges</a> above for detailed
+information on how this should be handled.</p>
+</div>
+</div>
+<div class="section" id="http-headers-sent">
+<h4>HTTP Headers Sent<a class="headerlink" href="#http-headers-sent" title="Permalink to this headline">¶</a></h4>
+<p>Depending on the request and how your service has filled it, there are different HTTP response headers that you may need
+to set.</p>
+<div class="section" id="content-range">
+<h5>Content-Range<a class="headerlink" href="#content-range" title="Permalink to this headline">¶</a></h5>
+<p>If you received a <code class="docutils literal"><span class="pre">Range:</span></code> request header, you should set the <code class="docutils literal"><span class="pre">Content-Range:</span></code> response header.  See <a class="reference internal" href="#ranges">Ranges</a> above
+for detailed on how this should be handled.</p>
+</div>
+<div class="section" id="content-type">
+<h5>Content-Type<a class="headerlink" href="#content-type" title="Permalink to this headline">¶</a></h5>
+<p>If you are returning content, you should be setting the <code class="docutils literal"><span class="pre">Content-Type</span></code> on the response.  Typically this will be
+<code class="docutils literal"><span class="pre">application/json</span></code>.</p>
+</div>
+<div class="section" id="location">
+<h5>Location<a class="headerlink" href="#location" title="Permalink to this headline">¶</a></h5>
+<p>You can specify the <code class="docutils literal"><span class="pre">Location:</span></code> header to let the consumer know the &#8220;real&#8221; location of the requested URI.  Typically
+this is used when the consumer POSTs a new resource, which now has a specific resource URI.  See <a class="reference internal" href="#post">POST</a> above for
+further details.</p>
+</div>
+</div>
+</div>
+<div class="section" id="converting-between-sql-and-rest">
+<h3><a class="toc-backref" href="#id14">Converting between SQL and REST</a><a class="headerlink" href="#converting-between-sql-and-rest" title="Permalink to this headline">¶</a></h3>
+<p>If you are using an underlying relational database, versus a database that is designed for RESTful services, like
+CouchDB, then it is likely that you will have to convert from the RESTful conventions to SQL.  It is important that you
+try your best to avoid introducing &#8220;attack vectors&#8221; in your services by malicious individual using SQL injection via
+your service.</p>
+<div class="section" id="get-to-select">
+<h4>GET to SELECT<a class="headerlink" href="#get-to-select" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="post-to-insert">
+<h4>POST to INSERT<a class="headerlink" href="#post-to-insert" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="put-to-update">
+<h4>PUT to UPDATE<a class="headerlink" href="#put-to-update" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="delete-to-delete">
+<h4>DELETE to DELETE<a class="headerlink" href="#delete-to-delete" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+</div>
+<div class="section" id="combining-it-and-other-considerations">
+<h2><a class="toc-backref" href="#id15">Combining It and Other Considerations</a><a class="headerlink" href="#combining-it-and-other-considerations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="examples">
+<h3><a class="toc-backref" href="#id16">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="array-type-widgets">
+<h3><a class="toc-backref" href="#id17">&#8220;Array&#8221; Type Widgets</a><a class="headerlink" href="#array-type-widgets" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="tree-type-widgets">
+<h3><a class="toc-backref" href="#id18">&#8220;Tree&#8221; Type Widgets</a><a class="headerlink" href="#tree-type-widgets" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

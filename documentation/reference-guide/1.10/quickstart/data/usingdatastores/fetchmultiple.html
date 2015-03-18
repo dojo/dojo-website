@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Fetching multiple items and values &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../../index.html">Startpage</a></li>
+          <li><a href="../../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#"><strong>Fetching multiple items and values</strong></a><ul>
+<li><a class="reference internal" href="#working-with-multiple-items">Working with Multiple Items</a></li>
+<li><a class="reference internal" href="#functional-examples">Functional Examples</a><ul>
+<li><a class="reference internal" href="#loading-all-items-through-callbacks">Loading all items through callbacks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#working-with-lots-of-items">Working with Lots of Items</a></li>
+<li><a class="reference internal" href="#functional-onitem-examples">Functional onItem Examples</a><ul>
+<li><a class="reference internal" href="#loading-all-items-through-the-onitem-callback">Loading all items through the onItem callback</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="fetching-multiple-items-and-values">
+<span id="quickstart-data-usingdatastores-fetchmultiple"></span><h1><a class="toc-backref" href="#id1"><strong>Fetching multiple items and values</strong></a><a class="headerlink" href="#fetching-multiple-items-and-values" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#fetching-multiple-items-and-values" id="id1"><strong>Fetching multiple items and values</strong></a><ul>
+<li><a class="reference internal" href="#working-with-multiple-items" id="id2">Working with Multiple Items</a></li>
+<li><a class="reference internal" href="#functional-examples" id="id3">Functional Examples</a><ul>
+<li><a class="reference internal" href="#loading-all-items-through-callbacks" id="id4">Loading all items through callbacks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#working-with-lots-of-items" id="id5">Working with Lots of Items</a></li>
+<li><a class="reference internal" href="#functional-onitem-examples" id="id6">Functional onItem Examples</a><ul>
+<li><a class="reference internal" href="#loading-all-items-through-the-onitem-callback" id="id7">Loading all items through the onItem callback</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="working-with-multiple-items">
+<h2><a class="toc-backref" href="#id2">Working with Multiple Items</a><a class="headerlink" href="#working-with-multiple-items" title="Permalink to this headline">¶</a></h2>
+<p>You will likely want to access multiple items from such a data source as in the preceding example. No problem! Dojo.data Read API provides a mechanism for loading a set of items. All you have to do is provide the following information to the fetch function of the Read API:</p>
+<ul class="simple">
+<li>This is what I want (if I don&#8217;t tell you something, get everything)</li>
+<li>Do this if there is an error</li>
+<li>Do that when everything is loaded</li>
+</ul>
+<p>If this sounds like it might be event-driven, that&#8217;s because it is.  Most I/O methods in Ajax must perform operations asynchronously, so results and errors have to be returned through events (commonly called callbacks).  Because of the asynchronous requirements of the I/O methods, the dojo.data API was designed to operate in an asynchronous manner and use events for item retrieval.  Obtaining multiple items is one of the primary operations of dojo.data that people will use and first experience the necessities of callbacks.</p>
+<p>This page demonstrates the absolute basics of obtaining multiple items in one request.  The prime method called is the  dojo.data.api.Read.fetch()</p>
+<p>In the following examples, the Read API is used with the following values:</p>
+<dl class="docutils">
+<dt><strong>fetch()</strong></dt>
+<dd>Asynchronous API that fetches a set of items which match a list of attributes.</dd>
+<dt><strong>getValue()</strong></dt>
+<dd>Takes an item and an attribute and returns the associated value.</dd>
+</dl>
+<p>The following example code fragment returns all items:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">pantryStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ItemFileReadStore</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="s2">&quot;pantry_items.json&quot;</span> <span class="p">});</span>
+<span class="c1">// Define a callback that fires when all the items are returned.</span>
+<span class="kd">var</span> <span class="nx">gotList</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">itemsList</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+  <span class="nx">dojo</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">){</span>
+    <span class="nx">itemsList</span> <span class="o">+=</span> <span class="nx">pantryStore</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="p">;</span>
+  <span class="p">});</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;All items are: &quot;</span> <span class="o">+</span> <span class="nx">itemsList</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">gotError</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;The request to the store failed. &quot;</span> <span class="o">+</span>  <span class="nx">error</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// Invoke the search</span>
+<span class="nx">pantryStore</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span>
+  <span class="nx">onComplete</span><span class="o">:</span> <span class="nx">gotList</span><span class="p">,</span>
+  <span class="nx">onError</span><span class="o">:</span> <span class="nx">gotError</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var pantryStore = new dojo.data.ItemFileReadStore({ url: &quot;pantry_items.json&quot; });
+// Define a callback that fires when all the items are returned.
+var gotList = function(items, request){
+  var itemsList = &quot;&quot;;
+  dojo.forEach(items, function(i){
+    itemsList += pantryStore.getValue(i, &quot;name&quot;) + &quot; &quot;;
+  });
+  console.debug(&quot;All items are: &quot; + itemsList);
+}
+var gotError = function(error, request){
+  alert(&quot;The request to the store failed. &quot; +  error);
+}
+// Invoke the search
+pantryStore.fetch({
+  onComplete: gotList,
+  onError: gotError
+});</textarea></div><p>That&#8217;s great, but what is more useful is seeing a completely functional example.  In the following example, clicking a button retrieves a list of items and displays them.  Please note that this is a simple example using ItemFileReadStore, but the concepts it presents applies to all Data Stores.</p>
+</div>
+<div class="section" id="functional-examples">
+<h2><a class="toc-backref" href="#id3">Functional Examples</a><a class="headerlink" href="#functional-examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="loading-all-items-through-callbacks">
+<h3><a class="toc-backref" href="#id4">Loading all items through callbacks</a><a class="headerlink" href="#loading-all-items-through-callbacks" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.data.ItemFileReadStore&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.Button&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">storeData</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">identifier</span><span class="o">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span>
+  <span class="nx">items</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Adobo&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Mexican&#39;</span><span class="p">,</span> <span class="nx">price</span><span class="o">:</span> <span class="mf">3.01</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Balsamic vinegar&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span> <span class="nx">price</span><span class="o">:</span> <span class="mf">4.01</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Basil&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Spices&#39;</span><span class="p">,</span> <span class="nx">price</span><span class="o">:</span> <span class="mf">3.59</span>  <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bay leaf&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Spices&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">2.01</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Beef Bouillon Granules&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Soup&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">5.01</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Vinegar&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">1.99</span>  <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;White cooking wine&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">2.01</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Worcestershire Sauce&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">3.99</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;pepper&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Spices&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">1.01</span>  <span class="p">}</span>
+  <span class="p">]};</span>
+
+  <span class="c1">// This function performs some basic dojo initialization.  In this case it connects the button</span>
+  <span class="c1">// onClick to a function which invokes the fetch().  The fetch function queries for all items</span>
+  <span class="c1">// and provides callbacks to use for completion of data retrieval or reporting of errors.</span>
+  <span class="kd">function</span> <span class="nx">init</span><span class="p">(){</span>
+     <span class="c1">// Function to perform a fetch on the datastore when a button is clicked</span>
+     <span class="kd">function</span> <span class="nx">getAllItems</span><span class="p">(){</span>
+
+       <span class="c1">// Callback to perform an action when the data items are starting to be returned:</span>
+       <span class="kd">function</span> <span class="nx">clearOldList</span><span class="p">(</span><span class="nx">size</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+         <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">);</span>
+         <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+           <span class="k">while</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">){</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">);</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+       <span class="p">}</span>
+
+       <span class="c1">// Callback for processing a returned list of items.</span>
+       <span class="kd">function</span> <span class="nx">gotItems</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+         <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">);</span>
+         <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+           <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+           <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+             <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">foodStore</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+       <span class="p">}</span>
+
+       <span class="c1">// Callback for if the lookup fails.</span>
+       <span class="kd">function</span> <span class="nx">fetchFailed</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+          <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;lookup failed.&quot;</span><span class="p">);</span>
+       <span class="p">}</span>
+
+       <span class="c1">// Fetch the data.</span>
+       <span class="nx">foodStore</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span><span class="nx">onBegin</span><span class="o">:</span> <span class="nx">clearOldList</span><span class="p">,</span> <span class="nx">onComplete</span><span class="o">:</span> <span class="nx">gotItems</span><span class="p">,</span> <span class="nx">onError</span><span class="o">:</span> <span class="nx">fetchFailed</span><span class="p">});</span>
+
+     <span class="p">}</span>
+     <span class="c1">// Link the click event of the button to driving the fetch.</span>
+     <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="s2">&quot;onClick&quot;</span><span class="p">,</span> <span class="nx">getAllItems</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="c1">// Set the init function to run when dojo loading and page parsing has completed.</span>
+  <span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="nx">init</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojo.data.ItemFileReadStore&quot;);
+dojo.require(&quot;dijit.form.Button&quot;);
+
+var storeData = { identifier: 'name',
+  items: [
+    { name: 'Adobo', aisle: 'Mexican', price: 3.01 },
+    { name: 'Balsamic vinegar', aisle: 'Condiments', price: 4.01 },
+    { name: 'Basil', aisle: 'Spices', price: 3.59  },
+    { name: 'Bay leaf', aisle: 'Spices',  price: 2.01 },
+    { name: 'Beef Bouillon Granules', aisle: 'Soup',  price: 5.01 },
+    { name: 'Vinegar', aisle: 'Condiments',  price: 1.99  },
+    { name: 'White cooking wine', aisle: 'Condiments',  price: 2.01 },
+    { name: 'Worcestershire Sauce', aisle: 'Condiments',  price: 3.99 },
+    { name: 'pepper', aisle: 'Spices',  price: 1.01  }
+  ]};
+
+  // This function performs some basic dojo initialization.  In this case it connects the button
+  // onClick to a function which invokes the fetch().  The fetch function queries for all items
+  // and provides callbacks to use for completion of data retrieval or reporting of errors.
+  function init(){
+     // Function to perform a fetch on the datastore when a button is clicked
+     function getAllItems(){
+
+       // Callback to perform an action when the data items are starting to be returned:
+       function clearOldList(size, request){
+         var list = dojo.byId(&quot;list&quot;);
+         if(list){
+           while(list.firstChild){
+             list.removeChild(list.firstChild);
+           }
+         }
+       }
+
+       // Callback for processing a returned list of items.
+       function gotItems(items, request){
+         var list = dojo.byId(&quot;list&quot;);
+         if(list){
+           var i;
+           for(i = 0; i &lt; items.length; i++){
+             var item = items[i];
+             list.appendChild(document.createTextNode(foodStore.getValue(item, &quot;name&quot;)));
+             list.appendChild(document.createElement(&quot;br&quot;));
+           }
+         }
+       }
+
+       // Callback for if the lookup fails.
+       function fetchFailed(error, request){
+          alert(&quot;lookup failed.&quot;);
+       }
+
+       // Fetch the data.
+       foodStore.fetch({onBegin: clearOldList, onComplete: gotItems, onError: fetchFailed});
+
+     }
+     // Link the click event of the button to driving the fetch.
+     dojo.connect(button, &quot;onClick&quot;, getAllItems);
+  }
+  // Set the init function to run when dojo loading and page parsing has completed.
+  dojo.ready(init);</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojo/data/ItemFileReadStore&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;data:storeData&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;foodStore&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>Click me for a list!<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;list&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/span&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dojo/data/ItemFileReadStore&quot; data-dojo-props=&quot;data:storeData&quot; data-dojo-id=&quot;foodStore&quot;&gt;&lt;/div&gt;
+&lt;div data-dojo-type=&quot;dijit/form/Button&quot; data-dojo-id=&quot;button&quot;&gt;Click me for a list!&lt;/div&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;span id=&quot;list&quot;&gt;
+&lt;/span&gt;</textarea></div></div></div></div>
+</div>
+<div class="section" id="working-with-lots-of-items">
+<h2><a class="toc-backref" href="#id5">Working with Lots of Items</a><a class="headerlink" href="#working-with-lots-of-items" title="Permalink to this headline">¶</a></h2>
+<p>Now that we&#8217;ve looked at dealing with getting a list of items in one batch, what if the list is huge? It could take a long time to get all the items, push them into an array, and then call the callback with the array of items. Wouldn&#8217;t it be nice if you could stream the items in, one at a time, and do something each time a new item is available? Well, with dojo.data, you can do that! There is an alternate callback you can pass to fetch() that is called on an item by item basis. It is the onItem callback.</p>
+<p>In the following examples, the code will request that all items be returned (an empty query). As each item gets returned, it will add a textnode to the document. In this example, the Read API is used with the following values:</p>
+<dl class="docutils">
+<dt><strong>fetch()</strong></dt>
+<dd>Asynchronous API that fetches a set of items which match a list of attributes.</dd>
+<dt><strong>getValue()</strong></dt>
+<dd>Takes an item and an attribute and returns the associated value.</dd>
+</dl>
+<p>The following code fragment loads all items and streams them back into the page:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">pantryStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ItemFileReadStore</span><span class="p">({</span><span class="nx">url</span><span class="o">:</span> <span class="s2">&quot;pantry_items.json&quot;</span> <span class="p">}</span> <span class="p">);</span>
+<span class="kd">var</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">body</span><span class="p">();</span> <span class="c1">// node to put output in</span>
+
+<span class="c1">// Define the onComplete callback to write</span>
+<span class="c1">// COMPLETED to the page when the fetch has</span>
+<span class="c1">// finished returning items.</span>
+<span class="kd">var</span> <span class="nx">done</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+  <span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;COMPLETED&quot;</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// Define the callback that appends a textnode into the document each time an item is returned.</span>
+<span class="nx">gotItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+  <span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span>
+      <span class="nx">pantryStore</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+  <span class="p">);</span>
+  <span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// Define a simple error handler.</span>
+<span class="kd">var</span> <span class="nx">gotError</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;The request to the store failed. &quot;</span> <span class="o">+</span>  <span class="nx">error</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Invoke the search</span>
+<span class="nx">pantryStore</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span>
+  <span class="nx">onComplete</span><span class="o">:</span> <span class="nx">done</span><span class="p">,</span>
+  <span class="nx">onItem</span><span class="o">:</span> <span class="nx">gotItem</span><span class="p">,</span>
+  <span class="nx">onError</span><span class="o">:</span> <span class="nx">gotError</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var pantryStore = new dojo.data.ItemFileReadStore({url: &quot;pantry_items.json&quot; } );
+var body = dojo.body(); // node to put output in
+
+// Define the onComplete callback to write
+// COMPLETED to the page when the fetch has
+// finished returning items.
+var done = function(items, request){
+  body.appendChild(document.createTextNode(&quot;COMPLETED&quot;));
+}
+
+// Define the callback that appends a textnode into the document each time an item is returned.
+gotItem = function(item, request){
+  body.appendChild(
+    document.createTextNode(
+      pantryStore.getValue(item, &quot;name&quot;)
+    )
+  );
+  body.appendChild(document.createElement(&quot;br&quot;));
+}
+
+// Define a simple error handler.
+var gotError = function(error, request){
+  console.debug(&quot;The request to the store failed. &quot; +  error);
+}
+
+// Invoke the search
+pantryStore.fetch({
+  onComplete: done,
+  onItem: gotItem,
+  onError: gotError
+});</textarea></div><p>Now, to demonstrate this concept in a functional example. In the following example, clicking a button retrieves a list of items and displays them.  Please note that this is a simple example using ItemFileReadStore, but the concepts it presents applies to all Data Stores.</p>
+</div>
+<div class="section" id="functional-onitem-examples">
+<h2><a class="toc-backref" href="#id6">Functional onItem Examples</a><a class="headerlink" href="#functional-onitem-examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="loading-all-items-through-the-onitem-callback">
+<h3><a class="toc-backref" href="#id7">Loading all items through the onItem callback</a><a class="headerlink" href="#loading-all-items-through-the-onitem-callback" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+  <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.data.ItemFileReadStore&quot;</span><span class="p">);</span>
+  <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.Button&quot;</span><span class="p">);</span>
+
+  <span class="kd">var</span> <span class="nx">storeData2</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">identifier</span><span class="o">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span>
+    <span class="nx">items</span><span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Adobo&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Mexican&#39;</span><span class="p">,</span> <span class="nx">price</span><span class="o">:</span> <span class="mf">3.01</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Balsamic vinegar&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span> <span class="nx">price</span><span class="o">:</span> <span class="mf">4.01</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Basil&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Spices&#39;</span><span class="p">,</span> <span class="nx">price</span><span class="o">:</span> <span class="mf">3.59</span>  <span class="p">},</span>
+      <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bay leaf&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Spices&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">2.01</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Beef Bouillon Granules&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Soup&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">5.01</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Vinegar&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">1.99</span>  <span class="p">},</span>
+      <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;White cooking wine&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">2.01</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Worcestershire Sauce&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">3.99</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;pepper&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Spices&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">1.01</span>  <span class="p">}</span>
+    <span class="p">]};</span>
+
+    <span class="c1">// This function performs some basic dojo initialization.  In this case it connects the button</span>
+    <span class="c1">// onClick to a function which invokes the fetch().  The fetch function queries for all items</span>
+    <span class="c1">// and provides callbacks to use for completion of data retrieval or reporting of errors.</span>
+    <span class="kd">function</span> <span class="nx">init2</span><span class="p">(){</span>
+       <span class="c1">// Function to perform a fetch on the datastore when a button is clicked</span>
+       <span class="kd">function</span> <span class="nx">getStreamingItems</span><span class="p">(){</span>
+
+         <span class="c1">// Callback to perform an action when the data items are starting to be returned:</span>
+         <span class="kd">function</span> <span class="nx">clearOldList</span><span class="p">(</span><span class="nx">size</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+           <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;list2&quot;</span><span class="p">);</span>
+           <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+             <span class="k">while</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">){</span>
+               <span class="nx">list</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">);</span>
+             <span class="p">}</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+
+         <span class="c1">// Callback for processing a single returned item.</span>
+         <span class="kd">function</span> <span class="nx">gotItem</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+           <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;list2&quot;</span><span class="p">);</span>
+           <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+             <span class="k">if</span><span class="p">(</span><span class="nx">item</span><span class="p">){</span>
+               <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">foodStore2</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)));</span>
+               <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+             <span class="p">}</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+
+         <span class="c1">// Callback for if the lookup fails.</span>
+         <span class="kd">function</span> <span class="nx">fetchFailed</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;lookup failed.&quot;</span><span class="p">);</span>
+         <span class="p">}</span>
+
+         <span class="c1">// Fetch the data.</span>
+         <span class="nx">foodStore2</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span><span class="nx">onBegin</span><span class="o">:</span> <span class="nx">clearOldList</span><span class="p">,</span> <span class="nx">onItem</span><span class="o">:</span> <span class="nx">gotItem</span><span class="p">,</span> <span class="nx">onError</span><span class="o">:</span> <span class="nx">fetchFailed</span><span class="p">});</span>
+       <span class="p">}</span>
+
+       <span class="c1">// Link the click event of the button to driving the fetch.</span>
+       <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">button2</span><span class="p">,</span> <span class="s2">&quot;onClick&quot;</span><span class="p">,</span> <span class="nx">getStreamingItems</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="c1">// Set the init function to run when dojo loading and page parsing has completed.</span>
+    <span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="nx">init2</span><span class="p">);</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">&lt;script&gt;
+  dojo.require(&quot;dojo.data.ItemFileReadStore&quot;);
+  dojo.require(&quot;dijit.form.Button&quot;);
+
+  var storeData2 = { identifier: 'name',
+    items: [
+      { name: 'Adobo', aisle: 'Mexican', price: 3.01 },
+      { name: 'Balsamic vinegar', aisle: 'Condiments', price: 4.01 },
+      { name: 'Basil', aisle: 'Spices', price: 3.59  },
+      { name: 'Bay leaf', aisle: 'Spices',  price: 2.01 },
+      { name: 'Beef Bouillon Granules', aisle: 'Soup',  price: 5.01 },
+      { name: 'Vinegar', aisle: 'Condiments',  price: 1.99  },
+      { name: 'White cooking wine', aisle: 'Condiments',  price: 2.01 },
+      { name: 'Worcestershire Sauce', aisle: 'Condiments',  price: 3.99 },
+      { name: 'pepper', aisle: 'Spices',  price: 1.01  }
+    ]};
+
+    // This function performs some basic dojo initialization.  In this case it connects the button
+    // onClick to a function which invokes the fetch().  The fetch function queries for all items
+    // and provides callbacks to use for completion of data retrieval or reporting of errors.
+    function init2(){
+       // Function to perform a fetch on the datastore when a button is clicked
+       function getStreamingItems(){
+
+         // Callback to perform an action when the data items are starting to be returned:
+         function clearOldList(size, request){
+           var list = dojo.byId(&quot;list2&quot;);
+           if(list){
+             while(list.firstChild){
+               list.removeChild(list.firstChild);
+             }
+           }
+         }
+
+         // Callback for processing a single returned item.
+         function gotItem(item, request){
+           var list = dojo.byId(&quot;list2&quot;);
+           if(list){
+             if(item){
+               list.appendChild(document.createTextNode(foodStore2.getValue(item, &quot;name&quot;)));
+               list.appendChild(document.createElement(&quot;br&quot;));
+             }
+           }
+         }
+
+         // Callback for if the lookup fails.
+         function fetchFailed(error, request){
+            alert(&quot;lookup failed.&quot;);
+         }
+
+         // Fetch the data.
+         foodStore2.fetch({onBegin: clearOldList, onItem: gotItem, onError: fetchFailed});
+       }
+
+       // Link the click event of the button to driving the fetch.
+       dojo.connect(button2, &quot;onClick&quot;, getStreamingItems);
+    }
+    // Set the init function to run when dojo loading and page parsing has completed.
+    dojo.ready(init2);
+&lt;/script&gt;</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojo/data/ItemFileReadStore&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;data:storeData2&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;foodStore2&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;button2&quot;</span><span class="nt">&gt;</span>Click me for a list!<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;list2&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/span&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dojo/data/ItemFileReadStore&quot; data-dojo-props=&quot;data:storeData2&quot; data-dojo-id=&quot;foodStore2&quot;&gt;&lt;/div&gt;
+&lt;div data-dojo-type=&quot;dijit/form/Button&quot; data-dojo-id=&quot;button2&quot;&gt;Click me for a list!&lt;/div&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;span id=&quot;list2&quot;&gt;
+&lt;/span&gt;</textarea></div></div></div><p><strong>Note:</strong> If the onItem callback is present in the parameters to fetch, then the first parameter to the onComplete callback, the items array, will always be null. Therefore, onItem is streaming only mode and does not rely on onComplete for anything other than a signal that the streaming has ended.</p>
+</div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

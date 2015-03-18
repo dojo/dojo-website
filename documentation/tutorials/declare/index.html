@@ -1,0 +1,345 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="icon" href="/images/favicons/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="/images/favicons/apple-touch-icon-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+		<link rel="stylesheet" href="/css/tutorials.css">
+		<title>Dojo Toolkit Tutorial</title>
+	</head>
+	<body>
+		<div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+		<main>
+			<div class="row">
+				<div class="large-9 large-offset-1 columns content tutorial">
+					<h2 id="classy-javascript-with-dojo-_base-declare">Classy JavaScript with dojo/_base/declare</h2>
+<p>The <code>dojo/_base/declare</code> module is the foundation of class creation within the Dojo Toolkit.  <code>declare</code> allows for multiple inheritance to allow developers to create flexible code and avoid writing the same code routines.  Dojo, Dijit, and Dojox modules all use <code>declare</code>; in this tutorial, you&#39;ll learn why you should too.</p>
+<p></p></p>
+<ul>
+<li><span>Difficulty:</span> Beginner</li>
+<li><span>Dojo Version:</span> 1.10</li>
+</ul>
+<h3 id="getting-started">Getting Started</h3>
+<p>Make sure you have reviewed the concepts presented in the <a href="../modules">modules tutorial</a>.</p>
+<!-- Basic dojo.declare Creation -->
+<h3 id="basic-dojo-class-creation-with-dojo">Basic Dojo Class Creation with Dojo</h3>
+<p>The <code>declare</code> function is defined in the <code>dojo/_base/declare</code> module.  <code>declare</code> accepts three arguments: <code>className</code>, <code>superClass</code>, and <code>properties</code>.</p>
+<h4 id="classname">ClassName</h4>
+<p>The <code>className</code> argument represents the name of the class, including the namespace, to be created.  Named classes are placed within the global scope. The <code>className</code> can also represent the inheritance chain via the namespace.</p>
+<h5 id="named-class">Named Class</h5>
+<pre class="brush:js;">
+// Create a new class named "mynamespace.MyClass"
+declare("mynamespace.MyClass", null, {
+
+    // Custom properties and methods here
+
+});
+</pre>
+
+<p>A class named <code>mynamespace.MyClass</code> is now globally available within the application.</p>
+<p>Named classes should only be created if they will be used with the Dojo parser. All other classes should omit the <code>className</code> parameter.</p>
+<h5 id="-anonymous-class">&quot;Anonymous&quot; Class</h5>
+<pre class="brush:js;">
+// Create a scoped, anonymous class
+var MyClass = declare(null, {
+
+    // Custom properties and methods here
+
+});
+</pre>
+
+<p>The <code>MyClass</code> is now only available within its given scope.</p>
+<h4 id="superclass-es-">SuperClass(es)</h4>
+<p>The SuperClass argument can be <code>null</code>, one existing class, or an array of existing classes.  If a new class inherits from more than one class, the first class in the list will be the base prototype, the rest will be considered &quot;mixins&quot;.</p>
+<h5 id="class-with-no-inheritance">Class with No Inheritance</h5>
+<pre class="brush:js;">
+var MyClass = declare(null, {
+
+    // Custom properties and methods here
+
+});
+</pre>
+
+<p><code>null</code> signifies that this class has no classes to inherit from.</p>
+<h5 id="class-inheriting-from-another-class">Class Inheriting from Another Class</h5>
+<pre class="brush:js;">
+var MySubClass = declare(MyClass, {
+
+    // MySubClass now has all of MyClass's properties and methods
+    // These properties and methods override parent's
+
+});
+</pre>
+
+<p>The new <code>MySubClass</code> will inherit <code>MyClass</code>&#39;s properties and methods.  A parent class&#39; method or property can be overridden by adding its key with a new definition within the third argument, which will be explained shortly.</p>
+<h5 id="class-with-multiple-inheritance">Class with Multiple Inheritance</h5>
+<pre class="brush:js;">
+var MyMultiSubClass = declare([
+    MySubClass,
+    MyOtherClass,
+    MyMixinClass
+],{
+
+    // MyMultiSubClass now has all of the properties and methods from:
+    // MySubClass, MyOtherClass, and MyMixinClass
+
+});
+</pre>
+
+<p>An array of classes signifies multiple inheritance.  Properties and methods are inherited from left to right.  The first class in the array serves as the base prototype, then the subsequent classes are mixins to that class.</p>
+<p>If a property or method is specified in more than one inherited class, the property or method from the last inherited class is used.</p>
+<h4 id="properties-and-methods-object">Properties and Methods Object</h4>
+<p>The last argument of <code>declare</code> is an object containing methods and properties for the class prototype.  Properties and methods provided via this argument will override their same namesake if inherited classes have the same properties.</p>
+<h5 id="custom-properties-and-methods">Custom Properties and Methods</h5>
+<pre class="brush:js;">
+// Class with custom properties and methods
+var MyClass = declare(MyParentClass, {
+    // Any property
+    myProperty1: 12,
+    // Another
+    myOtherProperty: "Hello",
+    // A method
+    myMethod: function(){
+
+        // Perform any functionality here
+
+        return result;
+    }
+});
+</pre>
+
+<h4 id="example-basic-class-creation-and-inheritance">Example:  Basic Class Creation and Inheritance</h4>
+<p>The following code creates a widget that inherits from <code>dijit/form/Button</code>:</p>
+<pre class="brush:js;">
+define([
+    "dojo/_base/declare",
+    "dijit/form/Button"
+], function(declare, Button){
+    return declare("mynamespace.Button", Button, {
+        label: "My Button",
+        onClick: function(evt){
+            console.log("I was clicked!");
+            this.inherited(arguments);
+        }
+    });
+});
+</pre>
+
+<p>From the snippet above, it&#39;s easy to conclude:</p>
+<ul>
+<li>The class&#39; name is <code>mynamespace.Button</code></li>
+<li>The class may be referenced by the globally available <code>mynamespace.Button</code> or from the module&#39;s return value</li>
+<li>The class inherits from <code>dijit/form/Button</code> (and thus Button&#39;s dependencies)</li>
+<li>The class sets a few custom properties and methods</li>
+</ul>
+<p>Let&#39;s dig deeper into class creation with Dojo by learning about the <code>constructor</code> method.</p>
+<h3 id="the-constructor-method">The constructor Method</h3>
+<p>One of the special class methods is the <code>constructor</code> method.  The <code>constructor</code> method is fired upon class instantiation, executed in the scope of the new object.  This means that the <code>this</code> keyword references the instance, not the original class.  The <code>constructor</code> method also accepts any number of instance-specific arguments.</p>
+<pre class="brush:js;">
+// Create a new class
+var Twitter = declare(null, {
+    // The default username
+    username: "defaultUser",
+
+    // The constructor
+    constructor: function(args){
+        declare.safeMixin(this,args);
+    }
+});
+</pre>
+
+<p>Take the following instance creation:</p>
+<pre class="brush:js;">
+var myInstance = new Twitter();
+</pre>
+
+<p>The username used within this instance will be &quot;defaultUser&quot; since no specific settings were provided to the instance.  To leverage the <code>safeMixin</code> method, provide a username parameter:</p>
+<pre class="brush:js;">
+var myInstance = new Twitter({
+    username: "sitepen"
+});
+</pre>
+
+<p>Now the instance uses <code>sitepen</code> as the username setting!</p>
+<p><code>declare.safeMixin</code> is also useful in class creation and inheritance.  As the API docs state:</p>
+<blockquote>
+<p>This function is used to mix in properties like lang._mixin does, but it skips a constructor property and decorates functions like dojo/_base/declare does. It is meant to be used with classes and objects produced with dojo/_base/declare. Functions mixed in with declare.safeMixin can use this.inherited() like normal methods. This function is used to implement extend() method of a constructor produced with declare().</p>
+</blockquote>
+<p><code>declare.safeMixin</code> is the perfect ally when creating classes with numerous options.</p>
+<h3 id="inheritance">Inheritance</h3>
+<p>As stated above, inheritance is defined within the second argument of <code>declare</code>.  Classes are mixed-in from left to right with each subsequent class&#39; properties and methods getting priority over the previous if a property has already been defined.  Take the following:</p>
+<pre class="brush:js;">
+// Define class A
+var A = declare(null, {
+    // A few properties...
+    propertyA: "Yes",
+    propertyB: 2
+});
+
+// Define class B
+var B = declare(A, {
+    // A few properties...
+    propertyA: "Maybe",
+    propertyB: 1,
+    propertyC: true
+});
+
+// Define class C
+var C = declare([mynamespace.A, mynamespace.B], {
+    // A few properties...
+    propertyA: "No",
+    propertyB: 99,
+    propertyD: false
+});
+</pre>
+
+<p>The result of the inherited class properties is:</p>
+<pre class="brush:js;">
+// Create an instance
+var instance = new C();
+
+// instance.propertyA = "No" // overridden by B, then by C
+// instance.propertyB = 99 // overridden by B, then by C
+// instance.propertyC = true // kept from B
+// instance.propertyD = false // created by C
+</pre>
+
+<p>It is important to have a clear understanding of prototypical inheritance. When a property is read from an object instance, the instance itself is first inspected to see if the property is defined on it. If not, the prototype chain is traversed and the value from the first object in the chain that has the property defined is returned. When a value is assigned to a property it is always on the object instance, never the prototype. The result of this is that all objects that share a common prototype will return the same value for a property defined on the prototype, unless the value has been set on the instance. This makes it easy to define default values for primitive data types (number, string, boolean) in your class declaration and update them on instance objects as needed. However, if you assign object values (Object, Array) to a property on the prototype, every instance will manipulate the same shared value. Consider the following:</p>
+<pre class="brush: js;">var MyClass = declare(null, {
+    primitiveVal: 5,
+    objectVal: [1, 2, 3]
+});
+
+var obj1 = new MyClass();
+var obj2 = new MyClass();
+
+// both return the same value from the prototype
+obj1.primitiveVal === 5; // true
+obj2.primitiveVal === 5; // true
+
+// obj2 gets its own property (prototype remains unchanged)
+obj2.primitiveVal = 10;
+
+// obj1 still gets its value from the prototype
+obj1.primitiveVal === 5; // true
+obj2.primitiveVal === 10; // true
+
+// both point to the array on the prototype,
+// neither instance has its own array at this point
+obj1.objectVal === obj2.objectVal; // true
+
+// obj2 manipulates the prototype's array
+obj2.objectVal.push(4);
+// obj2's manipulation is reflected in obj1 since the array
+// is shared by all instances from the prototype
+obj1.objectVal.length === 4; // true
+obj1.objectVal[3] === 4; // true
+
+// only assignment of the property itself (not manipulation of object
+// properties) creates an instance-specific property
+obj2.objectVal = [];
+obj1.objectVal === obj2.objectVal; // false
+</pre>
+
+<p>To avoid inadvertently sharing arrays or objects among all instances, object properties should be declared with null values and initialized in the constructor function:</p>
+<pre class="brush: js;">declare(null, {
+    // not strictly necessary, but good practice
+    // for readability to declare all properties
+    memberList: null,
+    roomMap: null,
+
+    constructor: function () {
+        // initializing these properties with values in the constructor
+        // ensures that they ready for use by other methods
+        // (and are not null or undefined)
+        this.memberList = [];
+        this.roomMap = {};
+    }
+});
+</pre>
+
+<p>Refer to the <a href="/reference-guide/1.10/dojo/_base/declare.html#arrays-and-objects-as-member-variables">dojo/_base/declare</a> documentation for additional information.</p>
+<h4 id="this-inherited">this.inherited</h4>
+<p>While completely overriding methods is certainly useful, sometimes the constructor of each class up through the inheritance chain should be executed to preserve its original functionality.  This is where the <code>this.inherited(arguments)</code> statement comes in handy.  The <code>this.inherited(arguments)</code> statement calls the parent class&#39; method of the same name.  Consider the following:</p>
+<pre class="brush:js;">
+// Define class A
+var A = declare(null, {
+    myMethod: function(){
+        console.log("Hello!");
+    }
+});
+
+// Define class B
+var B = declare(A, {
+    myMethod: function(){
+        // Call A's myMethod
+        this.inherited(arguments); // arguments provided to A's myMethod
+        console.log("World!");
+    }
+});
+
+// Create an instance of B
+var myB = new B();
+myB.myMethod();
+
+// Would output:
+//        Hello!
+//        World!
+</pre>
+
+<p>The <code>this.inherited</code> method can be called at any time within the child class&#39; code.  There will be some cases where you will want to call <code>inherited()</code> in the middle of the child function, or even at the end. That said, you should not call it from within the constructor.</p>
+<!-- tutorials end with a "Conclusion" block -->
+<h3 id="conclusion">Conclusion</h3>
+<p>The <code>declare</code> function is the key to creating modular, reusable classes with the Dojo Toolkit. <code>declare</code> allows for complex class recreation with multiple inheritance and any number of properties and methods.  Better yet is that <code>declare</code> is simple to learn and will allow developers to avoid repeating code.</p>
+<!-- resources -->
+<h3 id="dojo-_base-declare-resources">dojo/_base/declare Resources</h3>
+<p>Looking for more detail about <code>declare</code> and class creation?  Check out these great resources:</p>
+<ul>
+<li><a href="/reference-guide/1.10/dojo/_base/declare.html">dojo/declare</a></li>
+<li><a href="/reference-guide/1.10/dojo/_base/lang.html#dojo-base-lang-mixin">dojo/_base/lang::mixin</a></li>
+<li><a href="/reference-guide/1.10/quickstart/writingWidgets.html">Writing Your Own Widget</a></li>
+</ul>
+
+				</div>
+			</div>
+		</main>
+		<div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+	</body>
+</html>

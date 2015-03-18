@@ -1,0 +1,753 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.8/dojox/mvc/Bind.EditModelRefController" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.8/dojox/mvc/Bind.EditModelRefController.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/mvc/Bind.EditModelRefController<span style="font-size:11px;color:#999;"> (version 1.8)</span></h1>
+<div class="jsdoc-mixins">
+  <label>Extends</label><a href="/documentation/api/1.8/dojox/mvc/ModelRefController" class="jsdoc-link">dojox/mvc/ModelRefController</a>
+</div>
+<div class="jsdoc-full-summary"><p>A child class of <a class="jsdoc-link" href="/documentation/api/1.8/dojox/mvc/ModelRefController">dojox/mvc/ModelRefController</a>.
+Keeps a copy (originalModel) of given data model (sourceModel) so that it can manage the data model of before/after the edit.</p>
+</div>
+<div class="jsdoc-full-summary"><p>Has two modes:
+
+</p>
+<ul>
+<li>Directly reflect the edits to sourceModel (holdModelUntilCommit=false)</li>
+<li>Don&#39;t reflect the edits to sourceModel, until commit() is called (holdModelUntilCommit=true)</li>
+</ul>
+<p>For the 1st case, <a class="jsdoc-link" href="/documentation/api/1.8/dojo/Stateful">dojo/Stateful</a> get()/set()/watch() interfaces will work with sourceModel.
+For the 2nd case, <a class="jsdoc-link" href="/documentation/api/1.8/dojo/Stateful">dojo/Stateful</a> get()/set()/watch() interfaces will work with a copy of sourceModel, and sourceModel will be replaced with such copy when commit() is called.
+
+</p>
+<p>NOTE - If this class is used with a widget by data-dojo-mixins, make sure putting the widget in data-dojo-type and putting this class to data-dojo-mixins.</p>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><p>The check box refers to &quot;value&quot; property in the controller (with &quot;ctrl&quot; ID).
+The controller provides the &quot;value&quot; property on behalf of the model (&quot;model&quot; property in the controller, which comes from &quot;sourceModel&quot; property).
+Two seconds later, the check box changes from unchecked to checked, and the controller saves the state.
+Two seconds later then, the check box changes from checked to unchecked.
+Two seconds later then, the controller goes back to the last saved state, and the check box changes from unchecked to checked as the result.
+
+</p>
+<pre><code>&lt;html&gt;
+    &lt;head&gt;
+        &lt;script src=&quot;/path/to/dojo-toolkit/dojo/dojo.js&quot; type=&quot;text/javascript&quot; data-dojo-config=&quot;parseOnLoad: 0&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+            require([
+                &quot;dojo/dom&quot;, &quot;dojo/parser&quot;, &quot;dojo/Stateful&quot;, &quot;dijit/registry&quot;, &quot;dijit/form/CheckBox&quot;, &quot;dojox/mvc/EditModelRefController&quot;, &quot;dojo/domReady!&quot;
+            ], function(ddom, parser, Stateful, registry){
+                model = new Stateful({value: false});
+                setTimeout(function(){
+                    ddom.byId(&quot;check&quot;).click();
+                    registry.byId(&quot;ctrl&quot;).commit();
+                    setTimeout(function(){
+                        ddom.byId(&quot;check&quot;).click();
+                        setTimeout(function(){
+                            registry.byId(&quot;ctrl&quot;).reset();
+                        }, 2000);
+                    }, 2000);
+                }, 2000);
+                parser.parse();
+            });
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;script type=&quot;dojo/require&quot;&gt;at: &quot;dojox/mvc/at&quot;&lt;/script&gt;
+        &lt;span id=&quot;ctrl&quot; data-dojo-type=&quot;dojox/mvc/EditModelRefController&quot; data-dojo-props=&quot;sourceModel: model&quot;&gt;&lt;/span&gt;
+        &lt;input id=&quot;check&quot; type=&quot;checkbox&quot; data-dojo-type=&quot;dijit/form/CheckBox&quot; data-dojo-props=&quot;checked: at(&#39;widget:ctrl&#39;, &#39;value&#39;)&quot;&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 2</h3><p>The controller with &quot;ctrlSource&quot; ID specifies holding changes until commit() is called (by setting true to holdModelUntilCommit).
+As the change in the second check box is committed two seconds later from the change, the first check box is checked at then (when the change is committed).
+
+</p>
+<pre><code>&lt;html&gt;
+    &lt;head&gt;
+        &lt;script src=&quot;/path/to/dojo-toolkit/dojo/dojo.js&quot; type=&quot;text/javascript&quot; data-dojo-config=&quot;parseOnLoad: 0&quot;&gt;&lt;/script&gt;
+        &lt;script type=&quot;text/javascript&quot;&gt;
+            require([
+                &quot;dojo/dom&quot;, &quot;dojo/parser&quot;, &quot;dojo/Stateful&quot;, &quot;dijit/registry&quot;,
+                &quot;dijit/form/CheckBox&quot;, &quot;dojox/mvc/ModelRefController&quot;, &quot;dojox/mvc/EditModelRefController&quot;, &quot;dojo/domReady!&quot;
+            ], function(ddom, parser, Stateful, registry){
+                model = new Stateful({value: false});
+                setTimeout(function(){
+                    ddom.byId(&quot;checkEdit&quot;).click();
+                    setTimeout(function(){
+                        registry.byId(&quot;ctrlEdit&quot;).commit();
+                    }, 2000);
+                }, 2000);
+                parser.parse();
+            });
+        &lt;/script&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;script type=&quot;dojo/require&quot;&gt;at: &quot;dojox/mvc/at&quot;&lt;/script&gt;
+        &lt;span id=&quot;ctrlSource&quot; data-dojo-type=&quot;dojox/mvc/ModelRefController&quot; data-dojo-props=&quot;model: model&quot;&gt;&lt;/span&gt;
+        &lt;span id=&quot;ctrlEdit&quot; data-dojo-type=&quot;dojox/mvc/EditModelRefController&quot;
+         data-dojo-props=&quot;sourceModel: at(&#39;widget:ctrlSource&#39;, &#39;model&#39;), holdModelUntilCommit: true&quot;&gt;&lt;/span&gt;
+        Source:
+        &lt;input id=&quot;checkSource&quot; type=&quot;checkbox&quot; data-dojo-type=&quot;dijit/form/CheckBox&quot;
+         data-dojo-props=&quot;checked: at(&#39;widget:ctrlSource&#39;, &#39;value&#39;)&quot;&gt;
+        Edit:
+        &lt;input id=&quot;checkEdit&quot; type=&quot;checkbox&quot; data-dojo-type=&quot;dijit/form/CheckBox&quot;
+         data-dojo-props=&quot;checked: at(&#39;widget:ctrlEdit&#39;, &#39;value&#39;)&quot;&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="objectIcon private extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController__attrPairNames">_attrPairNames</a>
+        </li><span>Used across all instances a hash to cache attribute names and their getter 
+and setter names.<span title="private" class="jsdoc-private"></span><span title="Must manually require () dojo/Stateful to access" class="jsdoc-extension"></span></span>
+        <li class="stringIcon private extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController__refEditModelProp">_refEditModelProp</a>
+        </li><span>The property name for the data model, that is being edited.<span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="stringIcon private extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController__refInModelProp">_refInModelProp</a>
+        </li><span>The property name for the data model, used as the input.<span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="stringIcon private extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController__refModelProp">_refModelProp</a>
+        </li><span>The property name for the data model.<span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="stringIcon private extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController__refOriginalModelProp">_refOriginalModelProp</a>
+        </li><span>The property name for the data model, that serves as the original data.<span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="stringIcon private extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController__refSourceModelProp">_refSourceModelProp</a>
+        </li><span>The property name for the data model, that serves as the data source.<span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="stringIcon public extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController_data-mvc-bindings">data-mvc-bindings</a>
+        </li><span><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span></span>
+        <li class="stringIcon public extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController_dataBindAttr">dataBindAttr</a>
+        </li><span>The attribute name for data binding.<span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span></span>
+        <li class="objectIcon public extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController_getPlainValueOptions">getPlainValueOptions</a>
+        </li><span>The options to get plain value from stateful object.<span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="objectIcon public extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController_getStatefulOptions">getStatefulOptions</a>
+        </li><span>The options to get stateful object from plain value.<span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="booleanIcon public extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController_holdModelUntilCommit">holdModelUntilCommit</a>
+        </li><span>True not to send the change in model back to sourceModel until commit() is called.<span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="objectIcon public extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController_model">model</a>
+        </li><span>The data model.<span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="objectIcon public extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController_originalModel">originalModel</a>
+        </li><span>The data model, that serves as the original data.<span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="objectIcon public extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController_ownProps">ownProps</a>
+        </li><span>List of property names owned by this controller, instead of the data model.<span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span></span>
+        <li class="objectIcon public extension-module"><a href="1_8dojox_mvc_Bind_EditModelRefController_sourceModel">sourceModel</a>
+        </li><span><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span></span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__changeAttrValue">_changeAttrValue</a><span class="parameters"></span><span class="parameters">(name,value) </span><span>Internal helper for directly changing an attribute value.</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojo/Stateful to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__dbpostscript">_dbpostscript</a><span class="parameters"></span><span class="parameters">(params,srcNodeRef) </span><span>See if any parameters for this widget are dojox/mvc/at handles.</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__get">_get</a><span class="parameters"></span><span class="parameters">(name,names) </span><span>Private function that does a get based off a hash of names</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojo/Stateful to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__getAttrNames">_getAttrNames</a><span class="parameters"></span><span class="parameters">(name) </span><span>Helper function for get() and set().</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojo/Stateful to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__getExcludesAttr">_getExcludesAttr</a><span class="parameters"></span><span class="parameters">() </span><span>Returns list of all properties that data binding is established with.</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__getPropertiesAttr">_getPropertiesAttr</a><span class="parameters"></span><span class="parameters">() </span><span>Returns list of all properties in this widget, except &quot;id&quot;.</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__set">_set</a><span class="parameters"></span><span class="parameters">(name,value) </span><span>Set the value to the data model or to this object.</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__setAtWatchHandle">_setAtWatchHandle</a><span class="parameters"></span><span class="parameters">(name,value) </span><span>Called if the value is a dojox/mvc/at handle.</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__setBind">_setBind</a><span class="parameters"></span><span class="parameters">(value) </span><span>Sets data binding described in data-mvc-bindings.</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__startAtWatchHandles">_startAtWatchHandles</a><span class="parameters"></span><span class="parameters">() </span><span>Establish data bindings based on dojox/mvc/at handles.</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController__stopAtWatchHandles">_stopAtWatchHandles</a><span class="parameters"></span><span class="parameters">() </span><span>Stops data binding synchronization handles as widget is destroyed.</span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon  extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController_cloneModel">cloneModel</a><span class="parameters"></span><span class="parameters">(value) </span><span>Create a clone object of the data source.</span><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon  extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController_commit">commit</a><span class="parameters"></span><span class="parameters">() </span><span>Send the change back to the data source.</span><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon  extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController_destroy">destroy</a><span class="parameters"></span><span class="parameters">() </span><span>Stops data binding as this object is destroyed.</span><span title="Must manually require () dojox/mvc/_Controller to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon  extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController_get">get</a><span class="parameters"></span><span class="parameters">(name) </span><span>If getter function is there, use it.</span><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon  extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController_hasControllerProperty">hasControllerProperty</a><span class="parameters"></span><span class="parameters">(name) </span><span>Returns true if this controller itself owns the given property.</span><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon  extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController_postscript">postscript</a><span class="parameters"></span><span class="parameters">(params,srcNodeRef) </span><span>Sets certain properties before setting models.</span><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon  extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController_reset">reset</a><span class="parameters"></span><span class="parameters">() </span><span>Change the model back to its original state.</span><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon  extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController_set">set</a><span class="parameters"></span><span class="parameters">(name,value) </span><span>Set a property to this.</span><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon  extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController_startup">startup</a><span class="parameters"></span><span class="parameters">() </span><span>Starts up data binding as this object starts up.</span><span title="Must manually require () dojox/mvc/_Controller to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon  extension-module"><a href="#1_8dojox_mvc_Bind_EditModelRefController_watch">watch</a><span class="parameters"></span><span class="parameters">(name,callback) </span><span>Watch a property in the data model or in this object.</span><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__attrPairNames"></a><span class="objectIcon">_attrPairNames</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojo/Stateful" class="jsdoc-link">dojo/Stateful</a><span title="Must manually require () dojo/Stateful to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Used across all instances a hash to cache attribute names and their getter 
+and setter names.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__refEditModelProp"></a><span class="stringIcon">_refEditModelProp</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The property name for the data model, that is being edited.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__refInModelProp"></a><span class="stringIcon">_refInModelProp</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/ModelRefController" class="jsdoc-link">dojox/mvc/ModelRefController</a><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The property name for the data model, used as the input.
+Used when this controller needs data model (as input) that is different from the data model this controller provides.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__refModelProp"></a><span class="stringIcon">_refModelProp</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/ModelRefController" class="jsdoc-link">dojox/mvc/ModelRefController</a><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The property name for the data model.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__refOriginalModelProp"></a><span class="stringIcon">_refOriginalModelProp</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The property name for the data model, that serves as the original data.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__refSourceModelProp"></a><span class="stringIcon">_refSourceModelProp</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The property name for the data model, that serves as the data source.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_data-mvc-bindings"></a><span class="stringIcon">data-mvc-bindings</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_atBindingMixin" class="jsdoc-link">dojox/mvc/_atBindingMixin</a><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </div>
+      </div>
+      <div class="jsdoc-field public extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_dataBindAttr"></a><span class="stringIcon">dataBindAttr</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_atBindingMixin" class="jsdoc-link">dojox/mvc/_atBindingMixin</a><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The attribute name for data binding.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_getPlainValueOptions"></a><span class="objectIcon">getPlainValueOptions</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The options to get plain value from stateful object.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_getStatefulOptions"></a><span class="objectIcon">getStatefulOptions</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The options to get stateful object from plain value.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_holdModelUntilCommit"></a><span class="booleanIcon">holdModelUntilCommit</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>True not to send the change in model back to sourceModel until commit() is called.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_model"></a><span class="objectIcon">model</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/ModelRefController" class="jsdoc-link">dojox/mvc/ModelRefController</a><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The data model.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_originalModel"></a><span class="objectIcon">originalModel</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The data model, that serves as the original data.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_ownProps"></a><span class="objectIcon">ownProps</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/ModelRefController" class="jsdoc-link">dojox/mvc/ModelRefController</a><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-summary"><p>List of property names owned by this controller, instead of the data model.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_sourceModel"></a><span class="objectIcon">sourceModel</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__changeAttrValue"></a><span class="functionIcon">_changeAttrValue</span><span class="parameters">(name,value)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/Stateful" class="jsdoc-link">dojo/Stateful</a><span title="Must manually require () dojo/Stateful to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal helper for directly changing an attribute value.
+</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Directly change the value of an attribute on an object, bypassing any 
+accessor setter.  Also handles the calling of watch and emitting events. 
+It is designed to be used by descendent class when there are two values 
+of attributes that are linked, but calling .set() is not appropriate.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The property to set.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">Mixed</td>
+            <td class="jsdoc-param-description"><p>The value to set in the property.
+</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">function</span></div>
+        <div class="jsdoc-return-description"><p>Internal helper for directly changing an attribute value.
+</p>
+</div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__dbpostscript"></a><span class="functionIcon">_dbpostscript</span><span class="parameters">(params,srcNodeRef)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_atBindingMixin" class="jsdoc-link">dojox/mvc/_atBindingMixin</a><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>See if any parameters for this widget are dojox/mvc/at handles.
+If so, move them under this._refs to prevent widget implementations from referring them.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">params</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">srcNodeRef</td>
+            <td class="jsdoc-param-type">DomNode | String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__get"></a><span class="functionIcon">_get</span><span class="parameters">(name,names)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/Stateful" class="jsdoc-link">dojo/Stateful</a><span title="Must manually require () dojo/Stateful to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Private function that does a get based off a hash of names</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">names</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>Hash of names of custom attributes</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__getAttrNames"></a><span class="functionIcon">_getAttrNames</span><span class="parameters">(name)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/Stateful" class="jsdoc-link">dojo/Stateful</a><span title="Must manually require () dojo/Stateful to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Helper function for get() and set().
+Caches attribute name values so we don&#39;t do the string ops every time.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined | object</span></div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__getExcludesAttr"></a><span class="functionIcon">_getExcludesAttr</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_atBindingMixin" class="jsdoc-link">dojox/mvc/_atBindingMixin</a><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns list of all properties that data binding is established with.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined | Array</span></div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__getPropertiesAttr"></a><span class="functionIcon">_getPropertiesAttr</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_atBindingMixin" class="jsdoc-link">dojox/mvc/_atBindingMixin</a><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns list of all properties in this widget, except &quot;id&quot;.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">String[] | undefined</span></div>
+        <div class="jsdoc-return-description"><p>The list of all properties in this widget, except &quot;id&quot;..</p>
+</div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__set"></a><span class="functionIcon">_set</span><span class="parameters">(name,value)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/ModelRefController" class="jsdoc-link">dojox/mvc/ModelRefController</a><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Set the value to the data model or to this object.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The property name.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">Anything</td>
+            <td class="jsdoc-param-description"><p>The property value.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">function | undefined</span></div>
+        <div class="jsdoc-return-description"><p>Set the value to the data model or to this object.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__setAtWatchHandle"></a><span class="functionIcon">_setAtWatchHandle</span><span class="parameters">(name,value)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_atBindingMixin" class="jsdoc-link">dojox/mvc/_atBindingMixin</a><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Called if the value is a dojox/mvc/at handle.
+If this widget has started, start data binding with the new dojox/mvc/at handle.
+Otherwise, queue it up to this._refs so that _dbstartup() can pick it up.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">Anything</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__setBind"></a><span class="functionIcon">_setBind</span><span class="parameters">(value)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_atBindingMixin" class="jsdoc-link">dojox/mvc/_atBindingMixin</a><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Sets data binding described in data-mvc-bindings.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__startAtWatchHandles"></a><span class="functionIcon">_startAtWatchHandles</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_atBindingMixin" class="jsdoc-link">dojox/mvc/_atBindingMixin</a><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Establish data bindings based on dojox/mvc/at handles.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController__stopAtWatchHandles"></a><span class="functionIcon">_stopAtWatchHandles</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_atBindingMixin" class="jsdoc-link">dojox/mvc/_atBindingMixin</a><span title="Must manually require () dojox/mvc/_atBindingMixin to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Stops data binding synchronization handles as widget is destroyed.</p>
+</div>
+      </div>
+      <div class="jsdoc-field extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_cloneModel"></a><span class="functionIcon">cloneModel</span><span class="parameters">(value)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Create a clone object of the data source.
+Child classes of this controller can override it to achieve its specific needs.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">Anything</td>
+            <td class="jsdoc-param-description"><p>The data serving as the data source.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_commit"></a><span class="functionIcon">commit</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Send the change back to the data source.</p>
+</div>
+      </div>
+      <div class="jsdoc-field extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_destroy"></a><span class="functionIcon">destroy</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_Controller" class="jsdoc-link">dojox/mvc/_Controller</a><span title="Must manually require () dojox/mvc/_Controller to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Stops data binding as this object is destroyed.</p>
+</div>
+      </div>
+      <div class="jsdoc-field extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_get"></a><span class="functionIcon">get</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/ModelRefController" class="jsdoc-link">dojox/mvc/ModelRefController</a><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>If getter function is there, use it. Otherwise, get the data from data model of this object.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The property name.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_hasControllerProperty"></a><span class="functionIcon">hasControllerProperty</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns true if this controller itself owns the given property.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The property name.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_postscript"></a><span class="functionIcon">postscript</span><span class="parameters">(params,srcNodeRef)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Sets certain properties before setting models.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">params</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">srcNodeRef</td>
+            <td class="jsdoc-param-type">DomNode | String</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_reset"></a><span class="functionIcon">reset</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Change the model back to its original state.</p>
+</div>
+      </div>
+      <div class="jsdoc-field extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_set"></a><span class="functionIcon">set</span><span class="parameters">(name,value)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/EditModelRefController" class="jsdoc-link">dojox/mvc/EditModelRefController</a><span title="Must manually require () dojox/mvc/EditModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Set a property to this.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The property to set.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">Anything</td>
+            <td class="jsdoc-param-description"><p>The value to set in the property.</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_startup"></a><span class="functionIcon">startup</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/_Controller" class="jsdoc-link">dojox/mvc/_Controller</a><span title="Must manually require () dojox/mvc/_Controller to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Starts up data binding as this object starts up.</p>
+</div>
+      </div>
+      <div class="jsdoc-field extension-module">
+        <div class="jsdoc-title"><a name="1_8dojox_mvc_Bind_EditModelRefController_watch"></a><span class="functionIcon">watch</span><span class="parameters">(name,callback)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/mvc/ModelRefController" class="jsdoc-link">dojox/mvc/ModelRefController</a><span title="Must manually require () dojox/mvc/ModelRefController to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Watch a property in the data model or in this object.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>The property name.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">callback</td>
+            <td class="jsdoc-param-type">Function</td>
+            <td class="jsdoc-param-description"><p>The callback function.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined | object</span></div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.8/dojox/mvc/Bind.EditModelRefController" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

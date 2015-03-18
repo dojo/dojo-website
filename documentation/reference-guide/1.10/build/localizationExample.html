@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Localized Build Example &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Localized Build Example</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#starting-point-a-simple-test-dijit-and-build-profile">Starting Point - A Simple Test Dijit And Build Profile</a></li>
+<li><a class="reference internal" href="#adding-a-strings-bundle">Adding A Strings Bundle</a></li>
+<li><a class="reference internal" href="#optimizing-performance-using-the-built-layer">Optimizing Performance - Using the Built Layer</a></li>
+<li><a class="reference internal" href="#the-build-bakes-available-locales-into-your-code">The Build Bakes Available Locales Into Your Code</a></li>
+<li><a class="reference internal" href="#providing-other-languages">Providing Other Languages</a></li>
+<li><a class="reference internal" href="#trees-of-locales">Trees of Locales</a></li>
+<li><a class="reference internal" href="#multiple-custom-dijits">Multiple Custom Dijits</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="localized-build-example">
+<span id="build-localizationexample"></span><h1><a class="toc-backref" href="#id1">Localized Build Example</a><a class="headerlink" href="#localized-build-example" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Nick Fenwick</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">as long as I can remember</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#localized-build-example" id="id1">Localized Build Example</a><ul>
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a></li>
+<li><a class="reference internal" href="#starting-point-a-simple-test-dijit-and-build-profile" id="id3">Starting Point - A Simple Test Dijit And Build Profile</a></li>
+<li><a class="reference internal" href="#adding-a-strings-bundle" id="id4">Adding A Strings Bundle</a></li>
+<li><a class="reference internal" href="#optimizing-performance-using-the-built-layer" id="id5">Optimizing Performance - Using the Built Layer</a></li>
+<li><a class="reference internal" href="#the-build-bakes-available-locales-into-your-code" id="id6">The Build Bakes Available Locales Into Your Code</a></li>
+<li><a class="reference internal" href="#providing-other-languages" id="id7">Providing Other Languages</a></li>
+<li><a class="reference internal" href="#trees-of-locales" id="id8">Trees of Locales</a></li>
+<li><a class="reference internal" href="#multiple-custom-dijits" id="id9">Multiple Custom Dijits</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This page attempts to describe how to include localized strings bundles in your custom build.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The dojo build system results in &#8220;layers&#8221;, which are single large .js files that contain a concatenation (plus some magic sugar) of individual .js files from the SDK.  Localization bundles are not, by default, included in these layer .js files.  They exist in their own parallel set of .js files, and are built into their own concatenated .js file.  So, a &#8220;layer&#8221; can actually be thought of two files, a main .js file containing the JavaScript implementation (and interned template strings), and a set of strings bundle .js files.</p>
+<p>This document is more to do with how to arrange your source files so that the build system can work its magic.  We do not directly employ any build system switches or capabilities via <code class="docutils literal"><span class="pre">build.sh</span></code> or the profile .js file.</p>
+<p>There are several pages of existing documentation that describe the background and theory to the localization process:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="../quickstart/internationalization/index.html#quickstart-internationalization-index"><span>Internationalization Quickstart</span></a></li>
+<li><a class="reference internal" href="../dojo/i18n.html#dojo-i18n"><span>getLocalization</span></a></li>
+<li><a class="reference internal" href="../dojo/requireLocalization.html#dojo-requirelocalization"><span>requireLocalization</span></a></li>
+</ul>
+</div></blockquote>
+<p>Here we provide a practical walkthrough of applying localization to actual dijits and an actual build profile.</p>
+</div>
+<div class="section" id="starting-point-a-simple-test-dijit-and-build-profile">
+<h2><a class="toc-backref" href="#id3">Starting Point - A Simple Test Dijit And Build Profile</a><a class="headerlink" href="#starting-point-a-simple-test-dijit-and-build-profile" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s say we have a test dijit called <code class="docutils literal"><span class="pre">testdijits.Foo</span></code>.  It is defined in <code class="docutils literal"><span class="pre">testdijits/Foo.js</span></code>.  An example directory structure might be:</p>
+<div class="highlight-text"><div class="highlight"><pre>dojo/..dojo SDK here..
+dojo/dojo/dojo.js ..for example..
+testdijits/Foo.js .. the test dijit implementation
+</pre></div>
+</div>
+<p>We keep the 'testdijits' folder outside the main dojo SDK directory to keep it distinct from the version of dojo we're using.</p>
+<p>A custom build profile might look like this:</p>
+<div class="highlight-text"><div class="highlight"><pre>dependencies = {
+    layers: [
+        {
+            name: &quot;testdijits.js&quot;,
+            resourceName: &quot;testdijits&quot;, /* This is what is dojo.provide()&#39;d by the layer */
+            dependencies: [
+                &quot;testdijits.Foo&quot;
+            ]
+        }
+    ],
+
+    prefixes: [
+        [ &quot;dijit&quot;, &quot;../dijit&quot; ],
+        [ &quot;dojox&quot;, &quot;../dojox&quot; ],
+        [ &quot;testdijits&quot;, &quot;../../testdijits&quot;]
+    ]
+};
+</pre></div>
+</div>
+<p>Remember that the build process first copies all directories mentioned in <code class="docutils literal"><span class="pre">prefixes</span></code> to the build output directory, and then resolves all relative paths relative to that subtree; it does not resolve paths relative to your original source directories.  The build will find Foo.js by looking up its namespace &quot;testdijits&quot; in the prefixes section, and resolve the &quot;../../testdijits&quot; path relative to the directory containing dojo.js.  Run the build with a command like:</p>
+<p>build.sh releaseName=test profile=test action=clean,release</p>
+<p>The built layer will be in <code class="docutils literal"><span class="pre">../../release/test/dojo/testdijits.js</span></code>.</p>
+<p>The build will also produce a localized strings bundle for the &quot;testdijits.js&quot; layer.  In the build directory, look in ../../release/test/dojo/nls.  You should see a file for each locale, e.g. testdijits_ar.js, testdijits_ca.js, etc.  Each will be nearly empty, with a simple provide call e.g. <code class="docutils literal"><span class="pre">dojo.provide(&quot;dojo.nls.testdijits_ar&quot;);</span></code>.  This indicates that the build process has created localised strings bundles for your layer, but there were no actual strings provided to put in those bundles.</p>
+<p>A 'real world' build will contain many dijits (testdijits.Foo, testdijits.Bar, testdijits.App etc.), each with their own strings bundle.  Our aim is to make those individual strings bundles build to a single file for efficient download to the client at runtime, rather than a single network request per file.</p>
+</div>
+<div class="section" id="adding-a-strings-bundle">
+<h2><a class="toc-backref" href="#id4">Adding A Strings Bundle</a><a class="headerlink" href="#adding-a-strings-bundle" title="Permalink to this headline">¶</a></h2>
+<p>So far, no localization.  Let's add a string resource.  Our Foo.js implementation should try to load and use a strings bundle</p>
+<div class="highlight"><pre>dojo.provide(&quot;testdijits.Foo&quot;);
+dojo.require(&quot;dijit._Widget&quot;);
+dojo.require(&quot;dijit._Templated&quot;);
+
+dojo.declare(&quot;testdijits.Foo&quot;, [ dijit._Widget, dijit._Templated ], {
+
+    // Our template contains a localised string from the messages bundle
+    templateString: &quot;<span class="nt">&lt;div&gt;&lt;p&gt;</span>The string: ${messages.test}<span class="nt">&lt;/div&gt;</span>&quot;,
+
+    // On creation, pull in the correct strings bundle
+    postMixInProperties: function(){
+        this.inherited(arguments);
+        console.log(&quot;Foo calling requireLocalization..&quot;);
+        dojo.requireLocalization(&quot;testdijits&quot;, &quot;Foo&quot;);
+        console.log(&quot;Foo calling getLocalization for lang &quot;, this.lang);
+        this.messages = dojo.i18n.getLocalization(&quot;testdijits&quot;, &quot;Foo&quot;, this.lang);
+        console.log(&quot;TEST LOCALIZATION: &quot;, this.messages);
+    }
+})
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">dojo.provide(&quot;testdijits.Foo&quot;);
+dojo.require(&quot;dijit._Widget&quot;);
+dojo.require(&quot;dijit._Templated&quot;);
+
+dojo.declare(&quot;testdijits.Foo&quot;, [ dijit._Widget, dijit._Templated ], {
+
+    // Our template contains a localised string from the messages bundle
+    templateString: &quot;&lt;div&gt;&lt;p&gt;The string: ${messages.test}&lt;/div&gt;&quot;,
+
+    // On creation, pull in the correct strings bundle
+    postMixInProperties: function(){
+        this.inherited(arguments);
+        console.log(&quot;Foo calling requireLocalization..&quot;);
+        dojo.requireLocalization(&quot;testdijits&quot;, &quot;Foo&quot;);
+        console.log(&quot;Foo calling getLocalization for lang &quot;, this.lang);
+        this.messages = dojo.i18n.getLocalization(&quot;testdijits&quot;, &quot;Foo&quot;, this.lang);
+        console.log(&quot;TEST LOCALIZATION: &quot;, this.messages);
+    }
+})</textarea></div><p>So the template contains a template variable usage, ${messages.test}.  Before the template is processed, the widget lifecycle dictates that <code class="docutils literal"><span class="pre">postMixInProperties</span></code> is called, which our implementation uses to prepare and make available a <code class="docutils literal"><span class="pre">this.messages</span></code> variable.  This is simply a variable on our dijit instance.  When the template is then processed in <code class="docutils literal"><span class="pre">buildRendering</span></code> later in the lifecycle, the ${messages.test} reference is resolved from <code class="docutils literal"><span class="pre">this.messages.test</span></code>.</p>
+<p>We must add a strings bundle in a <a class="reference external" href="http://en.wikipedia.org/wiki/Magic_%28programming%29">magic</a> directory called <code class="docutils literal"><span class="pre">nls</span></code>, like so:</p>
+<div class="highlight-text"><div class="highlight"><pre>testdijits/Foo.js     - The original Foo.js implementation
+testdijits/nls/Foo.js - The new root strings bundle
+</pre></div>
+</div>
+<p>That is the <code class="docutils literal"><span class="pre">root</span></code> strings bundle, for when no locale has been specified, or the requested locale is not available.  If we just provide that file, then every locale (fr, zh and so on) will contain that strings bundle.</p>
+<dl class="docutils">
+<dt>Note:</dt>
+<dd><ul class="first last simple">
+<li>we have not specified the strings bundle in the build profile</li>
+<li>the requireLocalization call is picked up by the build process automatically, and used to load the nls/Foo.js file for minification.  If you change the line to e.g. <code class="docutils literal"><span class="pre">dojo.requireLocalization(&quot;testdijitsxxx&quot;,</span> <span class="pre">&quot;Foo&quot;)</span></code> you'll notice that the Foo.js strings bundle is no longer inlined as described here.</li>
+</ul>
+</dd>
+</dl>
+<p>The <code class="docutils literal"><span class="pre">testdijits/nls/Foo.js</span></code> file should contain:</p>
+<div class="highlight-text"><div class="highlight"><pre>define({ root:
+// begin v1.x content
+({
+    test: &#39;this is a test&#39;
+})
+// end v1.x content
+})
+</pre></div>
+</div>
+<p>Now run the build again.  You will find that the 'this is a test' string gets included in _every_ layer nls file test/dojo/nls/testdijits* .. testdijits_ar.js, testdijits_en.js, and so on.  The files that previously had a single dojo.provide call now look like:</p>
+<div class="highlight-text"><div class="highlight"><pre>[neek nlstest (develop)]$ cat test/dojo/nls/testdijits_ar.js
+dojo.provide(&quot;dojo.nls.testdijits_ar&quot;);dojo.provide(&quot;testdijits.nls.Foo&quot;);testdijits.nls.Foo._built=true;dojo.provide(&quot;testdijits.nls.Foo.ar&quot;);testdijits.nls.Foo.ar={&quot;test&quot;:&quot;this is a test&quot;};
+</pre></div>
+</div>
+<p>This bundle will now be loaded by the requireLocalization call above, and provided to our code by the getLocalization call, and used by the dijit in the template by means of the template parameter ${messages.test}.</p>
+<p>To use this dijit, use a simple test file such as <code class="docutils literal"><span class="pre">test.html</span></code>:</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;&lt;head&gt;&lt;title&gt;</span>Localized build test<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+    <span class="kd">var</span> <span class="nx">djConfig</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">parseOnLoad</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">};</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;test/dojo/dojo.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+    <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;testdijits.Foo&quot;</span><span class="p">);</span>
+<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;p&gt;</span>Here is the dijit:<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;testdijits.Foo&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;&lt;/html&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;!DOCTYPE html&gt;
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Localized build test&lt;/title&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    var djConfig = {
+        parseOnLoad: true
+    };
+&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;test/dojo/dojo.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    dojo.require(&quot;testdijits.Foo&quot;);
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;p&gt;Here is the dijit:&lt;/p&gt;
+&lt;div data-dojo-type=&quot;testdijits.Foo&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;</textarea></div><p><code class="docutils literal"><span class="pre">test/dojo/dojo.js</span></code> should refer to the <code class="docutils literal"><span class="pre">test</span></code> build output by the custom build run above.  It will have been built to the <code class="docutils literal"><span class="pre">release</span></code> dir in your dojo SDK by default.  Loading that web page in a browser should result in a page that shows:</p>
+<div class="highlight-text"><div class="highlight"><pre>Here is the dijit:
+
+The string: this is a test
+</pre></div>
+</div>
+<p>An important distinction to make here is that the original source of yours (slightly modified) is in the output build, <em>as well as</em> the compiled layer and nls resources.  This can be confusing for a beginner.  Focusing on the output build tree, in the <code class="docutils literal"><span class="pre">test</span></code> directory (because we specified <code class="docutils literal"><span class="pre">releaseName=test</span></code> on the build.sh command line):</p>
+<div class="highlight-text"><div class="highlight"><pre>testdijits/Foo.js        - The source testdijits/Foo.js implementation (slightly modified, see later)
+testdijits/nls/Foo.js    - The source strings bundle
+dojo/testdijits.js       - The compiled layer containing testdijits/Foo.js
+dojo/nls/testdijits_*.js - Many nls resources, one per supported locale, containing testdijits/nls/Foo.js
+</pre></div>
+</div>
+<p>When you come to actually use your compiled layer, you'll be using the files from <code class="docutils literal"><span class="pre">dojo/testdijits.js</span></code> and <code class="docutils literal"><span class="pre">dojo/nls/testdijits_*.js</span></code>, _not_ the copy of your original code, in <code class="docutils literal"><span class="pre">testdijits/*</span></code>.</p>
+</div>
+<div class="section" id="optimizing-performance-using-the-built-layer">
+<h2><a class="toc-backref" href="#id5">Optimizing Performance - Using the Built Layer</a><a class="headerlink" href="#optimizing-performance-using-the-built-layer" title="Permalink to this headline">¶</a></h2>
+<p>In the test.html file above, we only linked to the dojo.js file.  Thus, the dojo.require(&quot;testdijits.Foo&quot;) had to fetch all dijit files over the network.  We aren't actually using our built layer at all.  The Net panel in the debugger shows many individual requests:</p>
+<div class="highlight-text"><div class="highlight"><pre>test.html
+dojo.js
+Foo.js
+_Widget.js
+_WidgetBase.js
+manager.js
+Stateful.js
+_base.js
+focus.js
+window.js
+place.js
+AdapterRegistry.js
+popup.js
+window.js
+scroll.js
+sniff.js
+uacss.js
+typematic.js
+wai.js
+_Templated.js
+string.js
+parser.js
+stamp.js
+cache.js
+i18n.js
+Foo.js
+</pre></div>
+</div>
+<p>The first Foo.js is <code class="docutils literal"><span class="pre">test/testdijits/Foo.js</span></code> and the second is <code class="docutils literal"><span class="pre">test/testdijits/nls/Foo.js</span></code>.  Note that I haven't had to manually load that second Foo.js file .. it has been loaded automatically by the <code class="docutils literal"><span class="pre">dojo.getLocalization</span></code> call.</p>
+<p>If you add <code class="docutils literal"><span class="pre">locale:</span> <span class="pre">'fr'</span></code> to the djConfig at this point, you'll see no different in the network requests, it still fetches the <code class="docutils literal"><span class="pre">test/testdijits/nls/Foo.js</span></code> file.  Why didn't it even bother looking for a 'fr' nls file?  I'll answer this in the next section.</p>
+<p>To use your built layer, link to it after the link to dojo.js:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;test/dojo/dojo.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;test/dojo/testdijits.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+    <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;testdijits.Foo&quot;</span><span class="p">);</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script type=&quot;text/javascript&quot; src=&quot;test/dojo/dojo.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;test/dojo/testdijits.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    dojo.require(&quot;testdijits.Foo&quot;);
+&lt;/script&gt;</textarea></div><p>Suddenly, the load performance is very different.  The Net panel now shows:</p>
+<div class="highlight-text"><div class="highlight"><pre>test.html
+dojo.js
+test/dojo/testdijits.js
+test/dojo/nls/testdijits_en-us.js
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Important points to note here:</dt>
+<dd><ul class="first last simple">
+<li><code class="docutils literal"><span class="pre">test/dojo/testdijits.js</span></code> contains the JavaScript implementation and inlined templates of all dijits mentioned in the profile .js file for that layer.</li>
+<li><code class="docutils literal"><span class="pre">test/dojo/nls/testdijits_en-us.js</span></code> contains the strings bundles for all those dijits.</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="the-build-bakes-available-locales-into-your-code">
+<h2><a class="toc-backref" href="#id6">The Build Bakes Available Locales Into Your Code</a><a class="headerlink" href="#the-build-bakes-available-locales-into-your-code" title="Permalink to this headline">¶</a></h2>
+<p>Going back to before we linked to the built layer <code class="docutils literal"><span class="pre">test/dojo/testdijits.js</span></code>, when we added <code class="docutils literal"><span class="pre">djConfig:</span> <span class="pre">{</span> <span class="pre">locale:</span> <span class="pre">'fr'</span> <span class="pre">}</span></code>, why did the build not even look for a <code class="docutils literal"><span class="pre">fr</span></code> nls file?  The answer lies in what the build system does to your Foo.js implementation.  Just when you thought you'd put the following in your source testdijits/Foo.js file:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">requireLocalization</span><span class="p">(</span><span class="s2">&quot;testdijits&quot;</span><span class="p">,</span> <span class="s2">&quot;Foo&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.requireLocalization(&quot;testdijits&quot;, &quot;Foo&quot;);</textarea></div><p>You'll see different code in the build output directory, test/testdijits/Foo.js:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">requireLocalization</span><span class="p">(</span><span class="s2">&quot;testdijits&quot;</span><span class="p">,</span> <span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;ROOT&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.requireLocalization(&quot;testdijits&quot;, &quot;Foo&quot;, null, &quot;ROOT&quot;);</textarea></div><p>The extra <code class="docutils literal"><span class="pre">null,</span> <span class="pre">&quot;ROOT&quot;</span></code> information tells the loader at runtime what string bundles are actually available.</p>
+<p>When you simply include a <code class="docutils literal"><span class="pre">fr</span></code> localized strings bundle in your source directory tree, by creating:</p>
+<div class="highlight-text"><div class="highlight"><pre>testdijits/nls/fr/Foo.js
+</pre></div>
+</div>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">requireLocalization</span><span class="p">(</span><span class="s2">&quot;testdijits&quot;</span><span class="p">,</span> <span class="s2">&quot;Foo&quot;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;ROOT,fr&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.requireLocalization(&quot;testdijits&quot;, &quot;Foo&quot;, null, &quot;ROOT,fr&quot;);</textarea></div><p>You don't need to change any code for this to happen.  If fact it you create a directory called <code class="docutils literal"><span class="pre">pumpkins</span></code>, the requireLocalization call will then tell dojo that there is a <code class="docutils literal"><span class="pre">pumpkins</span></code> locale available.  This is how the loader knows to directly fetch <code class="docutils literal"><span class="pre">test/testdijits/nls/fr/Foo.js</span></code> when you specify a locale of <code class="docutils literal"><span class="pre">fr</span></code>, and the base resource <code class="docutils literal"><span class="pre">test/testdijits/nls/Foo.js</span></code> when any other locale is requested.</p>
+</div>
+<div class="section" id="providing-other-languages">
+<h2><a class="toc-backref" href="#id7">Providing Other Languages</a><a class="headerlink" href="#providing-other-languages" title="Permalink to this headline">¶</a></h2>
+<p>From here it's simple to add another strings resource, along with the single <code class="docutils literal"><span class="pre">testdijits/nls/Foo.js</span></code> file from before.</p>
+<div class="highlight-text"><div class="highlight"><pre>dojo/..dojo SDK here..
+dojo/dojo/dojo.js ..for example..
+testdijits/Foo.js .. the test dijit implementation
+testdijits/nls/Foo.js
+testdijits/nls/fr/Foo.js
+</pre></div>
+</div>
+<p><code class="docutils literal"><span class="pre">fr/Foo.js</span></code> might contain:</p>
+<div class="highlight-text"><div class="highlight"><pre>define({ root:
+// begin v1.x content
+({
+    test: &#39;FRENCH this is a test FRENCH&#39;
+})
+// end v1.x content
+})
+</pre></div>
+</div>
+<p>The custom build would then contain the same files as before, but the <code class="docutils literal"><span class="pre">fr</span></code> file contains the localized string:</p>
+<div class="highlight-text"><div class="highlight"><pre>test/dojo/nls/testdijits_en.js - The default &quot;this is a test&quot;
+test/dojo/nls/testdijits_fr.js - Contains &quot;FRENCH this is a test FRENCH&quot;
+</pre></div>
+</div>
+<p>Specifying <code class="docutils literal"><span class="pre">locale:</span> <span class="pre">'fr'</span></code> in test.html results in the following network activity:</p>
+<div class="highlight-text"><div class="highlight"><pre>test.html
+dojo.js
+test/dojo/testdijits.js
+test/dojo/nls/testdijits_fr.js
+</pre></div>
+</div>
+<p>So, the only string resources that are transmitted over the network are those for the <code class="docutils literal"><span class="pre">fr</span></code> locale for all the dijits baked into the <code class="docutils literal"><span class="pre">testdijits</span></code> layer.  And of course, the page shows:</p>
+<div class="highlight-text"><div class="highlight"><pre>Here is the dijit:
+
+The string: FRENCH this is a test FRENCH
+</pre></div>
+</div>
+<p>If you visit the page with no <code class="docutils literal"><span class="pre">locale</span></code> specified in the djConfig, and a browser which is sending a suitable <code class="docutils literal"><span class="pre">Accept-Language</span></code> header, for example:</p>
+<div class="highlight-text"><div class="highlight"><pre>Accept-Language fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3
+</pre></div>
+</div>
+<p>then dojo will automatically serve the page with the <code class="docutils literal"><span class="pre">fr</span></code> string resources, and the dijits will automatically appear correctly to the user.</p>
+</div>
+<div class="section" id="trees-of-locales">
+<h2><a class="toc-backref" href="#id8">Trees of Locales</a><a class="headerlink" href="#trees-of-locales" title="Permalink to this headline">¶</a></h2>
+<p>Locales can be thought of as a tree, starting at the generic <code class="docutils literal"><span class="pre">root</span></code> locale and descending into more specific sub-locales.  The <a class="reference internal" href="../dojo/requireLocalization.html#dojo-requirelocalization"><span>requireLocalization</span></a> page mentions that the bundles for each locale are merged to provide a single JavaScript object.  An example would be useful at this point.</p>
+<p>If we provide the following:</p>
+<div class="highlight-text"><div class="highlight"><pre>testdijits/nls/Foo.js
+testdijits/nls/fr/Foo.js
+testdijits/nls/fr-fr/Foo.js
+</pre></div>
+</div>
+<p>And they contain the following (just the strings are provided here, the full file is the syntax shown above):</p>
+<div class="highlight-text"><div class="highlight"><pre>testdijits/nls/Foo.js
+      test: &#39;this is a test&#39;
+
+testdijits/nls/fr/Foo.js
+      test: &#39;FRENCH this is a test FRENCH&#39;
+
+testdijits/nls/fr-fr/Foo.js
+      fr_fr_test: &#39;FRENCH-FR this is only in the fr-fr bundle&#39;
+</pre></div>
+</div>
+<p>Then our built bundles contain the following:</p>
+<div class="highlight-text"><div class="highlight"><pre>test/dojo/nls/testdijits_en.js
+dojo.provide(&quot;dojo.nls.testdijits_en&quot;);dojo.provide(&quot;testdijits.nls.Foo&quot;);testdijits.nls.Foo._built=true;dojo.provide(&quot;testdijits.nls.Foo.en&quot;);testdijits.nls.Foo.en={&quot;test&quot;:&quot;this is a test&quot;};dojo.provide(&quot;testdijits.nls.Bar&quot;);testdijits.nls.Bar._built=true;dojo.provide(&quot;testdijits.nls.Bar.en&quot;);testdijits.nls.Bar.en={&quot;test&quot;:&quot;BAR this is a test BAR&quot;};
+
+test/dojo/nls/testdijits_fr.js
+dojo.provide(&quot;dojo.nls.testdijits_fr&quot;);dojo.provide(&quot;testdijits.nls.Foo&quot;);testdijits.nls.Foo._built=true;dojo.provide(&quot;testdijits.nls.Foo.fr&quot;);testdijits.nls.Foo.fr={&quot;test&quot;:&quot;FRENCH this is a test FRENCH&quot;};dojo.provide(&quot;testdijits.nls.Bar&quot;);testdijits.nls.Bar._built=true;dojo.provide(&quot;testdijits.nls.Bar.fr&quot;);testdijits.nls.Bar.fr={&quot;test&quot;:&quot;FRENCH BAR this is a test BAR FRENCH&quot;};
+
+test/dojo/nls/testdijits_fr-fr.js
+dojo.provide(&quot;dojo.nls.testdijits_fr-fr&quot;);dojo.provide(&quot;testdijits.nls.Foo&quot;);testdijits.nls.Foo._built=true;dojo.provide(&quot;testdijits.nls.Foo.fr_fr&quot;);testdijits.nls.Foo.fr_fr={&quot;fr_fr_test&quot;:&quot;FRENCH-FR this is only in the fr-fr bundle&quot;,&quot;test&quot;:&quot;FRENCH this is a test FRENCH&quot;};dojo.provide(&quot;testdijits.nls.Bar&quot;);testdijits.nls.Bar._built=true;dojo.provide(&quot;testdijits.nls.Bar.fr_fr&quot;);testdijits.nls.Bar.fr_fr={&quot;test&quot;:&quot;FRENCH BAR this is a test BAR FRENCH&quot;};
+</pre></div>
+</div>
+<p>The important points here are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>All language bundles contain the basic <code class="docutils literal"><span class="pre">test</span></code> string.</li>
+<li>The <code class="docutils literal"><span class="pre">fr</span></code> bundle contains the FRENCH version of <code class="docutils literal"><span class="pre">test</span></code>.</li>
+<li>The <code class="docutils literal"><span class="pre">fr-fr</span></code> bundle contains both <code class="docutils literal"><span class="pre">test</span></code> and <code class="docutils literal"><span class="pre">fr_fr_test</span></code>.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="multiple-custom-dijits">
+<h2><a class="toc-backref" href="#id9">Multiple Custom Dijits</a><a class="headerlink" href="#multiple-custom-dijits" title="Permalink to this headline">¶</a></h2>
+<p>Just to demonstrate that this approach really does save on network traffic, let's add a second dijit, <code class="docutils literal"><span class="pre">testdijits.Bar</span></code>, to our <code class="docutils literal"><span class="pre">testdijits</span></code> namespace, provide language resources for it, and add it to our build profile.</p>
+<blockquote>
+<div><ul class="simple">
+<li>Create the testdijits/Bar.js implementation, just like Foo but specifying <code class="docutils literal"><span class="pre">&quot;testdijits&quot;,</span> <span class="pre">&quot;Bar&quot;</span></code> in the calls to <code class="docutils literal"><span class="pre">requireLocalization</span></code> and <code class="docutils literal"><span class="pre">getLocalization</span></code>.</li>
+<li>Create <code class="docutils literal"><span class="pre">nls/Bar.js</span></code> and <code class="docutils literal"><span class="pre">nls/fr/Bar.js</span></code></li>
+<li>Add a <code class="docutils literal"><span class="pre">testdijits.Bar</span></code> entry to the profile .js file for the build.</li>
+<li>Add a dojo.require of &quot;testdijits.Bar&quot; to our test.html file (not strictly required if you are linking to the built layer, dojo/testdijits.j, as the testdijits.Bar dijit will already be loaded from that, so the dojo.require call has nothing to do).</li>
+</ul>
+</div></blockquote>
+<p>Our source directory now looks like:</p>
+<div class="highlight-text"><div class="highlight"><pre>dojo/..dojo SDK here..
+dojo/dojo/dojo.js ..for example..
+testdijits/Foo.js .. the test dijit implementation
+testdijits/Bar.js .. the test dijit implementation
+testdijits/nls/Foo.js
+testdijits/nls/fr/Foo.js
+testdijits/nls/Bar.js
+testdijits/nls/fr/Bar.js
+</pre></div>
+</div>
+<p>The network activity on loading test.html has no extra requests:</p>
+<div class="highlight-text"><div class="highlight"><pre>test.html
+dojo.js
+test/dojo/testdijits.js
+test/dojo/nls/testdijits_fr.js
+</pre></div>
+</div>
+<p>And the page shows the new dijit and its localised string (you can see that Bar is a simple copy of Foo with the string &quot;BAR&quot; inserted here and there so we can tell the difference in the output):</p>
+<div class="highlight-text"><div class="highlight"><pre>Here is the dijit:
+
+The string: FRENCH this is a test FRENCH
+
+BAR The string: FRENCH BAR this is a test BAR FRENCH BAR
+</pre></div>
+</div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.form.manager._Mixin &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../../index.html">Startpage</a></li>
+          <li><a href="../../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.form.manager._Mixin</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#methods-and-properties">Methods and properties</a><ul>
+<li><a class="reference internal" href="#general">General</a><ul>
+<li><a class="reference internal" href="#watch">watch</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#value-access">Value access</a><ul>
+<li><a class="reference internal" href="#formwidgetvalue">formWidgetValue</a></li>
+<li><a class="reference internal" href="#formpointvalue">formPointValue</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inspection">Inspection</a><ul>
+<li><a class="reference internal" href="#inspectformwidgets">inspectFormWidgets</a></li>
+<li><a class="reference internal" href="#inspectattachedpoints">inspectAttachedPoints</a></li>
+<li><a class="reference internal" href="#inspect">inspect</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#registration">Registration</a><ul>
+<li><a class="reference internal" href="#registerwidget">registerWidget</a></li>
+<li><a class="reference internal" href="#unregisterwidget">unregisterWidget</a></li>
+<li><a class="reference internal" href="#registerwidgetdescendants">registerWidgetDescendants</a></li>
+<li><a class="reference internal" href="#unregisterwidgetdescendants">unregisterWidgetDescendants</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lifecycle">Lifecycle</a><ul>
+<li><a class="reference internal" href="#startup">startup</a></li>
+<li><a class="reference internal" href="#destroy">destroy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#additional-functions">Additional functions</a><ul>
+<li><a class="reference internal" href="#dojox-form-manager-actionadapter">dojox.form.manager.actionAdapter</a></li>
+<li><a class="reference internal" href="#dojox-form-manager-inspectoradapter">dojox.form.manager.inspectorAdapter</a></li>
+<li><a class="reference internal" href="#dojox-form-manager-keys">dojox.form.manager._keys</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#technical-notes">Technical notes</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-form-manager-mixin">
+<span id="id1"></span><h1><a class="toc-backref" href="#id3">dojox.form.manager._Mixin</a><a class="headerlink" href="#dojox-form-manager-mixin" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Project owner:</th><td class="field-body">Eugene Lazutkin</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">1.3</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-form-manager-mixin" id="id3">dojox.form.manager._Mixin</a><ul>
+<li><a class="reference internal" href="#introduction" id="id4">Introduction</a></li>
+<li><a class="reference internal" href="#methods-and-properties" id="id5">Methods and properties</a><ul>
+<li><a class="reference internal" href="#general" id="id6">General</a></li>
+<li><a class="reference internal" href="#value-access" id="id7">Value access</a></li>
+<li><a class="reference internal" href="#inspection" id="id8">Inspection</a></li>
+<li><a class="reference internal" href="#registration" id="id9">Registration</a></li>
+<li><a class="reference internal" href="#lifecycle" id="id10">Lifecycle</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#additional-functions" id="id11">Additional functions</a><ul>
+<li><a class="reference internal" href="#dojox-form-manager-actionadapter" id="id12">dojox.form.manager.actionAdapter</a></li>
+<li><a class="reference internal" href="#dojox-form-manager-inspectoradapter" id="id13">dojox.form.manager.inspectorAdapter</a></li>
+<li><a class="reference internal" href="#dojox-form-manager-keys" id="id14">dojox.form.manager._keys</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#technical-notes" id="id15">Technical notes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id4">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This class is the main component of the form manager, which provides the initialization and core functionality. It can be used on its own as a mixin to other widgets, or as a part of <a class="reference internal" href="../Manager.html#dojox-form-manager"><span>dojox.form.Manager</span></a>. All other form manager mixins require this class to be mixed in as well.</p>
+<p>On startup this mixin inspects its body and registers all found form widgets, and attached nodes (by <code class="docutils literal"><span class="pre">data-dojo-attach-point</span></code>). Additionally it provides some low-level properties and methods to handle controlled elements.</p>
+</div>
+<div class="section" id="methods-and-properties">
+<h2><a class="toc-backref" href="#id5">Methods and properties</a><a class="headerlink" href="#methods-and-properties" title="Permalink to this headline">¶</a></h2>
+<p>This section describes all public methods and properties of the dojox.form.manager._Mixin class.</p>
+<div class="section" id="general">
+<h3><a class="toc-backref" href="#id6">General</a><a class="headerlink" href="#general" title="Permalink to this headline">¶</a></h3>
+<p>Only one property falls under this category: <a class="reference internal" href="#watch">watch</a>.</p>
+<div class="section" id="watch">
+<h4>watch<a class="headerlink" href="#watch" title="Permalink to this headline">¶</a></h4>
+<p>This is a Boolean property, which is used to control <a class="reference internal" href="index.html#dojox-form-manager-index"><span>observers</span></a>. When this property is <code class="docutils literal"><span class="pre">true</span></code> change events are processed and passed to relevant observers as usual. When it is <code class="docutils literal"><span class="pre">false</span></code>, change events are ignored.</p>
+<p>This property is useful when you want to modify/update controlled elements, but you don&#8217;t want to cause observers to run.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span class="c1">// stop change event processing</span>
+<span class="nx">fm</span><span class="p">.</span><span class="nx">watch</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<span class="c1">// update some fields without alerting observers</span>
+<span class="nx">fm</span><span class="p">.</span><span class="nx">setFormValues</span><span class="p">({</span>
+  <span class="nx">lastName</span><span class="o">:</span>  <span class="s2">&quot;Smith&quot;</span><span class="p">,</span>
+  <span class="nx">firstName</span><span class="o">:</span> <span class="s2">&quot;Jane&quot;</span>
+<span class="p">});</span>
+<span class="c1">// start change event processing</span>
+<span class="nx">fm</span><span class="p">.</span><span class="nx">watch</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// stop change event processing
+fm.watch = false;
+// update some fields without alerting observers
+fm.setFormValues({
+  lastName:  &quot;Smith&quot;,
+  firstName: &quot;Jane&quot;
+});
+// start change event processing
+fm.watch = true;</textarea></div></div>
+</div>
+<div class="section" id="value-access">
+<h3><a class="toc-backref" href="#id7">Value access</a><a class="headerlink" href="#value-access" title="Permalink to this headline">¶</a></h3>
+<p>Methods in this category provide primitives for low-level access to values of individual form elements. For high-level access to values use <a class="reference internal" href="_ValueMixin.html#dojox-form-manager-valuemixin"><span>_ValueMixin</span></a>.</p>
+<p>Note: <a class="reference internal" href="_NodeMixin.html#dojox-form-manager-nodemixin"><span>_NodeMixin</span></a> implements a complimentary method: <a class="reference internal" href="_NodeMixin.html#dojox-form-manager-nodemixin"><span>formNodeValue</span></a>.</p>
+<div class="section" id="formwidgetvalue">
+<h4>formWidgetValue<a class="headerlink" href="#formwidgetvalue" title="Permalink to this headline">¶</a></h4>
+<p>This method allows to get/set values of controlled form widgets. It can be used two ways: with one parameter to get the value, and with two parameters to set the value:</p>
+<div class="highlight"><pre><span class="c1">// reading the value</span>
+<span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">fm</span><span class="p">.</span><span class="nx">formWidgetValue</span><span class="p">(</span><span class="s2">&quot;lastName&quot;</span><span class="p">);</span>
+<span class="c1">// writing the value</span>
+<span class="nx">fm</span><span class="p">.</span><span class="nx">formWidgetValue</span><span class="p">(</span><span class="s2">&quot;lastName&quot;</span><span class="p">,</span> <span class="s2">&quot;Smith&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// reading the value
+var value = fm.formWidgetValue(&quot;lastName&quot;);
+// writing the value
+fm.formWidgetValue(&quot;lastName&quot;, &quot;Smith&quot;);</textarea></div><p>The first parameter is a name of <a class="reference internal" href="index.html#dojox-form-manager-index"><span>a controlled form element</span></a> (a string). The optional second parameter is a value to be set. It is usually a string too.</p>
+<p>The returned value is:</p>
+<ul class="simple">
+<li>A form element&#8217;s value for the getter version.</li>
+<li>The form manager itself for the setter version providing easy chaining.</li>
+</ul>
+</div>
+<div class="section" id="formpointvalue">
+<h4>formPointValue<a class="headerlink" href="#formpointvalue" title="Permalink to this headline">¶</a></h4>
+<p>This method is similar to <a class="reference internal" href="#formwidgetvalue">formWidgetValue</a> method but works on <a class="reference internal" href="index.html#dojox-form-manager-index"><span>nodes attached to the widget itself</span></a>:</p>
+<div class="highlight"><pre><span class="c1">// reading the value</span>
+<span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">fm</span><span class="p">.</span><span class="nx">formPointValue</span><span class="p">(</span><span class="s2">&quot;firstName&quot;</span><span class="p">);</span>
+<span class="c1">// writing the value</span>
+<span class="nx">fm</span><span class="p">.</span><span class="nx">formPointValue</span><span class="p">(</span><span class="s2">&quot;lastName&quot;</span><span class="p">,</span> <span class="s2">&quot;Jane&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// reading the value
+var value = fm.formPointValue(&quot;firstName&quot;);
+// writing the value
+fm.formPointValue(&quot;lastName&quot;, &quot;Jane&quot;);</textarea></div><p>Usage and syntax is exactly the same as for <a class="reference internal" href="#formwidgetvalue">formWidgetValue</a>.</p>
+</div>
+</div>
+<div class="section" id="inspection">
+<h3><a class="toc-backref" href="#id8">Inspection</a><a class="headerlink" href="#inspection" title="Permalink to this headline">¶</a></h3>
+<p>Methods in this category provide primitives to iterate over controlled elements. These methods are major building blocks for all other mixins. In most cases you should avoid using them directly relying on more high-level methods of other mixins. Do use them if you write your own mixins.</p>
+<p>Note: <a class="reference internal" href="_NodeMixin.html#dojox-form-manager-nodemixin"><span>_NodeMixin</span></a> implements a complimentary method: <a class="reference internal" href="_NodeMixin.html#dojox-form-manager-nodemixin"><span>inspectFormNodes</span></a>.</p>
+<div class="section" id="inspectformwidgets">
+<h4>inspectFormWidgets<a class="headerlink" href="#inspectformwidgets" title="Permalink to this headline">¶</a></h4>
+<p>This method iterates over controlled elements:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">inspector</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">widget</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">oldValue</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">formWidgetValue</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">formWidgetValue</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">oldValue</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;firstName&quot;</span><span class="p">,</span> <span class="s2">&quot;lastName&quot;</span><span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">defaultValue</span> <span class="o">=</span> <span class="s2">&quot;X&quot;</span><span class="p">;</span>
+
+<span class="nx">fm</span><span class="p">.</span><span class="nx">inspectFormWidgets</span><span class="p">(</span><span class="nx">inspector</span><span class="p">,</span> <span class="nx">state</span><span class="p">,</span> <span class="nx">defaultValue</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var inspector = function(name, widget, value){
+  var oldValue = this.formWidgetValue(name);
+  this.formWidgetValue(name, value);
+  return oldValue;
+};
+
+var state = [&quot;firstName&quot;, &quot;lastName&quot;];
+
+var defaultValue = &quot;X&quot;;
+
+fm.inspectFormWidgets(inspector, state, defaultValue);</textarea></div><p>There are three ways to use this method:</p>
+<ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">state</span></code> is an array of form names. In this case <code class="docutils literal"><span class="pre">inspector</span></code> is called with the same 3rd parameter <code class="docutils literal"><span class="pre">defaultValue</span></code> for every widget in the array. The above example uses this form of inspection: both <code class="docutils literal"><span class="pre">lastName</span></code> and <code class="docutils literal"><span class="pre">firstName</span></code> will be set to <code class="docutils literal"><span class="pre">&quot;X&quot;</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">state</span></code> is an object. In this case keys of the object are form names, while corresponding values are actual values to be passed to <code class="docutils literal"><span class="pre">inspector</span></code> as the 3rd parameter (in this case <code class="docutils literal"><span class="pre">defaultValue</span></code> is not used):</li>
+</ol>
+<blockquote>
+<div><div class="highlight"><pre><span class="kd">var</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">firstName</span><span class="o">:</span> <span class="s2">&quot;Jill&quot;</span><span class="p">,</span>
+  <span class="nx">lastName</span><span class="o">:</span>  <span class="s2">&quot;Taylor&quot;</span>
+<span class="p">};</span>
+<span class="nx">fm</span><span class="p">.</span><span class="nx">inspectFormWidgets</span><span class="p">(</span><span class="nx">inspector</span><span class="p">,</span> <span class="nx">state</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var state = {
+  firstName: &quot;Jill&quot;,
+  lastName:  &quot;Taylor&quot;
+};
+fm.inspectFormWidgets(inspector, state);</textarea></div><p>The above example sets <code class="docutils literal"><span class="pre">lastName</span></code> to <code class="docutils literal"><span class="pre">&quot;Taylor&quot;</span></code> and <code class="docutils literal"><span class="pre">firstName</span></code> to <code class="docutils literal"><span class="pre">&quot;Jill&quot;</span></code>.</p>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li><code class="docutils literal"><span class="pre">state</span></code> is <code class="docutils literal"><span class="pre">null</span></code> or missing. In this case the method will iterate over all controlled widgets passing <code class="docutils literal"><span class="pre">defaultValue</span></code> as the <code class="docutils literal"><span class="pre">value</span></code> parameter to <code class="docutils literal"><span class="pre">inspector</span></code>.</li>
+</ol>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">fm</span><span class="p">.</span><span class="nx">inspectFormWidgets</span><span class="p">(</span><span class="nx">inspector</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">fm.inspectFormWidgets(inspector, null, &quot;X&quot;);</textarea></div><p>The above example sets all controlled widgets to <code class="docutils literal"><span class="pre">&quot;X&quot;</span></code>.</p>
+</div></blockquote>
+<p>While iterating the method collects all returned values of <code class="docutils literal"><span class="pre">inspector</span></code> in an object keyed by corresponding widget names, and returns it as the result.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">state</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">firstName</span><span class="o">:</span> <span class="s2">&quot;Jill&quot;</span><span class="p">,</span>
+  <span class="nx">lastName</span><span class="o">:</span>  <span class="s2">&quot;Taylor&quot;</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">fm</span><span class="p">.</span><span class="nx">inspectFormWidgets</span><span class="p">(</span><span class="nx">inspector</span><span class="p">,</span> <span class="nx">state</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">firstName</span><span class="p">);</span>                <span class="c1">// Jane</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">lastName</span><span class="p">);</span>                 <span class="c1">// Smith</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fm</span><span class="p">.</span><span class="nx">formWidgetValue</span><span class="p">(</span><span class="s2">&quot;firstName&quot;</span><span class="p">));</span> <span class="c1">// Jill</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fm</span><span class="p">.</span><span class="nx">formWidgetValue</span><span class="p">(</span><span class="s2">&quot;lastName&quot;</span><span class="p">));</span>  <span class="c1">// Taylor</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var state = {
+  firstName: &quot;Jill&quot;,
+  lastName:  &quot;Taylor&quot;
+};
+var result = fm.inspectFormWidgets(inspector, state);
+
+console.log(result.firstName);                // Jane
+console.log(result.lastName);                 // Smith
+
+console.log(fm.formWidgetValue(&quot;firstName&quot;)); // Jill
+console.log(fm.formWidgetValue(&quot;lastName&quot;));  // Taylor</textarea></div><p><code class="docutils literal"><span class="pre">inspector</span></code> function is called for every inspected widget in the context of the form manager. It has following signature:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">inspector</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">widget</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+  <span class="c1">// ...</span>
+  <span class="k">return</span> <span class="nx">someValue</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var inspector = function(name, widget, value){
+  // ...
+  return someValue;
+};</textarea></div><p><code class="docutils literal"><span class="pre">name</span></code> is the name of the inspected widget, <code class="docutils literal"><span class="pre">widget</span></code> is the widget itself, or an array of widgets for radio button widgets, <code class="docutils literal"><span class="pre">value</span></code> is the value passed to the function according to the above described rules. <code class="docutils literal"><span class="pre">inspector</span></code>&#8216;s return value will be collected and returned as a part of the result object as described above.</p>
+<p>What <code class="docutils literal"><span class="pre">inspector</span></code> does is up to you. It can modify or just read widget values. It can return something meaningful or nothing at all. It is strongly suggested to use other form manager&#8217;s methods to get/set widget values rather than doing it manually.</p>
+</div>
+<div class="section" id="inspectattachedpoints">
+<h4>inspectAttachedPoints<a class="headerlink" href="#inspectattachedpoints" title="Permalink to this headline">¶</a></h4>
+<p>This method is similar to <a class="reference internal" href="#inspectformwidgets">inspectFormWidgets</a> method but works on <a class="reference internal" href="index.html#dojox-form-manager-index"><span>nodes attached to the widget itself</span></a>. The only difference is the inspector signature, which uses a DOM node instead of a widget:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">inspector</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">node</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+  <span class="c1">// ...</span>
+  <span class="k">return</span> <span class="nx">someValue</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var inspector = function(name, node, value){
+  // ...
+  return someValue;
+};</textarea></div><p>Everything else is the same. Example:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">inspector</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">formPointValue</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// collect all current values of attached nodes</span>
+<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">fm</span><span class="p">.</span><span class="nx">inspectAttachedPoints</span><span class="p">(</span><span class="nx">inspector</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var inspector = function(name){
+  return this.formPointValue(name);
+};
+
+// collect all current values of attached nodes
+var result = fm.inspectAttachedPoints(inspector);</textarea></div></div>
+<div class="section" id="inspect">
+<h4>inspect<a class="headerlink" href="#inspect" title="Permalink to this headline">¶</a></h4>
+<p>This is the high-level method, which has the same signature as <a class="reference internal" href="#inspectformwidgets">inspectFormWidgets</a> and <a class="reference internal" href="#inspectattachedpoints">inspectAttachedPoints</a>. The major difference is: it iterates over widgets <strong>and</strong> attached nodes <strong>and</strong> form nodes (for the last one you have to include <a class="reference internal" href="_NodeMixin.html#dojox-form-manager-nodemixin"><span>_NodeMixin</span></a>):</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">inspector</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
+  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">formPointValue</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="c1">// collect all current values of attached nodes</span>
+<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">fm</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">inspector</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var inspector = function(name){
+  return this.formPointValue(name);
+};
+
+// collect all current values of attached nodes
+var result = fm.inspect(inspector);</textarea></div><p><code class="docutils literal"><span class="pre">inspector</span></code>&#8216;s signature is similar to <a class="reference internal" href="#inspectformwidgets">inspectFormWidgets</a>&#8216;s <code class="docutils literal"><span class="pre">inspector</span></code>, but the 2nd argument will be a form widget for widgets, a DOM node for attached nodes and form nodes, or an array of widgets or DOM nodes for radio buttons.</p>
+</div>
+</div>
+<div class="section" id="registration">
+<h3><a class="toc-backref" href="#id9">Registration</a><a class="headerlink" href="#registration" title="Permalink to this headline">¶</a></h3>
+<p>These functions can register/unregister widgets. In most cases these methods are not used directly because dojox.form.manager._Mixin registers all children form widgets automatically. But if you create/delete widgets dynamically, you should register/unregister them manually.</p>
+<p>Note: <a class="reference internal" href="_NodeMixin.html#dojox-form-manager-nodemixin"><span>_NodeMixin</span></a> implements complimentary methods: <a class="reference internal" href="_NodeMixin.html#dojox-form-manager-nodemixin"><span>registerNode</span></a>, <a class="reference internal" href="_NodeMixin.html#dojox-form-manager-nodemixin"><span>unregisterNode</span></a>, <a class="reference internal" href="_NodeMixin.html#dojox-form-manager-nodemixin"><span>registerNodeDescendants</span></a>, <a class="reference internal" href="_NodeMixin.html#dojox-form-manager-nodemixin"><span>unregisterNodeDescendants</span></a>.</p>
+<div class="section" id="registerwidget">
+<h4>registerWidget<a class="headerlink" href="#registerwidget" title="Permalink to this headline">¶</a></h4>
+<p>This method registers a form widget with a form manager, and connects its observers. This widget is not required to be a descendant of the form manager it is being registered with. Three signatures are recognized:</p>
+<ol class="arabic simple">
+<li>Register by widget id:</li>
+</ol>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">fm</span><span class="p">.</span><span class="nx">registerWidget</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">fm.registerWidget(id);</textarea></div></div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Register by widget&#8217;s DOM node:</li>
+</ol>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">fm</span><span class="p">.</span><span class="nx">registerWidget</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">fm.registerWidget(node);</textarea></div></div></blockquote>
+<ol class="arabic simple" start="3">
+<li>Register a widget object:</li>
+</ol>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">fm</span><span class="p">.</span><span class="nx">registerWidget</span><span class="p">(</span><span class="nx">widget</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">fm.registerWidget(widget);</textarea></div></div></blockquote>
+</div>
+<div class="section" id="unregisterwidget">
+<h4>unregisterWidget<a class="headerlink" href="#unregisterwidget" title="Permalink to this headline">¶</a></h4>
+<p>This method disconnects widget&#8217;s observers, and removes it from internal structures of a form manager. The only way to unregister a widget is by its form name:</p>
+<div class="highlight"><pre><span class="nx">fm</span><span class="p">.</span><span class="nx">unregisterWidget</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">fm.unregisterWidget(name);</textarea></div></div>
+<div class="section" id="registerwidgetdescendants">
+<h4>registerWidgetDescendants<a class="headerlink" href="#registerwidgetdescendants" title="Permalink to this headline">¶</a></h4>
+<p>This method calls <a class="reference internal" href="#registerwidget">registerWidget</a> for every descendant form widget of a given widget (usually a layout widget). This method is useful when you add several widgets dynamically. These widgets do not need to be descendants of the form manager they are being registered with. For example you can register a dialog widget, which is attached directly to the <code class="docutils literal"><span class="pre">body</span></code> element.</p>
+<p>Like with <a class="reference internal" href="#registerwidget">registerWidget</a> widget three signatures are recognized:</p>
+<ol class="arabic simple">
+<li>Register by widget id:</li>
+</ol>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">fm</span><span class="p">.</span><span class="nx">registerWidgetDescendants</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">fm.registerWidgetDescendants(id);</textarea></div></div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Register by widget&#8217;s DOM node:</li>
+</ol>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">fm</span><span class="p">.</span><span class="nx">registerWidgetDescendants</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">fm.registerWidgetDescendants(node);</textarea></div></div></blockquote>
+<ol class="arabic simple" start="3">
+<li>Register by specifying a widget object:</li>
+</ol>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">fm</span><span class="p">.</span><span class="nx">registerWidgetDescendants</span><span class="p">(</span><span class="nx">widget</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">fm.registerWidgetDescendants(widget);</textarea></div></div></blockquote>
+</div>
+<div class="section" id="unregisterwidgetdescendants">
+<h4>unregisterWidgetDescendants<a class="headerlink" href="#unregisterwidgetdescendants" title="Permalink to this headline">¶</a></h4>
+<p>This method calls <a class="reference internal" href="#unregisterwidget">unregisterWidget</a> for every descendant form widget of a given widget (usually a layout widget). Its signature is the same as <a class="reference internal" href="#registerwidgetdescendants">registerWidgetDescendants</a>&#8216;s signature (all three variants).</p>
+</div>
+</div>
+<div class="section" id="lifecycle">
+<h3><a class="toc-backref" href="#id10">Lifecycle</a><a class="headerlink" href="#lifecycle" title="Permalink to this headline">¶</a></h3>
+<p>Lifecycle methods are part of every widget. They are used to initialize and destroy a widget. If you mix dojox.form.manager._Mixin in your own widget, make sure that these methods are not overwritten. If you overwrite them, make sure to call <code class="docutils literal"><span class="pre">this.inherited(arguments)</span></code> at the appropriate place, so they can initialize/destroy the widget properly.</p>
+<div class="section" id="startup">
+<h4>startup<a class="headerlink" href="#startup" title="Permalink to this headline">¶</a></h4>
+<p>This is the standard method of any widget. It is responsible for starting up the widget after it was created and the DOM was parsed. For more details, see <a class="reference internal" href="../../../dijit/_Widget.html#dijit-widget"><span>dijit._Widget</span></a>.</p>
+</div>
+<div class="section" id="destroy">
+<h4>destroy<a class="headerlink" href="#destroy" title="Permalink to this headline">¶</a></h4>
+<p>This is the standard method of any widget. It is responsible for tearing up internal widget structures preparing the widget for the garbage collection. Usually it detaches event handlers, and kills references to DOM nodes. For more details, see <a class="reference internal" href="../../../dijit/_Widget.html#dijit-widget"><span>dijit._Widget</span></a>.</p>
+</div>
+</div>
+</div>
+<div class="section" id="additional-functions">
+<h2><a class="toc-backref" href="#id11">Additional functions</a><a class="headerlink" href="#additional-functions" title="Permalink to this headline">¶</a></h2>
+<p>For writers of additional mixins, this module provides several helper functions.</p>
+<div class="section" id="dojox-form-manager-actionadapter">
+<span id="id2"></span><h3><a class="toc-backref" href="#id12">dojox.form.manager.actionAdapter</a><a class="headerlink" href="#dojox-form-manager-actionadapter" title="Permalink to this headline">¶</a></h3>
+<p>As described above the inspector can receive a widget/node as the 2nd parameter, or an array of widgets/nodes. This adapter checks the 2nd value and applies the inspector directly, if it was called with a widget/node. If it was called with the array, the adapter will apply the inspector to all elements of the array.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">inspector</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">elem</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+  <span class="c1">// ...</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">adapted</span> <span class="o">=</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">manager</span><span class="p">.</span><span class="nx">actionAdapter</span><span class="p">(</span><span class="nx">inspector</span><span class="p">);</span>
+<span class="nx">fm</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">adapted</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var inspector = function(name, elem, value){
+  // ...
+};
+var adapted = dojox.form.manager.actionAdapter(inspector);
+fm.inspect(adapted);</textarea></div><p>This adapter is useful when you want to do a uniform processing of form elements, e.g., disabling them, or adding a CSS class.</p>
+</div>
+<div class="section" id="dojox-form-manager-inspectoradapter">
+<h3><a class="toc-backref" href="#id13">dojox.form.manager.inspectorAdapter</a><a class="headerlink" href="#dojox-form-manager-inspectoradapter" title="Permalink to this headline">¶</a></h3>
+<p>This is a slightly different adapter for arrays versus widgets/nodes. The difference with <a class="reference internal" href="#dojox-form-manager-actionadapter"><span>dojox.form.manager.actionAdapter</span></a> is in case of arrays it applies the inspector only to the first element of the array.</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">inspector</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
+  <span class="c1">// ...</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">adapted</span> <span class="o">=</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">manager</span><span class="p">.</span><span class="nx">inspectorAdapter</span><span class="p">(</span><span class="nx">inspector</span><span class="p">);</span>
+<span class="nx">fm</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">adapted</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var inspector = function(name){
+  // ...
+};
+var adapted = dojox.form.manager.inspectorAdapter(inspector);
+fm.inspect(adapted);</textarea></div><p>This adapter is useful when you want to do a uniform inspection of form elements, e.g., reading and returning their values.</p>
+</div>
+<div class="section" id="dojox-form-manager-keys">
+<h3><a class="toc-backref" href="#id14">dojox.form.manager._keys</a><a class="headerlink" href="#dojox-form-manager-keys" title="Permalink to this headline">¶</a></h3>
+<p>This function takes an object and returns an array of all keys. It is very similar to <a class="reference internal" href="../../lang/functional/object.html#dojox-lang-functional-object"><span>dojox.lang.functional.object.keys()</span></a>. It is defined there only to reduce the dependency on other packages.</p>
+</div>
+</div>
+<div class="section" id="technical-notes">
+<h2><a class="toc-backref" href="#id15">Technical notes</a><a class="headerlink" href="#technical-notes" title="Permalink to this headline">¶</a></h2>
+<p>_Mixin extends <a class="reference internal" href="../../../dijit/_Widget.html#dijit-widget"><span>dijit._Widget</span></a> with an extra attribute: <code class="docutils literal"><span class="pre">observer</span></code>. It makes this attribute valid for all widgets. You can read more on observers in the <a class="reference internal" href="index.html#dojox-form-manager-index"><span>dojox.form.manager event processing documentation</span></a>.</p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

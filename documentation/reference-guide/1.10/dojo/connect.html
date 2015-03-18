@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo.connect() &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo.connect()</a><ul>
+<li><a class="reference internal" href="#events">Events</a></li>
+<li><a class="reference internal" href="#advice">Advice</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-connect">
+<span id="id1"></span><h1>dojo.connect()<a class="headerlink" href="#dojo-connect" title="Permalink to this headline">¶</a></h1>
+<p>Deprecated.</p>
+<p>Dojo versions prior to 1.7 used dojo.connect() for event handling and advice.
+But it&#8217;s functionality has been replaced by <a class="reference internal" href="on.html#dojo-on"><span>dojo/on module</span></a> and the <a class="reference internal" href="aspect.html#dojo-aspect-after"><span>dojo/aspect module&#8217;s after() method</span></a>.</p>
+<div class="section" id="events">
+<h2>Events<a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h2>
+<p>As of Dojo 1.7, the preferred way of handling events is to use the new lightweight <a class="reference internal" href="on.html#dojo-on"><span>dojo/on</span></a> module.</p>
+<p>For compatibility reasons, the dojo.connect api&#8217;s will remain fully supported through remaining 1.x releases, but will likely be removed in Dojo 2.0.  Migration from connect() to on() should be straightforward as the api signature is very similar.</p>
+<p>Old code like:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;onclick&quot;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">...</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="nx">handle</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var handle = dojo.connect(node, &quot;onclick&quot;, callback);
+...
+dojo.disconnect(handle);</textarea></div><p>should be converted to:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/on&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">on</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">on</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+  <span class="p">...</span>
+  <span class="nx">handle</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/on&quot;], function(on){
+  var handle = on(node, &quot;click&quot;, callback);
+  ...
+  handle.remove();
+});</textarea></div><dl class="docutils">
+<dt>Note that:</dt>
+<dd><ul class="first last simple">
+<li>the &#8220;on&#8221; prefix was dropped, and &#8220;onclick&#8221; became &#8220;click&#8221;</li>
+<li>the &#8220;handle&#8221; has a remove() method, rather than there being a function like dojo.disconnect()</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="advice">
+<h2>Advice<a class="headerlink" href="#advice" title="Permalink to this headline">¶</a></h2>
+<p>The preferred way of handling after advice is to use the new lightweight <a class="reference internal" href="aspect.html#dojo-aspect-after"><span>dojo/aspect&#8217;s after() method</span></a>.</p>
+<p>Old code:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">myInstance</span><span class="p">,</span> <span class="s2">&quot;execute&quot;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+<span class="p">...</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="nx">handle</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var handle = dojo.connect(myInstance, &quot;execute&quot;, callback);
+...
+dojo.disconnect(handle);</textarea></div><p>is changed to</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/aspect&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">aspect</span><span class="p">){</span>
+    <span class="nx">aspect</span><span class="p">.</span><span class="nx">after</span><span class="p">(</span><span class="nx">myInstance</span><span class="p">,</span> <span class="s2">&quot;execute&quot;</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="nx">handle</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/aspect&quot;], function(aspect){
+    aspect.after(myInstance, &quot;execute&quot;, callback);
+    ...
+    handle.remove();
+});</textarea></div><p>Note that callback() should not return a value, because if it did the returned value would be reported as the value that myInstance.execute() appeared to return, which is not what dojo.connect() did.</p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

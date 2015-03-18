@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dijit._AttachMixin &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dijit._AttachMixin</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#data-dojo-attach-point">data-dojo-attach-point</a></li>
+<li><a class="reference internal" href="#data-dojo-attach-event">data-dojo-attach-event</a></li>
+<li><a class="reference internal" href="#attachscope">attachScope</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojo-parser-parseonload-and-stopparser">dojo/parser (parseOnLoad) and stopParser</a></li>
+<li><a class="reference internal" href="#visibility">Visibility</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dijit-attachmixin">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dijit._AttachMixin</a><a class="headerlink" href="#dijit-attachmixin" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dijit-attachmixin" id="id2">dijit._AttachMixin</a></li>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a><ul>
+<li><a class="reference internal" href="#data-dojo-attach-point" id="id5">data-dojo-attach-point</a></li>
+<li><a class="reference internal" href="#data-dojo-attach-event" id="id6">data-dojo-attach-event</a></li>
+<li><a class="reference internal" href="#attachscope" id="id7">attachScope</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojo-parser-parseonload-and-stopparser" id="id8">dojo/parser (parseOnLoad) and stopParser</a></li>
+<li><a class="reference internal" href="#visibility" id="id9">Visibility</a></li>
+<li><a class="reference internal" href="#see-also" id="id10">See also</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p><cite>dijit/_AttachMixin</cite> allows automatic attachment of attributes and event handlers for a dijit based on DOM node content.  The DOM nodes may be detached from the document, or already exist in the document.  It uses <code class="docutils literal"><span class="pre">data-dojo-attach-point</span></code> and <code class="docutils literal"><span class="pre">data-dojo-attach-event</span></code> DOM node attributes to do its work.</p>
+<p>It also allows the attach points and events for a dijit to be assigned to another object, see <a class="reference internal" href="#attachscope">attachScope</a>.</p>
+<p><code class="docutils literal"><span class="pre">_AttachMixin</span></code> can be used to instantiate dijits whose templates have been generated by a server side templating system.  This places their template content in the DOM instead of the more traditional approach of baking a templateString into your dijit declaration and having them parsed during <code class="docutils literal"><span class="pre">_TemplatedMixin</span></code> instantiation.  If the <a class="reference internal" href="../dojo/parser.html#dojo-parser"><span>parser</span></a> parses your DOM you may run into conflicts between _WidgetsInTempalteMixin and the parser, see <a class="reference internal" href="#dojo-parser-parseonload-and-stopparser">dojo/parser (parseOnLoad) and stopParser</a>.</p>
+<p>This functionality is abstracted from <a class="reference internal" href="_TemplatedMixin.html#dijit-templatedmixin"><span>dijit/_TemplatedMixin</span></a> although historically this functionality was contained within that dijit.</p>
+<p>Remember that content in the DOM is rendered using normal browser rendering rules.  If you do not want the content to be visible until after it has been parsed or the _AttachMixin dijit otherwise created, you will have to make it invisible and handle making it visible again yourself.  See <a class="reference internal" href="#visibility">visibility</a>.</p>
+</div>
+<div class="section" id="usage">
+<h1><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<p>Mixin <cite>dijit/_AttachMixin</cite> when you declare your dijit and direct it to use DOM nodes that contain suitable <cite>data-dojo-attach-point</cite> or <cite>data-dojo-attach-event</cite> properties:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;somenode&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">data-dojo-attach-point=</span><span class="s">&quot;anattachpoint&quot;</span>
+     <span class="na">data-dojo-attach-event=</span><span class="s">&quot;click: clicked&quot;</span><span class="nt">&gt;</span>Click me<span class="nt">&lt;/span&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;somenode&quot;&gt;&lt;span data-dojo-attach-point=&quot;anattachpoint&quot;
+     data-dojo-attach-event=&quot;click: clicked&quot;&gt;Click me&lt;/span&gt;&lt;/div&gt;</textarea></div><div class="highlight"><pre><span class="kd">var</span> <span class="nx">MyDijit</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_AttachMixin</span> <span class="p">],</span> <span class="p">{</span>
+    <span class="c1">// .. declaration goes here ..</span>
+    <span class="nx">clicked</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// handle event</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+<span class="c1">// instantiate the dijit instance, which will attach to the &#39;somenode&#39; div.</span>
+<span class="kd">var</span> <span class="nx">mydijit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyDijit</span><span class="p">({},</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s1">&#39;somenode&#39;</span><span class="p">));</span>
+<span class="nx">mydijit</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var MyDijit = declare([ _WidgetBase, _AttachMixin ], {
+    // .. declaration goes here ..
+    clicked: function(e) {
+        // handle event
+    }
+});
+// instantiate the dijit instance, which will attach to the 'somenode' div.
+var mydijit = new MyDijit({}, dom.byId('somenode'));
+mydijit.startup();</textarea></div><p>You may also want to use <a class="reference internal" href="_WidgetsInTemplateMixin.html#dijit-widgetsintemplatemixin"><span>dijit._WidgetsInTemplateMixin</span></a> to cause dijits in your DOM content, identified by having a <cite>data-dojo-type</cite> property, be parsed while your dijit is instantiated.</p>
+<p>The <cite>_srcNodeRef</cite> of the dijit will be used as a basis for attaching.</p>
+<p>For example, here is a working sample of the above example:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: false, async: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>The HTML that is picked up by the dijit.</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;somenode&quot;</span><span class="nt">&gt;&lt;span</span> <span class="na">data-dojo-attach-point=</span><span class="s">&quot;anattachpoint&quot;</span>
+     <span class="na">data-dojo-attach-event=</span><span class="s">&quot;click: clicked&quot;</span><span class="nt">&gt;</span>Click me<span class="nt">&lt;/span&gt;&lt;br&gt;</span>
+     <span class="nt">&lt;input</span> <span class="na">data-dojo-attach-point=</span><span class="s">&quot;field&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;somenode&quot;&gt;&lt;span data-dojo-attach-point=&quot;anattachpoint&quot;
+     data-dojo-attach-event=&quot;click: clicked&quot;&gt;Click me&lt;/span&gt;&lt;br&gt;
+     &lt;input data-dojo-attach-point=&quot;field&quot;&gt;&lt;/div&gt;</textarea></div><p>Javascript to declare a dijit using _AttachMixin.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+    <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_AttachMixin&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_AttachMixin</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="kd">var</span> <span class="nx">MyDijit</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_AttachMixin</span> <span class="p">],</span> <span class="p">{</span>
+        <span class="nx">clicked</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">field</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">&quot;I was clicked&quot;</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">})</span>
+
+    <span class="kd">var</span> <span class="nx">mydijit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyDijit</span><span class="p">({},</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s1">&#39;somenode&#39;</span><span class="p">));</span>
+    <span class="nx">mydijit</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+<span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+    &quot;dojo/_base/declare&quot;, &quot;dojo/dom&quot;, &quot;dijit/_WidgetBase&quot;, &quot;dijit/_AttachMixin&quot;, &quot;dojo/domReady!&quot;
+], function(declare, dom, _WidgetBase, _AttachMixin) {
+
+    var MyDijit = declare([ _WidgetBase, _AttachMixin ], {
+        clicked: function(e) { this.field.value = &quot;I was clicked&quot;; }
+    })
+
+    var mydijit = new MyDijit({}, dom.byId('somenode'));
+    mydijit.startup();
+})</textarea></div></div></div><div class="section" id="data-dojo-attach-point">
+<h2><a class="toc-backref" href="#id5">data-dojo-attach-point</a><a class="headerlink" href="#data-dojo-attach-point" title="Permalink to this headline">¶</a></h2>
+<p>(before Dojo 1.6 a.k.a. dojoAttachPoint)</p>
+<p>In the JavaScript of a widget, one often wishes to refer to some of its html template&#8217;s dom nodes directly.  In this case the widget will need to access the &lt;span&gt; with the count in order to change the value.</p>
+<p>You might think the widget author could just use ids in the html template, and then dom.byId() in the widget&#8217;s js.
+But if she does, then if two or more widget instances are created, they&#8217;ll all have the same ids!  The dom.byId call is no longer precise enough to return the node you want.</p>
+<p>Instead:</p>
+<ol class="arabic simple">
+<li>In your widget template&#8217;s html, for every node you want a variable reference for, you add the attribute: data-dojo-attach-point=&#8221;yourVariableNameHere&#8221;.</li>
+<li>In your widget&#8217;s js, you use (without declaring them) variables for these nodes. In the example below, we access <code class="docutils literal"><span class="pre">this.counter</span></code>.</li>
+</ol>
+<p>You don&#8217;t need to declare the variables because <code class="docutils literal"><span class="pre">_AttachMixin</span></code> simply assigns the dom node to a property of the <code class="docutils literal"><span class="pre">attachScope</span></code> with <code class="docutils literal"><span class="pre">attachScope[yourVariableNameHere]</span> <span class="pre">=</span> <span class="pre">refNode</span></code>.  Any property you have declared with that name will be overritten.</p>
+<p>When using the <code class="docutils literal"><span class="pre">widgetsInTemplate</span></code> parameter, a data-dojo-attach-point on the widget node in the template will refer to the widget instance rather than the Dom Node (see also <a class="reference internal" href="#dojo-parser-parseonload-and-stopparser">dojo/parser (parseOnLoad) and stopParser</a> below).</p>
+</div>
+<div class="section" id="data-dojo-attach-event">
+<h2><a class="toc-backref" href="#id6">data-dojo-attach-event</a><a class="headerlink" href="#data-dojo-attach-event" title="Permalink to this headline">¶</a></h2>
+<p>(before Dojo 1.6 a.k.a. dojoAttachEvent)</p>
+<p><code class="docutils literal"><span class="pre">data-dojo-attach-event</span></code> will automatically setup a connection from an event on the DOM node (onclick in this case) to call a method in the widget (in this case <code class="docutils literal"><span class="pre">increment()</span></code>.</p>
+<p>Here&#8217;s an example of data-dojo-attach-point and data-dojo-attach-event:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'inline', pluginArgs:{ dojoConfig: 'parseOnLoad: false', version:'' }, width:'400', height:'250', toolbar:'versions, dir', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre> <span class="nx">require</span><span class="p">([</span>
+     <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_TemplatedMixin&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span>
+ <span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">parser</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">){</span>
+
+      <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;FancyCounter&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">dijit</span><span class="p">.</span><span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">dijit</span><span class="p">.</span><span class="nx">_TemplatedMixin</span><span class="p">],</span> <span class="p">{</span>
+             <span class="c1">// counter</span>
+             <span class="nx">_i</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+
+             <span class="nx">templateString</span><span class="o">:</span>
+                 <span class="s2">&quot;&lt;div&gt;&quot;</span> <span class="o">+</span>
+                     <span class="s2">&quot;&lt;button data-dojo-attach-event=&#39;onclick: increment&#39;&gt;press me&lt;/button&gt;&quot;</span> <span class="o">+</span>
+                     <span class="s2">&quot;&amp;nbsp; count: &lt;span data-dojo-attach-point=&#39;counter&#39;&gt;0&lt;/span&gt;&quot;</span> <span class="o">+</span>
+                 <span class="s2">&quot;&lt;/div&gt;&quot;</span><span class="p">,</span>
+
+              <span class="nx">increment</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">evt</span><span class="p">){</span>
+                  <span class="k">this</span><span class="p">.</span><span class="nx">counter</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">++</span><span class="k">this</span><span class="p">.</span><span class="nx">_i</span><span class="p">;</span>
+              <span class="p">}</span>
+      <span class="p">});</span>
+      <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none"> require([
+     &quot;dojo/_base/declare&quot;, &quot;dojo/parser&quot;,
+     &quot;dijit/_WidgetBase&quot;, &quot;dijit/_TemplatedMixin&quot;, &quot;dojo/domReady!&quot;
+ ], function(declare, parser, _WidgetBase, _TemplatedMixin){
+
+      declare(&quot;FancyCounter&quot;, [dijit._WidgetBase, dijit._TemplatedMixin], {
+             // counter
+             _i: 0,
+
+             templateString:
+                 &quot;&lt;div&gt;&quot; +
+                     &quot;&lt;button data-dojo-attach-event='onclick: increment'&gt;press me&lt;/button&gt;&quot; +
+                     &quot;&amp;nbsp; count: &lt;span data-dojo-attach-point='counter'&gt;0&lt;/span&gt;&quot; +
+                 &quot;&lt;/div&gt;&quot;,
+
+              increment: function(evt){
+                  this.counter.innerHTML = ++this._i;
+              }
+      });
+      parser.parse();
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">data-dojo-type=</span><span class="s">&quot;FancyCounter&quot;</span><span class="nt">&gt;</span>press me<span class="nt">&lt;/span&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;span data-dojo-type=&quot;FancyCounter&quot;&gt;press me&lt;/span&gt;</textarea></div></div></div></div>
+<div class="section" id="attachscope">
+<h2><a class="toc-backref" href="#id7">attachScope</a><a class="headerlink" href="#attachscope" title="Permalink to this headline">¶</a></h2>
+<p>The attachScope of <code class="docutils literal"><span class="pre">_AttachMixin</span></code> defaults to <cite>this</cite>, the dijit object.  In some (rare) circumstances you may want to attach your attach-points and attach-events to another object.  For example, when a dijit contains a nested dijit whose fields and events are considered to be &#8216;owned&#8217; by the containing dijit, it may be laborious to set up the necessary wiring to propagate events from the inner dijit to the outer one.</p>
+<p>In this simple example, the outer dijit has the event handler for a field that is actually created by a completely separate inner dijit.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: false, async: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;somenode&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;somenode&quot;&gt;&lt;/div&gt;</textarea></div><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+    <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_TemplatedMixin&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="kd">var</span> <span class="nx">OuterDijit</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span> <span class="nx">_WidgetBase</span> <span class="p">],</span> <span class="p">{</span>
+        <span class="nx">fieldChanged</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">thespan</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;Value is now: &#39;&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">field</span><span class="p">.</span><span class="nx">value</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="kd">var</span> <span class="nx">InnerDijit</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span> <span class="p">],</span> <span class="p">{</span>
+        <span class="nx">templateString</span><span class="o">:</span> <span class="s2">&quot;&lt;div&gt;&lt;span data-dojo-attach-point=&#39;thespan&#39;&gt;Initial span value&lt;/span&gt;&lt;br&gt;&quot;</span> <span class="o">+</span>
+            <span class="s2">&quot;&lt;input data-dojo-attach-point=&#39;field&#39; data-dojo-attach-event=&#39;keyup: fieldChanged&#39;&gt;&quot;</span> <span class="o">+</span>
+            <span class="s2">&quot;&lt;/div&gt;&quot;</span>
+    <span class="p">})</span>
+
+    <span class="c1">// Create the outer dijit instance, and then the inner one with</span>
+    <span class="c1">//  its attachScope referencing the outer dijit.</span>
+    <span class="kd">var</span> <span class="nx">outerdijit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">OuterDijit</span><span class="p">({},</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s1">&#39;somenode&#39;</span><span class="p">)),</span>
+        <span class="nx">innerdijit</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">InnerDijit</span><span class="p">({</span>
+            <span class="nx">attachScope</span><span class="o">:</span> <span class="nx">outerdijit</span>
+        <span class="p">});</span>
+    <span class="c1">// The outer dijit is already in the DOM.  Place the inner dijit and</span>
+    <span class="c1">//  start them both up.</span>
+    <span class="nx">innerdijit</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="nx">outerdijit</span><span class="p">.</span><span class="nx">domNode</span><span class="p">);</span>
+    <span class="nx">innerdijit</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+    <span class="nx">outerdijit</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+<span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+    &quot;dojo/_base/declare&quot;, &quot;dojo/dom&quot;, &quot;dijit/_WidgetBase&quot;, &quot;dijit/_TemplatedMixin&quot;, &quot;dojo/domReady!&quot;
+], function(declare, dom, _WidgetBase, _TemplatedMixin) {
+
+    var OuterDijit = declare([ _WidgetBase ], {
+        fieldChanged: function(e) {
+            this.thespan.innerHTML = &quot;Value is now: '&quot; + this.field.value + &quot;'&quot;;
+        }
+    })
+    var InnerDijit = declare([ _WidgetBase, _TemplatedMixin ], {
+        templateString: &quot;&lt;div&gt;&lt;span data-dojo-attach-point='thespan'&gt;Initial span value&lt;/span&gt;&lt;br&gt;&quot; +
+            &quot;&lt;input data-dojo-attach-point='field' data-dojo-attach-event='keyup: fieldChanged'&gt;&quot; +
+            &quot;&lt;/div&gt;&quot;
+    })
+
+    // Create the outer dijit instance, and then the inner one with
+    //  its attachScope referencing the outer dijit.
+    var outerdijit = new OuterDijit({}, dom.byId('somenode')),
+        innerdijit = new InnerDijit({
+            attachScope: outerdijit
+        });
+    // The outer dijit is already in the DOM.  Place the inner dijit and
+    //  start them both up.
+    innerdijit.placeAt(outerdijit.domNode);
+    innerdijit.startup();
+    outerdijit.startup();
+})</textarea></div></div></div><p>Thus we achieve efficient delagation of events to the outer dijit instance.</p>
+<p>Destruction and other lifecycle issues are not addressed in this example.</p>
+</div>
+</div>
+<div class="section" id="dojo-parser-parseonload-and-stopparser">
+<h1><a class="toc-backref" href="#id8">dojo/parser (parseOnLoad) and stopParser</a><a class="headerlink" href="#dojo-parser-parseonload-and-stopparser" title="Permalink to this headline">¶</a></h1>
+<p>The parser normally iterates the entire DOM and then runs through the nodes instantiating any dijits it found (that were marked with <code class="docutils literal"><span class="pre">data-dojo-type</span></code>).  Unfortunately your <code class="docutils literal"><span class="pre">_AttachMixin</span></code> templates may include dijits themselves, with the intention of using <code class="docutils literal"><span class="pre">_WidgetsInTemplateMixin</span></code> to instantiate them.  Consider the following:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: false, async: true, isDebug: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;MyDijit&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span> <span class="na">data-dojo-attach-point=</span><span class="s">&quot;mybutton&quot;</span><span class="nt">&gt;</span>Click me<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;MyDijit&quot;&gt;
+    &lt;button data-dojo-type=&quot;dijit/form/Button&quot; data-dojo-attach-point=&quot;mybutton&quot;&gt;Click me&lt;/button&gt;
+&lt;/div&gt;</textarea></div><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+    <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_AttachMixin&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_WidgetsInTemplateMixin&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/form/Button&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">parser</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_AttachMixin</span><span class="p">,</span> <span class="nx">_WidgetsInTemplateMixin</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="kd">var</span> <span class="nx">MyDijit</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;MyDijit&quot;</span><span class="p">,</span> <span class="p">[</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_AttachMixin</span><span class="p">,</span> <span class="nx">_WidgetsInTemplateMixin</span> <span class="p">],</span> <span class="p">{</span>
+
+        <span class="nx">stopParser</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+
+        <span class="nx">postCreate</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;mybutton: &quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">mybutton</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">})</span>
+
+    <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+<span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+    &quot;dojo/_base/declare&quot;, &quot;dojo/dom&quot;, &quot;dojo/parser&quot;, &quot;dijit/_WidgetBase&quot;, &quot;dijit/_AttachMixin&quot;, &quot;dijit/_WidgetsInTemplateMixin&quot;, &quot;dijit/form/Button&quot;, &quot;dojo/domReady!&quot;
+], function(declare, dom, parser, _WidgetBase, _AttachMixin, _WidgetsInTemplateMixin) {
+
+    var MyDijit = declare(&quot;MyDijit&quot;, [ _WidgetBase, _AttachMixin, _WidgetsInTemplateMixin ], {
+
+        stopParser: 1,
+
+        postCreate: function() {
+            console.log(&quot;mybutton: &quot;, this.mybutton);
+        }
+    })
+
+    parser.parse();
+})</textarea></div></div></div><p>When the parser scans the document, it will find both the <code class="docutils literal"><span class="pre">MyDijit</span></code> dijit node, and the mybutton <code class="docutils literal"><span class="pre">dijit/form/Button</span></code> node.  It will record them both as dijits to instantiate.  The MyDijit construction will happen first, and because it extends <code class="docutils literal"><span class="pre">_WidgetsInTemplateMixin</span></code> it will do its own scan and instantiation of dijit/form/Button.  If the parser were then to continue down its array of nodes to instantiate dijits for, it would re-instantiate the <code class="docutils literal"><span class="pre">dijit/form/Button</span></code>.</p>
+<p>The parser checks each constructor prototype for a &#8216;stopParser&#8217; attribute, and does not recurse into it if found.  We can use this flag on our dijit declaration to indicate to the parser that we do not want it to consider nodes in our template for parsing.</p>
+</div>
+<div class="section" id="visibility">
+<h1><a class="toc-backref" href="#id9">Visibility</a><a class="headerlink" href="#visibility" title="Permalink to this headline">¶</a></h1>
+<p>Placing dijit template nodes in the DOM often leads to unwelcome &#8216;flicker&#8217;, where the nodes are rendered by the browser before the javascript that picks up and uses those nodes is executed.  To get around this, developers often make the nodes invisible at page rendering time, and make them visible later when required.  There are various common schemes used to make nodes invisible.  Which you use it up to you.</p>
+<ul class="simple">
+<li>Set the CSS style &#8220;display&#8221; to &#8220;none&#8221; (either by an inline style or a CSS class).  Similarly you could set &#8220;visibility&#8221; to &#8220;hidden&#8221; but this would make the nodes take up space which is normally not desired.</li>
+<li>Set the position of the element to somewhere outside the expected viewport of the browser window.</li>
+<li>Set the size (height, width) of the nodes to zero.</li>
+<li>Set the position and z-index so they are rendered underneath other elements (e.g. a large blocking element).</li>
+</ul>
+<p>Because the options are so varied, and each option brings its own challenges (e.g. <a class="reference internal" href="Editor.html#dijit-editor"><span>dijit/Editor</span></a> has serious problems if created in a hidden element) no attempt is made by Dojo to prescribe how you should do it.</p>
+</div>
+<div class="section" id="see-also">
+<h1><a class="toc-backref" href="#id10">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="_TemplatedMixin.html#dijit-templatedmixin"><span>dijit/_TemplatedMixin</span></a></li>
+</ul>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

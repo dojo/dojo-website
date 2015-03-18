@@ -1,0 +1,558 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="icon" href="/images/favicons/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="/images/favicons/apple-touch-icon-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+		<link rel="stylesheet" href="/css/tutorials.css">
+		<title>Dojo Toolkit Tutorial</title>
+	</head>
+	<body>
+		<div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+		<main>
+			<div class="row">
+				<div class="large-9 large-offset-1 columns content tutorial">
+					<h2 id="ajax-with-dojo-request">Ajax with dojo/request</h2>
+<p><a href="http://dojotoolkit.org/reference-guide/1.10/dojo/request.html">dojo/request</a> is a new API (introduced in Dojo 1.8) for making requests to a server from the client.  This tutorial introduces the <code>dojo/request</code> API:  you&#39;ll learn how to request a text file from the server, handle errors if they occur, post information to the server, take advantage of the notify API, and use the registry to use the same code to request data from different locations.</p>
+<ul>
+<li><span>Difficulty:</span> Beginner</li>
+<li><span>Dojo Version:</span> 1.10</li>
+</ul>
+<h3 id="getting-started">Getting Started</h3>
+<p><code>dojo/request</code> allows you to send and receive data to and from the server without reloading the page
+(commonly known as AJAX).  The new features introduced make written code more compact and the execution lightning
+fast. This tutorial mentions <code>dojo/promise</code> and <code>dojo/Deferred</code>, which
+ <code>dojo/request</code> uses for asynchronous programming. Because it&#39;s impossible to learn everything at
+once, just keep in mind that promises and Deferreds allow for easier programming of non-blocking asynchronous code.
+After this tutorial, you&#39;ll want to check out those tutorials.</p>
+<h3 id="introducing-dojo-request">Introducing dojo/request</h3>
+<p>Let&#39;s take a look at a simple example:</p>
+<pre class="brush: js; html-script: false;">
+require(["dojo/request"], function(request){
+    request("helloworld.txt").then(
+        function(text){
+            console.log("The file's content is: " + text);
+        },
+        function(error){
+            console.log("An error occurred: " + error);
+        }
+    );
+});</pre>
+
+
+<p>In a browser, the code above will execute an HTTP GET request using an <code>XMLHttpRequest</code> to
+<code>helloworld.txt</code> and return a
+<a href="/reference-guide/1.10/dojo/promise/Promise.html"><code>dojo/promise/Promise</code></a>
+. If the request is successful, the
+first function passed to <code>then()</code> is executed with the text of the file as its only argument; if the
+request fails, the second function passed to <code>then()</code> will execute with an error object as its only
+argument. But what if there is form data to send to the server? Or the response is JSON or XML? No problem &mdash;
+the <code>dojo/request</code> API allows for request customization.</p>
+<h3 id="the-dojo-request-api">The dojo/request API</h3>
+<p>Every request needs one thing: an end-point. Because of this, <code>dojo/request</code>&#39;s first parameter is
+the URL to request.</p>
+<p><p>Web developers need flexibility in their tools in order to adapt them for their applications and for multiple
+environments. The <code>dojo/request</code> API takes this into account: the first, non-optional, parameter to
+<code>dojo/request</code> is the URL to request. A second parameter can be specified to customize a request using
+an <code>Object</code>. Some of the most-used options available are:</p>
+<ul>
+<li><strong>method</strong> - An uppercase string representing the HTTP method to use to make the request.<pre><code>Several helper functions are provided to make specifying this option easier (`request.get`,
+`request.post`, `request.put`, `request.del`).
+</code></pre></li>
+<li><strong>sync</strong> - A boolean that, if true, causes the request to block until the server has<pre><code>responded or the request has timed out.
+</code></pre></li>
+<li><strong>query</strong> - A string or key-value object containing query parameters to append to<pre><code>the URL.
+</code></pre></li>
+<li><strong>data</strong> - A string, key-value object, or <code>FormData</code> object containing data to<pre><code>transfer to the server.
+</code></pre></li>
+<li><strong>timeout</strong> - Time in milliseconds before considering the request a failure and triggering<pre><code>the error handler.
+</code></pre></li>
+<li><strong>handleAs</strong> - A string representing how to convert the text payload of the response before<pre><code>passing the converted data to the success handler. Possible formats are &quot;text&quot; (the default), &quot;json&quot;,
+&quot;javascript&quot;, and &quot;xml&quot;.
+</code></pre></li>
+<li><strong>headers</strong> - A key-value object containing extra headers to send with the request.</li>
+</ul>
+<p><p>Let&#39;s take a look at an example using some of these options:</p>
+<pre class="brush: js; html-script: false;">
+require(["dojo/request"], function(request){
+    request.post("post-content.php", {
+        data: {
+            color: "blue",
+            answer: 42
+        },
+        headers: {
+            "X-Something": "A value"
+        }
+    }).then(function(text){
+        console.log("The server returned: ", text);
+    });
+});
+</pre>
+
+
+<p>This example executes an HTTP POST request to <code>post-content.php</code>; a simple object (<code>data</code>)
+is also serialized and sent as POST data with the request as well as an &quot;X-Something&quot; header. When the server
+responds, the payload is used as the value of the promise returned from <code>request.post</code>.</p>
+<h3 id="examples-request-get-and-request-post">Examples: request.get and request.post</h3>
+<p>The following are some common uses of <code>dojo/request</code>.</p>
+<h4 id="display-the-contents-of-a-text-file-on-a-page">Display the contents of a text file on a page</h4>
+<p>This example uses <code>dojo/request.get</code> to request a text file.  A good use of this approach would be to provide text for terms and conditions or privacy for a site, because the text files would only be sent to the client if they were specifically requested, and it is easier to maintain text in a file than in code.</p>
+<pre class="brush: js; html-script: false;">
+require(["dojo/dom", "dojo/on", "dojo/request", "dojo/domReady!"],
+    function(dom, on, request){
+        // Results will be displayed in resultDiv
+        var resultDiv = dom.byId("resultDiv");
+
+        // Attach the onclick event handler to the textButton
+        on(dom.byId("textButton"), "click", function(evt){
+            // Request the text file
+            request.get("../resources/text/psalm_of_life.txt").then(
+                function(response){
+                    // Display the text file content
+                    resultDiv.innerHTML = "&lt;pre&gt;"+response+"&lt;/pre&gt;";
+                },
+                function(error){
+                    // Display the error returned
+                    resultDiv.innerHTML = "&lt;div class=\"error\"&gt;"+error+"&lt;div&gt;";
+                }
+            );
+        });
+    }
+);
+
+</pre>
+
+<p><a href="demo/dojo-request-xhr.php">View Demo</a></p>
+<h4 id="login-demo">Login demo</h4>
+<p>In the example below, a POST request is used to send the username and password to the server and the result from the server is displayed.</p>
+<pre class="brush: js; html-script: false;">
+
+require(["dojo/dom", "dojo/on", "dojo/request", "dojo/dom-form"],
+    function(dom, on, request, domForm){
+
+        var form = dom.byId('formNode');
+
+        // Attach the onsubmit event handler of the form
+        on(form, "submit", function(evt){
+
+            // prevent the page from navigating after submit
+            evt.stopPropagation();
+            evt.preventDefault();
+
+            // Post the data to the server
+            request.post("../resources/php/login-demo.php", {
+                // Send the username and password
+                data: domForm.toObject("formNode"),
+                // Wait 2 seconds for a response
+                timeout: 2000
+
+            }).then(function(response){
+                dom.byId('svrMessage').innerHTML = response;
+            });
+        });
+    }
+);
+
+</pre>
+
+<p><a href="demo/dojo-request-xhr-post.php">View Demo</a></p>
+<h4 id="headers-demo">Headers demo</h4>
+<p>In the example below, a POST request is used as above, and the Auth-Token header is accessed.</p>
+<p>To access the headers, use the <code>promise.response.getHeader</code> method of the
+original <code>Promise</code> (The <code>Promise</code> returned from the <code>XHR</code> will
+<strong>not</strong> have this property).
+Additionally, when using <code>promise.response.then</code>, the response will not be the data,
+but an object with a data property.</p>
+<pre class="brush: js; html-script: false;">
+
+require(["dojo/dom", "dojo/on", "dojo/request", "dojo/dom-form"],
+    function(dom, on, request, domForm){
+        // Results will be displayed in resultDiv
+
+        var form = dom.byId('formNode');
+
+        // Attach the onsubmit event handler of the form
+        on(form, "submit", function(evt){
+
+            // prevent the page from navigating after submit
+            evt.stopPropagation();
+            evt.preventDefault();
+
+            // Post the data to the server
+            var promise = request.post("../resources/php/login-demo.php", {
+                // Send the username and password
+                data: domForm.toObject("formNode"),
+                // Wait 2 seconds for a response
+                timeout: 2000
+            });
+
+            // Use promise.response.then, NOT promise.then
+            promise.response.then(function(response){
+
+                // get the message from the data property
+                var message = response.data;
+
+                // Access the 'Auth-Token' header
+                var token = response.getHeader('Auth-Token');
+
+                dom.byId('svrMessage').innerHTML = message;
+                dom.byId('svrToken').innerHTML = token;
+            });
+        });
+    }
+);
+
+</pre>
+
+<p><a href="demo/dojo-request-xhr-header.php">View Demo</a></p>
+<h3 id="json-javascript-object-notation-">JSON (JavaScript Object Notation)</h3>
+<p><a href="http://json.org">JSON</a> is a very common way to encode data for AJAX requests, because it is easy to read, easy to work with, and very compact.  JSON can be used to encode any type of data: JSON support is included in or available for many languages, including <a href="http://www.php.net/manual/en/ref.json.php">PHP</a>, <a href="http://www.json.org/java/">Java</a>, <a href="http://search.cpan.org/~makamaka/JSON-2.53/lib/JSON.pm">Perl</a>, <a href="http://docs.python.org/library/json.html">Python</a>, <a href="http://flori.github.com/json/">Ruby</a>, and <a href="http://code.google.com/p/aspjson/">ASP</a>.</p>
+<p><strong>JSON encoded object</strong></p>
+<pre style="overflow-x:scroll">{
+    "title":"JSON Sample Data",
+    "items":[{
+        "name":"text",
+        "value":"text data"
+    },{
+        "name":"integer",
+        "value":100
+    },{
+        "name":"float",
+        "value":5.65
+    },{
+        "name":"boolean",
+        "value":false
+    }]
+}</pre>
+
+
+<p>When <code>handleAs</code> is set to <code>&quot;json&quot;</code>, <code>dojo/request</code> treats the response payload
+as JSON data and parses it into a JavaScript object.</p>
+<pre class="brush: js; html-script: false;">
+require(["dojo/dom", "dojo/request", "dojo/json",
+        "dojo/_base/array", "dojo/domReady!"],
+    function(dom, request, JSON, arrayUtil){
+        // Results will be displayed in resultDiv
+        var resultDiv = dom.byId("resultDiv");
+
+        // Request the JSON data from the server
+        request.get("../resources/data/sample.json.php", {
+            // Parse data from JSON to a JavaScript object
+            handleAs: "json"
+        }).then(function(data){
+            // Display the data sent from the server
+            var html = "&lt;h2&gt;JSON Data&lt;/h2&gt;" +
+                "&lt;p&gt;JSON encoded data:&lt;/p&gt;" +
+                "&lt;p&gt;&lt;code&gt;" + JSON.stringify(data) + "&lt;/code&gt;&lt;/p&gt;"+
+                "&lt;h3&gt;Accessing the JSON data&lt;/h3&gt;" +
+                "&lt;p&gt;&lt;strong&gt;title&lt;/strong&gt; " + data.title + "&lt;/p&gt;" +
+                "&lt;p&gt;&lt;strong&gt;items&lt;/strong&gt; An array of items." +
+                "Each item has a name and a value.  The type of " +
+                "the value is shown in parentheses.&lt;/p&gt;&lt;dl&gt;";
+
+            arrayUtil.forEach(data.items, function(item,i){
+                html += "&lt;dt&gt;" + item.name +
+                    "&lt;/dt&gt;&lt;dd&gt;" + item.value +
+                    " (" + (typeof item.value) + ")&lt;/dd&gt;";
+            });
+            html += "&lt;/dl&gt;";
+
+            resultDiv.innerHTML = html;
+        },
+        function(error){
+            // Display the error returned
+            resultDiv.innerHTML = error;
+        });
+    }
+);
+</pre>
+
+
+<p>In addition to the encoding the data as JSON in the response, set the <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17">Content-Type</a> header to <em>application/json</em>, either using server configuration such as <a href="http://httpd.apache.org/docs/2.0/mod/mod_mime.html#addtype">Apache&#39;s AddType</a> or adding it to the header with the server side code.</p>
+<p><a href="demo/dojo-request-json.php">View Demo</a></p>
+<h3 id="jsonp-javascript-object-notation-with-padding-">JSONP (Javascript Object Notation with Padding)</h3>
+<p>AJAX requests are restricted to the current domain.  If you need to request data from a different domain, you can use <a href="http://json-p.org">JSONP</a>.  When using JSONP, a script tag is inserted in the current page, the <em>src</em> file is requested, the server wraps the data in a callback function, and when the response is interpreted, the callback is called with the data as its first argument.  JSONP requests are made with <a href="/reference-guide/1.10/dojo/request/script.html">dojo/request/script</a>.</p>
+<p>Let&#39;s take a look at a few examples:</p>
+<h4 id="using-jsonp-to-request-data-from-a-server-and-handling-the-response">Using JSONP to request data from a server and handling the response</h4>
+<pre class="brush: js; html-script: false;">
+require(["dojo/dom", "dojo/on", "dojo/request/script",
+        "dojo/json", "dojo/domReady!"
+], function(dom, on, script, JSON){
+    // Results will be displayed in resultDiv
+    var resultDiv = dom.byId("resultDiv");
+
+    // Attach the onclick event handler to the makeRequest button
+    on(dom.byId('makeRequest'),"click", function(evt){
+
+        // When the makeRequest button is clicked, send the current
+        // date and time to the server in a JSONP request
+        var d = new Date(),
+            dateNow = d.toString();
+        script.get("../resources/php/jsonp-demo.php",{
+            // Tell the server that the callback name to
+            // use is in the "callback" query parameter
+            jsonp: "callback",
+            // Send the date and time
+            query: {
+                clienttime: dateNow
+            }
+        }).then(function(data){
+            // Display the result
+            resultDiv.innerHTML = JSON.stringify(data);
+        });
+    });
+});
+</pre>
+
+
+<p>Since the response is JavaScript, not JSON, the <strong>Content-Type</strong> header on the response should be <em>application/javascript</em>.</p>
+<p><a href="demo/dojo-request-script.php">View Demo</a></p>
+<h4 id="using-jsonp-to-request-dojo-pull-requests-from-the-github-api">Using JSONP to request Dojo pull requests from the GitHub API</h4>
+<pre class="brush: js; html-script: false;">
+require(["dojo/dom", "dojo/on", "dojo/request/script",
+        "dojo/dom-construct", "dojo/_base/array",
+        "dojo/domReady!"
+], function(dom, on, script, domConstruct, arrayUtil){
+    var pullsNode = dom.byId("pullrequests");
+
+    // Attach the onclick event handler to tweetButton
+    on(dom.byId("pullrequestsButton"), "click", function(evt){
+        // Request the open pull requests from Dojo's GitHub repo
+        script.get("https://api.github.com/repos/dojo/dojo/pulls", {
+            // Use the "callback" query parameter to tell
+            // GitHub's services the name of the function
+            // to wrap the data in
+            jsonp: "callback"
+        }).then(function(response){
+            // Empty the tweets node
+            domConstruct.empty(pullsNode);
+
+            // Create a document fragment to keep from
+            // doing live DOM manipulation
+            var fragment = document.createDocumentFragment();
+
+            // Loop through each pull request and create a list item
+            // for it
+            arrayUtil.forEach(response.data, function(pull){
+                var li = domConstruct.create("li", {}, fragment);
+                var link = domConstruct.create("a", {href: pull.url, innerHTML: pull.title}, li);
+            });
+
+            // Append the document fragment to the list
+            domConstruct.place(fragment, pullsNode);
+        });
+    });
+});
+</pre>
+
+<p><a href="demo/dojo-request-script-pulls.php">View Demo</a></p>
+<h3 id="reporting-status">Reporting Status</h3>
+<p><a href="/reference-guide/1.10/dojo/request/notify.html">dojo/request/notify</a> provides a mechanism to report the status of requests made with <code>dojo/request</code> (or any provider within <code>dojo/request</code>).  Requiring <code>dojo/request/notify</code> will allow the providers to emit events which can be listened to and used to report the status of requests. To listen for an event, call the return value of the <code>dojo/request/notify</code> module with two parameters: an event name and a listener function. The following are the events that <code>dojo/request</code> providers emit:</p>
+<h4 id="supported-dojo-request-notify-events">Supported dojo/request/notify events</h4>
+<ul>
+<li><strong>start</strong> - Emitted when the first in-flight request starts</li>
+<li><strong>send</strong> - Emitted prior to a provider sending a request</li>
+<li><strong>load</strong> - Emitted when a provider receives a successful response</li>
+<li><strong>error</strong> - Emitted when a provider receives an error</li>
+<li><strong>done</strong> - Emitted when a provider finishes a request, regardless of success or failure</li>
+<li><strong>stop</strong> - Emitted when all in-flight requests have finished</li>
+</ul>
+<p>Listeners of <code>&quot;start&quot;</code> and <code>&quot;stop&quot;</code> receive no arguments. Listeners of <code>&quot;send&quot;</code> receive two arguments: an object representing the request and a cancel function. Calling the cancel function will cancel the request before it begins. Listeners of <code>&quot;load&quot;</code>, <code>&quot;error&quot;</code>, and <code>&quot;done&quot;</code> receive one argument: an object representing the response from the server. Let&#39;s take a look at an example of this in action:</p>
+<h4 id="using-dojo-request-notify-to-monitor-the-progress-of-requests">Using dojo/request/notify to monitor the progress of requests</h4>
+<pre class="brush: js; html-script: false;">
+require(["dojo/dom", "dojo/request", "dojo/request/notify",
+        "dojo/on", "dojo/dom-construct", "dojo/query",
+        "dojo/domReady!"],
+    function(dom, request, notify, on, domConstruct){
+        // Listen for events from request providers
+        notify("start", function(){
+            domConstruct.place("&lt;p&gt;Start&lt;/p&gt;","divStatus");
+        });
+        notify("send", function(data, cancel){
+            domConstruct.place("&lt;p&gt;Sent request&lt;/p&gt;","divStatus");
+        });
+        notify("load", function(data){
+            domConstruct.place("&lt;p&gt;Load (response received)&lt;/p&gt;","divStatus");
+        });
+        notify("error", function(error){
+            domConstruct.place("&lt;p class=\"error\"&gt;Error&lt;/p&gt;","divStatus");
+        });
+        notify("done", function(data){
+            domConstruct.place("&lt;p&gt;Done (response processed)&lt;/p&gt;","divStatus");
+            if(data instanceof Error){
+                domConstruct.place("&lt;p class=\"error\"&gt;Error&lt;/p&gt;","divStatus");
+            }else{
+                domConstruct.place("&lt;p class=\"success\"&gt;Success&lt;/p&gt;","divStatus");
+            }
+        });
+        notify("stop", function(){
+            domConstruct.place("&lt;p&gt;Stop&lt;/p&gt;","divStatus");
+            domConstruct.place("&lt;p class=\"ready\"&gt;Ready&lt;/p&gt;", "divStatus");
+        });
+
+        // Use event delegation to only listen for clicks that
+        // come from nodes with a class of "action"
+        on(dom.byId("buttonContainer"), ".action:click", function(evt){
+            domConstruct.empty("divStatus");
+            request.get("../resources/php/notify-demo.php", {
+                query: {
+                    success: this.id === "successBtn"
+                },
+                handleAs: "json"
+            });
+        });
+    }
+);
+</pre>
+
+<p><a href="demo/dojo-request-notify.php">View Demo</a></p>
+<h3 id="dojo-request-registry">dojo/request/registry</h3>
+<p><a href="/reference-guide/1.10/dojo/request/registry.html">dojo/request/registry</a> provides a mechanism to route requests based on the URL requested.  Common uses of the registry are to assign a provider based on whether the request will be made to the current domain using <em>JSON</em>, or to a different domain using <em>JSONP</em>.  You may also use this approach if the URLs can vary based on the operations in progress.</p>
+<h4 id="dojo-request-registry-syntax">dojo/request/registry syntax</h4>
+<pre class="brush: js; html-script: false;">
+request.register(url, provider, first);
+</pre>
+
+
+<h4 id="dojo-request-registry-parameters">dojo/request/registry parameters</h4>
+<ul>
+<li><p><strong>url</strong> - The url may be a string, regEx, or function.</p>
+<pre><code>*   **string** - If the url is a string, the provider will be used if the url is an exact match.
+</code></pre><ul>
+<li><strong>regExp</strong> - If the url is regular expression, the provider will be used if the regular expression matches the requested URL.</li>
+<li><strong>function</strong> - If the url is a function, the function will be passed the URL and options object of the request. If the function returns a <a href="http://www.sitepoint.com/javascript-truthy-falsy/">truthy</a> value, the provider will be used for the request</li>
+</ul>
+</li>
+<li><strong>provider</strong> - The provider to use to handle the request.</li>
+<li><strong>first</strong> - An optional boolean parameter. If truthy, registers the provider before other already registered providers.</li>
+</ul>
+<p>Let&#39;s take a look at one final example:</p>
+<h4 id="using-dojo-request-registry-to-assign-the-provider-based-on-the-url-of-requests">Using dojo/request/registry to assign the provider based on the URL of requests</h4>
+<pre class="brush: js; html-script: false;">
+require(["dojo/request/registry", "dojo/request/script", "dojo/dom",
+        "dojo/dom-construct", "dojo/on", "dojo/domReady!"],
+    function(request, script, dom, domConstuct, on){
+        // Registers anything that starts with "http://"
+        // to be sent to the script provider,
+        // requests for a local search will use xhr
+        request.register(/^https?:\/\//i, script);
+
+        // When the search button is clicked
+        on(dom.byId("searchButton"), "click", function(){
+            // First send a request to twitter for all tweets
+            // tagged with the search string
+            request("http://search.twitter.com/search.json", {
+                query: {
+                    q:"#" + dom.byId("searchText").value,
+                    result_type:"mixed",
+                    lang:"en"
+                },
+                jsonp: "callback"
+            }).then(function(data){
+                // If the tweets node exists, destroy it
+                if (dom.byId("tweets")){
+                    domConstuct.destroy("tweets");
+                }
+                // If at least one result was returned
+                if (data.results.length &gt; 0) {
+                    // Create a new tweet list
+                    domConstuct.create("ul", {id: "tweets"},"twitterDiv");
+                    // Add each tweet as an li
+                    while (data.results.length&gt;0){
+                        domConstuct.create("li", {innerHTML: data.results.shift().text},"tweets");
+                    }
+                }else{
+                    // No results returned
+                    domConstuct.create("p", {id:"tweets",innerHTML:"None"},"twitterDiv");
+                }
+            });
+            // Next send a request to the local search
+            request("../resources/php/search.php", {
+                query: {
+                    q: dom.byId("searchText").value
+                },
+                handleAs: "json"
+            }).then(
+                function(data){
+                    dom.byId('localResourceDiv').innerHTML =
+                        "&lt;p&gt;&lt;strong&gt;" + data.name + "&lt;/strong&gt;&lt;br /&gt;" +
+                        "&lt;a href=\"" + data.url + "\"&gt;" + data.url + "&lt;/a&gt;&lt;br /&gt;";
+                },
+                function(error){
+                    // If no results are found, the local search returns a 404
+                    dom.byId('localResourceDiv').innerHTML = "&lt;p&gt;None&lt;/p&gt;";
+                }
+            );
+        });
+    }
+);
+</pre>
+
+<p><a href="demo/dojo-request-registry.php">View Demo</a></p>
+<h3 id="best-practices">Best Practices</h3>
+<p>Best practices for using <code>dojo/request</code> include:</p>
+<ul>
+<li>Careful choice of request method.  Generally, <em>GET</em> is used for simple requests of data without security considerations.  <em>GET</em> is often faster than <em>POST</em>.  <em>POST</em> is usually used to send form data and when the data should not be passed on the URL.</li>
+<li>Use of HTTPS for data which should be protected and on HTTPS pages.</li>
+<li>Since AJAX requests don&#39;t refresh the page, most users appreciate status updates, from <em>Loading ...</em> to <em>Done</em>.</li>
+<li>Error callbacks should be used for graceful detection and recovery of request failures.</li>
+<li>Use available developer tools to resolve problems more quickly.</li>
+<li>Test your code carefully with as many browsers as possible.</li>
+</ul>
+<h3 id="conclusion">Conclusion</h3>
+<p><code>dojo/request</code> provides a cross-browser compliant AJAX interface for requests to the current domain and others, including graceful error handling, support for notification, and request routing based on URL.  The promise returned by <code>dojo/request</code> is a <a href="/reference-guide/1.10/dojo/promise/Promise.html">promise</a>, allowing a series of requests to be issued and the responses processed asynchronously.  Pages can include content from multiple sources and use the data from each request as soon as it is available.  Turbocharge your pages with <code>dojo/request</code>!</p>
+<h3 id="resources">Resources</h3>
+<ul>
+<li><a href="/reference-guide/1.10/dojo/request.html">dojo/request Documentation</a></li>
+<li><a href="../jsonp">Getting Jiggy with JSONP Tutorial</a></li>
+<li><a href="../deferreds">Getting Started with Deferreds Tutorial</a></li>
+<li><a href="../promises">Dojo Deferreds and Promises Tutorial</a></li>
+<li><a href="http://json.org/">JSON</a> Introducing JSON</li>
+<li><a href="http://json-p.org/">JSONP</a> JSON-P Documentation</li>
+<li><a href="http://www.diffen.com/difference/Get_vs_Post">Comparison of GET and POST</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Futures_and_promises">Future and Promises</a> Wikipedia article</li>
+</ul>
+
+				</div>
+			</div>
+		</main>
+		<div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+	</body>
+</html>

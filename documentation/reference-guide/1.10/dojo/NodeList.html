@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>NodeList &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">NodeList</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#features">Features</a><ul>
+<li><a class="reference internal" href="#at">at()</a></li>
+<li><a class="reference internal" href="#concat">concat()</a></li>
+<li><a class="reference internal" href="#end">end()</a></li>
+<li><a class="reference internal" href="#every">every()</a></li>
+<li><a class="reference internal" href="#foreach">forEach()</a></li>
+<li><a class="reference internal" href="#indexof">indexOf()</a></li>
+<li><a class="reference internal" href="#instantiate">instantiate()</a></li>
+<li><a class="reference internal" href="#lastindexof">lastIndexOf()</a></li>
+<li><a class="reference internal" href="#map">map()</a></li>
+<li><a class="reference internal" href="#on">on()</a></li>
+<li><a class="reference internal" href="#slice">slice()</a></li>
+<li><a class="reference internal" href="#some">some()</a></li>
+<li><a class="reference internal" href="#splice">splice()</a></li>
+<li><a class="reference internal" href="#other">Other</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#extending">Extending</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="nodelist">
+<span id="dojo-nodelist"></span><h1><a class="toc-backref" href="#id1">NodeList</a><a class="headerlink" href="#nodelist" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#nodelist" id="id1">NodeList</a><ul>
+<li><a class="reference internal" href="#usage" id="id2">Usage</a></li>
+<li><a class="reference internal" href="#features" id="id3">Features</a></li>
+<li><a class="reference internal" href="#extending" id="id4">Extending</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>A <code class="docutils literal"><span class="pre">NodeList</span></code> is a JavaScript Array that has been decorated with many helpful functions that operate on each member of the array.  It is what gets returned as the results of a <a class="reference internal" href="query.html#dojo-query"><span>dojo/query()</span></a> call.</p>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id2">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>When using <code class="docutils literal"><span class="pre">dojo/query</span></code>, it returns an instance of <code class="docutils literal"><span class="pre">NodeList</span></code>:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">nodelist</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.something&quot;</span><span class="p">);</span>
+  <span class="c1">// nodelist contains an instance of NodeList</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;], function(query){
+  var nodelist = query(&quot;.something&quot;);
+  // nodelist contains an instance of NodeList
+});</textarea></div><p>You can also create an instance of <code class="docutils literal"><span class="pre">NodeList</span></code> directly:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">nodelist</span> <span class="o">=</span> <span class="nx">query</span><span class="p">.</span><span class="nx">NodeList</span><span class="p">();</span>
+  <span class="nx">nodelist</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;someId&quot;</span><span class="p">));</span>
+  <span class="nx">nodelist</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;someOtherId&quot;</span><span class="p">));</span>
+  <span class="c1">// nodelist now contains the two DOM nodes</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;, &quot;dojo/dom&quot;], function(query, dom){
+  var nodelist = query.NodeList();
+  nodelist.push(dom.byId(&quot;someId&quot;));
+  nodelist.push(dom.byId(&quot;someOtherId&quot;));
+  // nodelist now contains the two DOM nodes
+});</textarea></div><p>Most of the functions that decorate <code class="docutils literal"><span class="pre">NodeList</span></code> return the same instance, therefore easily allowing method chaining:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/NodeList-dom&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+      <span class="c1">// get all &quot;li&quot; elements</span>
+    <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;ul &gt; li&quot;</span><span class="p">).</span>
+      <span class="c1">// make them visible but, slightly transparent</span>
+      <span class="nx">style</span><span class="p">({</span> <span class="nx">opacity</span><span class="o">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nx">visibility</span><span class="o">:</span> <span class="s2">&quot;visible&quot;</span> <span class="p">}).</span>
+      <span class="c1">// and set a handler to make a clicked item fully opaque</span>
+      <span class="nx">onclick</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+        <span class="c1">// a node to dojo.query() is a fast way to get a list</span>
+        <span class="nx">query</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">).</span><span class="nx">style</span><span class="p">({</span> <span class="nx">opacity</span><span class="o">:</span><span class="mi">1</span> <span class="p">}).</span><span class="nx">toggleClass</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">);</span>
+      <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;, &quot;dojo/NodeList-dom&quot;], function(query){
+      // get all &quot;li&quot; elements
+    query(&quot;ul &gt; li&quot;).
+      // make them visible but, slightly transparent
+      style({ opacity: 0.5, visibility: &quot;visible&quot; }).
+      // and set a handler to make a clicked item fully opaque
+      onclick(function(e){
+        // a node to dojo.query() is a fast way to get a list
+        query(e.target).style({ opacity:1 }).toggleClass(&quot;clicked&quot;);
+      });
+});</textarea></div><p>Beyond the basic functionality defined in <code class="docutils literal"><span class="pre">dojo/query</span></code>, there are also several other modules which add additional functionality:</p>
+<ul class="simple">
+<li><a class="reference internal" href="NodeList-data.html#dojo-nodelist-data"><span>dojo/NodeList-data</span></a> - Allows the association of arbitrary data with items of a <code class="docutils literal"><span class="pre">NodeList</span></code>.</li>
+<li><a class="reference internal" href="NodeList-dom.html#dojo-nodelist-dom"><span>dojo/NodeList-dom</span></a> - DOM related functions that are similar in functionality to the <code class="docutils literal"><span class="pre">dojo/dom-*</span></code> related modules.</li>
+<li><a class="reference internal" href="NodeList-fx.html#dojo-nodelist-fx"><span>dojo/NodeList-fx</span></a> - Adds base and core FX support to <code class="docutils literal"><span class="pre">NodeList</span></code>.</li>
+<li><a class="reference internal" href="NodeList-html.html#dojo-nodelist-html"><span>dojo/NodeList-html</span></a> - Adds advanced content setting functionality.</li>
+<li><a class="reference internal" href="NodeList-manipulate.html#dojo-nodelist-manipulate"><span>dojo/NodeList-manipulate</span></a> - Functions that allow for manipulation of DOM nodes in similar way to jQuery.</li>
+<li><a class="reference internal" href="NodeList-traverse.html#dojo-nodelist-traverse"><span>dojo/NodeList-traverse</span></a> - Advanced node traversal functions.</li>
+</ul>
+</div>
+<div class="section" id="features">
+<h2><a class="toc-backref" href="#id3">Features</a><a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<p>The following sections provide an overview of the base functionality provide by <code class="docutils literal"><span class="pre">dojo/query</span></code>.</p>
+<div class="section" id="at">
+<h3>at()<a class="headerlink" href="#at" title="Permalink to this headline">¶</a></h3>
+<p>Returns a new <code class="docutils literal"><span class="pre">NodeList</span></code> with the items specified by index assuming a 0 based array.  Negative values will return values from the end of the <code class="docutils literal"><span class="pre">NodeList</span></code>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">nodelist</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;ul &gt; li&quot;</span><span class="p">).</span><span class="nx">at</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+  <span class="c1">// nodelist contains first and last nodes of an unordered list</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;], function(query){
+  var nodelist = query(&quot;ul &gt; li&quot;).at(0, -1);
+  // nodelist contains first and last nodes of an unordered list
+});</textarea></div></div>
+<div class="section" id="concat">
+<h3>concat()<a class="headerlink" href="#concat" title="Permalink to this headline">¶</a></h3>
+<p>Returns a new <code class="docutils literal"><span class="pre">NodeList</span></code> which contains the original list in addition to any passed arguments.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">)){</span>
+  <span class="kd">var</span> <span class="nx">nodelist</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;h1&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">query</span><span class="p">(</span><span class="s2">&quot;h2&quot;</span><span class="p">));</span>
+  <span class="c1">// nodelist contains all the documents headers that are level 1 and 2</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;], function(query)){
+  var nodelist = query(&quot;h1&quot;).concat(query(&quot;h2&quot;));
+  // nodelist contains all the documents headers that are level 1 and 2
+}</textarea></div></div>
+<div class="section" id="end">
+<h3>end()<a class="headerlink" href="#end" title="Permalink to this headline">¶</a></h3>
+<p>Used when &#8220;chaining&#8221; to revert back to the previous <code class="docutils literal"><span class="pre">NodeList</span></code> that generated the current <code class="docutils literal"><span class="pre">NodeList</span></code>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/NodeList-dom&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span>
+    <span class="c1">// Contains all anchors</span>
+      <span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="s2">&quot;.disabled&quot;</span><span class="p">)</span>
+      <span class="c1">// Only contains anchors with class &quot;disabled&quot;</span>
+        <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="s2">&quot;grey&quot;</span><span class="p">)</span>
+   <span class="p">.</span><span class="nx">end</span><span class="p">()</span>
+      <span class="c1">// Reverts back to all anchors now</span>
+      <span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;fontSize&quot;</span><span class="p">,</span> <span class="s2">&quot;14px&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;, &quot;dojo/NodeList-dom&quot;], function(query){
+  query(&quot;a&quot;)
+    // Contains all anchors
+      .filter(&quot;.disabled&quot;)
+      // Only contains anchors with class &quot;disabled&quot;
+        .style(&quot;color&quot;, &quot;grey&quot;)
+   .end()
+      // Reverts back to all anchors now
+      .style(&quot;fontSize&quot;, &quot;14px&quot;);
+});</textarea></div><p>This function takes no arguments.</p>
+</div>
+<div class="section" id="every">
+<h3>every()<a class="headerlink" href="#every" title="Permalink to this headline">¶</a></h3>
+<p>Returns <code class="docutils literal"><span class="pre">true</span></code> if every node of the <code class="docutils literal"><span class="pre">NodeList</span></code> returns <code class="docutils literal"><span class="pre">true</span></code> for the supplied function, or <code class="docutils literal"><span class="pre">false</span></code> if any element returns <code class="docutils literal"><span class="pre">false</span></code> for the supplied function.  This works just like <a class="reference internal" href="_base/array.html#dojo-base-array-every"><span>dojo/_base/array::every()</span></a> except the target is implied to be the <code class="docutils literal"><span class="pre">NodeList</span></code>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someclass&quot;</span><span class="p">).</span><span class="nx">every</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">==</span> <span class="s2">&quot;hello&quot;</span><span class="p">;</span>
+  <span class="p">})){</span>
+    <span class="c1">// function is true for every node</span>
+  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="c1">// function is not true for every node</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;], function(query){
+  if(query(&quot;.someclass&quot;).every(function(node){
+    return node.innerHTML == &quot;hello&quot;;
+  })){
+    // function is true for every node
+  }else{
+    // function is not true for every node
+  }
+});</textarea></div></div>
+<div class="section" id="foreach">
+<h3>forEach()<a class="headerlink" href="#foreach" title="Permalink to this headline">¶</a></h3>
+<p>Iterates over every node of the <code class="docutils literal"><span class="pre">NodeList</span></code> passing the nodes to a function.  This function will process each node.  If you want the ability to &#8220;short circuit&#8221; see <code class="docutils literal"><span class="pre">every()</span></code> or <code class="docutils literal"><span class="pre">some()</span></code> instead.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someclass&quot;</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">){</span>
+    <span class="c1">// node will be each node in the list.</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;], function(query){
+  query(&quot;.someclass&quot;).forEach(function(node){
+    // node will be each node in the list.
+  });
+});</textarea></div></div>
+<div class="section" id="indexof">
+<h3>indexOf()<a class="headerlink" href="#indexof" title="Permalink to this headline">¶</a></h3>
+<p>Returns the index of the first occurance of a node in a <code class="docutils literal"><span class="pre">NodeList</span></code>.  If not found, it returns <code class="docutils literal"><span class="pre">-1</span></code>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;someId&quot;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">idx</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someClass&quot;</span><span class="p">).</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+  <span class="c1">// if idx &gt;= 0 then node has a class of someClass</span>
+  <span class="c1">// if idx = -1 then node doesn&#39;t have class of someClass</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;, &quot;dojo/dom&quot;], function(query, dom){
+  var node = dom.byId(&quot;someId&quot;);
+  var idx = query(&quot;.someClass&quot;).indexOf(node);
+  // if idx &gt;= 0 then node has a class of someClass
+  // if idx = -1 then node doesn't have class of someClass
+});</textarea></div></div>
+<div class="section" id="instantiate">
+<h3>instantiate()<a class="headerlink" href="#instantiate" title="Permalink to this headline">¶</a></h3>
+<p>Instantiates objects for each class, passing the optional configuration object to the constructor.  This is similar
+to the functionality of the :ref:<code class="docutils literal"><span class="pre">dojo/parser</span> <span class="pre">&lt;dojo/parser&gt;</span></code> but instead of scanning the DOM for marked up nodes, it
+uses the nodes in the <code class="docutils literal"><span class="pre">NodeList</span></code>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/form/Button&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">Button</span><span class="p">){</span>
+  <span class="c1">// Converts all button nodes to dijit/form/Buttons</span>
+  <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;button&quot;</span><span class="p">).</span><span class="nx">instantiate</span><span class="p">(</span><span class="nx">Button</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">showLabel</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;, &quot;dijit/form/Button&quot;], function(query, Button){
+  // Converts all button nodes to dijit/form/Buttons
+  query(&quot;button&quot;).instantiate(Button, {
+    showLabel: true
+  });
+});</textarea></div><p>The function returns a <code class="docutils literal"><span class="pre">NodeList</span></code> where the members are the instantiated objects.</p>
+</div>
+<div class="section" id="lastindexof">
+<h3>lastIndexOf()<a class="headerlink" href="#lastindexof" title="Permalink to this headline">¶</a></h3>
+<p>Returns the index of the last occurrence of a node in a <code class="docutils literal"><span class="pre">NodeList</span></code>.  If the node is not found, the value of <code class="docutils literal"><span class="pre">-1</span></code> is
+returned.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;someId&quot;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">idx</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someClass&quot;</span><span class="p">).</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+  <span class="c1">// if idx &gt;= 0 then the value is the last occurrence of node</span>
+  <span class="c1">// if idx = -1 then node was not found in the NodeList</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;, &quot;dojo/dom&quot;], function(query, dom){
+  var node = dom.byId(&quot;someId&quot;);
+  var idx = query(&quot;.someClass&quot;).lastIndexOf(node);
+  // if idx &gt;= 0 then the value is the last occurrence of node
+  // if idx = -1 then node was not found in the NodeList
+});</textarea></div></div>
+<div class="section" id="map">
+<h3>map()<a class="headerlink" href="#map" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">map()</span></code> interates all the nodes in the <code class="docutils literal"><span class="pre">NodeList</span></code>, passing them to the <code class="docutils literal"><span class="pre">callback</span></code> function and then returning a new <code class="docutils literal"><span class="pre">NodeList</span></code> with any of the modified results.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">nodelist</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;h1&quot;</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">;</span>
+  <span class="p">});</span>
+  <span class="c1">// nodelist contains all the parent nodes of every heading level 1 node</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;], function(query){
+  var nodelist = query(&quot;h1&quot;).map(function(node){
+    return node.parentNode;
+  });
+  // nodelist contains all the parent nodes of every heading level 1 node
+});</textarea></div><p>The function has the following signature:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="17%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>callback</td>
+<td><strong>Function|String</strong></td>
+<td>The function (or function name in the optional scope object) to apply to each node</td>
+</tr>
+<tr class="row-odd"><td>thisObj</td>
+<td><em>Object</em></td>
+<td>The optional scope object to be used as <code class="docutils literal"><span class="pre">this</span></code>.</td>
+</tr>
+</tbody>
+</table>
+<p>The function returns a <code class="docutils literal"><span class="pre">NodeList</span></code> with the returned values of the <code class="docutils literal"><span class="pre">callback</span></code> function.</p>
+</div>
+<div class="section" id="on">
+<h3>on()<a class="headerlink" href="#on" title="Permalink to this headline">¶</a></h3>
+<p>Attaches an event listener to the nodes of the <code class="docutils literal"><span class="pre">NodeList</span></code>.  This feature leverages <a class="reference internal" href="on.html#dojo-on"><span>dojo/on</span></a> to provide this mechanism.  Please refer to that for additional information.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;button&quot;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;click!&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="c1">// Every button will log &quot;click!&quot; to the console when clicked</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require(&quot;dojo/query&quot;, function(query){
+  query(&quot;button&quot;).on(&quot;click&quot;, function(e){
+    console.log(&quot;click!&quot;);
+  });
+  // Every button will log &quot;click!&quot; to the console when clicked
+});</textarea></div><p><code class="docutils literal"><span class="pre">on()</span></code> supports event delegation by using selectors as the first argument with the event names as pseudo selectors.
+For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;#mylist&quot;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;li:click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;click!&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="c1">// Listens for onclick events on list items in the list with an ID of &quot;myList&quot;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require(&quot;dojo/query&quot;, function(query){
+  query(&quot;#mylist&quot;).on(&quot;li:click&quot;, function(e){
+    console.log(&quot;click!&quot;);
+  });
+  // Listens for onclick events on list items in the list with an ID of &quot;myList&quot;
+});</textarea></div><p>Because <code class="docutils literal"><span class="pre">on()</span></code> supports CSS selector syntax, comma delimited events can be used as well:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;#mylist&quot;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;li button:mouseover, li:click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;hello!&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require(&quot;dojo/query&quot;, function(query){
+  query(&quot;#mylist&quot;).on(&quot;li button:mouseover, li:click&quot;, function(e){
+    console.log(&quot;hello!&quot;);
+  });
+});</textarea></div><p>This function returns a <code class="docutils literal"><span class="pre">NodeList</span></code> where each node has a <code class="docutils literal"><span class="pre">remove()</span></code> function that can be used to remove any
+listeners.</p>
+</div>
+<div class="section" id="slice">
+<h3>slice()<a class="headerlink" href="#slice" title="Permalink to this headline">¶</a></h3>
+<p>Returns a new <code class="docutils literal"><span class="pre">NodeList</span></code> that is a &#8220;slice&#8221; of the source <code class="docutils literal"><span class="pre">NodeList</span></code>.  Like all array type functions, the indexes are zero based.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">nodelist</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+  <span class="c1">// nodelist contains the first 4 &lt;div&gt; elements</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require(&quot;dojo/query&quot;, function(query){
+  var nodelist = query(&quot;div&quot;).slice(0, 3);
+  // nodelist contains the first 4 &lt;div&gt; elements
+});</textarea></div></div>
+<div class="section" id="some">
+<h3>some()<a class="headerlink" href="#some" title="Permalink to this headline">¶</a></h3>
+<p>Returns <code class="docutils literal"><span class="pre">true</span></code> if any node of the <code class="docutils literal"><span class="pre">NodeList</span></code> returns <code class="docutils literal"><span class="pre">true</span></code> for the supplied function, or <code class="docutils literal"><span class="pre">false</span></code> if no elements return <code class="docutils literal"><span class="pre">false</span></code> for the supplied function.  This works just like <a class="reference internal" href="_base/array.html#dojo-base-array-some"><span>dojo/_base/array::some()</span></a> except the target is implied to be the <code class="docutils literal"><span class="pre">NodeList</span></code>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someclass&quot;</span><span class="p">).</span><span class="nx">some</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">node</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">==</span> <span class="s2">&quot;hello&quot;</span><span class="p">;</span>
+  <span class="p">})){</span>
+    <span class="c1">// function is true for at least one node</span>
+  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="c1">// function is not true for any node</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;], function(query){
+  if(query(&quot;.someclass&quot;).some(function(node){
+    return node.innerHTML == &quot;hello&quot;;
+  })){
+    // function is true for at least one node
+  }else{
+    // function is not true for any node
+  }
+});</textarea></div></div>
+<div class="section" id="splice">
+<h3>splice()<a class="headerlink" href="#splice" title="Permalink to this headline">¶</a></h3>
+<p>Returns a new <code class="docutils literal"><span class="pre">NodeList</span></code> that is a manipulated version based on the passed arguments that may insert new nodes or remove nodes.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">nodelist</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">).</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+  <span class="c1">// nodelist contains a list with the first 3 elements spliced out</span>
+  <span class="c1">// from the source</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;], function(query){
+  var nodelist = query(&quot;div&quot;).splice(0, 3);
+  // nodelist contains a list with the first 3 elements spliced out
+  // from the source
+});</textarea></div></div>
+<div class="section" id="other">
+<h3>Other<a class="headerlink" href="#other" title="Permalink to this headline">¶</a></h3>
+<p>In addition, standard JavaScript <code class="docutils literal"><span class="pre">Array</span></code> functions will also work, like <code class="docutils literal"><span class="pre">push()</span></code>, <code class="docutils literal"><span class="pre">pop()</span></code>, <code class="docutils literal"><span class="pre">shift()</span></code> and
+<code class="docutils literal"><span class="pre">unshift()</span></code>.  Since <code class="docutils literal"><span class="pre">NodeList</span></code> is essentially a JavaScript array that has been extended, these core array
+functions are provided by the underlying JavaScript engine.</p>
+</div>
+</div>
+<div class="section" id="extending">
+<h2><a class="toc-backref" href="#id4">Extending</a><a class="headerlink" href="#extending" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">NodeList</span></code> is specifically designed to be extended, which is exactly what the other <code class="docutils literal"><span class="pre">dojo/NodeList-*</span></code> modules do.  By using <a class="reference internal" href="_base/lang.html#dojo-base-lang-extend"><span>dojo/_base/lang::extend()</span></a> you can add functionality to the <code class="docutils literal"><span class="pre">NodeList</span></code> quite easily.  It is recommended that you do this via creating an AMD module.</p>
+<p>For example, create a custom module named <code class="docutils literal"><span class="pre">myapp/NodeList-custom.js</span></code>:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/NodeList-dom&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">query</span><span class="p">){</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">query</span><span class="p">.</span><span class="nx">NodeList</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">makeRed</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">style</span><span class="p">({</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;red&quot;</span> <span class="p">});</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/lang&quot;, &quot;dojo/query&quot;, &quot;dojo/NodeList-dom&quot;], function(lang, query){
+  lang.extend(query.NodeList, {
+    makeRed: function(){
+      this.style({ color: &quot;red&quot; });
+      return this;
+    }
+  });
+});</textarea></div><p>And then to use the extension:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;myapp/NodeList-custom&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">){</span>
+  <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.geenText&quot;</span><span class="p">).</span><span class="nx">makeRed</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;, &quot;myapp/NodeList-custom&quot;], function(query){
+  query(&quot;.geenText&quot;).makeRed();
+});</textarea></div><p>It is important that you return an instance of <code class="docutils literal"><span class="pre">NodeList</span></code> for chaining to work as expected, which in most cases will be <code class="docutils literal"><span class="pre">return</span> <span class="pre">this;</span></code>.</p>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Provides an example of working with a <code class="docutils literal"><span class="pre">NodeList</span></code> in an array like fashion.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/json&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">domConst</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;button&quot;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">nodelist</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;li&quot;</span><span class="p">);</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;Length: &quot;</span> <span class="o">+</span> <span class="nx">nodelist</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">));</span>
+    <span class="kd">var</span> <span class="nx">ih</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="nx">nodelist</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">){</span>
+      <span class="nx">ih</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">node</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;pre&gt;&quot;</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">ih</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&lt;/pre&gt;&quot;</span><span class="p">,</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">));</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/query&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/json&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(query, dom, domConst, JSON, on){
+  query(&quot;button&quot;).on(&quot;click&quot;, function(e){
+    var nodelist = query(&quot;li&quot;);
+    domConst.place(&quot;&lt;p&gt;Length: &quot; + nodelist.length, dom.byId(&quot;output&quot;));
+    var ih = [];
+    nodelist.slice(0, 3).forEach(function(node){
+      ih.push(node.innerHTML);
+    });
+    domConst.place(&quot;&lt;pre&gt;&quot; + JSON.stringify(ih) + &quot;&lt;/pre&gt;&quot;, dom.byId(&quot;output&quot;));
+  });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;start&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;test1&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;test1&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;ul&gt;</span>
+      <span class="nt">&lt;li&gt;</span>Item 1<span class="nt">&lt;/li&gt;</span>
+      <span class="nt">&lt;li&gt;</span>Item 2<span class="nt">&lt;/li&gt;</span>
+      <span class="nt">&lt;li&gt;</span>Item 3<span class="nt">&lt;/li&gt;</span>
+      <span class="nt">&lt;li&gt;</span>Item 4<span class="nt">&lt;/li&gt;</span>
+      <span class="nt">&lt;li&gt;</span>Item 5<span class="nt">&lt;/li&gt;</span>
+      <span class="nt">&lt;li&gt;</span>Item 6<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;/ul&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;h2&gt;</span>Output<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button id=&quot;start&quot; type=&quot;button&quot;&gt;Start&lt;/button&gt;
+&lt;div id=&quot;content&quot;&gt;
+  &lt;div class=&quot;test1&quot;&gt;&lt;/div&gt;
+  &lt;div class=&quot;test1&quot;&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Item 1&lt;/li&gt;
+      &lt;li&gt;Item 2&lt;/li&gt;
+      &lt;li&gt;Item 3&lt;/li&gt;
+      &lt;li&gt;Item 4&lt;/li&gt;
+      &lt;li&gt;Item 5&lt;/li&gt;
+      &lt;li&gt;Item 6&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;h2&gt;Output&lt;/h2&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="NodeList-data.html#dojo-nodelist-data"><span>dojo/NodeList-data</span></a> - Allows the association of arbitrary data with items of a <code class="docutils literal"><span class="pre">NodeList</span></code>.</li>
+<li><a class="reference internal" href="NodeList-dom.html#dojo-nodelist-dom"><span>dojo/NodeList-dom</span></a> - DOM related functions that are similar functionality to the <code class="docutils literal"><span class="pre">dojo/dom-*</span></code> related modules.</li>
+<li><a class="reference internal" href="NodeList-fx.html#dojo-nodelist-fx"><span>dojo/NodeList-fx</span></a> - Adds base and core FX support to <code class="docutils literal"><span class="pre">NodeList</span></code>.</li>
+<li><a class="reference internal" href="NodeList-html.html#dojo-nodelist-html"><span>dojo/NodeList-html</span></a> - Adds advanced content setting functionality.</li>
+<li><a class="reference internal" href="NodeList-manipulate.html#dojo-nodelist-manipulate"><span>dojo/NodeList-manipulate</span></a> - Functions that allow for manipulation of DOM nodes in similar way to jQuery.</li>
+<li><a class="reference internal" href="NodeList-traverse.html#dojo-nodelist-traverse"><span>dojo/NodeList-traverse</span></a> - Advanced node traversal functions.</li>
+<li><a class="reference internal" href="../dojox/NodeList/delegate.html#dojox-nodelist-delegate"><span>dojox/NodeList/delegate</span></a> - An event delegation API for <code class="docutils literal"><span class="pre">NodeList</span></code>.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

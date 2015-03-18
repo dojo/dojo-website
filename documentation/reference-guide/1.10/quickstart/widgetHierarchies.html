@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Widget Hierarchies: containers, dijit._Container, and startup() &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Widget Hierarchies: containers, dijit._Container, and startup()</a><ul>
+<li><a class="reference internal" href="#dijit-container">dijit/_Container</a></li>
+<li><a class="reference internal" href="#dijit-contained">dijit/_Contained</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="widget-hierarchies-containers-dijit-container-and-startup">
+<span id="quickstart-widgethierarchies"></span><h1><a class="toc-backref" href="#id1">Widget Hierarchies: containers, dijit._Container, and startup()</a><a class="headerlink" href="#widget-hierarchies-containers-dijit-container-and-startup" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Bill Keese</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#widget-hierarchies-containers-dijit-container-and-startup" id="id1">Widget Hierarchies: containers, dijit._Container, and startup()</a><ul>
+<li><a class="reference internal" href="#dijit-container" id="id2">dijit/_Container</a></li>
+<li><a class="reference internal" href="#dijit-contained" id="id3">dijit/_Contained</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>Deprecated</em> This document is deprecated.  The information contained in here maybe out of date.</p>
+<p>Often developers will build a hierarchy of widgets.  For example, a <a class="reference internal" href="../dijit/Menu.html#dijit-menu"><span>dijit.Menu</span></a> will contain <a class="reference internal" href="../dijit/MenuItem.html#dijit-menuitem"><span>dijit.MenuItem</span></a>&#8216;s, or a <a class="reference internal" href="../dijit/layout/BorderContainer.html#dijit-layout-bordercontainer"><span>dijit.layout.BorderContainer</span></a> will contain multiple <a class="reference internal" href="../dijit/layout/ContentPane.html#dijit-layout-contentpane"><span>dijit.layout.ContentPane</span></a>&#8216;s, each of which contains some other widgets like <a class="reference internal" href="../dijit/form/TextBox.html#dijit-form-textbox"><span>dijit.form.TextBox</span></a> and <a class="reference internal" href="../dijit/form/Button.html#dijit-form-button"><span>dijit.form.Button</span></a>.</p>
+<p>Widgets that are meant to contain other widgets must:</p>
+<blockquote>
+<div><ul class="simple">
+<li>define a containerNode attribute pointing to the DOMNode containing the child widgets (either to the widget&#8217;s root node or a descendant)</li>
+<li>call startup() on the child widgets (when startup() is called on the widget)</li>
+</ul>
+</div></blockquote>
+<p>Note that &#8220;other widgets&#8221; here refers to widgets added by the user (ie, by the calling code),
+rather than an internal widgets which are hidden from the user, and appear to be part of the main widget.
+Examples are <a class="reference internal" href="../dijit/layout/ContentPane.html#dijit-layout-contentpane"><span>dijit/layout/ContentPane</span></a> and <a class="reference internal" href="../dijit/Toolbar.html#dijit-toolbar"><span>dijit/Toolbar</span></a>.
+A widget that is <em>not</em> considered a container is  <a class="reference internal" href="../dijit/InlineEditBox.html#dijit-inlineeditbox"><span>dijit/InlineEditBox</span></a>,
+because even though it contains button widgets, they appear to be part of the InlineEditBox and are not listed by
+getChildren().</p>
+<p>Since widgets are required to call startup() on their children, the parser (<a class="reference internal" href="../dojo/parser.html#dojo-parser"><span>dojo.parser</span></a>) will <strong>*not*</strong> call startup on those widgets.  This allows the parent widget to do processing both before and after the child widget is started.  Therefore, when adding child widgets to a parent widget, be sure to use the proper API, so that the parent knows the child exists.</p>
+<div class="section" id="dijit-container">
+<h2><a class="toc-backref" href="#id2">dijit/_Container</a><a class="headerlink" href="#dijit-container" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../dijit/_Container.html#dijit-container"><span>dijit/_Container</span></a>
+is a mixin for widgets with child widgets,
+especially for widgets that contain nothing but an ordered list of child widgets, like a <a class="reference internal" href="../dijit/Menu.html#dijit-menu"><span>dijit.Menu</span></a>.
+It implements the contract for containers listed above, and goes farther.</p>
+<p>In particular, dijit/_Container implements the addChild() and removeChild() API.</p>
+<p>All of the widgets named ***Container (ex: <a class="reference internal" href="../dijit/layout/TabContainer.html#dijit-layout-tabcontainer"><span>dijit.layout.TabContainer</span></a>) extend dijit/_Container.</p>
+</div>
+<div class="section" id="dijit-contained">
+<h2><a class="toc-backref" href="#id3">dijit/_Contained</a><a class="headerlink" href="#dijit-contained" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference internal" href="../dijit/_Contained.html#dijit-contained"><span>dijit/_Contained</span></a> is the counterpart to <a class="reference internal" href="../dijit/_Container.html#dijit-container"><span>dijit/_Container</span></a>.
+It represents a widget that has a dijit._Container as a parent.
+However, <a class="reference internal" href="../dijit/_Container.html#dijit-container"><span>dijit/_Container</span></a> can contain any widget, regardless of whether it extends
+<a class="reference internal" href="../dijit/_Contained.html#dijit-contained"><span>dijit/_Contained</span></a>, so this class is generally not used.</p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

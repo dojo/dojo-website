@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hints about Migrating from 1.x to 1.7 &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Hints about Migrating from 1.x to 1.7</a><ul>
+<li><a class="reference internal" href="#backwards-compatibility">Backwards Compatibility</a></li>
+<li><a class="reference internal" href="#basic-patterns-changed">Basic Patterns, Changed</a><ul>
+<li><a class="reference internal" href="#loading-dojo">Loading Dojo</a></li>
+<li><a class="reference internal" href="#dojo-require">dojo.require</a></li>
+<li><a class="reference internal" href="#dojo-provide">dojo.provide</a></li>
+<li><a class="reference internal" href="#dojo-cache">dojo.cache</a></li>
+<li><a class="reference internal" href="#dojo-ready">dojo.ready</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-hands-off-approach">The Hands off Approach</a><ul>
+<li><a class="reference internal" href="#running-a-build">Running a build</a></li>
+<li><a class="reference internal" href="#manual-conversion">Manual Conversion</a></li>
+<li><a class="reference internal" href="#automation">Automation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="hints-about-migrating-from-1-x-to-1-7">
+<span id="releasenotes-migration17"></span><h1><a class="toc-backref" href="#id1">Hints about Migrating from 1.x to 1.7</a><a class="headerlink" href="#hints-about-migrating-from-1-x-to-1-7" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#hints-about-migrating-from-1-x-to-1-7" id="id1">Hints about Migrating from 1.x to 1.7</a><ul>
+<li><a class="reference internal" href="#backwards-compatibility" id="id2">Backwards Compatibility</a></li>
+<li><a class="reference internal" href="#basic-patterns-changed" id="id3">Basic Patterns, Changed</a></li>
+<li><a class="reference internal" href="#the-hands-off-approach" id="id4">The Hands off Approach</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This guide aims to serve as the quick-and-dirty/all-you-need-to-know about getting up to speed with Dojo&#8217;s new AMD-ready module loader and all the goodness that comes along with it.</p>
+<p><strong>TODOC:</strong> dojo/i18n!, AMD nls bundles</p>
+<div class="section" id="backwards-compatibility">
+<h2><a class="toc-backref" href="#id2">Backwards Compatibility</a><a class="headerlink" href="#backwards-compatibility" title="Permalink to this headline">¶</a></h2>
+<p>First and foremost, all the changes in Dojo 1.7 <strong>should</strong> be backwards compatible. If you have an existing codebase utilizing Dojo 1.x everything should &#8220;JustWork&#8221;. This guide is not for covering any regressions found, but rather aims to help a developer convert his/her codebase to the new AMD goodness.</p>
+<p>This guide also assumes you have a basic working knowledge of the Dojo Toolkit, package system, and JavaScript.</p>
+<p>You may see <strong>several</strong> examples and tutorials using a variety of syntax. Hopefully this guide will empower you to recognize the difference between major versions. For example:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.event.*&quot;</span><span class="p">)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojo.event.*&quot;)</textarea></div><p>Is a snippet of code from Dojo <strong>0.4</strong>. If you ever see an asterisk in a module name know that you are likely reading an outdated tutorial (with the exception of this guide or any other guides trying to show the difference). Likewise, many Dojo documentation tutorials read like:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">provide</span><span class="p">(</span><span class="s2">&quot;a.b.C&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;d.e.F&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.provide(&quot;a.b.C&quot;);
+dojo.require(&quot;d.e.F&quot;);</textarea></div><p>While this is still valid and will work with the &#8220;legacy synchronous loader&#8221;, the goal here is to teach about the new asynchronous/anonymous loader.</p>
+</div>
+<div class="section" id="basic-patterns-changed">
+<h2><a class="toc-backref" href="#id3">Basic Patterns, Changed</a><a class="headerlink" href="#basic-patterns-changed" title="Permalink to this headline">¶</a></h2>
+<p>A lot of little syntax changes have occurred, as well as a number of fundamental paradigm shifts in how you access modules. Again, everything <strong>should</strong> be backwards compatible, and this guide is meant to teach adoption of the new available patterns (which will likely be adopted for Dojo 2.0 ... so there&#8217;s that)</p>
+<div class="section" id="loading-dojo">
+<h3>Loading Dojo<a class="headerlink" href="#loading-dojo" title="Permalink to this headline">¶</a></h3>
+<p>Nothing has changed. For browser environments, point your web browser&#8217;s <code class="docutils literal"><span class="pre">script</span></code> element at a <code class="docutils literal"><span class="pre">dojo.js</span></code>.</p>
+<p>Additionally, there is no longer a special <code class="docutils literal"><span class="pre">dojo.xd.js</span></code> file provided on the CDN. The AMD conversion makes <em>every</em> module cross-domain-loadable. In fact, the AMD loader is essentially a stripped down version of the cross-domain loader Dojo has shipped for several years. If you are familiar with, and perhaps already using, Dojo from a cross-domain CDN these new patterns won&#8217;t seem so new.</p>
+</div>
+<div class="section" id="dojo-require">
+<h3>dojo.require<a class="headerlink" href="#dojo-require" title="Permalink to this headline">¶</a></h3>
+<p>Previously, one would <code class="docutils literal"><span class="pre">dojo.require()</span></code> modules into a page. Take this basic example:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.cookie&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;my.Thinger&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">addOnLoad</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;modules and DOM ready!&quot;</span><span class="p">);</span>
+<span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojo.cookie&quot;);
+dojo.require(&quot;my.Thinger&quot;);
+dojo.addOnLoad(function(){
+    alert(&quot;modules and DOM ready!&quot;);
+})</textarea></div><p><code class="docutils literal"><span class="pre">dojo.require</span></code> has been replaced simply with <code class="docutils literal"><span class="pre">require()</span></code>. This is provided by loading <code class="docutils literal"><span class="pre">dojo.js</span></code>, as always. The same example redone with Dojo 1.7 would look like:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/cookie&quot;</span><span class="p">,</span> <span class="s2">&quot;my/Thinger&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cookie</span><span class="p">,</span> <span class="nx">Thinger</span><span class="p">){</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;wait! DOM might not be ready yet?!&quot;</span><span class="p">)</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/cookie&quot;, &quot;my/Thinger&quot;], function(cookie, Thinger){
+    alert(&quot;wait! DOM might not be ready yet?!&quot;)
+});</textarea></div><p>The <code class="docutils literal"><span class="pre">require()</span></code> call follows the <a class="reference external" href="http://requirejs.org/docs/api.html">requirejs</a> API. It does lots of amazing things. That is beyond the scope of this document, currently.</p>
+<p>Take notice of the difference in the two examples:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">dojo.require</span></code> takes a dot-separated module name, <code class="docutils literal"><span class="pre">require()</span></code> takes a forward-slash separated module name</li>
+<li><code class="docutils literal"><span class="pre">require()</span></code> takes a function parameter, acting as a callback.</li>
+<li>the alert in the <code class="docutils literal"><span class="pre">require()</span></code> callback says DOM isn&#8217;t ready? huh?</li>
+<li>the <code class="docutils literal"><span class="pre">require()</span></code> callback is passed arguments. I named them <cite>cookie</cite> and <cite>Thinger</cite></li>
+</ul>
+<p>The module name conversion should be self-explanatory. Both point to some resource on disk. In this case <code class="docutils literal"><span class="pre">dojo/cookie.js</span></code> and <code class="docutils literal"><span class="pre">my/Thinger.js</span></code>. Both loaders will load the two files (and any dependencies) and execute the code following.</p>
+<p>The <code class="docutils literal"><span class="pre">require()</span></code> callback function is important. In the former example, we <code class="docutils literal"><span class="pre">alert()</span></code> within a <code class="docutils literal"><span class="pre">dojo.addOnLoad</span></code> function. In Dojo &lt; 1.7, dojo.addOnLoad meant &#8220;modules and DOM ready&#8221;. With <code class="docutils literal"><span class="pre">require()</span></code>, the callback simply means &#8220;the modules you asked for are ready&#8221;, leaving the DOM the be a separate concern. This is easily achieved with the <code class="docutils literal"><span class="pre">dojo/domReady</span></code> plugin.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/cookie&quot;</span><span class="p">,</span> <span class="s2">&quot;my/Thinger&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cookie</span><span class="p">,</span> <span class="nx">Thinger</span><span class="p">){</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;okay, NOW the modules I wanted AND DOM are ready! phew.&quot;</span><span class="p">);</span>
+<span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/cookie&quot;, &quot;my/Thinger&quot;, &quot;dojo/domReady!&quot;], function(cookie, Thinger){
+    alert(&quot;okay, NOW the modules I wanted AND DOM are ready! phew.&quot;);
+})</textarea></div><p>So to summarize: instead of calling dojo.require() N times, call require() once, passing an array of module names you want. If you need DOMReady, use <code class="docutils literal"><span class="pre">&quot;dojo/domReady!&quot;</span></code>. Note the <code class="docutils literal"><span class="pre">!</span></code> following the module name. That puts the <code class="docutils literal"><span class="pre">dojo/domReady</span></code> module into &#8220;plugin&#8221; mode.</p>
+<p>The special <code class="docutils literal"><span class="pre">Thinger</span></code> and <code class="docutils literal"><span class="pre">cookie</span></code> variables created for our <code class="docutils literal"><span class="pre">require()</span></code> callback are whatever the return values from <code class="docutils literal"><span class="pre">dojo/cookie.js</span></code> and <code class="docutils literal"><span class="pre">my/Thinger.js</span></code> were, respectively. We will discuss the return value of <code class="docutils literal"><span class="pre">my/Thinger</span></code> while we deprecate <a class="reference internal" href="#dojo-provide">dojo.provide</a> in the next section.</p>
+</div>
+<div class="section" id="dojo-provide">
+<h3>dojo.provide<a class="headerlink" href="#dojo-provide" title="Permalink to this headline">¶</a></h3>
+<p>Previously, and building on the <a class="reference internal" href="#dojo-require">dojo.require</a> breakdown, one would define a module on disk using <code class="docutils literal"><span class="pre">dojo.provide</span></code>:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">provide</span><span class="p">(</span><span class="s2">&quot;my.Thinger&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit._Widget&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;my.Thinger&quot;</span><span class="p">,</span> <span class="nx">dijit</span><span class="p">.</span><span class="nx">_Widget</span><span class="p">,</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.provide(&quot;my.Thinger&quot;);
+dojo.require(&quot;dijit._Widget&quot;);
+dojo.declare(&quot;my.Thinger&quot;, dijit._Widget, {
+    // ...
+});</textarea></div><p>With Dojo 1.7+, this becomes <code class="docutils literal"><span class="pre">define()</span></code>. Easier to show in code than words:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_Widget&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">_Widget</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">_Widget</span><span class="p">,</span> <span class="p">{</span>
+        <span class="c1">// ...</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/declare&quot;, &quot;dijit/_Widget&quot;], function(declare, _Widget){
+    return declare(_Widget, {
+        // ...
+    });
+});</textarea></div><p>Ok, so this is where it gets cool. First, <code class="docutils literal"><span class="pre">define()</span></code> looks like a <code class="docutils literal"><span class="pre">require()</span></code> call: array of dependencies, and a callback function with those dependencies passed, in order. We could &#8220;name&#8221; our module in the <code class="docutils literal"><span class="pre">define()</span></code> call, but that takes the &#8220;A&#8221; out of &#8220;AMD&#8221;. Instead, we define some anonymous module that requires Dojo&#8217;s <a class="reference internal" href="../dojo/declare.html#dojo-declare"><span>declare()</span></a> module, and the base Dijit mixin <a class="reference internal" href="../dijit/_Widget.html#dijit-widget"><span>dijit._Widget</span></a>.</p>
+<p>The return value of <code class="docutils literal"><span class="pre">dojo/_base/declare</span></code> is the old <code class="docutils literal"><span class="pre">dojo.declare</span></code> function we know and love. It is available to us as a local variable <code class="docutils literal"><span class="pre">declare</span></code>, within the <code class="docutils literal"><span class="pre">define</span></code> callback, as is the old <code class="docutils literal"><span class="pre">dijit._Widget</span></code> base class we love to inherit from.</p>
+<p><code class="docutils literal"><span class="pre">dojo.provide</span></code> would expand the passed module name into an object in the global space. eg:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">provide</span><span class="p">(</span><span class="s2">&quot;a.b.c.d.e.f.g&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.provide(&quot;a.b.c.d.e.f.g&quot;);</textarea></div><p>Would create an object structure like:</p>
+<div class="highlight"><pre><span class="p">{</span> <span class="nx">a</span><span class="o">:</span> <span class="p">{</span> <span class="nx">b</span><span class="o">:</span> <span class="p">{</span> <span class="nx">c</span><span class="o">:</span> <span class="p">{</span> <span class="nx">d</span><span class="o">:</span> <span class="p">{</span> <span class="nx">e</span><span class="o">:</span> <span class="p">{</span> <span class="nx">f</span><span class="o">:</span> <span class="p">{</span> <span class="nx">g</span><span class="o">:</span> <span class="p">{}</span> <span class="p">}}}}}}}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{ a: { b: { c: { d: { e: { f: { g: {} }}}}}}}</textarea></div><p>Part of the motivation for AMD is to avoid global pollution. You are no longer <code class="docutils literal"><span class="pre">a.b.c.d.e.f.g</span></code>: you are whatever you return from your module. Above, we are returning the return value of our <code class="docutils literal"><span class="pre">dojo/_base/declare</span></code> call, which turns out to be whatever it is we <code class="docutils literal"><span class="pre">declare'd</span></code>. Like magic, a completely nameless/global-less &#8220;Class&#8221;, available to anyone. When someone calls:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;my/Thinger&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Thinger</span><span class="p">){</span>
+    <span class="k">new</span> <span class="nx">Thinger</span><span class="p">();</span> <span class="c1">//</span>
+<span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;my/Thinger&quot;], function(Thinger){
+    new Thinger(); //
+})</textarea></div><p>They are creating a new instance of whatever it is you returned.</p>
+</div>
+<div class="section" id="dojo-cache">
+<h3>dojo.cache<a class="headerlink" href="#dojo-cache" title="Permalink to this headline">¶</a></h3>
+<p>Most commonly used with <code class="docutils literal"><span class="pre">dijit._Templated</span></code>, dojo.cache reads local resources from a tree and makes them available to your JavaScript in a variable.</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">provide</span><span class="p">(</span><span class="s2">&quot;a.b.C&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;a.b.C&quot;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">templateString</span><span class="o">:</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">cache</span><span class="p">(</span><span class="s2">&quot;a.b&quot;</span><span class="p">,</span> <span class="s2">&quot;templates/C.html&quot;</span><span class="p">)</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.provide(&quot;a.b.C&quot;);
+dojo.declare(&quot;a.b.C&quot;, null, {
+    templateString: dojo.cache(&quot;a.b&quot;, &quot;templates/C.html&quot;)
+});</textarea></div><p>The resource at <code class="docutils literal"><span class="pre">a/b/templates/C.html</span></code> would be loaded immediately, and used to populate the <code class="docutils literal"><span class="pre">templateString</span></code> variable. In Dojo 1.7+ this is done with the <code class="docutils literal"><span class="pre">dojo/text!</span></code> plugin. Pass the module name as the parameter to the plugin, and the return value is transferred to the variable in the callback. Here is it <code class="docutils literal"><span class="pre">template</span></code>:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/text!a/b/templates/C.html&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">template</span><span class="p">){</span>
+    <span class="k">return</span> <span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;a.b.C&quot;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">templateString</span><span class="o">:</span> <span class="nx">template</span>
+    <span class="p">})</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/declare&quot;, &quot;dojo/text!a/b/templates/C.html&quot;], function(declare, template){
+    return declare(&quot;a.b.C&quot;, null, {
+        templateString: template
+    })
+});</textarea></div></div>
+<div class="section" id="dojo-ready">
+<h3>dojo.ready<a class="headerlink" href="#dojo-ready" title="Permalink to this headline">¶</a></h3>
+<p>As seen in the <a class="reference internal" href="#dojo-require">dojo.require</a> section, <code class="docutils literal"><span class="pre">dojo.ready</span></code> (an alias to <code class="docutils literal"><span class="pre">dojo.addOnLoad</span></code>) no longer considers DOM-readiness. Or rather: The <code class="docutils literal"><span class="pre">require()</span></code> callback is <strong>not</strong> synonymous with <code class="docutils literal"><span class="pre">document.ready</span></code>. The <code class="docutils literal"><span class="pre">require()</span></code> callback <strong>only</strong> considers modules and plugins. To accomplish &#8220;modules and DOM ready&#8221; you have a couple of options:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;a/b/C&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">C</span><span class="p">){</span>
+    <span class="k">new</span> <span class="nx">C</span><span class="p">().</span><span class="nx">placeAt</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;a/b/C&quot;, &quot;dojo/domReady!&quot;], function(C){
+    new C().placeAt(document.body)
+});</textarea></div><p>Above the module a/b/C.js is loaded, and the <code class="docutils literal"><span class="pre">new</span></code> call is deferred until <code class="docutils literal"><span class="pre">document.ready</span></code>. Next, we&#8217;ll look at the <code class="docutils literal"><span class="pre">dojo/ready</span></code> module (not a plugin):</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;a/b/C&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/ready&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">C</span><span class="p">,</span> <span class="nx">ready</span><span class="p">,</span> <span class="nx">declare</span><span class="p">){</span>
+
+    <span class="kd">var</span> <span class="nx">D</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">C</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">newProp</span><span class="o">:</span> <span class="mi">10</span>
+    <span class="p">});</span>
+
+    <span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">// DOM nao!</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;a/b/C&quot;, &quot;dojo/ready&quot;, &quot;dojo/_base/declare&quot;], function(C, ready, declare){
+
+    var D = declare(C, {
+        newProp: 10
+    });
+
+    ready(function(){
+        // DOM nao!
+    });
+});</textarea></div><p>In this example we loaded the <code class="docutils literal"><span class="pre">declare</span></code>, <code class="docutils literal"><span class="pre">a/b/C.js</span></code> and <code class="docutils literal"><span class="pre">dojo/ready</span></code> modules. When all the module dependencies are loaded our <code class="docutils literal"><span class="pre">require()</span></code> callback fires. <em>Then</em>, we register another function by calling <code class="docutils literal"><span class="pre">ready()</span></code> (the return value from <code class="docutils literal"><span class="pre">dojo/ready</span></code>, in the second position)</p>
+</div>
+</div>
+<div class="section" id="the-hands-off-approach">
+<h2><a class="toc-backref" href="#id4">The Hands off Approach</a><a class="headerlink" href="#the-hands-off-approach" title="Permalink to this headline">¶</a></h2>
+<p>It may be possible for you to convert much of your codebase into AMD-compatible goodness in a mostly automated fashion. Or rather: the method described in the coming sections will modify much of your existing code, making it passable as AMD-ready, though the devil is in the details, and some guidance is needed.</p>
+<p>The secret is to run a build. Running a build over a legacy application codebase will create output wrapped in AMD (somewhat poorly, but backwards compatible). This is the first step into having a truly anonymous/granular source tree.</p>
+<div class="section" id="running-a-build">
+<h3>Running a build<a class="headerlink" href="#running-a-build" title="Permalink to this headline">¶</a></h3>
+<p>Let&#8217;s take a simple module, and build it.
+(Again, this guide assumes you have a build plan in place and have existing code using 1.6 we want to convert)</p>
+<p>Our sample module looks like this:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">provide</span><span class="p">(</span><span class="s2">&quot;my.HotApplication&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;my.HotController&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit._Widget&quot;</span><span class="p">);</span>
+
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;my.HotApplication&quot;</span><span class="p">,</span> <span class="nx">my</span><span class="p">.</span><span class="nx">HotController</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">templateString</span><span class="o">:</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">cache</span><span class="p">(</span><span class="s2">&quot;my&quot;</span><span class="p">,</span> <span class="s2">&quot;templates/HotApplication.html&quot;</span><span class="p">)</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.provide(&quot;my.HotApplication&quot;);
+dojo.require(&quot;my.HotController&quot;);
+dojo.require(&quot;dijit._Widget&quot;);
+
+dojo.declare(&quot;my.HotApplication&quot;, my.HotController, {
+    templateString: dojo.cache(&quot;my&quot;, &quot;templates/HotApplication.html&quot;)
+});</textarea></div><p>It is conveniently located in a <code class="docutils literal"><span class="pre">my/</span></code> folder with <code class="docutils literal"><span class="pre">dojo/</span></code> and <code class="docutils literal"><span class="pre">dijit/</span></code> siblings.  First step is to run a build, but remember to turn off all optimizations:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ./build.sh profile=myprofile cssOptimize=0 optimize=0 layerOptimize=0 copyTests=1 mini=0 version=...
+</pre></div>
+</div>
+<p>It might be a good idea to turn <code class="docutils literal"><span class="pre">stripConsole</span></code> off as well. Running this build will result in a new file tree including your newly AMD'ified <code class="docutils literal"><span class="pre">my/</span></code> folder. Looking at the new <code class="docutils literal"><span class="pre">HotApplication.js</span></code> file we see:</p>
+<div class="highlight"><pre><span class="c1">//&gt;&gt;built</span>
+<span class="nx">define</span><span class="p">(</span><span class="s2">&quot;my/HotApplication&quot;</span><span class="p">,</span> <span class="p">[</span>
+    <span class="s2">&quot;dojo&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit&quot;</span><span class="p">,</span> <span class="s2">&quot;dojox&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/require!my/HotController&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_Widget&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dojo/text!my/templates/HotApplication.html&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dojo</span><span class="p">,</span> <span class="nx">dijit</span><span class="p">,</span> <span class="nx">dojox</span><span class="p">){</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">provide</span><span class="p">(</span><span class="s2">&quot;my.HotApplication&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;my.HotController&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit._Widget&quot;</span><span class="p">);</span>
+
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;my.HotApplication&quot;</span><span class="p">,</span> <span class="nx">my</span><span class="p">.</span><span class="nx">HotController</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">templateString</span><span class="o">:</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">cache</span><span class="p">(</span><span class="s2">&quot;my&quot;</span><span class="p">,</span> <span class="s2">&quot;templates/HotApplication.html&quot;</span><span class="p">)</span>
+<span class="p">});</span>
+<span class="p">});</span>
+<span class="c1">//&gt;&gt;built</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">//&gt;&gt;built
+define(&quot;my/HotApplication&quot;, [
+    &quot;dojo&quot;, &quot;dijit&quot;, &quot;dojox&quot;, &quot;dojo/require!my/HotController&quot;, &quot;dijit/_Widget&quot;,
+    &quot;dojo/text!my/templates/HotApplication.html&quot;
+], function(dojo, dijit, dojox){
+dojo.provide(&quot;my.HotApplication&quot;);
+dojo.require(&quot;my.HotController&quot;);
+dojo.require(&quot;dijit._Widget&quot;);
+
+dojo.declare(&quot;my.HotApplication&quot;, my.HotController, {
+    templateString: dojo.cache(&quot;my&quot;, &quot;templates/HotApplication.html&quot;)
+});
+});
+//&gt;&gt;built</textarea></div><p>See what has happened? First, our module is no longer anonymous: given the name <code class="docutils literal"><span class="pre">my/HotApplication</span></code> ... Next, the first three dependencies listed are simply <code class="docutils literal"><span class="pre">dojo</span></code>, <code class="docutils literal"><span class="pre">dijit</span></code> and <code class="docutils literal"><span class="pre">dojox</span></code> ... This is a backwards-compatibility require which populates the global <code class="docutils literal"><span class="pre">dojo</span></code> and <code class="docutils literal"><span class="pre">dijit</span></code> objects, so you can continue to use calls like <cite>dojo.declare &lt;dojo/declale&gt;</cite> and <cite>dojo.byId &lt;dojo/byId&gt;</cite> without having to know which base module to pick from.</p>
+<p>We also see a special plugin <code class="docutils literal"><span class="pre">dojo.require!</span></code> used to load &quot;all the rest of the modules you required previously&quot;. This is a comma separated list of modules to load, all in a single string.</p>
+</div>
+<div class="section" id="manual-conversion">
+<h3>Manual Conversion<a class="headerlink" href="#manual-conversion" title="Permalink to this headline">¶</a></h3>
+<p>First, let's remove the <code class="docutils literal"><span class="pre">//&gt;&gt;built</span></code> pragmas, as we are essentially un-building our newly converted module. Then remove the define() name, &quot;my/HotApplication&quot;, returning the module to be anonymous, and capable of moving around on disk without modification.</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit&quot;</span><span class="p">,</span> <span class="s2">&quot;dojox&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/require!........&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dojo</span><span class="p">,</span> <span class="nx">dijix</span><span class="p">,</span> <span class="nx">dojox</span><span class="p">){</span>
+
+<span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo&quot;, &quot;dijit&quot;, &quot;dojox&quot;, &quot;dojo/require!........&quot;], function(dojo, dijix, dojox){
+
+})</textarea></div><p>Now, unless we're using the object we create by calling <code class="docutils literal"><span class="pre">dojo.provide</span></code> we can remove that as well. If we need to continue populating the global space, you can continue to use <code class="docutils literal"><span class="pre">provide</span></code>, or take the shortcut of using <code class="docutils literal"><span class="pre">dojo.getObject</span></code>.</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dojo</span><span class="p">){</span>
+    <span class="c1">// FIXME: actually look up this call</span>
+    <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">getObject</span><span class="p">(</span><span class="s2">&quot;HotApplication&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;my&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo&quot;], function(dojo){
+    // FIXME: actually look up this call
+    var obj = dojo.getObject(&quot;HotApplication&quot;, true, &quot;my&quot;)
+    return obj;
+});</textarea></div><p>There is no need to duplicate modules in a <code class="docutils literal"><span class="pre">dojo.require()</span></code> call versus a <code class="docutils literal"><span class="pre">dojo/require!</span></code> plugin, so remove the former. Additionally, if you'd like to eliminate the <code class="docutils literal"><span class="pre">dojo.require!</span></code> plugin all together simply remove it, expanding out the items into new <code class="docutils literal"><span class="pre">define</span></code> dependencies:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span>
+    <span class="s2">&quot;dojo&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit&quot;</span><span class="p">,</span> <span class="s2">&quot;dojox&quot;</span><span class="p">,</span> <span class="s2">&quot;my/HotController&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_Widget&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/text!my/templates/HotApplication.html&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dojo</span><span class="p">,</span> <span class="nx">dijit</span><span class="p">,</span> <span class="nx">dojox</span><span class="p">,</span> <span class="nx">Controller</span><span class="p">,</span> <span class="nx">_Widget</span><span class="p">,</span> <span class="nx">template</span><span class="p">){</span>
+
+    <span class="k">return</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;my.HotApplication&quot;</span><span class="p">,</span> <span class="nx">Controller</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">templateString</span><span class="o">:</span> <span class="nx">template</span>
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([
+    &quot;dojo&quot;, &quot;dijit&quot;, &quot;dojox&quot;, &quot;my/HotController&quot;, &quot;dijit/_Widget&quot;, &quot;dojo/text!my/templates/HotApplication.html&quot;
+], function(dojo, dijit, dojox, Controller, _Widget, template){
+
+    return dojo.declare(&quot;my.HotApplication&quot;, Controller, {
+        templateString: template
+    });
+
+});</textarea></div><p>Now we need to goto <code class="docutils literal"><span class="pre">my/HotController.js</span></code> and ensure it is properly using a <code class="docutils literal"><span class="pre">define()</span></code> call, and returning the class previously living at <code class="docutils literal"><span class="pre">my.HotController</span></code> (now referenced locally as <code class="docutils literal"><span class="pre">Controller</span></code>)</p>
+<p>To move to the more modern AMD and Dojo approach, we then want to upgrade to using the smallest modules possible, rather than all of dojo, dijit, and dojox. We also want to remove any global identifiers. The above example would then become:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span>
+    <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;my/HotController&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/text!my/templates/HotApplication.html&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declareController</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">template</span><span class="p">){</span>
+
+    <span class="k">return</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">Controller</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">templateString</span><span class="o">:</span> <span class="nx">template</span>
+    <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([
+    &quot;dojo/_base/declare&quot;, &quot;my/HotController&quot;, &quot;dijit/_WidgetBase&quot;, &quot;dojo/text!my/templates/HotApplication.html&quot;
+], function(declareController, _WidgetBase, template){
+
+    return declare(Controller, {
+        templateString: template
+    });
+
+});</textarea></div></div>
+<div class="section" id="automation">
+<h3>Automation<a class="headerlink" href="#automation" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference external" href="https://github.com/SitePen/dojo-amd-converter/">dojo-amd-converter</a> may help you automate some or most of the conversion of your Dojo application from pre-AMD to AMD syntax.</p>
+</div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

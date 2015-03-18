@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/_base/lang &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/_base/lang</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#features">Features</a><ul>
+<li><a class="reference internal" href="#clone">clone()</a><ul>
+<li><a class="reference internal" href="#id2">Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#delegate">delegate()</a><ul>
+<li><a class="reference internal" href="#id3">Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exists">exists()</a></li>
+<li><a class="reference internal" href="#extend">extend()</a><ul>
+<li><a class="reference internal" href="#extending-dijit-widgetbase">Extending dijit/_WidgetBase</a></li>
+<li><a class="reference internal" href="#extend-vs-mixin">extend() vs. mixin()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#getobject">getObject()</a></li>
+<li><a class="reference internal" href="#hitch">hitch()</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mixin">mixin()</a><ul>
+<li><a class="reference internal" href="#simple-mixes">Simple Mixes</a></li>
+<li><a class="reference internal" href="#creating-new-objects">Creating New Objects</a></li>
+<li><a class="reference internal" href="#mixins-with-classes">Mixins with Classes</a></li>
+<li><a class="reference internal" href="#mixing-into-instances">Mixing into Instances</a></li>
+<li><a class="reference internal" href="#mixing-methods">Mixing Methods</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#partial">partial()</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#replace">replace()</a><ul>
+<li><a class="reference internal" href="#with-dictionary">With Dictionary</a></li>
+<li><a class="reference internal" href="#with-array">With Array</a></li>
+<li><a class="reference internal" href="#with-a-function">With a Function</a></li>
+<li><a class="reference internal" href="#with-custom-pattern">With Custom Pattern</a></li>
+<li><a class="reference internal" href="#escaping-substitutions">Escaping Substitutions</a></li>
+<li><a class="reference internal" href="#formatting-substitutions">Formatting Substitutions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#setobject">setObject()</a></li>
+<li><a class="reference internal" href="#trim">trim()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#deprecated-methods">Deprecated Methods</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-base-lang">
+<span id="id1"></span><h1><a class="toc-backref" href="#id4">dojo/_base/lang</a><a class="headerlink" href="#dojo-base-lang" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">v0.9</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-base-lang" id="id4">dojo/_base/lang</a><ul>
+<li><a class="reference internal" href="#usage" id="id5">Usage</a></li>
+<li><a class="reference internal" href="#features" id="id6">Features</a></li>
+<li><a class="reference internal" href="#deprecated-methods" id="id7">Deprecated Methods</a></li>
+<li><a class="reference internal" href="#see-also" id="id8">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/_base/lang</strong> contains functions for supporting Polymorphism and other language constructs that are
+fundamental to the rest of the toolkit.</p>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id5">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>As with the rest of <code class="docutils literal"><span class="pre">dojo/_base</span></code> modules, if you are running the Dojo loader in legacy mode (<code class="docutils literal"><span class="pre">async:</span> <span class="pre">false</span></code>) this
+module is automatically loaded.  Even if it is automatically loaded, you should require it in to have access to its
+features:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="c1">// lang now contains the module features</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  // lang now contains the module features
+});</textarea></div></div>
+<div class="section" id="features">
+<h2><a class="toc-backref" href="#id6">Features</a><a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="clone">
+<span id="dojo-base-lang-clone"></span><h3>clone()<a class="headerlink" href="#clone" title="Permalink to this headline">¶</a></h3>
+<p>Clones objects and/or nodes, returning a new anything, versus a reference. Pass <em>something</em> to <code class="docutils literal"><span class="pre">clone()</span></code>, and a new
+version of that <em>something</em> will be made:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="c1">// clone an object</span>
+  <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">a</span><span class="o">:</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="nx">c</span><span class="o">:</span><span class="s2">&quot;d&quot;</span> <span class="p">};</span>
+  <span class="kd">var</span> <span class="nx">thing</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+
+  <span class="c1">// clone an array</span>
+  <span class="kd">var</span> <span class="nx">newarray</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">clone</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">]);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  // clone an object
+  var obj = { a:&quot;b&quot;, c:&quot;d&quot; };
+  var thing = lang.clone(obj);
+
+  // clone an array
+  var newarray = lang.clone([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]);
+});</textarea></div><div class="section" id="id2">
+<h4>Usage<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>Often times, you want to clone a DOM Node. The easiest way to locate a DOM Node is
+<a class="reference internal" href="../dom.html#dojo-dom-byid"><span>dojo/dom::byId</span></a>, though consideration to change the <code class="docutils literal"><span class="pre">id</span></code> after cloning is required (IDs are
+unique to the document, and should be used as such).</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-attr&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">attr</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;someNode&quot;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">newnode</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+  <span class="nx">attr</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">newnode</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;someNewId&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-attr&quot;], function(lang, dom, attr){
+  var node = dom.byId(&quot;someNode&quot;);
+  var newnode = lang.clone(node);
+  attr.set(newnode, &quot;id&quot;, &quot;someNewId&quot;);
+});</textarea></div><p>If you have a pointer to some node already, or want to avoid IDs all together, <a class="reference internal" href="../query.html#dojo-query"><span>dojo/query()</span></a> may be useful:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;query()&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="nx">ctr</span><span class="p">,</span> <span class="nx">win</span><span class="p">){</span>
+  <span class="c1">// get a reference to some node</span>
+  <span class="kd">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;.someNode&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+
+  <span class="c1">// create 10 clones of this node and append to body</span>
+  <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+  <span class="k">while</span><span class="p">(</span><span class="nx">i</span><span class="o">--</span><span class="p">){</span>
+    <span class="nx">ctr</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="nx">lang</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">n</span><span class="p">),</span> <span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">());</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;query()&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/_base/window&quot;], function(lang, query, ctr, win){
+  // get a reference to some node
+  var n = query(&quot;.someNode&quot;)[0];
+
+  // create 10 clones of this node and append to body
+  var i = 10;
+  while(i--){
+    ctr.place(lang.clone(n), win.body());
+  }
+});</textarea></div><p><code class="docutils literal"><span class="pre">clone()</span></code> is always &#8220;deep&#8221;. Cyclic (e.g., circular or DAG) cases are explicitly not supported due to speed and space
+concerns.</p>
+<ul class="simple">
+<li>If you want a shallow copy of an object: <code class="docutils literal"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">lang.mixin({},</span> <span class="pre">x)</span></code>;</li>
+<li>If you want a shallow copy of an array: <code class="docutils literal"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">arrayUtil.map(x,</span> <span class="pre">&quot;return</span> <span class="pre">value;&quot;)</span></code>;</li>
+<li>The rest will be covered by the deep copy: <code class="docutils literal"><span class="pre">y</span> <span class="pre">=</span> <span class="pre">lang.clone(x)</span></code>;</li>
+</ul>
+<p><em>TODOC</em> clone and event objects.</p>
+</div>
+</div>
+<div class="section" id="delegate">
+<span id="dojo-base-lang-delegate"></span><h3>delegate()<a class="headerlink" href="#delegate" title="Permalink to this headline">¶</a></h3>
+<p>Returns a new object which &#8220;looks&#8221; at the passed object for properties which it does not have a value for, or takes a
+set of properties to seed the returned object with initially.</p>
+<p>This is a subset of implementation of the Boodman/Crockford delegation pattern in JavaScript. An intermediate object
+constructor mediates the prototype chain for the returned object, using it to delegate down to the supplied object for
+property lookup when object-local lookup fails. This can be thought of similarly to ES4&#8217;s <code class="docutils literal"><span class="pre">wrap()</span></code>, except that it
+does not act on types but rather on pure objects.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">myNewObject</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="nx">anOldObject</span><span class="p">,</span> <span class="p">{</span> <span class="nx">myNewProperty</span><span class="o">:</span> <span class="s2">&quot;value or text&quot;</span><span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, function(lang){
+  var myNewObject = lang.delegate(anOldObject, { myNewProperty: &quot;value or text&quot;});
+});</textarea></div><p>The signature of the method is:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="5%" />
+<col width="8%" />
+<col width="87%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>obj</td>
+<td>Object</td>
+<td>The object to delegate to for properties not found directly on the return object or in <code class="docutils literal"><span class="pre">props</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>props</td>
+<td>Object...</td>
+<td>An object containing properties to assign to the returned object.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="id3">
+<h4>Usage<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">anOldObject</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">bar</span><span class="o">:</span> <span class="s2">&quot;baz&quot;</span> <span class="p">};</span>
+  <span class="kd">var</span> <span class="nx">myNewObject</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">delegate</span><span class="p">(</span><span class="nx">anOldObject</span><span class="p">,</span> <span class="p">{</span> <span class="nx">thud</span><span class="o">:</span> <span class="s2">&quot;xyzzy&quot;</span><span class="p">});</span>
+  <span class="nx">myNewObject</span><span class="p">.</span><span class="nx">bar</span> <span class="o">==</span> <span class="s2">&quot;baz&quot;</span><span class="p">;</span> <span class="c1">// delegated to anOldObject</span>
+  <span class="nx">anOldObject</span><span class="p">.</span><span class="nx">thud</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">;</span> <span class="c1">// by definition</span>
+  <span class="nx">myNewObject</span><span class="p">.</span><span class="nx">thud</span> <span class="o">==</span> <span class="s2">&quot;xyzzy&quot;</span><span class="p">;</span> <span class="c1">// mixed in from props</span>
+  <span class="nx">anOldObject</span><span class="p">.</span><span class="nx">bar</span> <span class="o">=</span> <span class="s2">&quot;thonk&quot;</span><span class="p">;</span>
+  <span class="nx">myNewObject</span><span class="p">.</span><span class="nx">bar</span> <span class="o">==</span> <span class="s2">&quot;thonk&quot;</span><span class="p">;</span> <span class="c1">// still delegated to anOldObject&#39;s bar</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, function(lang){
+  var anOldObject = { bar: &quot;baz&quot; };
+  var myNewObject = lang.delegate(anOldObject, { thud: &quot;xyzzy&quot;});
+  myNewObject.bar == &quot;baz&quot;; // delegated to anOldObject
+  anOldObject.thud == undefined; // by definition
+  myNewObject.thud == &quot;xyzzy&quot;; // mixed in from props
+  anOldObject.bar = &quot;thonk&quot;;
+  myNewObject.bar == &quot;thonk&quot;; // still delegated to anOldObject's bar
+});</textarea></div></div>
+</div>
+<div class="section" id="exists">
+<span id="dojo-base-lang-exists"></span><h3>exists()<a class="headerlink" href="#exists" title="Permalink to this headline">¶</a></h3>
+<p>Check if all objects in a dot-separated string object path exist, such as <code class="docutils literal"><span class="pre">&quot;A.B.C&quot;</span></code>.</p>
+<p><code class="docutils literal"><span class="pre">exists()</span></code> is a convenience function, particularly useful for testing long object paths. It accepts a string as its
+first parameter, and walks down the path it represents. You can optionally provide a root for the path as a second
+parameter, otherwise it will use a default value of the global object. Each portion of the <code class="docutils literal"><span class="pre">.</span></code> delimited string is
+tested for defined-ness, returning true only if each object exists as defined in the strong.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="s2">&quot;myns.widget.Foo&quot;</span><span class="p">)</span> <span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;myns.widget.Foo exists&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  if( lang.exists(&quot;myns.widget.Foo&quot;) ){
+    console.log(&quot;myns.widget.Foo exists&quot;);
+  }
+});</textarea></div><p>The second <code class="docutils literal"><span class="pre">root</span></code> parameter is optional, <code class="docutils literal"><span class="pre">exists()</span></code> will use the value of
+<a class="reference internal" href="kernel.html#dojo-base-kernel-global"><span>dojo/_base/kernel::global</span></a> by default (which is usually the current <code class="docutils literal"><span class="pre">window</span></code>). You
+can use it to root the path in a different window object, or a particular namespace:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/dijit&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">dijit</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">widgetType</span> <span class="o">=</span> <span class="s2">&quot;form.Button&quot;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">myNamespace</span> <span class="o">=</span> <span class="nx">docs</span><span class="p">;</span>
+
+  <span class="k">if</span><span class="p">(</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">widgetType</span><span class="p">,</span> <span class="nx">myNamespace</span><span class="p">)</span> <span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;There&#39;s a docs.form.Button available&quot;</span><span class="p">);</span>
+  <span class="p">}</span><span class="k">else</span> <span class="k">if</span><span class="p">(</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">exists</span><span class="p">(</span><span class="nx">widgetType</span><span class="p">,</span> <span class="nx">dijit</span><span class="p">)</span> <span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Dijits form.Button class is available&quot;</span><span class="p">);</span>
+  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;No form.Button classes are available&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dijit/dijit&quot;], function(lang, dijit){
+  var widgetType = &quot;form.Button&quot;;
+  var myNamespace = docs;
+
+  if( lang.exists(widgetType, myNamespace) ){
+    console.log(&quot;There's a docs.form.Button available&quot;);
+  }else if( lang.exists(widgetType, dijit) ){
+    console.log(&quot;Dijits form.Button class is available&quot;);
+  }else{
+    console.log(&quot;No form.Button classes are available&quot;);
+  }
+});</textarea></div></div>
+<div class="section" id="extend">
+<span id="dojo-base-lang-extend"></span><h3>extend()<a class="headerlink" href="#extend" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">extend()</span></code> works much like <a class="reference internal" href="#mixin">mixin()</a>, though works directly on an object&#8217;s prototype. <code class="docutils literal"><span class="pre">extend()</span></code> mixes members
+from the right-most object into the first object, modifying the object directly.</p>
+<p>This can be used to extend functionality into existing classes. Consider the following:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/TitlePane&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">TitlePane</span><span class="p">){</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">TitlePane</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">randomAttribute</span><span class="o">:</span><span class="s2">&quot;value&quot;</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dijit/TitlePane&quot;], function(lang, TitlePane){
+  lang.extend(TitlePane, {
+    randomAttribute:&quot;value&quot;
+  });
+});</textarea></div><p>The way the <a class="reference internal" href="../parser.html#dojo-parser"><span>dojo/parser</span></a> works, a custom attribute on the node will be recognized, as in the
+interest of performance, only declared members are mixed as part of the parsing process. Before the above <code class="docutils literal"><span class="pre">extend()</span></code>
+call, this sample would not recognize the follow markup:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/TitlePane&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;randomAttribute:&#39;newValue&#39;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dijit/TitlePane&quot; data-dojo-props=&quot;randomAttribute:'newValue'&quot;&gt;&lt;/div&gt;</textarea></div><p>After the extend, any new instances of a <code class="docutils literal"><span class="pre">dijit/TitlePane</span></code> will have the <code class="docutils literal"><span class="pre">randomAttribute</span></code> member mixed into the
+instance. <code class="docutils literal"><span class="pre">extend()</span></code> affects all future instances of a class or prototyped Object.</p>
+<div class="section" id="extending-dijit-widgetbase">
+<h4>Extending dijit/_WidgetBase<a class="headerlink" href="#extending-dijit-widgetbase" title="Permalink to this headline">¶</a></h4>
+<p>A potentially confusing result of the above actually provides us a lot of flexibility. All Dijit widgets inherit from
+<a class="reference internal" href="../../dijit/_WidgetBase.html#dijit-widgetbase"><span>dijit/_WidgetBase</span></a> in one way or another. Some widgets, like the
+<a class="reference internal" href="../../dijit/layout/BorderContainer.html#dijit-layout-bordercontainer"><span>dijit/layout/BorderContainer</span></a> can contain arbitrary widgets, though require a
+<code class="docutils literal"><span class="pre">region</span></code> parameter on the contained widget, though rather than manually adding a <code class="docutils literal"><span class="pre">region</span></code> parameter to each
+declaration across Dijit, the BorderContainer simply extends <code class="docutils literal"><span class="pre">dijit/_WidgetBase</span></code> with the member, and anyone using
+any widget within a BorderContainer can specify a <code class="docutils literal"><span class="pre">region</span></code>:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">){</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">_WidgetBase</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">region</span><span class="o">:</span> <span class="s2">&quot;center&quot;</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dijit/_WidgetBase&quot;], function(lang, _WidgetBase){
+  lang.extend(_WidgetBase, {
+    region: &quot;center&quot;
+  });
+});</textarea></div><p>The side-effect of this is a documentation nightmare. Now <em>every</em> widget appears to have a region variable, when in
+fact it is just there for the benefit of BorderContainer.  As a side note, this has been addressed in the API Viewer
+and other documentation as &#8220;extension&#8221; properties, methods and events and can be easily identified and filtered out.</p>
+</div>
+<div class="section" id="extend-vs-mixin">
+<h4>extend() vs. mixin()<a class="headerlink" href="#extend-vs-mixin" title="Permalink to this headline">¶</a></h4>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/json&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">json</span><span class="p">){</span>
+  <span class="c1">// define a class</span>
+  <span class="kd">var</span> <span class="nx">myClass</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">defaultProp</span> <span class="o">=</span> <span class="s2">&quot;default value&quot;</span><span class="p">;</span>
+  <span class="p">};</span>
+  <span class="nx">myClass</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;the class (unmodified):&quot;</span><span class="p">,</span> <span class="nx">json</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">myClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">));</span>
+
+  <span class="c1">// extend the class</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">myClass</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;extendedProp&quot;</span><span class="o">:</span> <span class="s2">&quot;extendedValue&quot;</span><span class="p">});</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;the class (modified with lang.extend):&quot;</span><span class="p">,</span> <span class="nx">json</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">myClass</span><span class="p">.</span><span class="nx">prototype</span><span class="p">));</span>
+
+  <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">myClass</span><span class="p">();</span>
+  <span class="c1">// add new properties to the instance of our class</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="nx">t</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;myProp&quot;</span><span class="o">:</span> <span class="s2">&quot;myValue&quot;</span><span class="p">});</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;the instance (modified with lang.mixin):&quot;</span><span class="p">,</span> <span class="nx">json</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">t</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dojo/json&quot;], function(lang, json){
+  // define a class
+  var myClass = function(){
+    this.defaultProp = &quot;default value&quot;;
+  };
+  myClass.prototype = {};
+  console.log(&quot;the class (unmodified):&quot;, json.stringify(myClass.prototype));
+
+  // extend the class
+  lang.extend(myClass, {&quot;extendedProp&quot;: &quot;extendedValue&quot;});
+  console.log(&quot;the class (modified with lang.extend):&quot;, json.stringify(myClass.prototype));
+
+  var t = new myClass();
+  // add new properties to the instance of our class
+  lang.mixin(t, {&quot;myProp&quot;: &quot;myValue&quot;});
+  console.log(&quot;the instance (modified with lang.mixin):&quot;, json.stringify(t));
+});</textarea></div></div>
+</div>
+<div class="section" id="getobject">
+<span id="dojo-base-lang-getobject"></span><h3>getObject()<a class="headerlink" href="#getobject" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">getObject()</span></code> returns the property of an object from a dot-separated string such as <code class="docutils literal"><span class="pre">A.B.C</span></code>.</p>
+<p>The simplest way to use <code class="docutils literal"><span class="pre">getObject()</span></code> is to pass a dot-separated string as shown below:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="nx">require</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="c1">// define an object (intentionally global to demonstrate)</span>
+  <span class="nx">foo</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">bar</span><span class="o">:</span> <span class="s2">&quot;some value&quot;</span>
+  <span class="p">};</span>
+
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">getObject</span><span class="p">(</span><span class="s2">&quot;foo.bar&quot;</span><span class="p">);</span> <span class="c1">// returns &quot;some value&quot;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], require(lang){
+  // define an object (intentionally global to demonstrate)
+  foo = {
+    bar: &quot;some value&quot;
+  };
+
+  lang.getObject(&quot;foo.bar&quot;); // returns &quot;some value&quot;
+});</textarea></div><p><code class="docutils literal"><span class="pre">getObject()</span></code> also takes an optional boolean parameter which, if <code class="docutils literal"><span class="pre">true</span></code>, will create the property if it does not exist. Any other properties along the path will also be created along the way. The default value is <code class="docutils literal"><span class="pre">false</span></code>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="c1">// define an object (intetionally global to demonstrate)</span>
+  <span class="nx">foo</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">bar</span><span class="o">:</span> <span class="s2">&quot;some value&quot;</span>
+  <span class="p">};</span>
+
+  <span class="c1">// get the &quot;foo.baz&quot; property, create it if it doesn&#39;t exist</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">getObject</span><span class="p">(</span><span class="s2">&quot;foo.baz&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span> <span class="c1">// returns foo.baz - an empty object {}</span>
+  <span class="cm">/*</span>
+<span class="cm">    foo == {</span>
+<span class="cm">      bar: &quot;some value&quot;,</span>
+<span class="cm">      baz: {}</span>
+<span class="cm">    }</span>
+<span class="cm">  */</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  // define an object (intetionally global to demonstrate)
+  foo = {
+    bar: &quot;some value&quot;
+  };
+
+  // get the &quot;foo.baz&quot; property, create it if it doesn't exist
+  lang.getObject(&quot;foo.baz&quot;, true); // returns foo.baz - an empty object {}
+  /*
+    foo == {
+      bar: &quot;some value&quot;,
+      baz: {}
+    }
+  */
+});</textarea></div><p>You can also pass an object as the third parameter. This will define the context in which to search for the property.
+By default, the context is <a class="reference internal" href="kernel.html#dojo-base-kernel-global"><span>dojo/_base/kernel::global</span></a>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="c1">// define an object</span>
+  <span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">bar</span><span class="o">:</span> <span class="s2">&quot;some value&quot;</span>
+  <span class="p">};</span>
+
+  <span class="c1">// get the &quot;bar&quot; property of the foo object</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">getObject</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">foo</span><span class="p">);</span> <span class="c1">// returns &quot;some value&quot;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  // define an object
+  var foo = {
+    bar: &quot;some value&quot;
+  };
+
+  // get the &quot;bar&quot; property of the foo object
+  lang.getObject(&quot;bar&quot;, false, foo); // returns &quot;some value&quot;
+});</textarea></div></div>
+<div class="section" id="hitch">
+<span id="dojo-base-lang-hitch"></span><h3>hitch()<a class="headerlink" href="#hitch" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">hitch()</span></code> returns a function that will execute a given function in a given context.  This function allows you to control how a function executes, particularly in asynchronous operations.  Sometimes code will be written like this:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/on&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">on</span><span class="p">){</span>
+
+  <span class="kd">var</span> <span class="nx">processEvent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">something</span> <span class="o">=</span> <span class="s2">&quot;else&quot;</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">something</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">processEvent</span><span class="p">);</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/on&quot;], function(on){
+
+  var processEvent = function(e){
+    this.something = &quot;else&quot;;
+  };
+
+  on(something, &quot;click&quot;, processEvent);
+
+});</textarea></div><p>Only to have it fail with a cryptic error about an unresolved variable? Why does that occur? Well, because in asynchronous callbacks such as above, the context that the code is executing in has changed.  It will no longer refer to the object that originally provided it, but its context will now refer to the enclosing object, the callback.  To get around this, you can use <code class="docutils literal"><span class="pre">hitch()</span></code> to force the function to retain its original context.  The same code done properly will look like:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">on</span><span class="p">,</span> <span class="nx">lang</span><span class="p">){</span>
+
+  <span class="kd">var</span> <span class="nx">processEvent</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">something</span> <span class="o">=</span> <span class="s2">&quot;else&quot;</span><span class="p">;</span>
+  <span class="p">};</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">something</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">hitch</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">processEvent</span><span class="p">));</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/on&quot;, &quot;dojo/_base/lang&quot;], function(on, lang){
+
+  var processEvent = function(e){
+    this.something = &quot;else&quot;;
+  };
+
+  on(something, &quot;click&quot;, lang.hitch(this, processEvent));
+
+});</textarea></div><p>And now when the event fires and runs the function, <code class="docutils literal"><span class="pre">this</span></code> will refer to the context that is expected.</p>
+<div class="section" id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h4>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>A simple example.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">myObj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="s2">&quot;bar&quot;</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">func</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">hitch</span><span class="p">(</span><span class="nx">myObj</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">foo</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">func</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  var myObj = {
+    foo: &quot;bar&quot;
+  };
+
+  var func = lang.hitch(myObj, function(){
+    console.log(this.foo);
+  });
+
+  func();
+});</textarea></div></div></div><p>Looking in the console, <code class="docutils literal"><span class="pre">bar</span></code> should be printed. That is because the scope provided in <code class="docutils literal"><span class="pre">hitch()</span></code> was <code class="docutils literal"><span class="pre">myObj</span></code>, so
+inside the function, <code class="docutils literal"><span class="pre">this</span></code> refers to <code class="docutils literal"><span class="pre">myObj</span></code>.</p>
+<p>To call a method in a given context that is already in scope, just the method name as a string can be passed as the second argument:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Passing method name as string.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">myObj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+    <span class="nx">method</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">someArg</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">foo</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">func</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">hitch</span><span class="p">(</span><span class="nx">myObj</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">);</span>
+
+  <span class="nx">func</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  var myObj = {
+    foo: &quot;bar&quot;,
+    method: function(someArg){
+      console.log(this.foo);
+    }
+  };
+
+  var func = lang.hitch(myObj, &quot;method&quot;);
+
+  func();
+});</textarea></div></div></div><p>The console output should be <code class="docutils literal"><span class="pre">bar</span></code>.</p>
+<p>Arguments can also be passed to the function that is being called:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Passing arguments to a function.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">myObj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+    <span class="nx">method</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">someArg</span><span class="p">){</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">someArg</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">foo</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="kd">var</span> <span class="nx">func</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">hitch</span><span class="p">(</span><span class="nx">myObj</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">);</span>
+
+  <span class="nx">func</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  var myObj = {
+    foo: &quot;bar&quot;,
+    method: function(someArg){
+      console.log(someArg + &quot; &quot; + this.foo);
+    }
+  };
+
+  var func = lang.hitch(myObj, &quot;method&quot;, &quot;baz&quot;);
+
+  func();
+});</textarea></div></div></div><p>The output in the console should be <code class="docutils literal"><span class="pre">baz</span> <span class="pre">bar</span></code>. Any arguments provided after the first two will be passed to the
+function.</p>
+</div>
+</div>
+<div class="section" id="mixin">
+<span id="dojo-base-lang-mixin"></span><h3>mixin()<a class="headerlink" href="#mixin" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">mixin()</span></code> is a simple utility function for mixing objects together. Mixin combines two objects from right to left,
+overwriting the left-most object, and returning the newly mixed object for use. <code class="docutils literal"><span class="pre">mixin()</span></code> is very similar to
+<a class="reference internal" href="#extend">extend()</a> but only works on objects, whereas extend explicitly extends an object&#8217;s prototype.</p>
+<p>Note: In case of nested objects and arrays, mixin does not combine, only overwrite.</p>
+<div class="section" id="simple-mixes">
+<h4>Simple Mixes<a class="headerlink" href="#simple-mixes" title="Permalink to this headline">¶</a></h4>
+<p>Merge two objects (join two objects) together with mixin():</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">b</span><span class="o">:</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="nx">d</span><span class="o">:</span> <span class="s2">&quot;e&quot;</span> <span class="p">};</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="p">{</span> <span class="nx">d</span><span class="o">:</span> <span class="s2">&quot;f&quot;</span><span class="p">,</span> <span class="nx">g</span><span class="o">:</span> <span class="s2">&quot;h&quot;</span> <span class="p">});</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span> <span class="c1">// b: c, d: f, g: h</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  var a = { b: &quot;c&quot;, d: &quot;e&quot; };
+  lang.mixin(a, { d: &quot;f&quot;, g: &quot;h&quot; });
+  console.log(a); // b: c, d: f, g: h
+});</textarea></div><p>This example overwrites the <code class="docutils literal"><span class="pre">d</span></code> member from the second object, leaving the variable <code class="docutils literal"><span class="pre">a</span></code> with three members: <code class="docutils literal"><span class="pre">b</span></code>,
+<code class="docutils literal"><span class="pre">d</span></code>, and <code class="docutils literal"><span class="pre">g</span></code>. To expand on this, we can illustrate how to use mixin to overwrite defaults for some function:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/fx&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">baseFx</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">generatedProps</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;someNode&quot;</span><span class="p">,</span> <span class="nx">onEnd</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="cm">/*code*/</span> <span class="p">}</span> <span class="p">};</span>
+  <span class="kd">var</span> <span class="nx">defaultProps</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">duration</span><span class="o">:</span> <span class="mi">1000</span> <span class="p">};</span>
+  <span class="nx">baseFx</span><span class="p">.</span><span class="nx">fadeIn</span><span class="p">(</span><span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="nx">generatedProps</span><span class="p">,</span> <span class="nx">defaultProps</span><span class="p">)).</span><span class="nx">play</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dojo/_base/fx&quot;], function(lang, baseFx){
+  var generatedProps = { node: &quot;someNode&quot;, onEnd: function(){ /*code*/ } };
+  var defaultProps = { duration: 1000 };
+  baseFx.fadeIn(lang.mixin(generatedProps, defaultProps)).play();
+});</textarea></div><p>This will create and play a fadeIn animation passing and <code class="docutils literal"><span class="pre">onEnd</span></code> function and node, using a default duration.</p>
+</div>
+<div class="section" id="creating-new-objects">
+<h4>Creating New Objects<a class="headerlink" href="#creating-new-objects" title="Permalink to this headline">¶</a></h4>
+<p>Mixin modifies the first object in the list, mixing in second object. If you wish to make an entirely new object from the mixed results, you have a couple options.  First, clone the existing object with <a class="reference internal" href="#clone">clone()</a>, and then mix:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">newObject</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="nx">lang</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">a</span><span class="p">),</span> <span class="nx">b</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  var newObject = lang.mixin(lang.clone(a), b);
+});</textarea></div><p>Here, the return from <code class="docutils literal"><span class="pre">clone()</span></code> is a new object, then <code class="docutils literal"><span class="pre">b</span></code> is mixed in.</p>
+<p>Alternately, you can pass an empty object as the first mix, and mix another object into it. You can then repeat this
+pattern as often as you&#8217;d like:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">newObject</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">({},</span> <span class="nx">b</span><span class="p">);</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="nx">newObject</span><span class="p">,</span> <span class="nx">c</span><span class="p">);</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="nx">newObject</span><span class="p">,</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">f</span><span class="p">));</span>
+  <span class="c1">// and so on</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  var newObject = lang.mixin({}, b);
+  lang.mixin(newObject, c);
+  lang.mixin(newObject, lang.mixin(e, f));
+  // and so on
+});</textarea></div><p>Just remember the object instance in the first position will always be overwritten, and the right-most object will
+take precedence in the mix.</p>
+</div>
+<div class="section" id="mixins-with-classes">
+<h4>Mixins with Classes<a class="headerlink" href="#mixins-with-classes" title="Permalink to this headline">¶</a></h4>
+<p>A common pattern when creating class objects is to pass an object-hash of properties to the constructor. <code class="docutils literal"><span class="pre">mixin()</span></code>
+provides a technique for easy override of default in you own classes. Consider the follow class declaration:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">Thinger</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">defaultValue</span><span class="o">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+    <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">){</span>
+      <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="nx">Thinger</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/_base/lang&quot;, &quot;dojo/_base/declare&quot;], function(lang, declare){
+  var Thinger = declare(null, {
+    defaultValue: &quot;red&quot;,
+    constructor: function(args){
+      lang.mixin(this, args);
+    }
+  });
+  return Thinger;
+});</textarea></div><p>Now, any time we create a new instance of a <code class="docutils literal"><span class="pre">Thinger</span></code>, it will have a member variable <code class="docutils literal"><span class="pre">defaultValue</span></code> set to red.
+If we provide a new <code class="docutils literal"><span class="pre">defaultValue</span></code>, the constructor will immediately overwrite the existing one:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;my/Thinger&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Thinger</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">thing</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Thinger</span><span class="p">({</span> <span class="nx">defaultValue</span><span class="o">:</span> <span class="s2">&quot;blue&quot;</span> <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;my/Thinger&quot;], function(Thinger){
+  var thing = new Thinger({ defaultValue: &quot;blue&quot; });
+});</textarea></div></div>
+<div class="section" id="mixing-into-instances">
+<h4>Mixing into Instances<a class="headerlink" href="#mixing-into-instances" title="Permalink to this headline">¶</a></h4>
+<p>Sometimes is it useful to mix custom variables and members into instances of widgets and other objects. Mixing into an
+instance allows you to easily add arbitrary references or overwrite functionality after instantiation.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/layout/ContentPane&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">ContentPane</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">cp</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ContentPane</span><span class="p">();</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">mixin</span><span class="p">(</span><span class="nx">cp</span><span class="p">,</span> <span class="p">{</span> <span class="nx">_timeCreated</span><span class="o">:</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span> <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dijit/layout/ContentPane&quot;], function(lang, ContentPane){
+  var cp = new ContentPane();
+  lang.mixin(cp, { _timeCreated: new Date() });
+});</textarea></div><p>Now, that instance of the ContentPane as a Date object attached in the _timeCreated member, which is accessible to the
+widget as <code class="docutils literal"><span class="pre">this._timeCreated</span></code>.</p>
+</div>
+<div class="section" id="mixing-methods">
+<h4>Mixing Methods<a class="headerlink" href="#mixing-methods" title="Permalink to this headline">¶</a></h4>
+<p>If you want to mix in some methods into an instance using two previous techniques, be aware that
+<a class="reference internal" href="declare.html#dojo-base-declare"><span>dojo/_base/declare()</span></a> decorates them, while <code class="docutils literal"><span class="pre">mixin()</span></code> does not, which may affect how
+<code class="docutils literal"><span class="pre">this.inherited()</span></code> works, if used in mixed-in methods. Use
+<a class="reference internal" href="declare.html#dojo-base-declare-safemixin"><span>dojo/_base/declare::safeMixin()</span></a>, which correctly handles all properties in
+<code class="docutils literal"><span class="pre">dojo/_base/declare</span></code>-compatible way.</p>
+</div>
+</div>
+<div class="section" id="partial">
+<span id="dojo-base-lang-partial"></span><h3>partial()<a class="headerlink" href="#partial" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">partial()</span></code> is related to <a class="reference internal" href="#hitch">hitch()</a> in that it is a function that returns a function.  What it does is allow
+manipulation of the arguments being passed to a function.  It allows the first <em>n</em> arguments to be fixed to a specific
+value, but the remaining arguments to vary.</p>
+<p>Let&#8217;s take a quick look at a pseudo-code example of using partial:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/request&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">dataLoaded</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">someFirstParam</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">ioArgs</span><span class="p">){};</span>
+
+  <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">dataLoaded</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/request&quot;], function(request){
+  var dataLoaded = function(someFirstParam, data, ioArgs){};
+
+  request.get(&quot;foo&quot;).then(dataLoaded);
+});</textarea></div><p>Okay, so that will invoke the <code class="docutils literal"><span class="pre">dataLoaded</span></code> function when the <code class="docutils literal"><span class="pre">request.get()</span></code> function is fullfulled... but the
+success callback expects to pass on <code class="docutils literal"><span class="pre">data,</span> <span class="pre">ioArgs</span></code>.  So how the heck do we make sure that the expectations are
+honored even with that new first param called <code class="docutils literal"><span class="pre">someFirstParam</span></code>?  Use <code class="docutils literal"><span class="pre">partial()</span></code>.  Here&#8217;s how you would do it:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/request&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">dataLoaded</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">someFirstParam</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">ioargs</span><span class="p">){};</span>
+
+  <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="nx">lang</span><span class="p">.</span><span class="nx">partial</span><span class="p">(</span><span class="nx">dataLoaded</span><span class="p">,</span> <span class="s2">&quot;firstValue&quot;</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dojo/request&quot;], function(lang, request){
+  var dataLoaded = function(someFirstParam, data, ioargs){};
+
+  request.get(&quot;foo&quot;).then(lang.partial(dataLoaded, &quot;firstValue&quot;));
+});</textarea></div><p>What that does is create a new function that wraps dataLoaded and affixes the first parameter with the value
+<code class="docutils literal"><span class="pre">firstValue</span></code>.  Note that <code class="docutils literal"><span class="pre">partial()</span></code> allows you to do <em>n</em> parameters, so you can keep defining as many values as
+you want for fixed-value parameters of a function.</p>
+<div class="section" id="example">
+<h4>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h4>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Let&#8217;s look at a quick running example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">domConst</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">myClick</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">presetValue</span><span class="p">,</span> <span class="nx">event</span><span class="p">){</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;&quot;</span> <span class="o">+</span> <span class="nx">presetValue</span> <span class="o">+</span> <span class="s2">&quot;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;appendLocation&quot;</span><span class="p">);</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;br /&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;appendLocation&quot;</span><span class="p">);</span>
+  <span class="p">};</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;myButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">partial</span><span class="p">(</span><span class="nx">myClick</span><span class="p">,</span> <span class="s2">&quot;This is preset text!&quot;</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(lang, dom, domConst, on){
+  var myClick = function(presetValue, event){
+    domConst.place(&quot;&lt;p&gt;&quot; + presetValue + &quot;&lt;/p&gt;&quot;, &quot;appendLocation&quot;);
+    domConst.place(&quot;&lt;br /&gt;&quot;, &quot;appendLocation&quot;);
+  };
+
+  on(dom.byId(&quot;myButton&quot;), &quot;click&quot;, lang.partial(myClick, &quot;This is preset text!&quot;));
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;myButton&quot;</span><span class="nt">&gt;</span>Click me to append in a preset value!<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;appendLocation&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button type=&quot;button&quot; id=&quot;myButton&quot;&gt;Click me to append in a preset value!&lt;/button&gt;
+&lt;div id=&quot;appendLocation&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+</div>
+<div class="section" id="replace">
+<span id="dojo-base-lang-replace"></span><h3>replace()<a class="headerlink" href="#replace" title="Permalink to this headline">¶</a></h3>
+<p>This function provides a light-weight foundation for substitution-based templating. It is a sane alternative to string
+concatenation technique, which is brittle and doesn&#8217;t play nice with localization.</p>
+<div class="section" id="with-dictionary">
+<h4>With Dictionary<a class="headerlink" href="#with-dictionary" title="Permalink to this headline">¶</a></h4>
+<p>If the second argument is an object, all names within braces are interpreted as property names within this object. All
+names separated by <code class="docutils literal"><span class="pre">.</span></code> (dot) will be interpreted as sub-objects. This default behavior provides greater flexibility:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span>
+    <span class="s2">&quot;Hello, {name.first} {name.last} AKA {nick}!&quot;</span><span class="p">,</span>
+    <span class="p">{</span>
+      <span class="nx">name</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">first</span><span class="o">:</span>  <span class="s2">&quot;Robert&quot;</span><span class="p">,</span>
+        <span class="nx">middle</span><span class="o">:</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span>
+        <span class="nx">last</span><span class="o">:</span>   <span class="s2">&quot;Cringely&quot;</span>
+      <span class="p">},</span>
+      <span class="nx">nick</span><span class="o">:</span> <span class="s2">&quot;Bob&quot;</span>
+    <span class="p">}</span>
+  <span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dojo/dom&quot;, &quot;dojo/domReady!&quot;], function(lang, dom){
+  dom.byId(&quot;output&quot;).innerHTML = lang.replace(
+    &quot;Hello, {name.first} {name.last} AKA {nick}!&quot;,
+    {
+      name: {
+        first:  &quot;Robert&quot;,
+        middle: &quot;X&quot;,
+        last:   &quot;Cringely&quot;
+      },
+      nick: &quot;Bob&quot;
+    }
+  );
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;p id=&quot;output&quot;&gt;&lt;/p&gt;</textarea></div></div></div><p>You don&#8217;t need to use all properties of an object, you can list them in any order, and you can reuse them as many
+times as you like.</p>
+</div>
+<div class="section" id="with-array">
+<h4>With Array<a class="headerlink" href="#with-array" title="Permalink to this headline">¶</a></h4>
+<p>In most cases you may prefer an array notation effectively simulating the venerable <code class="docutils literal"><span class="pre">printf</span></code>:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span>
+    <span class="s2">&quot;Hello, {0} {2} AKA {3}!&quot;</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;Robert&quot;</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;Cringely&quot;</span><span class="p">,</span> <span class="s2">&quot;Bob&quot;</span><span class="p">]</span>
+  <span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dojo/dom&quot;, &quot;dojo/domReady!&quot;], function(lang, dom){
+  dom.byId(&quot;output&quot;).innerHTML = lang.replace(
+    &quot;Hello, {0} {2} AKA {3}!&quot;,
+    [&quot;Robert&quot;, &quot;X&quot;, &quot;Cringely&quot;, &quot;Bob&quot;]
+  );
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;p id=&quot;output&quot;&gt;&lt;/p&gt;</textarea></div></div></div></div>
+<div class="section" id="with-a-function">
+<h4>With a Function<a class="headerlink" href="#with-a-function" title="Permalink to this headline">¶</a></h4>
+<p>For ultimate flexibility you can use <code class="docutils literal"><span class="pre">replace()</span></code> with a function as the second argument.</p>
+<p>Essentially these arguments are the same as in <a class="reference external" href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String/replace">String.replace()</a> when a function is used. Usually the second argument is the most useful one.</p>
+<p>Let&#8217;s take a look at example where we are calculating values lazily on demand from a potentially dynamic source.</p>
+<p>This code in action:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/array&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">lang</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+
+  <span class="c1">// helper function</span>
+  <span class="kd">function</span> <span class="nx">sum</span><span class="p">(</span><span class="nx">a</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nx">array</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">){</span> <span class="nx">t</span> <span class="o">+=</span> <span class="nx">x</span><span class="p">;</span> <span class="p">});</span>
+    <span class="k">return</span> <span class="nx">t</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span>
+    <span class="s2">&quot;{count} payments averaging {avg} USD per payment.&quot;</span><span class="p">,</span>
+    <span class="nx">lang</span><span class="p">.</span><span class="nx">hitch</span><span class="p">(</span>
+      <span class="p">{</span> <span class="nx">payments</span><span class="o">:</span> <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span> <span class="p">},</span>
+      <span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">key</span><span class="p">){</span>
+        <span class="k">switch</span><span class="p">(</span><span class="nx">key</span><span class="p">){</span>
+          <span class="k">case</span> <span class="s2">&quot;count&quot;</span><span class="o">:</span> <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">payments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+          <span class="k">case</span> <span class="s2">&quot;min&quot;</span><span class="o">:</span>   <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nb">Math</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">payments</span><span class="p">);</span>
+          <span class="k">case</span> <span class="s2">&quot;max&quot;</span><span class="o">:</span>   <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nb">Math</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">payments</span><span class="p">);</span>
+          <span class="k">case</span> <span class="s2">&quot;sum&quot;</span><span class="o">:</span>   <span class="k">return</span> <span class="nx">sum</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">payments</span><span class="p">);</span>
+          <span class="k">case</span> <span class="s2">&quot;avg&quot;</span><span class="o">:</span>   <span class="k">return</span> <span class="nx">sum</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">payments</span><span class="p">)</span> <span class="o">/</span> <span class="k">this</span><span class="p">.</span><span class="nx">payments</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">)</span>
+  <span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/array&quot;, &quot;dojo/_base/lang&quot;, &quot;dojo/dom&quot;, &quot;dojo/domReady!&quot;],
+function(array, lang, dom){
+
+  // helper function
+  function sum(a){
+    var t = 0;
+    array.forEach(a, function(x){ t += x; });
+    return t;
+  }
+
+  dom.byId(&quot;output&quot;).innerHTML = lang.replace(
+    &quot;{count} payments averaging {avg} USD per payment.&quot;,
+    lang.hitch(
+      { payments: [11, 16, 12] },
+      function(_, key){
+        switch(key){
+          case &quot;count&quot;: return this.payments.length;
+          case &quot;min&quot;:   return Math.min.apply(Math, this.payments);
+          case &quot;max&quot;:   return Math.max.apply(Math, this.payments);
+          case &quot;sum&quot;:   return sum(this.payments);
+          case &quot;avg&quot;:   return sum(this.payments) / this.payments.length;
+        }
+      }
+    )
+  );
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;p id=&quot;output&quot;&gt;&lt;/p&gt;</textarea></div></div></div></div>
+<div class="section" id="with-custom-pattern">
+<h4>With Custom Pattern<a class="headerlink" href="#with-custom-pattern" title="Permalink to this headline">¶</a></h4>
+<p>In some cases you may want to use different braces, for example because your interpolated strings contain patterns
+similar to <code class="docutils literal"><span class="pre">{abc}</span></code>, but they should not be evaluated and replaced, or your server-side framework already uses these
+patterns for something else. In this case you should replace the pattern:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span>
+    <span class="s2">&quot;Hello, %[0] %[2] AKA %[3]!&quot;</span><span class="p">,</span>
+    <span class="p">[</span><span class="s2">&quot;Robert&quot;</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;Cringely&quot;</span><span class="p">,</span> <span class="s2">&quot;Bob&quot;</span><span class="p">],</span>
+    <span class="sr">/\%\[([^\]]+)\]/g</span>
+  <span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;, &quot;dojo/dom&quot;, &quot;dojo/domReady!&quot;], function(lang, dom){
+  dom.byId(&quot;output&quot;).innerHTML = lang.replace(
+    &quot;Hello, %[0] %[2] AKA %[3]!&quot;,
+    [&quot;Robert&quot;, &quot;X&quot;, &quot;Cringely&quot;, &quot;Bob&quot;],
+    /\%\[([^\]]+)\]/g
+  );
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;p id=&quot;output&quot;&gt;&lt;/p&gt;</textarea></div></div></div><p>It is advised for the new pattern to be:</p>
+<ul class="simple">
+<li>Global</li>
+<li>It should capture one substring, usually some text inside &#8220;braces&#8221;.</li>
+</ul>
+</div>
+<div class="section" id="escaping-substitutions">
+<h4>Escaping Substitutions<a class="headerlink" href="#escaping-substitutions" title="Permalink to this headline">¶</a></h4>
+<p>This example escapes substituted text for HTML to prevent possible exploits.  Dijit templates implement similar
+technique.  We will also borrow Dijit syntax: where all names starting with <code class="docutils literal"><span class="pre">!</span></code> are going to be placed as is
+(e.g., <code class="docutils literal"><span class="pre">{!abc}</span></code>), while everything else is going to be escaped.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="nx">lang</span><span class="p">){</span>
+
+  <span class="kd">function</span> <span class="nx">safeReplace</span><span class="p">(</span><span class="nx">tmpl</span><span class="p">,</span> <span class="nx">dict</span><span class="p">){</span>
+    <span class="c1">// convert dict to a function, if needed</span>
+    <span class="kd">var</span> <span class="nx">fn</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">dict</span><span class="p">)</span> <span class="o">?</span> <span class="nx">dict</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">name</span><span class="p">){</span>
+      <span class="k">return</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">getObject</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">dict</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="c1">// perform the substitution</span>
+    <span class="k">return</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">tmpl</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">name</span><span class="p">){</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">name</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;!&#39;</span><span class="p">){</span>
+        <span class="c1">// no escaping</span>
+        <span class="k">return</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">name</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+      <span class="p">}</span>
+      <span class="c1">// escape</span>
+      <span class="k">return</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">name</span><span class="p">).</span>
+        <span class="nx">replace</span><span class="p">(</span><span class="sr">/&amp;/g</span><span class="p">,</span> <span class="s2">&quot;&amp;&quot;</span><span class="p">).</span>
+        <span class="nx">replace</span><span class="p">(</span><span class="sr">/&lt;/g</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">).</span>
+        <span class="nx">replace</span><span class="p">(</span><span class="sr">/&gt;/g</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">).</span>
+        <span class="nx">replace</span><span class="p">(</span><span class="sr">/&quot;/g</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+
+  <span class="c1">// we don&#39;t want to break the Code Glass widget here</span>
+  <span class="kd">var</span> <span class="nx">bad</span> <span class="o">=</span> <span class="s2">&quot;{script}alert(&#39;Let\&#39; break stuff!&#39;);{/script}&quot;</span><span class="p">;</span>
+
+  <span class="c1">// let&#39;s reconstitute the original bad string</span>
+  <span class="nx">bad</span> <span class="o">=</span> <span class="nx">bad</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\{/g</span><span class="p">,</span> <span class="s2">&quot;&lt;&quot;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\}/g</span><span class="p">,</span> <span class="s2">&quot;&gt;&quot;</span><span class="p">);</span>
+
+  <span class="c1">// now the replacement</span>
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">safeReplace</span><span class="p">(</span><span class="s2">&quot;&lt;div&gt;{0}&lt;/div&quot;</span><span class="p">,</span> <span class="p">[</span><span class="nx">bad</span><span class="p">]);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom&quot;, &quot;dojo/_base/lang&quot;, &quot;dojo/domReady!&quot;], function(dom, lang){
+
+  function safeReplace(tmpl, dict){
+    // convert dict to a function, if needed
+    var fn = lang.isFunction(dict) ? dict : function(_, name){
+      return lang.getObject(name, false, dict);
+    };
+
+    // perform the substitution
+    return lang.replace(tmpl, function(_, name){
+      if(name.charAt(0) == '!'){
+        // no escaping
+        return fn(_, name.slice(1));
+      }
+      // escape
+      return fn(_, name).
+        replace(/&amp;/g, &quot;&amp;&quot;).
+        replace(/&lt;/g, &quot;&lt;&quot;).
+        replace(/&gt;/g, &quot;&gt;&quot;).
+        replace(/&quot;/g, '&quot;');
+    });
+  }
+
+  // we don't want to break the Code Glass widget here
+  var bad = &quot;{script}alert('Let\' break stuff!');{/script}&quot;;
+
+  // let's reconstitute the original bad string
+  bad = bad.replace(/\{/g, &quot;&lt;&quot;).replace(/\}/g, &quot;&gt;&quot;);
+
+  // now the replacement
+  dom.byId(&quot;output&quot;).innerHTML = safeReplace(&quot;&lt;div&gt;{0}&lt;/div&quot;, [bad]);
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;</span>Hello<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;output&quot;&gt;Hello&lt;/div&gt;</textarea></div></div></div></div>
+<div class="section" id="formatting-substitutions">
+<h4>Formatting Substitutions<a class="headerlink" href="#formatting-substitutions" title="Permalink to this headline">¶</a></h4>
+<p>Let&#8217;s add a simple formatting to substituted fields. We will use the following notation in this example:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">{name}</span></code> - use the result of substitution directly.</li>
+<li><code class="docutils literal"><span class="pre">{name:fmt}</span></code> - use formatter <code class="docutils literal"><span class="pre">fmt</span></code> to format the result.</li>
+<li><code class="docutils literal"><span class="pre">{name:fmt:a:b:c}</span></code> - use formatter <code class="docutils literal"><span class="pre">fmt</span></code> with optional parameters <code class="docutils literal"><span class="pre">a</span></code>, <code class="docutils literal"><span class="pre">b</span></code>, and <code class="docutils literal"><span class="pre">c</span></code>. Any number of
+parameters can be used. Their interpretation depends on a formatter.</li>
+</ul>
+<p>In this example we are going to format numbers as fixed or exponential with optional precision.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">function</span> <span class="nx">format</span><span class="p">(</span><span class="nx">tmpl</span><span class="p">,</span> <span class="nx">dict</span><span class="p">,</span> <span class="nx">formatters</span><span class="p">){</span>
+    <span class="c1">// convert dict to a function, if needed</span>
+    <span class="kd">var</span> <span class="nx">fn</span> <span class="o">=</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="nx">dict</span><span class="p">)</span> <span class="o">?</span> <span class="nx">dict</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">name</span><span class="p">){</span>
+      <span class="k">return</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">getObject</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">dict</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="c1">// perform the substitution</span>
+    <span class="k">return</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">tmpl</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">name</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">parts</span> <span class="o">=</span> <span class="nx">name</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">),</span>
+          <span class="nx">value</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">parts</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">){</span>
+        <span class="nx">value</span> <span class="o">=</span> <span class="nx">formatters</span><span class="p">[</span><span class="nx">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]](</span><span class="nx">value</span><span class="p">,</span> <span class="nx">parts</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+      <span class="p">}</span>
+      <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">}</span>
+
+  <span class="c1">// simple numeric formatters</span>
+  <span class="kd">var</span> <span class="nx">customFormatters</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">f</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">opts</span><span class="p">){</span>
+      <span class="c1">// return formatted as a fixed number</span>
+      <span class="kd">var</span> <span class="nx">precision</span> <span class="o">=</span> <span class="nx">opts</span> <span class="o">&amp;&amp;</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="nx">opts</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+      <span class="k">return</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">toFixed</span><span class="p">(</span><span class="nx">precision</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">e</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">opts</span><span class="p">){</span>
+      <span class="c1">// return formatted as an exponential number</span>
+      <span class="kd">var</span> <span class="nx">precision</span> <span class="o">=</span> <span class="nx">opts</span> <span class="o">&amp;&amp;</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">length</span> <span class="o">&amp;&amp;</span> <span class="nx">opts</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+      <span class="k">return</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">value</span><span class="p">).</span><span class="nx">toExponential</span><span class="p">(</span><span class="nx">precision</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+
+  <span class="c1">// that is how we use it:</span>
+  <span class="kd">var</span> <span class="nx">output1</span> <span class="o">=</span> <span class="nx">format</span><span class="p">(</span>
+    <span class="s2">&quot;pi = {pi}&lt;br&gt;pi:f = {pi:f}&lt;br&gt;pi:f:5 = {pi:f:5}&quot;</span><span class="p">,</span>
+    <span class="p">{</span><span class="nx">pi</span><span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">,</span> <span class="nx">big</span><span class="o">:</span> <span class="mi">1234567890</span><span class="p">},</span>
+    <span class="nx">customFormatters</span>
+  <span class="p">);</span>
+
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output1&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">format</span><span class="p">(</span>
+    <span class="s2">&quot;pi = {pi}&lt;br&gt;pi:f = {pi:f}&lt;br&gt;pi:f:5 = {pi:f:5}&quot;</span><span class="p">,</span>
+    <span class="p">{</span><span class="nx">pi</span><span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">,</span> <span class="nx">big</span><span class="o">:</span> <span class="mi">1234567890</span><span class="p">},</span>
+    <span class="nx">customFormatters</span>
+  <span class="p">);</span>
+
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output2&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">format</span><span class="p">(</span>
+    <span class="s2">&quot;big = {big}&lt;br&gt;big:e = {big:e}&lt;br&gt;big:e:5 = {big:e:5}&quot;</span><span class="p">,</span>
+    <span class="p">{</span><span class="nx">pi</span><span class="o">:</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">,</span> <span class="nx">big</span><span class="o">:</span> <span class="mi">1234567890</span><span class="p">},</span>
+    <span class="nx">customFormatters</span>
+  <span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom&quot;, &quot;dojo/_base/lang&quot;, &quot;dojo/domReady!&quot;], function(dom, lang){
+  function format(tmpl, dict, formatters){
+    // convert dict to a function, if needed
+    var fn = lang.isFunction(dict) ? dict : function(_, name){
+      return lang.getObject(name, false, dict);
+    };
+
+    // perform the substitution
+    return lang.replace(tmpl, function(_, name){
+      var parts = name.split(&quot;:&quot;),
+          value = fn(_, parts[0]);
+      if(parts.length &gt; 1){
+        value = formatters[parts[1]](value, parts.slice(2));
+      }
+      return value;
+    });
+  }
+
+  // simple numeric formatters
+  var customFormatters = {
+    f: function(value, opts){
+      // return formatted as a fixed number
+      var precision = opts &amp;&amp; opts.length &amp;&amp; opts[0];
+      return Number(value).toFixed(precision);
+    },
+    e: function(value, opts){
+      // return formatted as an exponential number
+      var precision = opts &amp;&amp; opts.length &amp;&amp; opts[0];
+      return Number(value).toExponential(precision);
+    }
+  };
+
+  // that is how we use it:
+  var output1 = format(
+    &quot;pi = {pi}&lt;br&gt;pi:f = {pi:f}&lt;br&gt;pi:f:5 = {pi:f:5}&quot;,
+    {pi: Math.PI, big: 1234567890},
+    customFormatters
+  );
+
+  dom.byId(&quot;output1&quot;).innerHTML = format(
+    &quot;pi = {pi}&lt;br&gt;pi:f = {pi:f}&lt;br&gt;pi:f:5 = {pi:f:5}&quot;,
+    {pi: Math.PI, big: 1234567890},
+    customFormatters
+  );
+
+  dom.byId(&quot;output2&quot;).innerHTML = format(
+    &quot;big = {big}&lt;br&gt;big:e = {big:e}&lt;br&gt;big:e:5 = {big:e:5}&quot;,
+    {pi: Math.PI, big: 1234567890},
+    customFormatters
+  );
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output1&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output2&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;p id=&quot;output1&quot;&gt;&lt;/p&gt;
+&lt;p id=&quot;output2&quot;&gt;&lt;/p&gt;</textarea></div></div></div></div>
+</div>
+<div class="section" id="setobject">
+<span id="dojo-base-lang-setobject"></span><h3>setObject()<a class="headerlink" href="#setobject" title="Permalink to this headline">¶</a></h3>
+<p>Set a property from a dot-separated string, such as <code class="docutils literal"><span class="pre">A.B.C</span></code>.  In JavaScript, a dot separated string like
+<code class="docutils literal"><span class="pre">obj.parent.child</span></code> refers to an item called <code class="docutils literal"><span class="pre">child</span></code> inside an object called <code class="docutils literal"><span class="pre">parent</span></code> inside of <code class="docutils literal"><span class="pre">obj</span></code>.
+<code class="docutils literal"><span class="pre">setObject()</span></code> will let you set the value of child, creating the intermediate parent objects if they don&#8217;t exist.</p>
+<p>Without <code class="docutils literal"><span class="pre">setObject()</span></code>, it is often handle like this:</p>
+<div class="highlight"><pre><span class="c1">// ensure that intermediate objects are available</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">obj</span><span class="p">[</span><span class="s2">&quot;parent&quot;</span><span class="p">]){</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">parent</span> <span class="o">=</span><span class="p">{};</span> <span class="p">}</span>
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">obj</span><span class="p">.</span><span class="nx">parent</span><span class="p">[</span><span class="s2">&quot;child&quot;</span><span class="p">]){</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">child</span><span class="o">=</span><span class="p">{};</span> <span class="p">}</span>
+
+<span class="c1">// now we can safely set the property</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">child</span><span class="p">.</span><span class="nx">prop</span> <span class="o">=</span> <span class="s2">&quot;some value&quot;</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// ensure that intermediate objects are available
+if(!obj[&quot;parent&quot;]){ obj.parent ={}; }
+if(!obj.parent[&quot;child&quot;]){ obj.parent.child={}; }
+
+// now we can safely set the property
+obj.parent.child.prop = &quot;some value&quot;;</textarea></div><p>Whereas with <cite>setObject()</cite>, we can shorten that to:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lang</span><span class="p">){</span>
+  <span class="nx">lang</span><span class="p">.</span><span class="nx">setObject</span><span class="p">(</span><span class="s2">&quot;parent.child.prop&quot;</span><span class="p">,</span> <span class="s2">&quot;some value&quot;</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/lang&quot;], function(lang){
+  lang.setObject(&quot;parent.child.prop&quot;, &quot;some value&quot;, obj);
+});</textarea></div></div>
+<div class="section" id="trim">
+<span id="dojo-base-lang-trim"></span><h3>trim()<a class="headerlink" href="#trim" title="Permalink to this headline">¶</a></h3>
+<p>This function implements a frequently required functionality: it removes white-spaces from both ends of a string. This
+functionality is part of ECMAScript 5 standard and implemented by some browsers. In this case <code class="docutils literal"><span class="pre">trim()</span></code> delegates to
+the native implementation. More information can be found here: <a class="reference external" href="https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/String/Trim">String.trim() at MDC</a>.</p>
+<p><code class="docutils literal"><span class="pre">trim()</span></code> implementation was informed by <a class="reference external" href="http://blog.stevenlevithan.com/archives/faster-trim-javascript">Steven Levithan&#8217;s blog post</a>. It was chosen to implement the compact yet performant version. If your application requires even
+more speed, check out <a class="reference internal" href="../string.html#dojo-string-trim"><span>dojo/string::trim()</span></a>, which implements the fastest version.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/lang&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="nx">lang</span><span class="p">){</span>
+  <span class="kd">function</span> <span class="nx">show</span><span class="p">(</span><span class="nx">str</span><span class="p">){</span>
+    <span class="k">return</span> <span class="s2">&quot;|&quot;</span> <span class="o">+</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;|&quot;</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output1&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">show</span><span class="p">(</span><span class="s2">&quot;   one&quot;</span><span class="p">);</span>
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output2&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">show</span><span class="p">(</span><span class="s2">&quot;two &quot;</span><span class="p">);</span>
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output3&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">show</span><span class="p">(</span><span class="s2">&quot;   three &quot;</span><span class="p">);</span>
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output4&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">show</span><span class="p">(</span><span class="s2">&quot;\tfour\r\n&quot;</span><span class="p">);</span>
+  <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output5&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">show</span><span class="p">(</span><span class="s2">&quot;\f\n\r\t\vF I V E\f\n\r\t\v&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom&quot;, &quot;dojo/_base/lang&quot;, &quot;dojo/domReady!&quot;], function(dom, lang){
+  function show(str){
+    return &quot;|&quot; + lang.trim(str) + &quot;|&quot;;
+  }
+  dom.byId(&quot;output1&quot;).innerHTML = show(&quot;   one&quot;);
+  dom.byId(&quot;output2&quot;).innerHTML = show(&quot;two &quot;);
+  dom.byId(&quot;output3&quot;).innerHTML = show(&quot;   three &quot;);
+  dom.byId(&quot;output4&quot;).innerHTML = show(&quot;\tfour\r\n&quot;);
+  dom.byId(&quot;output5&quot;).innerHTML = show(&quot;\f\n\r\t\vF I V E\f\n\r\t\v&quot;);
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output1&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output2&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output3&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output4&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">&quot;output5&quot;</span><span class="nt">&gt;&lt;/p&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;p id=&quot;output1&quot;&gt;&lt;/p&gt;
+&lt;p id=&quot;output2&quot;&gt;&lt;/p&gt;
+&lt;p id=&quot;output3&quot;&gt;&lt;/p&gt;
+&lt;p id=&quot;output4&quot;&gt;&lt;/p&gt;
+&lt;p id=&quot;output5&quot;&gt;&lt;/p&gt;</textarea></div></div></div></div>
+</div>
+<div class="section" id="deprecated-methods">
+<h2><a class="toc-backref" href="#id7">Deprecated Methods</a><a class="headerlink" href="#deprecated-methods" title="Permalink to this headline">¶</a></h2>
+<p>The following methods are <em>deprecated</em>. See
+<a class="reference internal" href="../../releasenotes/migration-2.0.html#releasenotes-migration-2-0-testing-object-types"><span>Testing Object Types</span></a> for advice on how to differentiate
+between different types of objects without using methods().  The methods below are deprecated:</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">isString()</span></code></p>
+<p>Checks if the parameter is a String</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">isArray()</span></code></p>
+<p>Checks if the parameter is an Array</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">isFunction()</span></code></p>
+<p>Checks if the parameter is a Function</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">isObject()</span></code></p>
+<p>Checks if the parameter is a Object</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">isArrayLike()</span></code></p>
+<p>Checks if the parameter is like an Array</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">isAlien()</span></code></p>
+<p>Checks if the parameter is a built-in function</p>
+</li>
+</ul>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id8">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../../dojox/lang/index.html#dojox-lang-index"><span>dojox/lang</span></a> - Additional language extensions</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

@@ -1,0 +1,270 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.8/dojox/html/_base" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.8/dojox/html/_base.html</div>
+<h1 class="objectIcon36 jsdoc-title module-title">dojox/html/_base<span style="font-size:11px;color:#999;"> (version 1.8)</span></h1>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_8dojox_html__base__adjustCssPaths">_adjustCssPaths</a><span class="parameters"></span><span class="parameters">(cssUrl,cssText) </span><span>adjusts relative paths in cssText to be relative to cssUrl
+a path is considered relative if it doesn&#39;t start with &#39;/&#39; and not contains &#39;:&#39;</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_8dojox_html__base__adjustHtmlPaths">_adjustHtmlPaths</a><span class="parameters"></span><span class="parameters">(htmlUrl,cont) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_8dojox_html__base__ContentSetter">_ContentSetter</a><span class="parameters"></span><span class="parameters">() </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_8dojox_html__base__snarfScripts">_snarfScripts</a><span class="parameters"></span><span class="parameters">(cont,byRef) </span><span>strips out script tags from cont</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_8dojox_html__base__snarfStyles">_snarfStyles</a><span class="parameters"></span><span class="parameters">(cssUrl,cont,styles) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_html__base_evalInGlobal">evalInGlobal</a><span class="parameters"></span><span class="parameters">(code,appendNode) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_html__base_set">set</a><span class="parameters"></span><span class="parameters">(node,cont,params) </span><span>inserts (replaces) the given content into the given node</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_html__base__adjustCssPaths"></a><span class="functionIcon">_adjustCssPaths</span><span class="parameters">(cssUrl,cssText)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/html/_base" class="jsdoc-link">dojox/html/_base</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>adjusts relative paths in cssText to be relative to cssUrl
+a path is considered relative if it doesn&#39;t start with &#39;/&#39; and not contains &#39;:&#39;</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Say we fetch a HTML page from level1/page.html
+It has some inline CSS:
+
+</p>
+<pre><code>@import &quot;css/page.css&quot; tv, screen;
+...
+background-image: url(images/aplhaimage.png);</pre></code>
+<p>as we fetched this HTML and therefore this CSS
+from level1/page.html, these paths needs to be adjusted to:
+
+</p>
+<pre><code>@import &#39;level1/css/page.css&#39; tv, screen;
+...
+background-image: url(level1/images/alphaimage.png);</pre></code>
+<p>In IE it will also adjust relative paths in AlphaImageLoader()
+
+</p>
+<pre><code>filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=&#39;images/alphaimage.png&#39;);</pre></code>
+<p>will be adjusted to:
+
+
+</p>
+<pre><code>filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=&#39;level1/images/alphaimage.png&#39;);</pre></code>
+<p>Please note that any relative paths in AlphaImageLoader in external css files wont work, as
+the paths in AlphaImageLoader is MUST be declared relative to the HTML page,
+not relative to the CSS file that declares it</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">cssUrl</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">cssText</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_html__base__adjustHtmlPaths"></a><span class="functionIcon">_adjustHtmlPaths</span><span class="parameters">(htmlUrl,cont)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/html/_base" class="jsdoc-link">dojox/html/_base</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">htmlUrl</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">cont</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_html__base__ContentSetter"></a><span class="functionIcon">_ContentSetter</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/html/_base" class="jsdoc-link">dojox/html/_base</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_html__base__snarfScripts"></a><span class="functionIcon">_snarfScripts</span><span class="parameters">(cont,byRef)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/html/_base" class="jsdoc-link">dojox/html/_base</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>strips out script tags from cont</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">cont</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">byRef</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>byRef = {errBack:function(){/<em>add your download error code here</em>/, downloadRemote: true(default false)}}
+byRef will have {code: &#39;jscode&#39;} when this scope leaves</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_html__base__snarfStyles"></a><span class="functionIcon">_snarfStyles</span><span class="parameters">(cssUrl,cont,styles)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/html/_base" class="jsdoc-link">dojox/html/_base</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">cssUrl</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">cont</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">styles</td>
+            <td class="jsdoc-param-type">Array</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_html__base_evalInGlobal"></a><span class="functionIcon">evalInGlobal</span><span class="parameters">(code,appendNode)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/html/_base" class="jsdoc-link">dojox/html/_base</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">code</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">appendNode</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_html__base_set"></a><span class="functionIcon">set</span><span class="parameters">(node,cont,params)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/html/_base" class="jsdoc-link">dojox/html/_base</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>inserts (replaces) the given content into the given node</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DomNode</td>
+            <td class="jsdoc-param-description"><p>the parent element that will receive the content</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">cont</td>
+            <td class="jsdoc-param-type">String | DomNode | NodeList</td>
+            <td class="jsdoc-param-description"><p>the content to be set on the parent element.
+This can be an html string, a node reference or a NodeList, dojo/NodeList, Array or other enumerable list of nodes</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">params</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>Optional flags/properties to configure the content-setting. See dojo.html._ContentSetter</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><p>A safe string/node/nodelist content replacement/injection with hooks for extension
+Example Usage:
+
+</p>
+<pre><code>dojo.html.set(node, &quot;some string&quot;);
+dojo.html.set(node, contentNode, {options});
+dojo.html.set(node, myNode.childNodes, {options});</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.8/dojox/html/_base" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

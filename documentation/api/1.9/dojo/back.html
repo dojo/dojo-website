@@ -1,0 +1,216 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojo/back" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojo/back.html</div>
+<h1 class="objectIcon36 jsdoc-title module-title">dojo/back<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-full-summary"><p>Browser history management resources</p>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_9dojo_back__iframeLoaded">_iframeLoaded</a><span class="parameters"></span><span class="parameters">(evt,ifrLoc) </span><span>private method.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_back_addToHistory">addToHistory</a><span class="parameters"></span><span class="parameters">(args) </span><span>adds a state object (args) to the history list.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_back_getHash">getHash</a><span class="parameters"></span><span class="parameters">() </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_back_goBack">goBack</a><span class="parameters"></span><span class="parameters">() </span><span>private method.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_back_goForward">goForward</a><span class="parameters"></span><span class="parameters">() </span><span>private method.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_back_init">init</a><span class="parameters"></span><span class="parameters">() </span><span>Initializes the undo stack.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_back_setHash">setHash</a><span class="parameters"></span><span class="parameters">(h) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_back_setInitialState">setInitialState</a><span class="parameters"></span><span class="parameters">(args) </span><span>Sets the state object and back callback for the very first page
+that is loaded.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojo_back__iframeLoaded"></a><span class="functionIcon">_iframeLoaded</span><span class="parameters">(evt,ifrLoc)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/back" class="jsdoc-link">dojo/back</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>private method. Do not call this directly.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">evt</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">ifrLoc</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_back_addToHistory"></a><span class="functionIcon">addToHistory</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/back" class="jsdoc-link">dojo/back</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>adds a state object (args) to the history list.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>To support getting back button notifications, the object
+argument should implement a function called either &quot;back&quot;,
+&quot;backButton&quot;, or &quot;handle&quot;. The string &quot;back&quot; will be passed as
+the first and only argument to this callback.
+
+</p>
+<p>To support getting forward button notifications, the object
+argument should implement a function called either &quot;forward&quot;,
+&quot;forwardButton&quot;, or &quot;handle&quot;. The string &quot;forward&quot; will be
+passed as the first and only argument to this callback.
+
+</p>
+<p>If you want the browser location string to change, define &quot;changeUrl&quot; on the object. If the
+value of &quot;changeUrl&quot; is true, then a unique number will be appended to the URL as a fragment
+identifier (<a href="http://some.domain.com/path#uniquenumber">http://some.domain.com/path#uniquenumber</a>). If it is any other value that does
+not evaluate to false, that value will be used as the fragment identifier. For example,
+if changeUrl: &#39;page1&#39;, then the URL will look like: <a href="http://some.domain.com/path#page1">http://some.domain.com/path#page1</a>
+
+</p>
+<p>There are problems with using <a class="jsdoc-link" href="/documentation/api/1.9/dojo/back">dojo/back</a> with semantically-named fragment identifiers
+(&quot;hash values&quot; on an URL). In most browsers it will be hard for <a class="jsdoc-link" href="/documentation/api/1.9/dojo/back">dojo/back</a> to know
+distinguish a back from a forward event in those cases. For back/forward support to
+work best, the fragment ID should always be a unique value (something using new Date().getTime()
+for example). If you want to detect hash changes using semantic fragment IDs, then
+consider using <a class="jsdoc-link" href="/documentation/api/1.9/dojo/hash">dojo/hash</a> instead (in Dojo 1.4+).
+</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>The state object that will be added to the history list.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>back.addToHistory({
+    back: function(){ console.log(&#39;back pressed&#39;); },
+    forward: function(){ console.log(&#39;forward pressed&#39;); },
+    changeUrl: true
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_back_getHash"></a><span class="functionIcon">getHash</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/back" class="jsdoc-link">dojo/back</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_back_goBack"></a><span class="functionIcon">goBack</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/back" class="jsdoc-link">dojo/back</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>private method. Do not call this directly.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_back_goForward"></a><span class="functionIcon">goForward</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/back" class="jsdoc-link">dojo/back</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>private method. Do not call this directly.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_back_init"></a><span class="functionIcon">init</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/back" class="jsdoc-link">dojo/back</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Initializes the undo stack. This must be called from a <script>
+block that lives inside the <code>&lt;body&gt;</code> tag to prevent bugs on IE.
+
+</p>
+<p>Only call this method before the page&#39;s DOM is finished loading. Otherwise
+it will not work. Be careful with xdomain loading or djConfig.debugAtAllCosts scenarios,
+in order for this method to work, dojo/back will need to be part of a build layer.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_back_setHash"></a><span class="functionIcon">setHash</span><span class="parameters">(h)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/back" class="jsdoc-link">dojo/back</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">h</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_back_setInitialState"></a><span class="functionIcon">setInitialState</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/back" class="jsdoc-link">dojo/back</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Sets the state object and back callback for the very first page
+that is loaded.
+
+</p>
+<p>It is recommended that you call this method as part of an event
+listener that is registered via dojo/ready.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>See the addToHistory() function for the list of valid args properties.</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojo/back" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

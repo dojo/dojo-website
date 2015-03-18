@@ -1,0 +1,601 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.8/dijit/tree/ObjectStoreModel" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.8/dijit/tree/ObjectStoreModel.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dijit/tree/ObjectStoreModel<span style="font-size:11px;color:#999;"> (version 1.8)</span></h1>
+<div class="jsdoc-full-summary"><p>Implements <a class="jsdoc-link" href="/documentation/api/1.8/dijit/tree/model">dijit/tree/model</a> connecting <a class="jsdoc-link" href="/documentation/api/1.8/dijit/Tree">dijit/Tree</a> to a <a class="jsdoc-link" href="/documentation/api/1.8/dojo/store/api/Store">dojo/store/api/Store</a> that implements
+getChildren().
+
+</p>
+<p>If getChildren() returns an array with an observe() method, then it will be leveraged to reflect
+store updates to the tree.   So, this class will work best when:
+
+</p>
+<pre><code>1. the store implements dojo/store/Observable
+2. getChildren() is implemented as a query to the server (i.e. it calls store.query())</pre></code>
+<p>Drag and Drop: To support drag and drop, besides implementing getChildren()
+and <a class="jsdoc-link" href="/documentation/api/1.8/dojo/store/Observable">dojo/store/Observable</a>, the store must support the parent option to put().
+And in order to have child elements ordered according to how the user dropped them,
+put() must support the before option.</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new ObjectStoreModel<span class="parameters">(args);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.8/dijit/tree/ObjectStoreModel">dijit/tree/ObjectStoreModel</a></div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">args</td>
+    <td class="jsdoc-param-type">Object</td>
+    <td class="jsdoc-param-description">
+    </td>
+  </tr>
+</table>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="stringIcon public"><a href="1_8dijit_tree_ObjectStoreModel_labelAttr">labelAttr</a>
+        </li><span>Get label for tree node from this attribute</span>
+        <li class="objectIcon public"><a href="1_8dijit_tree_ObjectStoreModel_query">query</a>
+        </li><span>Specifies datastore query to return the root item for the tree.</span>
+        <li class="objectIcon public"><a href="1_8dijit_tree_ObjectStoreModel_root">root</a>
+        </li><span>Pointer to the root item from the dojo/store/api/Store (read only, not a parameter)</span>
+        <li class="objectIcon public"><a href="1_8dijit_tree_ObjectStoreModel_store">store</a>
+        </li><span>Underlying store</span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a href="#1_8dijit_tree_ObjectStoreModel_destroy">destroy</a><span class="parameters"></span><span class="parameters">() </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dijit_tree_ObjectStoreModel_fetchItemByIdentity">fetchItemByIdentity</a><span class="parameters"></span><span class="parameters">(keywordArgs) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dijit_tree_ObjectStoreModel_getChildren">getChildren</a><span class="parameters"></span><span class="parameters">(parentItem,onComplete,onError) </span><span>Calls onComplete() with array of child items of given parent item.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dijit_tree_ObjectStoreModel_getIdentity">getIdentity</a><span class="parameters"></span><span class="parameters">(item) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dijit_tree_ObjectStoreModel_getLabel">getLabel</a><span class="parameters"></span><span class="parameters">(item) </span><span>Get the label for an item</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dijit_tree_ObjectStoreModel_getRoot">getRoot</a><span class="parameters"></span><span class="parameters">(onItem,onError) </span><span>Calls onItem with the root item for the tree, possibly a fabricated item.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dijit_tree_ObjectStoreModel_isItem">isItem</a><span class="parameters"></span><span class="parameters">(something) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dijit_tree_ObjectStoreModel_mayHaveChildren">mayHaveChildren</a><span class="parameters"></span><span class="parameters">(item) </span><span>Tells if an item has or may have children.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dijit_tree_ObjectStoreModel_newItem">newItem</a><span class="parameters"></span><span class="parameters">(args,parent,insertIndex,before) </span><span>Creates a new item.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dijit_tree_ObjectStoreModel_pasteItem">pasteItem</a><span class="parameters"></span><span class="parameters">(childItem,oldParentItem,newParentItem,bCopy,insertIndex,before) </span><span>Move or copy an item from one parent item to another.</span>
+        </li>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Event Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a #{link}="#{link}">onChange</a><span class="parameters">
+            <item></item>,</span><span>Callback whenever an item has changed, so that Tree
+can update the label, icon, etc.</span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onChildrenChange</a><span class="parameters">
+            <parent></parent>,
+            <newChildrenList></newChildrenList>,</span><span>Callback to do notifications about new, updated, or deleted items.</span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onDelete</a><span class="parameters">
+            <item></item>,</span><span>Callback when an item has been deleted.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_labelAttr"></a><span class="stringIcon">labelAttr</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-summary"><p>Get label for tree node from this attribute</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_query"></a><span class="objectIcon">query</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-summary"><p>Specifies datastore query to return the root item for the tree.
+Must only return a single item.   Alternately can just pass in pointer
+to root item.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_root"></a><span class="objectIcon">root</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-summary"><p>Pointer to the root item from the <a class="jsdoc-link" href="/documentation/api/1.8/dojo/store/api/Store">dojo/store/api/Store</a> (read only, not a parameter)</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_store"></a><span class="objectIcon">store</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-summary"><p>Underlying store</p>
+</div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_destroy"></a><span class="functionIcon">destroy</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_fetchItemByIdentity"></a><span class="functionIcon">fetchItemByIdentity</span><span class="parameters">(keywordArgs)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">keywordArgs</td>
+            <td class="jsdoc-param-type">object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_getChildren"></a><span class="functionIcon">getChildren</span><span class="parameters">(parentItem,onComplete,onError)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Calls onComplete() with array of child items of given parent item.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">parentItem</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>Item from the dojo/store</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">onComplete</td>
+            <td class="jsdoc-param-type">function(items)</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">onError</td>
+            <td class="jsdoc-param-type">function</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_getIdentity"></a><span class="functionIcon">getIdentity</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_getLabel"></a><span class="functionIcon">getLabel</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Get the label for an item</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">dojo/data/Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_getRoot"></a><span class="functionIcon">getRoot</span><span class="parameters">(onItem,onError)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Calls onItem with the root item for the tree, possibly a fabricated item.
+Calls onError on error.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">onItem</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">onError</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_isItem"></a><span class="functionIcon">isItem</span><span class="parameters">(something)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">something</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_mayHaveChildren"></a><span class="functionIcon">mayHaveChildren</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Tells if an item has or may have children.  Implementing logic here
+avoids showing +/- expando icon for nodes that we know don&#39;t have children.
+(For efficiency reasons we may not want to check if an element actually
+has children until user clicks the expando node).
+
+</p>
+<p>Application code should override this method based on the data, for example
+it could be <code>return item.leaf == true;</code>.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>Item from the dojo/store</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_newItem"></a><span class="functionIcon">newItem</span><span class="parameters">(args,parent,insertIndex,before)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Creates a new item.   See <code>dojo/data/api/Write</code> for details on args.
+Used in drag &amp; drop when item from external source dropped onto tree.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type"><a class="jsdoc-link" href="/documentation/api/1.8/dijit/tree/dndSource.__Item">dijit/tree/dndSource.__Item</a></td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">parent</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">insertIndex</td>
+            <td class="jsdoc-param-type">int</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">before</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_pasteItem"></a><span class="functionIcon">pasteItem</span><span class="parameters">(childItem,oldParentItem,newParentItem,bCopy,insertIndex,before)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Move or copy an item from one parent item to another.
+Used in drag &amp; drop</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">childItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">oldParentItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">newParentItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">bCopy</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">insertIndex</td>
+            <td class="jsdoc-param-type">int</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">before</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+    </div>
+    <h2>Events</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_onChange"></a><span class="functionIcon">onChange</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Callback whenever an item has changed, so that Tree
+can update the label, icon, etc.   Note that changes
+to an item&#39;s children or parent(s) will trigger an
+onChildrenChange() so you can ignore those changes here.</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">childItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">oldParentItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">newParentItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">bCopy</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">insertIndex</td>
+            <td class="jsdoc-param-type">int</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">before</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_onChildrenChange"></a><span class="functionIcon">onChildrenChange</span><span class="parameters">(parent,newChildrenList)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Callback to do notifications about new, updated, or deleted items.</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">childItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">oldParentItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">newParentItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">bCopy</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">insertIndex</td>
+            <td class="jsdoc-param-type">int</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">before</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dijit_tree_ObjectStoreModel_onDelete"></a><span class="functionIcon">onDelete</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="jsdoc-link">dijit/tree/ObjectStoreModel</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Callback when an item has been deleted.
+Actually we have no way of knowing this with the new dojo.store API,
+so this method is never called (but it&#39;s left here since Tree connects
+to it).</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">childItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">oldParentItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">newParentItem</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">bCopy</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">insertIndex</td>
+            <td class="jsdoc-param-type">int</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">before</td>
+            <td class="jsdoc-param-type">Item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.8/dijit/tree/ObjectStoreModel" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

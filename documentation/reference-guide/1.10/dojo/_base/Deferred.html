@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/_base/Deferred &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/_base/Deferred</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#pseudocode-example-1-creating-and-calling-a-deferred">Pseudocode Example 1:  Creating and calling a deferred.</a></li>
+<li><a class="reference internal" href="#pseudocode-example-2-assigning-callbacks-to-fire-when-a-deferred-fires">Pseudocode Example 2:  Assigning callbacks to fire when a deferred fires.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#when">when()</a></li>
+<li><a class="reference internal" href="#promise">promise</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-1-creating-a-deferred-and-adding-callbacks">Example 1: Creating a deferred and adding callbacks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-base-deferred">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/_base/Deferred</a><a class="headerlink" href="#dojo-base-deferred" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V0.9</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-base-deferred" id="id2">dojo/_base/Deferred</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#when" id="id5">when()</a></li>
+<li><a class="reference internal" href="#promise" id="id6">promise</a></li>
+<li><a class="reference internal" href="#examples" id="id7">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id8">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>Deprecated</em>, use <a class="reference internal" href="../Deferred.html#dojo-deferred"><span>dojo/Deferred</span></a> instead.</p>
+<p>dojo.Deferred manages the communication between asynchronous threads (Callbacks). dojo.Deferred encapsulates a sequence of callbacks in response to a value that may not yet be available.  All of dojo.xhr* functions make use of this class, as do many others, such as dojo.io.script.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>dojo.Deferred is an object that allows users to assign callback functions for success and error conditions for a task that may not complete immediately.  Such tasks are commonly those generated by calls to <a class="reference internal" href="../xhrGet.html#dojo-xhrget"><span>dojo.xhrGet</span></a>, and other IO functions that operate asynchronously.</p>
+<p>The basic premise is that an asynchronous task (or even a synchronous task) can return an instance of dojo.Deferred.  Users can then call &#8216;then&#8217; to assign functions for the Deferred to invoke when the task it is monitoring actually completes.  If the &#8216;then&#8217; function is called after the deferred has executed, then the deferred will immediately call those functions with the results of the task.</p>
+<p>As with all dojo classes, please see the API documentation for more detail on using dojo.Deferred.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Using a dojo.Deferred is simple.  When you are presented with one from another function call as the return, you simply invoke &#8216;then&#8217; and hand it a function to execute when the Deferred is fired.  The &#8216;then&#8217; function can take an optional second argument that is the callback for an error. Now, if you are creating a deferred for some purpose, you simply instantiate one and return it to the caller.  When the task you want to associate with the deferred is complete, you invoke the &#8216;callback&#8217; or &#8216;errback&#8217; functions to signal the completion.  This in turn will invoke any other callback and errback functions that have been associated with the deferred.  See below for details:</p>
+<div class="section" id="pseudocode-example-1-creating-and-calling-a-deferred">
+<h3>Pseudocode Example 1:  Creating and calling a deferred.<a class="headerlink" href="#pseudocode-example-1-creating-and-calling-a-deferred" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/Deferred&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Deferred</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">();</span>
+  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="nx">success</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span> <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">deferred</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/Deferred&quot;], function(Deferred){
+  var deferred = new Deferred();
+  setTimeout(function(){ deferred.resolve({success: true}); }, 1000);
+  return deferred;
+});</textarea></div></div>
+<div class="section" id="pseudocode-example-2-assigning-callbacks-to-fire-when-a-deferred-fires">
+<h3>Pseudocode Example 2:  Assigning callbacks to fire when a deferred fires.<a class="headerlink" href="#pseudocode-example-2-assigning-callbacks-to-fire-when-a-deferred-fires" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">someAsyncFunction</span><span class="p">();</span>
+<span class="nx">deferred</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+    <span class="c1">// Do something on success.</span>
+  <span class="p">},</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+    <span class="c1">// Do something on failure.</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var deferred = someAsyncFunction();
+deferred.then(function(value){
+    // Do something on success.
+  },
+  function(error){
+    // Do something on failure.
+});</textarea></div></div>
+</div>
+<div class="section" id="when">
+<h2><a class="toc-backref" href="#id5">when()</a><a class="headerlink" href="#when" title="Permalink to this headline">¶</a></h2>
+<p><em>Deprecated</em>, use <a class="reference internal" href="../when.html#dojo-when"><span>dojo/when</span></a> instead.</p>
+<p>The <cite>when()</cite> function is a useful tool for interacting with Deferred objects since it can provide normalization between asynchronous Deferreds and normal synchronous values.</p>
+<p>In Dojo 1.7, the <code class="docutils literal"><span class="pre">when</span></code> function is exposed as a member of the <code class="docutils literal"><span class="pre">dojo/_base/Deferred</span></code> module return (which is also the <code class="docutils literal"><span class="pre">Deferred</span></code> constructor), but in Dojo 1.8, the module was moved to stand on its own.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/Deferred&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Deferred</span><span class="p">){</span>
+
+  <span class="nx">Deferred</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">print</span><span class="p">);</span> <span class="c1">// this will print 4 immediately</span>
+
+  <span class="kd">var</span> <span class="nx">fourAsync</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">();</span>
+  <span class="nx">Deferred</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">fourAsync</span><span class="p">,</span> <span class="nx">print</span><span class="p">);</span> <span class="c1">// this will print 4, one second later when the Deferred is resolved</span>
+  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">fourAsync</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+  <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+
+  <span class="kd">function</span> <span class="nx">print</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">value</span><span class="p">);</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/Deferred&quot;], function(Deferred){
+
+  Deferred.when(4, print); // this will print 4 immediately
+
+  var fourAsync = new Deferred();
+  Deferred.when(fourAsync, print); // this will print 4, one second later when the Deferred is resolved
+  setTimeout(function(){
+    fourAsync.resolve(4);
+  }, 1000);
+
+  function print(value){
+    console.log(value);
+  };
+});</textarea></div></div>
+<div class="section" id="promise">
+<h2><a class="toc-backref" href="#id6">promise</a><a class="headerlink" href="#promise" title="Permalink to this headline">¶</a></h2>
+<p>Deferred objects also have a <code class="docutils literal"><span class="pre">promise</span></code> property that provides a read-only view of the result of the operation. This provides a safe robust object that can be passed to other functions without worry of the Deferred being mutated or improperly resolved against expectations.</p>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id7">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-1-creating-a-deferred-and-adding-callbacks">
+<h3>Example 1: Creating a deferred and adding callbacks<a class="headerlink" href="#example-1-creating-a-deferred-and-adding-callbacks" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre>  <span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/Deferred&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Deferred</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+      <span class="nx">createDeferred</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+          <span class="c1">// Create a deferred and set it to fire in 1 second.</span>
+          <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">();</span>
+          <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span><span class="nx">called</span><span class="o">:</span> <span class="kc">true</span><span class="p">});},</span> <span class="mi">1000</span><span class="p">);</span>
+          <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;response&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;Created a deferred.&quot;</span><span class="p">;</span>
+
+          <span class="c1">// Add a callback that changes the displayed message after it fires.</span>
+          <span class="nx">deferred</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;response&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;Deferred has fired.&quot;</span><span class="p">;</span>
+          <span class="p">});</span>
+      <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">  require([&quot;dojo/_base/Deferred&quot;, &quot;dojo/dom&quot;], function(Deferred, dom){
+      createDeferred = function(){
+          // Create a deferred and set it to fire in 1 second.
+          var deferred = new Deferred();
+          setTimeout(function(){ deferred.resolve({called: true});}, 1000);
+          dom.byId(&quot;response&quot;).innerHTML = &quot;Created a deferred.&quot;;
+
+          // Add a callback that changes the displayed message after it fires.
+          deferred.then(function(){
+            dom.byId(&quot;response&quot;).innerHTML = &quot;Deferred has fired.&quot;;
+          });
+      };
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;b&gt;</span>Push the button to create a deferred and set up an async callback<span class="nt">&lt;/B&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;deferredButton&quot;</span> <span class="na">onclick=</span><span class="s">&quot;createDeferred();&quot;</span><span class="nt">&gt;</span>Create deferred!<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;b&gt;</span>Result<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;response&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;b&gt;Push the button to create a deferred and set up an async callback&lt;/B&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;button id=&quot;deferredButton&quot; onclick=&quot;createDeferred();&quot;&gt;Create deferred!&lt;/button&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;Result&lt;/b&gt;
+&lt;div id=&quot;response&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id8">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../xhr.html#dojo-xhr"><span>dojo/xhr()</span></a></li>
+<li>Article on the new design of Deferreds in 1.5: <a class="reference external" href="http://www.sitepen.com/blog/2010/05/03/robust-promises-with-dojo-deferred-1-5/">http://www.sitepen.com/blog/2010/05/03/robust-promises-with-dojo-deferred-1-5/</a></li>
+<li>Tutorial &#8220;Getting Started with Deferreds&#8221; at <a class="reference external" href="http://dojotoolkit.org/documentation/tutorials/1.6/deferreds/">http://dojotoolkit.org/documentation/tutorials/1.6/deferreds/</a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

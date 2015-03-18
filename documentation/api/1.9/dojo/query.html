@@ -1,0 +1,306 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojo/query" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojo/query.html</div>
+<h1 class="functionIcon36 jsdoc-title module-title">dojo/query<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-full-summary"><p>This modules provides DOM querying functionality. The module export is a function
+that can be used to query for DOM nodes by CSS selector and returns a NodeList
+representing the matching nodes.</p>
+</div>
+<div class="jsdoc-full-summary"><p><a class="jsdoc-link" href="/documentation/api/1.9/dojo/query">dojo/query</a> is responsible for loading the appropriate query engine and wrapping
+its results with a <code>NodeList</code>. You can use <a class="jsdoc-link" href="/documentation/api/1.9/dojo/query">dojo/query</a> with a specific selector engine
+by using it as a plugin. For example, if you installed the sizzle package, you could
+use it as the selector engine with:
+
+</p>
+<pre><code>require([&quot;dojo/query!sizzle&quot;], function(query){
+    query(&quot;div&quot;)...</pre></code>
+<p>The id after the ! can be a module id of the selector engine or one of the following values:
+
+</p>
+<ul>
+<li><p>acme: This is the default engine used by Dojo base, and will ensure that the full
+Acme engine is always loaded.</p>
+</li>
+<li><p>css2: If the browser has a native selector engine, this will be used, otherwise a
+very minimal lightweight selector engine will be loaded that can do simple CSS2 selectors
+(by #id, .class, tag, and [name=value] attributes, with standard child or descendant (&gt;)
+operators) and nothing more.</p>
+</li>
+<li><p>css2.1: If the browser has a native selector engine, this will be used, otherwise the
+full Acme engine will be loaded.</p>
+</li>
+<li><p>css3: If the browser has a native selector engine with support for CSS3 pseudo
+selectors (most modern browsers except IE8), this will be used, otherwise the
+full Acme engine will be loaded.</p>
+</li>
+<li><p>Or the module id of a selector engine can be used to explicitly choose the selector engine</p>
+</li>
+</ul>
+<p>For example, if you are using CSS3 pseudo selectors in module, you can specify that
+you will need support them with:
+
+</p>
+<pre><code>require([&quot;dojo/query!css3&quot;], function(query){
+    query(&#39;#t &gt; h3:nth-child(odd)&#39;)...</pre></code>
+<p>You can also choose the selector engine/load configuration by setting the query-selector:
+For example:
+
+</p>
+<pre><code>&lt;script data-dojo-config=&quot;query-selector:&#39;css3&#39;&quot; src=&quot;dojo.js&quot;&gt;&lt;/script&gt;</pre></code>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature">query<span class="parameters">(selector,context);</span>
+  </div>
+</div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">selector</td>
+    <td class="jsdoc-param-type">String</td>
+    <td class="jsdoc-param-description"><p>A CSS selector to search for.</p>
+
+    </td>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">context</td>
+    <td class="jsdoc-param-type">String | DomNode</td>
+    <td class="jsdoc-param-description">
+      <div><em>Optional</em></div><p>An optional context to limit the searching scope. Only nodes under <code>context</code> will be
+scanned.</p>
+
+    </td>
+  </tr>
+</table>
+<div><strong>Returns:</strong><span class="jsdoc-return-type">instance</span></div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><p>add an onclick handler to every submit button in the document
+which causes the form to be sent via Ajax instead:
+
+</p>
+<pre><code>require([&quot;dojo/query&quot;, &quot;dojo/request&quot;, &quot;dojo/dom-form&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/dom-style&quot;
+], function(query, request, domForm, domConstruct, domStyle){
+    query(&quot;input[type=&#39;submit&#39;]&quot;).on(&quot;click&quot;, function(e){
+        e.preventDefault(); // prevent sending the form
+        var btn = e.target;
+        request.post(&quot;http://example.com/&quot;, {
+            data: domForm.toObject(btn.form)
+        }).then(function(response){
+            // replace the form with the response
+            domConstruct.create(div, {innerHTML: response}, btn.form, &quot;after&quot;);
+            domStyle.set(btn.form, &quot;display&quot;, &quot;none&quot;);
+        });
+    });
+});</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_9dojo_query__filterResult">_filterResult</a><span class="parameters"></span><span class="parameters">(nodes,selector,root) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_query_load">load</a><span class="parameters"></span><span class="parameters">(id,parentRequire,loaded) </span><span>can be used as AMD plugin to conditionally load new query engine</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_query_NodeList">NodeList</a><span class="parameters"></span><span class="parameters">(array) </span><span>Array-like object which adds syntactic
+sugar for chaining, common iteration operations, animation, and
+node manipulation.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojo_query__filterResult"></a><span class="functionIcon">_filterResult</span><span class="parameters">(nodes,selector,root)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/query" class="jsdoc-link">dojo/query</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">nodes</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">selector</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">root</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">instance | undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_query_load"></a><span class="functionIcon">load</span><span class="parameters">(id,parentRequire,loaded)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/query" class="jsdoc-link">dojo/query</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>can be used as AMD plugin to conditionally load new query engine</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">id</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">parentRequire</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">loaded</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>require([&quot;dojo/query!custom&quot;], function(qsa){
+    // loaded selector/custom.js as engine
+    qsa(&quot;#foobar&quot;).forEach(...);
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_query_NodeList"></a><span class="functionIcon">NodeList</span><span class="parameters">(array)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/query" class="jsdoc-link">dojo/query</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Array-like object which adds syntactic
+sugar for chaining, common iteration operations, animation, and
+node manipulation. NodeLists are most often returned as the
+result of dojo/query() calls.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>NodeList instances provide many utilities that reflect
+core Dojo APIs for Array iteration and manipulation, DOM
+manipulation, and event handling. Instead of needing to dig up
+functions in the dojo package, NodeLists generally make the
+full power of Dojo available for DOM manipulation tasks in a
+simple, chainable way.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">array</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><p>create a node list from a node
+
+</p>
+<pre><code>require([&quot;dojo/query&quot;, &quot;dojo/dom&quot;
+], function(query, dom){
+    query.NodeList(dom.byId(&quot;foo&quot;));
+});</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 2</h3><p>get a NodeList from a CSS query and iterate on it
+
+</p>
+<pre><code>require([&quot;dojo/on&quot;, &quot;dojo/dom&quot;
+], function(on, dom){
+    var l = query(&quot;.thinger&quot;);
+    l.forEach(function(node, index, nodeList){
+        console.log(index, node.innerHTML);
+    });
+});</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 3</h3><p>use native and Dojo-provided array methods to manipulate a
+NodeList without needing to use dojo.* functions explicitly:
+
+</p>
+<pre><code>require([&quot;dojo/query&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/dom&quot;
+], function(query, domConstruct, dom){
+    var l = query(&quot;.thinger&quot;);
+    // since NodeLists are real arrays, they have a length
+    // property that is both readable and writable and
+    // push/pop/shift/unshift methods
+    console.log(l.length);
+    l.push(domConstruct.create(&quot;span&quot;));
+
+    // dojo&#39;s normalized array methods work too:
+    console.log( l.indexOf(dom.byId(&quot;foo&quot;)) );
+    // ...including the special &quot;function as string&quot; shorthand
+    console.log( l.every(&quot;item.nodeType == 1&quot;) );
+
+    // NodeLists can be [..] indexed, or you can use the at()
+    // function to get specific items wrapped in a new NodeList:
+    var node = l[3]; // the 4th element
+    var newList = l.at(1, 3); // the 2nd and 4th elements
+});</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 4</h3><p>chainability is a key advantage of NodeLists:
+
+</p>
+<pre><code>require([&quot;dojo/query&quot;, &quot;dojo/NodeList-dom&quot;
+], function(query){
+    query(&quot;.thinger&quot;)
+        .onclick(function(e){ /* ... */ })
+        .at(1, 3, 8) // get a subset
+            .style(&quot;padding&quot;, &quot;5px&quot;)
+            .forEach(console.log);
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojo/query" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

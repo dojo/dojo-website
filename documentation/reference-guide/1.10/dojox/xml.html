@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.xml &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.xml</a><ul>
+<li><a class="reference internal" href="#generic-xml-text-to-dom-parser-and-xml-dom-utility-functions">Generic XML Text to DOM parser and XML DOM utility functions</a><ul>
+<li><a class="reference internal" href="#example-1-generic-xml-dom-parser-and-utilities">Example 1: Generic XML DOM Parser and utilities</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#generic-xml-dom-to-js-object-tree-parser">Generic XML DOM to JS Object tree parser</a><ul>
+<li><a class="reference internal" href="#example-2-generic-xml-dom-to-js-object-parser">Example 2: Generic XML DOM to JS Object parser</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-xml">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.xml</a><a class="headerlink" href="#dojox-xml" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Tom Trenka, Jared Jurkiewicz</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-xml" id="id2">dojox.xml</a><ul>
+<li><a class="reference internal" href="#generic-xml-text-to-dom-parser-and-xml-dom-utility-functions" id="id3">Generic XML Text to DOM parser and XML DOM utility functions</a></li>
+<li><a class="reference internal" href="#generic-xml-dom-to-js-object-tree-parser" id="id4">Generic XML DOM to JS Object tree parser</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The goal of DojoX XML Utilities is provide differing XML utilities for use in various places in a consolidated package to eliminate code duplication.  Currently this includes a native JS DomParser that converts XML to a JS object tree.  It also includes several general utility XML functions, such as a function to construct new XML Doms in a browser independent fashion, produce XML text from an XML DOM, and do things such as getting all the text content under a node in a browser agnostic way.</p>
+<div class="section" id="generic-xml-text-to-dom-parser-and-xml-dom-utility-functions">
+<h2><a class="toc-backref" href="#id3">Generic XML Text to DOM parser and XML DOM utility functions</a><a class="headerlink" href="#generic-xml-text-to-dom-parser-and-xml-dom-utility-functions" title="Permalink to this headline">¶</a></h2>
+<p>The dojox.xml.parser utility library contains numerous functions for working with XML text and XML dom.  The functions it provides are listed below:</p>
+<ul class="simple">
+<li>XML Text to XML DOM parser ( dojox.xml.parser.parse(someXMLText) )</li>
+<li>XML DOM to XML Text parser ( dojox.xml.parser.innerXML(someDOM) )</li>
+<li>Getting and setting text content on a node: ( dojox.xml.parser.textContent(node, &#8220;optional text to set&#8221;) )</li>
+</ul>
+<div class="section" id="example-1-generic-xml-dom-parser-and-utilities">
+<h3>Example 1: Generic XML DOM Parser and utilities<a class="headerlink" href="#example-1-generic-xml-dom-parser-and-utilities" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.xml.parser&quot;</span><span class="p">);</span>
+
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+   <span class="c1">// Parse text and generate an XML DOM</span>
+   <span class="kd">var</span> <span class="nx">xml</span> <span class="o">=</span> <span class="s2">&quot;&lt;tnode&gt;&lt;node&gt;Some Text&lt;/node&gt;&lt;node&gt;Some Other Text&lt;/node&gt;&lt;/tnode&gt;&quot;</span><span class="p">;</span>
+   <span class="kd">var</span> <span class="nx">dom</span> <span class="o">=</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">xml</span><span class="p">.</span><span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">xml</span><span class="p">);</span>
+
+   <span class="c1">// Walk DOM and attach into the display how many child nodes were parsed out.</span>
+   <span class="kd">var</span> <span class="nx">ap</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;xmlContent&quot;</span><span class="p">);</span>
+   <span class="kd">var</span> <span class="nx">docNode</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">;</span>
+   <span class="nx">ap</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;Document contains: &quot;</span> <span class="o">+</span> <span class="nx">docNode</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot; elements&quot;</span><span class="p">));</span>
+   <span class="nx">ap</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+   <span class="nx">ap</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+
+   <span class="c1">// Write text content into the display.</span>
+   <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">docNode</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+     <span class="nx">ap</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;Element: [&quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> <span class="s2">&quot;] contains text: &quot;</span> <span class="o">+</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">xml</span><span class="p">.</span><span class="nx">parser</span><span class="p">.</span><span class="nx">textContent</span><span class="p">(</span><span class="nx">docNode</span><span class="p">.</span><span class="nx">childNodes</span><span class="p">[</span><span class="nx">i</span><span class="p">])));</span>
+     <span class="nx">ap</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+   <span class="p">}</span>
+
+   <span class="c1">// Write out the XML text obtained from converting the DOM back.</span>
+   <span class="nx">ap</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+   <span class="nx">ap</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;Document XML: &quot;</span> <span class="o">+</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">xml</span><span class="p">.</span><span class="nx">parser</span><span class="p">.</span><span class="nx">innerXML</span><span class="p">(</span><span class="nx">docNode</span><span class="p">)));</span>
+   <span class="nx">ap</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+   <span class="nx">ap</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.xml.parser&quot;);
+
+dojo.ready(function(){
+   // Parse text and generate an XML DOM
+   var xml = &quot;&lt;tnode&gt;&lt;node&gt;Some Text&lt;/node&gt;&lt;node&gt;Some Other Text&lt;/node&gt;&lt;/tnode&gt;&quot;;
+   var dom = dojox.xml.parser.parse(xml);
+
+   // Walk DOM and attach into the display how many child nodes were parsed out.
+   var ap = dojo.byId(&quot;xmlContent&quot;);
+   var docNode = dom.documentElement;
+   ap.appendChild(document.createTextNode(&quot;Document contains: &quot; + docNode.childNodes.length + &quot; elements&quot;));
+   ap.appendChild(document.createElement(&quot;br&quot;));
+   ap.appendChild(document.createElement(&quot;br&quot;));
+
+   // Write text content into the display.
+   for(var i = 0; i &lt; docNode.childNodes.length; i++){
+     ap.appendChild(document.createTextNode(&quot;Element: [&quot; + i + &quot;] contains text: &quot; + dojox.xml.parser.textContent(docNode.childNodes[i])));
+     ap.appendChild(document.createElement(&quot;br&quot;));
+   }
+
+   // Write out the XML text obtained from converting the DOM back.
+   ap.appendChild(document.createElement(&quot;br&quot;));
+   ap.appendChild(document.createTextNode(&quot;Document XML: &quot; + dojox.xml.parser.innerXML(docNode)));
+   ap.appendChild(document.createElement(&quot;br&quot;));
+   ap.appendChild(document.createElement(&quot;br&quot;));
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;xmlContent&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;xmlContent&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+</div>
+<div class="section" id="generic-xml-dom-to-js-object-tree-parser">
+<h2><a class="toc-backref" href="#id4">Generic XML DOM to JS Object tree parser</a><a class="headerlink" href="#generic-xml-dom-to-js-object-tree-parser" title="Permalink to this headline">¶</a></h2>
+<p>The second helper class is the dojox.xml.DomParser.   This utility function will parse an XML text string into a JS Object tree that is structured similarly to the XML dom.  This is done completely with regular expressions and avoids any usage of browser parsers.  It is very efficient.</p>
+<div class="section" id="example-2-generic-xml-dom-to-js-object-parser">
+<h3>Example 2: Generic XML DOM to JS Object parser<a class="headerlink" href="#example-2-generic-xml-dom-to-js-object-parser" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.xml.DomParser&quot;</span><span class="p">);</span>
+
+<span class="kd">function</span> <span class="nx">init</span><span class="p">(){</span>
+   <span class="c1">// Parse text and generate an JS DOM</span>
+   <span class="kd">var</span> <span class="nx">xml</span> <span class="o">=</span> <span class="s2">&quot;&lt;tnode&gt;&lt;node&gt;Some Text&lt;/node&gt;&lt;node&gt;Some Other Text&lt;/node&gt;&lt;/tnode&gt;&quot;</span><span class="p">;</span>
+   <span class="kd">var</span> <span class="nx">jsdom</span> <span class="o">=</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">xml</span><span class="p">.</span><span class="nx">DomParser</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">xml</span><span class="p">);</span>
+
+   <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="nx">jsdom</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="nx">init</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.xml.DomParser&quot;);
+
+function init(){
+   // Parse text and generate an JS DOM
+   var xml = &quot;&lt;tnode&gt;&lt;node&gt;Some Text&lt;/node&gt;&lt;node&gt;Some Other Text&lt;/node&gt;&lt;/tnode&gt;&quot;;
+   var jsdom = dojox.xml.DomParser.parse(xml);
+
+   console.debug(jsdom);
+}
+dojo.ready(init);</textarea></div><div class="highlight"><pre>Look in the console for debug statements showing the constructed JS DOM like structure.
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">Look in the console for debug statements showing the constructed JS DOM like structure.</textarea></div></div></div></div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

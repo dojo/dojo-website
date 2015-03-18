@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Build profiles &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Build profiles</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#empty-profiles">Empty Profiles</a></li>
+<li><a class="reference internal" href="#dependencies-object">Dependencies Object</a></li>
+<li><a class="reference internal" href="#layers">Layers</a></li>
+<li><a class="reference internal" href="#prefixes">Prefixes</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#programmatic-example">Programmatic example</a></li>
+<li><a class="reference internal" href="#declarative-example">Declarative example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="build-profiles">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">Build profiles</a><a class="headerlink" href="#build-profiles" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Project owner:</th><td class="field-body">(docs) Scott Jenkins</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">1.0</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#build-profiles" id="id2">Build profiles</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#empty-profiles" id="id4">Empty Profiles</a></li>
+<li><a class="reference internal" href="#dependencies-object" id="id5">Dependencies Object</a></li>
+<li><a class="reference internal" href="#layers" id="id6">Layers</a></li>
+<li><a class="reference internal" href="#prefixes" id="id7">Prefixes</a></li>
+<li><a class="reference internal" href="#examples" id="id8">Examples</a><ul>
+<li><a class="reference internal" href="#programmatic-example" id="id9">Programmatic example</a></li>
+<li><a class="reference internal" href="#declarative-example" id="id10">Declarative example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also" id="id11">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The build profile is a simple JavaScript file containing an object which provides the parameters driving the build.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The builder reads its parameters from a profile, which is a JavaScript file named <em>something</em>.profile.js, typically containing a <code class="docutils literal"><span class="pre">dependencies</span></code> object matching the structure described in this article.</p>
+<p>The builder automatically appends <code class="docutils literal"><span class="pre">.profile.js</span></code> to the name of the profile specified on the build command line, so this naming convention is mandatory.</p>
+<p>Note:  throughout the various options described below, file system paths are often specified.  Even on Windows based hosts, use forward slashes (akin to Unix) as directory separators, instead of the Windows native backslash.</p>
+</div>
+<div class="section" id="empty-profiles">
+<h2><a class="toc-backref" href="#id4">Empty Profiles</a><a class="headerlink" href="#empty-profiles" title="Permalink to this headline">¶</a></h2>
+<p>If you specify an empty profile containing no <code class="docutils literal"><span class="pre">dependencies</span></code> object (such as the <code class="docutils literal"><span class="pre">base.profile.js</span></code> file shipped with the Dojo distribution), all defaults will be applied to the build.  In this case, the builder will create a single layer, <code class="docutils literal"><span class="pre">dojo.js</span></code>, which contains only Dojo Base.  All other resources will be loaded from the distribution on demand via <code class="docutils literal"><span class="pre">dojo.require</span></code>.</p>
+</div>
+<div class="section" id="dependencies-object">
+<h2><a class="toc-backref" href="#id5">Dependencies Object</a><a class="headerlink" href="#dependencies-object" title="Permalink to this headline">¶</a></h2>
+<p>The top level object in the profile should be of the general format:</p>
+<div class="highlight"><pre><span class="nx">dependencies</span><span class="o">:</span> <span class="p">{</span>
+   <span class="nx">layers</span><span class="o">:</span> <span class="p">[</span>
+      <span class="c1">// Individual layer objects...</span>
+   <span class="p">],</span>
+   <span class="nx">prefixes</span><span class="o">:</span> <span class="p">[</span>
+      <span class="c1">// Individual prefix objects...</span>
+   <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dependencies: {
+   layers: [
+      // Individual layer objects...
+   ],
+   prefixes: [
+      // Individual prefix objects...
+   ]
+}</textarea></div><dl class="docutils">
+<dt>dependencies</dt>
+<dd>Optional.  An object, possibly containing <code class="docutils literal"><span class="pre">layers</span></code> and <code class="docutils literal"><span class="pre">prefixes</span></code> members.  By convention, the <code class="docutils literal"><span class="pre">layers</span></code> member comes first in source.</dd>
+<dt>layers</dt>
+<dd>Optional.  An array of individual layer objects, one per layer which the build should generate.  The sequence is significant&#8211;layers are built in the order in which they are specified within the <code class="docutils literal"><span class="pre">layers</span></code> array.</dd>
+<dt>prefixes</dt>
+<dd>Optional.  An array of individual prefix objects, describing where relative to the source directory tree, a particular top-level module&#8217;s source is found.</dd>
+</dl>
+</div>
+<div class="section" id="layers">
+<h2><a class="toc-backref" href="#id6">Layers</a><a class="headerlink" href="#layers" title="Permalink to this headline">¶</a></h2>
+<p>Each member of the top level <code class="docutils literal"><span class="pre">layers</span></code> array is an object similar to (in many builds, only a few of these options will be used):</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;string.discard&quot;</span><span class="p">,</span>
+  <span class="nx">resourceName</span><span class="o">:</span> <span class="s2">&quot;string.discard&quot;</span><span class="p">,</span>
+  <span class="nx">discard</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="nx">copyrightFile</span><span class="o">:</span> <span class="s2">&quot;myCopyright.txt&quot;</span><span class="p">,</span>
+  <span class="nx">dependencies</span><span class="o">:</span> <span class="p">[</span>
+      <span class="c1">// List of resources this layer depends on</span>
+     <span class="s1">&#39;dijit.form.Button&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;dojox.data.Grid&#39;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{
+  name: &quot;string.discard&quot;,
+  resourceName: &quot;string.discard&quot;,
+  discard: false,
+  copyrightFile: &quot;myCopyright.txt&quot;,
+  dependencies: [
+      // List of resources this layer depends on
+     'dijit.form.Button',
+     'dojox.data.Grid'
+  ]
+}</textarea></div><p>The build system will build one layer file for each member object within the top level <code class="docutils literal"><span class="pre">layers</span></code> array.  It interprets the members of each individual layer object as follows:</p>
+<dl class="docutils">
+<dt>name</dt>
+<dd><p class="first">The path to and file name of the file that will be built for the layer.</p>
+<p class="last">This path is actually relative to <code class="docutils literal"><span class="pre">/util</span></code>.  Therefore, to specify a layer file that will be created  in the dijit directory, you would specify <code class="docutils literal"><span class="pre">../dijit/layerfilename.js</span></code>.</p>
+</dd>
+<dt>resourceName</dt>
+<dd><p class="first">Optional, String.  The name of the resource module to be provided by the layer.  If this is specified, the layer file will contain a <code class="docutils literal"><span class="pre">dojo.provide</span></code> statement specifying the resourceName.</p>
+<dl class="last docutils">
+<dt>Note</dt>
+<dd>If you are using localization, your resourceName must have an entry in the <code class="docutils literal"><span class="pre">dependencies.prefixes</span></code> list, in order for the localization system to find your resources.</dd>
+</dl>
+</dd>
+<dt>discard</dt>
+<dd>Optional.  Normally, this property is omitted.  If set to true, the layer file will be discarded after it is assembled.  You would use this in order to exclude the same resources from being built into another, subsequent layer (via the <code class="docutils literal"><span class="pre">layerDependencies</span></code> list for the subsequent layer) without actually creating an additional layer file in your as-built directory.</dd>
+<dt>copyrightFile</dt>
+<dd>Optional.  Filename of a simple text file that will be prepended to build layer files.  If omitted, the default Dojo copyright notice will be used instead.</dd>
+<dt>dependencies</dt>
+<dd><p class="first">Optional, array of string.  A list of Dojo resources that this layer relies on.  Normally, they are to be included in the layer.  The builder will locate and include each of the resources listed in the <code class="docutils literal"><span class="pre">dependencies</span></code> array, then locate and include each resource referenced within those resources with a <code class="docutils literal"><span class="pre">dojo.require</span></code> statement, and so on recursively until all modules required to actually implement all of the layer dependencies are built into the layer.</p>
+<p>No module will be included in the layer more than once, even if it is referenced at multiple locations within the web of resources the layer uses.</p>
+<dl class="last docutils">
+<dt>Note</dt>
+<dd>It is not a documentation error that this property has the same name as the top level object.</dd>
+<dt>Hint</dt>
+<dd>It may be more effective to create a dummy JavaScript file with multiple <code class="docutils literal"><span class="pre">dojo.require</span></code> statements in the source tree, and simply list the dummy file as a dependency rather than try to maintain a detailed dependency list within the profile.</dd>
+<dt>Advanced notes</dt>
+<dd><ul class="first last simple">
+<li>When the builder parses for dependencies in your source files, it is looking for the standard dojo.require(&#8216;module-name&#8217;) syntax via regular expression.  If you use the syntax dojo[&#8216;require&#8217;] (or any other legal JavaScript construct), the builder will not recognize the dependency and will not include that resource.</li>
+<li>The advanced <a class="reference internal" href="keepRequires.html#build-keeprequires"><span>keepRequires</span></a> option changes the behavior of the dependency list, by causing specified <code class="docutils literal"><span class="pre">dojo.require</span></code> statements found within the dependent modules to not be included in the layer build.</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>layerDependencies</dt>
+<dd><p class="first">Specifies other layers which are <em>prerequisites</em> for this layer; resources in the prerequisite layers are not duplicated in the current layer being built.  That is, if the builder locates a <code class="docutils literal"><span class="pre">dojo.require</span></code> statement in a source file, but that resource has already been placed in one of the layers specified as one of the layer dependencies, that resource will not be included in the current layer.</p>
+<dl class="last docutils">
+<dt>Note</dt>
+<dd><p class="first">All layers have an implicit dependency on dojo.js, but additional layerDependencies may be specified.</p>
+<p class="last">Layer dependency should be specified based on the prerequisite layer&#8217;s name property in the profile.  this is typically something like <code class="docutils literal"><span class="pre">'../app/layer.js'</span></code></p>
+</dd>
+</dl>
+</dd>
+<dt>keepRequires</dt>
+<dd><p class="first">Optional.  Changes the behavior of the layer dependency list, by causing specified <code class="docutils literal"><span class="pre">dojo.require</span></code> statements found within the dependent modules to not be included in the layer build.</p>
+<p class="last">See the <a class="reference internal" href="keepRequires.html#build-keeprequires"><span>keepRequires detailed description</span></a>.</p>
+</dd>
+<dt>customBase</dt>
+<dd><p class="first">Optional.  Used to build exceptionally small <code class="docutils literal"><span class="pre">dojo.js</span></code> layer, not including all of the standard Dojo Base.</p>
+<p class="last">See the <a class="reference internal" href="customBase.html#build-custombase"><span>customBase detailed description</span></a>.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="prefixes">
+<h2><a class="toc-backref" href="#id7">Prefixes</a><a class="headerlink" href="#prefixes" title="Permalink to this headline">¶</a></h2>
+<p>An array of prefix descriptors, where each prefix descriptor is a length == 2 array of strings, similar to this:</p>
+<div class="highlight"><pre><span class="nx">prefixes</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">[</span> <span class="s2">&quot;dijit&quot;</span><span class="p">,</span> <span class="s2">&quot;../dijit&quot;</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="s2">&quot;dojox&quot;</span><span class="p">,</span> <span class="s2">&quot;../dojox&quot;</span> <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">prefixes: [
+        [ &quot;dijit&quot;, &quot;../dijit&quot; ],
+        [ &quot;dojox&quot;, &quot;../dojox&quot; ]
+]</textarea></div><p>Each prefix describes where to find a top level namespace relative to the <code class="docutils literal"><span class="pre">/util</span></code> directory of the source tree.  As the builder finds modules which are required for a layer, it uses the prefix list to determine where to locate the module&#8217;s files within the source tree.</p>
+<p>Within each prefix descriptor, the members are:</p>
+<dl class="docutils">
+<dt>first member (module name)</dt>
+<dd>String.  The name of a top-level module.</dd>
+<dt>second member (path)</dt>
+<dd>String.  The path to that module&#8217;s <em>directory</em> relative to the source <code class="docutils literal"><span class="pre">/util</span></code> directory.</dd>
+</dl>
+<p>Note:  If you have a custom module namespace outside of the Dojo source distribution tree, you will need to specify it in the prefix list as similarly to:</p>
+<p>Note: It is entirely incorrect to include a &#8216;dojo&#8217; prefix (i.e. &#8220;dojo&#8221;, &#8221;../dojo&#8221;) in the prefixes.  This will prevent anything being copied to the releaseDir and break the build.</p>
+<div class="highlight"><pre><span class="nx">prefixes</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">[</span> <span class="s2">&quot;dijit&quot;</span><span class="p">,</span> <span class="s2">&quot;../dijit&quot;</span> <span class="p">],</span>
+        <span class="p">[</span> <span class="s2">&quot;dojox&quot;</span><span class="p">,</span> <span class="s2">&quot;../dojox&quot;</span> <span class="p">],</span>
+        <span class="c1">// Unix style, in the user&#39;s home directory, for example</span>
+        <span class="p">[</span> <span class="s2">&quot;myNamespace&quot;</span><span class="p">,</span> <span class="s2">&quot;~/src/myNamespace&quot;</span> <span class="p">]</span>
+        <span class="c1">// For Windows OS, this might be something like [ &quot;myNamespace&quot;, &quot;M:/myNamespace&quot; ]</span>
+<span class="p">]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">prefixes: [
+        [ &quot;dijit&quot;, &quot;../dijit&quot; ],
+        [ &quot;dojox&quot;, &quot;../dojox&quot; ],
+        // Unix style, in the user's home directory, for example
+        [ &quot;myNamespace&quot;, &quot;~/src/myNamespace&quot; ]
+        // For Windows OS, this might be something like [ &quot;myNamespace&quot;, &quot;M:/myNamespace&quot; ]
+]</textarea></div><p>This permits you to build into your distribution private namespace resources which are not within the Dojo distribution directory tree.</p>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id8">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="programmatic-example">
+<h3><a class="toc-backref" href="#id9">Programmatic example</a><a class="headerlink" href="#programmatic-example" title="Permalink to this headline">¶</a></h3>
+<p>TODO: example</p>
+</div>
+<div class="section" id="declarative-example">
+<h3><a class="toc-backref" href="#id10">Declarative example</a><a class="headerlink" href="#declarative-example" title="Permalink to this headline">¶</a></h3>
+<p>TODO: example</p>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id11">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>TODO: links to other related articles</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

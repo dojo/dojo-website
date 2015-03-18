@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/i18n &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/i18n</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-i18n">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/i18n</a><a class="headerlink" href="#dojo-i18n" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Project owner:</th><td class="field-body">Adam Peller</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V1.0</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-i18n" id="id2">dojo/i18n</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/i18n</strong> is a module the provides internationalization (i18n) features for Dojo.  It also operates as a plugin for loading text resources based on a locale.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">dojo/i18n</span></code> solves a problem in JavaScript: with a significant amount of logic now on the client, there are
+internationalization issues which cannot easily be solved by server-driven templates.  Furthermore, a server-based
+solution for dynamic content is difficult to manage and couples the client-side toolkit to a particular server
+architecture, making it difficult to share JavaScript components or widgets.  With a client-side internationalization
+framework, the integration point moves to the browser where simple or complex logic can be applied without becoming a
+bottleneck. This architecture also encourages encapsulation and efficient caching both at edge servers and in the
+browser. And, while all translations are present on the server, rest assured that only those which match the user&#8217;s
+locale are requested by the client and sent over the wire.</p>
+<p>To internationalize a web application with Dojo, a combination of client and server techniques are typically employed.
+The methods used in Dojo to substitute localized resources are intended for dynamic content generated by JavaScript. It
+is usually best to continue using a server-side mechanism to localize static page content, rather than trying to
+generate all page content through Dojo and JavaScript.</p>
+<p>Dojo and Dijit provide resource bundles for all strings which are made visible to the user on the page, with
+translations provided in many languages.  Those augmenting Dojo or writing their own widgets may to create and
+translate their own set of resources, as needed.  Error information, such as that sent to a browser console, are not
+translated.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The main usage is to use the plugin to load a &#8220;bundle&#8221; of resources.  The plugin will detect the current user locale of
+the web browser, coupled with the available translations by language and return the most appropriate bundle:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/i18n!myApp/nls/myResources&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">myResources</span><span class="p">){</span>
+  <span class="c1">// myResources will contain the appropriate strings</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/i18n!myApp/nls/myResources&quot;], function(myResources){
+  // myResources will contain the appropriate strings
+});</textarea></div><p>The localized content is simply an Object with properties.  Where the root file (in the case above would be
+<code class="docutils literal"><span class="pre">myApp/nls/myResources.js</span></code>) contains the default translations plus any other information about supported locales.
+For example:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">({</span>
+  <span class="nx">root</span><span class="o">:</span> <span class="p">{</span>
+   <span class="nx">greeting</span><span class="o">:</span> <span class="s2">&quot;Hello, world!&quot;</span>
+  <span class="p">}</span>
+
+  <span class="nx">de</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="s2">&quot;de-at&quot;</span> <span class="o">:</span> <span class="kc">true</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define({
+  root: {
+   greeting: &quot;Hello, world!&quot;
+  }
+
+  de: true,
+  &quot;de-at&quot; : true
+});</textarea></div><p>This would provide a default <code class="docutils literal"><span class="pre">greeting</span></code> string, unless your local was <code class="docutils literal"><span class="pre">de</span></code> (German) or one of its variants, unless
+your locale is <code class="docutils literal"><span class="pre">de-at</span></code> (Austrian German) where you will get a variant translation.</p>
+<p>We would need to provide two additional files, one at <code class="docutils literal"><span class="pre">myApp/nls/de/myResources.js</span></code>:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">({</span>
+  <span class="nx">greeting</span><span class="o">:</span> <span class="s2">&quot;Hallo, Welt!&quot;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define({
+  greeting: &quot;Hallo, Welt!&quot;
+});</textarea></div><p>And then at <code class="docutils literal"><span class="pre">myApp/nls/de-at/myResources.js</span></code>:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">({</span>
+  <span class="nx">greeting</span><span class="o">:</span> <span class="s2">&quot;Grüß Gott!&quot;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define({
+  greeting: &quot;Grüß Gott!&quot;
+});</textarea></div><p>When you are using the <code class="docutils literal"><span class="pre">dojo/i18n</span></code> against &#8220;un-built&#8221; code, the way the plugin attempts to resolve the &#8220;best&#8221; locale
+for the user is to potentially make multiple server side requests.  This can be high inefficient in a production
+application so the <a class="reference internal" href="../build/index.html#build-index"><span>builder</span></a> will flatten the NLS bundles into single files to make it more
+efficient.  You can also specify which locales you want built into your production application.</p>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>This example retrieves some of the strings that are bundled with Dijit.  What should appear is the translations in
+whatever your browser&#8217;s local locale is.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/i18n!../../_static/dijit/nls/common.js&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">common</span><span class="p">,</span> <span class="nx">domConst</span><span class="p">){</span>
+  <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;ul&gt;&quot;</span>
+    <span class="o">+</span> <span class="s2">&quot;&lt;li&gt; buttonOk: &quot;</span> <span class="o">+</span> <span class="nx">common</span><span class="p">.</span><span class="nx">buttonOk</span> <span class="o">+</span> <span class="s2">&quot;&lt;/li&gt;&quot;</span>
+    <span class="o">+</span> <span class="s2">&quot;&lt;li&gt; buttonCancel: &quot;</span> <span class="o">+</span> <span class="nx">common</span><span class="p">.</span><span class="nx">buttonCancel</span> <span class="o">+</span> <span class="s2">&quot;&lt;/li&gt;&quot;</span>
+    <span class="o">+</span> <span class="s2">&quot;&lt;li&gt; buttonSave: &quot;</span> <span class="o">+</span> <span class="nx">common</span><span class="p">.</span><span class="nx">buttonSave</span> <span class="o">+</span> <span class="s2">&quot;&lt;/li&gt;&quot;</span>
+    <span class="o">+</span> <span class="s2">&quot;&lt;li&gt; itemClose: &quot;</span> <span class="o">+</span> <span class="nx">common</span><span class="p">.</span><span class="nx">itemClose</span> <span class="o">+</span> <span class="s2">&quot;&lt;/li&gt;&lt;/ul&gt;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;output&quot;</span>
+  <span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/i18n!../../_static/dijit/nls/common.js&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/domReady!&quot;],
+function(common, domConst){
+  domConst.place(&quot;&lt;ul&gt;&quot;
+    + &quot;&lt;li&gt; buttonOk: &quot; + common.buttonOk + &quot;&lt;/li&gt;&quot;
+    + &quot;&lt;li&gt; buttonCancel: &quot; + common.buttonCancel + &quot;&lt;/li&gt;&quot;
+    + &quot;&lt;li&gt; buttonSave: &quot; + common.buttonSave + &quot;&lt;/li&gt;&quot;
+    + &quot;&lt;li&gt; itemClose: &quot; + common.itemClose + &quot;&lt;/li&gt;&lt;/ul&gt;&quot;,
+    &quot;output&quot;
+  );
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;h2&gt;</span>Translations Loaded<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;h2&gt;Translations Loaded&lt;/h2&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../quickstart/internationalization/index.html#quickstart-internationalization-index"><span>In Depth Internationalization Guide</span></a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

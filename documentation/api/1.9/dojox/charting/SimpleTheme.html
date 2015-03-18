@@ -1,0 +1,542 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojox/charting/SimpleTheme" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojox/charting/SimpleTheme.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/charting/SimpleTheme<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-full-summary"><p>A SimpleTheme or Theme is a pre-defined object, primarily JSON-based, that makes up the definitions to
+style a chart.
+</p>
+</div>
+<div class="jsdoc-full-summary"><p>While you can set up style definitions on a chart directly (usually through the various add methods
+on a dojox.charting.Chart object), a Theme simplifies this manual setup by allowing you to
+pre-define all of the various visual parameters of each element in a chart.
+
+</p>
+<p>Most of the properties of a Theme are straight-forward; if something is line-based (such as
+an axis or the ticks on an axis), they will be defined using basic stroke parameters.  Likewise,
+if an element is primarily block-based (such as the background of a chart), it will be primarily
+fill-based.
+
+</p>
+<p>In addition (for convenience), a Theme definition does not have to contain the entire JSON-based
+structure.  Each theme is built on top of a default theme (which serves as the basis for the theme
+&quot;GreySkies&quot;), and is mixed into the default theme object.  This allows you to create a theme based,
+say, solely on colors for data series.
+
+</p>
+<p>Defining a new theme is relatively easy; see any of the themes in dojox.charting.themes for examples
+on how to define your own.
+
+</p>
+<p>When you set a theme on a chart, the theme itself is deep-cloned.  This means that you cannot alter
+the theme itself after setting the theme value on a chart, and expect it to change your chart.  If you
+are looking to make alterations to a theme for a chart, the suggestion would be to create your own
+theme, based on the one you want to use, that makes those alterations before it is applied to a chart.
+
+</p>
+<p>Finally, a Theme contains a number of functions to facilitate rendering operations on a chart--the main
+helper of which is the ~next~ method, in which a chart asks for the information for the next data series
+to be rendered.
+
+</p>
+<p>A note on colors:
+A theme palette is usually comprised of 5 different color definitions, and
+no more.  If you have a need to render a chart with more than 5 data elements, you can simply &quot;push&quot;
+new color definitions into the theme&#39;s .color array.  Make sure that you do that with the actual
+theme object from a Chart, and not in the theme itself (i.e. either do that before using .setTheme
+on a chart).
+</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new SimpleTheme<span class="parameters">(kwArgs);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/SimpleTheme">dojox/charting/SimpleTheme</a></div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">kwArgs</td>
+    <td class="jsdoc-param-type">undefined</td>
+    <td class="jsdoc-param-description">
+    </td>
+  </tr>
+</table>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><p>The default theme (and structure) looks like so:
+
+</p>
+<pre><code>// all objects are structs used directly in dojox.gfx
+chart:{
+    stroke: null,
+    fill: &quot;white&quot;,
+    pageStyle: null // suggested page style as an object suitable for dojo.style()
+},
+plotarea:{
+    stroke: null,
+    fill: &quot;white&quot;
+},
+axis:{
+    stroke: { // the axis itself
+        color: &quot;#333&quot;,
+        width: 1
+    },
+    tick: { // used as a foundation for all ticks
+        color:     &quot;#666&quot;,
+        position:  &quot;center&quot;,
+        font:      &quot;normal normal normal 7pt Tahoma&quot;,   // labels on axis
+        fontColor: &quot;#333&quot;                               // color of labels
+    },
+    majorTick:  { // major ticks on axis, and used for major gridlines
+        width:  1,
+        length: 6
+    },
+    minorTick:  { // minor ticks on axis, and used for minor gridlines
+        width:  0.8,
+        length: 3
+    },
+    microTick:  { // minor ticks on axis, and used for minor gridlines
+        width:  0.5,
+        length: 1
+    },
+    title: {
+        gap:  15,
+        font: &quot;normal normal normal 11pt Tahoma&quot;,   // title font
+        fontColor: &quot;#333&quot;,                          // title font color
+        orientation: &quot;axis&quot;                     // &quot;axis&quot;: facing the axis, &quot;away&quot;: facing away
+    }
+},
+series: {
+    stroke:  {width: 1.5, color: &quot;#333&quot;},       // line
+    outline: {width: 0.1, color: &quot;#ccc&quot;},       // outline
+    //shadow:  {dx: 1, dy: 1, width: 2, color: [0, 0, 0, 0.3]},
+    shadow: null,                               // no shadow
+    //filter:  dojox/gfx/filters.createFilter(),
+    filter: null,                               // no filter, to use a filter you must use gfx SVG render and require dojox/gfx/svgext
+    fill:    &quot;#ccc&quot;,                            // fill, if appropriate
+    font:    &quot;normal normal normal 8pt Tahoma&quot;, // if there&#39;s a label
+    fontColor: &quot;#000&quot;                           // color of labels
+    labelWiring: {width: 1, color: &quot;#ccc&quot;},     // connect marker and target data item(slice, column, bar...)
+},
+marker: {   // any markers on a series
+    symbol:  &quot;m-3,3 l3,-6 3,6 z&quot;,               // symbol
+    stroke:  {width: 1.5, color: &quot;#333&quot;},       // stroke
+    outline: {width: 0.1, color: &quot;#ccc&quot;},       // outline
+    shadow: null,                               // no shadow
+    fill:    &quot;#ccc&quot;,                            // fill if needed
+    font:    &quot;normal normal normal 8pt Tahoma&quot;, // label
+    fontColor: &quot;#000&quot;
+},
+grid: { // grid, when not present axis tick strokes are used instead
+    majorLine: {    // major grid line
+        color:     &quot;#666&quot;,
+        width:  1,
+        length: 6
+    },
+    minorLine: {    // minor grid line
+        color:     &quot;#666&quot;,
+        width:  0.8,
+        length: 3
+    },
+    fill: &quot;grey&quot;,  // every other stripe
+    alternateFill: &quot;grey&quot; // alternate stripe
+},
+indicator: {
+    lineStroke:  {width: 1.5, color: &quot;#333&quot;},       // line
+    lineOutline: {width: 0.1, color: &quot;#ccc&quot;},       // line outline
+    lineShadow: null,                               // no line shadow
+    lineFill: null,                                 // fill between lines for dual indicators
+    stroke:  {width: 1.5, color: &quot;#333&quot;},           // label background stroke
+    outline: {width: 0.1, color: &quot;#ccc&quot;},           // label background outline
+    shadow: null,                                   // no label background shadow
+    fill:  &quot;#ccc&quot;,                                  // label background fill
+    radius: 3,                                      // radius of the label background
+    font:    &quot;normal normal normal 10pt Tahoma&quot;,    // label font
+    fontColor: &quot;#000&quot;                               // label color
+    markerFill:    &quot;#ccc&quot;,                          // marker fill
+    markerSymbol:  &quot;m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0&quot;,   // marker symbol
+    markerStroke:  {width: 1.5, color: &quot;#333&quot;},     // marker stroke
+    markerOutline: {width: 0.1, color: &quot;#ccc&quot;},     // marker outline
+    markerShadow: null,                             // no marker shadow
+}</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 2</h3><p>Defining a new theme is pretty simple:
+
+</p>
+<pre><code>var Grasslands = new SimpleTheme({
+    colors: [ &quot;#70803a&quot;, &quot;#dde574&quot;, &quot;#788062&quot;, &quot;#b1cc5d&quot;, &quot;#eff2c2&quot; ]
+});
+
+myChart.setTheme(Grasslands);</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="arrayIcon public"><a href="1_9dojox_charting_SimpleTheme_defaultColors">defaultColors</a>
+        </li><span></span>
+        <li class="objectIcon public"><a href="1_9dojox_charting_SimpleTheme_defaultMarkers">defaultMarkers</a>
+        </li><span></span>
+        <li class="objectIcon public"><a href="1_9dojox_charting_SimpleTheme_defaultTheme">defaultTheme</a>
+        </li><span></span>
+        <li class="objectIcon public"><a href="1_9dojox_charting_SimpleTheme_shapeSpaces">shapeSpaces</a>
+        </li><span></span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_9dojox_charting_SimpleTheme__buildMarkerArray">_buildMarkerArray</a><span class="parameters"></span><span class="parameters">() </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_addMarker">addMarker</a><span class="parameters"></span><span class="parameters">(name,segment) </span><span>Add a custom marker to this theme.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_addMixin">addMixin</a><span class="parameters"></span><span class="parameters">(theme,elementType,mixin,doPost) </span><span>Add a mixin object to the passed theme and process.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_clear">clear</a><span class="parameters"></span><span class="parameters">() </span><span>Clear and reset the internal pointer to start fresh.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_clone">clone</a><span class="parameters"></span><span class="parameters">() </span><span>Clone the current theme.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_getTick">getTick</a><span class="parameters"></span><span class="parameters">(name,mixin) </span><span>Calculates and merges tick parameters.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_inspectObjects">inspectObjects</a><span class="parameters"></span><span class="parameters">(f) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_next">next</a><span class="parameters"></span><span class="parameters">(elementType,mixin,doPost) </span><span>Get the next color or series theme.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_post">post</a><span class="parameters"></span><span class="parameters">(theme,elementType) </span><span>Process any post-shape fills.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_reverseFills">reverseFills</a><span class="parameters"></span><span class="parameters">() </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_setMarkers">setMarkers</a><span class="parameters"></span><span class="parameters">(obj) </span><span>Set all the markers of this theme at once.  obj should be a
+dictionary of keys and path segments.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_SimpleTheme_skip">skip</a><span class="parameters"></span><span class="parameters">() </span><span>Skip the next internal color.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_defaultColors"></a><span class="arrayIcon">defaultColors</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_defaultMarkers"></a><span class="objectIcon">defaultMarkers</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_defaultTheme"></a><span class="objectIcon">defaultTheme</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_shapeSpaces"></a><span class="objectIcon">shapeSpaces</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme__buildMarkerArray"></a><span class="functionIcon">_buildMarkerArray</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_addMarker"></a><span class="functionIcon">addMarker</span><span class="parameters">(name,segment)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Add a custom marker to this theme.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">segment</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>myTheme.addMarker(&quot;Ellipse&quot;, foo);</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_addMixin"></a><span class="functionIcon">addMixin</span><span class="parameters">(theme,elementType,mixin,doPost)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Add a mixin object to the passed theme and process.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">theme</td>
+            <td class="jsdoc-param-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/SimpleTheme">dojox/charting/SimpleTheme</a></td>
+            <td class="jsdoc-param-description"><p>The theme to mixin to.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">elementType</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The type of element in question. Can be &quot;line&quot;, &quot;bar&quot; or &quot;circle&quot;</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">mixin</td>
+            <td class="jsdoc-param-type">Object | Array</td>
+            <td class="jsdoc-param-description"><p>The object or objects to mix into the theme.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">doPost</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description"><p>If true, run the new theme through the post-processor.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/SimpleTheme">dojox/charting/SimpleTheme</a> | undefined</span></div>
+        <div class="jsdoc-return-description"><p>The new theme.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_clear"></a><span class="functionIcon">clear</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Clear and reset the internal pointer to start fresh.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_clone"></a><span class="functionIcon">clone</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Clone the current theme.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">dojox.charting.SimpleTheme | instance</span></div>
+        <div class="jsdoc-return-description"><p>The cloned theme; any alterations made will not affect the original.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_getTick"></a><span class="functionIcon">getTick</span><span class="parameters">(name,mixin)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Calculates and merges tick parameters.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Tick name, can be &quot;major&quot;, &quot;minor&quot;, or &quot;micro&quot;.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">mixin</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>Optional object to mix in to the tick.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_inspectObjects"></a><span class="functionIcon">inspectObjects</span><span class="parameters">(f)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">f</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_next"></a><span class="functionIcon">next</span><span class="parameters">(elementType,mixin,doPost)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Get the next color or series theme.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">elementType</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>An optional element type (for use with series themes)</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">mixin</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>An optional object to mix into the theme.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">doPost</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>A flag to post-process the results.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Object | undefined</span></div>
+        <div class="jsdoc-return-description"><p>An object of the structure { series, marker, symbol }</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_post"></a><span class="functionIcon">post</span><span class="parameters">(theme,elementType)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Process any post-shape fills.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">theme</td>
+            <td class="jsdoc-param-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/SimpleTheme">dojox/charting/SimpleTheme</a></td>
+            <td class="jsdoc-param-description"><p>The theme to post process with.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">elementType</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The type of element being filled.  Can be &quot;bar&quot; or &quot;circle&quot;.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/SimpleTheme">dojox/charting/SimpleTheme</a> | undefined</span></div>
+        <div class="jsdoc-return-description"><p>The post-processed theme.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_reverseFills"></a><span class="functionIcon">reverseFills</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_setMarkers"></a><span class="functionIcon">setMarkers</span><span class="parameters">(obj)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Set all the markers of this theme at once.  obj should be a
+dictionary of keys and path segments.
+</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">obj</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>myTheme.setMarkers({ &quot;CIRCLE&quot;: foo });</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_SimpleTheme_skip"></a><span class="functionIcon">skip</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/SimpleTheme" class="jsdoc-link">dojox/charting/SimpleTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Skip the next internal color.</p>
+</div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojox/charting/SimpleTheme" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

@@ -1,0 +1,427 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.10/dojo/i18n" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.10/dojo/i18n.html</div>
+<h1 class="objectIcon36 jsdoc-title module-title">dojo/i18n<span style="font-size:11px;color:#999;"> (version 1.10)</span></h1>
+<div class="jsdoc-full-summary"><p>This module implements the <a class="jsdoc-link" href="/documentation/api/1.10/dojo/i18n">dojo/i18n</a>! plugin and the v1.6- i18n API</p>
+</div>
+<div class="jsdoc-full-summary"><p>We choose to include our own plugin to leverage functionality already contained in dojo
+and thereby reduce the size of the plugin compared to various loader implementations. Also, this
+allows foreign AMD loaders to be used without their plugins.</p>
+</div>
+<p>See the<a href="/reference-guide/1.10/dojo/i18n.html" target="_blank">dojo/i18n reference documentation</a> for more information.</p>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="objectIcon public"><a href="1_10dojo_i18n_cache">cache</a>
+        </li><span></span>
+        <li class="booleanIcon public"><a href="1_10dojo_i18n_dynamic">dynamic</a>
+        </li><span></span>
+        <li class="arrayIcon public"><a href="1_10dojo_i18n_unitTests">unitTests</a>
+        </li><span></span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_10dojo_i18n__preloadLocalizations">_preloadLocalizations</a><span class="parameters"></span><span class="parameters">(bundlePrefix,localesGenerated,guaranteedAmdFormat,contextRequire) </span><span>Load available flattened resource bundles associated with a particular module for dojo/locale and all dojo/config.extraLocale (if any)</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojo_i18n_getL10nName">getL10nName</a><span class="parameters"></span><span class="parameters">(moduleName,bundleName,locale) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojo_i18n_getLocalization">getLocalization</a><span class="parameters"></span><span class="parameters">(moduleName,bundleName,locale) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojo_i18n_load">load</a><span class="parameters"></span><span class="parameters">(id,require,load) </span><span>id is in one of the following formats
+
+
+
+/nls/
+ =&gt; load the bundle, localized to config.locale; load all bundles localized to
+ config.extraLocale (if any); return the loaded bundle localized to config.locale.
+
+/nls//
+ =&gt; load then return the bundle localized to 
+
+preload/nls/*
+ =&gt; for config.locale and all config.extraLocale, load all bundles found
+ in the best-matching bundle rollup.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojo_i18n_normalize">normalize</a><span class="parameters"></span><span class="parameters">(id,toAbsMid) </span><span>id may be relative.
+preload has form *preload*&lt;path&gt;/nls/&lt;module&gt;*&lt;flattened locales&gt; and
+therefore never looks like a relative</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojo_i18n_normalizeLocale">normalizeLocale</a><span class="parameters"></span><span class="parameters">(locale) </span><span></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojo_i18n_cache"></a><span class="objectIcon">cache</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojo/i18n" class="jsdoc-link">dojo/i18n</a>
+        </div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojo_i18n_dynamic"></a><span class="booleanIcon">dynamic</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojo/i18n" class="jsdoc-link">dojo/i18n</a>
+        </div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojo_i18n_unitTests"></a><span class="arrayIcon">unitTests</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojo/i18n" class="jsdoc-link">dojo/i18n</a>
+        </div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojo_i18n__preloadLocalizations"></a><span class="functionIcon">_preloadLocalizations</span><span class="parameters">(bundlePrefix,localesGenerated,guaranteedAmdFormat,contextRequire)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojo/i18n" class="jsdoc-link">dojo/i18n</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Load available flattened resource bundles associated with a particular module for dojo/locale and all dojo/config.extraLocale (if any)</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Only called by built layer files. The entire locale hierarchy is loaded. For example,
+if locale==&quot;ab-cd&quot;, then ROOT, &quot;ab&quot;, and &quot;ab-cd&quot; are loaded. This is different than v1.6-
+in that the v1.6- would only load ab-cd...which was <em>always</em> flattened.
+
+</p>
+<p>If guaranteedAmdFormat is true, then the module can be loaded with require thereby circumventing the detection algorithm
+and the extra possible extra transaction.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">bundlePrefix</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">localesGenerated</td>
+            <td class="jsdoc-param-type">Array</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">guaranteedAmdFormat</td>
+            <td class="jsdoc-param-type">boolean</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">contextRequire</td>
+            <td class="jsdoc-param-type">function</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojo_i18n_getL10nName"></a><span class="functionIcon">getL10nName</span><span class="parameters">(moduleName,bundleName,locale)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojo/i18n" class="jsdoc-link">dojo/i18n</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">moduleName</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">bundleName</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">locale</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">string</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojo_i18n_getLocalization"></a><span class="functionIcon">getLocalization</span><span class="parameters">(moduleName,bundleName,locale)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojo/i18n" class="jsdoc-link">dojo/i18n</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">moduleName</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">bundleName</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">locale</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojo_i18n_load"></a><span class="functionIcon">load</span><span class="parameters">(id,require,load)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojo/i18n" class="jsdoc-link">dojo/i18n</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>id is in one of the following formats
+
+</p>
+<ol>
+<li><p><path>/nls/<bundle>
+ =&gt; load the bundle, localized to config.locale; load all bundles localized to
+ config.extraLocale (if any); return the loaded bundle localized to config.locale.</p>
+</li>
+<li><p><path>/nls/<locale>/<bundle>
+ =&gt; load then return the bundle localized to <locale></p>
+</li>
+<li><p><em>preload</em><path>/nls/<module>*<JSON array of available locales>
+ =&gt; for config.locale and all config.extraLocale, load all bundles found
+ in the best-matching bundle rollup. A value of 1 is returned, which
+ is meaningless other than to say the plugin is executing the requested
+ preloads</p>
+</li>
+</ol>
+<p>In cases 1 and 2, <path> is always normalized to an absolute module id upon entry; see
+normalize. In case 3, it <path> is assumed to be absolute; this is arranged by the builder.
+
+</p>
+<p>To load a bundle means to insert the bundle into the plugin&#39;s cache and publish the bundle
+value to the loader. Given <path>, <bundle>, and a particular <locale>, the cache key
+
+</p>
+<pre><code>&lt;path&gt;/nls/&lt;bundle&gt;/&lt;locale&gt;</code></pre>
+<p>will hold the value. Similarly, then plugin will publish this value to the loader by
+
+</p>
+<pre><code>define(&quot;&lt;path&gt;/nls/&lt;bundle&gt;/&lt;locale&gt;&quot;, &lt;bundle-value&gt;);</code></pre>
+<p>Given this algorithm, other machinery can provide fast load paths be preplacing
+values in the plugin&#39;s cache, which is public. When a load is demanded the
+cache is inspected before starting any loading. Explicitly placing values in the plugin
+cache is an advanced/experimental feature that should not be needed; use at your own risk.
+
+</p>
+<p>For the normal AMD algorithm, the root bundle is loaded first, which instructs the
+plugin what additional localized bundles are required for a particular locale. These
+additional locales are loaded and a mix of the root and each progressively-specific
+locale is returned. For example:
+
+</p>
+<ol>
+<li><p>The client demands &quot;dojo/i18n!some/path/nls/someBundle</p>
+</li>
+<li><p>The loader demands load(some/path/nls/someBundle)</p>
+</li>
+<li><p>This plugin require&#39;s &quot;some/path/nls/someBundle&quot;, which is the root bundle.</p>
+</li>
+<li><p>Assuming config.locale is &quot;ab-cd-ef&quot; and the root bundle indicates that localizations
+are available for &quot;ab&quot; and &quot;ab-cd-ef&quot; (note the missing &quot;ab-cd&quot;, then the plugin
+requires &quot;some/path/nls/ab/someBundle&quot; and &quot;some/path/nls/ab-cd-ef/someBundle&quot;</p>
+</li>
+<li><p>Upon receiving all required bundles, the plugin constructs the value of the bundle
+ab-cd-ef as...</p>
+<pre><code> mixin(mixin(mixin({}, require(&quot;some/path/nls/someBundle&quot;),
+     require(&quot;some/path/nls/ab/someBundle&quot;)),
+     require(&quot;some/path/nls/ab-cd-ef/someBundle&quot;));</code></pre>
+</li>
+</ol>
+<p>This value is inserted into the cache and published to the loader at the
+key/module-id some/path/nls/someBundle/ab-cd-ef.
+
+</p>
+<p>The special preload signature (case 3) instructs the plugin to stop servicing all normal requests
+(further preload requests will be serviced) until all ongoing preloading has completed.
+
+</p>
+<p>The preload signature instructs the plugin that a special rollup module is available that contains
+one or more flattened, localized bundles. The JSON array of available locales indicates which locales
+are available. Here is an example:
+
+</p>
+<pre><code>*preload*some/path/nls/someModule*[&quot;root&quot;, &quot;ab&quot;, &quot;ab-cd-ef&quot;]</code></pre>
+<p>This indicates the following rollup modules are available:
+
+</p>
+<pre><code>some/path/nls/someModule_ROOT
+some/path/nls/someModule_ab
+some/path/nls/someModule_ab-cd-ef</code></pre>
+<p>Each of these modules is a normal AMD module that contains one or more flattened bundles in a hash.
+For example, assume someModule contained the bundles some/bundle/path/someBundle and
+some/bundle/path/someOtherBundle, then some/path/nls/someModule_ab would be expressed as follows:
+
+</p>
+<pre><code>define({
+    some/bundle/path/someBundle:&lt;value of someBundle, flattened with respect to locale ab&gt;,
+    some/bundle/path/someOtherBundle:&lt;value of someOtherBundle, flattened with respect to locale ab&gt;,
+});</code></pre>
+<p>E.g., given this design, preloading for locale==&quot;ab&quot; can execute the following algorithm:
+
+</p>
+<pre><code>require([&quot;some/path/nls/someModule_ab&quot;], function(rollup){
+    for(var p in rollup){
+        var id = p + &quot;/ab&quot;,
+        cache[id] = rollup[p];
+        define(id, rollup[p]);
+    }
+});</code></pre>
+<p>Similarly, if &quot;ab-cd&quot; is requested, the algorithm can determine that &quot;ab&quot; is the best available and
+load accordingly.
+
+</p>
+<p>The builder will write such rollups for every layer if a non-empty localeList  profile property is
+provided. Further, the builder will include the following cache entry in the cache associated with
+any layer.
+
+</p>
+<pre><code>&quot;*now&quot;:function(r){r([&#39;dojo/i18n!*preload*&lt;path&gt;/nls/&lt;module&gt;*&lt;JSON array of available locales&gt;&#39;]);}</code></pre>
+<p>The *now special cache module instructs the loader to apply the provided function to context-require
+with respect to the particular layer being defined. This causes the plugin to hold all normal service
+requests until all preloading is complete.
+
+</p>
+<p>Notice that this algorithm is rarely better than the standard AMD load algorithm. Consider the normal case
+where the target locale has a single segment and a layer depends on a single bundle:
+
+</p>
+<p>Without Preloads:
+
+</p>
+<ol>
+<li>Layer loads root bundle.</li>
+<li>bundle is demanded; plugin loads single localized bundle.</li>
+</ol>
+<p>With Preloads:
+
+</p>
+<ol>
+<li>Layer causes preloading of target bundle.</li>
+<li>bundle is demanded; service is delayed until preloading complete; bundle is returned.</li>
+</ol>
+<p>In each case a single transaction is required to load the target bundle. In cases where multiple bundles
+are required and/or the locale has multiple segments, preloads still requires a single transaction whereas
+the normal path requires an additional transaction for each additional bundle/locale-segment. However all
+of these additional transactions can be done concurrently. Owing to this analysis, the entire preloading
+algorithm can be discard during a build by setting the has feature dojo-preload-i18n-Api to false.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">id</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">require</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">load</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojo_i18n_normalize"></a><span class="functionIcon">normalize</span><span class="parameters">(id,toAbsMid)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojo/i18n" class="jsdoc-link">dojo/i18n</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>id may be relative.
+preload has form <code>*preload*&lt;path&gt;/nls/&lt;module&gt;*&lt;flattened locales&gt;</code> and
+therefore never looks like a relative</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">id</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">toAbsMid</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojo_i18n_normalizeLocale"></a><span class="functionIcon">normalizeLocale</span><span class="parameters">(locale)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojo/i18n" class="jsdoc-link">dojo/i18n</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">locale</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.10/dojo/i18n" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

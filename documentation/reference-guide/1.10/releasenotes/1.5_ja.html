@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dojo 1.5 リリース・ノート &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Dojo 1.5 リリース・ノート</a></li>
+<li><a class="reference internal" href="#id1">サポートするブラウザ</a></li>
+<li><a class="reference internal" href="#dojo-core">Dojo Core</a><ul>
+<li><a class="reference internal" href="#firefox-extension-dojo">Firefox拡張機能(extension)内でのDojoの使用</a></li>
+<li><a class="reference internal" href="#dojo-cldr">dojo.cldr</a></li>
+<li><a class="reference internal" href="#dojo-deferred-dojo-when">dojo.Deferred, dojo.when</a></li>
+<li><a class="reference internal" href="#dojo-window-dojo-uacss">dojo.window, dojo.uacss</a></li>
+<li><a class="reference internal" href="#dojo-stateful">dojo.Stateful</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dijit">Dijit</a><ul>
+<li><a class="reference internal" href="#claro">Claro テーマ</a><ul>
+<li><a class="reference internal" href="#id2">他のテーマからClaroへ切り替える際の注意点</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#colorpalette">ColorPalette</a></li>
+<li><a class="reference internal" href="#dialog">Dialog</a></li>
+<li><a class="reference internal" href="#id3">入力ウィジェット</a><ul>
+<li><a class="reference internal" href="#placeholder">新しいplaceHolder属性</a></li>
+<li><a class="reference internal" href="#id4">入力ウィジェットの幅と高さの標準化</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bidi">Bidiの強化</a></li>
+<li><a class="reference internal" href="#cssstatemixin">_CssStateMixin</a></li>
+<li><a class="reference internal" href="#tree">Tree</a></li>
+<li><a class="reference internal" href="#get-set-attr">新しいget()/set()と廃止予定のattr()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojox">DojoX</a><ul>
+<li><a class="reference internal" href="#charting">Charting</a></li>
+<li><a class="reference internal" href="#css3">CSS3</a></li>
+<li><a class="reference internal" href="#dnd">DnD</a></li>
+<li><a class="reference internal" href="#editor">Editor</a></li>
+<li><a class="reference internal" href="#geo">Geo</a></li>
+<li><a class="reference internal" href="#gfx">GFX</a></li>
+<li><a class="reference internal" href="#lang">Lang</a></li>
+<li><a class="reference internal" href="#layout">Layout</a></li>
+<li><a class="reference internal" href="#mdnd">MDnD</a></li>
+<li><a class="reference internal" href="#mobile">Mobile</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#util">Util</a><ul>
+<li><a class="reference internal" href="#id5">ビルドシステム/ビルドスクリプト</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6">マイグレーション</a><ul>
+<li><a class="reference internal" href="#get-set">get/set</a></li>
+<li><a class="reference internal" href="#dijit-popup">dijit.popup</a></li>
+<li><a class="reference internal" href="#container-getchildren">_Container.getChildren()</a></li>
+<li><a class="reference internal" href="#id7">フォームウィジェット</a></li>
+<li><a class="reference internal" href="#textbox">TextBox</a></li>
+<li><a class="reference internal" href="#dijit-css">Dijit CSS</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <p id="releasenotes-1-5-ja">この文書は <a class="reference internal" href="1.5.html#releasenotes-1-5"><span>1.5</span></a> の翻訳版です。もし翻訳にエラーがあったり、オリジナルの文書が更新されている場合は、英語で書かれたオリジナル文書の最新版を信頼してください。</p>
+<div class="section" id="dojo-1-5">
+<h1><a class="toc-backref" href="#id9">Dojo 1.5 リリース・ノート</a><a class="headerlink" href="#dojo-1-5" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-1-5" id="id9">Dojo 1.5 リリース・ノート</a></li>
+<li><a class="reference internal" href="#id1" id="id10">サポートするブラウザ</a></li>
+<li><a class="reference internal" href="#dojo-core" id="id11">Dojo Core</a><ul>
+<li><a class="reference internal" href="#firefox-extension-dojo" id="id12">Firefox拡張機能(extension)内でのDojoの使用</a></li>
+<li><a class="reference internal" href="#dojo-cldr" id="id13">dojo.cldr</a></li>
+<li><a class="reference internal" href="#dojo-deferred-dojo-when" id="id14">dojo.Deferred, dojo.when</a></li>
+<li><a class="reference internal" href="#dojo-window-dojo-uacss" id="id15">dojo.window, dojo.uacss</a></li>
+<li><a class="reference internal" href="#dojo-stateful" id="id16">dojo.Stateful</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dijit" id="id17">Dijit</a><ul>
+<li><a class="reference internal" href="#claro" id="id18">Claro テーマ</a><ul>
+<li><a class="reference internal" href="#id2" id="id19">他のテーマからClaroへ切り替える際の注意点</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#colorpalette" id="id20">ColorPalette</a></li>
+<li><a class="reference internal" href="#dialog" id="id21">Dialog</a></li>
+<li><a class="reference internal" href="#id3" id="id22">入力ウィジェット</a><ul>
+<li><a class="reference internal" href="#placeholder" id="id23">新しいplaceHolder属性</a></li>
+<li><a class="reference internal" href="#id4" id="id24">入力ウィジェットの幅と高さの標準化</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#bidi" id="id25">Bidiの強化</a></li>
+<li><a class="reference internal" href="#cssstatemixin" id="id26">_CssStateMixin</a></li>
+<li><a class="reference internal" href="#tree" id="id27">Tree</a></li>
+<li><a class="reference internal" href="#get-set-attr" id="id28">新しいget()/set()と廃止予定のattr()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojox" id="id29">DojoX</a><ul>
+<li><a class="reference internal" href="#charting" id="id30">Charting</a></li>
+<li><a class="reference internal" href="#css3" id="id31">CSS3</a></li>
+<li><a class="reference internal" href="#dnd" id="id32">DnD</a></li>
+<li><a class="reference internal" href="#editor" id="id33">Editor</a></li>
+<li><a class="reference internal" href="#geo" id="id34">Geo</a></li>
+<li><a class="reference internal" href="#gfx" id="id35">GFX</a></li>
+<li><a class="reference internal" href="#lang" id="id36">Lang</a></li>
+<li><a class="reference internal" href="#layout" id="id37">Layout</a></li>
+<li><a class="reference internal" href="#mdnd" id="id38">MDnD</a></li>
+<li><a class="reference internal" href="#mobile" id="id39">Mobile</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#util" id="id40">Util</a><ul>
+<li><a class="reference internal" href="#id5" id="id41">ビルドシステム/ビルドスクリプト</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id6" id="id42">マイグレーション</a><ul>
+<li><a class="reference internal" href="#get-set" id="id43">get/set</a></li>
+<li><a class="reference internal" href="#dijit-popup" id="id44">dijit.popup</a></li>
+<li><a class="reference internal" href="#container-getchildren" id="id45">_Container.getChildren()</a></li>
+<li><a class="reference internal" href="#id7" id="id46">フォームウィジェット</a></li>
+<li><a class="reference internal" href="#textbox" id="id47">TextBox</a></li>
+<li><a class="reference internal" href="#dijit-css" id="id48">Dijit CSS</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="id1">
+<h1><a class="toc-backref" href="#id10">サポートするブラウザ</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>次のブラウザがサポートされています。サポートされていないブラウザの場合は、動作するかもしれませんが、テストはされていません。また、サポートされていないブラウザ固有の修正がなされることもありません。</p>
+<ul class="simple">
+<li>Firefox 3.5/3.6</li>
+<li>Safari 4/Safari 5 および Chrome 5</li>
+<li>IE6, IE7, IE8</li>
+<li>Opera 10.50 またはそれ以降 (Dojo core のみ)</li>
+</ul>
+</div>
+<div class="section" id="dojo-core">
+<h1><a class="toc-backref" href="#id11">Dojo Core</a><a class="headerlink" href="#dojo-core" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="firefox-extension-dojo">
+<h2><a class="toc-backref" href="#id12">Firefox拡張機能(extension)内でのDojoの使用</a><a class="headerlink" href="#firefox-extension-dojo" title="Permalink to this headline">¶</a></h2>
+<p>ソースコード版のDojoをFirefox拡張機能の中から使用する場合は、dojo.jsをインクルードする前にdjConfig.hostEnv = &#8220;ff_ext&#8221;の設定をしてください。</p>
+</div>
+<div class="section" id="dojo-cldr">
+<h2><a class="toc-backref" href="#id13">dojo.cldr</a><a class="headerlink" href="#dojo-cldr" title="Permalink to this headline">¶</a></h2>
+<p>数値、通貨、日付のフォーマットに使用するロケール固有データのテーブルをCLDR 1.8 (unicode.org/cldr)に更新しました。</p>
+</div>
+<div class="section" id="dojo-deferred-dojo-when">
+<h2><a class="toc-backref" href="#id14">dojo.Deferred, dojo.when</a><a class="headerlink" href="#dojo-deferred-dojo-when" title="Permalink to this headline">¶</a></h2>
+<p>dojo.Deferredは副作用のない連結(chaining)を実現するためにリファクタリングされ、これにより次のようなコードを実行できるようになります。</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">def</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">xhr</span><span class="p">(...);</span>
+<span class="nx">def</span><span class="p">.</span><span class="nx">then</span><span class="p">(...);</span>
+<span class="nx">def</span><span class="p">.</span><span class="nx">then</span><span class="p">(...);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var def = dojo.xhr(...);
+def.then(...);
+def.then(...);</textarea></div><p>最初のthen()呼び出しが2回目のthen()呼び出しに渡される値に影響を与える心配はありません。</p>
+<p>次のようにして、チェインの各要素が値に影響を与えるような連結も可能です。</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">xhr</span><span class="p">(...).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span> <span class="k">return</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">toJson</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span> <span class="p">}).</span><span class="nx">then</span><span class="p">(...);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.xhr(...).then(function(val){ return dojo.toJson(val); }).then(...);</textarea></div><p>最後に、dojo.when()はDeferredオブジェクトまたは普通の値を取るメソッドです。Deferredオブジェクトの場合は値の準備が整った時点で、それ以外の場合は直ちに、与えられたコードを実行します。(訳注：これにより、Deferredを使った非同期処理の場合とそれ以外の同期処理の場合とで共通のコーディングスタイルを取ることができるようになります。)</p>
+<div class="highlight"><pre><span class="c1">// val might be a Deferred, or it could be (for example) a String</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">val</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">val</span><span class="p">){</span>
+      <span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// val might be a Deferred, or it could be (for example) a String
+dojo.when(val, function(val){
+      ...
+});</textarea></div><p>詳細は <a class="reference external" href="http://www.sitepen.com/blog/2010/05/03/robust-promises-with-dojo-deferred-1-5/">blog post</a> (英語)を参照してください。</p>
+</div>
+<div class="section" id="dojo-window-dojo-uacss">
+<h2><a class="toc-backref" href="#id15">dojo.window, dojo.uacss</a><a class="headerlink" href="#dojo-window-dojo-uacss" title="Permalink to this headline">¶</a></h2>
+<p>dijitのいくつかの関数がdojo coreへ移動しました。(互換性のためにdijitにはスタブを残してあります)</p>
+<ul class="simple">
+<li>dojo.require(&#8220;dojo.uacss&#8221;)はdj_ieなどのクラスを&lt;html&gt;ノードに追加します。それらは、ブラウザの種類、ブラウザのバージョン、ボックスモデルなどを表します。以前はdojo.require(&#8220;dijit.sniff&#8221;)でした。</li>
+<li>dojo.window.getBox()はビューポートのサイズを取得します。以前はdijit.getViewport()でした。</li>
+<li>dojo.window.get()はdocumentオブジェクトから対応するwindowオブジェクトを取得します。以前はdijit.getDocumentWindow()でした。</li>
+<li>dojo.window.scrollIntoView()はビュー内でノードをスクロールします。node.scrollIntoView()と同様ですが、ブラウザごとの挙動の違いを吸収します。以前はdijit.scrollIntoView()でした。</li>
+</ul>
+</div>
+<div class="section" id="dojo-stateful">
+<h2><a class="toc-backref" href="#id16">dojo.Stateful</a><a class="headerlink" href="#dojo-stateful" title="Permalink to this headline">¶</a></h2>
+<p>一貫性のある方法で、プロパティの値の取得、設定、変更の監視を行うための、新しい汎用的なインターフェイスあるいはベースクラスとなるものです。</p>
+<p>参照:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../dojo/Stateful.html#dojo-stateful"><span>dojo.Stateful</span></a></li>
+<li><a class="reference external" href="http://bugs.dojotoolkit.org/ticket/10839d">Ticket #10839</a></li>
+<li><a class="reference external" href="http://www.sitepen.com/blog/2010/05/04/consistent-interaction-with-stateful-objects-in-dojo/">Stateful blog post</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="dijit">
+<h1><a class="toc-backref" href="#id17">Dijit</a><a class="headerlink" href="#dijit" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="claro">
+<h2><a class="toc-backref" href="#id18">Claro テーマ</a><a class="headerlink" href="#claro" title="Permalink to this headline">¶</a></h2>
+<p>ClaroはDijitとdojox.Gridの新しいテーマです。(以前はLucidと呼ばれていました。) Claroテーマには次のような狙いがあります。</p>
+<blockquote>
+<div><ul class="simple">
+<li>グラデーションつき背景画像、ドロップシャドウ、CSSアニメーション(webkitとmozilla用)などの視覚的効果の向上により、Dijitライブラリを使ったリッチ インターネット アプリケーションのための現代的で魅力あるビジュアル スタイルを提供する。</li>
+<li>一貫性のあるパディング、フォントの扱い、位置揃えとともに、すぐに使えてそれだけで完結するプロフェッショナル品質を提供する。さらに、従来欠陥のあった、ウィジェットの動作状態(ホバー、アクティブ、選択)を修正する。</li>
+<li>テーマCSSのカスタマイズ性を向上する。これにより、新しい背景画像をデザインし直すことなしに、パディングや色などのスタイル要素によって、デザイナが容易に独自のテーマを作成することを可能とする。</li>
+</ul>
+</div></blockquote>
+<p>Claroテーマは、LTR(left-to-right: 左から右)、RTL(right-to-left: 右から左)のどちらの文章方向の表示もサポートします。また、Dojo 1.5がサポートするすべてのブラウザをサポートしますが、一部のスタイルはグレースフル デグラデーション（訳注：表現能力の低いブラウザでも能力に応じた見栄えが得られる工夫）になります。例えば、IE6における24ビットPNGや、IE6, IE7, IE8におけるラウンドコーナー(角丸)はサポートされません。</p>
+<p>Dijitテーマ(Claro, Tundra, Nihilo, Soria)に関する詳細情報および更新情報は <a class="reference internal" href="../dijit/themes.html#dijit-themes"><span>Themes and Theming</span></a> (英語)を参照してください。</p>
+<div class="section" id="id2">
+<h3><a class="toc-backref" href="#id19">他のテーマからClaroへ切り替える際の注意点</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>Claroの.dijitTreeIconクラスはwidthとheightを指定していません。もしツリーフォルダー用のカスタムアイコンを定義(あるいは同様の何かを)している場合は、それらにwidthとheightが指定されていることを確認してください。</p>
+<p>また、TabContainerにおいて、アイコンを持たないタブの高さは16px未満になるため、もしアイコンを持つタブと持たないタブが混在する場合は高さが異なってしまいます。そのような場合は次のようにmin-heightを追加するか、</p>
+<div class="highlight"><pre><span class="nc">.dijitTab</span> <span class="nc">.tabLabel</span> <span class="p">{</span>
+    <span class="k">min-height</span><span class="o">:</span> <span class="m">12px</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">.dijitTab .tabLabel {
+    min-height: 12px;
+}</textarea></div><p>あるいは、アイコンを持たないタブに、サイズが1x16のブランクアイコンを指定します。</p>
+</div>
+</div>
+<div class="section" id="colorpalette">
+<h2><a class="toc-backref" href="#id20">ColorPalette</a><a class="headerlink" href="#colorpalette" title="Permalink to this headline">¶</a></h2>
+<p>暗い色の色見本がホバーまたはフォーカスされたときに識別しやすいように、各色見本の周囲に白いボーダーを置くようにスタイルが変更されました。また、フォーカスはホバーと分離されました。</p>
+<p>さらに、ColorPaletteはset(&#8220;value&#8221;, ...)とget(&#8220;value&#8221;)をサポートするようになり、現在選択されている色をその色の周囲の黒いボーダーで示すようになりました。
+エディタの前景色、背景色のプラグインも現在選択中のテキスト(あるいは選択テキストがない場合はテキストカーソル周囲のテキスト)の色を示すようになりました。</p>
+</div>
+<div class="section" id="dialog">
+<h2><a class="toc-backref" href="#id21">Dialog</a><a class="headerlink" href="#dialog" title="Permalink to this headline">¶</a></h2>
+<p>Dialogウィジェットは、ダイアログの下側にOKやキャンセルといったアクションボタンを配したグレーのバー「アクションバー」をサポートします。ダイアログは以前と同様にして作りますが、次のようにダイアログのコンテンツとボタンを分離して記述します。</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">dojoType=</span><span class="s">&quot;dijit.Dialog&quot;</span> <span class="na">id=</span><span class="s">&quot;myDialog&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;dijitDialogPaneContentArea&quot;</span><span class="nt">&gt;</span>
+        ...
+    <span class="nt">&lt;/div&gt;</span>
+
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;dijitDialogPaneActionBar&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;button</span> <span class="na">dojoType=</span><span class="s">&quot;dijit.form.Button&quot;</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">id=</span><span class="s">&quot;ok&quot;</span><span class="nt">&gt;</span>OK<span class="nt">&lt;/button&gt;</span>
+        <span class="nt">&lt;button</span> <span class="na">dojoType=</span><span class="s">&quot;dijit.form.Button&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">onClick=</span><span class="s">&quot;dijit.byId(&#39;myDialog&#39;).onCancel();&quot;</span>
+                <span class="na">id=</span><span class="s">&quot;cancel&quot;</span><span class="nt">&gt;</span>Cancel<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div dojoType=&quot;dijit.Dialog&quot; id=&quot;myDialog&quot;&gt;
+    &lt;div class=&quot;dijitDialogPaneContentArea&quot;&gt;
+        ...
+    &lt;/div&gt;
+
+    &lt;div class=&quot;dijitDialogPaneActionBar&quot;&gt;
+        &lt;button dojoType=&quot;dijit.form.Button&quot; type=&quot;submit&quot; id=&quot;ok&quot;&gt;OK&lt;/button&gt;
+        &lt;button dojoType=&quot;dijit.form.Button&quot; type=&quot;button&quot; onClick=&quot;dijit.byId('myDialog').onCancel();&quot;
+                id=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</textarea></div></div>
+<div class="section" id="id3">
+<h2><a class="toc-backref" href="#id22">入力ウィジェット</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="placeholder">
+<h3><a class="toc-backref" href="#id23">新しいplaceHolder属性</a><a class="headerlink" href="#placeholder" title="Permalink to this headline">¶</a></h3>
+<p>HTML5のplaceholder属性(「ヒント」としても知られる)がTextBoxベースのすべてのウィジェットに実装されました。プレースホルダは、ウィジェットが&#8221;名前を入力してください&#8221;のようなテキストを空の入力フィールド内に見本あるはヒントとしてグレーで表示するものです。テキストはユーザーがフィールドにフォーカスを当てると消えます。</p>
+<p>次のように&#8221;placeHolder&#8221;パラメータをウィジェットに指定して使います。</p>
+<div class="highlight"><pre><span class="nx">myTextBox</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dijit</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">TextBox</span><span class="p">({</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;firstname&quot;</span><span class="p">,</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;&quot;</span> <span class="cm">/* no or empty value! */</span><span class="p">,</span>
+    <span class="nx">placeHolder</span><span class="o">:</span> <span class="s2">&quot;type in your name&quot;</span>
+<span class="p">},</span> <span class="s2">&quot;firstname&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myTextBox = new dijit.form.TextBox({
+    name: &quot;firstname&quot;,
+    value: &quot;&quot; /* no or empty value! */,
+    placeHolder: &quot;type in your name&quot;
+}, &quot;firstname&quot;);</textarea></div></div>
+<div class="section" id="id4">
+<h3><a class="toc-backref" href="#id24">入力ウィジェットの幅と高さの標準化</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>入力ウィジェット(TextBox, ValidationTextBox, ComboBox/FilteringSelect, NumberSpinner)の幅と高さが標準化されました。従来はそれらのウィジェットの幅と高さは数ピクセルずつ異なることがあったため、UIの見た目がよくありませんでした。</p>
+</div>
+</div>
+<div class="section" id="bidi">
+<h2><a class="toc-backref" href="#id25">Bidiの強化</a><a class="headerlink" href="#bidi" title="Permalink to this headline">¶</a></h2>
+<p>アプリケーションは、dir属性によりウィジェットごとにテキストの表示方向を指定できるようになりました。設定可能な値は、&#8221;ltr&#8221;(left-to-right、ほとんどの言語で使われる)または&#8221;rtl&#8221;(アラビア語とヘブライ語)です。従来はすべてのウィジェットがページに対して指定された方向と同じ方向でレンダリングされていました。ただし、この属性は次の例のようにウィジェットの作成時にのみ指定可能であることに注意してください。</p>
+<div class="highlight"><pre><span class="k">new</span> <span class="nx">dijit</span><span class="p">.</span><span class="nx">Editor</span><span class="p">({</span><span class="nx">dir</span><span class="o">:</span> <span class="s2">&quot;rtl&quot;</span><span class="p">},</span> <span class="nx">srcNodeRef</span><span class="p">);</span>
+<span class="k">new</span> <span class="nx">dijit</span><span class="p">.</span><span class="nx">Editor</span><span class="p">({</span><span class="nx">dir</span><span class="o">:</span> <span class="s2">&quot;ltr&quot;</span><span class="p">},</span> <span class="nx">srcNodeRef</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">new dijit.Editor({dir: &quot;rtl&quot;}, srcNodeRef);
+new dijit.Editor({dir: &quot;ltr&quot;}, srcNodeRef);</textarea></div><p>また、parserが改訂され、DOMノードに対するdir=rtlまたはdir=ltrの設定が(dojoTypeの指定があるかどうかにかかわらず)認識されるようになりました。次の例のように、もしノードにdirが設定されている場合は、そのノード以下に存在するすべてのウィジェットがそのdirの設定に従って作成されます。</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">dir=</span><span class="s">&quot;ltr&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">dojoType=</span><span class="s">&quot;dijit.TextBox&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">dojoType=</span><span class="s">&quot;dijit.TextBox&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">dojoType=</span><span class="s">&quot;dijit.TextBox&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">dir=</span><span class="s">&quot;rtl&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">dojoType=</span><span class="s">&quot;dijit.TextBox&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">dojoType=</span><span class="s">&quot;dijit.TextBox&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">dojoType=</span><span class="s">&quot;dijit.TextBox&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div dir=&quot;ltr&quot;&gt;
+    &lt;input dojoType=&quot;dijit.TextBox&quot;&gt;
+    &lt;input dojoType=&quot;dijit.TextBox&quot;&gt;
+    &lt;input dojoType=&quot;dijit.TextBox&quot;&gt;
+&lt;/div&gt;
+&lt;div dir=&quot;rtl&quot;&gt;
+    &lt;input dojoType=&quot;dijit.TextBox&quot;&gt;
+    &lt;input dojoType=&quot;dijit.TextBox&quot;&gt;
+    &lt;input dojoType=&quot;dijit.TextBox&quot;&gt;
+&lt;/div&gt;</textarea></div><p>parserはデフォルトのdirやlangを指定するフラグを取ることもできます。ウィジェットは(個別に指定がない限り)その値を継承します。</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">({</span><span class="nx">rootNode</span><span class="o">:</span> <span class="p">...,</span> <span class="nx">inherited</span><span class="o">:</span> <span class="p">{</span><span class="nx">dir</span><span class="o">:</span> <span class="nx">rtl</span><span class="p">,</span> <span class="nx">lang</span><span class="o">:</span> <span class="s2">&quot;ar-eg&quot;</span><span class="p">}</span> <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.parser.parse({rootNode: ..., inherited: {dir: rtl, lang: &quot;ar-eg&quot;} });</textarea></div><p>(ただし、一般的に指定の必要はありません。parserは文書のデフォルトの方向と言語を取得して使うためです。)</p>
+<p>これらの二つの変更により、異なる言語のポートレットが混在するポータルや、ヘブライ語またはアラビア語のページ内で一部だけ英語といったことを可能にします。</p>
+<p>TundraとClaroテーマはRTLとLTRの混在するページをサポートします。</p>
+<p>内部的にこの機能は、dir=rtlであるウィジェットに対しては、dijitTextBoxのようなウィジェットのベースクラスに加えて、dijitTextBoxRtl(ウィジェットのベースクラス名＋&#8221;Rtl&#8221;)のようなCSSクラスもウィジェットのルートノードに適用することで実現しています。TundraとClaroテーマは、BODYノードに対するdijitRtlクラスではなく、ウィジェットごとのCSSクラスを参照するように修正されています。</p>
+<p>最後に、ウィジェット単位でlangを指定することは(以前と同様に)可能ではありますが、dojoで使われているメッセージの翻訳(デフォルトツールチップ、ロード中メッセージ等)は依然としてページにつき一つの言語であることに注意してください。</p>
+</div>
+<div class="section" id="cssstatemixin">
+<h2><a class="toc-backref" href="#id26">_CssStateMixin</a><a class="headerlink" href="#cssstatemixin" title="Permalink to this headline">¶</a></h2>
+<p>ホバー/アクティブ/フォーカスのステートやセマンティックステート(チェック、選択、使用不可)に応じてCSSクラスをセットするための、ウィジェットに対する新しいmixinクラスです。ほとんどのdijitウィジェットはこのmixinクラスを使用するように書き換えられました。その結果、以前より多くの種類のセレクタ、例えばスライダーのハンドルがホバーされたとかインクリメントボタンが押された等に対応するCSSクラス、が利用できるようになりました。</p>
+<p>次のウィジェットに対しては、ホバー、アクティブ(mouse down)、選択(focus)の動作状態が追加されました。</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">dijit.Calendar</div>
+<div class="line">dijit.ColorPalette</div>
+<div class="line">dijit.Dialog</div>
+<div class="line">dijit.Editor</div>
+<div class="line">dijit.InlineEditBox</div>
+<div class="line">dijit.Menu</div>
+<div class="line">dijit.MenuBar</div>
+<div class="line">dijit.ProgressBar</div>
+<div class="line">dijit.TitlePane</div>
+<div class="line">dijit.Toolbar</div>
+<div class="line">dijit.Tree</div>
+<div class="line">dijit.layout.AccordionContainer</div>
+<div class="line">dijit.layout.BorderContainer</div>
+<div class="line">dijit.layout.ContentPane</div>
+<div class="line">dijit.layout.TabContainer</div>
+<div class="line">dojox.grid.EnhancedGrid</div>
+<div class="line">dojox.grid.enhancedDataGrid</div>
+</div>
+</div></blockquote>
+<p>カスタムウィジェットでこのmixinクラスを使用するには、</p>
+<ol class="arabic">
+<li><p class="first">_CssStateMixinをrequireし、ウィジェットにmix-inする。</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit._CssStateMixin&quot;</span><span class="p">);</span>
+<span class="p">...</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="nx">myWidget</span><span class="p">,</span> <span class="p">[</span> <span class="p">...,</span> <span class="nx">dijit</span><span class="p">.</span><span class="nx">_CssStateMixin</span><span class="p">],</span> <span class="p">...</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dijit._CssStateMixin&quot;);
+...
+dojo.declare(myWidget, [ ..., dijit._CssStateMixin], ...</textarea></div><p><em>すべてのフォームウィジェットは_FormWidgetを通して_CssStateMixinを既に継承していることに注意してください。それらのウィジェットはこのステップを省略できます。</em></p>
+</li>
+<li><p class="first">baseClassが未設定であれば設定します。 <em>(フォームウィジェットは既にbaseClassを設定しています)</em></p>
+<div class="highlight"><pre><span class="nx">baseClass</span><span class="o">:</span> <span class="s2">&quot;dijitSlider&quot;</span><span class="p">,</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">baseClass: &quot;dijitSlider&quot;,</textarea></div></li>
+<li><p class="first">(もしスライダーのup/downボタンのようなウィジェットのサブノードに対してCSSクラスを設定したい場合は)cssStateNodes属性を設定します。</p>
+<div class="highlight"><pre><span class="nx">cssStateNodes</span><span class="o">:</span> <span class="p">{</span>
+   <span class="nx">incrementButton</span><span class="o">:</span> <span class="s2">&quot;dijitSliderIncrementButton&quot;</span><span class="p">,</span>
+   <span class="nx">decrementButton</span><span class="o">:</span> <span class="s2">&quot;dijitSliderDecrementButton&quot;</span><span class="p">,</span>
+   <span class="nx">focusNode</span><span class="o">:</span> <span class="s2">&quot;dijitSliderThumb&quot;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">cssStateNodes: {
+   incrementButton: &quot;dijitSliderIncrementButton&quot;,
+   decrementButton: &quot;dijitSliderDecrementButton&quot;,
+   focusNode: &quot;dijitSliderThumb&quot;
+}</textarea></div><p>左側(例：incrementButton)はdojoAttachPointの名前になり、右側(&#8220;dijitSliderIncrementButton&#8221;)はノードに適用するCSSクラス名を生成するのに使われます。</p>
+</li>
+</ol>
+<p>上記のステップの後、CSSクラスがスライダーのdomNodeに対して自動的に設定されます(dijitSliderHover, dijitSliderFocused等)。また、指定されたサブノードも同様です(this.incrementButton &#8211;&gt; &#8220;dijitSliderIncrementButtonActive&#8221; CSSクラス等)。</p>
+<p>ウィジェットテンプレートで必要となる、ホバー/アクティブ/フォーカスのイベントハンドラコードは生成されませんので注意してください。</p>
+</div>
+<div class="section" id="tree">
+<h2><a class="toc-backref" href="#id27">Tree</a><a class="headerlink" href="#tree" title="Permalink to this headline">¶</a></h2>
+<p>次を実現するために、「フォーカスノード」と「選択ノード」の概念が分離されました。</p>
+<ol class="arabic simple">
+<li>ツリーは初期状態では選択ノードを持ちません。アプリケーションは、現在の選択ノードを設定するために、set(&#8220;selectedItem&#8221;, ...) あるいは set(&#8220;path&#8221;, ...)を呼び出す必要があります。ノードをクリックすれば選択されますが、ノード展開アイコン(プラス記号)では選択されません。</li>
+<li>矢印キーを使ったツリー内の移動は、(フォーカスは移動しても)選択ノードは変更しません。</li>
+</ol>
+</div>
+<div class="section" id="get-set-attr">
+<h2><a class="toc-backref" href="#id28">新しいget()/set()と廃止予定のattr()</a><a class="headerlink" href="#get-set-attr" title="Permalink to this headline">¶</a></h2>
+<p>コードをより明確にするために、Dojo 1.5では、コードによるプロパティアクセスは、以前使われていたattr()メソッド(設定と取得の両方の用途で使われていた)の代わりに、get()/set()パターンを使い始めました。</p>
+<p>これにより、Dijitのプロパティの設定の推奨される方法は、従来の次のような書き方から、</p>
+<div class="highlight"><pre><span class="nx">widget</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;property&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">);</span> <span class="c1">// old way and now deprecated for Dijits</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">widget.attr('property', 'value'); // old way and now deprecated for Dijits</textarea></div><p>次のような書き方になります。</p>
+<div class="highlight"><pre><span class="nx">widget</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;property&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">);</span> <span class="c1">// new since 1.5</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">widget.set('property', 'value'); // new since 1.5</textarea></div><p>プロパティの取得も同様にして、従来の次のような書き方から、</p>
+<div class="highlight"><pre><span class="nx">widget</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;property&#39;</span><span class="p">);</span> <span class="c1">// old way and now deprecated for Dijits</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">widget.attr('property'); // old way and now deprecated for Dijits</textarea></div><p>次のような書き方になります。</p>
+<div class="highlight"><pre><span class="nx">widget</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;property&#39;</span><span class="p">);</span> <span class="c1">// new since 1.5</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">widget.get('property'); // new since 1.5</textarea></div></div>
+</div>
+<div class="section" id="dojox">
+<h1><a class="toc-backref" href="#id29">DojoX</a><a class="headerlink" href="#dojox" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="charting">
+<h2><a class="toc-backref" href="#id30">Charting</a><a class="headerlink" href="#charting" title="Permalink to this headline">¶</a></h2>
+<p>チャーティングテーマの主な変更点:</p>
+<ul class="simple">
+<li>領域単位の(space-based)グラデーションのサポート。(訳注：プロット領域、シェイプ領域等)</li>
+<li>テーマは任意の塗りつぶし(fill)を指定可能。線形グラデーション、円形グラデーションを含む。</li>
+<li>統一されたテーマは、プロット、系列、ここのデータの値のレベルでオーバーライド。</li>
+<li>散布図(Scatter plot)は、フィールドスタイルのカラーコーディングのグラデーションを実現。</li>
+<li>独自のグラデーションやグラデーションに基づくテーマを作るための新しいユーティリティ。</li>
+<li>新しい仕組みに基づくまったく新しいテーマ群。<ul>
+<li>Julie by Julie Santilli &#8211; 32もの異なるグラデーションを備えた多目的でクリーンなテーマ</li>
+<li>Chris by Christopher Anderson &#8211; 明るく明快なプレゼンテーションですぐ使えるテーマ</li>
+<li>Tom by Tom Trenka &#8211; 暗い背景用にデザインされており、ページ内でデータが際立つテーマ</li>
+<li>PrimaryColors &#8211; 原色ベースの古いテーマを繊細なグラデーションでリフレッシュ</li>
+<li>ThreeD &#8211; PrimaryColorsを拡張し、バーとカラムベースのプロットには3Dシリンダーの見た目を追加、それ以外のプロットへは微妙なシャドウを追加。</li>
+<li>Electric by Tom Trenka &#8211; 暗い背景上で、明るいネオンカラーを表示。</li>
+<li>Charged by Tom Trenka &#8211; Electricと同じだが、明るい背景用。</li>
+<li>Renkoo by Tom Trenka &#8211; 暗い背景用の、ノスタルジックなパステルカラー。</li>
+</ul>
+</li>
+</ul>
+<p>一般的な機能強化:</p>
+<ul class="simple">
+<li>DataPresentationのいつくかの機能強化。カスタムツールチップ、凡例のレイアウト/ワードラップオプション、チャートラベルの非表示、レンダリングへのフック等を含む。</li>
+<li>バーおよびカラムベースのチャートは、値としてオブジェクトをサポート(カスタムのツールチップ、カラー、塗りつぶしを指定可能)</li>
+<li>エリア、線、マーカーに対するチャーティングのアニメーション(伸長とズーム)</li>
+<li>すべてのプロットに対して、値の欠落(null)のサポート。</li>
+<li>新しい軸のタイプを追加：不可視の軸。(軸がないのと同様に)軸の描画はされないが、軸のジオメトリを指定することにより、プロットの挙動に影響を与えることが可能。</li>
+<li>プロットと系列の軽量な再配置を追加。</li>
+<li>イベント関連の強化:<ul>
+<li>他のプロットがイベントを処理中であることを知らせるためにすべてのイベント受信者(subscriber)に&#8221;間接&#8221;イベントを送信。これによりUI更新の機会を与える。</li>
+<li>プログラム的なイベント: プロットを動的に変更するアクションを起こさせるための、既存のイベント、あるいは独自に作ったイベントの発行。</li>
+</ul>
+</li>
+<li>DataSeriesの追加: dojo.dataストアへのブリッジ。通常の系列として使用可能であり、すべてのdojo.data APIをサポート。データが更新されるとリアルタイムでチャートを更新する通知機能(notification)を含む。</li>
+<li>回転した軸ラベルの追加。</li>
+<li>多数のバグ修正。</li>
+</ul>
+</div>
+<div class="section" id="css3">
+<h2><a class="toc-backref" href="#id31">CSS3</a><a class="headerlink" href="#css3" title="Permalink to this headline">¶</a></h2>
+<p>transformおよびtransform-originプロパティをサポートするためのdojo.styleの新しい拡張。</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.html.ext-dojo.style&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;myNode&quot;</span><span class="p">,</span> <span class="s2">&quot;transformOrigin&quot;</span><span class="p">,</span> <span class="s2">&quot;0 0&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">style</span><span class="p">(</span><span class="s2">&quot;myNode&quot;</span><span class="p">,</span> <span class="s2">&quot;transform&quot;</span><span class="p">,</span> <span class="s2">&quot;skew(10deg) rotate(20deg&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.html.ext-dojo.style&quot;);
+dojo.style(&quot;myNode&quot;, &quot;transformOrigin&quot;, &quot;0 0&quot;);
+dojo.style(&quot;myNode&quot;, &quot;transform&quot;, &quot;skew(10deg) rotate(20deg&quot;);</textarea></div><p>Internet Explorer 5.5+, Safari 3.1+, Firefox 3.5+, Chrome/Chromium, Opera 10.50+がサポートされています。</p>
+</div>
+<div class="section" id="dnd">
+<h2><a class="toc-backref" href="#id32">DnD</a><a class="headerlink" href="#dnd" title="Permalink to this headline">¶</a></h2>
+<p>dojo.dnd関連の向上のための新しいサブプロジェクト。次を導入。</p>
+<ul class="simple">
+<li>バウンディングボックスを使用したセレクション</li>
+<li>プログラムによるセレクション / DnDアイテムのセレクション解除</li>
+</ul>
+</div>
+<div class="section" id="editor">
+<h2><a class="toc-backref" href="#id33">Editor</a><a class="headerlink" href="#editor" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Smileyプラグイン (1.4にも存在したが動作していませんでした。今は動作します。)</li>
+<li><a class="reference internal" href="../dojox/editor/plugins/CollapsibleToolbar.html#dojox-editor-plugins-collapsibletoolbar"><span>dojox.editor.plugins.CollapsibleToolbar</span></a> &#8211; グリッドのヘッダーを変更し、折り畳み可能なツールバーに変換するプラグインです。このプラグインはよくテストされており、dojoがサポートするすべてのブラウザ上で動作することがわかっています。</li>
+<li><a class="reference internal" href="../dojox/editor/plugins/Blockquote.html#dojox-editor-plugins-blockquote"><span>dojox.editor.plugins.Blockquote</span></a> &#8211; ツールバーに引用(blockquote)ボタンを追加するプラグインです。ブロック内のテキストを&lt;blockquote&gt;タグで囲んだり、&lt;blockquote&gt;タグを外したりします。また、広範囲の選択領域に対しても適用可能で、テキストのブロックやインライン要素のそれぞれをblockquoteで囲みます。このプラグインはよくテストされており、dojoがサポートするすべてのブラウザ上で動作することがわかっています。</li>
+<li><a class="reference internal" href="../dojox/editor/plugins/PasteFromWord.html#dojox-editor-plugins-pastefromword"><span>dojox.editor.plugins.PasteFromWord</span></a> &#8211; ツールバーに&#8217;paste from word&#8217;アイコンを追加するプラグインです。Microsoft Wordあるいは類似のプログラムの内容をペースト可能なダイアログを開き、ペーストされた入力に対してフィルターを実行し、エディタにとってはやっかいな余計なHTMLを取り除き、きれいなHTMLにします。</li>
+<li><a class="reference internal" href="../dojox/editor/plugins/InsertAnchor.html#dojox-editor-plugins-insertanchor"><span>dojox.editor.plugins.InsertAnchor</span></a> &#8211; ツールバーに&#8217;insert anchor&#8217;アイコンを追加するプラグインです。アンカー(anchor)は&lt;a&gt;タグの特別な形で、文書内の特定の段落にリンクする場合に使われます。このプラグインは、ページ内のどこがアンカーであるかがわかるように、CSSを使って可視化します。また、ダブルクリックによりアンカーの編集を可能にします。</li>
+<li><a class="reference internal" href="../dojox/editor/plugins/FindReplace.html#dojox-editor-plugins-findreplace"><span>dojox.editor.plugins.FindReplace</span></a> &#8211; このプラグインは、UXチームからのフィードバックに基づいて、レイアウトとキーボード操作を向上させるための更新がされました。機能的には同じです。</li>
+<li><a class="reference internal" href="../dojox/editor/plugins/TextColor.html#dojox-editor-plugins-textcolor"><span>dojox.editor.plugins.TextColor</span></a> - dijit.ColorPaletteではなくdojox.widget.ColorPickerを使ってテキスト色および背景色の選択を実装するプラグインです。</li>
+<li><a class="reference internal" href="../dojox/editor/plugins/NormalizeStyle.html#dojox-editor-plugins-normalizestyle"><span>dojox.editor.plugins.NormalizeStyle</span></a> &#8211; 共通フォーマットオプション(訳注：太字、イタリック等)に対し、CSSスタイル(&lt;span&gt;タグのstyle属性を使用)またはセマンティック(&lt;b&gt;, &lt;i&gt;等のタグを使用)のどちらかにエディタの内容を双方向に変換するフィルター(前処理および後処理)を追加するUIのない実験的なプラグインです。出力に使うモードは設定可能です。入力に使うモードは、スタイルに関するブラウザのネイティブコマンドがうまく動作するように適切なモードが決定されます。</li>
+<li><a class="reference internal" href="../dojox/editor/plugins/StatusBar.html#dojox-editor-plugins-statusbar"><span>dojox.editor.plugins.StatusBar</span></a> &#8211;  ユーザーがエディタにステータスを表示させることを可能にするエディタ下部のバーを追加するプラグインです。メッセージの表示は、editor.statusBar属性に直接値をセットするか、pub/subを使って行います。また、エディタがリサイズ可能なコンテントペイン内にない場合に使えるようにオプショナルのリサイズハンドルを提供します。</li>
+</ul>
+</div>
+<div class="section" id="geo">
+<h2><a class="toc-backref" href="#id34">Geo</a><a class="headerlink" href="#geo" title="Permalink to this headline">¶</a></h2>
+<p>地理関連コードの新しいサブプロジェクト。最初のリリースでは地図ベースのチャートを提供します。サンプルとしてアメリカの州の地図を同梱します。</p>
+</div>
+<div class="section" id="gfx">
+<h2><a class="toc-backref" href="#id35">GFX</a><a class="headerlink" href="#gfx" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>VMLレンダラはSVGの線形グラデーションをシミュレートするようになりました。</li>
+<li>SVGレンダラのオプションとしてSVGWeb(Flash上のSVG)がサポートされます。IE6-IE8をサポートしなければならないがVMLは使いたくない場合に便利です。</li>
+<li>SVGオペレーションのバッチ処理のサポートにより、大きな絵の描画速度が向上します。</li>
+<li>多数のバグが修正されました。</li>
+</ul>
+</div>
+<div class="section" id="lang">
+<h2><a class="toc-backref" href="#id36">Lang</a><a class="headerlink" href="#lang" title="Permalink to this headline">¶</a></h2>
+<p>新しいモジュールを追加: <a class="reference internal" href="../dojox/lang/async.html#dojox-lang-async"><span>dojox.lang.async</span></a>. 非同期オペレーション(dojo.Deferredを返すもの)の順序を調整します。次の調整がサポートされます。</p>
+<ul class="simple">
+<li>Sequentially(順次): 直前のオペレーションが成功裏に終了した直後に次のオペレーションを開始します。</li>
+<li>In parallel(並列): すべてのオペレーションを同時に開始し、すべてが終了するのを待ちます。</li>
+<li>Competitively(競争): すべてのオペレーションを並列に開始し、最初に終了するオペレーションを待ちます。次に残りのオペレーションは取り消します。</li>
+<li>Selectively(選択): switch()文をエミュレートします。 &#8212; オペレーションを非同期に実行し、その結果に応じて選択肢の配列の中から次に実行するオペレーションを選択します。</li>
+<li>Selectively II(選択II): if()文をエミュレートします。 &#8212; オペレーションを非同期に実行し、その結果に応じて二つの選択肢の中からオペレーションを選択し、実行します。</li>
+<li>Continuously(連続): while()ループをエミュレートします。 &#8212; オペレーションを非同期に実行し、その結果に応じて別のオペレーションを非同期に実行し、ループを繰り返すか、あるいはループを抜けます。</li>
+</ul>
+<p>共通の非同期操作(イベント、トピック、タイマー)に対してはアダプタモジュールが提供されます。</p>
+<p>このモジュールを使うことで、高度で複雑な非同期オペレーションを、シンプルな構成要素を使って実現することが可能になります。</p>
+</div>
+<div class="section" id="layout">
+<h2><a class="toc-backref" href="#id37">Layout</a><a class="headerlink" href="#layout" title="Permalink to this headline">¶</a></h2>
+<p>GridContainerは <a class="reference internal" href="#mdnd">MDnD</a> を使って書き直され、GridContainerLiteが導入されました。GridContainerの使い方は、acceptTypes属性の変更のみで、概ねこれまでと同じです。従来のacceptTypes属性は、例えば&#8217;dojox.widget.Portlet,dijit.layout.ContentPane&#8217;のようなコンマ区切りのリストを取りました。それは任意の文字列を取るように変更されました。その文字列は、子ウィジェットの&#8217;dndType&#8217;までマッチします。例：GridContainerにおいてacceptTypes=&#8221;Portlet,SomeCustomWidget&#8221;、子ウィジェットにおいてdndType=&#8221;Portlet&#8221; or dndType=&#8221;SomeCustomWidget&#8221;</p>
+</div>
+<div class="section" id="mdnd">
+<h2><a class="toc-backref" href="#id38">MDnD</a><a class="headerlink" href="#mdnd" title="Permalink to this headline">¶</a></h2>
+<p>dojox.mdndは、dojo.dndと似たインターフェイスを使ってMoveable DnDを実現します。アバターを使うことなしにコンテナ間でノードの移動ができます。この新しい仕組みは、パネルベースのユーザーインターフェイスを実現する場合に特に便利です。</p>
+</div>
+<div class="section" id="mobile">
+<h2><a class="toc-backref" href="#id39">Mobile</a><a class="headerlink" href="#mobile" title="Permalink to this headline">¶</a></h2>
+<p>dojox.mobileはモバイル向けに特別にデザインされた軽量ウィジェットの集まりです。iPhoneとAndroid用のテーマが提供されます。ボタン、スイッチ、リスト、タブコンテナ等がサポートされています。</p>
+</div>
+</div>
+<div class="section" id="util">
+<h1><a class="toc-backref" href="#id40">Util</a><a class="headerlink" href="#util" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id5">
+<h2><a class="toc-backref" href="#id41">ビルドシステム/ビルドスクリプト</a><a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>copyTestsオプションの初期値がtrueからfalseに変更になりました。この変更は、ビルド結果にテストファイルをコピーする可能性を減らし、結果として余計なファイルや無用のセキュリティ上の懸案を減らすためになされました。</li>
+<li>cldrスクリプトを更新し、CLDR version 1.8を使うようになりました。(詳細はdojo.cldrを参照)</li>
+</ul>
+</div>
+</div>
+<div class="section" id="id6">
+<h1><a class="toc-backref" href="#id42">マイグレーション</a><a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h1>
+<p>通例どおり、dojoは前のバージョン1.xとAPIレベルで互換性があります。しかしながら、CSSその他いくつか変更があります。</p>
+<div class="section" id="get-set">
+<h2><a class="toc-backref" href="#id43">get/set</a><a class="headerlink" href="#get-set" title="Permalink to this headline">¶</a></h2>
+<p>attr()はget()とset()に取って代わり、廃止の方向です。古いattr()はまだサポートされているため(廃止予定の警告は出ます)、古いコードは引き続き動作するはずです。</p>
+<p>しかしながら、もしあなたのクラスが独自のget()/set()メソッドを定義している場合は、それらは_Widgetあるいはdojo._Statefulの派生クラスの持つget()/set()と競合してしまうでしょう。</p>
+<p>また、attr()へ接続するdojo.connect()呼び出しは、set()への接続に変更すべきです。</p>
+</div>
+<div class="section" id="dijit-popup">
+<h2><a class="toc-backref" href="#id44">dijit.popup</a><a class="headerlink" href="#dijit-popup" title="Permalink to this headline">¶</a></h2>
+<p>Dijit.popupはショートカットしてはいけません。次のコードは動作します。</p>
+<div class="highlight"><pre><span class="nx">dijit</span><span class="p">.</span><span class="nx">popup</span><span class="p">.</span><span class="nx">open</span><span class="p">({...});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dijit.popup.open({...});</textarea></div><p>しかし、次のコードは動作しません。</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">open</span> <span class="o">=</span> <span class="nx">dijit</span><span class="p">.</span><span class="nx">popup</span><span class="p">.</span><span class="nx">open</span><span class="p">;</span>
+<span class="nx">open</span><span class="p">({...});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var open = dijit.popup.open;
+open({...});</textarea></div></div>
+<div class="section" id="container-getchildren">
+<h2><a class="toc-backref" href="#id45">_Container.getChildren()</a><a class="headerlink" href="#container-getchildren" title="Permalink to this headline">¶</a></h2>
+<p>次のようなコードは、</p>
+<div class="highlight"><pre><span class="nx">myWidget</span><span class="p">.</span><span class="nx">getChildren</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(...);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myWidget.getChildren().forEach(...);</textarea></div><p>次のように書き換える必要があります。</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">myWidget</span><span class="p">.</span><span class="nx">getChildren</span><span class="p">(),</span> <span class="p">...);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.forEach(myWidget.getChildren(), ...);</textarea></div><p>getChildren()は、これまで常にドキュメントでは単純な普通の配列を返すとされてきましたが、バージョン1.4では実際にはforEach()やfilter()といったメソッドを持つ配列が返されていたため、ユーザーコードの中にはそれに依存した書き方をしている可能性があります。</p>
+</div>
+<div class="section" id="id7">
+<h2><a class="toc-backref" href="#id46">フォームウィジェット</a><a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p>もし_FormWidgetを拡張するカスタムウィジェットを持っていて、テンプレートで${nameAttrSetting}を参照している場合は、${!nameAttrSetting}への参照に変更する必要があります。これは、特殊文字のエスケープの問題に対処するためです。</p>
+</div>
+<div class="section" id="textbox">
+<h2><a class="toc-backref" href="#id47">TextBox</a><a class="headerlink" href="#textbox" title="Permalink to this headline">¶</a></h2>
+<p>TextBoxテンプレートは、&lt;input&gt;が&lt;div&gt;に囲まれているValidationTextBoxと同様の構造になるよう変更されました。</p>
+<p>id=fooのTextBoxに対し、&lt;input&gt;に対してスタイルを適用したい場合は、以前のように#fooに対してルールを記述します。</p>
+<div class="highlight"><pre><span class="nf">#foo</span> <span class="p">{</span> <span class="k">font</span><span class="o">:</span> <span class="o">...</span> <span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">#foo { font: ... }</textarea></div><p>外側のノードに対してスタイルを適用したい場合は、#widget_fooに対してルールを記述します。</p>
+<div class="highlight"><pre><span class="nf">#widget_foo</span> <span class="p">{</span> <span class="k">margin</span><span class="o">:</span> <span class="m">2em</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">#widget_foo { margin: 2em; }</textarea></div><p>詳細は <a class="reference external" href="http://bugs.dojotoolkit.org/ticket/11133">#11133</a> を参照してください。(英語)</p>
+</div>
+<div class="section" id="dijit-css">
+<h2><a class="toc-backref" href="#id48">Dijit CSS</a><a class="headerlink" href="#dijit-css" title="Permalink to this headline">¶</a></h2>
+<p>もしdijitウィジェット用のテンプレートを修正したものを持っている場合、おそらく削除すべきonmouseenter/onmouseleave/onfocus/onblurハンドラがあることでしょう。特に、_FormWidgetから_onMouse()が削除されているため、カスタムテンプレートからその呼び出しがある場合は削除する必要があります。</p>
+<p>さらに、もしカスタムCSSルールを持っている場合は、ネストされたボタンを持つフォームウィジェットのクラスにいつくかの変更があります。詳細は <a class="reference external" href="http://bugs.dojotoolkit.org/changeset/21117">http://bugs.dojotoolkit.org/changeset/21117</a> (英語)</p>
+<p>あなたのカスタムCSSルールのクラス名を更新する場合は、util/migrationの中にあるdijitCss14to15.sedスクリプトを実行してください。   (Windowsの場合はcygwinまたは何かのunixユーティリティが必要です。):</p>
+<div class="highlight-sh"><div class="highlight"><pre>sed -f dojoPath/util/migration/dijitCss14to15.sed -i .bak <span class="k">$(</span>find myCssDirectoryPath -name <span class="s1">&#39;*.css&#39;</span> -print<span class="k">)</span>
+</pre></div>
+</div>
+<p>あるいは、次のテーブルに従って手作業で更新することもできます。</p>
+<p>Spinner:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="41%" />
+<col width="10%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Old</th>
+<th class="head">New</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.dijitSpinnerUpArrowHover .dijitUpArrowButton</td>
+<td>.dijitSpinner .dijitUpArrowButtonHover</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>.dijitSpinnerUpArrowActive .dijitUpArrowButton</td>
+<td>.dijitSpinner .dijitUpArrowButtonActive</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>.dijitSpinnerDownArrowHover .dijitDownArrowButton</td>
+<td>.dijitSpinner .dijitDownArrowButtonHover</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>.dijitSpinnerDownArrowActive .dijitDownArrowButton</td>
+<td>.dijitSpinner .dijitDownArrowButtonActive</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>ComboButton:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="41%" />
+<col width="10%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Old</th>
+<th class="head">New</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.dijitComboButtonHover .dijitButtonContents</td>
+<td>.dijitComboButton .dijitButtonContentsHover</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>.dijitComboButtonActive .dijitButtonContents</td>
+<td>.dijitComboButton .dijitButtonContentsActive</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>.dijitComboButtonDownArrowHover .dijitDownArrowButton</td>
+<td>.dijitComboButton .dijitDownArrowButtonHover</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>.dijitComboButtonDownArrowActive .dijitDownArrowButton</td>
+<td>.dijitComboButton .dijitDownArrowButtonActive</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>その他、次のように、名前を標準化するためにCSSセレクタへの変更が行われました。</p>
+<p>Accordion:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="36%" />
+<col width="30%" />
+<col width="35%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Old</th>
+<th class="head">New</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.dijitAccordionFocused</td>
+<td>.dijitAccordionTitleFocused</td>
+<td>The accordion title is focused, not the pane contents</td>
+</tr>
+<tr class="row-odd"><td>.dijitAccordionTitle-hover</td>
+<td>.dijitAccordionTitleHover</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>.dijitAccordionTitle-selected</td>
+<td>.dijitAccordionTitleSelected</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>さらに、TitlePaneと同じようにタイトルとコンテンツを保持するdijitInnerAccordionContainer &lt;div&gt;によって、各ペインが取り囲まれるように、アコーディオンのレイアウトが変更されました。もしAccordionContainerをサブクラスしたり、AccordionContainerの内部実装に依存したことを行っている場合は、コードを修正する必要があるかもしれません。</p>
+<p>TabContainer:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="28%" />
+<col width="39%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Old</th>
+<th class="head">New</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.dijitTab .closeButton</td>
+<td>.dijitTabCloseButton</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>.dijitTab .closeButton-hover</td>
+<td>.dijitTabCloseButtonHover</td>
+<td>close button for individual tab</td>
+</tr>
+<tr class="row-even"><td>.dijitTabBtnDisabled</td>
+<td>.dijitTabDisabled</td>
+<td>left and right scroll buttons on tab strip</td>
+</tr>
+<tr class="row-odd"><td>.dijitTab .closeImage</td>
+<td>.dijitTabCloseIcon</td>
+<td>icon inside of close button</td>
+</tr>
+<tr class="row-even"><td>.dijitTab .closeText</td>
+<td>.dijitTabCloseText</td>
+<td>text inside of close button, for a11y</td>
+</tr>
+<tr class="row-odd"><td>.tabStripButton img</td>
+<td>.dijitTabStripIcon</td>
+<td>class for tabstrip's scroll-left, scroll-right, and menu icons</td>
+</tr>
+<tr class="row-even"><td>.tabStripMenuButton img</td>
+<td>.dijitTabStripMenuIcon</td>
+<td>icon to show menu (listing all tabs)</td>
+</tr>
+<tr class="row-odd"><td>.tabStripSlideButtonLeft img</td>
+<td>.dijitTabStripSlideLeftIcon</td>
+<td>icon to scroll tabs to left</td>
+</tr>
+<tr class="row-even"><td>.tabStripSlideButtonRight img</td>
+<td>.dijitTabStripSlideRightIcon</td>
+<td>icon to scroll tabs to right</td>
+</tr>
+</tbody>
+</table>
+<p>Dialog:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="41%" />
+<col width="10%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Old</th>
+<th class="head">New</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.dijitDialogCloseIcon-hover</td>
+<td>.dijitDialogCloseIconHover</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>Tree:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="42%" />
+<col width="35%" />
+<col width="24%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Old</th>
+<th class="head">New</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.dijitTreeNodeHover</td>
+<td>.dijitTreeRowHover</td>
+<td>on the TreeNode.rowNode domNode</td>
+</tr>
+<tr class="row-odd"><td>.dijitTreeNodeSelected</td>
+<td>.dijitTreeRowSelected</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>TitlePane:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="41%" />
+<col width="10%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Old</th>
+<th class="head">New</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.dijitTitlePaneTitle-hover</td>
+<td>.dijitTitlePaneTitleHover</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<p>InlineEditBox:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="28%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Old</th>
+<th class="head">New</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.dijitInlineEditBoxDisplayMode-hover</td>
+<td>.dijitInlineEditBoxDisplayModeHover</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>.dijitInlineEditBoxDisplayMode-disabled</td>
+<td>.dijitInlineEditBoxDisplayModeDisabled</td>
+<td>equivalent to a plain &lt;div&gt; or &lt;span&gt;, clicking has no effect</td>
+</tr>
+</tbody>
+</table>
+<p>Editor:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="46%" />
+<col width="38%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Old</th>
+<th class="head">New</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>.RichTextEditable</td>
+<td>.dijitEditor</td>
+<td>editor's root node</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

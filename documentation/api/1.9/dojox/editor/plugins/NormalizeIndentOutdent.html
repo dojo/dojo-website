@@ -1,0 +1,906 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojox/editor/plugins/NormalizeIndentOutdent" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/editor/plugins/NormalizeIndentOutdent<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-mixins">
+  <label>Extends</label><a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a>
+</div>
+<div class="jsdoc-full-summary"><p>This plugin provides improved indent and outdent handling to
+the editor.  It tries to generate valid HTML, as well as be
+consistent about how it indents and outdents lists and blocks/elements.</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new NormalizeIndentOutdent<span class="parameters">(args);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.9/dijit/_editor/_Plugin">dijit/_editor/_Plugin</a></div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">args</td>
+    <td class="jsdoc-param-type">Object</td>
+    <td class="jsdoc-param-description">
+      <div><em>Optional</em></div><p>Initial settings for any of the attributes.</p>
+
+    </td>
+  </tr>
+</table>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="objectIcon public inherited"><a href="1_9dojox_editor_plugins_NormalizeIndentOutdent_button">button</a>
+        </li><span>Pointer to dijit/form/Button or other widget (ex: dijit/form/FilteringSelect)
+that is added to the toolbar to control this plugin.<span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span></span>
+        <li class="stringIcon public inherited"><a href="1_9dojox_editor_plugins_NormalizeIndentOutdent_command">command</a>
+        </li><span>String like &amp;quot;insertUnorderedList&amp;quot;, &amp;quot;outdent&amp;quot;, &amp;quot;justifyCenter&amp;quot;, etc. that represents an editor command.<span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span></span>
+        <li class="booleanIcon public inherited"><a href="1_9dojox_editor_plugins_NormalizeIndentOutdent_disabled">disabled</a>
+        </li><span>Flag to indicate if this plugin has been disabled and should do nothing
+helps control button state, among other things.<span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span></span>
+        <li class="objectIcon public inherited"><a href="1_9dojox_editor_plugins_NormalizeIndentOutdent_editor">editor</a>
+        </li><span>Points to the parent editor<span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span></span>
+        <li class="stringIcon public inherited"><a href="1_9dojox_editor_plugins_NormalizeIndentOutdent_iconClassPrefix">iconClassPrefix</a>
+        </li><span>The CSS class name for the button node is formed from iconClassPrefix and command<span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span></span>
+        <li class="numberIcon public"><a href="1_9dojox_editor_plugins_NormalizeIndentOutdent_indentBy">indentBy</a>
+        </li><span>The amount to indent by.</span>
+        <li class="stringIcon public"><a href="1_9dojox_editor_plugins_NormalizeIndentOutdent_indentUnits">indentUnits</a>
+        </li><span>The units to apply to the indent amount.</span>
+        <li class="booleanIcon public inherited"><a href="1_9dojox_editor_plugins_NormalizeIndentOutdent_useDefaultCommand">useDefaultCommand</a>
+        </li><span>If true, this plugin executes by calling Editor.execCommand() with the argument specified in command.<span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span></span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__convertIndent">_convertIndent</a><span class="parameters"></span><span class="parameters">(indent) </span><span>Function to convert the current indent style to
+the units we&#39;re using by some heuristic.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__getAttrNames">_getAttrNames</a><span class="parameters"></span><span class="parameters">(name) </span><span>Helper function for get() and set().</span><span title="private" class="jsdoc-private"></span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__getTagName">_getTagName</a><span class="parameters"></span><span class="parameters">(node) </span><span>Internal function to get the tag name of an element
+if any.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__indentElement">_indentElement</a><span class="parameters"></span><span class="parameters">(node) </span><span>Function to indent a block type tag.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__indentImpl">_indentImpl</a><span class="parameters"></span><span class="parameters">(html) </span><span>Improved implementation of indent, generates correct indent for
+ul/ol</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__indentList">_indentList</a><span class="parameters"></span><span class="parameters">(listItem) </span><span>Internal function to handle indenting a list element.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__initButton">_initButton</a><span class="parameters"></span><span class="parameters">() </span><span>Initialize the button or other widget that will control this plugin.</span><span title="private" class="jsdoc-private"></span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__isEmpty">_isEmpty</a><span class="parameters"></span><span class="parameters">(node) </span><span>Internal function to determine if a node is &#39;empty&#39;
+Eg, contains only blank text.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__isIndentableElement">_isIndentableElement</a><span class="parameters"></span><span class="parameters">(tag) </span><span>Internal function to detect what element types
+are indent-controllable by us.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__isInlineFormat">_isInlineFormat</a><span class="parameters"></span><span class="parameters">(tag) </span><span>Function to determine if the current tag is an inline
+element that does formatting, as we don&#39;t want to
+break/indent around it, as it can screw up text.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__isLtr">_isLtr</a><span class="parameters"></span><span class="parameters">() </span><span>Function to detect if the editor body is in RTL or LTR.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__isRootInline">_isRootInline</a><span class="parameters"></span><span class="parameters">(node) </span><span>This functions tests whether an indicated node is in root as inline
+or rooted inline elements in the page.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__isTextElement">_isTextElement</a><span class="parameters"></span><span class="parameters">(node) </span><span>Helper function to check for text nodes.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__outdentElement">_outdentElement</a><span class="parameters"></span><span class="parameters">(node) </span><span>Function to outdent a block type tag.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__outdentImpl">_outdentImpl</a><span class="parameters"></span><span class="parameters">(html) </span><span>Improved implementation of outdent, generates correct indent for
+ul/ol and other elements.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__outdentList">_outdentList</a><span class="parameters"></span><span class="parameters">(listItem) </span><span>Internal function to handle outdenting a list element.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__queryCommandEnabled">_queryCommandEnabled</a><span class="parameters"></span><span class="parameters">(command) </span><span>An over-ride for the editor&#39;s query command enabled,
+so that we can prevent indents, etc, on bad elements
+or positions (like first element in a list).</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__set">_set</a><span class="parameters"></span><span class="parameters">(name,value) </span><span>Helper function to set new value for specified attribute</span><span title="private" class="jsdoc-private"></span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon private inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent__setDisabledAttr">_setDisabledAttr</a><span class="parameters"></span><span class="parameters">(disabled) </span><span>Function to set the plugin state and call updateState to make sure the
+button is updated appropriately.</span><span title="private" class="jsdoc-private"></span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent_buttonClass">buttonClass</a><span class="parameters"></span><span class="parameters">() </span><span>Class of widget (ex: dijit.form.Button or dijit/form/FilteringSelect)
+that is added to the toolbar to control this plugin.</span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent_connect">connect</a><span class="parameters"></span><span class="parameters">(o,f,tf) </span><span>Deprecated.</span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent_destroy">destroy</a><span class="parameters"></span><span class="parameters">() </span><span></span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent_get">get</a><span class="parameters"></span><span class="parameters">(name) </span><span>Get a property from a plugin.</span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon private inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent_getLabel">getLabel</a><span class="parameters"></span><span class="parameters">(key) </span><span>Returns the label to use for the button</span><span title="private" class="jsdoc-private"></span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent_own">own</a><span class="parameters"></span><span class="parameters">() </span><span>Track specified handles and remove/destroy them when this instance is destroyed, unless they were
+already removed/destroyed manually.</span><span title="inherited from dijit/Destroyable" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent_set">set</a><span class="parameters"></span><span class="parameters">(name,value) </span><span>Set a property on a plugin</span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent_setEditor">setEditor</a><span class="parameters"></span><span class="parameters">(editor) </span><span>Over-ride for the setting of the editor.</span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent_setToolbar">setToolbar</a><span class="parameters"></span><span class="parameters">(toolbar) </span><span>Tell the plugin to add it&#39;s controller widget (often a button)
+to the toolbar.</span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_editor_plugins_NormalizeIndentOutdent_updateState">updateState</a><span class="parameters"></span><span class="parameters">() </span><span>Change state of the plugin to respond to events in the editor.</span><span title="inherited from dijit/_editor/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_button"></a><span class="objectIcon">button</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Pointer to <a class="jsdoc-link" href="/documentation/api/1.9/dijit/form/Button">dijit/form/Button</a> or other widget (ex: <a class="jsdoc-link" href="/documentation/api/1.9/dijit/form/FilteringSelect">dijit/form/FilteringSelect</a>)
+that is added to the toolbar to control this plugin.
+If not specified, will be created on initialization according to <code>buttonClass</code></p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_command"></a><span class="stringIcon">command</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>String like &quot;insertUnorderedList&quot;, &quot;outdent&quot;, &quot;justifyCenter&quot;, etc. that represents an editor command.
+Passed to editor.execCommand() if <code>useDefaultCommand</code> is true.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_disabled"></a><span class="booleanIcon">disabled</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Flag to indicate if this plugin has been disabled and should do nothing
+helps control button state, among other things.  Set via the setter api.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_editor"></a><span class="objectIcon">editor</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Points to the parent editor</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_iconClassPrefix"></a><span class="stringIcon">iconClassPrefix</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>The CSS class name for the button node is formed from <code>iconClassPrefix</code> and <code>command</code></p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_indentBy"></a><span class="numberIcon">indentBy</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-summary"><p>The amount to indent by.  Valid values are 1+.  This is combined with
+the indentUnits parameter to determine how much to indent or outdent
+by for regular text.  It does not affect lists.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_indentUnits"></a><span class="stringIcon">indentUnits</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-summary"><p>The units to apply to the indent amount.  Usually &#39;px&#39;, but can also
+be em.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_useDefaultCommand"></a><span class="booleanIcon">useDefaultCommand</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>If true, this plugin executes by calling Editor.execCommand() with the argument specified in <code>command</code>.</p>
+</div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__convertIndent"></a><span class="functionIcon">_convertIndent</span><span class="parameters">(indent)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Function to convert the current indent style to
+the units we&#39;re using by some heuristic.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">indent</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The indent amount to convert.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">number</span></div>
+      </div>
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__getAttrNames"></a><span class="functionIcon">_getAttrNames</span><span class="parameters">(name)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Helper function for get() and set().
+Caches attribute name values so we don&#39;t do the string ops every time.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined | object</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__getTagName"></a><span class="functionIcon">_getTagName</span><span class="parameters">(node)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal function to get the tag name of an element
+if any.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The node to look at.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">string</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__indentElement"></a><span class="functionIcon">_indentElement</span><span class="parameters">(node)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Function to indent a block type tag.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The node who&#39;s content to indent.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__indentImpl"></a><span class="functionIcon">_indentImpl</span><span class="parameters">(html)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Improved implementation of indent, generates correct indent for
+ul/ol</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">html</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__indentList"></a><span class="functionIcon">_indentList</span><span class="parameters">(listItem)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal function to handle indenting a list element.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">listItem</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The list item to indent.</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__initButton"></a><span class="functionIcon">_initButton</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Initialize the button or other widget that will control this plugin.
+This code only works for plugins controlling built-in commands in the editor.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__isEmpty"></a><span class="functionIcon">_isEmpty</span><span class="parameters">(node)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal function to determine if a node is &#39;empty&#39;
+Eg, contains only blank text.  Used to determine if
+an empty list element should be removed or not.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The node to check.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__isIndentableElement"></a><span class="functionIcon">_isIndentableElement</span><span class="parameters">(tag)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal function to detect what element types
+are indent-controllable by us.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">tag</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The tag to check</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__isInlineFormat"></a><span class="functionIcon">_isInlineFormat</span><span class="parameters">(tag)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Function to determine if the current tag is an inline
+element that does formatting, as we don&#39;t want to
+break/indent around it, as it can screw up text.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">tag</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The tag to examine</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__isLtr"></a><span class="functionIcon">_isLtr</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Function to detect if the editor body is in RTL or LTR.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__isRootInline"></a><span class="functionIcon">_isRootInline</span><span class="parameters">(node)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>This functions tests whether an indicated node is in root as inline
+or rooted inline elements in the page.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The node to start at.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__isTextElement"></a><span class="functionIcon">_isTextElement</span><span class="parameters">(node)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Helper function to check for text nodes.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The node to check.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__outdentElement"></a><span class="functionIcon">_outdentElement</span><span class="parameters">(node)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Function to outdent a block type tag.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The node who&#39;s content to outdent.</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__outdentImpl"></a><span class="functionIcon">_outdentImpl</span><span class="parameters">(html)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Improved implementation of outdent, generates correct indent for
+ul/ol and other elements.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">html</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined | null</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__outdentList"></a><span class="functionIcon">_outdentList</span><span class="parameters">(listItem)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal function to handle outdenting a list element.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">listItem</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The list item to outdent.</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__queryCommandEnabled"></a><span class="functionIcon">_queryCommandEnabled</span><span class="parameters">(command)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>An over-ride for the editor&#39;s query command enabled,
+so that we can prevent indents, etc, on bad elements
+or positions (like first element in a list).</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">command</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The command passed in to check enablement.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean | undefined</span></div>
+      </div>
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__set"></a><span class="functionIcon">_set</span><span class="parameters">(name,value)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Helper function to set new value for specified attribute</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">anything</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent__setDisabledAttr"></a><span class="functionIcon">_setDisabledAttr</span><span class="parameters">(disabled)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Function to set the plugin state and call updateState to make sure the
+button is updated appropriately.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">disabled</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_buttonClass"></a><span class="functionIcon">buttonClass</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Class of widget (ex: dijit.form.Button or dijit/form/FilteringSelect)
+that is added to the toolbar to control this plugin.
+This is used to instantiate the button, unless <code>button</code> itself is specified directly.</p>
+</div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_connect"></a><span class="functionIcon">connect</span><span class="parameters">(o,f,tf)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Deprecated.  Use this.own() with dojo/on or dojo/aspect.instead.
+
+</p>
+<p>Make a connect.connect() that is automatically disconnected when this plugin is destroyed.
+Similar to <code>dijit/_Widget.connect()</code>.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">o</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">f</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">tf</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_destroy"></a><span class="functionIcon">destroy</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_get"></a><span class="functionIcon">get</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Get a property from a plugin.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Get a named property from a plugin. The property may
+potentially be retrieved via a getter method. If no getter is defined, this
+just retrieves the object&#39;s property.
+For example, if the plugin has a properties &quot;foo&quot;
+and &quot;bar&quot; and a method named &quot;_getFooAttr&quot;, calling:
+
+</p>
+<pre><code>plugin.get(&quot;foo&quot;);</pre></code>
+<p>would be equivalent to writing:
+
+
+</p>
+<pre><code>plugin._getFooAttr();</pre></code>
+<p>and:
+
+
+</p>
+<pre><code>plugin.get(&quot;bar&quot;);</pre></code>
+<p>would be equivalent to writing:
+
+
+</p>
+<pre><code>plugin.bar;</pre></code>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The property to get.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_getLabel"></a><span class="functionIcon">getLabel</span><span class="parameters">(key)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns the label to use for the button</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">key</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_own"></a><span class="functionIcon">own</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/Destroyable" class="jsdoc-link">dijit/Destroyable</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Track specified handles and remove/destroy them when this instance is destroyed, unless they were
+already removed/destroyed manually.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">any | undefined</span></div>
+        <div class="jsdoc-return-description"><p>The array of specified handles, so you can do for example:
+
+</p>
+<pre><code>var handle = this.own(on(...))[0];</code></pre>
+</div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_set"></a><span class="functionIcon">set</span><span class="parameters">(name,value)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Set a property on a plugin</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Sets named properties on a plugin which may potentially be handled by a
+setter in the plugin.
+For example, if the plugin has a properties &quot;foo&quot;
+and &quot;bar&quot; and a method named &quot;_setFooAttr&quot;, calling:
+
+</p>
+<pre><code>plugin.set(&quot;foo&quot;, &quot;Howdy!&quot;);</pre></code>
+<p>would be equivalent to writing:
+
+
+</p>
+<pre><code>plugin._setFooAttr(&quot;Howdy!&quot;);</pre></code>
+<p>and:
+
+
+</p>
+<pre><code>plugin.set(&quot;bar&quot;, 3);</pre></code>
+<p>would be equivalent to writing:
+
+
+</p>
+<pre><code>plugin.bar = 3;</pre></code>
+<p>set() may also be called with a hash of name/value pairs, ex:
+
+</p>
+<pre><code>plugin.set({
+    foo: &quot;Howdy&quot;,
+    bar: 3
+})</pre></code>
+<p>This is equivalent to calling set(foo, &quot;Howdy&quot;) and set(bar, 3)
+</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">attribute</td>
+            <td class="jsdoc-param-description"><p>The property to set.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">anything</td>
+            <td class="jsdoc-param-description"><p>The value to set in the property.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">function | string</span></div>
+        <div class="jsdoc-return-description"><p>Set a property on a plugin</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_setEditor"></a><span class="functionIcon">setEditor</span><span class="parameters">(editor)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="jsdoc-link">dojox/editor/plugins/NormalizeIndentOutdent</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Over-ride for the setting of the editor.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">editor</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>The editor to configure for this plugin to use.</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_setToolbar"></a><span class="functionIcon">setToolbar</span><span class="parameters">(toolbar)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Tell the plugin to add it&#39;s controller widget (often a button)
+to the toolbar.  Does nothing if there is no controller widget.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">toolbar</td>
+            <td class="jsdoc-param-type"><a class="jsdoc-link" href="/documentation/api/1.9/dijit/Toolbar">dijit/Toolbar</a></td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_editor_plugins_NormalizeIndentOutdent_updateState"></a><span class="functionIcon">updateState</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dijit/_editor/_Plugin" class="jsdoc-link">dijit/_editor/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Change state of the plugin to respond to events in the editor.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>This is called on meaningful events in the editor, such as change of selection
+or caret position (but not simple typing of alphanumeric keys).   It gives the
+plugin a chance to update the CSS of its button.
+
+</p>
+<p>For example, the &quot;bold&quot; plugin will highlight/unhighlight the bold button depending on whether the
+characters next to the caret are bold or not.
+
+</p>
+<p>Only makes sense when <code>useDefaultCommand</code> is true, as it calls Editor.queryCommandEnabled(<code>command</code>).</p>
+</div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojox/editor/plugins/NormalizeIndentOutdent" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.data.AndOrReadStore &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.data.AndOrReadStore</a><ul>
+<li><a class="reference internal" href="#supported-apis">Supported APIs</a></li>
+<li><a class="reference internal" href="#query-syntax">Query Syntax</a></li>
+<li><a class="reference internal" href="#example-queries">Example queries</a><ul>
+<li><a class="reference internal" href="#string-query">String Query</a></li>
+<li><a class="reference internal" href="#object-based-query">Object-Based Query</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functional-examples">Functional Examples</a><ul>
+<li><a class="reference internal" href="#finding-all-continents-and-cities">Finding all Continents and Cities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-data-andorreadstore">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.data.AndOrReadStore</a><a class="headerlink" href="#dojox-data-andorreadstore" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Frank Fortson</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Since:</th><td class="field-body">1.2</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-data-andorreadstore" id="id2">dojox.data.AndOrReadStore</a><ul>
+<li><a class="reference internal" href="#supported-apis" id="id3">Supported APIs</a></li>
+<li><a class="reference internal" href="#query-syntax" id="id4">Query Syntax</a></li>
+<li><a class="reference internal" href="#example-queries" id="id5">Example queries</a><ul>
+<li><a class="reference internal" href="#string-query" id="id6">String Query</a></li>
+<li><a class="reference internal" href="#object-based-query" id="id7">Object-Based Query</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functional-examples" id="id8">Functional Examples</a><ul>
+<li><a class="reference internal" href="#finding-all-continents-and-cities" id="id9">Finding all Continents and Cities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p>dojox.data.AndOrReadStore is a clone of dojo.data.ItemFileReadStore. The only significant difference is that it supports more complex queries than the simple AND format property matching. Specifically, it can perform AND and ORing, and NOT. For general functions, data format, and information refer to <a class="reference internal" href="../../dojo/data/ItemFileReadStore.html#dojo-data-itemfilereadstore"><span>dojo.data.ItemFileReadStore</span></a>.</p>
+<div class="section" id="supported-apis">
+<h2><a class="toc-backref" href="#id3">Supported APIs</a><a class="headerlink" href="#supported-apis" title="Permalink to this headline">¶</a></h2>
+<p>The following dojo.data APIs are implemented by AndOrReadStore</p>
+<ul class="simple">
+<li><a class="reference internal" href="../../dojo/data/api/Read.html#dojo-data-api-read"><span>dojo.data.api.Read</span></a></li>
+<li><a class="reference internal" href="../../dojo/data/api/Identity.html#dojo-data-api-identity"><span>dojo.data.api.Identity</span></a></li>
+</ul>
+</div>
+<div class="section" id="query-syntax">
+<h2><a class="toc-backref" href="#id4">Query Syntax</a><a class="headerlink" href="#query-syntax" title="Permalink to this headline">¶</a></h2>
+<p>AndOrReadStore supports all the same query capability as dojo.data.ItemFileReadStore as well as several others that allow for more complicated queries. In specific, it allows for chaining of ANDs, ORs, and NOTs for attributes (along with wildcards), for a much more flexible structure.</p>
+<p><strong>Supported Operators:</strong></p>
+<blockquote>
+<div>, NOT AND OR ( ) ! &amp;&amp; ||  Note: &#8221;,&#8221; included for legacy queries (translated to AND).</div></blockquote>
+</div>
+<div class="section" id="example-queries">
+<h2><a class="toc-backref" href="#id5">Example queries</a><a class="headerlink" href="#example-queries" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="string-query">
+<h3><a class="toc-backref" href="#id6">String Query</a><a class="headerlink" href="#string-query" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>...
+store.fetch({query: &quot;NOT id:23* AND (type:&#39;test*&#39; OR dept:&#39;bob&#39;) &amp;&amp; !filed:true&quot;, onComplete: doSomething}
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="object-based-query">
+<h3><a class="toc-backref" href="#id7">Object-Based Query</a><a class="headerlink" href="#object-based-query" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre>...
+store.fetch({query: {complexQuery:&quot;NOT id:23* AND (type:&#39;test*&#39; OR dept:&#39;bob&#39;) &amp;&amp; !filed:true&quot;}, onComplete: doSomething}
+...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="functional-examples">
+<h2><a class="toc-backref" href="#id8">Functional Examples</a><a class="headerlink" href="#functional-examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="finding-all-continents-and-cities">
+<h3><a class="toc-backref" href="#id9">Finding all Continents and Cities</a><a class="headerlink" href="#finding-all-continents-and-cities" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.data.AndOrReadStore&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.Button&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">geoData</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;identifier&#39;</span><span class="o">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;label&#39;</span><span class="o">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;items&#39;</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Africa&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">children</span><span class="o">:</span><span class="p">[</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Egypt&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Kenya&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">children</span><span class="o">:</span><span class="p">[</span>
+        <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Nairobi&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;city&#39;</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Mombasa&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;city&#39;</span> <span class="p">}</span> <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Sudan&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="o">:</span>
+        <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Khartoum&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;city&#39;</span> <span class="p">}</span>
+      <span class="p">}</span> <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Asia&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="o">:</span><span class="p">[</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;China&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;India&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Russia&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Mongolia&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span> <span class="p">}</span> <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Australia&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="s1">&#39;population&#39;</span><span class="o">:</span><span class="s1">&#39;21 million&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="o">:</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Commonwealth of Australia&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="s1">&#39;population&#39;</span><span class="o">:</span><span class="s1">&#39;21 million&#39;</span><span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Europe&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="o">:</span><span class="p">[</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Germany&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;France&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Spain&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Italy&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span> <span class="p">}</span> <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;North America&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="o">:</span><span class="p">[</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Mexico&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span>  <span class="s1">&#39;population&#39;</span><span class="o">:</span><span class="s1">&#39;108 million&#39;</span><span class="p">,</span> <span class="s1">&#39;area&#39;</span><span class="o">:</span><span class="s1">&#39;1,972,550 sq km&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="o">:</span><span class="p">[</span>
+        <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Mexico City&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="s1">&#39;population&#39;</span><span class="o">:</span><span class="s1">&#39;19 million&#39;</span><span class="p">,</span> <span class="s1">&#39;timezone&#39;</span><span class="o">:</span><span class="s1">&#39;-6 UTC&#39;</span><span class="p">},</span>
+        <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Guadalajara&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="s1">&#39;population&#39;</span><span class="o">:</span><span class="s1">&#39;4 million&#39;</span><span class="p">,</span> <span class="s1">&#39;timezone&#39;</span><span class="o">:</span><span class="s1">&#39;-6 UTC&#39;</span> <span class="p">}</span> <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Canada&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="s1">&#39;population&#39;</span><span class="o">:</span><span class="s1">&#39;33 million&#39;</span><span class="p">,</span> <span class="s1">&#39;area&#39;</span><span class="o">:</span><span class="s1">&#39;9,984,670 sq km&#39;</span><span class="p">,</span> <span class="s1">&#39;children&#39;</span><span class="o">:</span><span class="p">[</span>
+        <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Ottawa&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="s1">&#39;population&#39;</span><span class="o">:</span><span class="s1">&#39;0.9 million&#39;</span><span class="p">,</span> <span class="s1">&#39;timezone&#39;</span><span class="o">:</span><span class="s1">&#39;-5 UTC&#39;</span><span class="p">},</span>
+        <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Toronto&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="s1">&#39;population&#39;</span><span class="o">:</span><span class="s1">&#39;2.5 million&#39;</span><span class="p">,</span> <span class="s1">&#39;timezone&#39;</span><span class="o">:</span><span class="s1">&#39;-5 UTC&#39;</span> <span class="p">}]</span>
+      <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;United States of America&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span> <span class="p">}</span> <span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;South America&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">children</span><span class="o">:</span><span class="p">[</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Brazil&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="s1">&#39;population&#39;</span><span class="o">:</span><span class="s1">&#39;186 million&#39;</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="s1">&#39;name&#39;</span><span class="o">:</span><span class="s1">&#39;Argentina&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="s1">&#39;population&#39;</span><span class="o">:</span><span class="s1">&#39;40 million&#39;</span> <span class="p">}</span> <span class="p">]</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">};</span>
+
+<span class="c1">// This function performs some basic dojo initialization. In this case it connects the button</span>
+<span class="c1">// onClick to a function which invokes the fetch(). The fetch function queries for all items</span>
+<span class="c1">// and provides callbacks to use for completion of data retrieval or reporting of errors.</span>
+<span class="c1">// Set the init function to run when dojo loading and page parsing has completed.</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="c1">// Function to perform a fetch on the datastore when a button is clicked</span>
+  <span class="kd">function</span> <span class="nx">getItems</span><span class="p">(){</span>
+
+    <span class="c1">// Callback to perform an action when the data items are starting to be returned:</span>
+    <span class="kd">function</span> <span class="nx">clearOldCList</span><span class="p">(</span><span class="nx">size</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;list2&quot;</span><span class="p">);</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+        <span class="k">while</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">){</span>
+          <span class="nx">list</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Callback for processing a returned list of items.</span>
+    <span class="kd">function</span> <span class="nx">gotItems</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;list2&quot;</span><span class="p">);</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+          <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+          <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">geoStore</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)));</span>
+          <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Callback for if the lookup fails.</span>
+    <span class="kd">function</span> <span class="nx">fetchFailed</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;lookup failed.&quot;</span><span class="p">);</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Fetch the data.</span>
+    <span class="nx">geoStore</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span><span class="nx">query</span><span class="o">:</span> <span class="p">{</span> <span class="nx">complexQuery</span><span class="o">:</span> <span class="s2">&quot;type:\&quot;continent\&quot; OR type:\&quot;city\&quot;&quot;</span><span class="p">},</span> <span class="nx">onBegin</span><span class="o">:</span> <span class="nx">clearOldCList</span><span class="p">,</span> <span class="nx">onComplete</span><span class="o">:</span> <span class="nx">gotItems</span><span class="p">,</span> <span class="nx">onError</span><span class="o">:</span> <span class="nx">fetchFailed</span><span class="p">,</span> <span class="nx">queryOptions</span><span class="o">:</span> <span class="p">{</span><span class="nx">deep</span><span class="o">:</span><span class="kc">true</span><span class="p">}});</span>
+  <span class="p">}</span>
+  <span class="c1">// Link the click event of the button to driving the fetch.</span>
+  <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">button2</span><span class="p">,</span> <span class="s2">&quot;onClick&quot;</span><span class="p">,</span> <span class="nx">getItems</span> <span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.data.AndOrReadStore&quot;);
+dojo.require(&quot;dijit.form.Button&quot;);
+
+var geoData = {
+  'identifier': 'name',
+  'label': 'name',
+  'items': [
+    { 'name':'Africa', 'type':'continent', children:[
+      { 'name':'Egypt', 'type':'country' },
+      { 'name':'Kenya', 'type':'country', children:[
+        { 'name':'Nairobi', 'type':'city' },
+        { 'name':'Mombasa', 'type':'city' } ]
+      },
+      { 'name':'Sudan', 'type':'country', 'children':
+        { 'name':'Khartoum', 'type':'city' }
+      } ]
+    },
+    { 'name':'Asia', 'type':'continent', 'children':[
+      { 'name':'China', 'type':'country' },
+      { 'name':'India', 'type':'country' },
+      { 'name':'Russia', 'type':'country' },
+      { 'name':'Mongolia', 'type':'country' } ]
+    },
+    { 'name':'Australia', 'type':'continent', 'population':'21 million', 'children':
+      { 'name':'Commonwealth of Australia', 'type':'country', 'population':'21 million'}
+    },
+    { 'name':'Europe', 'type':'continent', 'children':[
+      { 'name':'Germany', 'type':'country' },
+      { 'name':'France', 'type':'country' },
+      { 'name':'Spain', 'type':'country' },
+      { 'name':'Italy', 'type':'country' } ]
+    },
+    { 'name':'North America', 'type':'continent', 'children':[
+      { 'name':'Mexico', 'type':'country',  'population':'108 million', 'area':'1,972,550 sq km', 'children':[
+        { 'name':'Mexico City', 'type':'city', 'population':'19 million', 'timezone':'-6 UTC'},
+        { 'name':'Guadalajara', 'type':'city', 'population':'4 million', 'timezone':'-6 UTC' } ]
+      },
+      { 'name':'Canada', 'type':'country', 'population':'33 million', 'area':'9,984,670 sq km', 'children':[
+        { 'name':'Ottawa', 'type':'city', 'population':'0.9 million', 'timezone':'-5 UTC'},
+        { 'name':'Toronto', 'type':'city', 'population':'2.5 million', 'timezone':'-5 UTC' }]
+      },
+      { 'name':'United States of America', 'type':'country' } ]
+    },
+    { 'name':'South America', 'type':'continent', children:[
+      { 'name':'Brazil', 'type':'country', 'population':'186 million' },
+      { 'name':'Argentina', 'type':'country', 'population':'40 million' } ]
+    }
+  ]
+};
+
+// This function performs some basic dojo initialization. In this case it connects the button
+// onClick to a function which invokes the fetch(). The fetch function queries for all items
+// and provides callbacks to use for completion of data retrieval or reporting of errors.
+// Set the init function to run when dojo loading and page parsing has completed.
+dojo.ready(function(){
+  // Function to perform a fetch on the datastore when a button is clicked
+  function getItems(){
+
+    // Callback to perform an action when the data items are starting to be returned:
+    function clearOldCList(size, request){
+      var list = dojo.byId(&quot;list2&quot;);
+      if(list){
+        while(list.firstChild){
+          list.removeChild(list.firstChild);
+        }
+      }
+    }
+
+    // Callback for processing a returned list of items.
+    function gotItems(items, request){
+      var list = dojo.byId(&quot;list2&quot;);
+      if(list){
+        var i;
+        for(i = 0; i &lt; items.length; i++){
+          var item = items[i];
+          list.appendChild(document.createTextNode(geoStore.getValue(item, &quot;name&quot;)));
+          list.appendChild(document.createElement(&quot;br&quot;));
+        }
+      }
+    }
+
+    // Callback for if the lookup fails.
+    function fetchFailed(error, request){
+      alert(&quot;lookup failed.&quot;);
+      alert(error);
+    }
+
+    // Fetch the data.
+    geoStore.fetch({query: { complexQuery: &quot;type:\&quot;continent\&quot; OR type:\&quot;city\&quot;&quot;}, onBegin: clearOldCList, onComplete: gotItems, onError: fetchFailed, queryOptions: {deep:true}});
+  }
+  // Link the click event of the button to driving the fetch.
+  dojo.connect(button2, &quot;onClick&quot;, getItems );
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.data.AndOrReadStore&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;data:geoData&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;geoStore&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit.form.Button&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;button2&quot;</span><span class="nt">&gt;</span>Find continents!<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;b&gt;</span>List of all Continents and Cities<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;list2&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/span&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dojox.data.AndOrReadStore&quot; data-dojo-props=&quot;data:geoData&quot; data-dojo-id=&quot;geoStore&quot;&gt;&lt;/div&gt;
+&lt;div data-dojo-type=&quot;dijit.form.Button&quot; data-dojo-id=&quot;button2&quot;&gt;Find continents!&lt;/div&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;List of all Continents and Cities&lt;/b&gt;
+&lt;br&gt;
+&lt;span id=&quot;list2&quot;&gt;
+&lt;/span&gt;</textarea></div></div></div></div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

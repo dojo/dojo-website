@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.charting.DataChart &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.charting.DataChart</a><ul>
+<li><a class="reference internal" href="#basic-description">Basic Description</a></li>
+<li><a class="reference internal" href="#different-chart-types">Different Chart Types</a></li>
+<li><a class="reference internal" href="#datachart-mapping">DataChart Mapping</a></li>
+<li><a class="reference internal" href="#chart-legends">Chart Legends</a></li>
+<li><a class="reference internal" href="#chart-labels">Chart Labels</a></li>
+<li><a class="reference internal" href="#demos">Demos</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-charting-datachart">
+<span id="id1"></span><h1>dojox.charting.DataChart<a class="headerlink" href="#dojox-charting-datachart" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Project owner:</th><td class="field-body">Mike Wilcox</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Mike Wilcox</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">1.3</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="basic-description">
+<h2>Basic Description<a class="headerlink" href="#basic-description" title="Permalink to this headline">¶</a></h2>
+<p>DataChart is an extension to Chart2D that connects to a data store in a simple manner. Animation can be achieved by connecting to the data store and modifying the store items. The change are captured and displayed in the DataChart which connects to the store&#8217;s onSet event.  Convenience methods have also been added for connecting store item labels to the chart labels.</p>
+<p>The examples on this page use dojo.ItemFileWriteStore, since it is the most commonly used, and most standard store. The store connects to the <em>dojox/charting/tests/stock.json</em> file which contains a set of imaginary stock market prices.</p>
+<p>DataChart maintains the integrity of the current charting APIs, although some things have been added or modified in order to get the store to connect and also to get the data to scroll/animate. &#8220;displayRange&#8221; in particular is used to force the x-axis to a specific size and keep the chart from stretching or squashing to fit the data. Also, the DataChart is meant to be setup quickly. More defaults have been added so only a few simple steps are required to get up and running.</p>
+<p>In its most basic, default form, DataChart requires no parameters, besides the node id. The store can be set in the parameters or as a separate method as shown. The setStore method is the same as used elsewhere in Dojo, like in the DataGrid. Unlike the Grid, the DataChart needs one additional argument — the store item property that will be charted. In this case, that property is &#8220;price&#8221;.</p>
+<p>A basic example follows:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;chartNode&quot;</span> <span class="na">style=</span><span class="s">&quot;width: 600px; height: 400px;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;chartNode&quot; style=&quot;width: 600px; height: 400px;&quot;&gt;&lt;/div&gt;</textarea></div><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.charting.DataChart&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.data.ItemFileWriteStore&quot;</span><span class="p">);</span>
+
+ <span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ItemFileWriteStore</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span><span class="nx">dojo</span><span class="p">.</span><span class="nx">moduleUrl</span><span class="p">(</span><span class="s2">&quot;dojox.charting&quot;</span><span class="p">,</span> <span class="s2">&quot;tests/stock.json&quot;</span><span class="p">)</span> <span class="p">});</span>
+<span class="nx">chart</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">charting</span><span class="p">.</span><span class="nx">DataChart</span><span class="p">(</span><span class="s2">&quot;chartNode&quot;</span><span class="p">,</span> <span class="nx">chartDefault</span><span class="p">.</span><span class="nx">chart</span><span class="p">);</span>
+<span class="nx">chart</span><span class="p">.</span><span class="nx">setStore</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="p">{</span><span class="nx">symbol</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">},</span> <span class="s2">&quot;price&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.charting.DataChart&quot;);
+dojo.require(&quot;dojo.data.ItemFileWriteStore&quot;);
+
+ var store = new dojo.data.ItemFileWriteStore({ url:dojo.moduleUrl(&quot;dojox.charting&quot;, &quot;tests/stock.json&quot;) });
+chart = new dojox.charting.DataChart(&quot;chartNode&quot;, chartDefault.chart);
+chart.setStore(store, {symbol='*'}, &quot;price&quot;);</textarea></div></div>
+<div class="section" id="different-chart-types">
+<h2>Different Chart Types<a class="headerlink" href="#different-chart-types" title="Permalink to this headline">¶</a></h2>
+<p>Different chart styles is a simple matter of passing a type:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+   <span class="nx">chart</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">charting</span><span class="p">.</span><span class="nx">DataChart</span><span class="p">(</span><span class="s2">&quot;chartDiv&quot;</span><span class="p">,</span> <span class="p">{</span>
+       <span class="nx">type</span><span class="o">:</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">charting</span><span class="p">.</span><span class="nx">plot2d</span><span class="p">.</span><span class="nx">Columns</span><span class="p">,</span> <span class="c1">// &lt;-- chart type</span>
+           <span class="nx">scroll</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span>
+           <span class="nx">xaxis</span><span class="o">:</span><span class="p">{</span><span class="nx">labelFunc</span><span class="o">:</span><span class="s2">&quot;seriesLabels&quot;</span><span class="p">}</span>
+   <span class="p">});</span>
+   <span class="nx">chart</span><span class="p">.</span><span class="nx">setStore</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="p">{</span><span class="nx">symbol</span><span class="o">:</span><span class="s2">&quot;*&quot;</span><span class="p">},</span> <span class="s2">&quot;price&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.ready(function(){
+   chart = new dojox.charting.DataChart(&quot;chartDiv&quot;, {
+       type: dojox.charting.plot2d.Columns, // &lt;-- chart type
+           scroll:false,
+           xaxis:{labelFunc:&quot;seriesLabels&quot;}
+   });
+   chart.setStore(store, {symbol:&quot;*&quot;}, &quot;price&quot;);
+});</textarea></div></div>
+<div class="section" id="datachart-mapping">
+<h2>DataChart Mapping<a class="headerlink" href="#datachart-mapping" title="Permalink to this headline">¶</a></h2>
+<p>This is a (trimmed down) version of the JSON file used, as it is important to the next concepts:</p>
+<div class="highlight"><pre><span class="p">{</span> <span class="s2">&quot;identifier&quot;</span><span class="o">:</span> <span class="s2">&quot;symbol&quot;</span><span class="p">,</span> <span class="s2">&quot;idAttribute&quot;</span><span class="o">:</span><span class="s2">&quot;symbol&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="o">:</span> <span class="s2">&quot;symbol&quot;</span><span class="p">,</span><span class="s2">&quot;items&quot;</span><span class="o">:</span> <span class="p">[</span>
+   <span class="p">{</span> <span class="s2">&quot;symbol&quot;</span><span class="o">:</span><span class="s2">&quot;ANDT&quot;</span><span class="p">,</span> <span class="s2">&quot;historicPrice&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">3.52</span><span class="p">,</span><span class="mf">3.66</span><span class="p">,</span><span class="mf">3.11</span><span class="p">,</span><span class="mf">3.90</span><span class="p">,</span><span class="mf">3.11</span><span class="p">,</span><span class="mf">3.11</span><span class="p">],</span> <span class="s2">&quot;price&quot;</span><span class="o">:</span><span class="mf">3.52</span><span class="p">},</span>
+   <span class="p">{</span> <span class="s2">&quot;symbol&quot;</span><span class="o">:</span><span class="s2">&quot;ATEU&quot;</span><span class="p">,</span> <span class="s2">&quot;historicPrice&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">6.72</span><span class="p">,</span><span class="mf">6.76</span><span class="p">,</span><span class="mf">6.61</span><span class="p">,</span><span class="mf">6.41</span><span class="p">,</span><span class="mf">6.31</span><span class="p">,</span><span class="mf">6.99</span><span class="p">,</span><span class="mf">7.20</span><span class="p">],</span> <span class="s2">&quot;price&quot;</span><span class="o">:</span><span class="mf">6.76</span><span class="p">},</span>
+   <span class="p">{</span> <span class="s2">&quot;symbol&quot;</span><span class="o">:</span><span class="s2">&quot;BGCN&quot;</span><span class="p">,</span> <span class="s2">&quot;historicPrice&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">4.11</span><span class="p">,</span><span class="mf">3.98</span><span class="p">,</span><span class="mf">4.05</span><span class="p">,</span><span class="mf">4.20</span><span class="p">,</span><span class="mf">4.16</span><span class="p">,</span><span class="mf">4.22</span><span class="p">,</span><span class="mf">3.80</span><span class="p">],</span> <span class="s2">&quot;price&quot;</span><span class="o">:</span><span class="mf">3.98</span><span class="p">},</span>
+   <span class="p">{</span> <span class="s2">&quot;symbol&quot;</span><span class="o">:</span><span class="s2">&quot;BAYC&quot;</span><span class="p">,</span> <span class="s2">&quot;historicPrice&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">9.79</span><span class="p">,</span><span class="mf">9.60</span><span class="p">,</span><span class="mf">9.50</span><span class="p">,</span><span class="mf">2.23</span><span class="p">,</span><span class="mf">9.45</span><span class="p">,</span><span class="mf">9.76</span><span class="p">,</span><span class="mf">9.99</span><span class="p">],</span> <span class="s2">&quot;price&quot;</span><span class="o">:</span><span class="mf">9.60</span><span class="p">},</span>
+   <span class="p">{</span> <span class="s2">&quot;symbol&quot;</span><span class="o">:</span><span class="s2">&quot;CRCR&quot;</span><span class="p">,</span> <span class="s2">&quot;historicPrice&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">8.44</span><span class="p">,</span><span class="mf">8.44</span><span class="p">,</span><span class="mf">8.54</span><span class="p">,</span><span class="mf">8.60</span><span class="p">,</span><span class="mf">9.65</span><span class="p">,</span><span class="mf">8.42</span><span class="p">,</span><span class="mf">8.44</span><span class="p">],</span> <span class="s2">&quot;price&quot;</span><span class="o">:</span><span class="mf">8.44</span><span class="p">},</span>
+   <span class="p">{</span> <span class="s2">&quot;symbol&quot;</span><span class="o">:</span><span class="s2">&quot;DTOA&quot;</span><span class="p">,</span> <span class="s2">&quot;historicPrice&quot;</span><span class="o">:</span><span class="p">[</span><span class="mf">2.11</span><span class="p">,</span><span class="mf">2.47</span><span class="p">,</span><span class="mf">3.11</span><span class="p">,</span><span class="mf">3.06</span><span class="p">,</span><span class="mf">3.01</span><span class="p">,</span><span class="mf">3.01</span><span class="p">,</span><span class="mf">3.00</span><span class="p">],</span> <span class="s2">&quot;price&quot;</span><span class="o">:</span><span class="mf">2.47</span><span class="p">}</span>
+<span class="p">]}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{ &quot;identifier&quot;: &quot;symbol&quot;, &quot;idAttribute&quot;:&quot;symbol&quot;, &quot;label&quot;: &quot;symbol&quot;,&quot;items&quot;: [
+   { &quot;symbol&quot;:&quot;ANDT&quot;, &quot;historicPrice&quot;:[0.01,3.52,3.66,3.11,3.90,3.11,3.11], &quot;price&quot;:3.52},
+   { &quot;symbol&quot;:&quot;ATEU&quot;, &quot;historicPrice&quot;:[6.72,6.76,6.61,6.41,6.31,6.99,7.20], &quot;price&quot;:6.76},
+   { &quot;symbol&quot;:&quot;BGCN&quot;, &quot;historicPrice&quot;:[4.11,3.98,4.05,4.20,4.16,4.22,3.80], &quot;price&quot;:3.98},
+   { &quot;symbol&quot;:&quot;BAYC&quot;, &quot;historicPrice&quot;:[9.79,9.60,9.50,2.23,9.45,9.76,9.99], &quot;price&quot;:9.60},
+   { &quot;symbol&quot;:&quot;CRCR&quot;, &quot;historicPrice&quot;:[8.44,8.44,8.54,8.60,9.65,8.42,8.44], &quot;price&quot;:8.44},
+   { &quot;symbol&quot;:&quot;DTOA&quot;, &quot;historicPrice&quot;:[2.11,2.47,3.11,3.06,3.01,3.01,3.00], &quot;price&quot;:2.47}
+]}</textarea></div><p>The property used for the first chart example is historicPrice and is an array. Because the default chart is a line-type, and plots each item separately, more than one bit of data is necessary to span across the x-axis. In this case, there are seven slots in the array, which is why there is an x-axis span of seven. If the price property was charted, there would be seven points all along the y-axis, and the chart x-axis would only have a length of one.</p>
+<p>However, the need of the chart may not be a series of individual item properties, it may be single item properties compared to the others. To compare the price of each item on a line chart using the comparative property:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+   <span class="nx">chart</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">charting</span><span class="p">.</span><span class="nx">DataChart</span><span class="p">(</span><span class="s2">&quot;chartDiv&quot;</span><span class="p">,</span> <span class="p">{</span>
+       <span class="nx">comparative</span><span class="o">:</span><span class="kc">true</span>
+   <span class="p">});</span>
+   <span class="nx">chart</span><span class="p">.</span><span class="nx">setStore</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="p">{</span><span class="nx">symbol</span><span class="o">:</span><span class="s2">&quot;*&quot;</span><span class="p">},</span> <span class="s2">&quot;price&quot;</span><span class="p">);</span>  <span class="c1">//  &lt;-- single value property</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.ready(function(){
+   chart = new dojox.charting.DataChart(&quot;chartDiv&quot;, {
+       comparative:true
+   });
+   chart.setStore(store, {symbol:&quot;*&quot;}, &quot;price&quot;);  //  &lt;-- single value property
+});</textarea></div><p>The DataChart supports information updating, which allows it to animate. To update the information, change the item property in the store. The DataChart is connected to the onSet event in the store and reflects the change. The test in the DojoX trunk demonstrates this with spinner widgets that modify the store item property (see link at bottom of page).</p>
+<p>The scroll parameter works in conjunction with two other parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>stretchToFit: This is how native charts work. If given five bits of data, the x-axis will be five segments long.</li>
+<li>displayRange: If set, stretchToFit is overridden and the x-axis will not stretch, it will always be that long. This is often used with scroll.</li>
+<li>scroll: If true and there is more data than fits on the x-axis, it will scroll to the left.</li>
+</ul>
+</div></blockquote>
+<p>Note that the y-axis is always fixed, having it stretch to fit or scroll is not currently supported.</p>
+<p>The combination of these parameters can be confusing, especially when it comes to different chart types. See the Property Demo link at the bottom of the page that you can use to test the different parameters and dynamically build new charts.</p>
+</div>
+<div class="section" id="chart-legends">
+<h2>Chart Legends<a class="headerlink" href="#chart-legends" title="Permalink to this headline">¶</a></h2>
+<p>DojoX Charting comes with dojox.charting.widget.Legend to make it easy to add legends to your charts. Currently however, it isn’t designed to handle &#8220;live&#8221; data — it’s expecting that the chart knows the data as it’s created. Therefore it needs to connect it when the chart has data:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;chartDiv&quot;</span> <span class="na">style=</span><span class="s">&quot;width: 400px; height: 250px;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;legend&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;chartDiv&quot; style=&quot;width: 400px; height: 250px;&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;legend&quot;&gt;&lt;/div&gt;</textarea></div><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+   <span class="nx">chart</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">charting</span><span class="p">.</span><span class="nx">DataChart</span><span class="p">(</span><span class="s2">&quot;chartDiv&quot;</span><span class="p">,</span> <span class="p">{});</span>
+   <span class="nx">chart</span><span class="p">.</span><span class="nx">setStore</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="p">{</span><span class="nx">symbol</span><span class="o">:</span><span class="s2">&quot;*&quot;</span><span class="p">},</span> <span class="s2">&quot;historicPrice&quot;</span><span class="p">);</span>
+
+   <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">chart</span><span class="p">,</span> <span class="s2">&quot;onData&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+       <span class="nx">dojo</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="nx">c</span><span class="p">);</span>
+       <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">charting</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">Legend</span><span class="p">({</span><span class="nx">chart</span><span class="o">:</span><span class="nx">chart</span><span class="p">},</span> <span class="s2">&quot;legend&quot;</span><span class="p">);</span>
+   <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.ready(function(){
+   chart = new dojox.charting.DataChart(&quot;chartDiv&quot;, {});
+   chart.setStore(store, {symbol:&quot;*&quot;}, &quot;historicPrice&quot;);
+
+   var c = dojo.connect(chart, &quot;onData&quot;, function(){
+       dojo.disconnect(c);
+       new dojox.charting.widget.Legend({chart:chart}, &quot;legend&quot;);
+   });
+});</textarea></div></div>
+<div class="section" id="chart-labels">
+<h2>Chart Labels<a class="headerlink" href="#chart-labels" title="Permalink to this headline">¶</a></h2>
+<p>DataChart has a convenient method for applying the store item labels. The chart.xaxis object can be edited, which is exposed so that besides the property to be added here, the other standard chart axis properties can edited as well.</p>
+<p><em>labelFunc</em> is actually a method that to tap into to write custom labels. DataChart also accepts a specific string which tells it to use its seriesLabels method. Simply put, it connects the item labels to the chart labels.</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+   <span class="nx">chart</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">charting</span><span class="p">.</span><span class="nx">DataChart</span><span class="p">(</span><span class="s2">&quot;chartDiv&quot;</span><span class="p">,</span> <span class="p">{</span>
+       <span class="nx">comparative</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
+       <span class="nx">xaxis</span><span class="o">:</span><span class="p">{</span><span class="nx">labelFunc</span><span class="o">:</span><span class="s2">&quot;seriesLabels&quot;</span><span class="p">},</span>
+   <span class="p">});</span>
+   <span class="nx">chart</span><span class="p">.</span><span class="nx">setStore</span><span class="p">(</span><span class="nx">store</span><span class="p">,</span> <span class="p">{</span><span class="nx">symbol</span><span class="o">:</span><span class="s2">&quot;*&quot;</span><span class="p">},</span> <span class="s2">&quot;price&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.ready(function(){
+   chart = new dojox.charting.DataChart(&quot;chartDiv&quot;, {
+       comparative:true,
+       xaxis:{labelFunc:&quot;seriesLabels&quot;},
+   });
+   chart.setStore(store, {symbol:&quot;*&quot;}, &quot;price&quot;);
+});</textarea></div></div>
+<div class="section" id="demos">
+<h2>Demos<a class="headerlink" href="#demos" title="Permalink to this headline">¶</a></h2>
+<p>DojoX Test: <a class="reference external" href="http://archive.dojotoolkit.org/nightly/dojotoolkit/dojox/charting/tests/test_DataChart.html">http://archive.dojotoolkit.org/nightly/dojotoolkit/dojox/charting/tests/test_DataChart.html</a></p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

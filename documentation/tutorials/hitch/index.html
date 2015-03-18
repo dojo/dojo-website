@@ -1,0 +1,328 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="icon" href="/images/favicons/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="/images/favicons/apple-touch-icon-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+		<link rel="stylesheet" href="/css/tutorials.css">
+		<title>Dojo Toolkit Tutorial</title>
+	</head>
+	<body>
+		<div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+		<main>
+			<div class="row">
+				<div class="large-9 large-offset-1 columns content tutorial">
+					<h2 id="making-functions-with-hitch-and-partial">Making Functions with hitch and partial</h2>
+<p>The <code>dojo/_base/lang</code> resource contains helpful methods for working with functions in JavaScript.  In this tutorial, you&#39;ll learn the basics of the Function object&mdash;and how to bind contexts to functions using
+<code>lang.hitch</code>.  From there, you&#39;ll learn how to bind specific <em>arguments</em> to a function using
+<code>lang.partial</code>, and how <code>lang.hitch</code> can combine the two operations.</p>
+<ul>
+<li><span>Difficulty:</span> Intermediate</li>
+<li><span>Dojo Version:</span> 1.10</li>
+</ul>
+<h3 id="getting-started">Getting Started</h3>
+<p>For the purposes of this tutorial, we will assume that you have basic knowledge of
+Dojo Toolkit constructs such as <a href="../using_query/">dojo/query</a> and other language-based
+helper functions, such as Dojo&#39;s <a href="../arrays/">Array helpers</a>.</p>
+<p>Before we can understand how and when to use <code>lang.hitch</code> and <code>lang.partial</code>, we must first understand the problems they solve. One of the most misunderstood concepts in JavaScript is embodied in the simple, frequently-asked question, &quot;What is <code>this</code>&quot;? Normally, in object-oriented programming, when one of an object&#39;s methods is invoked, we expect &#39;this&#39; to be that object. The answer is more subtle in JavaScript however; to get firmly to grips with it we need to understand <em>execution contexts</em>.</p>
+<h4 id="execution-contexts-in-javascript">Execution Contexts in JavaScript</h4>
+<p>Whenever a function is invoked in JavaScript, an execution context is created (see
+<a href="http://blog.tuenti.com/dev/functions-and-execution-contexts-in-javascript-2/">this article from Tuenti</a>
+for some gruesome details).  This context is created with the following process:</p>
+<ul>
+<li>The <strong>arguments</strong> object is created;</li>
+<li>The function&#39;s <strong>scope</strong> is created;</li>
+<li><strong>Variables</strong> for the function are instantiated;</li>
+<li>The <strong><em>this</em></strong> property (for the context itself) is created.</li>
+</ul>
+<p>The <strong><em>this</em></strong> property is where most developers get confused; it is a reference
+<em>to the object that is considered the context (or scope) of the function&#39;s invocation</em>.  Understanding this
+(no pun intended) is the key to understanding how JavaScript works&mdash;because in JavaScript, the
+actual context in which a function is executed is determined <em>when the function is invoked</em>.</p>
+<div class="proTip">
+
+Scope is often confusing in JavaScript - on the one hand, it can mean the object under which something is invoked (or executed), and on the other it is the object under which something is defined. The latter is referred to as lexical scope, and is considered the true scope in JavaScript. Lexical scoping enables such programming techniques as <a href="http://en.wikipedia.org/wiki/Closure_(computer_science">closures</a>); for reference, take a look at this <a href="http://www.jibbering.com/faq/notes/closures/">excellent article</a> by Richard Cornford.
+
+The idea of scope during invocation is known as the execution context in JavaScript
+</div>
+
+<p>Let&#39;s take a common example.  Say we have an object, and one of the methods in that object is intended
+to be used as an event handler for a number of nodes in a document.  We might define it like so:</p>
+<pre class="brush: js;">
+// Require the query resource, and wait until the DOM is ready
+require(["dojo/query", "dojo/domReady!"],
+    function(query) {
+
+        var myObject = {
+            foo: "bar",
+            myHandler: function(evt){
+                //    this is very contrived but will do.
+                alert("The value of 'foo' is " + this.foo);
+            }
+        };
+
+        //    later on in the script:
+        query(".myNodes").forEach(function(node){
+            node.onclick = myObject.myHandler;
+        });
+
+});
+</pre>
+
+<p><a href="demo/demo.php">View Demo</a></p>
+<p>When someone clicks on any node with the CSS class &quot;myNodes&quot;, you might expect the above function
+definition to show a JavaScript alert box saying &quot;The value of &#39;foo&#39; is bar&quot;; however, because of the way we
+set myObject.myHandler as the event handler for each node we&#39;ll instead get <strong>The value of &#39;foo&#39; is undefined</strong>.
+Let&#39;s look at why this happens:</p>
+<ul>
+<li><p><code>node.onclick = myObject.myHandler</code></p>
+<pre><code>*   The expression `myObject.myHandler` evaluates to a function &amp;mdash; the function `myHandler`.
+        However, the fact that `myHandler` is a defined as a method on `myObject`
+        is discarded.
+</code></pre><ul>
+<li>So now <code>node.onclick</code> is a reference to the function <code>myHandler</code> &mdash; just the function, no<pre><code>    context of `myObject`.
+</code></pre><li>DOM event handlers run in the context of the node that triggers the event - that is, the function, regardless of how or
+where it was defined, is executed as if it is a method of the node &mdash; the result is that the value of <code>this</code>
+inside the function at run-time is the node.</li>
+</ul>
+</li>
+</ul>
+<div class="proTip">
+
+If you find that confusing, remember that the reason why is because Function objects, like any other
+non-primitive type in JavaScript, are passed <em>by reference</em> and not by value; in our example above,
+we are setting the <em>onclick</em> method of a node to be a reference directly to <em>myObject.myHandler</em>.
+
+Remember: functions in JavaScript are <em>first-order objects</em>, and can be treated just like any
+other object in JavaScript&mdash;including being passed to another function as an argument.
+
+</div>
+
+<h4 id="switching-execution-contexts-with-apply-and-call-">Switching execution contexts with <code>.apply</code> and <code>.call</code></h4>
+<p>Because of the ability for JavaScript to define execution contexts when a function is invoked, the
+language provides a way of changing contexts&mdash;i.e., the meaning of <em>this</em>&mdash;on the
+fly through <code>Function.apply</code> and <code>Function.call</code>.  Simply put, both methods
+allow you to execute a function with a passed object as its context.  For example, if we wanted
+to ensure that our contrived handler above was executed in the context of <em>myObject</em>, we&#39;d
+wrap our reference using the <code>Function.call</code> method, like so:</p>
+<pre class="brush: js;">
+query(".myNodes").forEach(function(node){
+    node.onclick = function(evt){
+        myObject.myHandler.call(myObject, evt);
+    };
+});
+</pre>
+
+<p><a href="demo/call.php">View Demo</a></p>
+<div class="proTip">
+
+In most examples on the Intertubes&trade;, <code>Function.apply</code> is used, and usually
+passed the <em>arguments</em> object from the outer function.  However, when the <em>arguments</em>
+to a function are known in advance we recommend the use of <em>call</em>; there is a slight
+performance gain when the JavaScript interpreter does not have to access the <em>arguments</em>
+object directly.
+
+We could have also called <em>myObject.myHandler</em> directly, but used the <code>.call</code>
+form to demonstrate setting the context of <em>myHandler</em> on-the-fly.
+
+</div>
+
+<p>Now that we&#39;ve reviewed the basics of execution context in JavaScript, let&#39;s see how
+the Dojo Toolkit simplifies this process through <code>lang.hitch</code>.</p>
+<h3 id="binding-execution-context-with-lang-hitch-">Binding execution context with <code>lang.hitch</code></h3>
+<p>The Dojo Toolkit provides a way of simplifying context binding with functions via the workhorse
+<a href="/api/?qs=1.10/dojo/_base/lang"><code>lang.hitch</code></a>.  To put it simply, <code>lang.hitch</code>
+creates a <em>new</em> Function object that is bound (or hitched, hence the name) to a specific
+context, which you can then invoke safely&mdash;without ever worrying if the context has
+changed.  Using <code>lang.hitch</code> is simple:</p>
+<pre class="brush: js;">
+// `foo` is intentionally global
+var foo = "bar";
+require(["dojo/_base/lang"],
+    function(lang) {
+
+        var myFunction = function(){
+            return this.foo;
+        };
+        var myObject = { foo: "baz" };
+
+        // later on in your application
+        var boundFunction = lang.hitch(myObject, myFunction);
+
+        // the first value will be "bar", the second will be "baz";
+        // the third will still be "bar".
+        myFunction();        // "bar"
+        boundFunction();    // "baz"
+        myFunction();        // "bar"
+
+});
+</pre>
+
+<p><a href="demo/hitch.php">View Demo</a></p>
+<p>As you can see, <code>lang.hitch</code> ensures that a particular function&mdash;<em>bound</em> to
+a specific execution context&mdash;will <em>always</em> be invoked without fear of having that
+context be switched at run-time.</p>
+<h3 id="the-_arguments_-object">The <em>arguments</em> object</h3>
+<p>Remember when we explained the process by which an execution context is created?  The very first
+step is to create the <em>arguments</em> object.  This object is an Array-like object, with an
+ordered list of values that have been passed to a function.  In addition, in the third step of
+creating a context all variables for the function are created&mdash;including any named arguments,
+so that these values can be accessed directly by name as if they were just another variable in the
+function body.</p>
+<p>Keep in mind that the <em>arguments</em> object is not a true Array object in JavaScript; though
+it shares some of the same aspects (such as members accessible via numbers and a <em>length</em>
+property), it is considered read-only&mdash;which means that none of the other Array methods
+(such as <code>Array.prototype.slice</code>) are available.</p>
+<p>When a function is defined, the <em>signature</em> of the function becomes fixed.  One cannot add
+or remove named arguments without redefining the function itself.  This can become a problem at times,
+particularly when you are in need of matching a function signature (say, for a pre-defined handler in
+a library such as the Dojo Toolkit) without actually copying or rewriting the original function.  The
+Dojo Toolkit provides a simple way of accomplishing this through the method <code>lang.partial</code>.</p>
+<h3 id="changing-function-signatures-with-lang-partial-">Changing function signatures with <code>lang.partial</code></h3>
+<p>A problem a developer might face is having a function with multiple arguments
+being used where a smaller set of arguments is required.  For example, say we have a function
+that takes 4 arguments, like so (we&#39;ll be using <code>dojo/data</code> for the example):</p>
+<pre class="brush: js;">
+var putValue = function(store, item, attr, value){
+    return store.setValue(item, attr, value);
+}
+</pre>
+
+
+<p>...but somewhere else in your application, a different developer (or a library) has written a set of objects
+that will call a similar handler with only <em>3</em> arguments:</p>
+<pre class="brush: js;">
+someObject.setValueHandler = function(item, attr, value){
+    //    placeholder function to be overridden
+};
+</pre>
+
+
+<p>With <code>lang.partial</code>, you can create a new (unbound) function <em>with preset values
+for arguments</em> (or <em>bound</em> arguments).  To complete our example above, we&#39;d want to
+&quot;preset&quot; the <em>store</em> argument with a reference to a specific store and then set
+<code>someObject.setValueHandler</code> to a reference of our <em>partial</em> function
+(hence the name), like so:</p>
+<pre class="brush: js;">
+// assuming we have a dojo/data store called "myStore"
+
+// our function
+var putValue = function(store, item, attr, value){
+    return store.setValue(item, attr, value);
+}
+
+// ...
+// their function signature
+someObject.setValueHandler = function(item, attr, value){
+    //    placeholder function to be overridden
+};
+
+// ...
+// our solution using lang.partial
+someObject.setValueHandler = lang.partial(putValue, myStore);
+
+// ...
+// somewhere in the application when setValueHandler is invoked,
+// our putValue function will already have the "store" arg
+// set to a reference to "myStore"
+someObject.setValueHandler(someItem, "foo", "bar");
+</pre>
+
+<p><a href="demo/partial.php">View Demo</a></p>
+<p>The above can be confusing, so let&#39;s break down what is happening:</p>
+<ol>
+<li>We define our putValue function to take 4 arguments;</li>
+<li>We find out that the setValueHandler was only designed to take <em>3</em> arguments, and
+(for the sake of the example) we cannot change that;</li>
+<li>We create a <em>new</em> function out of <em>putValue</em> that has the first
+argument&mdash;<em>store</em>&mdash;<strong>preset</strong> to be <em>myStore</em>;</li>
+<li>The new <em>partial</em> function is then called by other mechanisms with the
+<em>3</em> arguments passed, but our <em>partial</em> function already has <em>myStore</em>
+set to be the first argument, no matter what.</li>
+</ol>
+<p>An important thing to note is that unlike <code>lang.hitch</code>, <code>lang.partial</code>
+<strong>does not preset the execution context for the returned partial function</strong>.  In
+other words, the meaning of the <em>this</em> keyword can change, depending on how you&#39;ve used
+the new partial function.</p>
+<p>One interesting technique you could do with <code>lang.partial</code>, should you be so inclined,
+is to preset a reference to an object you would like access to <em>beforehand</em> so that you
+get the best of both worlds&mdash;by letting the execution context change but having a bound
+reference via the function&#39;s arguments.</p>
+<h3 id="getting-the-best-of-hitch-and-partial-together">Getting the best of <code>hitch</code> and <code>partial</code> together</h3>
+<p>What if you wanted the best of what <code>hitch</code> does (forcing an execution context) with
+the best of what <code>partial</code> does (presetting arguments)?  Well, it turns out that
+<code>lang.hitch</code> was designed to do just that&mdash;you can include any number of values
+<em>after</em> the context and method arguments, and <code>lang.hitch</code> will assemble
+the new function with both a bound context and preset arguments.  Let&#39;s take a similar example
+to the above:</p>
+<pre class="brush: js;">
+someObject.setValueHandler = lang.hitch(someObject, putValue, myStore);
+
+// ...
+// later on in the application, the setHandler is invoked
+// again--this time in the context of someObject
+someObject.setValueHandler(someItem, "foo", "bar");
+</pre>
+
+
+<p><code>hitch</code> and <code>partial</code> are a gateway to a technique known as
+<a href="http://en.wikipedia.org/wiki/Functional_programming"><em>functional programming</em></a>;
+the Dojo Toolkit offers a lot more functional programming techniques through the
+<a href="/api/?qs=1.10/dojox/lang/functional">dojox/lang/functional</a> namespace, which we encourage
+you to take a look at.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>In this tutorial, we&#39;ve reviewed the JavaScript Function object&mdash;including the invocation
+process when a function is called. We then introduced <code>lang.hitch</code>, which allows
+you to bind a function to a specific execution context.  From there, we learned how to
+bind <em>arguments</em> to a function using <code>lang.partial</code>&mdash;and then showed how
+you can bind both context and arguments using <code>lang.hitch</code>.</p>
+<p><code>lang.hitch</code> is particularly useful with event-driven programming techniques
+(i.e. callback-based programming), as it allows you to preset the execution context of
+a function without fear of changing the meaning of the <em>this</em> keyword.</p>
+<p>Don&#39;t forget&mdash;if you ever need any help with the Dojo Toolkit, you can always
+<a href="/chat">drop into the #dojo IRC channel</a> on irc.freenode.net.  Don&#39;t forget
+our motto for the channel: <em>Don&#39;t Ask To Ask, Just Ask&reg;</em>!</p>
+
+				</div>
+			</div>
+		</main>
+		<div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+	</body>
+</html>

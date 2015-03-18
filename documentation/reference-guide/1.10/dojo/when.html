@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/when &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/when</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-when">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/when</a><a class="headerlink" href="#dojo-when" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">authors:</th><td class="field-body">Mark Wubben</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V1.8</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-when" id="id2">dojo/when</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/when</strong> transparently applies callbacks to values and/or promises as well as converts foreign promises to native ones.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><strong>dojo/when</strong> is designed to make it easier to merge coding of synchronous and asynchronous threads.  Accepts promises but also transparently handles non-promises. If no callbacks are provided returns a promise, regardless of the initial value. Also, foreign promises are converted.</p>
+<p>If callbacks are provided and the initial value is not a promise, the callback is executed immediately with no error handling. Returns a promise if the initial value is a promise, or the result of the callback otherwise.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Usage is straight forward and similar to <a class="reference internal" href="promise/Promise.html#dojo-promise-promise-then"><span>dojo/promise/Promise::then()</span></a> method.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/when&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">when</span><span class="p">){</span>
+  <span class="nx">when</span><span class="p">(</span><span class="nx">someValue</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+    <span class="c1">// do something when resolved</span>
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+    <span class="c1">// do something when rejected</span>
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">update</span><span class="p">){</span>
+    <span class="c1">// do something on progress</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/when&quot;], function(when){
+  when(someValue, function(value){
+    // do something when resolved
+  }, function(err){
+    // do something when rejected
+  }, function(update){
+    // do something on progress
+  });
+});</textarea></div><table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="8%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>valueOrPromise</td>
+<td>Mixed</td>
+<td>Either a value or a promise</td>
+</tr>
+<tr class="row-odd"><td>callback</td>
+<td>Function?</td>
+<td><em>Optional</em> The function that should be called back when the promise is fulfilled, or will be
+called immediately if <code class="docutils literal"><span class="pre">valueOrPromise</span></code> is not a promise.</td>
+</tr>
+<tr class="row-even"><td>errback</td>
+<td>Function?</td>
+<td><em>Optional</em> The function that should be called when a promise is rejected.</td>
+</tr>
+<tr class="row-odd"><td>progback</td>
+<td>Function?</td>
+<td><em>Optional</em> The function that should be called when a promise provides progress.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>In this example, we demonstrate how we can handle both a synchronous and asynchronous process with the same code, by
+using when.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/when&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/Deferred&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">when</span><span class="p">,</span> <span class="nx">Deferred</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="kd">function</span> <span class="nx">asyncProcess</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">();</span>
+
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s2">&quot;async&quot;</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">1000</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">syncProcess</span><span class="p">(){</span>
+    <span class="k">return</span> <span class="s2">&quot;sync&quot;</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">outputValue</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+=</span> <span class="s2">&quot;&lt;br/&gt;completed with value: &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;startButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">when</span><span class="p">(</span><span class="nx">asyncProcess</span><span class="p">(),</span> <span class="nx">outputValue</span><span class="p">);</span>
+    <span class="nx">when</span><span class="p">(</span><span class="nx">syncProcess</span><span class="p">(),</span> <span class="nx">outputValue</span><span class="p">);</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/when&quot;, &quot;dojo/Deferred&quot;, &quot;dojo/dom&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(when, Deferred, dom, on){
+  function asyncProcess(){
+    var deferred = new Deferred();
+
+    setTimeout(function(){
+      deferred.resolve(&quot;async&quot;);
+    }, 1000);
+
+    return deferred.promise;
+  }
+
+  function syncProcess(){
+    return &quot;sync&quot;;
+  }
+
+  function outputValue(value){
+    dom.byId(&quot;output&quot;).innerHTML += &quot;&lt;br/&gt;completed with value: &quot; + value;
+  }
+
+  on(dom.byId(&quot;startButton&quot;), &quot;click&quot;, function(){
+    when(asyncProcess(), outputValue);
+    when(syncProcess(), outputValue);
+  });
+
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span>Output:<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;startButton&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;h1&gt;Output:&lt;/h1&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;
+&lt;button type=&quot;button&quot; id=&quot;startButton&quot;&gt;Start&lt;/button&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="promise/Promise.html#dojo-promise-promise"><span>dojo/promise/Promise</span></a> - The base Promise class.</li>
+<li><a class="reference internal" href="Deferred.html#dojo-deferred"><span>dojo/Deferred</span></a> - The base async thread management class.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

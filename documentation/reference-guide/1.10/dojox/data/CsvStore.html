@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.data.CsvStore &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.data.CsvStore</a><ul>
+<li><a class="reference internal" href="#constructor-params">Constructor Params</a></li>
+<li><a class="reference internal" href="#query-syntax">Query Syntax</a></li>
+<li><a class="reference internal" href="#query-options">Query Options</a></li>
+<li><a class="reference internal" href="#custom-sorting">Custom Sorting</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#connecting-csvstore-to-dijit-form-combobox">Connecting CsvStore to dijit.form.ComboBox</a></li>
+<li><a class="reference internal" href="#connecting-csvstore-to-dojox-grid-datagrid">Connecting CsvStore to dojox.grid.DataGrid</a></li>
+<li><a class="reference internal" href="#connecting-csvstore-to-dojox-grid-datagrid-where-the-data-used-a-different-separator">Connecting CsvStore to dojox.grid.DataGrid where the data used a different separator</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-data-csvstore">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.data.CsvStore</a><a class="headerlink" href="#dojox-data-csvstore" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Jared Jurkiewicz</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V1.0</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-data-csvstore" id="id2">dojox.data.CsvStore</a><ul>
+<li><a class="reference internal" href="#constructor-params" id="id3">Constructor Params</a></li>
+<li><a class="reference internal" href="#query-syntax" id="id4">Query Syntax</a></li>
+<li><a class="reference internal" href="#query-options" id="id5">Query Options</a></li>
+<li><a class="reference internal" href="#custom-sorting" id="id6">Custom Sorting</a></li>
+<li><a class="reference internal" href="#examples" id="id7">Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>CsvStore is a simple read-only store provided by Dojo and contained in the DojoX project. CsvStore is a read interface that works with <a class="reference external" href="http://en.wikipedia.org/wiki/Comma-separated_values">CSV</a> formatted data files. The CSV file format is commonly known to folks who work regularly with spread sheet data. Like ItemFileReadStore, CsvStore reads the contents from an http endpoint or a JavaScript Data object that contains CSV formatted data. The following is an example of a CSV data source:</p>
+<div class="highlight-python"><div class="highlight"><pre>Title, Year, Producer
+City of God, 2002, Katia Lund
+Rain,, Christine Jeffs
+2001: A Space Odyssey, , Stanley Kubrick
+&quot;This is a &quot;&quot;fake&quot;&quot; movie title&quot;, 1957, Sidney Lumet
+Alien, 1979   , Ridley Scott
+&quot;The Sequel to &quot;&quot;Dances With Wolves.&quot;&quot;&quot;, 1982, Ridley Scott
+&quot;Caine Mutiny, The&quot;, 1954, &quot;Dymtryk &quot;&quot;the King&quot;&quot;, Edward&quot;
+</pre></div>
+</div>
+<p>Note that in the above data, the first row is always assumed to be the column names. Those are what get assigned as the attribute names for the CSV items. Each row in the CSV data is treated as a single item.</p>
+<p>The following dojo.data APIs are implemented by CsvStore</p>
+<ul class="simple">
+<li><a class="reference internal" href="../../dojo/data/api/Read.html#dojo-data-api-read"><span>dojo.data.api.Read</span></a></li>
+<li><a class="reference internal" href="../../dojo/data/api/Identity.html#dojo-data-api-identity"><span>dojo.data.api.Identity</span></a></li>
+</ul>
+<div class="section" id="constructor-params">
+<h2><a class="toc-backref" href="#id3">Constructor Params</a><a class="headerlink" href="#constructor-params" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="10%" />
+<col width="70%" />
+<col width="8%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Parameter</strong></td>
+<td><strong>Required</strong></td>
+<td><strong>Description</strong></td>
+<td><strong>Since</strong></td>
+</tr>
+<tr class="row-even"><td>url</td>
+<td>No</td>
+<td>This optional parameter specifies what URL from which to load the Csv data Note
+that this URL is only loaded one time, as this is an in-memory data store.</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>data</td>
+<td>No</td>
+<td>A JavaScript String of Csv formatted data to use to populate the store. This parameter can be
+used instead of <em>url</em>. when you wish to load data differently then modify it to fit the expected
+Csv format.</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>label</td>
+<td>No</td>
+<td>A string that identifies which column to treat as the human-readable label. It must match one of
+the column labels in the file for it to be effective.</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>separator</td>
+<td>No</td>
+<td><strong>New to Dojo Toolkit 1.4</strong> The CsvStore can now take an optional character parameter to
+identify the delimiter of fields.  Comma is not longer required, but merely the default.</td>
+<td>1.4</td>
+</tr>
+<tr class="row-even"><td>urlPreventCache</td>
+<td>No</td>
+<td>This boolean value controls whether dojo attempts to prevent the browser caching mechanism from
+caching values loaded from a webserver.</td>
+<td>1.4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="query-syntax">
+<h2><a class="toc-backref" href="#id4">Query Syntax</a><a class="headerlink" href="#query-syntax" title="Permalink to this headline">¶</a></h2>
+<p>The query syntax used by dojox.data.CsvStore is identical to the query syntax used by <a class="reference internal" href="../../dojo/data/ItemFileReadStore.html#dojo-data-itemfilereadstore"><span>dojo.data.ItemFileReadStore</span></a></p>
+</div>
+<div class="section" id="query-options">
+<h2><a class="toc-backref" href="#id5">Query Options</a><a class="headerlink" href="#query-options" title="Permalink to this headline">¶</a></h2>
+<p>Dojo.data defines support for a 'queryOptions' modifier object that affects the behavior of the query. The two defined options listed by the API are <em>ignoreCase</em> and <em>deep</em>. CsvStore supports these options. The affect of these options on a query is defined below.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="91%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Option</strong></td>
+<td><strong>Result</strong></td>
+</tr>
+<tr class="row-even"><td>ignoreCase</td>
+<td>The default is <strong>false</strong>. When set to true, the match on attributes is done in a case-insensitive fashion. This means
+with ignoreCase: true, a query of A* would match <em>Apple</em> and <em>acorn</em></td>
+</tr>
+<tr class="row-odd"><td>deep</td>
+<td>Ignored. Csv formatted data does not not support hierarchical data.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="custom-sorting">
+<h2><a class="toc-backref" href="#id6">Custom Sorting</a><a class="headerlink" href="#custom-sorting" title="Permalink to this headline">¶</a></h2>
+<p>All fields in the CsvStore are read as strings.  Therefore, they are sorted as strings based on JavaScript's default string comparison algorithm.    This is not always what is desired, as Csv data can have fields which are intended to be numeric.  The good news is, this is easy to deal with.   CsvStore uses the dojo.data.util.sorter helper functions to implement item sorting. These functions provide a mechanism by which end users can customize how attributes are sorted. This is done by defining a <em>comparatorMap</em> on the store class. The comparator map maps an attribute name to some sorting function. The sorting function is expected to return 1, -1, or 0, base on whether the value for two items for the attribute was greater than, less than, or equal to, each other. An example of a custom sorter for attribute 'foo' is shown below:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">csvData</span> <span class="o">=</span> <span class="s2">&quot;article,price\n&quot;</span><span class="p">;</span>
+<span class="nx">csvData</span> <span class="o">+=</span> <span class="s2">&quot;1008,4.59\n&quot;</span><span class="p">;</span>
+<span class="nx">csvData</span> <span class="o">+=</span> <span class="s2">&quot;1010,10.09\n&quot;</span><span class="p">;</span>
+<span class="nx">csvData</span> <span class="o">+=</span> <span class="s2">&quot;1011,5.13\n&quot;</span><span class="p">;</span>
+<span class="nx">csvData</span> <span class="o">+=</span> <span class="s2">&quot;1016,16.68\n&quot;</span><span class="p">;</span>
+<span class="nx">csvData</span> <span class="o">+=</span> <span class="s2">&quot;1019,15.5\n&quot;</span><span class="p">;</span>
+<span class="nx">csvData</span> <span class="o">+=</span> <span class="s2">&quot;1022,10.36\n&quot;</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">CsvStore</span><span class="p">({</span><span class="nx">identifier</span><span class="o">:</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">csvData</span><span class="p">});</span>
+
+<span class="c1">// Define the comparator function for price, we want to numerically, instead of</span>
+<span class="c1">// string based sorting (As all fields in a CsvStore are parsed as strings).</span>
+<span class="nx">store</span><span class="p">.</span><span class="nx">comparatorMap</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="nx">store</span><span class="p">.</span><span class="nx">comparatorMap</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+  <span class="nx">a</span> <span class="o">=</span> <span class="nb">parseFloat</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+  <span class="nx">b</span> <span class="o">=</span> <span class="nx">parseFload</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span>
+  <span class="k">return</span> <span class="p">(</span><span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">sortAttributes</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;price&quot;</span><span class="p">,</span> <span class="nx">descending</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span> <span class="p">{</span> <span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;article&quot;</span><span class="p">,</span> <span class="nx">descending</span><span class="o">:</span> <span class="kc">true</span><span class="p">}];</span>
+<span class="kd">function</span> <span class="nx">completed</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="nx">findResult</span><span class="p">){</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">store</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="s2">&quot;article&quot;</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Item ID: [&quot;</span> <span class="o">+</span> <span class="nx">store</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="s2">&quot;article&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;] with price: [&quot;</span> <span class="o">+</span> <span class="nx">store</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="s2">&quot;price&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">error</span><span class="p">(</span><span class="nx">errData</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Failed in sorting data.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Invoke the fetch.</span>
+<span class="nx">store</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span><span class="nx">onComplete</span><span class="o">:</span> <span class="nx">completed</span><span class="p">,</span> <span class="nx">onError</span><span class="o">:</span> <span class="nx">error</span><span class="p">,</span> <span class="nx">sort</span><span class="o">:</span> <span class="nx">sortAttributes</span><span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var csvData = &quot;article,price\n&quot;;
+csvData += &quot;1008,4.59\n&quot;;
+csvData += &quot;1010,10.09\n&quot;;
+csvData += &quot;1011,5.13\n&quot;;
+csvData += &quot;1016,16.68\n&quot;;
+csvData += &quot;1019,15.5\n&quot;;
+csvData += &quot;1022,10.36\n&quot;;
+
+var store = new dojox.data.CsvStore({identifier: &quot;article&quot;, data: csvData});
+
+// Define the comparator function for price, we want to numerically, instead of
+// string based sorting (As all fields in a CsvStore are parsed as strings).
+store.comparatorMap = {};
+store.comparatorMap[&quot;price&quot;] = function(a,b){
+  a = parseFloat(a);
+  b = parseFload(b);
+  return (a - b);
+};
+
+var sortAttributes = [{attribute: &quot;price&quot;, descending: true}, { attribute: &quot;article&quot;, descending: true}];
+function completed(items, findResult){
+  for(var i = 0; i &lt; items.length; i++){
+    var value = store.getValue(items[i], &quot;article&quot;);
+    console.log(&quot;Item ID: [&quot; + store.getValue(items[i], &quot;article&quot;) + &quot;] with price: [&quot; + store.getValue(items[i], &quot;price&quot;) + &quot;]&quot;);
+  }
+}
+function error(errData, request){
+  console.log(&quot;Failed in sorting data.&quot;);
+}
+
+// Invoke the fetch.
+store.fetch({onComplete: completed, onError: error, sort: sortAttributes});</textarea></div></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id7">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="connecting-csvstore-to-dijit-form-combobox">
+<h3>Connecting CsvStore to dijit.form.ComboBox<a class="headerlink" href="#connecting-csvstore-to-dijit-form-combobox" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.data.CsvStore&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.ComboBox&quot;</span><span class="p">);</span>
+
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">storeData</span> <span class="o">=</span>   <span class="s2">&quot;firstname,lastname,age\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;John, Doe, 21\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Jane, Doe, 22\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Richard, Smith, 43\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Sally, Smith, 49\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Lian, Zu, 23\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Ichiro, Kagetsume, 23\n&quot;</span><span class="o">+</span>
+                      <span class="s2">&quot;Umeko, Tsuguri, 18\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Alptraum, Reisender, 25\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Thomas, Winthrope, 14\n&quot;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">personStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">CsvStore</span><span class="p">({</span><span class="nx">data</span><span class="o">:</span> <span class="nx">storeData</span><span class="p">});</span>
+    <span class="nx">dijit</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;combo&quot;</span><span class="p">).</span><span class="nx">store</span> <span class="o">=</span> <span class="nx">personStore</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.data.CsvStore&quot;);
+dojo.require(&quot;dijit.form.ComboBox&quot;);
+
+dojo.ready(function(){
+    var storeData =   &quot;firstname,lastname,age\n&quot; +
+                      &quot;John, Doe, 21\n&quot; +
+                      &quot;Jane, Doe, 22\n&quot; +
+                      &quot;Richard, Smith, 43\n&quot; +
+                      &quot;Sally, Smith, 49\n&quot; +
+                      &quot;Lian, Zu, 23\n&quot; +
+                      &quot;Ichiro, Kagetsume, 23\n&quot;+
+                      &quot;Umeko, Tsuguri, 18\n&quot; +
+                      &quot;Alptraum, Reisender, 25\n&quot; +
+                      &quot;Thomas, Winthrope, 14\n&quot;;
+
+    var personStore = new dojox.data.CsvStore({data: storeData});
+    dijit.byId(&quot;combo&quot;).store = personStore;
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;combo&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit.form.ComboBox&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;searchAttr:&#39;firstname&#39;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;combo&quot; data-dojo-type=&quot;dijit.form.ComboBox&quot; data-dojo-props=&quot;searchAttr:'firstname'&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+<div class="section" id="connecting-csvstore-to-dojox-grid-datagrid">
+<h3>Connecting CsvStore to dojox.grid.DataGrid<a class="headerlink" href="#connecting-csvstore-to-dojox-grid-datagrid" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.DataGrid&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.data.CsvStore&quot;</span><span class="p">);</span>
+
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">peopleData</span> <span class="o">=</span>  <span class="s2">&quot;firstname,lastname,age\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;John, Doe, 21\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Jane, Doe, 22\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Richard, Smith, 43\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Sally, Smith, 49\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Lian, Zu, 23\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Ichiro, Kagetsume, 23\n&quot;</span><span class="o">+</span>
+                      <span class="s2">&quot;Umeko, Tsuguri, 18\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Alptraum, Reisender, 25\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Thomas, Winthrope, 14\n&quot;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">personStoreForGrid</span><span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">CsvStore</span><span class="p">({</span><span class="nx">data</span><span class="o">:</span> <span class="nx">peopleData</span><span class="p">});</span>
+
+    <span class="kd">var</span> <span class="nx">layoutPeople</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">[</span>
+        <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;firstname&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;First Name&quot;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">10</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;lastname&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Last Name&quot;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">10</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Age&quot;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="s1">&#39;auto&#39;</span> <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">];</span>
+    <span class="nx">dijit</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;grid&quot;</span><span class="p">).</span><span class="nx">setStructure</span><span class="p">(</span><span class="nx">layoutPeople</span><span class="p">);</span>
+    <span class="nx">dijit</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;grid&quot;</span><span class="p">).</span><span class="nx">setStore</span><span class="p">(</span><span class="nx">personStoreForGrid</span><span class="p">,</span> <span class="p">{});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.grid.DataGrid&quot;);
+dojo.require(&quot;dojox.data.CsvStore&quot;);
+
+dojo.ready(function(){
+    var peopleData =  &quot;firstname,lastname,age\n&quot; +
+                      &quot;John, Doe, 21\n&quot; +
+                      &quot;Jane, Doe, 22\n&quot; +
+                      &quot;Richard, Smith, 43\n&quot; +
+                      &quot;Sally, Smith, 49\n&quot; +
+                      &quot;Lian, Zu, 23\n&quot; +
+                      &quot;Ichiro, Kagetsume, 23\n&quot;+
+                      &quot;Umeko, Tsuguri, 18\n&quot; +
+                      &quot;Alptraum, Reisender, 25\n&quot; +
+                      &quot;Thomas, Winthrope, 14\n&quot;;
+
+    var personStoreForGrid= new dojox.data.CsvStore({data: peopleData});
+
+    var layoutPeople = [
+      [
+        { field: &quot;firstname&quot;, name: &quot;First Name&quot;, width: 10 },
+        { field: &quot;lastname&quot;, name: &quot;Last Name&quot;, width: 10 },
+        { field: &quot;age&quot;, name: &quot;Age&quot;, width: 'auto' }
+      ]
+    ];
+    dijit.byId(&quot;grid&quot;).setStructure(layoutPeople);
+    dijit.byId(&quot;grid&quot;).setStore(personStoreForGrid, {});
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;grid&quot;</span> <span class="na">style=</span><span class="s">&quot;width: 350px; height: 300px;&quot;</span>
+  <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.grid.DataGrid&quot;</span>
+  <span class="na">data-dojo-props=</span><span class="s">&quot;query:{},</span>
+<span class="s">  rowsPerPage:40&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;grid&quot; style=&quot;width: 350px; height: 300px;&quot;
+  data-dojo-type=&quot;dojox.grid.DataGrid&quot;
+  data-dojo-props=&quot;query:{},
+  rowsPerPage:40&quot;&gt;
+&lt;/div&gt;</textarea></div><div class="highlight"><pre><span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dojox/grid/resources/Grid.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dojox/grid/resources/tundraGrid.css&quot;</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">&#64;import &quot;{{baseUrl}}dojox/grid/resources/Grid.css&quot;;
+&#64;import &quot;{{baseUrl}}dojox/grid/resources/tundraGrid.css&quot;;</textarea></div></div></div></div>
+<div class="section" id="connecting-csvstore-to-dojox-grid-datagrid-where-the-data-used-a-different-separator">
+<h3>Connecting CsvStore to dojox.grid.DataGrid where the data used a different separator<a class="headerlink" href="#connecting-csvstore-to-dojox-grid-datagrid-where-the-data-used-a-different-separator" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.DataGrid&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.data.CsvStore&quot;</span><span class="p">);</span>
+
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">peopleData2</span> <span class="o">=</span>  <span class="s2">&quot;firstname|lastname|age\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;John|Doe|21\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Jane|Doe|22\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Richard|Smith|43\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Sally|Smith|49\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Lian|Zu|23\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Ichiro|Kagetsume|23\n&quot;</span><span class="o">+</span>
+                      <span class="s2">&quot;Umeko|Tsuguri|18\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Alptraum|Reisender|25\n&quot;</span> <span class="o">+</span>
+                      <span class="s2">&quot;Thomas|Winthrope|14\n&quot;</span><span class="p">;</span>
+
+    <span class="kd">var</span> <span class="nx">personStoreForGrid2</span><span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">CsvStore</span><span class="p">({</span><span class="nx">data</span><span class="o">:</span> <span class="nx">peopleData2</span><span class="p">,</span> <span class="nx">separator</span><span class="o">:</span> <span class="s1">&#39;|&#39;</span><span class="p">});</span>
+
+    <span class="kd">var</span> <span class="nx">layoutPeople2</span> <span class="o">=</span> <span class="p">[</span>
+      <span class="p">[</span>
+        <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;firstname&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;First Name&quot;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">10</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;lastname&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Last Name&quot;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">10</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;Age&quot;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="s1">&#39;auto&#39;</span> <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">];</span>
+    <span class="nx">dijit</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;grid2&quot;</span><span class="p">).</span><span class="nx">setStructure</span><span class="p">(</span><span class="nx">layoutPeople2</span><span class="p">);</span>
+    <span class="nx">dijit</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;grid2&quot;</span><span class="p">).</span><span class="nx">setStore</span><span class="p">(</span><span class="nx">personStoreForGrid2</span><span class="p">,</span> <span class="p">{});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.grid.DataGrid&quot;);
+dojo.require(&quot;dojox.data.CsvStore&quot;);
+
+dojo.ready(function(){
+    var peopleData2 =  &quot;firstname|lastname|age\n&quot; +
+                      &quot;John|Doe|21\n&quot; +
+                      &quot;Jane|Doe|22\n&quot; +
+                      &quot;Richard|Smith|43\n&quot; +
+                      &quot;Sally|Smith|49\n&quot; +
+                      &quot;Lian|Zu|23\n&quot; +
+                      &quot;Ichiro|Kagetsume|23\n&quot;+
+                      &quot;Umeko|Tsuguri|18\n&quot; +
+                      &quot;Alptraum|Reisender|25\n&quot; +
+                      &quot;Thomas|Winthrope|14\n&quot;;
+
+    var personStoreForGrid2= new dojox.data.CsvStore({data: peopleData2, separator: '|'});
+
+    var layoutPeople2 = [
+      [
+        { field: &quot;firstname&quot;, name: &quot;First Name&quot;, width: 10 },
+        { field: &quot;lastname&quot;, name: &quot;Last Name&quot;, width: 10 },
+        { field: &quot;age&quot;, name: &quot;Age&quot;, width: 'auto' }
+      ]
+    ];
+    dijit.byId(&quot;grid2&quot;).setStructure(layoutPeople2);
+    dijit.byId(&quot;grid2&quot;).setStore(personStoreForGrid2, {});
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;grid2&quot;</span> <span class="na">style=</span><span class="s">&quot;width: 350px; height: 300px;&quot;</span>
+  <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.grid.DataGrid&quot;</span>
+  <span class="na">data-dojo-props=</span><span class="s">&quot;query:{},</span>
+<span class="s">  rowsPerPage:40&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;grid2&quot; style=&quot;width: 350px; height: 300px;&quot;
+  data-dojo-type=&quot;dojox.grid.DataGrid&quot;
+  data-dojo-props=&quot;query:{},
+  rowsPerPage:40&quot;&gt;
+&lt;/div&gt;</textarea></div><div class="highlight"><pre><span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dojox/grid/resources/Grid.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}/dojox/grid/resources/tundraGrid.css&quot;</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">&#64;import &quot;{{baseUrl}}dojox/grid/resources/Grid.css&quot;;
+&#64;import &quot;{{baseUrl}}/dojox/grid/resources/tundraGrid.css&quot;;</textarea></div></div></div></div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

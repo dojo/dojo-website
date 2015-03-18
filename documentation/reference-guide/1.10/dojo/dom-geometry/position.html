@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/dom-geometry::position() &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/dom-geometry::position()</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#basic-usage">Basic usage</a></li>
+<li><a class="reference internal" href="#centering-a-dom-node">Centering a DOM node</a></li>
+<li><a class="reference internal" href="#comparison-of-various-dom-node-position-size-methods">Comparison of various DOM node position/size methods</a><ul>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-dom-geometry-position">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/dom-geometry::position()</a><a class="headerlink" href="#dojo-dom-geometry-position" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Project owner:</th><td class="field-body">Doug Hays</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V1.7</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-dom-geometry-position" id="id2">dojo/dom-geometry::position()</a><ul>
+<li><a class="reference internal" href="#usage" id="id3">Usage</a></li>
+<li><a class="reference internal" href="#attributes" id="id4">Attributes</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The <code class="docutils literal"><span class="pre">position()</span></code> is used to obtain position and size information about a DOM node. The type of information it returns
+is the width and height of the DOM node&#8217;s border-box (or borderStart-to-borderEnd size), and absolute position
+(border-start) in the form of x and y coordinates. If the optional includeScroll boolean parameter (default=``false``)
+has the value <code class="docutils literal"><span class="pre">true</span></code>, then the returned <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> values are offsets from the document root (unaffected by
+window scrolling), otherwise they are relative to the current viewport. The return object looks like:</p>
+<div class="highlight"><pre><span class="p">{</span> <span class="nx">w</span><span class="o">:</span> <span class="mi">300</span><span class="o">:</span> <span class="nx">h</span><span class="o">:</span> <span class="mi">150</span><span class="p">,</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">700</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">900</span><span class="p">,</span> <span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{ w: 300: h: 150, x: 700, y: 900, }</textarea></div><p>for a node with a width of 300px and a height of 150px, with page absolute coordinates of 700px on the x-axis and 900px
+on the y-axis.</p>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id3">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom-geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-style&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">domGeom</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">style</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;someNode&quot;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">includeScroll</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">domGeom</span><span class="p">.</span><span class="nx">position</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="nx">includeScroll</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom-geometry&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-style&quot;], function(domGeom, dom, style){
+  var node = dom.byId(&quot;someNode&quot;);
+  var includeScroll = false;
+  var output = domGeom.position(node, includeScroll);
+});</textarea></div></div>
+<div class="section" id="attributes">
+<h2><a class="toc-backref" href="#id4">Attributes</a><a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="12%" />
+<col width="77%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>node</td>
+<td>String|DOMNode</td>
+<td>The node to return the information for</td>
+</tr>
+<tr class="row-odd"><td>includeScroll</td>
+<td>Boolean?</td>
+<td>Defaults to <code class="docutils literal"><span class="pre">false</span></code>.  If <code class="docutils literal"><span class="pre">true</span></code> the <code class="docutils literal"><span class="pre">x</span></code> and <code class="docutils literal"><span class="pre">y</span></code> values will be relative to the
+scroll position of the document.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="basic-usage">
+<h3>Basic usage<a class="headerlink" href="#basic-usage" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom-geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/json&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">domGeom</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">on</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">){</span>
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">domGeom</span><span class="p">.</span><span class="nx">position</span><span class="p">(</span><span class="nx">node</span><span class="p">);</span>
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">output</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom-geometry&quot;, &quot;dojo/dom&quot;, &quot;dojo/on&quot;, &quot;dojo/json&quot;, &quot;dojo/domReady!&quot;],
+function(domGeom, dom, on, JSON){
+  on(dom.byId(&quot;command&quot;), &quot;click&quot;, function(){
+    var node = dom.byId(&quot;example&quot;);
+    var output = domGeom.position(node);
+    dom.byId(&quot;output&quot;).innerHTML = JSON.stringify(output);
+  });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;command&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>position()<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;example&quot;</span> <span class="na">id=</span><span class="s">&quot;example&quot;</span><span class="nt">&gt;</span>Some example node<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>Output:<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;pre</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/pre&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button id=&quot;command&quot; type=&quot;button&quot;&gt;position()&lt;/button&gt;
+&lt;div class=&quot;example&quot; id=&quot;example&quot;&gt;Some example node&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Output:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre id=&quot;output&quot;&gt;&lt;/pre&gt;</textarea></div><div class="highlight"><pre><span class="nc">.example</span><span class="p">{</span>
+  <span class="k">margin</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+  <span class="k">text-align</span><span class="o">:</span> <span class="k">center</span><span class="p">;</span>
+  <span class="k">padding</span><span class="o">:</span> <span class="m">1em</span><span class="p">;</span>
+  <span class="k">border</span><span class="o">:</span> <span class="m">2px</span> <span class="k">solid</span> <span class="nb">black</span><span class="p">;</span>
+  <span class="k">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+  <span class="k">background-color</span><span class="o">:</span> <span class="nb">blue</span><span class="p">;</span>
+  <span class="k">width</span><span class="o">:</span> <span class="m">200px</span><span class="p">;</span>
+  <span class="k">height</span><span class="o">:</span> <span class="m">100px</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">.example{
+  margin: 1em;
+  text-align: center;
+  padding: 1em;
+  border: 2px solid black;
+  color: white;
+  background-color: blue;
+  width: 200px;
+  height: 100px;
+}</textarea></div></div></div></div>
+<div class="section" id="centering-a-dom-node">
+<h3>Centering a DOM node<a class="headerlink" href="#centering-a-dom-node" title="Permalink to this headline">¶</a></h3>
+<p>This example shows how to center a small DOM node (with background image) over a larger DOM node (the frame) both
+vertically and horizontally relative to the document root.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'1.7-2.0' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom-geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-style&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">domGeom</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">style</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">lastX</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nx">lastY</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;doit&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">divInfo</span> <span class="o">=</span> <span class="nx">domGeom</span><span class="p">.</span><span class="nx">position</span><span class="p">(</span><span class="s2">&quot;div1&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">),</span> <span class="c1">// use true to get the x/y relative to the document root</span>
+        <span class="nx">span</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;span1&quot;</span><span class="p">),</span>
+        <span class="nx">spanInfo</span> <span class="o">=</span> <span class="nx">domGeom</span><span class="p">.</span><span class="nx">position</span><span class="p">(</span><span class="nx">span</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="nx">lastX</span> <span class="o">+=</span> <span class="nx">divInfo</span><span class="p">.</span><span class="nx">x</span> <span class="o">-</span> <span class="nx">spanInfo</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="p">(</span><span class="nx">divInfo</span><span class="p">.</span><span class="nx">w</span> <span class="o">-</span> <span class="nx">spanInfo</span><span class="p">.</span><span class="nx">w</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="nx">lastY</span> <span class="o">+=</span> <span class="nx">divInfo</span><span class="p">.</span><span class="nx">y</span> <span class="o">-</span> <span class="nx">spanInfo</span><span class="p">.</span><span class="nx">y</span> <span class="o">+</span> <span class="p">(</span><span class="nx">divInfo</span><span class="p">.</span><span class="nx">h</span> <span class="o">-</span> <span class="nx">spanInfo</span><span class="p">.</span><span class="nx">h</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="nx">style</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">span</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">left</span><span class="o">:</span> <span class="nx">lastX</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="p">,</span>
+      <span class="nx">top</span><span class="o">:</span> <span class="nx">lastY</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom-geometry&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-style&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(domGeom, dom, style, on){
+  var lastX = 0,
+      lastY = 0;
+  on(dom.byId(&quot;doit&quot;), &quot;click&quot;, function(){
+    var divInfo = domGeom.position(&quot;div1&quot;, true), // use true to get the x/y relative to the document root
+        span = dom.byId(&quot;span1&quot;),
+        spanInfo = domGeom.position(span, true);
+    lastX += divInfo.x - spanInfo.x + (divInfo.w - spanInfo.w) / 2;
+    lastY += divInfo.y - spanInfo.y + (divInfo.h - spanInfo.h) / 2;
+    style.set(span, {
+      left: lastX + &quot;px&quot;,
+      top: lastY + &quot;px&quot;
+    });
+  });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;span1&quot;</span> <span class="na">class=</span><span class="s">&quot;centered&quot;</span> <span class="na">style=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/span&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;div1&quot;</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span> <span class="na">style=</span><span class="s">&quot;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;doit&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>Click to center the image over the frame<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;span id=&quot;span1&quot; class=&quot;centered&quot; style=&quot;&quot;&gt;&lt;/span&gt;
+&lt;div id=&quot;div1&quot; class=&quot;container&quot; style=&quot;&quot;&gt;&lt;/div&gt;
+&lt;button id=&quot;doit&quot; type=&quot;button&quot;&gt;Click to center the image over the frame&lt;/button&gt;</textarea></div><div class="highlight"><pre><span class="nc">.container</span> <span class="p">{</span>
+    <span class="k">background</span><span class="o">:</span> <span class="sx">url(&quot;../../dojo/frame.png&quot;)</span> <span class="k">no-repeat</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">237px</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="m">181px</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.centered</span> <span class="p">{</span>
+    <span class="k">background</span><span class="o">:</span> <span class="sx">url(&quot;../../dojo/img.png&quot;)</span> <span class="k">no-repeat</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">171px</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="m">121px</span><span class="p">;</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+    <span class="k">left</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">border</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="nb">white</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">.container {
+    background: url(&quot;../../dojo/frame.png&quot;) no-repeat;
+    width: 237px;
+    height: 181px;
+}
+
+.centered {
+    background: url(&quot;../../dojo/img.png&quot;) no-repeat;
+    width: 171px;
+    height: 121px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 1px solid white;
+}</textarea></div></div></div></div>
+<div class="section" id="comparison-of-various-dom-node-position-size-methods">
+<h3>Comparison of various DOM node position/size methods<a class="headerlink" href="#comparison-of-various-dom-node-position-size-methods" title="Permalink to this headline">¶</a></h3>
+<p>To see the effect of dojo.position&#8217;s includeScroll boolean parameter, scroll the window down and click the 15x120
+content area.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'1.7-2.0' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom-geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/html&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">domGeom</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">html</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">testNode</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;testNode&quot;</span><span class="p">),</span>
+      <span class="nx">contentBox</span> <span class="o">=</span> <span class="nx">domGeom</span><span class="p">.</span><span class="nx">getContentBox</span><span class="p">(</span><span class="nx">testNode</span><span class="p">),</span>
+      <span class="nx">marginBox</span> <span class="o">=</span> <span class="nx">domGeom</span><span class="p">.</span><span class="nx">getMarginBox</span><span class="p">(</span><span class="nx">testNode</span><span class="p">),</span>
+      <span class="nx">position_win</span> <span class="o">=</span> <span class="nx">domGeom</span><span class="p">.</span><span class="nx">position</span><span class="p">(</span><span class="nx">testNode</span><span class="p">,</span> <span class="kc">true</span><span class="p">),</span>
+      <span class="nx">position_view</span> <span class="o">=</span> <span class="nx">domGeom</span><span class="p">.</span><span class="nx">position</span><span class="p">(</span><span class="nx">testNode</span><span class="p">,</span> <span class="kc">false</span><span class="p">),</span>
+      <span class="nx">coords_win</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">coords</span><span class="p">(</span><span class="nx">testNode</span><span class="p">,</span> <span class="kc">true</span><span class="p">),</span>
+      <span class="nx">coords_view</span> <span class="o">=</span> <span class="nx">html</span><span class="p">.</span><span class="nx">coords</span><span class="p">(</span><span class="nx">testNode</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">attr</span> <span class="k">in</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">w</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">h</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">l</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">t</span><span class="o">:</span> <span class="mi">0</span> <span class="p">}){</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">fcn</span> <span class="k">in</span> <span class="p">{</span> <span class="nx">position_win</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">position_view</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">marginBox</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">contentBox</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">coords_win</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">coords_view</span><span class="o">:</span> <span class="mi">0</span><span class="p">}){</span>
+      <span class="kd">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="nx">fcn</span><span class="p">)[</span><span class="nx">attr</span><span class="p">];</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="nx">fcn</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="nx">attr</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">!</span><span class="nb">isNaN</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span><span class="o">?</span><span class="nx">val</span><span class="o">:</span><span class="s2">&quot;--&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom-geometry&quot;, &quot;dojo/dom&quot;, &quot;dojo/_base/html&quot;, &quot;dojo/domReady!&quot;],
+function(domGeom, dom, html){
+  var testNode = dom.byId(&quot;testNode&quot;),
+      contentBox = domGeom.getContentBox(testNode),
+      marginBox = domGeom.getMarginBox(testNode),
+      position_win = domGeom.position(testNode, true),
+      position_view = domGeom.position(testNode, false),
+      coords_win = html.coords(testNode, true),
+      coords_view = html.coords(testNode, false);
+  for(var attr in { x: 0, y: 0, w: 0, h: 0, l: 0, t: 0 }){
+    for(var fcn in { position_win: 0, position_view: 0, marginBox: 0, contentBox: 0, coords_win: 0, coords_view: 0}){
+      var val = eval(fcn)[attr];
+      dom.byId(fcn + &quot;_&quot; + attr).innerHTML = !isNaN(val)?val:&quot;--&quot;;
+    }
+  }
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;fieldset</span> <span class="na">style=</span><span class="s">&quot;display:inline;border:15px solid gray;border-width:15px 0 0 15px;margin:0px;padding:0px;font:14px monospace;background-color:white;outline:1px dotted black;&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;fieldset</span> <span class="na">style=</span><span class="s">&quot;display:inline;border:0px;border:0px;padding:0px;width:270px;height:165px;overflow:hidden;position:relative;left:-15px;top:-15px;&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;testNode&quot;</span> <span class="na">style=</span><span class="s">&quot;display:inline;margin:25px;border:20px solid gray;padding:30px;float:left;position:relative;left:15px;top:15px;&quot;</span> <span class="na">onclick=</span><span class="s">&quot;compareMethods()&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;center</span> <span class="na">style=</span><span class="s">&quot;display:block;margin:0px;padding:0px;border:0px;width:120px;height:15px;background-color:gray;color:white;overflow:hidden;&quot;</span><span class="nt">&gt;</span>120x15 content<span class="nt">&lt;/center&gt;</span>
+        <span class="nt">&lt;nobr</span> <span class="na">style=</span><span class="s">&quot;position:absolute;left:2px;top:2px;color:black;&quot;</span><span class="nt">&gt;</span>padding 30px<span class="nt">&lt;/nobr&gt;</span>
+        <span class="nt">&lt;nobr</span> <span class="na">style=</span><span class="s">&quot;position:absolute;left:-18px;top:-18px;color:white;&quot;</span><span class="nt">&gt;</span>border 20px<span class="nt">&lt;/nobr&gt;</span>
+        <span class="nt">&lt;nobr</span> <span class="na">style=</span><span class="s">&quot;position:absolute;left:-43px;top:-43px;color:black;&quot;</span><span class="nt">&gt;</span>margin 25px<span class="nt">&lt;/nobr&gt;</span>
+        <span class="nt">&lt;nobr</span> <span class="na">style=</span><span class="s">&quot;position:absolute;left:-63px;top:-63px;color:white;&quot;</span><span class="nt">&gt;</span>left/top 15px<span class="nt">&lt;/nobr&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/fieldset&gt;</span>
+<span class="nt">&lt;/fieldset&gt;</span>
+<span class="nt">&lt;table</span> <span class="na">rules=</span><span class="s">all</span> <span class="na">cellpadding=</span><span class="s">2</span> <span class="na">cellspacing=</span><span class="s">2</span> <span class="na">border=</span><span class="s">2</span> <span class="na">style=</span><span class="s">&quot;font:16px monospace;text-align:center;&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td</span> <span class="na">colspan=</span><span class="s">&quot;6&quot;</span><span class="nt">&gt;</span>attribute<span class="nt">&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;&lt;td&gt;</span>function<span class="nt">&lt;/td&gt;&lt;td&gt;</span>x<span class="nt">&lt;/td&gt;&lt;td&gt;</span>y<span class="nt">&lt;/td&gt;&lt;td&gt;</span>w<span class="nt">&lt;/td&gt;&lt;td&gt;</span>h<span class="nt">&lt;/td&gt;&lt;td&gt;</span>l<span class="nt">&lt;/td&gt;&lt;td&gt;</span>t<span class="nt">&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;&lt;td</span> <span class="na">style=</span><span class="s">&quot;text-align:left;&quot;</span><span class="nt">&gt;</span>dojo.position(node,true)<span class="nt">&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_win_x&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_win_y&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_win_w&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_win_h&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_win_l&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_win_t&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;&lt;td</span> <span class="na">style=</span><span class="s">&quot;text-align:left;&quot;</span><span class="nt">&gt;</span>dojo.position(node,false)<span class="nt">&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_view_x&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_view_y&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_view_w&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_view_h&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_view_l&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;position_view_t&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;&lt;td</span> <span class="na">style=</span><span class="s">&quot;text-align:left;&quot;</span><span class="nt">&gt;</span>dojo.marginBox(node)<span class="nt">&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;marginBox_x&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;marginBox_y&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;marginBox_w&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;marginBox_h&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;marginBox_l&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;marginBox_t&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;tr&gt;&lt;td</span> <span class="na">style=</span><span class="s">&quot;text-align:left;&quot;</span><span class="nt">&gt;</span>dojo.contentBox(node)<span class="nt">&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;contentBox_x&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;contentBox_y&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;contentBox_w&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;contentBox_h&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;contentBox_l&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;contentBox_t&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;tr</span> <span class="na">style=</span><span class="s">&quot;color:gray;&quot;</span><span class="nt">&gt;&lt;td</span> <span class="na">style=</span><span class="s">&quot;text-align:left;&quot;</span><span class="nt">&gt;</span>dojo.coords(node,true)<span class="nt">&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_win_x&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_win_y&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_win_w&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_win_h&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_win_l&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_win_t&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;tr</span> <span class="na">style=</span><span class="s">&quot;color:gray;&quot;</span><span class="nt">&gt;&lt;td</span> <span class="na">style=</span><span class="s">&quot;text-align:left;&quot;</span><span class="nt">&gt;</span>dojo.coords(node,false)<span class="nt">&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_view_x&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_view_y&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_view_w&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_view_h&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_view_l&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;td</span> <span class="na">id=</span><span class="s">&quot;coords_view_t&quot;</span><span class="nt">&gt;&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;fieldset style=&quot;display:inline;border:15px solid gray;border-width:15px 0 0 15px;margin:0px;padding:0px;font:14px monospace;background-color:white;outline:1px dotted black;&quot;&gt;
+&lt;fieldset style=&quot;display:inline;border:0px;border:0px;padding:0px;width:270px;height:165px;overflow:hidden;position:relative;left:-15px;top:-15px;&quot;&gt;
+    &lt;div id=&quot;testNode&quot; style=&quot;display:inline;margin:25px;border:20px solid gray;padding:30px;float:left;position:relative;left:15px;top:15px;&quot; onclick=&quot;compareMethods()&quot;&gt;
+        &lt;center style=&quot;display:block;margin:0px;padding:0px;border:0px;width:120px;height:15px;background-color:gray;color:white;overflow:hidden;&quot;&gt;120x15 content&lt;/center&gt;
+        &lt;nobr style=&quot;position:absolute;left:2px;top:2px;color:black;&quot;&gt;padding 30px&lt;/nobr&gt;
+        &lt;nobr style=&quot;position:absolute;left:-18px;top:-18px;color:white;&quot;&gt;border 20px&lt;/nobr&gt;
+        &lt;nobr style=&quot;position:absolute;left:-43px;top:-43px;color:black;&quot;&gt;margin 25px&lt;/nobr&gt;
+        &lt;nobr style=&quot;position:absolute;left:-63px;top:-63px;color:white;&quot;&gt;left/top 15px&lt;/nobr&gt;
+    &lt;/div&gt;
+&lt;/fieldset&gt;
+&lt;/fieldset&gt;
+&lt;table rules=all cellpadding=2 cellspacing=2 border=2 style=&quot;font:16px monospace;text-align:center;&quot;&gt;
+&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td colspan=&quot;6&quot;&gt;attribute&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;function&lt;/td&gt;&lt;td&gt;x&lt;/td&gt;&lt;td&gt;y&lt;/td&gt;&lt;td&gt;w&lt;/td&gt;&lt;td&gt;h&lt;/td&gt;&lt;td&gt;l&lt;/td&gt;&lt;td&gt;t&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align:left;&quot;&gt;dojo.position(node,true)&lt;/td&gt;&lt;td id=&quot;position_win_x&quot;&gt;&lt;/td&gt;&lt;td id=&quot;position_win_y&quot;&gt;&lt;/td&gt;&lt;td id=&quot;position_win_w&quot;&gt;&lt;/td&gt;&lt;td id=&quot;position_win_h&quot;&gt;&lt;/td&gt;&lt;td id=&quot;position_win_l&quot;&gt;&lt;/td&gt;&lt;td id=&quot;position_win_t&quot;&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align:left;&quot;&gt;dojo.position(node,false)&lt;/td&gt;&lt;td id=&quot;position_view_x&quot;&gt;&lt;/td&gt;&lt;td id=&quot;position_view_y&quot;&gt;&lt;/td&gt;&lt;td id=&quot;position_view_w&quot;&gt;&lt;/td&gt;&lt;td id=&quot;position_view_h&quot;&gt;&lt;/td&gt;&lt;td id=&quot;position_view_l&quot;&gt;&lt;/td&gt;&lt;td id=&quot;position_view_t&quot;&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align:left;&quot;&gt;dojo.marginBox(node)&lt;/td&gt;&lt;td id=&quot;marginBox_x&quot;&gt;&lt;/td&gt;&lt;td id=&quot;marginBox_y&quot;&gt;&lt;/td&gt;&lt;td id=&quot;marginBox_w&quot;&gt;&lt;/td&gt;&lt;td id=&quot;marginBox_h&quot;&gt;&lt;/td&gt;&lt;td id=&quot;marginBox_l&quot;&gt;&lt;/td&gt;&lt;td id=&quot;marginBox_t&quot;&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;text-align:left;&quot;&gt;dojo.contentBox(node)&lt;/td&gt;&lt;td id=&quot;contentBox_x&quot;&gt;&lt;/td&gt;&lt;td id=&quot;contentBox_y&quot;&gt;&lt;/td&gt;&lt;td id=&quot;contentBox_w&quot;&gt;&lt;/td&gt;&lt;td id=&quot;contentBox_h&quot;&gt;&lt;/td&gt;&lt;td id=&quot;contentBox_l&quot;&gt;&lt;/td&gt;&lt;td id=&quot;contentBox_t&quot;&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr style=&quot;color:gray;&quot;&gt;&lt;td style=&quot;text-align:left;&quot;&gt;dojo.coords(node,true)&lt;/td&gt;&lt;td id=&quot;coords_win_x&quot;&gt;&lt;/td&gt;&lt;td id=&quot;coords_win_y&quot;&gt;&lt;/td&gt;&lt;td id=&quot;coords_win_w&quot;&gt;&lt;/td&gt;&lt;td id=&quot;coords_win_h&quot;&gt;&lt;/td&gt;&lt;td id=&quot;coords_win_l&quot;&gt;&lt;/td&gt;&lt;td id=&quot;coords_win_t&quot;&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr style=&quot;color:gray;&quot;&gt;&lt;td style=&quot;text-align:left;&quot;&gt;dojo.coords(node,false)&lt;/td&gt;&lt;td id=&quot;coords_view_x&quot;&gt;&lt;/td&gt;&lt;td id=&quot;coords_view_y&quot;&gt;&lt;/td&gt;&lt;td id=&quot;coords_view_w&quot;&gt;&lt;/td&gt;&lt;td id=&quot;coords_view_h&quot;&gt;&lt;/td&gt;&lt;td id=&quot;coords_view_l&quot;&gt;&lt;/td&gt;&lt;td id=&quot;coords_view_t&quot;&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;</textarea></div></div></div><div class="section" id="notes">
+<h4>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li>Remember that page coordinates start as the top leftmost of the page is 0px, 0px</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../dom-geometry.html#dojo-dom-geometry"><span>dojo/dom-geometry</span></a></li>
+<li><a class="reference internal" href="../_base/html.html#dojo-base-html"><span>dojo/_base/html</span></a></li>
+<li><a class="reference internal" href="../dom-style.html#dojo-dom-style"><span>dojo/dom-style</span></a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

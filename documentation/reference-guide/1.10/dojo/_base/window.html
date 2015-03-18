@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/_base/window &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/_base/window</a><ul>
+<li><a class="reference internal" href="#reasons-for-deprecation">Reasons for deprecation</a></li>
+<li><a class="reference internal" href="#accessing-the-current-document">Accessing the Current Document</a><ul>
+<li><a class="reference internal" href="#body">body()</a></li>
+<li><a class="reference internal" href="#doc">doc</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#changing-the-current-document">Changing the Current Document</a><ul>
+<li><a class="reference internal" href="#setcontext">setContext()</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#withdoc">withDoc()</a></li>
+<li><a class="reference internal" href="#withglobal">withGlobal()</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-base-window">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/_base/window</a><a class="headerlink" href="#dojo-base-window" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-base-window" id="id2">dojo/_base/window</a><ul>
+<li><a class="reference internal" href="#reasons-for-deprecation" id="id3">Reasons for deprecation</a></li>
+<li><a class="reference internal" href="#accessing-the-current-document" id="id4">Accessing the Current Document</a></li>
+<li><a class="reference internal" href="#changing-the-current-document" id="id5">Changing the Current Document</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>Deprecated</em>.</p>
+<div class="section" id="reasons-for-deprecation">
+<h2><a class="toc-backref" href="#id3">Reasons for deprecation</a><a class="headerlink" href="#reasons-for-deprecation" title="Permalink to this headline">¶</a></h2>
+<p><strong>dojo/_base/window</strong> was originally written to serve two main purposes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Provide methods/variables to access the current document and the <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> element of the current document.</li>
+<li>Provide functions to switch the &#8220;current document&#8221;, i.e. the document accessed by the methods/variables
+mentioned above, and indirectly by DOM methods where the document isn&#8217;t implied by the arguments, for example
+<code class="docutils literal"><span class="pre">dojo.byId(&quot;xyz&quot;)</span></code>.</li>
+</ul>
+</div></blockquote>
+<p>In modern code, you can usually forgo use of this module, and instead just:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Use the <code class="docutils literal"><span class="pre">window</span></code>, <code class="docutils literal"><span class="pre">document</span></code>, and <code class="docutils literal"><span class="pre">document.body</span></code> global variables, or equivalent variables
+for the frame that you want to operate on.</li>
+<li>If you need to operate on a different frame/document, all of the modern dojo DOM related methods either take a document
+parameter or a DOMNode parameter (which implies a document).   For example:</li>
+</ul>
+</div></blockquote>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-geometry&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="nx">domGeom</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;address&quot;</span><span class="p">,</span> <span class="nx">myDocument</span><span class="p">);</span>
+    <span class="nx">domGeom</span><span class="p">.</span><span class="nx">setMarginBox</span><span class="p">(</span><span class="nx">node</span><span class="p">,</span> <span class="p">...);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom&quot;, &quot;dojo/dom-geometry&quot;], function(dom, domGeom){
+    var node = dom.byId(&quot;address&quot;, myDocument);
+    domGeom.setMarginBox(node, ...);
+});</textarea></div><p>Here&#8217;s the original documentation for the dojo/_base/window methods, preserved for posterity:</p>
+</div>
+<div class="section" id="accessing-the-current-document">
+<h2><a class="toc-backref" href="#id4">Accessing the Current Document</a><a class="headerlink" href="#accessing-the-current-document" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="body">
+<span id="dojo-base-window-body"></span><h3>body()<a class="headerlink" href="#body" title="Permalink to this headline">¶</a></h3>
+<p>This is a shorthand <cite>method</cite> for accessing the <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> element within the document. Not only is it shorter, it returns the <cite>current</cite> body of the current context. It also allows Dojo to use the call in non-browser environments by overloading the function to return an appropriate element.</p>
+<p>The most important item to remember is <code class="docutils literal"><span class="pre">body()</span></code> is a function, and needs to be executed to get the value:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">win</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">()</span> <span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/window&quot;], function(win){
+  console.log( win.body() );
+});</textarea></div><p>This is shorter and safer to write than:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var b = document.getElementsByTagName(&quot;body&quot;)[0];
+console.log(b);</textarea></div><p>Using the <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> element is an exercise left to the developer.
+There are several utility functions in Dojo to do common tasks on DOMNodes, and <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> is just another DOMNode:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-style&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">win</span><span class="p">,</span> <span class="nx">style</span><span class="p">,</span> <span class="nx">ctr</span><span class="p">){</span>
+    <span class="c1">// set the background color:</span>
+    <span class="nx">style</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">(),</span> <span class="s2">&quot;backgroundColor&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">);</span>
+    <span class="c1">// place a node with id=&quot;foo&quot; as the last-child of body:</span>
+    <span class="nx">ctr</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">());</span>
+    <span class="c1">// place id=&quot;foo&quot; as a first-child of body:</span>
+    <span class="nx">ctr</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">(),</span> <span class="s2">&quot;first&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/window&quot;, &quot;dojo/dom-style&quot;, &quot;dojo/dom-construct&quot;], function(win, style, ctr){
+    // set the background color:
+    style.set(win.body(), &quot;backgroundColor&quot;, &quot;green&quot;);
+    // place a node with id=&quot;foo&quot; as the last-child of body:
+    ctr.place(&quot;foo&quot;, win.body());
+    // place id=&quot;foo&quot; as a first-child of body:
+    ctr.place(&quot;foo&quot;, win.body(), &quot;first&quot;);
+});</textarea></div></div>
+<div class="section" id="doc">
+<span id="dojo-base-window-doc"></span><h3>doc<a class="headerlink" href="#doc" title="Permalink to this headline">¶</a></h3>
+<p>Alias for the current document.  This is normally the value of window[&#8220;document&#8221;];</p>
+<p>The purpose of this attribute is twofold.  First, it provides a shorter reference to get the current document.  Second, all references that make use of it can have their document scope altered temporarily by changes to the <code class="docutils literal"><span class="pre">doc</span></code> variable.  In other words, <code class="docutils literal"><span class="pre">doc</span></code> is altered by <code class="docutils literal"><span class="pre">withDoc()</span></code> and <code class="docutils literal"><span class="pre">setContext()</span></code>.</p>
+<p>Use this variable in place of window.document.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">win</span><span class="p">){</span>
+   <span class="kd">var</span> <span class="nx">currentBody</span> <span class="o">=</span> <span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">();</span>
+   <span class="kd">var</span> <span class="nx">newText</span> <span class="o">=</span> <span class="nx">win</span><span class="p">.</span><span class="nx">doc</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;Some text&quot;</span><span class="p">);</span>
+   <span class="nx">currentBody</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">newText</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/window&quot;], function(win){
+   var currentBody = win.body();
+   var newText = win.doc.createTextNode(&quot;Some text&quot;);
+   currentBody.appendChild(newText);
+});</textarea></div></div>
+</div>
+<div class="section" id="changing-the-current-document">
+<h2><a class="toc-backref" href="#id5">Changing the Current Document</a><a class="headerlink" href="#changing-the-current-document" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="setcontext">
+<span id="dojo-base-window-setcontext"></span><h3>setContext()<a class="headerlink" href="#setcontext" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">setContext()</span></code> allows many of Dojo&#8217;s core functions to easily switch context (e.g. from the current window to an iframe) with a single function call:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">win</span><span class="p">){</span>
+  <span class="nx">win</span><span class="p">.</span><span class="nx">setContext</span><span class="p">(</span><span class="nb">window</span><span class="p">,</span> <span class="nb">window</span><span class="p">.</span><span class="nb">document</span><span class="p">);</span>
+  <span class="c1">// or</span>
+  <span class="nx">win</span><span class="p">.</span><span class="nx">setContext</span><span class="p">(</span><span class="nx">myIframe</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">,</span> <span class="nx">myIframe</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nb">document</span><span class="p">);</span>
+  <span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/window&quot;], function(win){
+  win.setContext(window, window.document);
+  // or
+  win.setContext(myIframe.contentWindow, myIframe.contentWindow.document);
+  ...
+});</textarea></div><p>However, most code will want to use <code class="docutils literal"><span class="pre">withDoc()</span></code> or <code class="docutils literal"><span class="pre">withGlobal()</span></code> rather than calling <code class="docutils literal"><span class="pre">setContext()</span></code> directly.</p>
+<p><code class="docutils literal"><span class="pre">setContext()</span></code> works by modifying the values of <code class="docutils literal"><span class="pre">doc</span></code>, <code class="docutils literal"><span class="pre">body()</span></code>, and <a class="reference internal" href="kernel.html#dojo-base-kernel-global"><span>dojo/_base/kernel::global</span></a></p>
+<div class="section" id="example">
+<h4>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h4>
+<p>Here is a simple example that counts the links in the current page as well as the links in an embedded iframe, via <code class="docutils literal"><span class="pre">setContext()</span></code>.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="nx">win</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">countLinks</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">these</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s1">&#39;these_links&#39;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">those</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s1">&#39;those_links&#39;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">iframe</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s1">&#39;iframe&#39;</span><span class="p">).</span><span class="nx">contentWindow</span><span class="p">;</span>
+
+    <span class="c1">// Count the number of links in *this* page</span>
+    <span class="nx">these</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
+
+    <span class="c1">// Change context from current window to iframe</span>
+    <span class="nx">win</span><span class="p">.</span><span class="nx">setContext</span><span class="p">(</span><span class="nx">iframe</span><span class="p">.</span><span class="nb">window</span><span class="p">,</span> <span class="nx">iframe</span><span class="p">.</span><span class="nb">window</span><span class="p">.</span><span class="nb">document</span><span class="p">);</span>
+
+    <span class="c1">// Count the number of links in the *iframe*</span>
+    <span class="nx">those</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom&quot;, &quot;dojo/query&quot;, &quot;dojo/_base/window&quot;], function(dom, query, win){
+  var countLinks = function(){
+    var these = dom.byId('these_links');
+    var those = dom.byId('those_links');
+    var iframe = dom.byId('iframe').contentWindow;
+
+    // Count the number of links in *this* page
+    these.value = query('a').length;
+
+    // Change context from current window to iframe
+    win.setContext(iframe.window, iframe.window.document);
+
+    // Count the number of links in the *iframe*
+    those.value = query('a').length;
+  };
+});</textarea></div></div>
+</div>
+<div class="section" id="withdoc">
+<span id="dojo-base-window-withdoc"></span><h3>withDoc()<a class="headerlink" href="#withdoc" title="Permalink to this headline">¶</a></h3>
+<p>Use this function to replace <code class="docutils literal"><span class="pre">doc</span></code> for the duration of a specific function call. Only during that specific function execution is <code class="docutils literal"><span class="pre">doc</span></code> assigned the document you specify, and then it&#8217;s restored to it&#8217;s previous value.</p>
+<p>The example below demonstrates how to use it against an iframe document to query into the iframe and make updates:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/array&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-style&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">win</span><span class="p">,</span> <span class="nx">query</span><span class="p">,</span> <span class="nx">style</span><span class="p">){</span>
+    <span class="nx">changeStyles</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">// Apply styles to the document contained by the iframe</span>
+        <span class="kd">var</span> <span class="nx">frameDoc</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;simpleFrame&quot;</span><span class="p">).</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nb">document</span><span class="p">;</span>
+        <span class="nx">win</span><span class="p">.</span><span class="nx">withDoc</span><span class="p">(</span><span class="nx">frameDoc</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="kd">var</span> <span class="nx">tds</span><span class="o">=</span> <span class="nx">query</span><span class="p">(</span><span class="s2">&quot;td&quot;</span><span class="p">);</span>
+            <span class="nx">array</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">tds</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">cell</span><span class="p">){</span>
+                <span class="nx">style</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">cell</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">});</span>
+    <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/array&quot;, &quot;dojo/dom&quot;, &quot;dojo/_base/window&quot;, &quot;dojo/query&quot;, &quot;dojo/dom-style&quot;],
+function(array, dom, win, query, style){
+    changeStyles = function(){
+        // Apply styles to the document contained by the iframe
+        var frameDoc = dom.byId(&quot;simpleFrame&quot;).contentWindow.document;
+        win.withDoc(frameDoc, function(){
+            var tds= query(&quot;td&quot;);
+            array.forEach(tds, function(cell){
+                style.set(cell, &quot;color&quot;, &quot;red&quot;);
+            });
+        });
+    };
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;changeStyles&quot;</span> <span class="na">onclick=</span><span class="s">&quot;changeStyles();&quot;</span><span class="nt">&gt;</span>Change Text Color in iFrame<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;br&gt;&lt;br&gt;</span>
+<span class="nt">&lt;iframe</span> <span class="na">id=</span><span class="s">&quot;simpleFrame&quot;</span> <span class="na">name=</span><span class="s">&quot;simpleFrame&quot;</span> <span class="na">src=</span><span class="s">&quot;{{dataUrl}}dojox/data/tests/stores/books.html&quot;</span> <span class="na">style=</span><span class="s">&quot;width: 500px; height: 500px;&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/iframe&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button id=&quot;changeStyles&quot; onclick=&quot;changeStyles();&quot;&gt;Change Text Color in iFrame&lt;/button&gt;
+&lt;br&gt;&lt;br&gt;
+&lt;iframe id=&quot;simpleFrame&quot; name=&quot;simpleFrame&quot; src=&quot;{{dataUrl}}dojox/data/tests/stores/books.html&quot; style=&quot;width: 500px; height: 500px;&quot;&gt;
+&lt;/iframe&gt;</textarea></div></div></div></div>
+<div class="section" id="withglobal">
+<span id="dojo-base-window-withglobal"></span><h3>withGlobal()<a class="headerlink" href="#withglobal" title="Permalink to this headline">¶</a></h3>
+<p>This function provides a quick way to alter both <code class="docutils literal"><span class="pre">dojo/_base/kernel::global</span></code> (the global scope)
+and the <code class="docutils literal"><span class="pre">dojo/_base/window::doc</span></code> (the current document) for the duration of a callback execution.
+You pass in a global scope (window object) and if it contains a &#8220;document&#8221; property, it is used in place of the default dojo/_base/window::doc.</p>
+<p>Example usage:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="nx">win</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">ifr</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;someIframe&quot;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">newGlobal</span> <span class="o">=</span> <span class="nx">ifr</span><span class="p">.</span><span class="nx">contentWindow</span><span class="p">;</span> <span class="c1">// get the global scope object from the frame</span>
+
+  <span class="c1">// Call a callback with different &#39;global&#39; values and context.</span>
+  <span class="nx">win</span><span class="p">.</span><span class="nx">withGlobal</span><span class="p">(</span><span class="nx">newGlobal</span><span class="p">,</span>  <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;The current win.global is: &quot;</span><span class="p">,</span> <span class="nx">win</span><span class="p">.</span><span class="nx">global</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;The current win.doc is: &quot;</span><span class="p">,</span> <span class="nx">win</span><span class="p">.</span><span class="nx">doc</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;The current scope is: &quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+  <span class="p">},</span> <span class="k">this</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom&quot;, &quot;dojo/_base/window&quot;], function(dom, win){
+  var ifr = dom.byId(&quot;someIframe&quot;);
+  var newGlobal = ifr.contentWindow; // get the global scope object from the frame
+
+  // Call a callback with different 'global' values and context.
+  win.withGlobal(newGlobal,  function(){
+    console.log(&quot;The current win.global is: &quot;, win.global);
+    console.log(&quot;The current win.doc is: &quot;, win.doc);
+    console.log(&quot;The current scope is: &quot;, this);
+  }, this);
+});</textarea></div></div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

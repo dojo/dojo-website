@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/topic &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/topic</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#subscribe">subscribe()</a></li>
+<li><a class="reference internal" href="#publish">publish()</a></li>
+<li><a class="reference internal" href="#globbing">Globbing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#migration">Migration</a><ul>
+<li><a class="reference internal" href="#passing-arguments">Passing Arguments</a></li>
+<li><a class="reference internal" href="#unsubscribe-handlers">Unsubscribe Handlers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-topic">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/topic</a><a class="headerlink" href="#dojo-topic" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">1.7.0</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-topic" id="id2">dojo/topic</a><ul>
+<li><a class="reference internal" href="#usage" id="id3">Usage</a></li>
+<li><a class="reference internal" href="#migration" id="id4">Migration</a></li>
+<li><a class="reference internal" href="#example" id="id5">Example</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/topic</strong> provides a centralized hub for publishing and subscribing to global messages by topic.  Topics can be
+subscribed to by using <code class="docutils literal"><span class="pre">topic.subscribe()</span></code>, and messages can publish by using <code class="docutils literal"><span class="pre">topic.publish()</span></code>.</p>
+<p>Because topics are not bound to a particular object, they are useful for communication between multiple instances or
+various different types of objects.  <a class="reference internal" href="on.html#dojo-on"><span>dojo/on</span></a> is more designed to deal with handling events
+specifically related to a particular object instance or reflecting a DOM event of a particular instance.</p>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id3">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Requiring in the module is all that is needed to leverage the functionality:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/topic&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">topic</span><span class="p">){</span>
+    <span class="nx">topic</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;some/topic&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;received:&quot;</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="c1">// ...</span>
+    <span class="nx">topic</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="s2">&quot;some/topic&quot;</span><span class="p">,</span> <span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/topic&quot;], function(topic){
+    topic.subscribe(&quot;some/topic&quot;, function(){
+        console.log(&quot;received:&quot;, arguments);
+    });
+    // ...
+    topic.publish(&quot;some/topic&quot;, &quot;one&quot;, &quot;two&quot;);
+});</textarea></div><div class="section" id="subscribe">
+<span id="dojo-topic-subscribe"></span><h3>subscribe()<a class="headerlink" href="#subscribe" title="Permalink to this headline">¶</a></h3>
+<p>Subscribes to a particular topic.</p>
+<p><code class="docutils literal"><span class="pre">subscribe()</span></code> returns a handle that has a <code class="docutils literal"><span class="pre">remove()</span></code> method that can be used to remove the listener.</p>
+</div>
+<div class="section" id="publish">
+<span id="dojo-topic-publish"></span><h3>publish()<a class="headerlink" href="#publish" title="Permalink to this headline">¶</a></h3>
+<p>Publishes a topic, which the arguments are then sent to every listener.</p>
+</div>
+<div class="section" id="globbing">
+<h3>Globbing<a class="headerlink" href="#globbing" title="Permalink to this headline">¶</a></h3>
+<p>Topics do <strong>not</strong> support <em>globbing</em>, or mixing of channel names based on wildcards. This example is <strong>invalid</strong>:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/topic&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">topic</span><span class="p">){</span>
+  <span class="nx">topic</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;/foo/*&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span> <span class="cm">/*handle*/</span> <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/topic&quot;], function(topic){
+  topic.subscribe(&quot;/foo/*&quot;, function(data){ /*handle*/ });
+});</textarea></div><p>It is not practical to support this on the client side.</p>
+</div>
+</div>
+<div class="section" id="migration">
+<h2><a class="toc-backref" href="#id4">Migration</a><a class="headerlink" href="#migration" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">dojo/topic</span></code> replaces the old <code class="docutils literal"><span class="pre">dojo.publish()</span></code> and <code class="docutils literal"><span class="pre">dojo.subscribe()</span></code> API.  There are some things to note about
+the migration from old API.</p>
+<div class="section" id="passing-arguments">
+<h3>Passing Arguments<a class="headerlink" href="#passing-arguments" title="Permalink to this headline">¶</a></h3>
+<p>Where as <code class="docutils literal"><span class="pre">dojo.publish()</span></code> required arguments to be specified within an array, <code class="docutils literal"><span class="pre">dojo/topic::publish()</span></code> does not
+have this requirement. Any number of arguments can be specified flatly after the initial argument which specifies the
+topic. For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/topic&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">topic</span><span class="p">){</span>
+  <span class="nx">topic</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="s2">&quot;some/topic&quot;</span><span class="p">,</span> <span class="s2">&quot;argument1&quot;</span><span class="p">,</span> <span class="s2">&quot;argument2&quot;</span><span class="p">);</span>
+<span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/topic&quot;], function(topic){
+  topic.publish(&quot;some/topic&quot;, &quot;argument1&quot;, &quot;argument2&quot;);
+})</textarea></div><p>Conversely, if you do specify an array as the second parameter, that is precisely what handlers subscribing to the
+topic will receive: a single argument which is an array.</p>
+</div>
+<div class="section" id="unsubscribe-handlers">
+<h3>Unsubscribe Handlers<a class="headerlink" href="#unsubscribe-handlers" title="Permalink to this headline">¶</a></h3>
+<p>Whereas <code class="docutils literal"><span class="pre">dojo.subscribe()</span></code> returns a handle which can be later passed to <code class="docutils literal"><span class="pre">dojo.unsubscribe()</span></code> but is otherwise
+somewhat opaque, <code class="docutils literal"><span class="pre">dojo/topic::subscribe()</span></code> returns a simple object containing a <code class="docutils literal"><span class="pre">remove()</span></code> method, which can be
+called to unsubscribe the listener.  This is akin to the <code class="docutils literal"><span class="pre">remove()</span></code> method available on objects returned by
+<code class="docutils literal"><span class="pre">dojo/on</span></code> functions:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/topic&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">topic</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">topic</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;some/topic&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// do something</span>
+  <span class="p">});</span>
+  <span class="c1">// ...</span>
+  <span class="nx">handle</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/topic&quot;], function(topic){
+  var handle = topic.subscribe(&quot;some/topic&quot;, function(){
+    // do something
+  });
+  // ...
+  handle.remove();
+});</textarea></div></div>
+</div>
+<div class="section" id="example">
+<h2><a class="toc-backref" href="#id5">Example</a><a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Demonstrates how to publish and subscribe to topics.  Once the topic has been fired one, the listener will remove
+itself.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/topic&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">topic</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+
+  <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">topic</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="s2">&quot;some/topic&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;I received: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">msg</span><span class="p">;</span>
+    <span class="nx">handle</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+  <span class="p">});</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;publish&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">topic</span><span class="p">.</span><span class="nx">publish</span><span class="p">(</span><span class="s2">&quot;some/topic&quot;</span><span class="p">,</span> <span class="p">{</span> <span class="nx">msg</span><span class="o">:</span> <span class="s2">&quot;hello world&quot;</span> <span class="p">});</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/topic&quot;, &quot;dojo/dom&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(topic, dom, on){
+
+  var handle = topic.subscribe(&quot;some/topic&quot;, function(e){
+    dom.byId(&quot;output&quot;).innerHTML = &quot;I received: &quot; + e.msg;
+    handle.remove();
+  });
+
+  on(dom.byId(&quot;publish&quot;), &quot;click&quot;, function(){
+    topic.publish(&quot;some/topic&quot;, { msg: &quot;hello world&quot; });
+  });
+
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;publish&quot;</span><span class="nt">&gt;</span>Publish &quot;some/topic&quot;<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;</span>Nothing Yet...<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button type=&quot;button&quot; id=&quot;publish&quot;&gt;Publish &quot;some/topic&quot;&lt;/button&gt;
+&lt;div id=&quot;output&quot;&gt;Nothing Yet...&lt;/div&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="on.html#dojo-on"><span>dojo/on</span></a> - The DOM and synthetic event handling module.</li>
+<li><a class="reference internal" href="Evented.html#dojo-evented"><span>dojo/Evented</span></a> - A class that supports emitting synthetic events.</li>
+<li><a class="reference internal" href="Stateful.html#dojo-stateful"><span>dojo/Stateful</span></a> - A class that supports the ability to &#8220;watch&#8221; property changes.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

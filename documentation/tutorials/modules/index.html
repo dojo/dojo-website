@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="icon" href="/images/favicons/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="/images/favicons/apple-touch-icon-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+		<link rel="stylesheet" href="/css/tutorials.css">
+		<title>Dojo Toolkit Tutorial</title>
+	</head>
+	<body>
+		<div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+		<main>
+			<div class="row">
+				<div class="large-9 large-offset-1 columns content tutorial">
+					<h2 id="introduction-to-amd-modules">Introduction to AMD Modules</h2>
+<p>Dojo supports modules written in the Asynchronous Module Definition (AMD) format, which makes code easier to author and debug. In this tutorial, we explain the basics of understanding and using AMD.</p>
+<ul>
+<li><span>Difficulty:</span> Beginner</li>
+<li><span>Dojo Version:</span> 1.10</li>
+</ul>
+<script src="/highlight/scripts/shBrushBash.js"></script>
+
+<p>If you are migrating from a version of Dojo lower than 1.7, you may find the <a href="../../1.8/modules/">1.8 version</a> of this tutorial useful as it provides some guidance on migrating from Dojo&#39;s old module system to AMD. This tutorial will focus strictly on AMD.</p>
+<h3 id="overview">Overview</h3>
+<p>The Asynchronous Module Definition (AMD) format is the module format that Dojo adopted starting with Dojo 1.7. It provides many enhancements over the legacy Dojo module style, including fully asynchronous operation, true package portability, better dependency management, and improved debugging support. It is also a community-driven standard, which means that modules written to the AMD specification can be used with any other AMD-compliant loader or library. In this tutorial, we’ll explain AMD and show you how to use it.</p>
+<h3 id="what-is-a-module-">What is a module?</h3>
+<p>A module is a value that can be accessed by a single reference. If you have multiple pieces of data or functions that you want to expose in a module, they have to be properties on a single object that represents the module. Practically speaking, it&#39;s overkill to create a module for a simple value like <code>var tinyModule = &#39;simple value&#39;;</code>, but it would be valid. Modules start to make a lot more sense for <em>modularizing</em> your code - splitting it up into logical subsets for handling specific functionality. If you want to represent a person with information like name and address, perhaps even add some methods to your person, it starts to make sense to put all that code in a single location. A module is stored in your file system in a single file.</p>
+<h3 id="how-do-i-create-a-module-">How do I create a module?</h3>
+<p>With AMD, you create a module by <em>registering</em> it with the loader.</p>
+<p>A quick aside here &mdash; loader? What&#39;s a loader? The loader is the code (yes, it&#39;s just JavaScript!) that handles the logic behind defining and loading modules. When you load <code>dojo.js</code> or <a href="http://requirejs.org"><code>require.js</code></a>, you get an AMD loader. The loader defines functions for interacting with it - <em>require</em> and <em>define</em>..</p>
+<p>The global function <code>define</code> allows you to register a module with the loader. Let&#39;s look at a few examples:</p>
+<pre class="brush: js">
+define(5);
+</pre>
+
+<p>Not very sophisticated, but valid - the value of this module is the number 5.</p>
+<pre class="brush: js">
+define({
+    library: 'dojo',
+    version: 1.10
+});
+</pre>
+
+<p>Getting a little more interesting - when this module is loaded, we get an object with 2 properties.</p>
+<pre class="brush: js">
+define(function(){
+    var privateValue = 0;
+    return {
+        increment: function(){
+            privateValue++;
+        },
+
+        decrement: function(){
+            privateValue--;
+        },
+
+        getValue: function(){
+            return privateValue;
+        }
+    };
+});
+</pre>
+
+<p>In this case, we&#39;ve passed a function to <code>define</code>. The function is evaluated and its result is stored by the loader as the module. This code uses a closure to create a private value that is not directly accessible by external code, but can be examined and manipulated by methods provided on the object that is returned as the module&#39;s value.</p>
+<h3 id="how-do-i-load-a-module-">How do I load a module?</h3>
+<p>For starters, we need to understand how modules are identified. In order to load a module, you need some way of identifying it. Similar to the module/package systems of other programming languages, an AMD module is identified by its path and file name. Let&#39;s save the code from the above example in a folder:</p>
+<pre>app/counter.js</pre>
+
+
+<p>Let&#39;s also add a loader (Dojo of course!) and an index.html - the entry-point for our application. This gives us the following file structure:</p>
+<pre>/
+    index.html
+    /dojo/
+    /app/
+        counter.js</pre>
+
+
+<p>The index page will look like this:</p>
+<pre class="brush: html">
+&lt;html&gt;
+    &lt;body&gt;
+        &lt;script src=&quot;dojo/dojo.js&quot; data-dojo-config="async: true"&gt;&lt;/script&gt;
+        &lt;script&gt;
+            require([
+                &quot;app/counter&quot;
+            ], function(counter){
+                log(counter.getValue());
+                counter.increment();
+                log(counter.getValue());
+                counter.decrement();
+                log(counter.getValue());
+            });
+        &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+
+<p><a href="demo/demo.php">View Demo</a></p>
+<p>Let&#39;s review what&#39;s going on here:</p>
+<ol>
+<li>In <code>app/counter.js</code>, we call <code>define</code> to register a module with the loader. Note that the module we have defined is a reference to an object, not a constructor function - this means that every bit of code that loads this module will get a reference to the exact same object. Generally, modules return constructors, but in some cases it is appropriate to return a singleton object.</li>
+<li>By locating our module in the file system in a sub-folder below the folder containing <code>index.html</code>, and in a sibling folder of our AMD loader (<code>dojo/dojo.js</code>), we don&#39;t have to do any extra configuration for the loader to know that the module id &quot;app/counter&quot; indicates that the loader should load the file <code>app/counter.js</code> and use its return value as the module.</li>
+<li>In our <code>index.html</code>, we call <code>require</code> to load the &quot;app/counter&quot; module. You can load a module simply with <code>require([&quot;app/counter&quot;])</code>. If the code in the module has side-effects (like augmenting other modules), you may not need a reference to the module at all. However, if you need a reference to the module, you need to supply a callback function. The loader will ensure the module has been loaded, and once it has, it will call your callback function passing any modules to it as parameters. As with any other function, you are free to name your parameters whatever you want - there&#39;s no requirement that parameter names have any relationship to the module name. That said, it <em>is</em> good practice to use similar names to the module name.</li>
+</ol>
+<h3 id="modules-loading-modules">Modules Loading Modules</h3>
+<p>Our examples so far have shown very simple usage of the <code>define</code> function. When an application is composed of well-organized modules, there is naturally a lot of dependency between modules. The <code>define</code> function can automatically load dependencies for your module. The dependency list is passed to <code>define</code> before the module value.</p>
+<pre class="brush: js">
+define([
+    "dojo/_base/declare",
+    "dojo/dom",
+    "app/dateFormatter"
+], function(declare, dom, dateFormatter){
+    return declare(null, {
+        showDate: function(id, date){
+            dom.byId(id).innerHTML = dateFormatter.format(date);
+        }
+    });
+});
+</pre>
+
+
+<p>This example demonstrates some more typical features of AMD applications:</p>
+<ol>
+<li>Multiple dependencies - both the &quot;dojo/dom&quot; and (hypothetical) &quot;app/dateFormatter&quot; modules are specified in the dependency list</li>
+<li>Returns a constructor - an appropriate name for a module like this would be something like &quot;app/DateManager&quot;. Code that uses it would look something like this:<pre><code>&lt;pre class=&quot;brush: js&quot;&gt;
+    require([
+        &quot;app/DateManager&quot;
+    ], function(DateManager){
+        var dm = new DateManager();
+        dm.showDate(&#39;dateElementId&#39;, new Date());
+    });
+&lt;/pre&gt;
+</code></pre></li>
+</ol>
+<p>While AMD is one of the first topics you should familiarize yourself with before developing with Dojo, <code>declare</code> is another vital function - if you&#39;re not already familiar with <code>dojo/_base/declare</code>, go read its <a href="../declare/">tutorial</a> next!</p>
+<h3 id="using-plugins">Using plugins</h3>
+<p>In addition to regular modules, the AMD loader also features a new type of module called a plugin. Plugins are used to extend the loader with new features beyond simply loading an AMD module. Plugins are loaded more or less the same way as a regular module, but use a special character &quot;!&quot; at the end of the module identifier to identify the request as a plugin request. Data after the &quot;!&quot; is passed directly to the plugin for processing. This will become clearer as we look at a few examples. Dojo comes with several plugins by default; the four most important are <code>dojo/text</code>, <code>dojo/i18n</code>, <code>dojo/has</code> and <code>dojo/domReady</code>. Let’s take a look at how they’re used.</p>
+<h4 id="-dojo-text-reference-guide-1-10-dojo-text-html-"><a href="/reference-guide/1.10/dojo/text.html">dojo/text</a></h4>
+<p><code>dojo/text</code> is used when you need to load a string from a file (like an HTML template). The value will be cached, so subsequent calls to load the same file will not result in additional network requests. The builder will inline strings loaded using <code>dojo/text</code>. So, for example, to load a template for a templated widget, you would define your module like this:</p>
+<pre class="brush: js;">
+// in "my/widget/NavBar.js"
+define([
+    "dojo/_base/declare",
+    "dijit/_WidgetBase",
+    "dijit/_TemplatedMixin",
+    "dojo/text!./templates/NavBar.html"
+], function(declare, _WidgetBase, _TemplatedMixin, template){
+    return declare([_WidgetBase, _TemplatedMixin], {
+        // template contains the content of the file "my/widget/templates/NavBar.html"
+        templateString: template
+    });
+});</pre>
+
+
+<h4 id="-dojo-i18n-reference-guide-1-10-dojo-i18n-html-"><a href="/reference-guide/1.10/dojo/i18n.html">dojo/i18n</a></h4>
+<p><code>dojo/i18n</code> loads language resource bundles according to the web browser&#39;s user locale. Its usage looks like this:</p>
+<pre class="brush: js;">
+// in "my/widget/Dialog.js"
+define([
+    "dojo/_base/declare",
+    "dijit/Dialog",
+    "dojo/i18n!./nls/common"
+], function(declare, Dialog, i18n){
+    return declare(Dialog, {
+        title: i18n.dialogTitle
+    });
+});</pre>
+
+
+<p>Read the <a href="../i18n/">internationalization tutorial</a> for more information on how to use <code>i18n</code>.</p>
+<h4 id="-dojo-has-reference-guide-1-10-dojo-has-html-"><a href="/reference-guide/1.10/dojo/has.html">dojo/has</a></h4>
+<p>Dojo’s loader includes an implementation of the <a href="https://github.com/phiggins42/has.js">has.js</a> feature detection API; the <code>dojo/has</code> plugin leverages this functionality for requiring modules conditionally. Its usage looks like this:</p>
+<pre class="brush: js;">
+// in "my/events.js"
+define([
+    "dojo/dom",
+    "dojo/has!dom-addeventlistener?./events/w3c:./events/ie"
+], function(dom, events){
+    // events is "my/events/w3c" if the "dom-addeventlistener" test was true, "my/events/ie" otherwise
+    events.addEvent(dom.byId("foo"), "click", function(){
+        console.log("Foo clicked!");
+    });
+});</pre>
+
+
+<h4 id="-dojo-domready-reference-guide-1-10-dojo-domready-html-"><a href="/reference-guide/1.10/dojo/domReady.html">dojo/domReady</a></h4>
+<p>dojo/domReady is the replacement for <code>dojo.ready</code>. It is a module that simply doesn’t resolve until the DOM is ready. Its usage looks like this:</p>
+<pre class="brush: js;">// in "my/app.js"
+define(["dojo/dom", "dojo/domReady!"], function(dom){
+    // This function does not execute until the DOM is ready
+    dom.byId("someElement");
+});</pre>
+
+
+<p>Note that we aren&#39;t defining a parameter in our callback function for any return value of dojo/domReady. This is because its return value is worthless—we are simply using it to defer the callback. Required modules or plugins with unused return values should be included at the end of your list of required dependencies, since the order between the modules and their local variable names depends on order.</p>
+<p>Even though no data is being passed to the plugin, the exclamation point is still required. Without it, you will just load the dojo/domReady module as a dependency instead of activating its special plugin features.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>The basic understanding of AMD provided in this tutorial will get you started with Dojo development, but you will soon find yourself running into more complicated scenarios. Read the <a href="../modules_advanced/">Advanced AMD Usage</a> tutorial to learn how to deal with:</p>
+<ul>
+<li>Configuring the loader so that it works when the loader and packages are in different locations, even different servers</li>
+<li>Creating packages of portable modules</li>
+<li>Loading multiple versions of the same module or library</li>
+<li>Loading non-AMD code</li>
+</ul>
+<h3 id="resources">Resources</h3>
+<ul>
+<li><a href="https://github.com/amdjs/amdjs-api/wiki/AMD">AMD Specification</a></li>
+</ul>
+
+				</div>
+			</div>
+		</main>
+		<div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+	</body>
+</html>

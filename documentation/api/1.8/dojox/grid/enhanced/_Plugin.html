@@ -1,0 +1,488 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.8/dojox/grid/enhanced/_Plugin" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.8/dojox/grid/enhanced/_Plugin.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/grid/enhanced/_Plugin<span style="font-size:11px;color:#999;"> (version 1.8)</span></h1>
+<div class="jsdoc-full-summary"><p>Base class for all plugins.</p>
+</div>
+<div class="jsdoc-full-summary"><p>Provides common plugin functionality and basic life cycle management.
+
+</p>
+<p>Each concrete plugin must have a name field and is responsible for registering itself to the global plugin registry
+e.g. for dnd plugin:
+
+</p>
+<pre><code>dojox.grid.EnhancedGrid.registerPlugin(&quot;dnd&quot; /*plugin name*/,
+                                        dojox.grid.enhanced.plugins.DnD /*full class name of a plugin*/
+                                        {&quot;preInit&quot;: false, &quot;dependency&quot;: [&quot;nestedSorting&quot;]} /*properties*/);</pre></code>
+<p>[Keywords] of plugin properties (case sensitive):
+
+</p>
+<ul>
+<li>&quot;preInit&quot;: boolean, whether a plugin should be created before EnhancedGrid.postCreate(),
+ false by default(plugins are created after EnhancedGrid.postCreate()).</li>
+<li>&quot;dependency&quot;: array or string, plugin(s) indicated by &quot;dependency&quot; will be created before the current one.
+ Note: recursive cycle dependencies are not supported e.g. following dependency is invalid:
+ pluginA -&gt; pluginB -&gt; pluginA</li>
+</ul>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new _Plugin<span class="parameters">(inGrid,option);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin">dojox/grid/enhanced/_Plugin</a></div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">inGrid</td>
+    <td class="jsdoc-param-type"><a class="jsdoc-link" href="/documentation/api/1.8/dojox/grid/EnhancedGrid">dojox/grid/EnhancedGrid</a></td>
+    <td class="jsdoc-param-description"><p>The grid to plug in to.</p>
+
+    </td>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">option</td>
+    <td class="jsdoc-param-type">undefined</td>
+    <td class="jsdoc-param-description">
+    </td>
+  </tr>
+</table>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><ol>
+<li>Customize default DnD plugin</li>
+</ol>
+<pre><code>declare(&quot;mygrid.MyDnD&quot;, dojox.grid.enhanced.plugins.DnD, {
+    name:&quot;dnd&quot; //still reuse the plugin name
+    constructor: function(inGrid, option){ ... }
+});
+dojox.grid.EnhancedGrid.registerPlugin(&quot;dnd&quot;, mygrid.MyDnD);</code></pre>
+<ol>
+<li>Add new plugin - PluginA</li>
+</ol>
+<pre><code>declare(&quot;mygrid.PluginA&quot;, dojox.grid.enhanced._Plugin, {
+    name: &quot;pA&quot;,
+    constructor: function(inGrid, option){ ... }
+});
+dojox.grid.EnhancedGrid.registerPlugin(&quot;pA&quot;,mygrid.PluginA);</code></pre>
+<ol>
+<li>Use plugins</li>
+</ol>
+<pre><code>dojo.require(&quot;mygrid.MyDnD&quot;);
+dojo.require(&quot;mygrid.PluginA&quot;);
+
+&lt;script type=&quot;text/javascript&quot;&gt;
+    var grid = new dojox.grid.EnhancedGrid(
+    {plugins: {dnd:true, pA:true}, ... }, dojo.byId(&quot;gridDiv&quot;));
+    grid.startup();
+&lt;/script&gt;</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="arrayIcon private"><a href="1_8dojox_grid_enhanced__Plugin__connects">_connects</a>
+        </li><span>List of all connections.<span title="private" class="jsdoc-private"></span></span>
+        <li class="arrayIcon private"><a href="1_8dojox_grid_enhanced__Plugin__subscribes">_subscribes</a>
+        </li><span>List of all subscribes.<span title="private" class="jsdoc-private"></span></span>
+        <li class="objectIcon public"><a href="1_8dojox_grid_enhanced__Plugin_grid">grid</a>
+        </li><span>Grid that the plugin belongs to</span>
+        <li class="stringIcon public"><a href="1_8dojox_grid_enhanced__Plugin_name">name</a>
+        </li><span>Plugin name, e.g. &amp;#39;nestedSorting&amp;#39;, &amp;#39;dnd&amp;#39;...</span>
+        <li class="objectIcon public"><a href="1_8dojox_grid_enhanced__Plugin_option">option</a>
+        </li><span>Plugin properties - leveraged with default and user specified properties.
+e.g. for dnd plugin, it may look like {&amp;quot;class&amp;quot;: dojox.grid.enhanced.plugins.DnD, &amp;quot;dependency&amp;quot;: [&amp;quot;nestedSorting&amp;quot;], ...}</span>
+        <li class="objectIcon public"><a href="1_8dojox_grid_enhanced__Plugin_privates">privates</a>
+        </li><span>Private properties/methods shouldn&amp;#39;t be mixin-ed anytime.</span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a href="#1_8dojox_grid_enhanced__Plugin_connect">connect</a><span class="parameters"></span><span class="parameters">(obj,event,method) </span><span>Connects specified obj/event to specified method of this object.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_grid_enhanced__Plugin_destroy">destroy</a><span class="parameters"></span><span class="parameters">() </span><span>Destroy all resources.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_grid_enhanced__Plugin_disconnect">disconnect</a><span class="parameters"></span><span class="parameters">(handle) </span><span>Disconnects handle and removes it from connection list.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_grid_enhanced__Plugin_init">init</a><span class="parameters"></span><span class="parameters">() </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_grid_enhanced__Plugin_subscribe">subscribe</a><span class="parameters"></span><span class="parameters">(topic,method) </span><span>Subscribes to the specified topic and calls the specified method
+of this object.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojox_grid_enhanced__Plugin_unsubscribe">unsubscribe</a><span class="parameters"></span><span class="parameters">(handle) </span><span>Un-subscribes handle and removes it from subscriptions list.</span>
+        </li>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Event Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a #{link}="#{link}">onPostInit</a><span class="parameters"></span><span></span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onPreInit</a><span class="parameters"></span><span></span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onSetStore</a><span class="parameters">
+            <store></store>,</span><span>Called when store is changed.</span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onStartUp</a><span class="parameters"></span><span></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin__connects"></a><span class="arrayIcon">_connects</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-summary"><p>List of all connections.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin__subscribes"></a><span class="arrayIcon">_subscribes</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-summary"><p>List of all subscribes.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_grid"></a><span class="objectIcon">grid</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-summary"><p>Grid that the plugin belongs to</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_name"></a><span class="stringIcon">name</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-summary"><p>Plugin name, e.g. &#39;nestedSorting&#39;, &#39;dnd&#39;...</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_option"></a><span class="objectIcon">option</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-summary"><p>Plugin properties - leveraged with default and user specified properties.
+e.g. for dnd plugin, it may look like {&quot;class&quot;: dojox.grid.enhanced.plugins.DnD, &quot;dependency&quot;: [&quot;nestedSorting&quot;], ...}</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_privates"></a><span class="objectIcon">privates</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-summary"><p>Private properties/methods shouldn&#39;t be mixin-ed anytime.</p>
+</div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_connect"></a><span class="functionIcon">connect</span><span class="parameters">(obj,event,method)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Connects specified obj/event to specified method of this object.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">obj</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">event</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">method</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when foo.bar() is called, call the listener in the scope of plugin
+plugin.connect(foo, &quot;bar&quot;, function(){
+    console.debug(this.xxx());//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_destroy"></a><span class="functionIcon">destroy</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Destroy all resources.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_disconnect"></a><span class="functionIcon">disconnect</span><span class="parameters">(handle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Disconnects handle and removes it from connection list.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_init"></a><span class="functionIcon">init</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_subscribe"></a><span class="functionIcon">subscribe</span><span class="parameters">(topic,method)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Subscribes to the specified topic and calls the specified method
+of this object.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">topic</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">method</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when /my/topic is published, call the subscriber in the scope of plugin
+// with passed parameter - &quot;v&quot;
+plugin.subscribe(&quot;/my/topic&quot;, function(v){
+    console.debug(this.xxx(v));//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_unsubscribe"></a><span class="functionIcon">unsubscribe</span><span class="parameters">(handle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Un-subscribes handle and removes it from subscriptions list.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <h2>Events</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_onPostInit"></a><span class="functionIcon">onPostInit</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when /my/topic is published, call the subscriber in the scope of plugin
+// with passed parameter - &quot;v&quot;
+plugin.subscribe(&quot;/my/topic&quot;, function(v){
+    console.debug(this.xxx(v));//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_onPreInit"></a><span class="functionIcon">onPreInit</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when /my/topic is published, call the subscriber in the scope of plugin
+// with passed parameter - &quot;v&quot;
+plugin.subscribe(&quot;/my/topic&quot;, function(v){
+    console.debug(this.xxx(v));//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_onSetStore"></a><span class="functionIcon">onSetStore</span><span class="parameters">(store)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Called when store is changed.</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when /my/topic is published, call the subscriber in the scope of plugin
+// with passed parameter - &quot;v&quot;
+plugin.subscribe(&quot;/my/topic&quot;, function(v){
+    console.debug(this.xxx(v));//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojox_grid_enhanced__Plugin_onStartUp"></a><span class="functionIcon">onStartUp</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when /my/topic is published, call the subscriber in the scope of plugin
+// with passed parameter - &quot;v&quot;
+plugin.subscribe(&quot;/my/topic&quot;, function(v){
+    console.debug(this.xxx(v));//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.8/dojox/grid/enhanced/_Plugin" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

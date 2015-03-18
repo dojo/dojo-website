@@ -1,0 +1,1272 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojox/charting/Chart" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojox/charting/Chart.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/charting/Chart<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-full-summary"><p>The main chart object in dojox.charting.  This will create a two dimensional
+chart based on dojox.gfx.
+</p>
+</div>
+<div class="jsdoc-full-summary"><p>dojox.charting.Chart is the primary object used for any kind of charts.  It
+is simple to create--just pass it a node reference, which is used as the
+container for the chart--and a set of optional keyword arguments and go.
+
+</p>
+<p>Note that like most of dojox.gfx, most of dojox.charting.Chart&#39;s methods are
+designed to return a reference to the chart itself, to allow for functional
+chaining.  This makes defining everything on a Chart very easy to do.
+</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new Chart<span class="parameters">(node,kwArgs);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a></div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">node</td>
+    <td class="jsdoc-param-type">DOMNode</td>
+    <td class="jsdoc-param-description">
+    </td>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">kwArgs</td>
+    <td class="jsdoc-param-type">Object</td>
+    <td class="jsdoc-param-description">
+      <div><em>Optional</em></div>
+    </td>
+  </tr>
+</table>
+<div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a></span></div>
+<div class="jsdoc-return-description"><p>The newly created chart.</p>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><p>Create an area chart, with smoothing.
+
+</p>
+<pre><code>require([&quot;dojox/charting/Chart&quot;, &quot;dojox/charting/themes/Shrooms&quot;, &quot;dojox/charting/plot2d/Areas&quot;, ...],
+    function(Chart, Shrooms, Areas, ...){
+    new Chart(node)
+        .addPlot(&quot;default&quot;, { type: Areas, tension: &quot;X&quot; })
+        .setTheme(Shrooms)
+        .addSeries(&quot;Series A&quot;, [1, 2, 0.5, 1.5, 1, 2.8, 0.4])
+        .addSeries(&quot;Series B&quot;, [2.6, 1.8, 2, 1, 1.4, 0.7, 2])
+        .addSeries(&quot;Series C&quot;, [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2])
+        .render();
+});</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 2</h3><p>The form of data in a data series can take a number of forms: a simple array,
+an array of objects {x,y}, or something custom (as determined by the plot).
+Here&#39;s an example of a Candlestick chart, which expects an object of
+{ open, high, low, close }.
+
+</p>
+<pre><code>require([&quot;dojox/charting/Chart&quot;, &quot;dojox/charting/plot2d/Candlesticks&quot;, ...],
+    function(Chart, Candlesticks, ...){
+    new Chart(node)
+        .addPlot(&quot;default&quot;, {type: Candlesticks, gap: 1})
+        .addAxis(&quot;x&quot;, {fixLower: &quot;major&quot;, fixUpper: &quot;major&quot;, includeZero: true})
+        .addAxis(&quot;y&quot;, {vertical: true, fixLower: &quot;major&quot;, fixUpper: &quot;major&quot;, natural: true})
+        .addSeries(&quot;Series A&quot;, [
+                { open: 20, close: 16, high: 22, low: 8 },
+                { open: 16, close: 22, high: 26, low: 6, mid: 18 },
+                { open: 22, close: 18, high: 22, low: 11, mid: 21 },
+                { open: 18, close: 29, high: 32, low: 14, mid: 27 },
+                { open: 29, close: 24, high: 29, low: 13, mid: 27 },
+                { open: 24, close: 8, high: 24, low: 5 },
+                { open: 8, close: 16, high: 22, low: 2 },
+                { open: 16, close: 12, high: 19, low: 7 },
+                { open: 12, close: 20, high: 22, low: 8 },
+                { open: 20, close: 16, high: 22, low: 8 },
+                { open: 16, close: 22, high: 26, low: 6, mid: 18 },
+                { open: 22, close: 18, high: 22, low: 11, mid: 21 },
+                { open: 18, close: 29, high: 32, low: 14, mid: 27 },
+                { open: 29, close: 24, high: 29, low: 13, mid: 27 },
+                { open: 24, close: 8, high: 24, low: 5 },
+                { open: 8, close: 16, high: 22, low: 2 },
+                { open: 16, close: 12, high: 19, low: 7 },
+                { open: 12, close: 20, high: 22, low: 8 },
+                { open: 20, close: 16, high: 22, low: 8 },
+                { open: 16, close: 22, high: 26, low: 6 },
+                { open: 22, close: 18, high: 22, low: 11 },
+                { open: 18, close: 29, high: 32, low: 14 },
+                { open: 29, close: 24, high: 29, low: 13 },
+                { open: 24, close: 8, high: 24, low: 5 },
+                { open: 8, close: 16, high: 22, low: 2 },
+                { open: 16, close: 12, high: 19, low: 7 },
+                { open: 12, close: 20, high: 22, low: 8 },
+                { open: 20, close: 16, high: 22, low: 8 }
+            ],
+            { stroke: { color: &quot;green&quot; }, fill: &quot;lightgreen&quot; }
+        )
+        .render();
+});</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_9dojox_charting_Chart__invalidateDependentPlots">_invalidateDependentPlots</a><span class="parameters"></span><span class="parameters">(plotName,verticalAxis) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_charting_Chart__makeClean">_makeClean</a><span class="parameters"></span><span class="parameters">() </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_charting_Chart__makeDirty">_makeDirty</a><span class="parameters"></span><span class="parameters">() </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_charting_Chart__renderChartBackground">_renderChartBackground</a><span class="parameters"></span><span class="parameters">(dim,offsets) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_charting_Chart__renderPlotBackground">_renderPlotBackground</a><span class="parameters"></span><span class="parameters">(dim,offsets,w,h) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_charting_Chart__resetLeftBottom">_resetLeftBottom</a><span class="parameters"></span><span class="parameters">(axis) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_addAxis">addAxis</a><span class="parameters"></span><span class="parameters">(name,kwArgs) </span><span>Add an axis to the chart, for rendering.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_addPlot">addPlot</a><span class="parameters"></span><span class="parameters">(name,kwArgs) </span><span>Add a new plot to the chart, defined by name and using the optional keyword arguments object.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_addSeries">addSeries</a><span class="parameters"></span><span class="parameters">(name,data,kwArgs) </span><span>Add a data series to the chart for rendering.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_calculateGeometry">calculateGeometry</a><span class="parameters"></span><span class="parameters">() </span><span>Calculate the geometry of the chart based on the defined axes of
+a chart.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_connectToPlot">connectToPlot</a><span class="parameters"></span><span class="parameters">(name,object,method) </span><span>A convenience method to connect a function to a plot.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_delayedRender">delayedRender</a><span class="parameters"></span><span class="parameters">() </span><span>Delayed render, which is used to collect multiple updates
+within a delayInMs time window.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_destroy">destroy</a><span class="parameters"></span><span class="parameters">() </span><span>Cleanup when a chart is to be destroyed.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_fireEvent">fireEvent</a><span class="parameters"></span><span class="parameters">(seriesName,eventName,index) </span><span>Fires a synthetic event for a series item.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_formatTruncatedLabel">formatTruncatedLabel</a><span class="parameters"></span><span class="parameters">(element,label,labelType) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_fullGeometry">fullGeometry</a><span class="parameters"></span><span class="parameters">() </span><span>Calculate the full geometry of the chart.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_fullRender">fullRender</a><span class="parameters"></span><span class="parameters">() </span><span>Force a full rendering of the chart, including full resets on the chart itself.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_getAxis">getAxis</a><span class="parameters"></span><span class="parameters">(name) </span><span>Get the given axis, by name.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_getCoords">getCoords</a><span class="parameters"></span><span class="parameters">() </span><span>Get the coordinates and dimensions of the containing DOMNode, as
+returned by dojo.coords.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_getGeometry">getGeometry</a><span class="parameters"></span><span class="parameters">() </span><span>Returns a map of information about all axes in a chart and what they represent
+in terms of scaling (see dojox.charting.axis2d.Default.getScaler).</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_getPlot">getPlot</a><span class="parameters"></span><span class="parameters">(name) </span><span>Get the given plot, by name.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_getPlotOrder">getPlotOrder</a><span class="parameters"></span><span class="parameters">() </span><span>Returns an array of plot names in the current order
+(the top-most plot is the first).</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_getSeries">getSeries</a><span class="parameters"></span><span class="parameters">(name) </span><span>Get the given series, by name.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_getSeriesOrder">getSeriesOrder</a><span class="parameters"></span><span class="parameters">(plotName) </span><span>Returns an array of series names in the current order
+(the top-most series is the first) within a plot.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_movePlotToBack">movePlotToBack</a><span class="parameters"></span><span class="parameters">(name) </span><span>Moves a given plot to back.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_movePlotToFront">movePlotToFront</a><span class="parameters"></span><span class="parameters">(name) </span><span>Moves a given plot to front.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_moveSeriesToBack">moveSeriesToBack</a><span class="parameters"></span><span class="parameters">(name) </span><span>Moves a given series to back of a plot.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_moveSeriesToFront">moveSeriesToFront</a><span class="parameters"></span><span class="parameters">(name) </span><span>Moves a given series to front of a plot.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_removeAxis">removeAxis</a><span class="parameters"></span><span class="parameters">(name) </span><span>Remove the axis that was defined using name.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_removePlot">removePlot</a><span class="parameters"></span><span class="parameters">(name) </span><span>Remove the plot defined using name from the chart&#39;s plot stack.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_removeSeries">removeSeries</a><span class="parameters"></span><span class="parameters">(name) </span><span>Remove the series defined by name from the chart.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_render">render</a><span class="parameters"></span><span class="parameters">() </span><span>Render the chart according to the current information defined.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_resize">resize</a><span class="parameters"></span><span class="parameters">(width,height) </span><span>Resize the chart to the dimensions of width and height.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_setAxisWindow">setAxisWindow</a><span class="parameters"></span><span class="parameters">(name,scale,offset,zoom) </span><span>Zooms an axis and all dependent plots.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_setDir">setDir</a><span class="parameters"></span><span class="parameters">(dir) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_setPlotOrder">setPlotOrder</a><span class="parameters"></span><span class="parameters">(newOrder) </span><span>Sets new order of plots. newOrder cannot add or remove
+plots.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_setSeriesOrder">setSeriesOrder</a><span class="parameters"></span><span class="parameters">(newOrder) </span><span>Sets new order of series within a plot. newOrder cannot add
+or remove series.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_setTheme">setTheme</a><span class="parameters"></span><span class="parameters">(theme) </span><span>Set a theme of the chart.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_setWindow">setWindow</a><span class="parameters"></span><span class="parameters">(sx,sy,dx,dy,zoom) </span><span>Zooms in or out any plots in two dimensions.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_updateSeries">updateSeries</a><span class="parameters"></span><span class="parameters">(name,data,offsets) </span><span>Update the given series with a new set of data points.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_charting_Chart_zoomIn">zoomIn</a><span class="parameters"></span><span class="parameters">(name,range,delayed) </span><span>Zoom the chart to a specific range on one axis.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart__invalidateDependentPlots"></a><span class="functionIcon">_invalidateDependentPlots</span><span class="parameters">(plotName,verticalAxis)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">plotName</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">verticalAxis</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart__makeClean"></a><span class="functionIcon">_makeClean</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart__makeDirty"></a><span class="functionIcon">_makeDirty</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart__renderChartBackground"></a><span class="functionIcon">_renderChartBackground</span><span class="parameters">(dim,offsets)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">dim</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">offsets</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart__renderPlotBackground"></a><span class="functionIcon">_renderPlotBackground</span><span class="parameters">(dim,offsets,w,h)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">dim</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">offsets</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">w</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">h</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart__resetLeftBottom"></a><span class="functionIcon">_resetLeftBottom</span><span class="parameters">(axis)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">axis</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_addAxis"></a><span class="functionIcon">addAxis</span><span class="parameters">(name,kwArgs)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Add an axis to the chart, for rendering.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the axis.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">kwArgs</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>An optional keyword arguments object for use in defining details of an axis.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_addPlot"></a><span class="functionIcon">addPlot</span><span class="parameters">(name,kwArgs)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Add a new plot to the chart, defined by name and using the optional keyword arguments object.
+Note that dojox.charting assumes the main plot to be called &quot;default&quot;; if you do not have
+a plot called &quot;default&quot; and attempt to add data series to the chart without specifying the
+plot to be rendered on, you WILL get errors.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the plot to be added to the chart.  If you only plan on using one plot, call it &quot;default&quot;.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">kwArgs</td>
+            <td class="jsdoc-param-type">dojox.charting.plot2d.__PlotCtorArgs</td>
+            <td class="jsdoc-param-description"><p>An object with optional parameters for the plot in question.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_addSeries"></a><span class="functionIcon">addSeries</span><span class="parameters">(name,data,kwArgs)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Add a data series to the chart for rendering.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the data series to be plotted.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">data</td>
+            <td class="jsdoc-param-type">Array | Object</td>
+            <td class="jsdoc-param-description"><p>The array of data points (either numbers or objects) that
+represents the data to be drawn. Or it can be an object. In
+the latter case, it should have a property &quot;data&quot; (an array),
+destroy(), and setSeriesObject().</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">kwArgs</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>An optional keyword arguments object that will be mixed into
+the resultant series object.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_calculateGeometry"></a><span class="functionIcon">calculateGeometry</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Calculate the geometry of the chart based on the defined axes of
+a chart.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | undefined | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_connectToPlot"></a><span class="functionIcon">connectToPlot</span><span class="parameters">(name,object,method)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>A convenience method to connect a function to a plot.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the plot as defined by addPlot.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">object</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>The object to be connected.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">method</td>
+            <td class="jsdoc-param-type">Function</td>
+            <td class="jsdoc-param-description"><p>The function to be executed.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array | null</span></div>
+        <div class="jsdoc-return-description"><p>A handle to the connection, as defined by dojo.connect (see dojo.connect).</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_delayedRender"></a><span class="functionIcon">delayedRender</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Delayed render, which is used to collect multiple updates
+within a delayInMs time window.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_destroy"></a><span class="functionIcon">destroy</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Cleanup when a chart is to be destroyed.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">void</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_fireEvent"></a><span class="functionIcon">fireEvent</span><span class="parameters">(seriesName,eventName,index)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Fires a synthetic event for a series item.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">seriesName</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Series name.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">eventName</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Event name to simulate: onmouseover, onmouseout, onclick.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">index</td>
+            <td class="jsdoc-param-type">Number</td>
+            <td class="jsdoc-param-description"><p>Valid data value index for the event.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_formatTruncatedLabel"></a><span class="functionIcon">formatTruncatedLabel</span><span class="parameters">(element,label,labelType)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">element</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">label</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">labelType</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_fullGeometry"></a><span class="functionIcon">fullGeometry</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Calculate the full geometry of the chart.  This includes passing
+over all major elements of a chart (plots, axes, series, container)
+in order to ensure proper rendering.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_fullRender"></a><span class="functionIcon">fullRender</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Force a full rendering of the chart, including full resets on the chart itself.
+You should not call this method directly unless absolutely necessary.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_getAxis"></a><span class="functionIcon">getAxis</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Get the given axis, by name.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name the axis was defined by.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/axis2d/Default">dojox/charting/axis2d/Default</a> | undefined</span></div>
+        <div class="jsdoc-return-description"><p>The axis as stored in the chart&#39;s axis map.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_getCoords"></a><span class="functionIcon">getCoords</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Get the coordinates and dimensions of the containing DOMNode, as
+returned by dojo.coords.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Object | undefined</span></div>
+        <div class="jsdoc-return-description"><p>The resulting coordinates of the chart.  See dojo.coords for details.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_getGeometry"></a><span class="functionIcon">getGeometry</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns a map of information about all axes in a chart and what they represent
+in terms of scaling (see dojox.charting.axis2d.Default.getScaler).</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Object | object</span></div>
+        <div class="jsdoc-return-description"><p>An map of geometry objects, a one-to-one mapping of axes.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_getPlot"></a><span class="functionIcon">getPlot</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Get the given plot, by name.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name the plot was defined by.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/plot2d/Base">dojox/charting/plot2d/Base</a> | undefined</span></div>
+        <div class="jsdoc-return-description"><p>The plot.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_getPlotOrder"></a><span class="functionIcon">getPlotOrder</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns an array of plot names in the current order
+(the top-most plot is the first).</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array | undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_getSeries"></a><span class="functionIcon">getSeries</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Get the given series, by name.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name the series was defined by.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Series">dojox/charting/Series</a> | undefined</span></div>
+        <div class="jsdoc-return-description"><p>The series.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_getSeriesOrder"></a><span class="functionIcon">getSeriesOrder</span><span class="parameters">(plotName)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns an array of series names in the current order
+(the top-most series is the first) within a plot.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">plotName</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Plot&#39;s name.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array | undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_movePlotToBack"></a><span class="functionIcon">movePlotToBack</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Moves a given plot to back.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Plot&#39;s name to move.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | undefined | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_movePlotToFront"></a><span class="functionIcon">movePlotToFront</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Moves a given plot to front.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Plot&#39;s name to move.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | undefined | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_moveSeriesToBack"></a><span class="functionIcon">moveSeriesToBack</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Moves a given series to back of a plot.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Series&#39; name to move.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | undefined | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_moveSeriesToFront"></a><span class="functionIcon">moveSeriesToFront</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Moves a given series to front of a plot.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>Series&#39; name to move.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | undefined | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_removeAxis"></a><span class="functionIcon">removeAxis</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Remove the axis that was defined using name.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The axis name, as defined in addAxis.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_removePlot"></a><span class="functionIcon">removePlot</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Remove the plot defined using name from the chart&#39;s plot stack.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the plot as defined using addPlot.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_removeSeries"></a><span class="functionIcon">removeSeries</span><span class="parameters">(name)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Remove the series defined by name from the chart.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the series as defined by addSeries.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_render"></a><span class="functionIcon">render</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Render the chart according to the current information defined.  This should
+be the last call made when defining/creating a chart, or if data within the
+chart has been changed.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | undefined | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_resize"></a><span class="functionIcon">resize</span><span class="parameters">(width,height)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Resize the chart to the dimensions of width and height.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Resize the chart and its surface to the width and height dimensions.
+If a single argument of the form {w: value1, h: value2} is provided take that argument as the dimensions to use.
+Finally if no argument is provided, resize the surface to the marginBox of the chart.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">width</td>
+            <td class="jsdoc-param-type">Number | Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>The new width of the chart or the box definition.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">height</td>
+            <td class="jsdoc-param-type">Number</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>The new height of the chart.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | undefined | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_setAxisWindow"></a><span class="functionIcon">setAxisWindow</span><span class="parameters">(name,scale,offset,zoom)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Zooms an axis and all dependent plots. Can be used to zoom in 1D.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the axis as defined by addAxis.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">scale</td>
+            <td class="jsdoc-param-type">Number</td>
+            <td class="jsdoc-param-description"><p>The scale on the target axis.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">offset</td>
+            <td class="jsdoc-param-type">Number</td>
+            <td class="jsdoc-param-description"><p>Any offest, as measured by axis tick</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">zoom</td>
+            <td class="jsdoc-param-type">Boolean | Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>The chart zooming animation trigger.  This is null by default,
+e.g. {duration: 1200}, or just set true.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_setDir"></a><span class="functionIcon">setDir</span><span class="parameters">(dir)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">dir</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">function</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_setPlotOrder"></a><span class="functionIcon">setPlotOrder</span><span class="parameters">(newOrder)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Sets new order of plots. newOrder cannot add or remove
+plots. Wrong names, or dups are ignored.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">newOrder</td>
+            <td class="jsdoc-param-type">Array</td>
+            <td class="jsdoc-param-description"><p>Array of plot names compatible with getPlotOrder().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_setSeriesOrder"></a><span class="functionIcon">setSeriesOrder</span><span class="parameters">(newOrder)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Sets new order of series within a plot. newOrder cannot add
+or remove series. Wrong names, or dups are ignored.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">newOrder</td>
+            <td class="jsdoc-param-type">Array</td>
+            <td class="jsdoc-param-description"><p>Array of series names compatible with getPlotOrder(). All
+series should belong to the same plot.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_setTheme"></a><span class="functionIcon">setTheme</span><span class="parameters">(theme)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Set a theme of the chart.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">theme</td>
+            <td class="jsdoc-param-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/SimpleTheme">dojox/charting/SimpleTheme</a></td>
+            <td class="jsdoc-param-description"><p>The theme to be used for visual rendering.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_setWindow"></a><span class="functionIcon">setWindow</span><span class="parameters">(sx,sy,dx,dy,zoom)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Zooms in or out any plots in two dimensions.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">sx</td>
+            <td class="jsdoc-param-type">Number</td>
+            <td class="jsdoc-param-description"><p>The scale for the x axis.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">sy</td>
+            <td class="jsdoc-param-type">Number</td>
+            <td class="jsdoc-param-description"><p>The scale for the y axis.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">dx</td>
+            <td class="jsdoc-param-type">Number</td>
+            <td class="jsdoc-param-description"><p>The pixel offset on the x axis.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">dy</td>
+            <td class="jsdoc-param-type">Number</td>
+            <td class="jsdoc-param-description"><p>The pixel offset on the y axis.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">zoom</td>
+            <td class="jsdoc-param-type">Boolean | Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>The chart zooming animation trigger.  This is null by default,
+e.g. {duration: 1200}, or just set true.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_updateSeries"></a><span class="functionIcon">updateSeries</span><span class="parameters">(name,data,offsets)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Update the given series with a new set of data points.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the series as defined in addSeries.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">data</td>
+            <td class="jsdoc-param-type">Array | Object</td>
+            <td class="jsdoc-param-description"><p>The array of data points (either numbers or objects) that
+represents the data to be drawn. Or it can be an object. In
+the latter case, it should have a property &quot;data&quot; (an array),
+destroy(), and setSeriesObject().</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">offsets</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>If true recomputes the offsets of the chart based on the new
+data. This is useful if the range of data is drastically changing
+and offsets need to be recomputed.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojox/charting/Chart">dojox/charting/Chart</a> | function</span></div>
+        <div class="jsdoc-return-description"><p>A reference to the current chart for functional chaining.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_charting_Chart_zoomIn"></a><span class="functionIcon">zoomIn</span><span class="parameters">(name,range,delayed)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/charting/Chart" class="jsdoc-link">dojox/charting/Chart</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Zoom the chart to a specific range on one axis.  This calls render()
+directly as a convenience method.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">name</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>The name of the axis as defined by addAxis.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">range</td>
+            <td class="jsdoc-param-type">Array</td>
+            <td class="jsdoc-param-description"><p>The end points of the zoom range, measured in axis ticks.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">delayed</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojox/charting/Chart" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

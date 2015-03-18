@@ -1,0 +1,1441 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojox/data/JsonQueryRestStore" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojox/data/JsonQueryRestStore.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/data/JsonQueryRestStore<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-mixins">
+  <label>Extends</label><a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore, </a><a href="/documentation/api/1.9/dojox/data/util/JsonQuery" class="jsdoc-link">dojox/data/util/JsonQuery</a>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new JsonQueryRestStore<span class="parameters">(options);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.9/dojox/data/JsonRestStore">dojox/data/JsonRestStore</a></div>
+<div class="jsdoc-summary">
+  <<p>The JsonRestStore will cause all saved modifications to be sent to the server using Rest commands (PUT, POST, or DELETE).
+When using a Rest store on a public network, it is important to implement proper security measures to
+control access to resources.
+
+</p>
+<p>On the server side implementing a REST interface means providing GET, PUT, POST, and DELETE handlers.
+
+</p>
+<ul>
+<li>GET - Retrieve an object or array/result set, this can be by id (like /table/1) or with a
+  query (like /table/?name=foo).</li>
+<li>PUT - This should modify a object, the URL will correspond to the id (like /table/1), and the body will
+  provide the modified object</li>
+<li>POST - This should create a new object. The URL will correspond to the target store (like /table/)
+  and the body should be the properties of the new object. The server&#39;s response should include a
+  Location header that indicates the id of the newly created object. This id will be used for subsequent
+  PUT and DELETE requests. JsonRestStore also includes a Content-Location header that indicates
+  the temporary randomly generated id used by client, and this location is used for subsequent
+  PUT/DELETEs if no Location header is provided by the server or if a modification is sent prior
+  to receiving a response from the server.</li>
+<li>DELETE - This should delete an object by id.</li>
+</ul>
+<p>These articles include more detailed information on using the JsonRestStore:
+
+</p>
+<ul>
+<li><a href="http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/">http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/</a></li>
+<li><a href="http://blog.medryx.org/2008/07/24/jsonreststore-overview/">http://blog.medryx.org/2008/07/24/jsonreststore-overview/</a></li>
+</ul>
+></<p>The JsonRestStore will cause all saved modifications to be sent to the server using Rest commands (PUT, POST, or DELETE).
+When using a Rest store on a public network, it is important to implement proper security measures to
+control access to resources.
+
+</p>
+<p>On the server side implementing a REST interface means providing GET, PUT, POST, and DELETE handlers.
+
+</p>
+<ul>
+<li>GET - Retrieve an object or array/result set, this can be by id (like /table/1) or with a
+  query (like /table/?name=foo).</li>
+<li>PUT - This should modify a object, the URL will correspond to the id (like /table/1), and the body will
+  provide the modified object</li>
+<li>POST - This should create a new object. The URL will correspond to the target store (like /table/)
+  and the body should be the properties of the new object. The server&#39;s response should include a
+  Location header that indicates the id of the newly created object. This id will be used for subsequent
+  PUT and DELETE requests. JsonRestStore also includes a Content-Location header that indicates
+  the temporary randomly generated id used by client, and this location is used for subsequent
+  PUT/DELETEs if no Location header is provided by the server or if a modification is sent prior
+  to receiving a response from the server.</li>
+<li>DELETE - This should delete an object by id.</li>
+</ul>
+<p>These articles include more detailed information on using the JsonRestStore:
+
+</p>
+<ul>
+<li><a href="http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/">http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/</a></li>
+<li><a href="http://blog.medryx.org/2008/07/24/jsonreststore-overview/">http://blog.medryx.org/2008/07/24/jsonreststore-overview/</a></li>
+</ul>
+>
+</div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">options</td>
+    <td class="jsdoc-param-type">undefined</td>
+    <td class="jsdoc-param-description"><p>Keyword arguments
+
+</p>
+<h4>The <em>schema</em> parameter</h4>
+<p>This is a schema object for this store. This should be JSON Schema format.
+
+</p>
+<h4>The <em>service</em> parameter</h4>
+<p>This is the service object that is used to retrieve lazy data and save results
+The function should be directly callable with a single parameter of an object id to be loaded
+The function should also have the following methods:
+
+</p>
+<ul>
+<li>put(id,value) - puts the value at the given id</li>
+<li>post(id,value) - posts (appends) the value at the given id</li>
+<li>delete(id) - deletes the value corresponding to the given id</li>
+</ul>
+<p>Note that it is critical that the service parses responses as JSON.
+If you are using dojox.rpc.Service, the easiest way to make sure this
+happens is to make the responses have a content type of
+application/json. If you are creating your own service, make sure you
+use handleAs: &quot;json&quot; with your XHR requests.
+
+</p>
+<h4>The <em>target</em> parameter</h4>
+<p>This is the target URL for this Service store. This may be used in place
+of a service parameter to connect directly to RESTful URL without
+using a dojox.rpc.Service object.
+
+</p>
+<h4>The <em>idAttribute</em> parameter</h4>
+<p>Defaults to &#39;id&#39;. The name of the attribute that holds an objects id.
+This can be a preexisting id provided by the server.
+If an ID isn&#39;t already provided when an object
+is fetched or added to the store, the autoIdentity system
+will generate an id for it and add it to the index.
+
+</p>
+<h4>The <em>syncMode</em> parameter</h4>
+<p>Setting this to true will set the store to using synchronous calls by default.
+Sync calls return their data immediately from the calling function, so
+callbacks are unnecessary</p>
+
+    </td>
+  </tr>
+</table>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="numberIcon private inherited"><a href="1_9dojox_data_JsonQueryRestStore__currentId">_currentId</a>
+        </li><span><span title="private" class="jsdoc-private"></span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span></span>
+        <li class="booleanIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_allowNoTrailingSlash">allowNoTrailingSlash</a>
+        </li><span>Allow no trailing slash on target paths.<span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span></span>
+        <li class="numberIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_estimateCountFactor">estimateCountFactor</a>
+        </li><span>This parameter is used by the ServiceStore to estimate the total count.<span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span></span>
+        <li class="booleanIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_idAsRef">idAsRef</a>
+        </li><span>Treat objects in queries as partially loaded objects<span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span></span>
+        <li class="stringIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_idAttribute">idAttribute</a>
+        </li><span>Defaults to &amp;#39;id&amp;#39;.<span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span></span>
+        <li class="booleanIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_jsonQueryPagination">jsonQueryPagination</a>
+        </li><span><span title="inherited from dojox/data/util/JsonQuery" class="jsdoc-inherited"></span></span>
+        <li class="stringIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_labelAttribute">labelAttribute</a>
+        </li><span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span></span>
+        <li class="booleanIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_loadLazyValues">loadLazyValues</a>
+        </li><span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span></span>
+        <li class="booleanIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_loadReferencedSchema">loadReferencedSchema</a>
+        </li><span>Will load any schemas referenced content-type header or in Link headers<span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span></span>
+        <li class="booleanIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_referenceIntegrity">referenceIntegrity</a>
+        </li><span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span></span>
+        <li class="objectIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_schema">schema</a>
+        </li><span>This is a schema object for this store.<span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span></span>
+        <li class="objectIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_service">service</a>
+        </li><span>This is the service object that is used to retrieve lazy data and save results
+The function should be directly callable with a single parameter of an object id to be loaded<span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span></span>
+        <li class="booleanIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_syncMode">syncMode</a>
+        </li><span>Setting this to true will set the store to using synchronous calls by default.<span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span></span>
+        <li class="stringIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_target">target</a>
+        </li><span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span></span>
+        <li class="booleanIcon public inherited"><a href="1_9dojox_data_JsonQueryRestStore_useFullIdInQueries">useFullIdInQueries</a>
+        </li><span><span title="inherited from dojox/data/util/JsonQuery" class="jsdoc-inherited"></span></span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private inherited"><a href="#1_9dojox_data_JsonQueryRestStore__doQuery">_doQuery</a><span class="parameters"></span><span class="parameters">(args) </span><span></span><span title="private" class="jsdoc-private"></span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon private inherited"><a href="#1_9dojox_data_JsonQueryRestStore__processResults">_processResults</a><span class="parameters"></span><span class="parameters">(results,deferred) </span><span></span><span title="private" class="jsdoc-private"></span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon private inherited"><a href="#1_9dojox_data_JsonQueryRestStore__toJsonQuery">_toJsonQuery</a><span class="parameters"></span><span class="parameters">(args,jsonQueryPagination) </span><span></span><span title="private" class="jsdoc-private"></span><span title="inherited from dojox/data/util/JsonQuery" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_cancelChanging">cancelChanging</a><span class="parameters"></span><span class="parameters">(object) </span><span>Removes an object from the list of dirty objects
+This will prevent that object from being saved to the server on the next save</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_changing">changing</a><span class="parameters"></span><span class="parameters">(item,_deleting) </span><span>adds an item to the list of dirty items.</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_clientSideFetch">clientSideFetch</a><span class="parameters"></span><span class="parameters">(request,baseResults) </span><span></span><span title="inherited from dojox/data/util/JsonQuery" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_close">close</a><span class="parameters"></span><span class="parameters">(request) </span><span></span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_containsValue">containsValue</a><span class="parameters"></span><span class="parameters">(item,attribute,value) </span><span>Checks to see if &#39;item&#39; has &#39;value&#39; at &#39;attribute&#39;</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_deleteItem">deleteItem</a><span class="parameters"></span><span class="parameters">(item) </span><span>deletes item and any references to that item from the store.</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_fetch">fetch</a><span class="parameters"></span><span class="parameters">(args) </span><span>See dojo/data/api/Read.fetch</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_fetchItemByIdentity">fetchItemByIdentity</a><span class="parameters"></span><span class="parameters">(args) </span><span></span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getAttributes">getAttributes</a><span class="parameters"></span><span class="parameters">(item) </span><span>Gets the available attributes of an item&#39;s &#39;property&#39; and returns
+it as an array.</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getConstructor">getConstructor</a><span class="parameters"></span><span class="parameters">() </span><span>Gets the constructor for objects from this store</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getFeatures">getFeatures</a><span class="parameters"></span><span class="parameters">() </span><span>return the store feature set</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getIdentity">getIdentity</a><span class="parameters"></span><span class="parameters">(item) </span><span></span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getIdentityAttributes">getIdentityAttributes</a><span class="parameters"></span><span class="parameters">(item) </span><span>returns the attributes which are used to make up the
+identity of an item.</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getLabel">getLabel</a><span class="parameters"></span><span class="parameters">(item) </span><span>returns the label for an item.</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getLabelAttributes">getLabelAttributes</a><span class="parameters"></span><span class="parameters">(item) </span><span>returns an array of attributes that are used to create the label of an item</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getParent">getParent</a><span class="parameters"></span><span class="parameters">(item) </span><span>Returns the parent item (or query) for the given item</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getSchema">getSchema</a><span class="parameters"></span><span class="parameters">() </span><span>Returns a reference to the JSON Schema</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getValue">getValue</a><span class="parameters"></span><span class="parameters">(item,property,defaultValue) </span><span>Gets the value of an item&#39;s &#39;property&#39;</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_getValues">getValues</a><span class="parameters"></span><span class="parameters">(item,property) </span><span>Gets the value of an item&#39;s &#39;property&#39; and returns
+it.</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_hasAttribute">hasAttribute</a><span class="parameters"></span><span class="parameters">(item,attribute) </span><span>Checks to see if item has attribute</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_isDirty">isDirty</a><span class="parameters"></span><span class="parameters">(item) </span><span>returns true if the item is marked as dirty.</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_isItem">isItem</a><span class="parameters"></span><span class="parameters">(item,anyStore) </span><span>Checks to see if a passed &#39;item&#39;
+really belongs to this JsonRestStore.</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_isItemLoaded">isItemLoaded</a><span class="parameters"></span><span class="parameters">(item) </span><span>Checks to see if the item is loaded.</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_isUpdateable">isUpdateable</a><span class="parameters"></span><span class="parameters">() </span><span></span><span title="inherited from dojox/data/util/JsonQuery" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_loadItem">loadItem</a><span class="parameters"></span><span class="parameters">(args) </span><span>Loads an item and calls the callback handler.</span><span title="inherited from dojox/data/ServiceStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_JsonQueryRestStore_matchesQuery">matchesQuery</a><span class="parameters"></span><span class="parameters">(item,request) </span><span></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_newItem">newItem</a><span class="parameters"></span><span class="parameters">(data,parentInfo) </span><span>adds a new item to the store at the specified point.</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_querySuperSet">querySuperSet</a><span class="parameters"></span><span class="parameters">(argsSuper,argsSub) </span><span></span><span title="inherited from dojox/data/util/JsonQuery" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_revert">revert</a><span class="parameters"></span><span class="parameters">(kwArgs) </span><span>returns any modified data to its original state prior to a save();</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_save">save</a><span class="parameters"></span><span class="parameters">(kwArgs) </span><span>Saves the dirty data using REST Ajax methods.</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_setValue">setValue</a><span class="parameters"></span><span class="parameters">(item,attribute,value) </span><span>sets &#39;attribute&#39; on &#39;item&#39; to &#39;value&#39;</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_setValues">setValues</a><span class="parameters"></span><span class="parameters">(item,attribute,values) </span><span>sets &#39;attribute&#39; on &#39;item&#39; to &#39;value&#39; value
+must be an array.</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_9dojox_data_JsonQueryRestStore_unsetAttribute">unsetAttribute</a><span class="parameters"></span><span class="parameters">(item,attribute) </span><span>unsets &#39;attribute&#39; on &#39;item&#39;</span><span title="inherited from dojox/data/JsonRestStore" class="jsdoc-inherited"></span>
+        </li>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Event Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon  inherited"><a #{link}="#{link}">onDelete</a><span class="parameters"></span><span></span><span title="inherited" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a #{link}="#{link}">onNew</a><span class="parameters"></span><span></span><span title="inherited" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a #{link}="#{link}">onSet</a><span class="parameters"></span><span></span><span title="inherited" class="jsdoc-inherited"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore__currentId"></a><span class="numberIcon">_currentId</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_allowNoTrailingSlash"></a><span class="booleanIcon">allowNoTrailingSlash</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Allow no trailing slash on target paths. This is generally discouraged since
+it creates prevents simple scalar values from being used a relative URLs.
+Disabled by default.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_estimateCountFactor"></a><span class="numberIcon">estimateCountFactor</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>This parameter is used by the ServiceStore to estimate the total count. When
+paging is indicated in a fetch and the response includes the full number of items
+requested by the fetch&#39;s count parameter, then the total count will be estimated
+to be estimateCountFactor multiplied by the provided count. If this is 1, then it is assumed that the server
+does not support paging, and the response is the full set of items, where the
+total count is equal to the numer of items returned. If the server does support
+paging, an estimateCountFactor of 2 is a good value for estimating the total count
+It is also possible to override _processResults if the server can provide an exact
+total count.    </p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_idAsRef"></a><span class="booleanIcon">idAsRef</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Treat objects in queries as partially loaded objects</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_idAttribute"></a><span class="stringIcon">idAttribute</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Defaults to &#39;id&#39;. The name of the attribute that holds an objects id.
+This can be a preexisting id provided by the server.
+If an ID isn&#39;t already provided when an object
+is fetched or added to the store, the autoIdentity system
+will generate an id for it and add it to the index.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_jsonQueryPagination"></a><span class="booleanIcon">jsonQueryPagination</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/util/JsonQuery" class="jsdoc-link">dojox/data/util/JsonQuery</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_labelAttribute"></a><span class="stringIcon">labelAttribute</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_loadLazyValues"></a><span class="booleanIcon">loadLazyValues</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_loadReferencedSchema"></a><span class="booleanIcon">loadReferencedSchema</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Will load any schemas referenced content-type header or in Link headers</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_referenceIntegrity"></a><span class="booleanIcon">referenceIntegrity</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_schema"></a><span class="objectIcon">schema</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>This is a schema object for this store. This should be JSON Schema format.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_service"></a><span class="objectIcon">service</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>This is the service object that is used to retrieve lazy data and save results
+The function should be directly callable with a single parameter of an object id to be loaded</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_syncMode"></a><span class="booleanIcon">syncMode</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Setting this to true will set the store to using synchronous calls by default.
+Sync calls return their data immediately from the calling function, so
+callbacks are unnecessary. This will only work with a synchronous capable service.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_target"></a><span class="stringIcon">target</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_useFullIdInQueries"></a><span class="booleanIcon">useFullIdInQueries</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/util/JsonQuery" class="jsdoc-link">dojox/data/util/JsonQuery</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore__doQuery"></a><span class="functionIcon">_doQuery</span><span class="parameters">(args)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore__processResults"></a><span class="functionIcon">_processResults</span><span class="parameters">(results,deferred)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">results</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">deferred</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore__toJsonQuery"></a><span class="functionIcon">_toJsonQuery</span><span class="parameters">(args,jsonQueryPagination)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/util/JsonQuery" class="jsdoc-link">dojox/data/util/JsonQuery</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">jsonQueryPagination</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">string</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_cancelChanging"></a><span class="functionIcon">cancelChanging</span><span class="parameters">(object)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Removes an object from the list of dirty objects
+This will prevent that object from being saved to the server on the next save</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">object</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The item to cancel changes on</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_changing"></a><span class="functionIcon">changing</span><span class="parameters">(item,_deleting)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>adds an item to the list of dirty items.    This item
+contains a reference to the item itself as well as a
+cloned and trimmed version of old item for use with
+revert.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">_deleting</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_clientSideFetch"></a><span class="functionIcon">clientSideFetch</span><span class="parameters">(request,baseResults)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/util/JsonQuery" class="jsdoc-link">dojox/data/util/JsonQuery</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">request</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">baseResults</td>
+            <td class="jsdoc-param-type">Array</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_close"></a><span class="functionIcon">close</span><span class="parameters">(request)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">request</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_containsValue"></a><span class="functionIcon">containsValue</span><span class="parameters">(item,attribute,value)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Checks to see if &#39;item&#39; has &#39;value&#39; at &#39;attribute&#39;</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">attribute</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">Anything</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_deleteItem"></a><span class="functionIcon">deleteItem</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>deletes item and any references to that item from the store.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>item to delete</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_fetch"></a><span class="functionIcon">fetch</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>See dojo/data/api/Read.fetch</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><h4>The <em>queryOptions.cache</em> parameter</h4>
+<p>If true, indicates that the query result should be cached for future use. This is only available
+if dojox.data.ClientFilter has been loaded before the ServiceStore
+
+</p>
+<h4>The <em>syncMode</em> parameter</h4>
+<p>Indicates that the call should be fetch synchronously if possible (this is not always possible)
+
+</p>
+<h4>The <em>clientFetch</em> parameter</h4>
+<p>This is a fetch keyword argument for explicitly doing client side filtering, querying, and paging</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">string</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_fetchItemByIdentity"></a><span class="functionIcon">fetchItemByIdentity</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getAttributes"></a><span class="functionIcon">getAttributes</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Gets the available attributes of an item&#39;s &#39;property&#39; and returns
+it as an array.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getConstructor"></a><span class="functionIcon">getConstructor</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Gets the constructor for objects from this store</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getFeatures"></a><span class="functionIcon">getFeatures</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>return the store feature set</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getIdentity"></a><span class="functionIcon">getIdentity</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getIdentityAttributes"></a><span class="functionIcon">getIdentityAttributes</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns the attributes which are used to make up the
+identity of an item.    Basically returns this.idAttribute</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getLabel"></a><span class="functionIcon">getLabel</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns the label for an item. Just gets the &quot;label&quot; attribute.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getLabelAttributes"></a><span class="functionIcon">getLabelAttributes</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns an array of attributes that are used to create the label of an item</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getParent"></a><span class="functionIcon">getParent</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns the parent item (or query) for the given item</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The item to find the parent of</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getSchema"></a><span class="functionIcon">getSchema</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns a reference to the JSON Schema</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Object | undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getValue"></a><span class="functionIcon">getValue</span><span class="parameters">(item,property,defaultValue)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Gets the value of an item&#39;s &#39;property&#39;</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>The item to get the value from</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>property to look up value for</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">defaultValue</td>
+            <td class="jsdoc-param-type">value</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>the default value</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">return the plain value since it was found;</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_getValues"></a><span class="functionIcon">getValues</span><span class="parameters">(item,property)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Gets the value of an item&#39;s &#39;property&#39; and returns
+it. If this value is an array it is just returned,
+if not, the value is added to an array and that is returned.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>property to look up value for</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_hasAttribute"></a><span class="functionIcon">hasAttribute</span><span class="parameters">(item,attribute)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Checks to see if item has attribute</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">attribute</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_isDirty"></a><span class="functionIcon">isDirty</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns true if the item is marked as dirty.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_isItem"></a><span class="functionIcon">isItem</span><span class="parameters">(item,anyStore)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Checks to see if a passed &#39;item&#39;
+really belongs to this JsonRestStore.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>The value to test for being an item</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">anyStore</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description"><p>If true, this will return true if the value is an item for any JsonRestStore,
+not just this instance</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_isItemLoaded"></a><span class="functionIcon">isItemLoaded</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Checks to see if the item is loaded.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_isUpdateable"></a><span class="functionIcon">isUpdateable</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/util/JsonQuery" class="jsdoc-link">dojox/data/util/JsonQuery</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_loadItem"></a><span class="functionIcon">loadItem</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Loads an item and calls the callback handler. Note, that this will call the callback
+handler even if the item is loaded. Consequently, you can use loadItem to ensure
+that an item is loaded is situations when the item may or may not be loaded yet.
+If you access a value directly through property access, you can use this to load
+a lazy value as well (doesn&#39;t need to be an item).</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>store.loadItem({
+    item: item, // this item may or may not be loaded
+    onItem: function(item){
+        // do something with the item
+    }
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_matchesQuery"></a><span class="functionIcon">matchesQuery</span><span class="parameters">(item,request)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonQueryRestStore" class="jsdoc-link">dojox/data/JsonQueryRestStore</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">request</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_newItem"></a><span class="functionIcon">newItem</span><span class="parameters">(data,parentInfo)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>adds a new item to the store at the specified point.
+Takes two parameters, data, and options.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">data</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>The data to be added in as an item.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">parentInfo</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">instance</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_querySuperSet"></a><span class="functionIcon">querySuperSet</span><span class="parameters">(argsSuper,argsSub)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/util/JsonQuery" class="jsdoc-link">dojox/data/util/JsonQuery</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">argsSuper</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">argsSub</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_revert"></a><span class="functionIcon">revert</span><span class="parameters">(kwArgs)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns any modified data to its original state prior to a save();</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">kwArgs</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><ul>
+<li>global:
+  This will cause the revert to undo all the changes for all
+  JsonRestStores in a single operation.</li>
+</ul>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_save"></a><span class="functionIcon">save</span><span class="parameters">(kwArgs)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Saves the dirty data using REST Ajax methods. See dojo/data/api/Write for API.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">kwArgs</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><ul>
+<li>global:
+  This will cause the save to commit the dirty data for all
+  JsonRestStores as a single transaction.</li>
+<li>revertOnError:
+  This will cause the changes to be reverted if there is an
+  error on the save. By default a revert is executed unless
+  a value of false is provide for this parameter.</li>
+<li>incrementalUpdates:
+  For items that have been updated, if this is enabled, the server will be sent a POST request
+  with a JSON object containing the changed properties. By default this is
+  not enabled, and a PUT is used to deliver an update, and will include a full
+  serialization of all the properties of the item/object.
+  If this is true, the POST request body will consist of a JSON object with
+  only the changed properties. The incrementalUpdates parameter may also
+  be a function, in which case it will be called with the updated and previous objects
+  and an object update representation can be returned.</li>
+<li>alwaysPostNewItems:
+  If this is true, new items will always be sent with a POST request. By default
+  this is not enabled, and the JsonRestStore will send a POST request if
+  the item does not include its identifier (expecting server assigned location/
+  identifier), and will send a PUT request if the item does include its identifier
+  (the PUT will be sent to the URI corresponding to the provided identifier).</li>
+</ul>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_setValue"></a><span class="functionIcon">setValue</span><span class="parameters">(item,attribute,value)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>sets &#39;attribute&#39; on &#39;item&#39; to &#39;value&#39;</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">attribute</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_setValues"></a><span class="functionIcon">setValues</span><span class="parameters">(item,attribute,values)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>sets &#39;attribute&#39; on &#39;item&#39; to &#39;value&#39; value
+must be an array.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">attribute</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">values</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_unsetAttribute"></a><span class="functionIcon">unsetAttribute</span><span class="parameters">(item,attribute)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>unsets &#39;attribute&#39; on &#39;item&#39;</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">attribute</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <h2>Events</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_onDelete"></a><span class="functionIcon">onDelete</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">attribute</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>store.loadItem({
+    item: item, // this item may or may not be loaded
+    onItem: function(item){
+        // do something with the item
+    }
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_onNew"></a><span class="functionIcon">onNew</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">attribute</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>store.loadItem({
+    item: item, // this item may or may not be loaded
+    onItem: function(item){
+        // do something with the item
+    }
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_9dojox_data_JsonQueryRestStore_onSet"></a><span class="functionIcon">onSet</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/JsonRestStore" class="jsdoc-link">dojox/data/JsonRestStore</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">attribute</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>store.loadItem({
+    item: item, // this item may or may not be loaded
+    onItem: function(item){
+        // do something with the item
+    }
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojox/data/JsonQueryRestStore" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

@@ -1,0 +1,562 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.10/dojox/grid/enhanced/plugins/Filter" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.10/dojox/grid/enhanced/plugins/Filter.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/grid/enhanced/plugins/Filter<span style="font-size:11px;color:#999;"> (version 1.10)</span></h1>
+<div class="jsdoc-mixins">
+  <label>Extends</label><a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a>
+</div>
+<div class="jsdoc-full-summary"><p>Provide filter functionality for grid.
+
+</p>
+<p>Acceptable plugin parameters:
+
+</p>
+<ol>
+<li>itemsName: string:
+ the name shown on the filter bar.</li>
+<li>statusTipTimeout: number:
+ when does the status tip show.</li>
+<li>ruleCount: number:
+ default to 3, should not change to more. The Claro theme limits it.</li>
+<li>disabledConditions: object:
+ If you don&#39;t need all of the conditions provided for a data type,
+ you can explicitly declare them here:
+ e.g.: disabledConditions: {string: [&quot;contains&quot;, &quot;is&quot;], number: [&quot;equalto&quot;], ...}</li>
+<li>isServerSide: boolean:
+ Whether to use server side filtering. Default to false.</li>
+<li>isStateful: boolean:
+ If isServerSide is true, set the server side filter to be stateful or not. default to false.</li>
+<li>url: string:
+ If using stateful, this is the url to send commands. default to store.url.</li>
+<li>ruleCountToConfirmClearFilter: Integer | null |Infinity:
+ If the filter rule count is larger than or equal to this value, then a confirm dialog will show when clearing filter.
+ If set to less than 1 or null, then always show the confirm dialog.
+ If set to Infinity, then never show the confirm dialog.
+ Default value is 2.</li>
+</ol>
+<p>Acceptable cell parameters defined in layout:
+
+</p>
+<ol>
+<li>filterable: boolean:
+ The column is not filterable only when this is set to false explicitly.</li>
+<li>datatype: string:
+ The data type of this column. Can be &quot;string&quot;, &quot;number&quot;, &quot;date&quot;, &quot;time&quot;, &quot;boolean&quot;.
+ Default to &quot;string&quot;.</li>
+<li>autoComplete: boolean:
+ If need auto-complete in the ComboBox for String type, set this to true.</li>
+<li><p>dataTypeArgs: object:
+ Some arguments helping convert store data to something the filter UI understands.
+ Different data type arguments can be provided to different data types.
+ For date/time, this is a dojo.date.locale.__FormatOptions, so the DataTimeBox can understand the store data.
+ For boolean, this object contains:</p>
+<ul>
+<li>trueLabel: string:
+  A label to display in the filter definition dialog for true value. Default to &quot;True&quot;.</li>
+<li>falseLabel: string:
+  A label to display in the filter definition dialog for false value. Default to &quot;False&quot;.</li>
+</ul>
+</li>
+<li><p>disabledConditions: object:
+ If you don&#39;t need all of the conditions provided by the filter UI on this column, you can explicitly say it out here.
+ e.g.: disabledConditions: [&quot;contains&quot;, &quot;is&quot;]
+ This will disable the &quot;contains&quot; condition for this column, if this column is of string type.
+ For full set of conditions, please refer to dojox.grid.enhanced.plugins.filter.FilterDefDialog._setupData.</p>
+</li>
+</ol>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new Filter<span class="parameters">(grid,args);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.10/dojox/grid/enhanced/plugins/Filter">dojox/grid/enhanced/plugins/Filter</a></div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">grid</td>
+    <td class="jsdoc-param-type">undefined</td>
+    <td class="jsdoc-param-description">
+    </td>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">args</td>
+    <td class="jsdoc-param-type">undefined</td>
+    <td class="jsdoc-param-description">
+    </td>
+  </tr>
+</table>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><pre><code>&lt;div dojoType=&quot;dojox.grid.EnhancedGrid&quot; plugins=&quot;{GridFilter: true}&quot; ...&gt;&lt;/div&gt;
+or provide some parameters:
+&lt;div dojoType=&quot;dojox.grid.EnhancedGrid&quot; plugins=&quot;{GridFilter: {itemsName: &#39;songs&#39;}}&quot; ...&gt;&lt;/div&gt;
+Customize columns for filter:
+var layout = [
+    ...
+    //define a column to be un-filterable in layout/structure
+    {field: &quot;Genre&quot;, filterable: false, ...}
+    //define a column of type string and supports autoComplete when you type in filter conditions.
+    {field: &quot;Writer&quot;, datatype: &quot;string&quot;, autoCommplete: true, ...}
+    //define a column of type date and the data in store has format: &quot;yyyy/M/d&quot;
+    {field: &quot;Publish Date&quot;, datatype: &quot;date&quot;, dataTypeArgs: {datePattern: &quot;yyyy/M/d&quot;}, ...}
+    //disable some conditions for a column
+    {field: &quot;Track&quot;, disabledConditions: [&quot;equalto&quot;,&quot;notequalto&quot;], ...}
+    ...
+];</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="arrayIcon private inherited"><a href="1_10dojox_grid_enhanced_plugins_Filter__connects">_connects</a>
+        </li><span>List of all connections.<span title="private" class="jsdoc-private"></span><span title="inherited from dojox/grid/enhanced/_Plugin" class="jsdoc-inherited"></span></span>
+        <li class="arrayIcon private inherited"><a href="1_10dojox_grid_enhanced_plugins_Filter__subscribes">_subscribes</a>
+        </li><span>List of all subscribes.<span title="private" class="jsdoc-private"></span><span title="inherited from dojox/grid/enhanced/_Plugin" class="jsdoc-inherited"></span></span>
+        <li class="objectIcon public inherited"><a href="1_10dojox_grid_enhanced_plugins_Filter_grid">grid</a>
+        </li><span>Grid that the plugin belongs to<span title="inherited from dojox/grid/enhanced/_Plugin" class="jsdoc-inherited"></span></span>
+        <li class="stringIcon public"><a href="1_10dojox_grid_enhanced_plugins_Filter_name">name</a>
+        </li><span>plugin name</span>
+        <li class="objectIcon public inherited"><a href="1_10dojox_grid_enhanced_plugins_Filter_option">option</a>
+        </li><span>Plugin properties - leveraged with default and user specified properties.
+e.g. for dnd plugin, it may look like {&amp;quot;class&amp;quot;: dojox.grid.enhanced.plugins.DnD, &amp;quot;dependency&amp;quot;: [&amp;quot;nestedSorting&amp;quot;], ...}<span title="inherited from dojox/grid/enhanced/_Plugin" class="jsdoc-inherited"></span></span>
+        <li class="objectIcon public inherited"><a href="1_10dojox_grid_enhanced_plugins_Filter_privates">privates</a>
+        </li><span>Private properties/methods shouldn&amp;#39;t be mixin-ed anytime.<span title="inherited from dojox/grid/enhanced/_Plugin" class="jsdoc-inherited"></span></span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_10dojox_grid_enhanced_plugins_Filter__clientFilterGetter">_clientFilterGetter</a><span class="parameters"></span><span class="parameters">(datarow,cell,rowIndex) </span><span>Define the grid-specific way to get data from a row.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_10dojox_grid_enhanced_plugins_Filter__wrapStore">_wrapStore</a><span class="parameters"></span><span class="parameters">() </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_10dojox_grid_enhanced_plugins_Filter_connect">connect</a><span class="parameters"></span><span class="parameters">(obj,event,method) </span><span>Connects specified obj/event to specified method of this object.</span><span title="inherited from dojox/grid/enhanced/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_grid_enhanced_plugins_Filter_destroy">destroy</a><span class="parameters"></span><span class="parameters">() </span><span></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_10dojox_grid_enhanced_plugins_Filter_disconnect">disconnect</a><span class="parameters"></span><span class="parameters">(handle) </span><span>Disconnects handle and removes it from connection list.</span><span title="inherited from dojox/grid/enhanced/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_10dojox_grid_enhanced_plugins_Filter_init">init</a><span class="parameters"></span><span class="parameters">() </span><span></span><span title="inherited from dojox/grid/enhanced/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_10dojox_grid_enhanced_plugins_Filter_subscribe">subscribe</a><span class="parameters"></span><span class="parameters">(topic,method) </span><span>Subscribes to the specified topic and calls the specified method
+of this object.</span><span title="inherited from dojox/grid/enhanced/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a href="#1_10dojox_grid_enhanced_plugins_Filter_unsubscribe">unsubscribe</a><span class="parameters"></span><span class="parameters">(handle) </span><span>Un-subscribes handle and removes it from subscriptions list.</span><span title="inherited from dojox/grid/enhanced/_Plugin" class="jsdoc-inherited"></span>
+        </li>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Event Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon  inherited"><a #{link}="#{link}">onPostInit</a><span class="parameters"></span><span></span><span title="inherited" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon  inherited"><a #{link}="#{link}">onPreInit</a><span class="parameters"></span><span></span><span title="inherited" class="jsdoc-inherited"></span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onSetStore</a><span class="parameters">
+            <store></store>,</span><span></span>
+        </li>
+        <li class="functionIcon  inherited"><a #{link}="#{link}">onStartUp</a><span class="parameters"></span><span></span><span title="inherited" class="jsdoc-inherited"></span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter__connects"></a><span class="arrayIcon">_connects</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>List of all connections.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter__subscribes"></a><span class="arrayIcon">_subscribes</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>List of all subscribes.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_grid"></a><span class="objectIcon">grid</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Grid that the plugin belongs to</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_name"></a><span class="stringIcon">name</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/plugins/Filter" class="jsdoc-link">dojox/grid/enhanced/plugins/Filter</a>
+        </div>
+        <div class="jsdoc-summary"><p>plugin name</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_option"></a><span class="objectIcon">option</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Plugin properties - leveraged with default and user specified properties.
+e.g. for dnd plugin, it may look like {&quot;class&quot;: dojox.grid.enhanced.plugins.DnD, &quot;dependency&quot;: [&quot;nestedSorting&quot;], ...}</p>
+</div>
+      </div>
+      <div class="jsdoc-field public inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_privates"></a><span class="objectIcon">privates</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-summary"><p>Private properties/methods shouldn&#39;t be mixin-ed anytime.</p>
+</div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter__clientFilterGetter"></a><span class="functionIcon">_clientFilterGetter</span><span class="parameters">(datarow,cell,rowIndex)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/plugins/Filter" class="jsdoc-link">dojox/grid/enhanced/plugins/Filter</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Define the grid-specific way to get data from a row.
+Argument &quot;cell&quot; is provided by FilterDefDialog when defining filter expressions.
+Argument &quot;rowIndex&quot; is provided by FilterLayer when checking a row.
+FilterLayer also provides a forth argument: &quot;store&quot;, which is grid.store,
+but we don&#39;t need it here.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">datarow</td>
+            <td class="jsdoc-param-type">data item</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">cell</td>
+            <td class="jsdoc-param-type">cell</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">rowIndex</td>
+            <td class="jsdoc-param-type">int</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter__wrapStore"></a><span class="functionIcon">_wrapStore</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/plugins/Filter" class="jsdoc-link">dojox/grid/enhanced/plugins/Filter</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_connect"></a><span class="functionIcon">connect</span><span class="parameters">(obj,event,method)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Connects specified obj/event to specified method of this object.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">obj</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">event</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">method</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when foo.bar() is called, call the listener in the scope of plugin
+plugin.connect(foo, &quot;bar&quot;, function(){
+    console.debug(this.xxx());//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_destroy"></a><span class="functionIcon">destroy</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/plugins/Filter" class="jsdoc-link">dojox/grid/enhanced/plugins/Filter</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_disconnect"></a><span class="functionIcon">disconnect</span><span class="parameters">(handle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Disconnects handle and removes it from connection list.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_init"></a><span class="functionIcon">init</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_subscribe"></a><span class="functionIcon">subscribe</span><span class="parameters">(topic,method)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Subscribes to the specified topic and calls the specified method
+of this object.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">topic</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">method</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when /my/topic is published, call the subscriber in the scope of plugin
+// with passed parameter - &quot;v&quot;
+plugin.subscribe(&quot;/my/topic&quot;, function(v){
+    console.debug(this.xxx(v));//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_unsubscribe"></a><span class="functionIcon">unsubscribe</span><span class="parameters">(handle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <div class="jsdoc-full-summary"><p>Un-subscribes handle and removes it from subscriptions list.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <h2>Events</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_onPostInit"></a><span class="functionIcon">onPostInit</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when /my/topic is published, call the subscriber in the scope of plugin
+// with passed parameter - &quot;v&quot;
+plugin.subscribe(&quot;/my/topic&quot;, function(v){
+    console.debug(this.xxx(v));//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_onPreInit"></a><span class="functionIcon">onPreInit</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when /my/topic is published, call the subscriber in the scope of plugin
+// with passed parameter - &quot;v&quot;
+plugin.subscribe(&quot;/my/topic&quot;, function(v){
+    console.debug(this.xxx(v));//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_onSetStore"></a><span class="functionIcon">onSetStore</span><span class="parameters">(store)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/plugins/Filter" class="jsdoc-link">dojox/grid/enhanced/plugins/Filter</a>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when /my/topic is published, call the subscriber in the scope of plugin
+// with passed parameter - &quot;v&quot;
+plugin.subscribe(&quot;/my/topic&quot;, function(v){
+    console.debug(this.xxx(v));//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field inherited">
+        <div class="jsdoc-title"><a name="1_10dojox_grid_enhanced_plugins_Filter_onStartUp"></a><span class="functionIcon">onStartUp</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/grid/enhanced/_Plugin" class="jsdoc-link">dojox/grid/enhanced/_Plugin</a><span title="inherited" class="jsdoc-inherited"></span>
+        </div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">handle</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var plugin = new dojox.grid.enhanced._Plugin(grid,&quot;myPlugin&quot;,{...});
+// when /my/topic is published, call the subscriber in the scope of plugin
+// with passed parameter - &quot;v&quot;
+plugin.subscribe(&quot;/my/topic&quot;, function(v){
+    console.debug(this.xxx(v));//&quot;this&quot; - plugin scope
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.10/dojox/grid/enhanced/plugins/Filter" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

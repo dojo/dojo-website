@@ -1,0 +1,772 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.10/dojox/data/ServiceStore" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.10/dojox/data/ServiceStore.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/data/ServiceStore<span style="font-size:11px;color:#999;"> (version 1.10)</span></h1>
+<div class="jsdoc-full-summary"><p>note that dojox.rpc.Service is not required, you can create your own services
+A ServiceStore is a readonly data store that provides a data.data interface to an RPC service.
+
+</p>
+<pre><code>var myServices = new dojox.rpc.Service(dojo.moduleUrl(&quot;dojox.rpc.tests.resources&quot;, &quot;test.smd&quot;));
+var serviceStore = new dojox.data.ServiceStore({service:myServices.ServiceStore});</pre></code>
+<p>The ServiceStore also supports lazy loading. References can be made to objects that have not been loaded.
+For example if a service returned:
+
+</p>
+<pre><code>{&quot;name&quot;:&quot;Example&quot;,&quot;lazyLoadedObject&quot;:{&quot;$ref&quot;:&quot;obj2&quot;}}</pre></code>
+<p>And this object has accessed using the dojo.data API:
+
+</p>
+<pre><code>var obj = serviceStore.getValue(myObject,&quot;lazyLoadedObject&quot;);</pre></code>
+<p>The object would automatically be requested from the server (with an object id of &quot;obj2&quot;).
+</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new ServiceStore<span class="parameters">(options);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.10/dojox/data/ServiceStore">dojox/data/ServiceStore</a></div>
+<div class="jsdoc-summary">
+  <<p>ServiceStore can do client side caching and result set updating if
+dojox.data.ClientFilter is loaded. Do this add:
+
+</p>
+<pre><code>dojo.require(&quot;dojox.data.ClientFilter&quot;)</code></pre>
+<p>prior to loading the ServiceStore (ClientFilter must be loaded before ServiceStore).
+
+</p>
+<p>To utilize client side filtering with a subclass, you can break queries into
+client side and server side components by putting client side actions in
+clientFilter property in fetch calls. For example you could override fetch:
+
+</p>
+<pre><code>fetch: function(args){
+    // do the sorting and paging on the client side
+    args.clientFilter = {start:args.start, count: args.count, sort: args.sort};
+    // args.query will be passed to the service object for the server side handling
+    return this.inherited(arguments);
+}</code></pre>
+<p>When extending this class, if you would like to create lazy objects, you can follow
+
+</p>
+<p>the example from dojox.data.tests.stores.ServiceStore:
+
+</p>
+<pre><code>var lazyItem = {
+    _loadObject: function(callback){
+        this.name=&quot;loaded&quot;;
+        delete this._loadObject;
+        callback(this);
+    }
+};</code></pre>
+></<p>ServiceStore can do client side caching and result set updating if
+dojox.data.ClientFilter is loaded. Do this add:
+
+</p>
+<pre><code>dojo.require(&quot;dojox.data.ClientFilter&quot;)</code></pre>
+<p>prior to loading the ServiceStore (ClientFilter must be loaded before ServiceStore).
+
+</p>
+<p>To utilize client side filtering with a subclass, you can break queries into
+client side and server side components by putting client side actions in
+clientFilter property in fetch calls. For example you could override fetch:
+
+</p>
+<pre><code>fetch: function(args){
+    // do the sorting and paging on the client side
+    args.clientFilter = {start:args.start, count: args.count, sort: args.sort};
+    // args.query will be passed to the service object for the server side handling
+    return this.inherited(arguments);
+}</code></pre>
+<p>When extending this class, if you would like to create lazy objects, you can follow
+
+</p>
+<p>the example from dojox.data.tests.stores.ServiceStore:
+
+</p>
+<pre><code>var lazyItem = {
+    _loadObject: function(callback){
+        this.name=&quot;loaded&quot;;
+        delete this._loadObject;
+        callback(this);
+    }
+};</code></pre>
+>
+</div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">options</td>
+    <td class="jsdoc-param-type">undefined</td>
+    <td class="jsdoc-param-description"><p>Keyword arguments
+
+</p>
+<h4>The <em>schema</em> parameter</h4>
+<p>This is a schema object for this store. This should be JSON Schema format.
+
+</p>
+<h4>The <em>service</em> parameter</h4>
+<p>This is the service object that is used to retrieve lazy data and save results
+The function should be directly callable with a single parameter of an object id to be loaded
+
+</p>
+<h4>The <em>idAttribute</em> parameter</h4>
+<p>Defaults to &#39;id&#39;. The name of the attribute that holds an objects id.
+This can be a preexisting id provided by the server.
+If an ID isn&#39;t already provided when an object
+is fetched or added to the store, the autoIdentity system
+will generate an id for it and add it to the index.
+
+</p>
+<h4>The <em>estimateCountFactor</em> parameter</h4>
+<p>This parameter is used by the ServiceStore to estimate the total count. When
+paging is indicated in a fetch and the response includes the full number of items
+requested by the fetch&#39;s count parameter, then the total count will be estimated
+to be estimateCountFactor multiplied by the provided count. If this is 1, then it is assumed that the server
+does not support paging, and the response is the full set of items, where the
+total count is equal to the number of items returned. If the server does support
+paging, an estimateCountFactor of 2 is a good value for estimating the total count
+It is also possible to override _processResults if the server can provide an exact
+total count.
+
+</p>
+<h4>The <em>syncMode</em> parameter</h4>
+<p>Setting this to true will set the store to using synchronous calls by default.
+Sync calls return their data immediately from the calling function, so
+callbacks are unnecessary. This will only work with a synchronous capable service.
+</p>
+
+    </td>
+  </tr>
+</table>
+<p>See the<a href="/reference-guide/1.10/dojox/data/ServiceStore.html" target="_blank">dojox/data/ServiceStore reference documentation</a> for more information.</p>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="numberIcon private"><a href="1_10dojox_data_ServiceStore__currentId">_currentId</a>
+        </li><span><span title="private" class="jsdoc-private"></span></span>
+        <li class="numberIcon public"><a href="1_10dojox_data_ServiceStore_estimateCountFactor">estimateCountFactor</a>
+        </li><span>This parameter is used by the ServiceStore to estimate the total count.</span>
+        <li class="stringIcon public"><a href="1_10dojox_data_ServiceStore_idAttribute">idAttribute</a>
+        </li><span>Defaults to &amp;#39;id&amp;#39;.</span>
+        <li class="stringIcon public"><a href="1_10dojox_data_ServiceStore_labelAttribute">labelAttribute</a>
+        </li><span></span>
+        <li class="booleanIcon public"><a href="1_10dojox_data_ServiceStore_loadLazyValues">loadLazyValues</a>
+        </li><span></span>
+        <li class="objectIcon public"><a href="1_10dojox_data_ServiceStore_schema">schema</a>
+        </li><span>This is a schema object for this store.</span>
+        <li class="objectIcon public"><a href="1_10dojox_data_ServiceStore_service">service</a>
+        </li><span>This is the service object that is used to retrieve lazy data and save results
+The function should be directly callable with a single parameter of an object id to be loaded</span>
+        <li class="booleanIcon public"><a href="1_10dojox_data_ServiceStore_syncMode">syncMode</a>
+        </li><span>Setting this to true will set the store to using synchronous calls by default.</span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_10dojox_data_ServiceStore__doQuery">_doQuery</a><span class="parameters"></span><span class="parameters">(args) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_10dojox_data_ServiceStore__processResults">_processResults</a><span class="parameters"></span><span class="parameters">(results,deferred) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_close">close</a><span class="parameters"></span><span class="parameters">(request) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_containsValue">containsValue</a><span class="parameters"></span><span class="parameters">(item,attribute,value) </span><span>Checks to see if &#39;item&#39; has &#39;value&#39; at &#39;attribute&#39;</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_fetch">fetch</a><span class="parameters"></span><span class="parameters">(args) </span><span>See dojo/data/api/Read.fetch</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_fetchItemByIdentity">fetchItemByIdentity</a><span class="parameters"></span><span class="parameters">(args) </span><span>fetch an item by its identity, by looking in our index of what we have loaded</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_getAttributes">getAttributes</a><span class="parameters"></span><span class="parameters">(item) </span><span>Gets the available attributes of an item&#39;s &#39;property&#39; and returns
+it as an array.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_getFeatures">getFeatures</a><span class="parameters"></span><span class="parameters">() </span><span>return the store feature set</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_getIdentity">getIdentity</a><span class="parameters"></span><span class="parameters">(item) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_getIdentityAttributes">getIdentityAttributes</a><span class="parameters"></span><span class="parameters">(item) </span><span>returns the attributes which are used to make up the
+identity of an item.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_getLabel">getLabel</a><span class="parameters"></span><span class="parameters">(item) </span><span>returns the label for an item.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_getLabelAttributes">getLabelAttributes</a><span class="parameters"></span><span class="parameters">(item) </span><span>returns an array of attributes that are used to create the label of an item</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_getSchema">getSchema</a><span class="parameters"></span><span class="parameters">() </span><span>Returns a reference to the JSON Schema</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_getValue">getValue</a><span class="parameters"></span><span class="parameters">(item,property,defaultValue) </span><span>Gets the value of an item&#39;s &#39;property&#39;</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_getValues">getValues</a><span class="parameters"></span><span class="parameters">(item,property) </span><span>Gets the value of an item&#39;s &#39;property&#39; and returns
+it.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_hasAttribute">hasAttribute</a><span class="parameters"></span><span class="parameters">(item,attribute) </span><span>Checks to see if item has attribute</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_isItem">isItem</a><span class="parameters"></span><span class="parameters">(item) </span><span>Checks to see if the argument is an item</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_isItemLoaded">isItemLoaded</a><span class="parameters"></span><span class="parameters">(item) </span><span>Checks to see if the item is loaded.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_data_ServiceStore_loadItem">loadItem</a><span class="parameters"></span><span class="parameters">(args) </span><span>Loads an item and calls the callback handler.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore__currentId"></a><span class="numberIcon">_currentId</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_estimateCountFactor"></a><span class="numberIcon">estimateCountFactor</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-summary"><p>This parameter is used by the ServiceStore to estimate the total count. When
+paging is indicated in a fetch and the response includes the full number of items
+requested by the fetch&#39;s count parameter, then the total count will be estimated
+to be estimateCountFactor multiplied by the provided count. If this is 1, then it is assumed that the server
+does not support paging, and the response is the full set of items, where the
+total count is equal to the numer of items returned. If the server does support
+paging, an estimateCountFactor of 2 is a good value for estimating the total count
+It is also possible to override _processResults if the server can provide an exact
+total count.    </p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_idAttribute"></a><span class="stringIcon">idAttribute</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-summary"><p>Defaults to &#39;id&#39;. The name of the attribute that holds an objects id.
+This can be a preexisting id provided by the server.
+If an ID isn&#39;t already provided when an object
+is fetched or added to the store, the autoIdentity system
+will generate an id for it and add it to the index.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_labelAttribute"></a><span class="stringIcon">labelAttribute</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_loadLazyValues"></a><span class="booleanIcon">loadLazyValues</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_schema"></a><span class="objectIcon">schema</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-summary"><p>This is a schema object for this store. This should be JSON Schema format.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_service"></a><span class="objectIcon">service</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-summary"><p>This is the service object that is used to retrieve lazy data and save results
+The function should be directly callable with a single parameter of an object id to be loaded</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_syncMode"></a><span class="booleanIcon">syncMode</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-summary"><p>Setting this to true will set the store to using synchronous calls by default.
+Sync calls return their data immediately from the calling function, so
+callbacks are unnecessary. This will only work with a synchronous capable service.</p>
+</div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore__doQuery"></a><span class="functionIcon">_doQuery</span><span class="parameters">(args)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore__processResults"></a><span class="functionIcon">_processResults</span><span class="parameters">(results,deferred)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">results</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">deferred</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_close"></a><span class="functionIcon">close</span><span class="parameters">(request)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">request</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_containsValue"></a><span class="functionIcon">containsValue</span><span class="parameters">(item,attribute,value)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Checks to see if &#39;item&#39; has &#39;value&#39; at &#39;attribute&#39;</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">attribute</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">Anything</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_fetch"></a><span class="functionIcon">fetch</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>See dojo/data/api/Read.fetch</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><h4>The <em>queryOptions.cache</em> parameter</h4>
+<p>If true, indicates that the query result should be cached for future use. This is only available
+if dojox.data.ClientFilter has been loaded before the ServiceStore
+
+</p>
+<h4>The <em>syncMode</em> parameter</h4>
+<p>Indicates that the call should be fetch synchronously if possible (this is not always possible)
+
+</p>
+<h4>The <em>clientFetch</em> parameter</h4>
+<p>This is a fetch keyword argument for explicitly doing client side filtering, querying, and paging</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">string</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_fetchItemByIdentity"></a><span class="functionIcon">fetchItemByIdentity</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>fetch an item by its identity, by looking in our index of what we have loaded</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_getAttributes"></a><span class="functionIcon">getAttributes</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Gets the available attributes of an item&#39;s &#39;property&#39; and returns
+it as an array.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_getFeatures"></a><span class="functionIcon">getFeatures</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>return the store feature set</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_getIdentity"></a><span class="functionIcon">getIdentity</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_getIdentityAttributes"></a><span class="functionIcon">getIdentityAttributes</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns the attributes which are used to make up the
+identity of an item.    Basically returns this.idAttribute</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_getLabel"></a><span class="functionIcon">getLabel</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns the label for an item. Just gets the &quot;label&quot; attribute.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_getLabelAttributes"></a><span class="functionIcon">getLabelAttributes</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns an array of attributes that are used to create the label of an item</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_getSchema"></a><span class="functionIcon">getSchema</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns a reference to the JSON Schema</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Object | undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_getValue"></a><span class="functionIcon">getValue</span><span class="parameters">(item,property,defaultValue)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Gets the value of an item&#39;s &#39;property&#39;</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>The item to get the value from</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>property to look up value for</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">defaultValue</td>
+            <td class="jsdoc-param-type">value</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>the default value</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">return the plain value since it was found;</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_getValues"></a><span class="functionIcon">getValues</span><span class="parameters">(item,property)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Gets the value of an item&#39;s &#39;property&#39; and returns
+it. If this value is an array it is just returned,
+if not, the value is added to an array and that is returned.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>property to look up value for</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_hasAttribute"></a><span class="functionIcon">hasAttribute</span><span class="parameters">(item,attribute)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Checks to see if item has attribute</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">attribute</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_isItem"></a><span class="functionIcon">isItem</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Checks to see if the argument is an item</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_isItemLoaded"></a><span class="functionIcon">isItemLoaded</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Checks to see if the item is loaded.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_data_ServiceStore_loadItem"></a><span class="functionIcon">loadItem</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/data/ServiceStore" class="jsdoc-link">dojox/data/ServiceStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Loads an item and calls the callback handler. Note, that this will call the callback
+handler even if the item is loaded. Consequently, you can use loadItem to ensure
+that an item is loaded is situations when the item may or may not be loaded yet.
+If you access a value directly through property access, you can use this to load
+a lazy value as well (doesn&#39;t need to be an item).</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>store.loadItem({
+    item: item, // this item may or may not be loaded
+    onItem: function(item){
+        // do something with the item
+    }
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.10/dojox/data/ServiceStore" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

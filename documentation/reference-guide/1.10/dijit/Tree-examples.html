@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dijit/Tree examples &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dijit/Tree examples</a><ul>
+<li><a class="reference internal" href="#detect-when-tree-has-finished-loading">Detect when tree has finished loading</a></li>
+<li><a class="reference internal" href="#expanding-and-selecting-tree-nodes-programmatically">Expanding and selecting tree nodes programmatically</a></li>
+<li><a class="reference internal" href="#making-nodes-expand-by-clicking-on-the-label">Making nodes expand by clicking on the label</a></li>
+<li><a class="reference internal" href="#rich-text-labels">Rich Text Labels</a></li>
+<li><a class="reference internal" href="#tree-menu-with-links-on-nodes">Tree menu with links on nodes</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dijit-tree-examples">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dijit/Tree examples</a><a class="headerlink" href="#dijit-tree-examples" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dijit-tree-examples" id="id2">dijit/Tree examples</a><ul>
+<li><a class="reference internal" href="#detect-when-tree-has-finished-loading" id="id3">Detect when tree has finished loading</a></li>
+<li><a class="reference internal" href="#expanding-and-selecting-tree-nodes-programmatically" id="id4">Expanding and selecting tree nodes programmatically</a></li>
+<li><a class="reference internal" href="#making-nodes-expand-by-clicking-on-the-label" id="id5">Making nodes expand by clicking on the label</a></li>
+<li><a class="reference internal" href="#rich-text-labels" id="id6">Rich Text Labels</a></li>
+<li><a class="reference internal" href="#tree-menu-with-links-on-nodes" id="id7">Tree menu with links on nodes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="detect-when-tree-has-finished-loading">
+<h2><a class="toc-backref" href="#id3">Detect when tree has finished loading</a><a class="headerlink" href="#detect-when-tree-has-finished-loading" title="Permalink to this headline">¶</a></h2>
+<p>Use the onLoadDeferred to detect when the Tree has finished loading</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">tree</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s1">&#39;myTree&#39;</span><span class="p">);</span>
+
+<span class="c1">// Connect to tree onLoad to do work once it has initialized</span>
+<span class="nx">tree</span><span class="p">.</span><span class="nx">onLoadDeferred</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;tree onLoad here!&quot;</span><span class="p">);</span>
+    <span class="nx">dojo</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="nx">tmph</span><span class="p">);</span>
+
+    <span class="c1">// do work here</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var tree = registry.byId('myTree');
+
+// Connect to tree onLoad to do work once it has initialized
+tree.onLoadDeferred.then(function(){
+    console.debug(&quot;tree onLoad here!&quot;);
+    dojo.disconnect(tmph);
+
+    // do work here
+});</textarea></div></div>
+<div class="section" id="expanding-and-selecting-tree-nodes-programmatically">
+<h2><a class="toc-backref" href="#id4">Expanding and selecting tree nodes programmatically</a><a class="headerlink" href="#expanding-and-selecting-tree-nodes-programmatically" title="Permalink to this headline">¶</a></h2>
+<p>There are a number of flags and methods for expanding/collapsing the tree and for selecting certain nodes.</p>
+<p>If the <code class="docutils literal"><span class="pre">autoExpand</span></code> flag is passed to the constructor, the Tree is initially shown with all nodes expanded.</p>
+<p>You can then call <code class="docutils literal"><span class="pre">collapseAll()</span></code> and <code class="docutils literal"><span class="pre">expandAll()</span></code> to collapse and expand the Tree, respectively.</p>
+<p>Also, <code class="docutils literal"><span class="pre">dijit.Tree</span></code> has a <code class="docutils literal"><span class="pre">paths</span></code> attribute, which can be set with the usual
+<code class="docutils literal"><span class="pre">tree.set('paths',</span> <span class="pre">[path1,</span> <span class="pre">path2])</span></code> syntax, where each path is an array of item id&#8217;s,
+starting with the root node and going down to the leaf.
+It serves two purposes: to expand the Tree to the specified nodes, and to select those nodes.</p>
+<p>Combining those all together into an example:</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/store/Memory&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/tree/ObjectStoreModel&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/Tree&quot;</span><span class="p">]);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/parser&quot;, &quot;dojo/store/Memory&quot;, &quot;dijit/tree/ObjectStoreModel&quot;, &quot;dijit/Tree&quot;]);</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojo/store/Memory&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;myStore&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- Create store with inlined data.</span>
+<span class="c">        For larger data sets should use dojo.store.JsonRest etc. instead of dojo.store.Memory. --&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;dojo/method&quot;</span><span class="nt">&gt;</span>
+         <span class="k">this</span><span class="p">.</span><span class="nx">setData</span><span class="p">([</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;The earth&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;planet&#39;</span><span class="p">,</span> <span class="nx">population</span><span class="o">:</span> <span class="s1">&#39;6 billion&#39;</span><span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;AF&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Africa&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">population</span><span class="o">:</span><span class="s1">&#39;900 million&#39;</span><span class="p">,</span> <span class="nx">area</span><span class="o">:</span> <span class="s1">&#39;30,221,532 sq km&#39;</span><span class="p">,</span>
+                    <span class="nx">timezone</span><span class="o">:</span> <span class="s1">&#39;-1 UTC to +4 UTC&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span><span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;EG&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Egypt&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AF&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;KE&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Kenya&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AF&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;Nairobi&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Nairobi&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;KE&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;Mombasa&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Mombasa&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;KE&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;SD&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Sudan&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AF&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;Khartoum&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Khartoum&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;SD&#39;</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;AS&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Asia&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;CN&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;China&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AS&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;India&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AS&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;RU&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Russia&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AS&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Mongolia&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AS&#39;</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;OC&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Oceania&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">population</span><span class="o">:</span><span class="s1">&#39;21 million&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span><span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;EU&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Europe&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;DE&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Germany&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;EU&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;FR&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;France&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;EU&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;ES&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Spain&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;EU&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;IT&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Italy&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;EU&#39;</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;NA&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;North America&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;SA&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;South America&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">}</span>
+        <span class="p">]);</span>
+    <span class="nt">&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;dojo/method&quot;</span> <span class="na">data-dojo-event=</span><span class="s">&quot;getChildren&quot;</span> <span class="na">data-dojo-args=</span><span class="s">&quot;object&quot;</span><span class="nt">&gt;</span>
+         <span class="c1">// Supply a getChildren() method to store for the data model where</span>
+         <span class="c1">// children objects point to their parent (aka relational model)</span>
+         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">parent</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">getIdentity</span><span class="p">(</span><span class="nx">object</span><span class="p">)});</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- Create the model bridging the store and the Tree --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/tree/ObjectStoreModel&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;myModel&quot;</span>
+  <span class="na">data-dojo-props=</span><span class="s">&quot;store: myStore, query: {id: &#39;world&#39;}&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- buttons to test Tree features --&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;mytree.collapseAll();&quot;</span><span class="nt">&gt;</span>
+    Collapse all
+<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;mytree.expandAll();&quot;</span><span class="nt">&gt;</span>
+    Expand all
+<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;mytree.set(&#39;paths&#39;, [ [&#39;world&#39;, &#39;AF&#39;, &#39;KE&#39;, &#39;Nairobi&#39;], [&#39;world&#39;, &#39;SA&#39;] ] );&quot;</span><span class="nt">&gt;</span>
+    Select Nairobi, South America
+<span class="nt">&lt;/button&gt;</span>
+
+<span class="c">&lt;!-- Create the tree --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/Tree&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;mytree&quot;</span>
+        <span class="na">data-dojo-props=</span><span class="s">&quot;model: myModel, autoExpand: true&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dojo/store/Memory&quot; data-dojo-id=&quot;myStore&quot;&gt;
+    &lt;!-- Create store with inlined data.
+        For larger data sets should use dojo.store.JsonRest etc. instead of dojo.store.Memory. --&gt;
+    &lt;script type=&quot;dojo/method&quot;&gt;
+         this.setData([
+            { id: 'world', name:'The earth', type:'planet', population: '6 billion'},
+            { id: 'AF', name:'Africa', type:'continent', population:'900 million', area: '30,221,532 sq km',
+                    timezone: '-1 UTC to +4 UTC', parent: 'world'},
+                { id: 'EG', name:'Egypt', type:'country', parent: 'AF' },
+                { id: 'KE', name:'Kenya', type:'country', parent: 'AF' },
+                    { id: 'Nairobi', name:'Nairobi', type:'city', parent: 'KE' },
+                    { id: 'Mombasa', name:'Mombasa', type:'city', parent: 'KE' },
+                { id: 'SD', name:'Sudan', type:'country', parent: 'AF' },
+                    { id: 'Khartoum', name:'Khartoum', type:'city', parent: 'SD' },
+            { id: 'AS', name:'Asia', type:'continent', parent: 'world' },
+                { id: 'CN', name:'China', type:'country', parent: 'AS' },
+                { id: 'IN', name:'India', type:'country', parent: 'AS' },
+                { id: 'RU', name:'Russia', type:'country', parent: 'AS' },
+                { id: 'MN', name:'Mongolia', type:'country', parent: 'AS' },
+            { id: 'OC', name:'Oceania', type:'continent', population:'21 million', parent: 'world'},
+            { id: 'EU', name:'Europe', type:'continent', parent: 'world' },
+                { id: 'DE', name:'Germany', type:'country', parent: 'EU' },
+                { id: 'FR', name:'France', type:'country', parent: 'EU' },
+                { id: 'ES', name:'Spain', type:'country', parent: 'EU' },
+                { id: 'IT', name:'Italy', type:'country', parent: 'EU' },
+            { id: 'NA', name:'North America', type:'continent', parent: 'world' },
+            { id: 'SA', name:'South America', type:'continent', parent: 'world' }
+        ]);
+    &lt;/script&gt;
+    &lt;script type=&quot;dojo/method&quot; data-dojo-event=&quot;getChildren&quot; data-dojo-args=&quot;object&quot;&gt;
+         // Supply a getChildren() method to store for the data model where
+         // children objects point to their parent (aka relational model)
+         return this.query({parent: this.getIdentity(object)});
+    &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;!-- Create the model bridging the store and the Tree --&gt;
+&lt;div data-dojo-type=&quot;dijit/tree/ObjectStoreModel&quot; data-dojo-id=&quot;myModel&quot;
+  data-dojo-props=&quot;store: myStore, query: {id: 'world'}&quot;&gt;&lt;/div&gt;
+
+&lt;!-- buttons to test Tree features --&gt;
+&lt;button onclick=&quot;mytree.collapseAll();&quot;&gt;
+    Collapse all
+&lt;/button&gt;
+&lt;button onclick=&quot;mytree.expandAll();&quot;&gt;
+    Expand all
+&lt;/button&gt;
+&lt;button onclick=&quot;mytree.set('paths', [ ['world', 'AF', 'KE', 'Nairobi'], ['world', 'SA'] ] );&quot;&gt;
+    Select Nairobi, South America
+&lt;/button&gt;
+
+&lt;!-- Create the tree --&gt;
+&lt;div data-dojo-type=&quot;dijit/Tree&quot; data-dojo-id=&quot;mytree&quot;
+        data-dojo-props=&quot;model: myModel, autoExpand: true&quot;&gt;&lt;/div&gt;</textarea></div></div></div><p>One complication with using &#8216;paths&#8217; is that you must know the full path to the node in your data you are trying to select.
+(And by the way, there may be more than one path to a node, if your Tree has nodes with multiple parents.)</p>
+<p>The solution to that problem will depend greatly on your data layout, and the query capabilities of your store.</p>
+</div>
+<div class="section" id="making-nodes-expand-by-clicking-on-the-label">
+<h2><a class="toc-backref" href="#id5">Making nodes expand by clicking on the label</a><a class="headerlink" href="#making-nodes-expand-by-clicking-on-the-label" title="Permalink to this headline">¶</a></h2>
+<p>Nodes always expand/collapse by clicking on the [+] icon, but to make a node expand when clicking on the label,
+simply set the <code class="docutils literal"><span class="pre">openOnClick</span></code> attribute to <code class="docutils literal"><span class="pre">true</span></code></p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/store/Memory&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/tree/ObjectStoreModel&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/Tree&quot;</span><span class="p">]);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/parser&quot;, &quot;dojo/store/Memory&quot;, &quot;dijit/tree/ObjectStoreModel&quot;, &quot;dijit/Tree&quot;]);</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojo/store/Memory&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;memoryStore&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- Create store with inlined data.</span>
+<span class="c">        For larger data sets should use dojo.store.JsonRest etc. instead of dojo.store.Memory. --&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;dojo/method&quot;</span><span class="nt">&gt;</span>
+         <span class="k">this</span><span class="p">.</span><span class="nx">setData</span><span class="p">([</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;The earth&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;planet&#39;</span><span class="p">,</span> <span class="nx">population</span><span class="o">:</span> <span class="s1">&#39;6 billion&#39;</span><span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;AF&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Africa&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">population</span><span class="o">:</span><span class="s1">&#39;900 million&#39;</span><span class="p">,</span> <span class="nx">area</span><span class="o">:</span> <span class="s1">&#39;30,221,532 sq km&#39;</span><span class="p">,</span>
+                    <span class="nx">timezone</span><span class="o">:</span> <span class="s1">&#39;-1 UTC to +4 UTC&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span><span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;EG&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Egypt&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AF&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;KE&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Kenya&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AF&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;Nairobi&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Nairobi&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;KE&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;Mombasa&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Mombasa&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;KE&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;SD&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Sudan&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AF&#39;</span> <span class="p">},</span>
+                    <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;Khartoum&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Khartoum&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;city&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;SD&#39;</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;AS&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Asia&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;CN&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;China&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AS&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;India&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AS&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;RU&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Russia&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AS&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Mongolia&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;AS&#39;</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;OC&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Oceania&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">population</span><span class="o">:</span><span class="s1">&#39;21 million&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span><span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;EU&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Europe&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;DE&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Germany&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;EU&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;FR&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;France&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;EU&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;ES&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Spain&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;EU&#39;</span> <span class="p">},</span>
+                <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;IT&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;Italy&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;EU&#39;</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;NA&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;North America&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;SA&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;South America&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;continent&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span> <span class="p">}</span>
+        <span class="p">]);</span>
+    <span class="nt">&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;dojo/method&quot;</span> <span class="na">data-dojo-event=</span><span class="s">&quot;getChildren&quot;</span> <span class="na">data-dojo-args=</span><span class="s">&quot;object&quot;</span><span class="nt">&gt;</span>
+         <span class="c1">// Supply a getChildren() method to store for the data model where</span>
+         <span class="c1">// children objects point to their parent (aka relational model)</span>
+         <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">parent</span><span class="o">:</span> <span class="nx">object</span><span class="p">.</span><span class="nx">id</span><span class="p">});</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- Create the model bridging the store and the Tree --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/tree/ObjectStoreModel&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;myModel&quot;</span>
+  <span class="na">data-dojo-props=</span><span class="s">&quot;store: memoryStore, query: {id: &#39;world&#39;}&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- Create the tree --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/Tree&quot;</span> <span class="na">id=</span><span class="s">&quot;mytree&quot;</span>
+    <span class="na">data-dojo-props=</span><span class="s">&quot;model: myModel, openOnClick: true&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dojo/store/Memory&quot; data-dojo-id=&quot;memoryStore&quot;&gt;
+    &lt;!-- Create store with inlined data.
+        For larger data sets should use dojo.store.JsonRest etc. instead of dojo.store.Memory. --&gt;
+    &lt;script type=&quot;dojo/method&quot;&gt;
+         this.setData([
+            { id: 'world', name:'The earth', type:'planet', population: '6 billion'},
+            { id: 'AF', name:'Africa', type:'continent', population:'900 million', area: '30,221,532 sq km',
+                    timezone: '-1 UTC to +4 UTC', parent: 'world'},
+                { id: 'EG', name:'Egypt', type:'country', parent: 'AF' },
+                { id: 'KE', name:'Kenya', type:'country', parent: 'AF' },
+                    { id: 'Nairobi', name:'Nairobi', type:'city', parent: 'KE' },
+                    { id: 'Mombasa', name:'Mombasa', type:'city', parent: 'KE' },
+                { id: 'SD', name:'Sudan', type:'country', parent: 'AF' },
+                    { id: 'Khartoum', name:'Khartoum', type:'city', parent: 'SD' },
+            { id: 'AS', name:'Asia', type:'continent', parent: 'world' },
+                { id: 'CN', name:'China', type:'country', parent: 'AS' },
+                { id: 'IN', name:'India', type:'country', parent: 'AS' },
+                { id: 'RU', name:'Russia', type:'country', parent: 'AS' },
+                { id: 'MN', name:'Mongolia', type:'country', parent: 'AS' },
+            { id: 'OC', name:'Oceania', type:'continent', population:'21 million', parent: 'world'},
+            { id: 'EU', name:'Europe', type:'continent', parent: 'world' },
+                { id: 'DE', name:'Germany', type:'country', parent: 'EU' },
+                { id: 'FR', name:'France', type:'country', parent: 'EU' },
+                { id: 'ES', name:'Spain', type:'country', parent: 'EU' },
+                { id: 'IT', name:'Italy', type:'country', parent: 'EU' },
+            { id: 'NA', name:'North America', type:'continent', parent: 'world' },
+            { id: 'SA', name:'South America', type:'continent', parent: 'world' }
+        ]);
+    &lt;/script&gt;
+    &lt;script type=&quot;dojo/method&quot; data-dojo-event=&quot;getChildren&quot; data-dojo-args=&quot;object&quot;&gt;
+         // Supply a getChildren() method to store for the data model where
+         // children objects point to their parent (aka relational model)
+         return this.query({parent: object.id});
+    &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;!-- Create the model bridging the store and the Tree --&gt;
+&lt;div data-dojo-type=&quot;dijit/tree/ObjectStoreModel&quot; data-dojo-id=&quot;myModel&quot;
+  data-dojo-props=&quot;store: memoryStore, query: {id: 'world'}&quot;&gt;&lt;/div&gt;
+
+&lt;!-- Create the tree --&gt;
+&lt;div data-dojo-type=&quot;dijit/Tree&quot; id=&quot;mytree&quot;
+    data-dojo-props=&quot;model: myModel, openOnClick: true&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+<div class="section" id="rich-text-labels">
+<h2><a class="toc-backref" href="#id6">Rich Text Labels</a><a class="headerlink" href="#rich-text-labels" title="Permalink to this headline">¶</a></h2>
+<p>In this example, <code class="docutils literal"><span class="pre">_createTreeNode()</span></code> is overridden to allow HTML markup in the tree.
+This is a hack, in the sense that the formatting may not be perfect for large (in pixels) elements.
+But the tree will display and work properly regardless, and for simple markup, ex: bold, it works great.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+    <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/store/Memory&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dijit/tree/ObjectStoreModel&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/Tree&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dojo/domReady!&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">declare</span><span class="p">,</span> <span class="nx">win</span><span class="p">,</span> <span class="nx">Memory</span><span class="p">,</span> <span class="nx">ObjectStoreModel</span><span class="p">,</span> <span class="nx">Tree</span><span class="p">){</span>
+
+    <span class="c1">// Create test store, adding getChildren() method needed by ObjectStoreModel</span>
+    <span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Memory</span><span class="p">({</span>
+        <span class="nx">data</span><span class="o">:</span> <span class="p">[</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;root&quot;</span><span class="p">},</span>
+               <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;&lt;i&gt;hello&lt;/i&gt;&quot;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span>
+               <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;&lt;b&gt;world&lt;/b&gt;&quot;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="p">],</span>
+        <span class="nx">getChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">){</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">parent</span><span class="o">:</span> <span class="nx">object</span><span class="p">.</span><span class="nx">id</span><span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="c1">// Create the model</span>
+    <span class="kd">var</span> <span class="nx">model</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ObjectStoreModel</span><span class="p">({</span>
+        <span class="nx">store</span><span class="o">:</span> <span class="nx">store</span><span class="p">,</span>
+        <span class="nx">query</span><span class="o">:</span> <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span>
+        <span class="nx">labelAttr</span><span class="o">:</span> <span class="s2">&quot;label&quot;</span>
+    <span class="p">});</span>
+
+    <span class="c1">// Custom TreeNode class (based on dijit.TreeNode) that allows rich text labels</span>
+    <span class="kd">var</span> <span class="nx">MyTreeNode</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">(</span><span class="nx">Tree</span><span class="p">.</span><span class="nx">_TreeNode</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">_setLabelAttr</span><span class="o">:</span> <span class="p">{</span><span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;labelNode&quot;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span> <span class="s2">&quot;innerHTML&quot;</span><span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="c1">// Create the Tree.</span>
+    <span class="kd">var</span> <span class="nx">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tree</span><span class="p">({</span>
+        <span class="nx">model</span><span class="o">:</span> <span class="nx">model</span><span class="p">,</span>
+        <span class="nx">_createTreeNode</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">args</span><span class="p">){</span>
+           <span class="k">return</span> <span class="k">new</span> <span class="nx">MyTreeNode</span><span class="p">(</span><span class="nx">args</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="nx">tree</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">());</span>
+    <span class="nx">tree</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+    &quot;dojo/_base/declare&quot;, &quot;dojo/_base/window&quot;, &quot;dojo/store/Memory&quot;,
+    &quot;dijit/tree/ObjectStoreModel&quot;, &quot;dijit/Tree&quot;,
+    &quot;dojo/domReady!&quot;
+], function(declare, win, Memory, ObjectStoreModel, Tree){
+
+    // Create test store, adding getChildren() method needed by ObjectStoreModel
+    var store = new Memory({
+        data: [
+            { id: 0, label: &quot;root&quot;},
+               {id: 1, label: &quot;&lt;i&gt;hello&lt;/i&gt;&quot;, parent: 0},
+               {id: 2, label: &quot;&lt;b&gt;world&lt;/b&gt;&quot;, parent: 0},
+        ],
+        getChildren: function(object){
+            return this.query({parent: object.id});
+        }
+    });
+
+    // Create the model
+    var model = new ObjectStoreModel({
+        store: store,
+        query: {id: 0},
+        labelAttr: &quot;label&quot;
+    });
+
+    // Custom TreeNode class (based on dijit.TreeNode) that allows rich text labels
+    var MyTreeNode = declare(Tree._TreeNode, {
+        _setLabelAttr: {node: &quot;labelNode&quot;, type: &quot;innerHTML&quot;}
+    });
+
+    // Create the Tree.
+    var tree = new Tree({
+        model: model,
+        _createTreeNode: function(args){
+           return new MyTreeNode(args);
+        }
+    });
+    tree.placeAt(win.body());
+    tree.startup();
+});</textarea></div></div></div></div>
+<div class="section" id="tree-menu-with-links-on-nodes">
+<h2><a class="toc-backref" href="#id7">Tree menu with links on nodes</a><a class="headerlink" href="#tree-menu-with-links-on-nodes" title="Permalink to this headline">¶</a></h2>
+<p>This example shows you how to use a tree to build a navigation menu.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre> <span class="nx">require</span><span class="p">([</span>
+     <span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/store/Memory&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;dijit/tree/ObjectStoreModel&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/Tree&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;dojo/domReady!&quot;</span>
+ <span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">win</span><span class="p">,</span> <span class="nx">Memory</span><span class="p">,</span> <span class="nx">ObjectStoreModel</span><span class="p">,</span> <span class="nx">Tree</span><span class="p">){</span>
+
+     <span class="c1">// Create test store, adding the getChildren() method required by ObjectStoreModel</span>
+     <span class="kd">var</span> <span class="nx">myStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Memory</span><span class="p">({</span>
+         <span class="nx">data</span><span class="o">:</span> <span class="p">[</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Dijit Tree API&#39;</span><span class="p">,</span> <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;http://dojotoolkit.org/api/1.6/dijit.Tree&#39;</span><span class="p">,</span> <span class="nx">root</span><span class="o">:</span> <span class="kc">true</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Dijit Tree.model API&#39;</span><span class="p">,</span> <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;http://dojotoolkit.org/api/1.6/dijit.Tree.model&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Dijit Tree.ForestStoreModel API&#39;</span><span class="p">,</span> <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;http://dojotoolkit.org/api/1.6/dijit.tree.ForestStoreModel&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Dijit Tree.TreeStoreModel API&#39;</span><span class="p">,</span> <span class="nx">url</span><span class="o">:</span> <span class="s1">&#39;http://dojotoolkit.org/api/1.6/dijit.tree.TreeStoreModel&#39;</span><span class="p">,</span> <span class="nx">parent</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
+         <span class="p">],</span>
+         <span class="nx">getChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">){</span>
+             <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">parent</span><span class="o">:</span> <span class="nx">object</span><span class="p">.</span><span class="nx">id</span><span class="p">});</span>
+         <span class="p">}</span>
+     <span class="p">});</span>
+
+     <span class="c1">// Create the model</span>
+     <span class="kd">var</span> <span class="nx">myModel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ObjectStoreModel</span><span class="p">({</span>
+         <span class="nx">store</span><span class="o">:</span> <span class="nx">myStore</span><span class="p">,</span>
+         <span class="nx">query</span><span class="o">:</span> <span class="p">{</span><span class="nx">root</span><span class="o">:</span> <span class="kc">true</span><span class="p">}</span>
+     <span class="p">});</span>
+
+     <span class="c1">// Create the Tree, specifying an onClick method</span>
+     <span class="p">(</span><span class="k">new</span> <span class="nx">Tree</span><span class="p">({</span>
+         <span class="nx">model</span><span class="o">:</span> <span class="nx">myModel</span><span class="p">,</span>
+         <span class="nx">onClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">){</span>
+             <span class="c1">// Get the URL from the item, and navigate to it</span>
+             <span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">item</span><span class="p">.</span><span class="nx">url</span><span class="p">;</span>
+         <span class="p">}</span>
+     <span class="p">})).</span><span class="nx">placeAt</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">()).</span><span class="nx">startup</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none"> require([
+     &quot;dojo/_base/window&quot;, &quot;dojo/store/Memory&quot;,
+     &quot;dijit/tree/ObjectStoreModel&quot;, &quot;dijit/Tree&quot;,
+     &quot;dojo/domReady!&quot;
+ ], function(win, Memory, ObjectStoreModel, Tree){
+
+     // Create test store, adding the getChildren() method required by ObjectStoreModel
+     var myStore = new Memory({
+         data: [
+            { id: 1, name: 'Dijit Tree API', url: 'http://dojotoolkit.org/api/1.6/dijit.Tree', root: true },
+            { id: 2, name: 'Dijit Tree.model API', url: 'http://dojotoolkit.org/api/1.6/dijit.Tree.model', parent: 1 },
+            { id: 3, name: 'Dijit Tree.ForestStoreModel API', url: 'http://dojotoolkit.org/api/1.6/dijit.tree.ForestStoreModel', parent: 1 },
+            { id: 4, name: 'Dijit Tree.TreeStoreModel API', url: 'http://dojotoolkit.org/api/1.6/dijit.tree.TreeStoreModel', parent: 1 },
+         ],
+         getChildren: function(object){
+             return this.query({parent: object.id});
+         }
+     });
+
+     // Create the model
+     var myModel = new ObjectStoreModel({
+         store: myStore,
+         query: {root: true}
+     });
+
+     // Create the Tree, specifying an onClick method
+     (new Tree({
+         model: myModel,
+         onClick: function(item){
+             // Get the URL from the item, and navigate to it
+             location.href = item.url;
+         }
+     })).placeAt(win.body()).startup();
+});</textarea></div></div></div></div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

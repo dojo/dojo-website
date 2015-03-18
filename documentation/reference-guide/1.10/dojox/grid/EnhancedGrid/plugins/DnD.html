@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.grid.EnhancedGrid.plugins.DnD &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../../../index.html">Startpage</a></li>
+          <li><a href="../../../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.grid.EnhancedGrid.plugins.DnD</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#plugin-declaration">Plugin Declaration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#dnd-within-grid">DnD within Grid</a></li>
+<li><a class="reference internal" href="#dnd-across-grids">DnD across Grids</a></li>
+<li><a class="reference internal" href="#dnd-from-grid-to-other-widgets">DnD from Grid to Other Widgets</a></li>
+<li><a class="reference internal" href="#public-methods">Public Methods</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#known-limitations">Known Limitations</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-grid-enhancedgrid-plugins-dnd">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.grid.EnhancedGrid.plugins.DnD</a><a class="headerlink" href="#dojox-grid-enhancedgrid-plugins-dnd" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Oliver Zhu</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Evan Huang</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V.1.6</td>
+</tr>
+</tbody>
+</table>
+<p>DnD plugin supports drag-and-drop of grid rows/column/cells.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-grid-enhancedgrid-plugins-dnd" id="id2">dojox.grid.EnhancedGrid.plugins.DnD</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#configuration" id="id4">Configuration</a></li>
+<li><a class="reference internal" href="#usage" id="id5">Usage</a></li>
+<li><a class="reference internal" href="#known-limitations" id="id6">Known Limitations</a></li>
+<li><a class="reference internal" href="#see-also" id="id7">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>DnD is a plugin for dojox.grid.EnhancedGrid. It provides supports for drag-and-drop grid rows/column/cells. Users can not only move rows/columns/cells within a grid by dragging them, but also drag them out of grid to other widgets (can be another grid).</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'650', height:'600', toolbar:'themes, versions, dir', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.data.ItemFileWriteStore&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.CheckBox&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.EnhancedGrid&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.enhanced.plugins.DnD&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">identifier</span><span class="o">:</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span>
+    <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span>
+    <span class="nx">items</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">,</span> <span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="s2">&quot;J&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;O&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">data_list</span> <span class="o">=</span> <span class="p">[];</span>
+<span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">row</span><span class="p">,</span> <span class="nx">j</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">){</span>
+    <span class="nx">row</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span><span class="p">(</span><span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">cols</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">j</span><span class="p">){</span>
+        <span class="nx">row</span><span class="p">[</span><span class="nx">cols</span><span class="p">[</span><span class="nx">j</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">cols</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="nx">data_list</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">data_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span> <span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">){</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">dojo</span><span class="p">.</span><span class="nx">mixin</span><span class="p">({</span> <span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">},</span> <span class="nx">data_list</span><span class="p">[</span><span class="nx">i</span><span class="p">]));</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">data1</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">layout1</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="nx">defaultCell</span><span class="o">:</span> <span class="p">{</span><span class="nx">width</span><span class="o">:</span> <span class="mi">3</span><span class="p">},</span>
+    <span class="nx">rows</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;A&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;B&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;C&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;D&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;E&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;F&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;G&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;H&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;I&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;J&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;K&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;L&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;M&quot;</span><span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}];</span>
+
+<span class="kd">var</span> <span class="nx">layout2</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="nx">defaultCell</span><span class="o">:</span> <span class="p">{</span><span class="nx">width</span><span class="o">:</span> <span class="mi">3</span><span class="p">},</span>
+    <span class="nx">rows</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;N&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;O&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;P&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Q&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;R&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;S&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;T&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;U&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;V&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;W&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;X&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Y&quot;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Z&quot;</span><span class="p">}</span>
+    <span class="p">]</span>
+<span class="p">}];</span>
+
+<span class="kd">function</span> <span class="nx">setIdentifierForNewItem</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">store</span><span class="p">,</span> <span class="nx">index</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">attrs</span> <span class="o">=</span> <span class="nx">store</span><span class="p">.</span><span class="nx">getIdentityAttributes</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">attrs</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span> <span class="o">--</span><span class="nx">i</span><span class="p">){</span>
+        <span class="nx">item</span><span class="p">[</span><span class="nx">attrs</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">index</span> <span class="o">+</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()).</span><span class="nx">getTime</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">item</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">setDnDConfig</span><span class="p">(</span><span class="nx">gridId</span><span class="p">,</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">mode</span><span class="p">,</span> <span class="nx">selected</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">config</span><span class="p">[</span><span class="nx">type</span><span class="p">]</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="nx">config</span><span class="p">[</span><span class="nx">type</span><span class="p">][</span><span class="nx">mode</span><span class="p">]</span> <span class="o">=</span> <span class="nx">selected</span><span class="p">;</span>
+    <span class="nx">dijit</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="nx">gridId</span><span class="p">).</span><span class="nx">setupDnDConfig</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">setCopyOnly</span><span class="p">(</span><span class="nx">gridId</span><span class="p">,</span> <span class="nx">selected</span><span class="p">){</span>
+    <span class="nx">dijit</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="nx">gridId</span><span class="p">).</span><span class="nx">dndCopyOnly</span><span class="p">(</span><span class="nx">selected</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">store1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ItemFileWriteStore</span><span class="p">({</span><span class="nx">data</span><span class="o">:</span> <span class="nx">data</span><span class="p">});</span>
+    <span class="kd">var</span> <span class="nx">store2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ItemFileWriteStore</span><span class="p">({</span><span class="nx">data</span><span class="o">:</span> <span class="nx">data1</span><span class="p">});</span>
+
+    <span class="kd">var</span> <span class="nx">grid1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">grid</span><span class="p">.</span><span class="nx">EnhancedGrid</span><span class="p">({</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;grid1&#39;</span><span class="p">,</span>
+        <span class="nx">store</span><span class="o">:</span> <span class="nx">store1</span><span class="p">,</span>
+        <span class="nx">structure</span><span class="o">:</span> <span class="nx">layout1</span><span class="p">,</span>
+        <span class="nx">rowSelector</span><span class="o">:</span> <span class="s1">&#39;20px&#39;</span><span class="p">,</span>
+        <span class="nx">canSort</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span><span class="k">return</span> <span class="kc">false</span><span class="p">;},</span>
+        <span class="nx">plugins</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">dnd</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">setIdentifierForNewItem</span><span class="o">:</span> <span class="nx">setIdentifierForNewItem</span><span class="p">,</span>
+                <span class="nx">dndConfig</span><span class="o">:</span> <span class="p">{}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="nx">grid1</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="s1">&#39;gridContainer1&#39;</span><span class="p">);</span>
+    <span class="nx">grid1</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+
+    <span class="kd">var</span> <span class="nx">grid2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">grid</span><span class="p">.</span><span class="nx">EnhancedGrid</span><span class="p">({</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;grid2&#39;</span><span class="p">,</span>
+        <span class="nx">store</span><span class="o">:</span> <span class="nx">store2</span><span class="p">,</span>
+        <span class="nx">structure</span><span class="o">:</span> <span class="nx">layout2</span><span class="p">,</span>
+        <span class="nx">rowSelector</span><span class="o">:</span> <span class="s1">&#39;20px&#39;</span><span class="p">,</span>
+        <span class="nx">canSort</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span><span class="k">return</span> <span class="kc">false</span><span class="p">;},</span>
+        <span class="nx">plugins</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">dnd</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">setIdentifierForNewItem</span><span class="o">:</span> <span class="nx">setIdentifierForNewItem</span><span class="p">,</span>
+                <span class="nx">dndConfig</span><span class="o">:</span> <span class="p">{}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="nx">grid2</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="s1">&#39;gridContainer2&#39;</span><span class="p">);</span>
+    <span class="nx">grid2</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+
+    <span class="nx">dojo</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s2">&quot;input.cfgbox&quot;</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">){</span>
+        <span class="nx">cb</span><span class="p">.</span><span class="nx">checked</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">});</span>
+    <span class="nx">dojo</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="s2">&quot;input.copyonlyCBox&quot;</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">cb</span><span class="p">){</span>
+        <span class="nx">cb</span><span class="p">.</span><span class="nx">checked</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojo.data.ItemFileWriteStore&quot;);
+dojo.require(&quot;dijit.form.CheckBox&quot;);
+dojo.require(&quot;dojox.grid.EnhancedGrid&quot;);
+dojo.require(&quot;dojox.grid.enhanced.plugins.DnD&quot;);
+
+var data = {
+    identifier: 'id',
+    label: 'id',
+    items: []
+};
+var cols = [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;, &quot;F&quot;, &quot;G&quot;, &quot;H&quot;, &quot;I&quot;, &quot;J&quot;, &quot;K&quot;, &quot;L&quot;, &quot;M&quot;, &quot;N&quot;, &quot;O&quot;, &quot;P&quot;, &quot;Q&quot;, &quot;R&quot;, &quot;S&quot;, &quot;T&quot;, &quot;U&quot;, &quot;V&quot;, &quot;W&quot;, &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;];
+var data_list = [];
+var i, row, j;
+for(i = 0; i &lt; 100; ++i){
+    row = {};
+    for(j = 0; j &lt; cols.length; ++j){
+        row[cols[j]] = (i + 1) + cols[j];
+    }
+    data_list.push(row);
+}
+var len = data_list.length;
+for(i = 0; i &lt; len ; ++i){
+    data.items.push(dojo.mixin({ 'id': i + 1 }, data_list[i]));
+}
+var data1 = dojo.clone(data);
+
+var layout1 = [{
+    defaultCell: {width: 3},
+    rows: [
+        {field: &quot;A&quot;},
+        {field: &quot;B&quot;},
+        {field: &quot;C&quot;},
+        {field: &quot;D&quot;},
+        {field: &quot;E&quot;},
+        {field: &quot;F&quot;},
+        {field: &quot;G&quot;},
+        {field: &quot;H&quot;},
+        {field: &quot;I&quot;},
+        {field: &quot;J&quot;},
+        {field: &quot;K&quot;},
+        {field: &quot;L&quot;},
+        {field: &quot;M&quot;}
+    ]
+}];
+
+var layout2 = [{
+    defaultCell: {width: 3},
+    rows: [
+        {field: &quot;N&quot;},
+        {field: &quot;O&quot;},
+        {field: &quot;P&quot;},
+        {field: &quot;Q&quot;},
+        {field: &quot;R&quot;},
+        {field: &quot;S&quot;},
+        {field: &quot;T&quot;},
+        {field: &quot;U&quot;},
+        {field: &quot;V&quot;},
+        {field: &quot;W&quot;},
+        {field: &quot;X&quot;},
+        {field: &quot;Y&quot;},
+        {field: &quot;Z&quot;}
+    ]
+}];
+
+function setIdentifierForNewItem(item, store, index){
+    var attrs = store.getIdentityAttributes(item);
+    for(var i = attrs.length - 1; i &gt;= 0; --i){
+        item[attrs[i]] = index + (new Date()).getTime();
+    }
+    return item;
+}
+function setDnDConfig(gridId, type, mode, selected){
+    var config = {};
+    config[type] = {};
+    config[type][mode] = selected;
+    dijit.byId(gridId).setupDnDConfig(config);
+}
+function setCopyOnly(gridId, selected){
+    dijit.byId(gridId).dndCopyOnly(selected);
+}
+dojo.ready(function(){
+    var store1 = new dojo.data.ItemFileWriteStore({data: data});
+    var store2 = new dojo.data.ItemFileWriteStore({data: data1});
+
+    var grid1 = new dojox.grid.EnhancedGrid({
+        id: 'grid1',
+        store: store1,
+        structure: layout1,
+        rowSelector: '20px',
+        canSort: function(){return false;},
+        plugins: {
+            dnd: {
+                setIdentifierForNewItem: setIdentifierForNewItem,
+                dndConfig: {}
+            }
+        }
+    });
+    grid1.placeAt('gridContainer1');
+    grid1.startup();
+
+    var grid2 = new dojox.grid.EnhancedGrid({
+        id: 'grid2',
+        store: store2,
+        structure: layout2,
+        rowSelector: '20px',
+        canSort: function(){return false;},
+        plugins: {
+            dnd: {
+                setIdentifierForNewItem: setIdentifierForNewItem,
+                dndConfig: {}
+            }
+        }
+    });
+    grid2.placeAt('gridContainer2');
+    grid2.startup();
+
+    dojo.query(&quot;input.cfgbox&quot;).forEach(function(cb){
+        cb.checked = true;
+    });
+    dojo.query(&quot;input.copyonlyCBox&quot;).forEach(function(cb){
+        cb.checked = false;
+    });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;myblock&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h3&gt;</span>Grid 1<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;gridContainer1&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;myblock&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h3&gt;</span>Grid 2<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;gridContainer2&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;myblock&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h3&gt;</span>Grid 1 Configuration<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">style=</span><span class="s">&quot;font-weight: bolder;&quot;</span><span class="nt">&gt;</span>Copy Only<span class="nt">&lt;/label&gt;&lt;input</span> <span class="na">class=</span><span class="s">&quot;copyonlyCBox&quot;</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setCopyOnly(&#39;grid1&#39;, this.checked)&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">&quot;cfgtable&quot;</span> <span class="na">border=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;thead&gt;</span>
+            <span class="nt">&lt;tr&gt;</span>
+                <span class="nt">&lt;th&gt;</span>Drag<span class="nt">&lt;/th&gt;</span>
+                <span class="nt">&lt;th&gt;</span>Within<span class="nt">&lt;/th&gt;</span>
+                <span class="nt">&lt;th&gt;</span>In<span class="nt">&lt;/th&gt;</span>
+                <span class="nt">&lt;th&gt;</span>Out<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;/thead&gt;</span>
+        <span class="nt">&lt;tbody&gt;</span>
+            <span class="nt">&lt;tr&gt;</span>
+                <span class="nt">&lt;td&gt;</span>Rows<span class="nt">&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid1&#39;, &#39;row&#39;, &#39;within&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid1&#39;, &#39;row&#39;, &#39;in&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid1&#39;, &#39;row&#39;, &#39;out&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+            <span class="nt">&lt;/tr&gt;</span>
+            <span class="nt">&lt;tr&gt;</span>
+                <span class="nt">&lt;td&gt;</span>Columns<span class="nt">&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid1&#39;, &#39;col&#39;, &#39;within&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;</span>Not implemented<span class="nt">&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid1&#39;, &#39;col&#39;, &#39;out&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+            <span class="nt">&lt;/tr&gt;</span>
+            <span class="nt">&lt;tr&gt;</span>
+                <span class="nt">&lt;td&gt;</span>Cells<span class="nt">&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid1&#39;, &#39;cell&#39;, &#39;within&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid1&#39;, &#39;cell&#39;, &#39;in&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid1&#39;, &#39;cell&#39;, &#39;out&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+            <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;/tbody&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;myblock&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h3&gt;</span>Grid 2 Configuration<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">style=</span><span class="s">&quot;font-weight: bolder;&quot;</span><span class="nt">&gt;</span>Copy Only<span class="nt">&lt;/label&gt;&lt;input</span> <span class="na">class=</span><span class="s">&quot;copyonlyCBox&quot;</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setCopyOnly(&#39;grid2&#39;, this.checked)&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">&quot;cfgtable&quot;</span> <span class="na">border=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;thead&gt;</span>
+            <span class="nt">&lt;tr&gt;</span>
+                <span class="nt">&lt;th&gt;</span>Drag<span class="nt">&lt;/th&gt;</span>
+                <span class="nt">&lt;th&gt;</span>Within<span class="nt">&lt;/th&gt;</span>
+                <span class="nt">&lt;th&gt;</span>In<span class="nt">&lt;/th&gt;</span>
+                <span class="nt">&lt;th&gt;</span>Out<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;/thead&gt;</span>
+        <span class="nt">&lt;tbody&gt;</span>
+            <span class="nt">&lt;tr&gt;</span>
+                <span class="nt">&lt;td&gt;</span>Rows<span class="nt">&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid2&#39;, &#39;row&#39;, &#39;within&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid2&#39;, &#39;row&#39;, &#39;in&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid2&#39;, &#39;row&#39;, &#39;out&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+            <span class="nt">&lt;/tr&gt;</span>
+            <span class="nt">&lt;tr&gt;</span>
+                <span class="nt">&lt;td&gt;</span>Columns<span class="nt">&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid2&#39;, &#39;col&#39;, &#39;within&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;</span>Not implemented<span class="nt">&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid2&#39;, &#39;col&#39;, &#39;out&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+            <span class="nt">&lt;/tr&gt;</span>
+            <span class="nt">&lt;tr&gt;</span>
+                <span class="nt">&lt;td&gt;</span>Cells<span class="nt">&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid2&#39;, &#39;cell&#39;, &#39;within&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid2&#39;, &#39;cell&#39;, &#39;in&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+                <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">class=</span><span class="s">&quot;cfgbox&quot;</span> <span class="na">onchange=</span><span class="s">&quot;setDnDConfig(&#39;grid2&#39;, &#39;cell&#39;, &#39;out&#39;, this.checked)&quot;</span><span class="nt">/&gt;&lt;/td&gt;</span>
+            <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;/tbody&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div class=&quot;myblock&quot;&gt;
+    &lt;h3&gt;Grid 1&lt;/h3&gt;
+    &lt;div id=&quot;gridContainer1&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;myblock&quot;&gt;
+    &lt;h3&gt;Grid 2&lt;/h3&gt;
+    &lt;div id=&quot;gridContainer2&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;myblock&quot;&gt;
+    &lt;h3&gt;Grid 1 Configuration&lt;/h3&gt;
+    &lt;label style=&quot;font-weight: bolder;&quot;&gt;Copy Only&lt;/label&gt;&lt;input class=&quot;copyonlyCBox&quot; type=&quot;checkbox&quot; onchange=&quot;setCopyOnly('grid1', this.checked)&quot; /&gt;
+    &lt;table class=&quot;cfgtable&quot; border=&quot;1&quot;&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;Drag&lt;/th&gt;
+                &lt;th&gt;Within&lt;/th&gt;
+                &lt;th&gt;In&lt;/th&gt;
+                &lt;th&gt;Out&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Rows&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid1', 'row', 'within', this.checked)&quot;/&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid1', 'row', 'in', this.checked)&quot;/&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid1', 'row', 'out', this.checked)&quot;/&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Columns&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid1', 'col', 'within', this.checked)&quot;/&gt;&lt;/td&gt;
+                &lt;td&gt;Not implemented&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid1', 'col', 'out', this.checked)&quot;/&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Cells&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid1', 'cell', 'within', this.checked)&quot;/&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid1', 'cell', 'in', this.checked)&quot;/&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid1', 'cell', 'out', this.checked)&quot;/&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;
+&lt;div class=&quot;myblock&quot;&gt;
+    &lt;h3&gt;Grid 2 Configuration&lt;/h3&gt;
+    &lt;label style=&quot;font-weight: bolder;&quot;&gt;Copy Only&lt;/label&gt;&lt;input class=&quot;copyonlyCBox&quot; type=&quot;checkbox&quot; onchange=&quot;setCopyOnly('grid2', this.checked)&quot; /&gt;
+    &lt;table class=&quot;cfgtable&quot; border=&quot;1&quot;&gt;
+        &lt;thead&gt;
+            &lt;tr&gt;
+                &lt;th&gt;Drag&lt;/th&gt;
+                &lt;th&gt;Within&lt;/th&gt;
+                &lt;th&gt;In&lt;/th&gt;
+                &lt;th&gt;Out&lt;/th&gt;
+            &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Rows&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid2', 'row', 'within', this.checked)&quot;/&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid2', 'row', 'in', this.checked)&quot;/&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid2', 'row', 'out', this.checked)&quot;/&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Columns&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid2', 'col', 'within', this.checked)&quot;/&gt;&lt;/td&gt;
+                &lt;td&gt;Not implemented&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid2', 'col', 'out', this.checked)&quot;/&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+            &lt;tr&gt;
+                &lt;td&gt;Cells&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid2', 'cell', 'within', this.checked)&quot;/&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid2', 'cell', 'in', this.checked)&quot;/&gt;&lt;/td&gt;
+                &lt;td&gt;&lt;input type=&quot;checkbox&quot; class=&quot;cfgbox&quot; onchange=&quot;setDnDConfig('grid2', 'cell', 'out', this.checked)&quot;/&gt;&lt;/td&gt;
+            &lt;/tr&gt;
+        &lt;/tbody&gt;
+    &lt;/table&gt;
+&lt;/div&gt;</textarea></div><div class="highlight"><pre><span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dojo/resources/dojo.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dijit/themes/claro/claro.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dijit/themes/claro/document.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dojox/grid/enhanced/resources/claro/EnhancedGrid.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dojox/grid/enhanced/resources/EnhancedGrid_rtl.css&quot;</span><span class="p">;</span>
+
+<span class="nc">.myblock</span><span class="p">{</span>
+    <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+    <span class="k">margin</span><span class="o">:</span> <span class="m">5px</span><span class="p">;</span>
+    <span class="k">margin-top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.cfgtable</span> <span class="nt">th</span><span class="o">,</span>
+<span class="nc">.cfgtable</span> <span class="nt">td</span><span class="p">{</span>
+    <span class="k">font-weight</span><span class="o">:</span> <span class="k">bolder</span><span class="p">;</span>
+    <span class="k">padding</span><span class="o">:</span> <span class="m">3px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">h3</span><span class="p">{</span>
+    <span class="k">margin</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#gridContainer1</span><span class="o">,</span> <span class="nf">#gridContainer2</span><span class="p">{</span>
+    <span class="k">margin-bottom</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">300px</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="m">300px</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">&#64;import &quot;{{baseUrl}}dojo/resources/dojo.css&quot;;
+&#64;import &quot;{{baseUrl}}dijit/themes/claro/claro.css&quot;;
+&#64;import &quot;{{baseUrl}}dijit/themes/claro/document.css&quot;;
+&#64;import &quot;{{baseUrl}}dojox/grid/enhanced/resources/claro/EnhancedGrid.css&quot;;
+&#64;import &quot;{{baseUrl}}dojox/grid/enhanced/resources/EnhancedGrid_rtl.css&quot;;
+
+.myblock{
+    float: left;
+    margin: 5px;
+    margin-top: 0;
+}
+.cfgtable th,
+.cfgtable td{
+    font-weight: bolder;
+    padding: 3px;
+}
+h3{
+    margin: 0;
+}
+#gridContainer1, #gridContainer2{
+    margin-bottom: 0px;
+    width: 300px;
+    height: 300px;
+}</textarea></div></div></div></div>
+<div class="section" id="configuration">
+<h2><a class="toc-backref" href="#id4">Configuration</a><a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>This DnD plugin is only available for EnhancedGrid, so use the following statement in the head of your HTML file:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.EnhancedGrid&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.enhanced.plugins.DnD&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.grid.EnhancedGrid&quot;);
+dojo.require(&quot;dojox.grid.enhanced.plugins.DnD&quot;);</textarea></div><p>Note that this DnD plugin is based on the Selector plugin, so there&#8217;s no need to &#8220;require&#8221; the Selector plugin anymore if you&#8217;d like to use the its functions.</p>
+</div>
+<div class="section" id="plugin-declaration">
+<h3>Plugin Declaration<a class="headerlink" href="#plugin-declaration" title="Permalink to this headline">¶</a></h3>
+<p>The declaration name of this plugin is <code class="docutils literal"><span class="pre">dnd</span></code> . It is declared in the <code class="docutils literal"><span class="pre">plugins</span></code> property of grid.</p>
+<p>If your grid is created declaratively:</p>
+<div class="highlight"><pre><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&quot;grid&quot;</span> <span class="nx">data</span><span class="o">-</span><span class="nx">dojo</span><span class="o">-</span><span class="nx">type</span><span class="o">=</span><span class="s2">&quot;dojox.grid.EnhancedGrid&quot;</span>
+  <span class="nx">store</span><span class="o">=</span><span class="s2">&quot;mystore&quot;</span> <span class="nx">structure</span><span class="o">=</span><span class="s2">&quot;mystructure&quot;</span>
+  <span class="nx">plugins</span><span class="o">=</span><span class="s2">&quot;{</span>
+<span class="s2">    dnd: /* a Boolean value or an argument object */{}</span>
+<span class="s2">}&quot;</span> <span class="o">&gt;&lt;</span><span class="err">/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">&lt;div id=&quot;grid&quot; data-dojo-type=&quot;dojox.grid.EnhancedGrid&quot;
+  store=&quot;mystore&quot; structure=&quot;mystructure&quot;
+  plugins=&quot;{
+    dnd: /* a Boolean value or an argument object */{}
+}&quot; &gt;&lt;/div&gt;</textarea></div><p>If your grid is created in JavaScript:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">grid</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">grid</span><span class="p">.</span><span class="nx">EnhancedGrid</span><span class="p">({</span>
+  <span class="nx">id</span><span class="o">:</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+  <span class="nx">store</span><span class="o">:</span><span class="s2">&quot;mystore&quot;</span><span class="p">,</span>
+  <span class="nx">structure</span><span class="o">:</span><span class="s2">&quot;mystructure&quot;</span><span class="p">,</span>
+  <span class="nx">plugins</span><span class="o">:</span><span class="p">{</span>
+    <span class="nx">dnd</span><span class="o">:</span> <span class="cm">/* a Boolean value or an argument object */</span><span class="p">{}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var grid = new dojox.grid.EnhancedGrid({
+  id:&quot;grid&quot;,
+  store:&quot;mystore&quot;,
+  structure:&quot;mystructure&quot;,
+  plugins:{
+    dnd: /* a Boolean value or an argument object */{}
+  }
+});</textarea></div><p>As shown in the above code, you can simply set the <code class="docutils literal"><span class="pre">dnd</span></code> property to true or false (disabled), or further configure it in an argument object.</p>
+<p>The argument object can accept the following properties:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="4%" />
+<col width="8%" />
+<col width="79%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Type</th>
+<th class="head">Default Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>copyOnly</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Set whether dragging from this grid means moving or copying.</td>
+</tr>
+<tr class="row-odd"><td>dndConfig</td>
+<td>Object</td>
+<td>{}</td>
+<td>Enable/disable dnd for every draggable objects (&#8220;row&#8221;, &#8220;col&#8221;, and &#8220;cell&#8221;) in every kind of circumstance (drag &#8220;within&#8221;, &#8220;in&#8221; to, or &#8220;out&#8221; of grid).
+These draggable objects and circumstances are configured in a hierarchical manner.
+You can set either &#8220;row&#8221;/&#8221;col&#8221;/&#8221;cell&#8221; or &#8220;within&#8221;/&#8221;in&#8221;/&#8221;out&#8221; at the first level, and configure the other group at the second level.
+Or simply disable/enable a whole set of situations directly at the first level.
+Note:
+1. Circumstance (within/in/out) has higher priority than objects (row/col/cell).
+2. Default value is &#8220;true&#8221;(enabled) if anything is omitted.</td>
+</tr>
+</tbody>
+</table>
+<p>Here is an example on how to set dndConfig:</p>
+<div class="highlight"><pre><span class="nx">GridDnD</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">dndConfig</span><span class="o">:</span> <span class="p">{</span>
+    <span class="c1">// Configure in a hierarchical manner.</span>
+    <span class="nx">row</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">out</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="c1">// This rule has lower priority, it&#39;ll be overwritten.</span>
+      <span class="nx">within</span><span class="o">:</span> <span class="kc">false</span>
+    <span class="p">},</span>
+    <span class="c1">// Both orders are correct.</span>
+    <span class="nx">out</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">row</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// This rule has higher priority, it&#39;ll be valid.</span>
+      <span class="nx">cell</span><span class="o">:</span> <span class="kc">false</span>
+    <span class="p">},</span>
+    <span class="c1">// Set a whole group of situations</span>
+    <span class="k">in</span><span class="o">:</span> <span class="kc">false</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">GridDnD: {
+  dndConfig: {
+    // Configure in a hierarchical manner.
+    row: {
+      out: false, // This rule has lower priority, it'll be overwritten.
+      within: false
+    },
+    // Both orders are correct.
+    out: {
+      row: true, // This rule has higher priority, it'll be valid.
+      cell: false
+    },
+    // Set a whole group of situations
+    in: false
+  }
+}</textarea></div><p>Currently, the following situations are supported:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="33%" />
+<col width="30%" />
+<col width="23%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">DnD</th>
+<th class="head">within</th>
+<th class="head">in</th>
+<th class="head">out</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>col</td>
+<td>supported</td>
+<td>not supported</td>
+<td>supported</td>
+</tr>
+<tr class="row-odd"><td>row</td>
+<td>supported</td>
+<td>supported</td>
+<td>supported</td>
+</tr>
+<tr class="row-even"><td>cell</td>
+<td>supported</td>
+<td>supported</td>
+<td>supported</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Note:</dt>
+<dd><ol class="first last arabic simple">
+<li>Dragging columns into a grid is NOT supported currently.</li>
+<li>Only cells forming a rectangle are draggable (do NOT support other shapes).</li>
+</ol>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id5">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>This section shows how to DnD.</p>
+<p>Note:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>If using Selector plugin only, the &#8220;drag&#8221; operation will start a new selection, and &#8220;drag&#8221; while pressing and holding CTRL key will start deselection.</li>
+<li>If using this GridDnD plugin, only drag AFTER pressing and holding CTRL key will start deselection. If you press the CTRL key DURING dragging process, it means COPY instead of MOVE.</li>
+</ol>
+</div></blockquote>
+<div class="section" id="dnd-within-grid">
+<h3>DnD within Grid<a class="headerlink" href="#dnd-within-grid" title="Permalink to this headline">¶</a></h3>
+<p>If enabled, selected rows/columns/cells can be dragged within grid.</p>
+<p>Dragging Columns</p>
+<img alt="../../../../_images/dnd-within-cols-1.gif" src="../../../../_images/dnd-within-cols-1.gif" />
+<p>Dragging Rows</p>
+<img alt="../../../../_images/dnd-within-rows-1.gif" src="../../../../_images/dnd-within-rows-1.gif" />
+<p>Dragging Cells</p>
+<img alt="../../../../_images/dnd-within-cells-1.gif" src="../../../../_images/dnd-within-cells-1.gif" />
+</div>
+<div class="section" id="dnd-across-grids">
+<h3>DnD across Grids<a class="headerlink" href="#dnd-across-grids" title="Permalink to this headline">¶</a></h3>
+<p>If both grids are EnhancedGrid with this GridDnD plugin, and one has enabled dragging &#8220;out&#8221; while the other enabled dragging &#8220;in&#8221;, data can be dragged across grids.
+Note: Dragging columns across grids is not supported.</p>
+<p>Moving rows across grids</p>
+<img alt="../../../../_images/dnd-togrid-rows-1.gif" src="../../../../_images/dnd-togrid-rows-1.gif" />
+<p>Copy rows across grids</p>
+<img alt="../../../../_images/dnd-togrid-rows-copy-1.gif" src="../../../../_images/dnd-togrid-rows-copy-1.gif" />
+<p>Moving cells across grids</p>
+<img alt="../../../../_images/dnd-togrid-cells-1.gif" src="../../../../_images/dnd-togrid-cells-1.gif" />
+<p>Copy cells across grids</p>
+<img alt="../../../../_images/dnd-togrid-cells-copy-1.gif" src="../../../../_images/dnd-togrid-cells-copy-1.gif" />
+<p>If selected cells do not form a rectangle, they can not be dragged:</p>
+<img alt="../../../../_images/dnd-cannotdndshape-1.png" src="../../../../_images/dnd-cannotdndshape-1.png" />
+<p>Because the grid lazy loads store data, and extended selection is supported, it is possible to select rows or cells that are not loaded to the client side yet. If this situation occurs, it&#8217;s not allowed to &#8220;drop&#8221; these unloaded objects to another grid:</p>
+<img alt="../../../../_images/dnd-unloadedrows-1.gif" src="../../../../_images/dnd-unloadedrows-1.gif" />
+</div>
+<div class="section" id="dnd-from-grid-to-other-widgets">
+<h3>DnD from Grid to Other Widgets<a class="headerlink" href="#dnd-from-grid-to-other-widgets" title="Permalink to this headline">¶</a></h3>
+<p>Other widgets/dom nodes can accept dragged data from a grid by extending dojox.grid.enhanced.plugins.GridSource instead of dojo.dnd.Source.</p>
+<p>GridSource extends dojo.dnd.Source. Its &#8220;accept&#8221; property can support &#8220;grid/cols&#8221;, &#8220;grid/rows&#8221;, and &#8220;grid/cells&#8221;.</p>
+<p>GridSource provides the following events to handle grid related dnd:</p>
+<dl class="docutils">
+<dt>onDropGridColumns(grid, columnIndexes):</dt>
+<dd>When a set of grid columns is dragged to this source.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="33%" />
+<col width="47%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>grid</td>
+<td>dojox.grid.EnhancedGrid</td>
+<td>The source grid.</td>
+</tr>
+<tr class="row-odd"><td>columnIndexes</td>
+<td>Integer[]</td>
+<td>The indexes of the dragged columns</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>onDropGridRows(grid, rowIndexes):</dt>
+<dd>When a set of grid rows is dragged to this source.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="33%" />
+<col width="47%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>grid</td>
+<td>dojox.grid.EnhancedGrid</td>
+<td>The source grid.</td>
+</tr>
+<tr class="row-odd"><td>rowIndexes</td>
+<td>Integer[]</td>
+<td>The indexes of the dragged rows</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>onDropGridCells(grid, leftTopPoint, rightBottomPoint):</dt>
+<dd>When a block of grid cells is dragged to this source.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="20%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>grid</td>
+<td>dojox.grid.EnhancedGrid</td>
+<td>The source grid.</td>
+</tr>
+<tr class="row-odd"><td>leftTopPoint</td>
+<td>Object(__SelectCellItem)</td>
+<td>The left-top cell of the selected cells. (For RTL, it&#8217;s the right-top cell)</td>
+</tr>
+<tr class="row-even"><td>rightBottomPoint</td>
+<td>Object(__SelectCellItem)</td>
+<td>The right-bottom cell of the selected cells. (For RTL, it&#8217;s the left-top cell)</td>
+</tr>
+</tbody>
+</table>
+<p>The following example shows how to use these events to drag a grid row to a form.</p>
+<p>The HTML is:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;grid&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.grid.EnhancedGrid&quot;</span> <span class="na">store=</span><span class="s">&quot;test_store&quot;</span> <span class="na">structure=</span><span class="s">&quot;layout&quot;</span> <span class="na">rowSelector=</span><span class="s">&quot;20px&quot;</span>
+  <span class="na">plugins=</span><span class="s">&quot;{</span>
+<span class="s">    dnd: {copyOnly: true}</span>
+<span class="s">  }&quot;</span>
+<span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">id=</span><span class="s">&quot;songForm&quot;</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;table&gt;</span>
+    <span class="nt">&lt;tr&gt;</span>
+      <span class="nt">&lt;td&gt;&lt;label</span> <span class="na">for=</span><span class="s">&quot;inputName&quot;</span><span class="nt">&gt;</span>Song name<span class="nt">&lt;/label&gt;&lt;/td&gt;</span>
+      <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">id=</span><span class="s">&quot;inputName&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="nt">/&gt;&lt;/td&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;tr&gt;</span>
+      <span class="nt">&lt;td&gt;&lt;label</span> <span class="na">for=</span><span class="s">&quot;inputAuthor&quot;</span><span class="nt">&gt;</span>Artist<span class="nt">&lt;/label&gt;&lt;/td&gt;</span>
+      <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">id=</span><span class="s">&quot;inputAuthor&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="nt">/&gt;&lt;/td&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;tr&gt;</span>
+      <span class="nt">&lt;td&gt;&lt;label</span> <span class="na">for=</span><span class="s">&quot;inputAlbum&quot;</span><span class="nt">&gt;</span>Album<span class="nt">&lt;/label&gt;&lt;/td&gt;</span>
+      <span class="nt">&lt;td&gt;&lt;input</span> <span class="na">id=</span><span class="s">&quot;inputAlbum&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="nt">/&gt;&lt;/td&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+  <span class="nt">&lt;/table&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;grid&quot; data-dojo-type=&quot;dojox.grid.EnhancedGrid&quot; store=&quot;test_store&quot; structure=&quot;layout&quot; rowSelector=&quot;20px&quot;
+  plugins=&quot;{
+    dnd: {copyOnly: true}
+  }&quot;
+&gt;&lt;/div&gt;
+&lt;form id=&quot;songForm&quot; class=&quot;container&quot;&gt;
+  &lt;table&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;label for=&quot;inputName&quot;&gt;Song name&lt;/label&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;input id=&quot;inputName&quot; type=&quot;text&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;label for=&quot;inputAuthor&quot;&gt;Artist&lt;/label&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;input id=&quot;inputAuthor&quot; type=&quot;text&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;label for=&quot;inputAlbum&quot;&gt;Album&lt;/label&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;input id=&quot;inputAlbum&quot; type=&quot;text&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;
+&lt;/form&gt;</textarea></div><p>The JavaScript code is:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.enhanced.plugins.GridSource&quot;</span><span class="p">);</span>
+
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">formTarget</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">grid</span><span class="p">.</span><span class="nx">enhanced</span><span class="p">.</span><span class="nx">plugins</span><span class="p">.</span><span class="nx">GridSource</span><span class="p">(</span><span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;songForm&quot;</span><span class="p">),{</span>
+    <span class="nx">isSource</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">insertNodesForGrid</span><span class="o">:</span> <span class="kc">false</span>
+  <span class="p">});</span>
+  <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">formTarget</span><span class="p">,</span> <span class="s2">&quot;onDropGridRows&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grid</span><span class="p">,</span> <span class="nx">rowIndexes</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">grid</span><span class="p">.</span><span class="nx">store</span><span class="p">,</span>
+        <span class="nx">row</span> <span class="o">=</span> <span class="nx">rowIndexes</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="nx">dojo</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;inputName&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">grid</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">row</span><span class="p">),</span> <span class="s2">&quot;Name&quot;</span><span class="p">));</span>
+    <span class="nx">dojo</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;inputAuthor&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">grid</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">row</span><span class="p">),</span> <span class="s2">&quot;Artist&quot;</span><span class="p">));</span>
+    <span class="nx">dojo</span><span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;inputAlbum&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="nx">s</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">grid</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">row</span><span class="p">),</span> <span class="s2">&quot;Album&quot;</span><span class="p">));</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.grid.enhanced.plugins.GridSource&quot;);
+
+dojo.ready(function(){
+  var formTarget = new dojox.grid.enhanced.plugins.GridSource(dojo.byId(&quot;songForm&quot;),{
+    isSource: false,
+    insertNodesForGrid: false
+  });
+  dojo.connect(formTarget, &quot;onDropGridRows&quot;, function(grid, rowIndexes){
+    var s = grid.store,
+        row = rowIndexes[0];
+    dojo.attr(dojo.byId(&quot;inputName&quot;), &quot;value&quot;, s.getValue(grid.getItem(row), &quot;Name&quot;));
+    dojo.attr(dojo.byId(&quot;inputAuthor&quot;), &quot;value&quot;, s.getValue(grid.getItem(row), &quot;Artist&quot;));
+    dojo.attr(dojo.byId(&quot;inputAlbum&quot;), &quot;value&quot;, s.getValue(grid.getItem(row), &quot;Album&quot;));
+  });
+});</textarea></div><p>And here is the effect:</p>
+<img alt="../../../../_images/dnd-tootherwidget-1.gif" src="../../../../_images/dnd-tootherwidget-1.gif" />
+</div>
+<div class="section" id="public-methods">
+<h3>Public Methods<a class="headerlink" href="#public-methods" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>copyOnly(isCopyOnly):</dt>
+<dd>Get/set function of the copyOnly property in the argument object.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="12%" />
+<col width="21%" />
+<col width="57%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Optional/Mandatory</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>isCopyOnly</td>
+<td>Boolean</td>
+<td>Optional(default to undefined)</td>
+<td>Whether DnD is a copy operation or a move operation. If omitted, this is a getter.</td>
+</tr>
+<tr class="row-odd"><td>[return]</td>
+<td>Boolean|Undefined</td>
+<td>&nbsp;</td>
+<td>If isCopyOnly is undefined, return the copyOnly property of this plugin.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>setupConfig(config):</dt>
+<dd>Change the dndConfig property in the argument object.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="22%" />
+<col width="38%" />
+<col width="23%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Optional/Mandatory</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>config</td>
+<td>Object</td>
+<td>Mandatory</td>
+<td>Same as dndConfig.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="known-limitations">
+<h2><a class="toc-backref" href="#id6">Known Limitations</a><a class="headerlink" href="#known-limitations" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Multiple row layout is not supported by this DnD plugin.</li>
+<li>Please be careful when dragging a numeric cell to a string cell (or vice versa), since sorting will have problems after that. This is because comparing string value and number value always returns false.</li>
+</ul>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id7">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../../DataGrid.html#dojox-grid-datagrid"><span>dojox.grid.DataGrid</span></a> - The base grid</li>
+<li><a class="reference internal" href="../../EnhancedGrid.html#dojox-grid-enhancedgrid"><span>dojox.grid.EnhancedGrid</span></a> - The enhanced grid supporting plugins</li>
+<li><a class="reference internal" href="../plugins.html#dojox-grid-enhancedgrid-plugins"><span>dojox.grid.EnhancedGrid.plugins</span></a> - Overview of the plugins of enhanced grid</li>
+<li><a class="reference internal" href="../plugins.html#dojox-grid-enhancedgrid-plugins"><span>dojox.grid.EnhancedGrid.plugins.Selector</span></a> - The selector plugin of enhanced grid</li>
+<li><a class="reference internal" href="../../TreeGrid.html#dojox-grid-treegrid"><span>dojox.grid.TreeGrid</span></a> - Grid with collapsible rows and model-based (<a class="reference internal" href="../../../../dijit/tree/ForestStoreModel.html#dijit-tree-foreststoremodel"><span>dijit.tree.ForestStoreModel</span></a>) structure</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

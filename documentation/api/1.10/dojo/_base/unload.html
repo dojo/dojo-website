@@ -1,0 +1,152 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.10/dojo/_base/unload" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.10/dojo/_base/unload.html</div>
+<h1 class="objectIcon36 jsdoc-title module-title">dojo/_base/unload<span style="font-size:11px;color:#999;"> (version 1.10)</span></h1>
+<div class="jsdoc-full-summary"><p>This module contains the document and window unload detection API.
+This module is deprecated.  Use on(window, &quot;unload&quot;, func)
+and on(window, &quot;beforeunload&quot;, func) instead.</p>
+</div>
+<p>See the<a href="/reference-guide/1.10/dojo/_base/unload.html" target="_blank">dojo/_base/unload reference documentation</a> for more information.</p>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a href="#1_10dojo__base_unload_addOnUnload">addOnUnload</a><span class="parameters"></span><span class="parameters">(obj,functionName) </span><span>Registers a function to be triggered when the page unloads.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojo__base_unload_addOnWindowUnload">addOnWindowUnload</a><span class="parameters"></span><span class="parameters">(obj,functionName) </span><span>Registers a function to be triggered when window.onunload fires.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojo__base_unload_addOnUnload"></a><span class="functionIcon">addOnUnload</span><span class="parameters">(obj,functionName)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojo/_base/unload" class="jsdoc-link">dojo/_base/unload</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Registers a function to be triggered when the page unloads.
+Deprecated, use on(window, &quot;beforeunload&quot;, lang.hitch(obj, functionName)) instead.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>The first time that addOnUnload is called Dojo will
+register a page listener to trigger your unload handler
+with.
+
+</p>
+<p>In a browser environment, the functions will be triggered
+during the window.onbeforeunload event. Be careful of doing
+too much work in an unload handler. onbeforeunload can be
+triggered if a link to download a file is clicked, or if
+the link is a javascript: link. In these cases, the
+onbeforeunload event fires, but the document is not
+actually destroyed. So be careful about doing destructive
+operations in a dojo.addOnUnload callback.
+
+</p>
+<p>Further note that calling dojo.addOnUnload will prevent
+browsers from using a &quot;fast back&quot; cache to make page
+loading via back button instantaneous.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">obj</td>
+            <td class="jsdoc-param-type">Object? | Function</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">functionName</td>
+            <td class="jsdoc-param-type">String | Function</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var afunc = function() {console.log(&quot;global function&quot;);};
+require([&quot;dojo/_base/unload&quot;], function(unload) {
+    var foo = {bar: function(){ console.log(&quot;bar unloading...&quot;);}, 
+               data: &quot;mydata&quot;};
+    unload.addOnUnload(afunc);
+    unload.addOnUnload(foo, &quot;bar&quot;);
+    unload.addOnUnload(foo, function(){console.log(&quot;&quot;, this.data);});
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojo__base_unload_addOnWindowUnload"></a><span class="functionIcon">addOnWindowUnload</span><span class="parameters">(obj,functionName)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojo/_base/unload" class="jsdoc-link">dojo/_base/unload</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Registers a function to be triggered when window.onunload fires.
+Deprecated, use on(window, &quot;unload&quot;, lang.hitch(obj, functionName)) instead.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>The first time that addOnWindowUnload is called Dojo
+will register a page listener to trigger your unload
+handler with. Note that registering these handlers may
+destroy &quot;fastback&quot; page caching in browsers that support
+it. Be careful trying to modify the DOM or access
+JavaScript properties during this phase of page unloading:
+they may not always be available. Consider
+addOnUnload() if you need to modify the DOM or do
+heavy JavaScript work since it fires at the equivalent of
+the page&#39;s &quot;onbeforeunload&quot; event.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">obj</td>
+            <td class="jsdoc-param-type">Object | Function</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">functionName</td>
+            <td class="jsdoc-param-type">String | Function</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var afunc = function() {console.log(&quot;global function&quot;);};
+require([&quot;dojo/_base/unload&quot;], function(unload) {
+    var foo = {bar: function(){ console.log(&quot;bar unloading...&quot;);}, 
+               data: &quot;mydata&quot;};
+    unload.addOnWindowUnload(afunc);
+    unload.addOnWindowUnload(foo, &quot;bar&quot;);
+    unload.addOnWindowUnload(foo, function(){console.log(&quot;&quot;, this.data);});
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.10/dojo/_base/unload" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

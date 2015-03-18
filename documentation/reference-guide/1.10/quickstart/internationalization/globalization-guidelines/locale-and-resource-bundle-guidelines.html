@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Globalization Guidelines: Locale and Resource Bundle &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../../index.html">Startpage</a></li>
+          <li><a href="../../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Globalization Guidelines: Locale and Resource Bundle</a><ul>
+<li><a class="reference internal" href="#locale-setting-in-dojo">Locale Setting in Dojo</a><ul>
+<li><a class="reference internal" href="#you-must-set-dojoconfig-locale-in-all-files-to-achieve-server-based-personalization">You must set dojoConfig.locale in all files to achieve server-based personalization</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resource-bundle-files">Resource Bundle Files</a><ul>
+<li><a class="reference internal" href="#you-must-always-use-resource-bundles-to-store-the-strings-displayed-to-users">You must always use resource bundles to store the strings displayed to users.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-resource-bundle">Using Resource Bundle</a><ul>
+<li><a class="reference internal" href="#you-should-use-dojoconfig-locale-to-set-the-default-locale-and-extra-locales-and-use-only-dojo-requirelocalization-without-the-locale-parameter">You should use dojoConfig.locale to set the default locale and extra locales, and use only dojo.requireLocalization without the locale parameter.</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#builds">Builds</a><ul>
+<li><a class="reference internal" href="#you-may-make-a-build-to-include-resource-bundles-in-the-locales-that-you-use">You may make a build to include resource bundles in the locales that you use</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#translation">Translation</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="globalization-guidelines-locale-and-resource-bundle">
+<span id="quickstart-internationalization-globalization-guidelines-locale-and-resource-bundle-guidelines"></span><h1><a class="toc-backref" href="#id1">Globalization Guidelines: Locale and Resource Bundle</a><a class="headerlink" href="#globalization-guidelines-locale-and-resource-bundle" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">?&#8211;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V?</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#globalization-guidelines-locale-and-resource-bundle" id="id1">Globalization Guidelines: Locale and Resource Bundle</a><ul>
+<li><a class="reference internal" href="#locale-setting-in-dojo" id="id2">Locale Setting in Dojo</a></li>
+<li><a class="reference internal" href="#resource-bundle-files" id="id3">Resource Bundle Files</a></li>
+<li><a class="reference internal" href="#using-resource-bundle" id="id4">Using Resource Bundle</a></li>
+<li><a class="reference internal" href="#builds" id="id5">Builds</a></li>
+<li><a class="reference internal" href="#translation" id="id6">Translation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="locale-setting-in-dojo">
+<h2><a class="toc-backref" href="#id2">Locale Setting in Dojo</a><a class="headerlink" href="#locale-setting-in-dojo" title="Permalink to this headline">¶</a></h2>
+<p>There is a slight difference in the locale naming conventions between Dojo and Java. Dojo uses &#8220;-&#8221; (hyphen) as the separator for concatenate language code, country code, and variants, whereas Java uses an &#8220;_&#8221; (underline). For example, &#8220;zh_CN&#8221; in Java is similar to &#8220;zh-cn&#8221; in Dojo.</p>
+<p>Like the default locale in Java, Dojo has a global locale value that is stored in a global variable: dojo.locale. This default locale value affects the behavior of several locale-related functions and widgets. The value of dojo.locale is not supposed to be changed. You should use dojoConfig.locale to initialize this value.</p>
+<div class="section" id="you-must-set-dojoconfig-locale-in-all-files-to-achieve-server-based-personalization">
+<h3>You must set dojoConfig.locale in all files to achieve server-based personalization<a class="headerlink" href="#you-must-set-dojoconfig-locale-in-all-files-to-achieve-server-based-personalization" title="Permalink to this headline">¶</a></h3>
+<p>If dojoConfig.locale is undefined, Dojo will consult the browser&#8217;s navigator object for the setting chosen at browser install time. Note that this is unrelated to the locale setting in the preferences dialog, which is for interaction with the server only. To provide personalization from the server to control locale settings in an application, you must set dojoConfig.locale in the page at the server side, prior to loading dojo.js. For example, here is a JSP page that sets the default locale for Dojo:</p>
+<div class="highlight"><pre>...
+<span class="err">&lt;</span>%
+String actualLocale = ResourceBundle.getBundle(&quot;my.app.test&quot;,
+    request.getLocale()).getLocale().toString().replace(&#39;_&#39;, &#39;-&#39;);
+%&gt;
+<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;../dojo/dojo.js&quot;</span> <span class="na">data-dojo-config=</span><span class="s">&quot;locale: &#39;&lt;%=userLocale%&gt;&#39;&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/script&gt;</span>
+...
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">...
+&lt;%
+String actualLocale = ResourceBundle.getBundle(&quot;my.app.test&quot;,
+    request.getLocale()).getLocale().toString().replace('_', '-');
+%&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;../dojo/dojo.js&quot; data-dojo-config=&quot;locale: '&lt;%=userLocale%&gt;'&quot;&gt;
+&lt;/script&gt;
+...</textarea></div></div>
+</div>
+<div class="section" id="resource-bundle-files">
+<h2><a class="toc-backref" href="#id3">Resource Bundle Files</a><a class="headerlink" href="#resource-bundle-files" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="you-must-always-use-resource-bundles-to-store-the-strings-displayed-to-users">
+<h3>You must always use resource bundles to store the strings displayed to users.<a class="headerlink" href="#you-must-always-use-resource-bundles-to-store-the-strings-displayed-to-users" title="Permalink to this headline">¶</a></h3>
+<p>Dojo introduces resource bundle into JavaScript. If you are familiar with Java resource bundle, you can find that Dojo resource bundle is very similar to Java resource bundle. The following table shows a summary of the differences between Java and Dojo:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="32%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Resource bundle:</th>
+<th class="head">Java</th>
+<th class="head">Dojo</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>File Format</td>
+<td>Properties file</td>
+<td>JSON file</td>
+</tr>
+<tr class="row-odd"><td>Locale Identifier</td>
+<td>Suffix of file name</td>
+<td>Directory name</td>
+</tr>
+<tr class="row-even"><td>Locale Naming</td>
+<td>Use &#8220;_&#8221; (underline) as separator</td>
+<td>Use &#8220;-&#8221; (hyphen) as separator</td>
+</tr>
+<tr class="row-odd"><td>Get Bundle</td>
+<td>ResourceBundle.getBundle</td>
+<td>dojo.requireLocalization, dojo.i18n.getLocalization</td>
+</tr>
+<tr class="row-even"><td>Get Message</td>
+<td>ResourceBundle.getString</td>
+<td>JSON object</td>
+</tr>
+</tbody>
+</table>
+<p>For example, there are two resource bundles named &#8220;bar&#8221; and &#8220;foo&#8221; in a package named &#8220;my.app&#8221; with some of their localized versions:</p>
+<p>In Java (6 files with different names):</p>
+<div class="highlight-python"><div class="highlight"><pre>my/
+  app/
+    bar.properties
+    bar_zh.properties
+    bar_zh_CN.properties
+    bar_zh_TW.properties
+    foo.properties
+    foo_zh_CN.properties
+</pre></div>
+</div>
+<p>And in Dojo (4 directories and 6 files):</p>
+<div class="highlight-python"><div class="highlight"><pre>my/
+  app/
+    nls/
+      bar.js
+      foo.js
+      zh/
+        bar.js
+      zh-cn/
+        bar.js
+        foo.js
+      zh-tw/
+        bar.js
+</pre></div>
+</div>
+<p>The fallback strategy in Dojo is the same as that in Java.</p>
+</div>
+</div>
+<div class="section" id="using-resource-bundle">
+<h2><a class="toc-backref" href="#id4">Using Resource Bundle</a><a class="headerlink" href="#using-resource-bundle" title="Permalink to this headline">¶</a></h2>
+<p>First, you should use the dojo.registerModulePath function to define the directory where resource bundles are as a registered module. The module name needs to be used in later callings to the dojo.requireLocalization and dojo.i18n.getLocalization functions. For the previous example, you can use the following line to define the module &quot;my.app&quot;:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">registerModulePath</span><span class="p">(</span><span class="s2">&quot;my.app&quot;</span><span class="p">,</span> <span class="s2">&quot;../../my/app&quot;</span><span class="p">);</span>
+<span class="c1">// Note: Here, the &quot;../../my/app&quot; path is relative to the directory that contains &quot;dojo.js&quot;.</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.registerModulePath(&quot;my.app&quot;, &quot;../../my/app&quot;);
+// Note: Here, the &quot;../../my/app&quot; path is relative to the directory that contains &quot;dojo.js&quot;.</textarea></div><p>Then you can use the dojo.requireLocalization function to load resource bundles from files. After a resource bundle is loaded, the dojo.i18n.getLocalization function returns a copy of the bundle object.</p>
+<p>When you get the bundle object, you can use it as a normal JSON object (a hash) to get messages. If you modify values in the bundle object, the original global bundle object will not be affected.</p>
+<div class="section" id="you-should-use-dojoconfig-locale-to-set-the-default-locale-and-extra-locales-and-use-only-dojo-requirelocalization-without-the-locale-parameter">
+<h3>You should use dojoConfig.locale to set the default locale and extra locales, and use only dojo.requireLocalization without the locale parameter.<a class="headerlink" href="#you-should-use-dojoconfig-locale-to-set-the-default-locale-and-extra-locales-and-use-only-dojo-requirelocalization-without-the-locale-parameter" title="Permalink to this headline">¶</a></h3>
+<p>dojoConfig.locale overrides the browser's default locale as specified by the navigator JavaScript object. This setting is effective for the entire page and must be declared prior to loading dojo.js. dojoConfig.extraLocale establishes additional locales whose resource bundles will be made available. This is used rarely to accommodate multiple languages on a single page. No other locales may be used on the page.</p>
+<p>If you omit the locale parameter when calling the dojo.requireLocalization function, the function will load the resource bundles for locales in dojoConfig.locale as well as for all the locales in dojoConfig.extraLocale.</p>
+<p>For example, if you define:</p>
+<div class="highlight"><pre><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nx">src</span><span class="o">=</span><span class="s2">&quot;../dojo/dojo.js&quot;</span> <span class="nx">data</span><span class="o">-</span><span class="nx">dojo</span><span class="o">-</span><span class="nx">config</span><span class="o">=</span><span class="s2">&quot;locale: &#39;zh-cn&#39;, extraLocale: [&#39;zh-tw&#39;, &#39;fr&#39;]&quot;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">&lt;script type=&quot;text/javascript&quot; src=&quot;../dojo/dojo.js&quot; data-dojo-config=&quot;locale: 'zh-cn', extraLocale: ['zh-tw', 'fr']&quot;&gt;
+&lt;/script&gt;</textarea></div><p>then the following two code blocks are equal:</p>
+<p>Code block A:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">requireLocalization</span><span class="p">(</span><span class="s2">&quot;my.app&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">bar</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">i18n</span><span class="p">.</span><span class="nx">getLocalization</span><span class="p">(</span><span class="s2">&quot;my.app&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.requireLocalization(&quot;my.app&quot;, &quot;bar&quot;);
+
+var bar = dojo.i18n.getLocalization(&quot;my.app&quot;, &quot;bar&quot;);</textarea></div><p>Code block B:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">requireLocalization</span><span class="p">(</span><span class="s2">&quot;my.app&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;zh-cn&quot;</span><span class="p">);</span> <span class="c1">// default locale</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">requireLocalization</span><span class="p">(</span><span class="s2">&quot;my.app&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;zh-tw&quot;</span><span class="p">);</span> <span class="c1">// extra locale</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">requireLocalization</span><span class="p">(</span><span class="s2">&quot;my.app&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;fr&quot;</span><span class="p">);</span>    <span class="c1">// extra locale</span>
+
+<span class="kd">var</span> <span class="nx">bar</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">i18n</span><span class="p">.</span><span class="nx">getLocalization</span><span class="p">(</span><span class="s2">&quot;my.app&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;zh-cn&quot;</span><span class="p">);</span> <span class="c1">// default locale</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.requireLocalization(&quot;my.app&quot;, &quot;bar&quot;, &quot;zh-cn&quot;); // default locale
+dojo.requireLocalization(&quot;my.app&quot;, &quot;bar&quot;, &quot;zh-tw&quot;); // extra locale
+dojo.requireLocalization(&quot;my.app&quot;, &quot;bar&quot;, &quot;fr&quot;);    // extra locale
+
+var bar = dojo.i18n.getLocalization(&quot;my.app&quot;, &quot;bar&quot;, &quot;zh-cn&quot;); // default locale</textarea></div><p>The first method is preferred as it is less brittle.</p>
+</div>
+</div>
+<div class="section" id="builds">
+<h2><a class="toc-backref" href="#id5">Builds</a><a class="headerlink" href="#builds" title="Permalink to this headline">¶</a></h2>
+<p>Before you deploy your Web application using Dojo, you should consider building the Dojo layers that are used by your application into a single JavaScript file. Using such a build brings you many advantages. The unused scripts, white spaces, comments, and overridden string values can be removed to make smaller downloads, and the need to search by locale can be skipped such that extra server requests and 404 responses are avoided. In general, the build reduces the request time from the browser to the server to avoid latency issues.</p>
+<div class="section" id="you-may-make-a-build-to-include-resource-bundles-in-the-locales-that-you-use">
+<h3>You may make a build to include resource bundles in the locales that you use<a class="headerlink" href="#you-may-make-a-build-to-include-resource-bundles-in-the-locales-that-you-use" title="Permalink to this headline">¶</a></h3>
+<p>Resource bundles can either be included in a build or be used without a build. If you use resource bundles without a build, the first request for each resource bundle will generate N+1 HTTP requests when it searches the server for values, where N is the number of segments in the target locale. For example, a call of dojo.requireLocalization(&quot;my.app&quot;, &quot;bar&quot;) in the &quot;zh-cn&quot; locale looks for &quot;bar.js&quot; first in the &quot;zh-cn&quot;, then in &quot;zh&quot;, and finally in the root. Without optimization, some of these requests might result in harmless HTTP 404 errors (page not found) if a variant does not need to override any definitions from its parent.</p>
+</div>
+</div>
+<div class="section" id="translation">
+<h2><a class="toc-backref" href="#id6">Translation</a><a class="headerlink" href="#translation" title="Permalink to this headline">¶</a></h2>
+<p>JSON is a convenient and efficient format for resource bundles in JavaScript, but the JSON format is not well supported by many professional translation centers. <a class="reference external" href="http://docs.oasis-open.org/xliff/v1.2/cs02/xliff-core.html#SectionIntroduction">XLIFF</a> is the industry standard file format for localization and translation. Among other things, XLIFF will ease in declaration of encoding and hide details from the translator such as JavaScript character entities. Tools will be developed to support round-trip transforms between JSON and XLIFF. Support for <a class="reference external" href="http://www.gnu.org/software/gettext/manual/gettext.html#PO-Files">gettext PO files</a> in the future is also possible.</p>
+<p>Translators must also be aware of the substitution syntax of Dojo — ${x}</p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

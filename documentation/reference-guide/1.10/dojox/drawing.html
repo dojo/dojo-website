@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.Drawing &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.Drawing</a><ul>
+<li><a class="reference internal" href="#basic-description">Basic Description</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#manipulating-the-drawing">Manipulating the Drawing</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-drawing">
+<span id="id1"></span><h1>dojox.Drawing<a class="headerlink" href="#dojox-drawing" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Project owner:</th><td class="field-body">Mike Wilcox</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Mike Wilcox</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">1.4</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="basic-description">
+<h2>Basic Description<a class="headerlink" href="#basic-description" title="Permalink to this headline">¶</a></h2>
+<p>Utilizes DojoX GFX to allow for SVG and VML vector graphics drawing in the browser without Flash. The goal of Drawing is to be as close as possible to a desktop vector drawing program such as Flash or Visio.</p>
+<p>Drawing is similar to DojoX Sketch, but is designed to be more versatile extendable and customizable.</p>
+<p>Drawing currently only initiates from HTML, although it&#8217;s technically not a Dijit to keep the file size light. But if Dijit is available, Drawing will register itself with it and can be accessed dijit.byId(&#8216;myDrawing&#8217;). If Dijit is not available, Drawing creates a registry in the Dijit stub so it can still be accessed via dijit.byId. However, it&#8217;s recommended to simply use data-dojo-id in the markup.</p>
+<p>The files are laid out as such:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>Drawing</dt>
+<dd><p class="first last">The master class. More than one instance of a Drawing can be placed on a page at one time (although this has not yet been tested). Plugins can be added in markup.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Toolbar</dt>
+<dd><p class="first last">Like Drawing, Toolbar is a psudeo Dijit that does not need Dijit. It is optional. It can be oriented horizontal or vertical by placing one of those params in the class (at least one is required). Plugins can be added in markup. A drawingId is required to point toolbar to the drawing.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>defaults</dt>
+<dd><p class="first last">Contains the default styles and dimensions for Stencils. An individual Stencil can be changed by calling stencil.att({color obj}); To change     all styles, a custom defaults file should be used.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Stencils</dt>
+<dd><p class="first last">Drawing uses a concept of &#8216;Stencils&#8217; to avoid confusion between a Dojox Shape and a Drawing Shape. The classes in the &#8216;stencils&#8217; package are display only, they are not used for actually drawing (see &#8216;tools&#8217;). This package contains _Base from which stencils inherit most of their     methods.(Path and Image are display only and not found in Tools)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Tools</dt>
+<dd><p class="first last">The Tools package contains Stencils that are attached to mouse events and can be used for drawing. Items in this package can also be selected and modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Tools / Custom</dt>
+<dd><p class="first last">Holds tools that do not directly extend Stencil base classes and often have very custom code.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Library (not implemented)</dt>
+<dd><p class="first last">The Library package, which is not yet implemented, will be the place to hold stencils that have very specific data points that result in a picture. Flag-like-banners, fancy borders, or other complex shapes would go here.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Annotations</dt>
+<dd><p class="first last">Annotations &#8216;decorate&#8217; and attach to other Stencils, such as a &#8216;Label&#8217; that can show text on a stencil, or an &#8216;Angle&#8217; that shows while dragging or modifying a Vector, or an Arrow head that is attached to the beginning or end of a line.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Manager</dt>
+<dd><p class="first last">Contains classes that control functionality of a Drawing.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Plugins</dt>
+<dd><p class="first last">Contains optional classes that are &#8216;plugged into&#8217; a Drawing. There are two types: &#8216;drawing&#8217; plugins that modify the canvas and &#8216;tools&#8217; which would     show in the toolbar.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>Util</dt>
+<dd><p class="first last">A collection of common tasks.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Here is an example of using dojox.drawing in an HTML document. The example consists of two parts: the drawing canvas itself and a customized toolbar. The require statement loads the drawing and the tools.</p>
+<div class="highlight"><pre><span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;Content-Type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;style&gt;</span>
+       <span class="k">@import</span> <span class="nt">url</span><span class="o">(</span><span class="s2">&quot;./dojox/drawing/resources/drawing.css&quot;</span><span class="o">)</span><span class="p">;</span>
+       <span class="k">@import</span> <span class="nt">url</span><span class="o">(</span><span class="s2">&quot;./dojox/drawing/resources/toolbar.css&quot;</span><span class="o">)</span><span class="p">;</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;./dojo/dojo.js&quot;</span> <span class="na">data-dojo-config=</span><span class="s">&quot;parseOnLoad:true&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+       <span class="nx">require</span><span class="p">([</span>
+           <span class="s2">&quot;dojo/ready&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing/ui/dom/Toolbar&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing/ui/dom/Pan&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing/ui/dom/Zoom&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing/tools/Line&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing/tools/Rect&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing/tools/Ellipse&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing/tools/TextBlock&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing/tools/custom/Equation&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing/plugins/drawing/Grid&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojox/drawing/util/positioning&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;dojo/parser&quot;</span><span class="p">],</span>
+       <span class="kd">function</span><span class="p">(</span><span class="nx">ready</span><span class="p">)</span> <span class="p">{</span>
+       <span class="p">});</span>
+
+    <span class="nt">&lt;/script&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body</span> <span class="na">style=</span><span class="s">&quot;font-family:sans-serif;font-size:10pt&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.drawing.Drawing&quot;</span> <span class="na">id=</span><span class="s">&quot;drawing&quot;</span> <span class="na">style=</span><span class="s">&quot;width:800px; height:400px;&quot;</span>
+       <span class="na">plugins=</span><span class="s">&quot;[{&#39;name&#39;:&#39;dojox.drawing.plugins.drawing.Grid&#39;, &#39;options&#39;:{gap:100}}]&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+
+    <span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.drawing.ui.dom.Toolbar&quot;</span> <span class="na">drawingId=</span><span class="s">&quot;drawing&quot;</span> <span class="na">class=</span><span class="s">&quot;drawingToolbar horizontal&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">tool=</span><span class="s">&quot;dojox.drawing.tools.Line&quot;</span> <span class="na">selected=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>Line<span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">tool=</span><span class="s">&quot;dojox.drawing.tools.Rect&quot;</span> <span class="na">selected=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>Rect<span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">tool=</span><span class="s">&quot;dojox.drawing.tools.Ellipse&quot;</span> <span class="na">selected=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>Ellipse<span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">tool=</span><span class="s">&quot;dojox.drawing.tools.TextBlock&quot;</span> <span class="na">selected=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>Statement<span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">tool=</span><span class="s">&quot;dojox.drawing.tools.custom.Equation&quot;</span> <span class="na">selected=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>Equation<span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">plugin=</span><span class="s">&quot;dojox.drawing.ui.dom.Pan&quot;</span> <span class="na">options=</span><span class="s">&quot;{}&quot;</span><span class="nt">&gt;</span>Pan<span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">plugin=</span><span class="s">&quot;dojox.drawing.ui.dom.Zoom&quot;</span> <span class="na">options=</span><span class="s">&quot;{zoomInc:.1,minZoom:.5,maxZoom:2}&quot;</span><span class="nt">&gt;</span>Zoom<span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="c">&lt;!-- needed by TextBlock --&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;conEdit&quot;</span> <span class="na">contenteditable=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+    &lt;style&gt;
+       &#64;import url(&quot;./dojox/drawing/resources/drawing.css&quot;);
+       &#64;import url(&quot;./dojox/drawing/resources/toolbar.css&quot;);
+    &lt;/style&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;./dojo/dojo.js&quot; data-dojo-config=&quot;parseOnLoad:true&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+       require([
+           &quot;dojo/ready&quot;,
+           &quot;dojox/drawing&quot;,
+           &quot;dojox/drawing/ui/dom/Toolbar&quot;,
+           &quot;dojox/drawing/ui/dom/Pan&quot;,
+           &quot;dojox/drawing/ui/dom/Zoom&quot;,
+           &quot;dojox/drawing/tools/Line&quot;,
+           &quot;dojox/drawing/tools/Rect&quot;,
+           &quot;dojox/drawing/tools/Ellipse&quot;,
+           &quot;dojox/drawing/tools/TextBlock&quot;,
+           &quot;dojox/drawing/tools/custom/Equation&quot;,
+           &quot;dojox/drawing/plugins/drawing/Grid&quot;,
+           &quot;dojox/drawing/util/positioning&quot;,
+           &quot;dojo/parser&quot;],
+       function(ready) {
+       });
+
+    &lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body style=&quot;font-family:sans-serif;font-size:10pt&quot;&gt;
+    &lt;div data-dojo-type=&quot;dojox.drawing.Drawing&quot; id=&quot;drawing&quot; style=&quot;width:800px; height:400px;&quot;
+       plugins=&quot;[{'name':'dojox.drawing.plugins.drawing.Grid', 'options':{gap:100}}]&quot;&gt;&lt;/div&gt;
+
+    &lt;div data-dojo-type=&quot;dojox.drawing.ui.dom.Toolbar&quot; drawingId=&quot;drawing&quot; class=&quot;drawingToolbar horizontal&quot;&gt;
+      &lt;div tool=&quot;dojox.drawing.tools.Line&quot; selected=&quot;false&quot;&gt;Line&lt;/div&gt;
+      &lt;div tool=&quot;dojox.drawing.tools.Rect&quot; selected=&quot;false&quot;&gt;Rect&lt;/div&gt;
+      &lt;div tool=&quot;dojox.drawing.tools.Ellipse&quot; selected=&quot;false&quot;&gt;Ellipse&lt;/div&gt;
+      &lt;div tool=&quot;dojox.drawing.tools.TextBlock&quot; selected=&quot;false&quot;&gt;Statement&lt;/div&gt;
+      &lt;div tool=&quot;dojox.drawing.tools.custom.Equation&quot; selected=&quot;false&quot;&gt;Equation&lt;/div&gt;
+      &lt;div plugin=&quot;dojox.drawing.ui.dom.Pan&quot; options=&quot;{}&quot;&gt;Pan&lt;/div&gt;
+      &lt;div plugin=&quot;dojox.drawing.ui.dom.Zoom&quot; options=&quot;{zoomInc:.1,minZoom:.5,maxZoom:2}&quot;&gt;Zoom&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;!-- needed by TextBlock --&gt;
+      &lt;div id=&quot;conEdit&quot; contenteditable=&quot;true&quot;&gt;&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</textarea></div><p><strong>NOTE</strong> Due to the nature of VML, a DOCTYPE cannot be used with Drawing or any GFX work. This will force your page into quirks mode and may create a need for style adjustments.</p>
+</div>
+<div class="section" id="manipulating-the-drawing">
+<h2>Manipulating the Drawing<a class="headerlink" href="#manipulating-the-drawing" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt>Stencil Types</dt>
+<dd><p class="first">Each tool on the toolbar (and the Path Stencil) has an associated type:</p>
+<ul class="simple">
+<li>ellipse</li>
+<li>rect</li>
+<li>line</li>
+<li>image</li>
+<li>path</li>
+<li>text</li>
+<li>textBlock</li>
+<li>arrow</li>
+<li>vector</li>
+<li>axes</li>
+<li>equation</li>
+</ul>
+<p>The difference between <em>text</em> and <em>textBlock</em> is <em>text</em> can not be dragged or selected, whereas <em>textBlock</em> can. <em>text</em> is used for non-editing situations such as labels or titles.</p>
+<p><em>path</em> is currently not available as a tool, though it will shortly. It is in the code primarily for use in arrow heads. It can be used programmatically.</p>
+<p class="last">Note that any custom tools such as <em>axes</em>, <em>equation</em> or <em>vector</em> need to be required in the document. They are not included in the basic Drawing package.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Data Structures</p>
+</li>
+</ul>
+<blockquote>
+<div><p>Each Stencil has its own data and point structure. Either <em>data</em> or <em>points</em>, but not both, can be used when programmatically inserting Stencils or importing data as shown below. Data structures are loosely modeled on those from DojoX GFX. <em>data</em> shows the object properties, and <em>points</em> shows which array slot corresponds to which point on the stencil. Unless noted, all arguments are numbers <strong>without</strong> units (such as <em>px</em>). A point is an object with two properties, <em>x</em> and <em>y</em>, each a number. The structures are as follows:</p>
+<blockquote>
+<div><ul>
+<li><dl class="first docutils">
+<dt>ellipse</dt>
+<dd><dl class="first last docutils">
+<dt>data:</dt>
+<dd><p class="first">cx: Center point x</p>
+<p>cy: Center point y</p>
+<p>rx: Horizontal radius</p>
+<p class="last">ry: Vertical radius</p>
+</dd>
+<dt>points:</dt>
+<dd><p class="first">0: Top left point</p>
+<p>1: Top right point</p>
+<p>2: Bottom right point</p>
+<p class="last">3: Bottom left point</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>rect</dt>
+<dd><dl class="first docutils">
+<dt>data:</dt>
+<dd><p class="first">x: Left point x</p>
+<p>y: Top point y</p>
+<p>width: width of rectangle</p>
+<p class="last">height: height of rectangle</p>
+</dd>
+</dl>
+<p>points:</p>
+<blockquote class="last">
+<div><p>0: Top left point</p>
+<p>1: Top right point</p>
+<p>2: Bottom right point</p>
+<p>3: Bottom left point</p>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>line</dt>
+<dd><dl class="first last docutils">
+<dt>data:</dt>
+<dd><blockquote class="first">
+<div><p>x1: First point x
+y1: First point y
+x2: Second point x
+y2: Second point y</p>
+</div></blockquote>
+<p>ALTERNATIVE</p>
+<blockquote class="last">
+<div><p>x: First point x
+y: First point y
+angle: angle of line
+radius: length of line</p>
+</div></blockquote>
+</dd>
+<dt>points:</dt>
+<dd><dl class="first last docutils">
+<dt>0: First point</dt>
+<dd><p class="first last">1: Second point</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>image</dt>
+<dd><dl class="first last docutils">
+<dt>data:</dt>
+<dd><p class="first">x: Left point x</p>
+<p>y: Top point y</p>
+<p>width: Optional width of Image. If not provided, it is obtained</p>
+<p>height: Optional height of Image. If not provided, it is obtained</p>
+<p class="last">src: [String] The location of the source image</p>
+</dd>
+<dt>points:</dt>
+<dd><p class="first">0: Top left point</p>
+<p>1: Top right point</p>
+<p>2: Bottom right point</p>
+<p class="last">3: Bottom left point</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>path</dt>
+<dd><dl class="first last docutils">
+<dt>data:</dt>
+<dd><p class="first last">Not supported</p>
+</dd>
+<dt>points:</dt>
+<dd><p class="first">0: First point</p>
+<p class="last">[1, 2, 3...] more points</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>text</dt>
+<dd><dl class="first last docutils">
+<dt>data:</dt>
+<dd><p class="first">x: Left point x</p>
+<p>y: Top point y</p>
+<p>width: Optional width of Text. Not required but recommended. For auto-sizing, use TextBlock</p>
+<p>height: Optional height of Text. If not provided, _lineHeight is used.</p>
+<p class="last">text: [String] The string content. If not provided, may auto-delete depending on defaults.</p>
+</dd>
+<dt>points:</dt>
+<dd><p class="first"><em>Using points obviously does not allow for the text string or other properties</em></p>
+<p>0: Top left point</p>
+<p>1: Top right point</p>
+<p>2: Bottom right point</p>
+<p class="last">3: Bottom left point</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>textBlock</dt>
+<dd><dl class="first last docutils">
+<dt>data:</dt>
+<dd><p class="first">x: Left point x</p>
+<p>y: Top point y</p>
+<p>width: Optional width of Text. Not required but reccommended. For auto-sizing, use <em>auto</em></p>
+<p>height: Optional height of Text. If not provided, _lineHeight is used.</p>
+<p class="last">text: [String] The string content. If not provided, may auto-delete depending on defaults.</p>
+</dd>
+<dt>points:</dt>
+<dd><p class="first"><em>Using points obviously does not allow for the text string or other properties</em></p>
+<p>0: Top left point</p>
+<p>1: Top right point</p>
+<p>2: Bottom right point</p>
+<p class="last">3: Bottom left point</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>arrow</dt>
+<dd><p class="first last">Same as <em>line</em>. Additional properties <em>arrowStart</em> and <em>arrowEnd</em> can be used (they are not part of the data object).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>vector</dt>
+<dd><p class="first last">Same as <em>line</em>. A vector can have a length of zero.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>axes</dt>
+<dd><dl class="first last docutils">
+<dt>data:</dt>
+<dd><p class="first last">TODO</p>
+</dd>
+<dt>points:</dt>
+<dd><p class="first last">TODO</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>equation</dt>
+<dd><p class="first last">Same as <em>textBlock</em>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+<p>DojoX Drawing contains several methods to manipulate the drawing. Most of these methods can be found in the main JavaScript file, drawing.js:</p>
+<dl class="docutils">
+<dt><strong>onSurfaceReady</strong></dt>
+<dd>Any actions taken on the drawing should happen within this function or after it&#8217;s called. This event is similar to dojo.ready; it fires when the canvas is ready.</dd>
+<dt><strong>addStencil</strong></dt>
+<dd>To programmatically add a Stencil to the drawing, use the <em>addStencil</em> method with two arguments, the basic Stencil type, and a object properties, which should include either the Stencil data or Stencil points.</dd>
+</dl>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">textBlock</span> <span class="o">=</span> <span class="nx">myDrawing</span><span class="p">.</span><span class="nx">addStencil</span><span class="p">(</span><span class="s2">&quot;textBlock&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">data</span><span class="o">:</span><span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="mi">20</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="mi">30</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span><span class="mi">200</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span><span class="s2">&quot;This is editable text&quot;</span><span class="p">}});</span>
+<span class="kd">var</span> <span class="nx">ellipse</span> <span class="o">=</span> <span class="nx">myDrawing</span><span class="p">.</span><span class="nx">addStencil</span><span class="p">(</span><span class="s2">&quot;ellipse&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">data</span><span class="o">:</span><span class="p">{</span><span class="nx">cx</span><span class="o">:</span><span class="mi">200</span><span class="p">,</span> <span class="nx">cy</span><span class="o">:</span><span class="mi">200</span><span class="p">,</span> <span class="nx">rx</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span> <span class="nx">ry</span><span class="o">:</span><span class="mi">50</span><span class="p">}});</span>
+<span class="kd">var</span> <span class="nx">arrow</span> <span class="o">=</span> <span class="nx">myDrawing</span><span class="p">.</span><span class="nx">addStencil</span><span class="p">(</span><span class="s2">&quot;arrow&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">data</span><span class="o">:</span><span class="p">{</span><span class="nx">x1</span><span class="o">:</span><span class="mi">400</span><span class="p">,</span> <span class="nx">y1</span><span class="o">:</span><span class="mi">200</span><span class="p">,</span> <span class="nx">x2</span><span class="o">:</span><span class="mi">500</span><span class="p">,</span> <span class="nx">y2</span><span class="o">:</span><span class="mi">300</span><span class="p">},</span> <span class="nx">arrowStart</span><span class="o">:</span><span class="kc">true</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">rect</span> <span class="o">=</span> <span class="nx">myDrawing</span><span class="p">.</span><span class="nx">addStencil</span><span class="p">(</span><span class="s2">&quot;rect&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">data</span><span class="o">:</span><span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="mi">50</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="mi">275</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span><span class="mi">100</span><span class="p">}});</span>
+<span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">myDrawing</span><span class="p">.</span><span class="nx">addStencil</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">data</span><span class="o">:</span><span class="p">{</span><span class="nx">x</span><span class="o">:</span><span class="mi">300</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="mi">260</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span><span class="mi">200</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span><span class="s2">&quot;This is just text&quot;</span><span class="p">}});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var textBlock = myDrawing.addStencil(&quot;textBlock&quot;, {data:{x:20, y:30, width:200, text:&quot;This is editable text&quot;}});
+var ellipse = myDrawing.addStencil(&quot;ellipse&quot;, {data:{cx:200, cy:200, rx:100, ry:50}});
+var arrow = myDrawing.addStencil(&quot;arrow&quot;, {data:{x1:400, y1:200, x2:500, y2:300}, arrowStart:true});
+var rect = myDrawing.addStencil(&quot;rect&quot;, {data:{x:50, y:275, width:100, height:100}});
+var text = myDrawing.addStencil(&quot;text&quot;, {data:{x:300, y:260, width:200, text:&quot;This is just text&quot;}});</textarea></div><dl class="docutils">
+<dt><strong>removeStencil</strong></dt>
+<dd>Removes a stencil from the drawing using the stencil itself as the argument:</dd>
+</dl>
+<div class="highlight"><pre><span class="nx">myDrawing</span><span class="p">.</span><span class="nx">removeStencil</span><span class="p">(</span><span class="nx">myRect</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myDrawing.removeStencil(myRect);</textarea></div><dl class="docutils">
+<dt><strong>removeAll</strong></dt>
+<dd>Removes all stencils from the drawing.</dd>
+<dt><strong>selectAll</strong></dt>
+<dd>Selects all stencils in the drawing.</dd>
+<dt><strong>importer</strong></dt>
+<dd>Imports an array of stencil data objects to the drawing. The objects should be in the format of the stencil structures shown above.</dd>
+<dt><strong>exporter</strong></dt>
+<dd>Collects all Stencil data and returns an array of objects. Drawing does not export SVG, nor does it do any serialization.</dd>
+<dt><strong>toSelected</strong></dt>
+<dd>Applies a function to the selected stencils. Could be used with the stencil.attr() method to style selected objects.</dd>
+<dt><strong>resize</strong></dt>
+<dd>Resizes the drawing based on the passed argument object. This occurs automatically if inside a Dijit layout widget.</dd>
+<dt><strong>changeDefaults</strong></dt>
+<dd>Changes the current style that is applied to newly drawn stencils. Pass in an object that represents one of the objects in drawing.style that will be mixed in. Not all properties are necessary. Only one object may be changed at a time. Non-objects like angleSnap cannot be changed in this manner. The following example changes the default fill to blue, the border color to yellow, and the border width to 5:</dd>
+</dl>
+<div class="highlight"><pre><span class="nx">myDrawing</span><span class="p">.</span><span class="nx">changeDefaults</span><span class="p">({</span>
+    <span class="nx">norm</span><span class="o">:</span><span class="p">{</span>
+         <span class="nx">fill</span><span class="o">:</span><span class="s2">&quot;#0000ff&quot;</span><span class="p">,</span>
+         <span class="nx">width</span><span class="o">:</span><span class="mi">5</span><span class="p">,</span>
+         <span class="nx">color</span><span class="o">:</span><span class="s2">&quot;#ffff00&quot;</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myDrawing.changeDefaults({
+    norm:{
+         fill:&quot;#0000ff&quot;,
+         width:5,
+         color:&quot;#ffff00&quot;
+    }
+});</textarea></div></div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

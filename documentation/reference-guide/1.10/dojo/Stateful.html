@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/Stateful &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/Stateful</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#get">get()</a></li>
+<li><a class="reference internal" href="#set">set()</a></li>
+<li><a class="reference internal" href="#watch">watch()</a></li>
+<li><a class="reference internal" href="#changeattrvalue">_changeAttrValue()</a></li>
+<li><a class="reference internal" href="#custom-accessors">Custom Accessors</a></li>
+<li><a class="reference internal" href="#constructor-and-object-initialization">Constructor and object initialization</a><ul>
+<li><a class="reference internal" href="#constructing-and-initializing-an-instance">Constructing and initializing an instance</a></li>
+<li><a class="reference internal" href="#why-is-a-no-arguments-constructor-mandatory">Why is a no-arguments constructor mandatory?</a></li>
+<li><a class="reference internal" href="#how-does-stateful-do-this">How does <code class="docutils literal"><span class="pre">Stateful</span></code> do this?</a></li>
+<li><a class="reference internal" href="#implementing-constructors-of-subclasses-of-stateful">Implementing constructors of subclasses of <code class="docutils literal"><span class="pre">Stateful</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-stateful">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/Stateful</a><a class="headerlink" href="#dojo-stateful" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Kris Zyp, Marcus Reimann, Kitson Kelly, Jan Dockx</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V1.5</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-stateful" id="id2">dojo/Stateful</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>A generic interface and base class for getting, setting, and watching for property changes (with getters and
+setters) in a consistent manner. Classes in your model, viewmodel, or view, that have state (i.e., the object
+is mutable) should implement this interface.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">dojo/Stateful</span></code> provides the ability to get and set named properties, including using custom accessors, in conjunction
+with the ability to monitor these properties for changes. <code class="docutils literal"><span class="pre">dojo/Stateful</span></code> is intended to be a base class that can be
+extended by other components that wish to support watchable properties. This can be very useful for creating live
+bindings that utilize current property states and must react to any changes in properties. It also allows a developer to
+customize the behavior of accessing the property by providing auto-magic getters and setters (accessors). Furthermore,
+<code class="docutils literal"><span class="pre">dojo/Stateful</span></code> makes it possible to create instances using <cite>object initialization</cite>.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>You can create an instance of <code class="docutils literal"><span class="pre">dojo/Stateful</span></code> directly, but creating a subclass is recommended:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Stateful&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Stateful</span><span class="p">,</span> <span class="nx">declare</span><span class="p">){</span>
+  <span class="c1">// Subclass dojo/Stateful:</span>
+  <span class="kd">var</span> <span class="nx">MyClass</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Stateful</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">_fooGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">foo</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">_fooSetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Create an instance and initialize some property values:</span>
+  <span class="nx">myObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyClass</span><span class="p">({</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="s2">&quot;baz&quot;</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Watch changes on a property:</span>
+  <span class="nx">myObj</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">oldValue</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+    <span class="c1">// Do something based on the change</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Get the value of a property:</span>
+  <span class="nx">myObj</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">);</span>
+
+  <span class="c1">// Set the value of a property:</span>
+  <span class="nx">myObj</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Stateful&quot;, &quot;dojo/_base/declare&quot;], function(Stateful, declare){
+  // Subclass dojo/Stateful:
+  var MyClass = declare([Stateful], {
+    foo: null,
+    _fooGetter: function(){
+      return this.foo;
+    },
+    _fooSetter: function(value){
+      this.foo = value;
+    }
+  });
+
+  // Create an instance and initialize some property values:
+  myObj = new MyClass({
+    foo: &quot;baz&quot;
+  });
+
+  // Watch changes on a property:
+  myObj.watch(&quot;foo&quot;, function(name, oldValue, value){
+    // Do something based on the change
+  });
+
+  // Get the value of a property:
+  myObj.get(&quot;foo&quot;);
+
+  // Set the value of a property:
+  myObj.set(&quot;foo&quot;, &quot;bar&quot;);
+});</textarea></div><p>When calling the constructor, you can pass an optional Object argument. This Object will be used
+to initialize the object <cite>after</cite> the constructors in the inheritance chain have executed.</p>
+<div class="section" id="get">
+<h3>get()<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<p>Gets the value of a property. If a custom getter is defined for the property, the custom getter will be called instead.
+The function takes a single argument:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="13%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>String</td>
+<td>The name of the property to get</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="set">
+<h3>set()<a class="headerlink" href="#set" title="Permalink to this headline">¶</a></h3>
+<p>Sets the value of a property. If a custom setter is defined for the property, the custom setter will be used instead.
+The function takes up to two arguments:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="11%" />
+<col width="82%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>String|Object</td>
+<td>The name of the property to set, or a hash of key/value pairs of several properties to set.</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>Any?</td>
+<td><em>Optional</em> The value of the property to set, or if <code class="docutils literal"><span class="pre">name</span></code> is a hash, this argument should be
+omitted.</td>
+</tr>
+</tbody>
+</table>
+<p>If no custom setter is defined on an object, performing a set() will result in the property value being set directly on the object. This can be convenient, as the property can be accessed directly through standard JS syntax (object.property). But, be aware that setting arbitrary property names could lead to overriding the object&#8217;s methods (like set(), get(), etc.), which may be undesirable. If you are setting arbitrary property names, you may wish to guard against reserved method names, or prefix property names to avoid collision.</p>
+</div>
+<div class="section" id="watch">
+<h3>watch()<a class="headerlink" href="#watch" title="Permalink to this headline">¶</a></h3>
+<p>Sets a callback to be called when the property changes.  The function takes up to two arguments:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="7%" />
+<col width="86%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>String?</td>
+<td><em>Optional</em> The name of the property to watch.  If omitted, all properties will be watched and the
+callback will be called.</td>
+</tr>
+<tr class="row-odd"><td>callback</td>
+<td>Function</td>
+<td>The callback function that should be called when the property changes.</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal"><span class="pre">watch()</span></code> returns a handle that allows disconnection of the watch at some point in the future.  For example:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">myObj</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">oldValue</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">oldValue</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">handle</span><span class="p">.</span><span class="nx">unwatch</span><span class="p">();</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var handle = myObj.watch(&quot;foo&quot;, function(name, oldValue, value){
+  console.log(name, oldValue, value);
+});
+
+handle.unwatch();</textarea></div><p>The callback function will be passed three arguments:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="10%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>String</td>
+<td>The name of the property that changed.</td>
+</tr>
+<tr class="row-odd"><td>oldValue</td>
+<td>Any</td>
+<td>The value of the property before the change.</td>
+</tr>
+<tr class="row-even"><td>value</td>
+<td>Any</td>
+<td>The value of the property after the change.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="changeattrvalue">
+<h3>_changeAttrValue()<a class="headerlink" href="#changeattrvalue" title="Permalink to this headline">¶</a></h3>
+<p>This is a helper function to be used in custom setters that is used in scenarios where calling <code class="docutils literal"><span class="pre">.set()</span></code> is not
+appropriate, but the value of the property needs to be changed and any watches called. The typical scenario is when
+there are interlinked values, where changing one value affects another value, and therefore can avoid an infinite loop
+of one property changing the value of the other property. The function takes two arguments:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="12%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>String</td>
+<td>The name of the property to change.</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>Any</td>
+<td>The value to change the property to.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="custom-accessors">
+<h3>Custom Accessors<a class="headerlink" href="#custom-accessors" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo/Stateful</span></code> supports the ability to define custom accessors (getters and setters) that allow control over how
+values of properties are set and retrieved.  When a custom accessors is defined, a call to <code class="docutils literal"><span class="pre">.get()</span></code> or <code class="docutils literal"><span class="pre">.set()</span></code>
+will auto-magically use the custom accessor instead of accessing the property directly.</p>
+<p>A custom getter is defined in the format of <code class="docutils literal"><span class="pre">_xxxGetter</span></code> and a custom setter is defined in the format of <code class="docutils literal"><span class="pre">_xxxSetter</span></code>
+where the name of the property is <code class="docutils literal"><span class="pre">xxx</span></code>.  The name of the property is not mutated in any way.  For example,
+the following demonstrates several different examples of how custom accessors would be defined:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Stateful&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Stateful</span><span class="p">,</span> <span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">MyClass</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Stateful</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">_fooGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">foo</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">_fooSetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">fooBar</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">_fooBarGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fooBar</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">_fooBarSetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">fooBar</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">},</span>
+
+    <span class="nx">foo_bar</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">_foo_barGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">fooBar</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">_foo_barSetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">foo_bar</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nx">_foo</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">__fooGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_foo</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">__fooSetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_foo</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Stateful&quot;, &quot;dojo/_base/declare&quot;], function(Stateful, declare){
+  var MyClass = declare([Stateful], {
+    foo: null,
+    _fooGetter: function(){
+      return this.foo;
+    },
+    _fooSetter: function(value){
+      this.foo = value;
+    },
+
+    fooBar: null,
+    _fooBarGetter: function(){
+      return this.fooBar;
+    },
+    _fooBarSetter: function(value){
+      this.fooBar = value;
+    },
+
+    foo_bar: null,
+    _foo_barGetter: function(){
+      return this.fooBar;
+    },
+    _foo_barSetter: function(value){
+      this.foo_bar = value;
+    }
+
+    _foo: null,
+    __fooGetter: function(){
+      return this._foo;
+    },
+    __fooSetter: function(value){
+      this._foo = value;
+    }
+  });
+});</textarea></div><p>In addition, <code class="docutils literal"><span class="pre">.set()</span></code> has the ability to detect promise returns from a custom setter. This can be used in situations
+where the customer setter will not be immediately setting the value of the attribute. For example, if a custom setter
+needs to validate or post a value to a back end service via XHR before actually setting the value of the attribute. The
+custom setter can return a Deferred or promise value and any watch callbacks will not be called until the promise is
+resolved. If the promise is rejected, the watch will not be called. For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Stateful&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/Deferred&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">Stateful</span><span class="p">,</span> <span class="nx">Deferred</span><span class="p">,</span> <span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">MyClass</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Stateful</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">_fooSetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">();</span>
+
+      <span class="c1">// do something async and then</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+      <span class="nx">d</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+
+      <span class="k">return</span> <span class="nx">d</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Stateful&quot;, &quot;dojo/Deferred&quot;, &quot;dojo/_base/declare&quot;],
+function(Stateful, Deferred, declare){
+  var MyClass = declare([Stateful], {
+    foo: null,
+    _fooSetter: function(value){
+      var d = new Deferred();
+
+      // do something async and then
+      this.foo = value;
+      d.resolve(true);
+
+      return d;
+    }
+  });
+});</textarea></div></div>
+<div class="section" id="constructor-and-object-initialization">
+<h3>Constructor and object initialization<a class="headerlink" href="#constructor-and-object-initialization" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="constructing-and-initializing-an-instance">
+<h4>Constructing and initializing an instance<a class="headerlink" href="#constructing-and-initializing-an-instance" title="Permalink to this headline">¶</a></h4>
+<p>You should always be able to construct an object of a subclass of <code class="docutils literal"><span class="pre">Stateful</span></code> without any arguments:</p>
+<div class="highlight"><pre><span class="c1">// Create an instance and initialize some property values:</span>
+<span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">();</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// Create an instance and initialize some property values:
+var person = new Person();</textarea></div><p>This should give you an &#8220;empty&#8221; object, with all properties initialized to default values.</p>
+<p>This means subclasses of <code class="docutils literal"><span class="pre">Stateful</span></code> <cite>cannot have mandatory properties that do not have a sensible default</cite>.
+Such properties require an initial value in the constructor, which violates the requirement for a no-arguments
+constructor.</p>
+<p>You can also call the constructor with an Object argument. This is merely syntactic sugar for <cite>object initialization</cite>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">({</span>
+  <span class="nx">firstName</span><span class="o">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span>
+  <span class="nx">lastName</span><span class="o">:</span> <span class="s2">&quot;Doe&quot;</span><span class="p">,</span>
+  <span class="nx">company</span><span class="o">:</span> <span class="s2">&quot;Acme&quot;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var person = new Person({
+  firstName: &quot;John&quot;,
+  lastName: &quot;Doe&quot;,
+  company: &quot;Acme&quot;
+});</textarea></div><p>is completely equivalent to</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">();</span>
+<span class="nx">person</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;firstName&quot;</span><span class="p">,</span> <span class="s2">&quot;John&quot;</span><span class="p">);</span>
+<span class="nx">person</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;lastName&quot;</span><span class="p">,</span> <span class="s2">&quot;Doe&quot;</span><span class="p">);</span>
+<span class="nx">person</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;company&quot;</span><span class="p">,</span> <span class="s2">&quot;Acme&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var person = new Person();
+person.set(&quot;firstName&quot;, &quot;John&quot;);
+person.set(&quot;lastName&quot;, &quot;Doe&quot;);
+person.set(&quot;company&quot;, &quot;Acme&quot;);</textarea></div><p>Note that this is exactly the same thing as <a class="reference external" href="http://msdn.microsoft.com/en-us/library/bb384062.aspx">object initializers</a> in C# and some other languages.
+The C# equivalent of the example would be:</p>
+<div class="highlight"><pre><span class="cm">/* C# code */</span>
+<span class="nx">Person</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span> <span class="p">{</span>
+  <span class="nx">firstName</span> <span class="o">=</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span>
+  <span class="nx">lastName</span> <span class="o">=</span> <span class="s2">&quot;Doe&quot;</span><span class="p">,</span>
+  <span class="nx">company</span> <span class="o">=</span> <span class="s2">&quot;Acme&quot;</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">/* C# code */
+Person person = new Person {
+  firstName = &quot;John&quot;,
+  lastName = &quot;Doe&quot;,
+  company = &quot;Acme&quot;
+};</textarea></div></div>
+<div class="section" id="why-is-a-no-arguments-constructor-mandatory">
+<h4>Why is a no-arguments constructor mandatory?<a class="headerlink" href="#why-is-a-no-arguments-constructor-mandatory" title="Permalink to this headline">¶</a></h4>
+<p>For classes in the model, viewmodel and view, that have state (i.e., are mutable),
+the only good programming idiom is to have <cite>only a default, no-arguments constructor</cite>. These are exactly the kinds of
+classes that would be <cite>Stateful</cite>.</p>
+<p>First of all, you always need a no-arguments constructor, because all kinds of frameworks (e.g., the
+<a class="reference internal" href="parser.html#dojo-parser"><span>dojo/parser</span></a>) require it. General code cannot provide specific arguments for a custom constructor.</p>
+<p>Second, for model and viewmodel objects, you almost always need to be able to construct an &#8220;empty&#8221; object.
+Although semantically a <code class="docutils literal"><span class="pre">firstName</span></code> might be mandatory, in a UI you cannot make this an invariant of <code class="docutils literal"><span class="pre">Person</span></code>.
+Sure, every time you get an existing object from the server, it will have a <cite>firstName</cite>, but most often the end user
+should also be able to create a new person in the UI, and for that he needs to be able to start out with an &#8220;empty&#8221;
+form. It makes things very difficult if you cannot bind a (view)model object to that empty form, so the (view)model
+object must allow even semantically mandatory fields to be empty. Such an object might not be &#8220;valid&#8221; for sending to
+the server, but it must be able to exist. A &#8220;correct&#8221; JavaScript object (i.e., the instance adheres to its invariants
+and will function correctly) is not necessarily a semantically valid object. A semantically valid object should always
+be a &#8220;correct&#8221; JavaScript object, though.</p>
+<p>In a language like Java or C#, you might then add further overloaded constructor methods, for convenience, but you
+quickly learn that you then have to write overloaded methods for all possible combinations, if that is possible at all.
+Each of these methods carries a slightly different version of initialisation semantics, needs to have its own unit
+tests, and needs to be maintained. The gain of all this extra work in a language like Java would be being able to write:</p>
+<div class="highlight"><pre><span class="cm">/* Java code */</span>
+<span class="nx">Person</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span> <span class="p">(</span><span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="s2">&quot;Doe&quot;</span><span class="p">,</span> <span class="s2">&quot;Acme&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">/* Java code */
+Person person = new Person (&quot;John&quot;, &quot;Doe&quot;, &quot;Acme&quot;);</textarea></div><p>instead of</p>
+<div class="highlight"><pre><span class="cm">/* Java code */</span>
+<span class="nx">Person</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">();</span>
+<span class="nx">person</span><span class="p">.</span><span class="nx">setFirstName</span><span class="p">(</span><span class="s2">&quot;John&quot;</span><span class="p">);</span>
+<span class="nx">person</span><span class="p">.</span><span class="nx">setLastName</span><span class="p">(</span><span class="s2">&quot;Doe&quot;</span><span class="p">);</span>
+<span class="nx">person</span><span class="p">.</span><span class="nx">setCompany</span><span class="p">(</span><span class="s2">&quot;Acme&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">/* Java code */
+Person person = new Person();
+person.setFirstName(&quot;John&quot;);
+person.setLastName(&quot;Doe&quot;);
+person.setCompany(&quot;Acme&quot;);</textarea></div><p>In C#, given the object initializer syntax, the gain is even smaller.</p>
+<p>All in all, it only makes sense for these kinds of classes to have only a default, no-arguments constructor,
+and <code class="docutils literal"><span class="pre">Stateful</span></code> builds on this.</p>
+</div>
+<div class="section" id="how-does-stateful-do-this">
+<h4>How does <code class="docutils literal"><span class="pre">Stateful</span></code> do this?<a class="headerlink" href="#how-does-stateful-do-this" title="Permalink to this headline">¶</a></h4>
+<p>Classes you <code class="docutils literal"><span class="pre">declare</span></code> with <a class="reference internal" href="_base/declare.html#dojo-base-declare"><span>dojo/_base/declare</span></a> can have a <cite>postscript</cite> method that is
+executed immediately after all the chained constructors in the inheritance chain have finished. In <code class="docutils literal"><span class="pre">Stateful</span></code>,
+this method is used to do <cite>object initialization</cite> if an instance is constructed with an Object argument.</p>
+<p>Your subclass can extend the <code class="docutils literal"><span class="pre">postscript</span></code> method (you probably never need to), but should not override it:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Stateful&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Stateful</span><span class="p">,</span> <span class="nx">declare</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="kd">var</span> <span class="nx">Person</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Stateful</span><span class="p">],</span> <span class="p">{</span>
+
+    <span class="nx">postscript</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">kwargs</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+      <span class="c1">// do your postscript stuff</span>
+      <span class="c1">// ...</span>
+    <span class="p">}</span>
+
+  <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Stateful&quot;, &quot;dojo/_base/declare&quot;], function(Stateful, declare) {
+
+  var Person = declare([Stateful], {
+
+    postscript: function(kwargs) {
+      this.inherited(arguments);
+      // do your postscript stuff
+      // ...
+    }
+
+  });</textarea></div></div>
+<div class="section" id="implementing-constructors-of-subclasses-of-stateful">
+<h4>Implementing constructors of subclasses of <code class="docutils literal"><span class="pre">Stateful</span></code><a class="headerlink" href="#implementing-constructors-of-subclasses-of-stateful" title="Permalink to this headline">¶</a></h4>
+<p>The constructor in every subclass in the inheritance chain should do its bit to deliver an &#8220;empty&#8221; instance with
+default values for all properties. Most often this resorts to doing nothing at all in Dojo, so you can leave out
+the constructor method entirely.</p>
+<p>In the example, we might choose to represent empty name values by <code class="docutils literal"><span class="pre">null</span></code> for all 3 properties (alternatives are
+<code class="docutils literal"><span class="pre">undefined</span></code> or the empty string <code class="docutils literal"><span class="pre">&quot;&quot;</span></code>). In a language like Java and C# this would require no work, since <code class="docutils literal"><span class="pre">null</span></code>
+is the default value. In Dojo, the default is <code class="docutils literal"><span class="pre">undefined</span></code>, but you set the default in the prototype, not in the
+constructor:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Person</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Stateful</span><span class="p">],</span> <span class="p">{</span>
+
+  <span class="nx">firstName</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+
+  <span class="nx">lastName</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+
+  <span class="nx">company</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+
+  <span class="nx">getFullName</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;firstName&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;lastName&quot;</span><span class="p">);</span>
+  <span class="p">},</span>
+
+  <span class="c1">// ...</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var Person = declare([Stateful], {
+
+  firstName: null,
+
+  lastName: null,
+
+  company: null,
+
+  getFullName: function() {
+    return this.get(&quot;firstName&quot;) + &quot; &quot; + this.get(&quot;lastName&quot;);
+  },
+
+  // ...
+
+});</textarea></div><p>As you can see, there is no need for a constructor.</p>
+<p>The only real need to do something in the constructor is when you have instance properties that are <cite>references</cite>,
+that you don&#8217;t want to be <code class="docutils literal"><span class="pre">null</span></code> or <code class="docutils literal"><span class="pre">undefined</span></code> in the &#8220;empty&#8221; state. The best example is a to-many association
+that you need to maintain:</p>
+<p>Suppose our Person has siblings:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">Person</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Stateful</span><span class="p">],</span> <span class="p">{</span>
+
+  <span class="c1">// ...</span>
+
+  <span class="nx">_siblings</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">,</span>
+
+  <span class="nx">constructor</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// summary:</span>
+    <span class="c1">//   After construction, there are no siblings.</span>
+
+    <span class="k">this</span><span class="p">.</span><span class="nx">_siblings</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="p">},</span>
+
+  <span class="c1">// ...</span>
+
+  <span class="nx">_siblingsGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_siblings</span><span class="p">.</span><span class="nx">slice</span><span class="p">();</span> <span class="c1">// return Person[]</span>
+  <span class="p">},</span>
+
+  <span class="nx">_siblingsSetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;Cannot set the siblings directly. Use addSibling and removeSibling instead.&quot;</span><span class="p">);</span>
+  <span class="p">},</span>
+
+  <span class="nx">addSibling</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="cm">/*Person*/</span> <span class="nx">sibling</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// summary:</span>
+    <span class="c1">//   `sibling` will be in `this.get(&quot;siblings&quot;)`.</span>
+    <span class="c1">//   `sibling` cannot be `null` or `undefined`, and must have the same</span>
+    <span class="c1">//   `lastName` as `this`.</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">sibling</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;sibling must be effective&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">sibling</span><span class="p">.</span><span class="nx">isInstanceOf</span> <span class="o">||</span> <span class="o">!</span><span class="nx">sibling</span><span class="p">.</span><span class="nx">isInstanceOf</span><span class="p">(</span><span class="nx">Person</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;sibling must be a Person&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">sibling</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;lastName&quot;</span><span class="p">)</span> <span class="o">!==</span> <span class="k">this</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;lastName&quot;</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;sibling must have the same last name&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_siblings</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">sibling</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_siblings</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">sibling</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+
+  <span class="nx">removeSibling</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">sibling</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// summary:</span>
+    <span class="c1">//   `sibling` will not be in `this.get(&quot;siblings&quot;)`</span>
+
+    <span class="kd">var</span> <span class="nx">siblingIndex</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_siblings</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">sibling</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">siblingIndex</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_siblings</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">siblingIndex</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var Person = declare([Stateful], {
+
+  // ...
+
+  _siblings: undefined,
+
+  constructor: function() {
+    // summary:
+    //   After construction, there are no siblings.
+
+    this._siblings = [];
+  },
+
+  // ...
+
+  _siblingsGetter: function() {
+    return this._siblings.slice(); // return Person[]
+  },
+
+  _siblingsSetter: function() {
+    throw new Error(&quot;Cannot set the siblings directly. Use addSibling and removeSibling instead.&quot;);
+  },
+
+  addSibling: function(/*Person*/ sibling) {
+    // summary:
+    //   `sibling` will be in `this.get(&quot;siblings&quot;)`.
+    //   `sibling` cannot be `null` or `undefined`, and must have the same
+    //   `lastName` as `this`.
+
+    if (!sibling) {
+      throw new Error(&quot;sibling must be effective&quot;);
+    }
+    if (!sibling.isInstanceOf || !sibling.isInstanceOf(Person)) {
+      throw new Error(&quot;sibling must be a Person&quot;);
+    }
+    if (sibling.get(&quot;lastName&quot;) !== this.get(&quot;lastName&quot;)) {
+      throw new Error(&quot;sibling must have the same last name&quot;);
+    }
+
+    if (this._siblings.indexOf(sibling) &lt; 0) {
+      this._siblings.push(sibling);
+    }
+  },
+
+  removeSibling: function(sibling) {
+    // summary:
+    //   `sibling` will not be in `this.get(&quot;siblings&quot;)`
+
+    var siblingIndex = this._siblings.indexOf(sibling);
+    if (siblingIndex &gt;= 0) {
+      this._siblings.splice(siblingIndex, 1);
+    }
+  }
+
+});</textarea></div><p>Here you need to create a distinct array in the constructor of each instance. Setting the prototype property to <code class="docutils literal"><span class="pre">[]</span></code>
+wouldn&#8217;t do the trick, because then all instances would share the one array in the prototype, mixing up the siblings
+of all Person instances.</p>
+</div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>And example of basic attribute getting, setting and watching.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Stateful&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">Stateful</span><span class="p">,</span> <span class="nx">declare</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">domConst</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">FooClass</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Stateful</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">bar</span><span class="o">:</span> <span class="kc">null</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Setting initial values for properties on construction</span>
+  <span class="kd">var</span> <span class="nx">aFoo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FooClass</span><span class="p">({</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="s2">&quot;baz&quot;</span><span class="p">,</span>
+    <span class="nx">bar</span><span class="o">:</span> <span class="s2">&quot;qux&quot;</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Creating a watch handler</span>
+  <span class="kd">function</span> <span class="nx">watchCallback</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">oldValue</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;br&gt;change: &quot;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot; from: &quot;</span> <span class="o">+</span> <span class="nx">oldValue</span> <span class="o">+</span> <span class="s2">&quot; to: &quot;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Setting watches</span>
+  <span class="nx">aFoo</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="nx">watchCallback</span><span class="p">);</span>
+  <span class="nx">aFoo</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="nx">watchCallback</span><span class="p">);</span>
+
+  <span class="c1">// Setting &quot;click&quot; event handler</span>
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;startButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;br&gt;aFoo.get(&#39;foo&#39;): &quot;</span> <span class="o">+</span> <span class="nx">aFoo</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">),</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;br&gt;aFoo.get(&#39;bar&#39;): &quot;</span> <span class="o">+</span> <span class="nx">aFoo</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">),</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+    <span class="nx">aFoo</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="nx">aFoo</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Stateful&quot;, &quot;dojo/_base/declare&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(Stateful, declare, dom, domConst, on){
+  var FooClass = declare([Stateful], {
+    foo: null,
+    bar: null
+  });
+
+  // Setting initial values for properties on construction
+  var aFoo = new FooClass({
+    foo: &quot;baz&quot;,
+    bar: &quot;qux&quot;
+  });
+
+  // Creating a watch handler
+  function watchCallback(name, oldValue, value){
+    domConst.place(&quot;&lt;br&gt;change: &quot; + name + &quot; from: &quot; + oldValue + &quot; to: &quot; + value, &quot;output&quot;);
+  }
+
+  // Setting watches
+  aFoo.watch(&quot;foo&quot;, watchCallback);
+  aFoo.watch(&quot;bar&quot;, watchCallback);
+
+  // Setting &quot;click&quot; event handler
+  on(dom.byId(&quot;startButton&quot;), &quot;click&quot;, function(){
+    domConst.place(&quot;&lt;br&gt;aFoo.get('foo'): &quot; + aFoo.get(&quot;foo&quot;), &quot;output&quot;);
+    domConst.place(&quot;&lt;br&gt;aFoo.get('bar'): &quot; + aFoo.get(&quot;bar&quot;), &quot;output&quot;);
+    aFoo.set(&quot;foo&quot;, 1);
+    aFoo.set(&quot;bar&quot;, 2);
+  });
+
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;p&gt;&lt;strong&gt;</span>Output:<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;startButton&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;p&gt;&lt;strong&gt;Output:&lt;/strong&gt;&lt;/p&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;
+&lt;button type=&quot;button&quot; id=&quot;startButton&quot;&gt;Start&lt;/button&gt;</textarea></div></div></div><div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>An example that uses custom accessors.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Stateful&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">Stateful</span><span class="p">,</span> <span class="nx">declare</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">domConst</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">FooClass</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Stateful</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">_fooGetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;code&gt;_fooGetter()&lt;/code&gt; called&lt;br&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">foo</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">_fooSetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;code&gt;_fooSetter()&lt;/code&gt; called&lt;br&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;startButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">aFoo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FooClass</span><span class="p">({</span>
+      <span class="nx">foo</span><span class="o">:</span> <span class="s2">&quot;bar&quot;</span>
+    <span class="p">});</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;code&gt;aFoo.get(&#39;foo&#39;)&lt;/code&gt;: &quot;</span> <span class="o">+</span> <span class="nx">aFoo</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;code&gt;aFoo.set(&#39;foo&#39;, &#39;baz&#39;)&lt;/code&gt;...&lt;br&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+    <span class="nx">aFoo</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;baz&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Stateful&quot;, &quot;dojo/_base/declare&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(Stateful, declare, dom, domConst, on){
+  var FooClass = declare([Stateful], {
+    foo: null,
+    _fooGetter: function(){
+      domConst.place(&quot;&lt;code&gt;_fooGetter()&lt;/code&gt; called&lt;br&gt;&quot;, &quot;output&quot;);
+      return this.foo;
+    },
+    _fooSetter: function(value){
+      domConst.place(&quot;&lt;code&gt;_fooSetter()&lt;/code&gt; called&lt;br&gt;&quot;, &quot;output&quot;);
+      this.foo = value;
+    }
+  });
+
+  on(dom.byId(&quot;startButton&quot;), &quot;click&quot;, function(){
+    var aFoo = new FooClass({
+      foo: &quot;bar&quot;
+    });
+    domConst.place(&quot;&lt;code&gt;aFoo.get('foo')&lt;/code&gt;: &quot; + aFoo.get(&quot;foo&quot;) + &quot;&lt;br&gt;&quot;, &quot;output&quot;);
+    domConst.place(&quot;&lt;code&gt;aFoo.set('foo', 'baz')&lt;/code&gt;...&lt;br&gt;&quot;, &quot;output&quot;);
+    aFoo.set(&quot;foo&quot;, &quot;baz&quot;);
+  });
+
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;p&gt;&lt;strong&gt;</span>Output:<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;startButton&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;p&gt;&lt;strong&gt;Output:&lt;/strong&gt;&lt;/p&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;
+&lt;button type=&quot;button&quot; id=&quot;startButton&quot;&gt;Start&lt;/button&gt;</textarea></div></div></div><div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>An example of a property that is not set immediately when <code class="docutils literal"><span class="pre">.set()</span></code> is called, but after 500ms, which means the
+<code class="docutils literal"><span class="pre">.watch()</span></code> callback will not be called until the property is actually set.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Stateful&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/Deferred&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">Stateful</span><span class="p">,</span> <span class="nx">Deferred</span><span class="p">,</span> <span class="nx">declare</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">domConst</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">FooClass</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Stateful</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+    <span class="nx">_fooSetter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+      <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;code&gt;_fooSetter()&lt;/code&gt; called&lt;br&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Deferred</span><span class="p">();</span>
+
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+      <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+        <span class="nx">d</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+      <span class="p">},</span> <span class="mi">500</span><span class="p">);</span>
+
+      <span class="k">return</span> <span class="nx">d</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="kd">var</span> <span class="nx">aFoo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FooClass</span><span class="p">();</span>
+
+  <span class="nx">aFoo</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">oldValue</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;code&gt;&quot;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s2">&quot;&lt;/code&gt; changed from: &quot;</span> <span class="o">+</span> <span class="nx">oldValue</span> <span class="o">+</span> <span class="s2">&quot; to: &quot;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;startButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;code&gt;aFoo.set(&#39;foo&#39;, &#39;bar&#39;)&lt;/code&gt;...&lt;br&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+    <span class="nx">aFoo</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Stateful&quot;, &quot;dojo/Deferred&quot;, &quot;dojo/_base/declare&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/on&quot;,
+    &quot;dojo/domReady!&quot;],
+function(Stateful, Deferred, declare, dom, domConst, on){
+  var FooClass = declare([Stateful], {
+    foo: null,
+    _fooSetter: function(value){
+      domConst.place(&quot;&lt;code&gt;_fooSetter()&lt;/code&gt; called&lt;br&gt;&quot;, &quot;output&quot;);
+      var d = new Deferred();
+
+      var self = this;
+      setTimeout(function(){
+        self.foo = value;
+        d.resolve(true);
+      }, 500);
+
+      return d;
+    }
+  });
+
+  var aFoo = new FooClass();
+
+  aFoo.watch(&quot;foo&quot;, function(name, oldValue, value){
+    domConst.place(&quot;&lt;code&gt;&quot; + name + &quot;&lt;/code&gt; changed from: &quot; + oldValue + &quot; to: &quot; + value + &quot;&lt;br&gt;&quot;, &quot;output&quot;);
+  });
+
+  on(dom.byId(&quot;startButton&quot;), &quot;click&quot;, function(){
+    domConst.place(&quot;&lt;code&gt;aFoo.set('foo', 'bar')&lt;/code&gt;...&lt;br&gt;&quot;, &quot;output&quot;);
+    aFoo.set(&quot;foo&quot;, &quot;bar&quot;);
+  });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;p&gt;&lt;strong&gt;</span>Output:<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;startButton&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;p&gt;&lt;strong&gt;Output:&lt;/strong&gt;&lt;/p&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;
+&lt;button type=&quot;button&quot; id=&quot;startButton&quot;&gt;Start&lt;/button&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../dijit/_WidgetBase.html#dijit-widgetbase-custom-setters-getters"><span>dijit/_WidgetBase::set/get</span></a> - Custom accessors for widgets that deal
+with both object properties and DOM attributes.</li>
+<li><a class="reference internal" href="Evented.html#dojo-evented"><span>dojo/Evented</span></a> - A base class for classes that utilize events.</li>
+<li>Introductory article on <code class="docutils literal"><span class="pre">dojo/Stateful</span></code> -
+<a class="reference external" href="http://www.sitepen.com/blog/2010/05/04/consistent-interaction-with-stateful-objects-in-dojo/">http://www.sitepen.com/blog/2010/05/04/consistent-interaction-with-stateful-objects-in-dojo/</a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

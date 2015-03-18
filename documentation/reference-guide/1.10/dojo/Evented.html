@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/Evented &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/Evented</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#event-handle-properties">Event Handle Properties</a></li>
+<li><a class="reference internal" href="#transitioning-to-dojo-2-0">Transitioning to Dojo 2.0</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-evented">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/Evented</a><a class="headerlink" href="#dojo-evented" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">1.7.0</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-evented" id="id2">dojo/Evented</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/Evented</strong> is a module that provides a class that can be used as a base class or mixin for JavaScript classes that
+emit their own events.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">dojo/Evented</span></code> is designed to provide a class that allows a developer to emit events and provide an easy way to allow
+those events to be connected to by downstream users. It leverages the API concepts of :ref:<code class="docutils literal"><span class="pre">dojo/on</span> <span class="pre">&lt;dojo/on&gt;</span></code>. It
+should be noted though that this is for what is commonly referred to as &#8220;synthetic&#8221; events, which are different than DOM
+events, which <code class="docutils literal"><span class="pre">dojo/on</span></code> normalises.</p>
+<p>Common convention is that events emitted are all lower case and usually a single word that has semantic meaning. For
+example <code class="docutils literal"><span class="pre">change</span></code> or <code class="docutils literal"><span class="pre">start</span></code> or <code class="docutils literal"><span class="pre">end</span></code>. The structure of the event that is passed on the emit is up to the
+developer, but it should be consistent and easy to understand.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">dojo/Evented</span></code> class provides two methods, <code class="docutils literal"><span class="pre">on(eventType,</span> <span class="pre">listener)</span></code> and <code class="docutils literal"><span class="pre">emit(eventType,</span> <span class="pre">eventObject)</span></code> which
+correspond to <code class="docutils literal"><span class="pre">dojo/on()</span></code> and <code class="docutils literal"><span class="pre">dojo/on::emit()</span></code> with the target being the instance object. For example, we could
+create a class:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/Evented&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Evented</span><span class="p">,</span> <span class="nx">declare</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">MyComponent</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Evented</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">startup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="c1">// once we are done with startup, fire the &quot;ready&quot; event</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;ready&quot;</span><span class="p">,</span> <span class="p">{});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="nx">component</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MyComponent</span><span class="p">();</span>
+  <span class="nx">component</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;ready&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="c1">// this will be called when the &quot;ready&quot; event is emitted</span>
+    <span class="c1">// ...</span>
+  <span class="p">});</span>
+  <span class="nx">component</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/Evented&quot;, &quot;dojo/_base/declare&quot;], function(Evented, declare){
+  var MyComponent = declare([Evented], {
+    startup: function(){
+      // once we are done with startup, fire the &quot;ready&quot; event
+      this.emit(&quot;ready&quot;, {});
+    }
+  });
+
+  component = new MyComponent();
+  component.on(&quot;ready&quot;, function(){
+    // this will be called when the &quot;ready&quot; event is emitted
+    // ...
+  });
+  component.startup();
+});</textarea></div><p>While <code class="docutils literal"><span class="pre">dojo/Evented</span></code> can be extended and used directly, it is better to subclass into a new class.</p>
+<p>If a <code class="docutils literal"><span class="pre">dojo/Evented</span></code> instance is passed to <code class="docutils literal"><span class="pre">dojo/on</span></code> as a target, <code class="docutils literal"><span class="pre">dojo/on</span></code> will detect this and delegate the
+setting of the event handler to <code class="docutils literal"><span class="pre">dojo/Evented</span></code>.</p>
+<div class="section" id="event-handle-properties">
+<h3>Event Handle Properties<a class="headerlink" href="#event-handle-properties" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">dojo/Evented</span></code> class supports auto-magic property/methods for events which are named after the event with an &#8220;on&#8221;
+prefix, following the DOM0 convention. For example, listening to the &#8220;foo&#8221; event will put the listeners in the <code class="docutils literal"><span class="pre">onfoo</span></code>
+method. If a class has an <code class="docutils literal"><span class="pre">onMouseDown</span></code> method, this corresponds to a &#8220;MouseDown&#8221; event that you can listen to with:</p>
+<div class="highlight"><pre><span class="nx">component</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;MouseDown&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">component.on(&quot;MouseDown&quot;);</textarea></div><p>While it is possible to trigger the event by directly calling the <code class="docutils literal"><span class="pre">onfoo()</span></code> or <code class="docutils literal"><span class="pre">onMouseDown()</span></code> method, it is
+recommend that you use emit(&#8220;foo&#8221;) or emit(&#8220;MouseDown&#8221;) for consistency. One can upgrade most classes with <code class="docutils literal"><span class="pre">onEvent</span></code>
+methods to be usable with dojo/on by simply adding the Evented class as a base class. Note that some event emitting
+objects, like Dijit widgets, have their own event emitting implementation, and define their own event names.</p>
+</div>
+<div class="section" id="transitioning-to-dojo-2-0">
+<h3>Transitioning to Dojo 2.0<a class="headerlink" href="#transitioning-to-dojo-2-0" title="Permalink to this headline">¶</a></h3>
+<p>There are a number of objects in Dojo (like <a class="reference internal" href="dnd.html#dojo-dnd"><span>dojo/dnd</span></a>) that inherit from <code class="docutils literal"><span class="pre">dojo/Evented</span></code>. However,
+these event emitting objects are likely to change their events (both names and emitted event objects) in 2.0, so one
+should not assume that code using <code class="docutils literal"><span class="pre">dojo/Evented</span></code> to listen to Dojo objects will work unchanged in 2.0.</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>This example creates a new <code class="docutils literal"><span class="pre">Timer</span></code> class that will emit <code class="docutils literal"><span class="pre">start</span></code>, <code class="docutils literal"><span class="pre">stop</span></code> and <code class="docutils literal"><span class="pre">tick</span></code> events and demonstrates how
+you can then assign handlers to those events.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/Evented&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">Evented</span><span class="p">,</span> <span class="nx">declare</span><span class="p">,</span> <span class="nx">on</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">domConst</span><span class="p">){</span>
+  <span class="c1">// Declare the new Timer class</span>
+  <span class="kd">var</span> <span class="nx">Timer</span> <span class="o">=</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">Evented</span><span class="p">],</span> <span class="p">{</span>
+    <span class="nx">timeout</span><span class="o">:</span> <span class="mi">1000</span><span class="p">,</span>
+    <span class="nx">start</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="p">{});</span>
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_handle</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;tick&quot;</span><span class="p">,</span> <span class="p">{});</span>
+      <span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">timeout</span><span class="p">);</span>
+    <span class="p">},</span>
+    <span class="nx">stop</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_handle</span><span class="p">){</span>
+        <span class="nx">clearInterval</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_handle</span><span class="p">);</span>
+        <span class="k">delete</span> <span class="k">this</span><span class="p">.</span><span class="nx">_handle</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s2">&quot;stop&quot;</span><span class="p">,</span> <span class="p">{});</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Create an instance</span>
+  <span class="kd">var</span> <span class="nx">timer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Timer</span><span class="p">();</span>
+
+  <span class="c1">// Set event handlers</span>
+  <span class="nx">timer</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;start&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+  <span class="p">})</span>
+  <span class="nx">timer</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;tick&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;tick&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">timer</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;stop&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;stop&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Setup button click handlers</span>
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;startButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">timer</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+  <span class="p">});</span>
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;stopButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">timer</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+  <span class="p">});</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/Evented&quot;, &quot;dojo/_base/declare&quot;, &quot;dojo/on&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/domReady!&quot;],
+function(Evented, declare, on, dom, domConst){
+  // Declare the new Timer class
+  var Timer = declare([Evented], {
+    timeout: 1000,
+    start: function(){
+      this.stop();
+      this.emit(&quot;start&quot;, {});
+      var self = this;
+      this._handle = setInterval(function(){
+        self.emit(&quot;tick&quot;, {});
+      }, this.timeout);
+    },
+    stop: function(){
+      if(this._handle){
+        clearInterval(this._handle);
+        delete this._handle;
+        this.emit(&quot;stop&quot;, {});
+      }
+    }
+  });
+
+  // Create an instance
+  var timer = new Timer();
+
+  // Set event handlers
+  timer.on(&quot;start&quot;, function(){
+    domConst.place(&quot;&lt;p&gt;start&lt;/p&gt;&quot;, &quot;output&quot;);
+  })
+  timer.on(&quot;tick&quot;, function(){
+    domConst.place(&quot;&lt;p&gt;tick&lt;/p&gt;&quot;, &quot;output&quot;);
+  });
+  timer.on(&quot;stop&quot;, function(){
+    domConst.place(&quot;&lt;p&gt;stop&lt;/p&gt;&quot;, &quot;output&quot;);
+  });
+
+  // Setup button click handlers
+  on(dom.byId(&quot;startButton&quot;), &quot;click&quot;, function(){
+    timer.start();
+  });
+  on(dom.byId(&quot;stopButton&quot;), &quot;click&quot;, function(){
+    timer.stop();
+  });
+
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;startButton&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;stopButton&quot;</span><span class="nt">&gt;</span>Stop<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;h1&gt;</span>Output<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button type=&quot;button&quot; id=&quot;startButton&quot;&gt;Start&lt;/button&gt;
+&lt;button type=&quot;button&quot; id=&quot;stopButton&quot;&gt;Stop&lt;/button&gt;
+&lt;h1&gt;Output&lt;/h1&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="on.html#dojo-on"><span>dojo/on</span></a> - The Dojo event normalization API</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

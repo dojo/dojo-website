@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/fx::slideTo() &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/fx::slideTo()</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-fx-slideto">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/fx::slideTo()</a><a class="headerlink" href="#dojo-fx-slideto" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Peter Higgins, Nikolai Onken, Marcus Reimann, Jared Jurkiewicz</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Developers:</th><td class="field-body">Bryan Forbes, Peter Higgins, Eugene Lazutkin, Bill Keese, Adam Peller, Alex Russell, Dylan Schiemann,
+sjmiles</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V1.0</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-fx-slideto" id="id2">dojo/fx::slideTo()</a><ul>
+<li><a class="reference internal" href="#usage" id="id3">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id4">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id5">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This function is a helper function that wraps the <a class="reference internal" href="../_base/fx.html#dojo-base-fx-animateproperty"><span>dojo/_base/fx::animateProperty()</span></a> function to provide an easy interface to sliding a node from its current position to a
+new position on the page. While this can be done with the <code class="docutils literal"><span class="pre">animateProperty()</span></code> function, this function is simpler to
+use and will handle 99% of the cases a wipe-out is desired.</p>
+<p><strong>NOTE:</strong> This function works best on absolutely positioned nodes.</p>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id3">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Basic usage requires the node being moved, the <code class="docutils literal"><span class="pre">top</span></code> and <code class="docutils literal"><span class="pre">left</span></code> coordinates and the <code class="docutils literal"><span class="pre">unit</span></code>s:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/fx&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">coreFx</span><span class="p">){</span>
+  <span class="nx">coreFx</span><span class="p">.</span><span class="nx">slideTo</span><span class="p">({</span>
+    <span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;someNode&quot;</span><span class="p">,</span>
+    <span class="nx">top</span><span class="o">:</span> <span class="s2">&quot;40&quot;</span><span class="p">,</span>
+    <span class="nx">left</span><span class="o">:</span> <span class="s2">&quot;50&quot;</span><span class="p">,</span>
+    <span class="nx">units</span><span class="o">:</span> <span class="s2">&quot;px&quot;</span>
+  <span class="p">}).</span><span class="nx">play</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/fx&quot;], function(coreFx){
+  coreFx.slideTo({
+    node: &quot;someNode&quot;,
+    top: &quot;40&quot;,
+    left: &quot;50&quot;,
+    units: &quot;px&quot;
+  }).play();
+});</textarea></div><p>The function configuration hash can take the other properties of <cite>dojo/_base/fx::animateProperty() &lt;dojo/_base/fx#animateproperty&gt;</cite>.</p>
+<p>The <code class="docutils literal"><span class="pre">slideTo()</span></code> function returns an instance of <a class="reference internal" href="../_base/fx.html#dojo-base-fx-animation"><span>dojo/_base/fx::Animation</span></a>. To start
+the slide, call the <code class="docutils literal"><span class="pre">.play()</span></code> function on the Animation. This object can be used with other Dojo animation
+functions, such as <a class="reference internal" href="chain.html#dojo-fx-chain"><span>dojo/fx::chain()</span></a> and <a class="reference internal" href="combine.html#dojo-fx-combine"><span>dojo/fx::combine()</span></a> to link it
+with other effects to perform complex animations.</p>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>This example allows you to slide a node to the left or the right by 200 pixels.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/fx&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">coreFx</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">domGeom</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+
+  <span class="kd">function</span> <span class="nx">slideIt</span><span class="p">(</span><span class="nx">amt</span><span class="p">){</span>
+    <span class="nx">coreFx</span><span class="p">.</span><span class="nx">slideTo</span><span class="p">({</span>
+      <span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;basicNode&quot;</span><span class="p">,</span>
+      <span class="nx">top</span><span class="o">:</span> <span class="nx">domGeom</span><span class="p">.</span><span class="nx">getMarginBox</span><span class="p">(</span><span class="s2">&quot;basicNode&quot;</span><span class="p">).</span><span class="nx">t</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+      <span class="nx">left</span><span class="o">:</span> <span class="p">(</span><span class="nx">domGeom</span><span class="p">.</span><span class="nx">getMarginBox</span><span class="p">(</span><span class="s2">&quot;basicNode&quot;</span><span class="p">).</span><span class="nx">l</span> <span class="o">+</span> <span class="nx">amt</span><span class="p">).</span><span class="nx">toString</span><span class="p">(),</span>
+      <span class="nx">unit</span><span class="o">:</span> <span class="s2">&quot;px&quot;</span>
+    <span class="p">}).</span><span class="nx">play</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;slideRightButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">slideIt</span><span class="p">(</span><span class="mi">200</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;slideLeftButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">slideIt</span><span class="p">(</span><span class="o">-</span><span class="mi">200</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/fx&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-geometry&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(coreFx, dom, domGeom, on){
+
+  function slideIt(amt){
+    coreFx.slideTo({
+      node: &quot;basicNode&quot;,
+      top: domGeom.getMarginBox(&quot;basicNode&quot;).t.toString(),
+      left: (domGeom.getMarginBox(&quot;basicNode&quot;).l + amt).toString(),
+      unit: &quot;px&quot;
+    }).play();
+  }
+
+  on(dom.byId(&quot;slideRightButton&quot;), &quot;click&quot;, function(){
+    slideIt(200);
+  });
+  on(dom.byId(&quot;slideLeftButton&quot;), &quot;click&quot;, function(){
+    slideIt(-200);
+  });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;slideLeftButton&quot;</span><span class="nt">&gt;</span>Slide It Left!<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;slideRightButton&quot;</span><span class="nt">&gt;</span>Slide It Right!<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;br</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">&quot;width: 100%; height: 120px;&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;basicNode&quot;</span> <span class="na">style=</span><span class="s">&quot;width: 100px; height: 100px; background-color: red; position: absolute;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button type=&quot;button&quot; id=&quot;slideLeftButton&quot;&gt;Slide It Left!&lt;/button&gt;
+&lt;button type=&quot;button&quot; id=&quot;slideRightButton&quot;&gt;Slide It Right!&lt;/button&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;div style=&quot;width: 100%; height: 120px;&quot;&gt;
+  &lt;div id=&quot;basicNode&quot; style=&quot;width: 100px; height: 100px; background-color: red; position: absolute;&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id5">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../fx.html#dojo-fx"><span>dojo/fx</span></a> - Overview of the core Dojo FX API</li>
+<li><a class="reference internal" href="../_base/fx.html#dojo-base-fx-animateproperty"><span>dojo/_base/fx::animateProperty()</span></a> - Details around the other options possible</li>
+<li><a class="reference external" href="http://dojotoolkit.org/documentation/tutorials/1.7/animation/">Animation Tutorial</a> - The tutorial to find out about
+Dojo&#8217;s FX API</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

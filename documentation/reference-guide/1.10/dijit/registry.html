@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dijit/registry &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dijit/registry</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#retrieving-a-widget-from-the-registry-using-a-widget-id">Retrieving a widget from the registry using a widget ID</a></li>
+<li><a class="reference internal" href="#retrieving-a-widget-by-its-id-and-accessing-its-dom-node-main-dom-rendering-element">Retrieving a widget by its id and accessing its DOM node (main DOM rendering element)</a></li>
+<li><a class="reference internal" href="#retrieving-a-widget-from-the-registry-using-the-widgets-dom-node">Retrieving a widget from the registry using the widget’s DOM node</a></li>
+<li><a class="reference internal" href="#finding-all-widgets-underneath-a-dom-node">Finding all widgets underneath a DOM node</a></li>
+<li><a class="reference internal" href="#finding-the-nearest-enclosing-widget-for-a-dom-node">Finding the nearest enclosing widget for a DOM node</a></li>
+<li><a class="reference internal" href="#iterating-over-the-registry">Iterating Over The Registry</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#data-dojo-id-dijit-registry-byid-and-dojo-dom-byid">data-dojo-id, dijit/registry.byId() and dojo/dom.byId()</a><ul>
+<li><a class="reference internal" href="#dom-byid">dom.byId()</a></li>
+<li><a class="reference internal" href="#registry-byid">registry.byId()</a></li>
+<li><a class="reference internal" href="#data-dojo-id-jsid-before-dojo-1-6">data-dojo-id (jsId before dojo 1.6)</a></li>
+<li><a class="reference internal" href="#comparing-dom-byid-and-registry-byid">Comparing dom.byId and registry.byId</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dijit-registry">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dijit/registry</a><a class="headerlink" href="#dijit-registry" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Colin Snover</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">1.7.0</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dijit-registry" id="id2">dijit/registry</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#data-dojo-id-dijit-registry-byid-and-dojo-dom-byid" id="id5">data-dojo-id, dijit/registry.byId() and dojo/dom.byId()</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>dijit/registry stores a collection of all the dijit widgets within a page.
+It is commonly used to retrieve a reference to a widget from a related piece of data (such as the widget’s DOM node or ID).
+It contains functions formerly found on the root <code class="docutils literal"><span class="pre">dijit</span></code> object for looking up widgets, such as <code class="docutils literal"><span class="pre">dijit.byId</span></code> and <code class="docutils literal"><span class="pre">dijit.byNode</span></code>.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="retrieving-a-widget-from-the-registry-using-a-widget-id">
+<h3>Retrieving a widget from the registry using a widget ID<a class="headerlink" href="#retrieving-a-widget-from-the-registry-using-a-widget-id" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">registry.byId</span></code> returns the widget that corresponds to the given ID.
+If no such widget exists, it returns undefined.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dijit/registry&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">registry</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;myWidgetId&quot;</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dijit/registry&quot;], function(registry){
+    var widget = registry.byId(&quot;myWidgetId&quot;);
+});</textarea></div></div>
+<div class="section" id="retrieving-a-widget-by-its-id-and-accessing-its-dom-node-main-dom-rendering-element">
+<h3>Retrieving a widget by its id and accessing its DOM node (main DOM rendering element)<a class="headerlink" href="#retrieving-a-widget-by-its-id-and-accessing-its-dom-node-main-dom-rendering-element" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/registry&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/form/TextBox&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">parser</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">registry</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+
+    <span class="c1">// Locate the JS object.</span>
+    <span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;myTextBox2&quot;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">widget</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">dNode</span> <span class="o">=</span> <span class="nx">widget</span><span class="p">.</span><span class="nx">domNode</span><span class="p">;</span>
+      <span class="c1">// Find my output node and write out I found my textbox and got its value.</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;textNode2&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;Found my text box.  It has value: [&quot;</span> <span class="o">+</span> <span class="nx">widget</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;] and its primary DOM node tag name is: [&quot;</span> <span class="o">+</span> <span class="nx">dNode</span><span class="p">.</span><span class="nx">tagName</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span><span class="p">;</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+      <span class="c1">// Find my output node and write out I couldn&#39;t find the widget.</span>
+      <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;textNode2&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;Could not locate my text box widget!&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/parser&quot;, &quot;dojo/dom&quot;, &quot;dijit/registry&quot;, &quot;dijit/form/TextBox&quot;, &quot;dojo/domReady!&quot;],
+  function(parser, dom, registry) {
+
+    parser.parse();
+
+    // Locate the JS object.
+    var widget = registry.byId(&quot;myTextBox2&quot;);
+    if (widget){
+      var dNode = widget.domNode;
+      // Find my output node and write out I found my textbox and got its value.
+      dom.byId(&quot;textNode2&quot;).innerHTML = &quot;Found my text box.  It has value: [&quot; + widget.get(&quot;value&quot;) + &quot;] and its primary DOM node tag name is: [&quot; + dNode.tagName + &quot;]&quot;;
+    }else{
+      // Find my output node and write out I couldn't find the widget.
+      dom.byId(&quot;textNode2&quot;).innerHTML = &quot;Could not locate my text box widget!&quot;;
+    }
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">&quot;myTextBox2&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/TextBox&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">value=</span><span class="s">&quot;Default Value&quot;</span><span class="nt">&gt;&lt;/input&gt;</span>
+<span class="nt">&lt;br&gt;&lt;br&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;textNode2&quot;</span> <span class="na">style=</span><span class="s">&quot;background-color: lightgray&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;input id=&quot;myTextBox2&quot; data-dojo-type=&quot;dijit/form/TextBox&quot; type=&quot;text&quot; value=&quot;Default Value&quot;&gt;&lt;/input&gt;
+&lt;br&gt;&lt;br&gt;
+&lt;div id=&quot;textNode2&quot; style=&quot;background-color: lightgray&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+<div class="section" id="retrieving-a-widget-from-the-registry-using-the-widgets-dom-node">
+<h3>Retrieving a widget from the registry using the widget’s DOM node<a class="headerlink" href="#retrieving-a-widget-from-the-registry-using-the-widgets-dom-node" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">registry.byNode</span></code> returns the widget that corresponds to the given DOM node.
+If the DOM node does not belong to a widget, it returns undefined.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dijit/registry&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">registry</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byNode</span><span class="p">(</span><span class="nx">domNode</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dijit/registry&quot;], function(registry){
+    var widget = registry.byNode(domNode);
+});</textarea></div></div>
+<div class="section" id="finding-all-widgets-underneath-a-dom-node">
+<h3>Finding all widgets underneath a DOM node<a class="headerlink" href="#finding-all-widgets-underneath-a-dom-node" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">registry.findWidgets</span></code> returns an array of all non-nested widgets inside the given DOM node.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/array&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/registry&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/form/TextBox&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">arrayUtil</span><span class="p">,</span> <span class="nx">registry</span><span class="p">,</span> <span class="nx">TextBox</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">formWidgets</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">findWidgets</span><span class="p">(</span><span class="nx">formNode</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/array&quot;, &quot;dijit/registry&quot;, &quot;dijit/form/TextBox&quot;], function(arrayUtil, registry, TextBox){
+    var formWidgets = registry.findWidgets(formNode);
+});</textarea></div><p>Note that <code class="docutils literal"><span class="pre">registry.findWidgets</span></code> will <em>not</em> descend into widgets.
+That is to say, if you had a DOM like this:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;root&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/Dialog&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;form</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Form&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/TextBox&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+    <span class="nt">&lt;div&gt;</span>
+        <span class="nt">&lt;form</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Form&quot;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;input</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/TextBox&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;/form&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;root&quot; data-dojo-type=&quot;dijit/Dialog&quot;&gt;
+    &lt;form data-dojo-type=&quot;dijit/form/Form&quot;&gt;
+        &lt;input data-dojo-type=&quot;dijit/form/TextBox&quot;&gt;
+    &lt;/form&gt;
+    &lt;div&gt;
+        &lt;form data-dojo-type=&quot;dijit/form/Form&quot;&gt;
+            &lt;input data-dojo-type=&quot;dijit/form/TextBox&quot;&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</textarea></div><p>Calling <code class="docutils literal"><span class="pre">findWidgets</span></code> on the <code class="docutils literal"><span class="pre">root</span></code> node would <strong>only</strong> return the Form widgets, not the TextBox widgets.</p>
+</div>
+<div class="section" id="finding-the-nearest-enclosing-widget-for-a-dom-node">
+<h3>Finding the nearest enclosing widget for a DOM node<a class="headerlink" href="#finding-the-nearest-enclosing-widget-for-a-dom-node" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">registry.getEnclosingWidget</span></code> returns the closest widget to the given DOM node.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dijit/registry&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">registry</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">parentWidget</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">getEnclosingWidget</span><span class="p">(</span><span class="nx">domNode</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dijit/registry&quot;], function(registry){
+    var parentWidget = registry.getEnclosingWidget(domNode);
+});</textarea></div><p>Note that <code class="docutils literal"><span class="pre">getEnclosingWidget</span></code> will check for and return the widget corresponding to the given DOM node, if one exists.
+For instance, given the following DOM:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Form&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">&quot;myTextField&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/TextBox&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dijit/form/Form&quot;&gt;
+    &lt;input id=&quot;myTextField&quot; data-dojo-type=&quot;dijit/form/TextBox&quot;&gt;
+&lt;/div&gt;</textarea></div><p>The following will return the TextBox widget, <strong>not</strong> the Form widget:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/registry&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="nx">registry</span><span class="p">){</span>
+    <span class="nx">registry</span><span class="p">.</span><span class="nx">getEnclosingWidget</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;myTextField&quot;</span><span class="p">));</span> <span class="c1">// returns TextBox</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom&quot;, &quot;dijit/registry&quot;], function(dom, registry){
+    registry.getEnclosingWidget(dom.byId(&quot;myTextField&quot;)); // returns TextBox
+});</textarea></div></div>
+<div class="section" id="iterating-over-the-registry">
+<h3>Iterating Over The Registry<a class="headerlink" href="#iterating-over-the-registry" title="Permalink to this headline">¶</a></h3>
+<p>If you need to iterate over the entire registry, it is best to call <code class="docutils literal"><span class="pre">registry.toArray</span></code>
+and use the standard <a class="reference internal" href="../dojo/_base/array.html#dojo-base-array"><span>dojo array</span></a> functions.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/array&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/registry&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">array</span><span class="p">,</span> <span class="nx">registry</span><span class="p">){</span>
+    <span class="nx">array</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">registry</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(),</span> <span class="p">...);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/array&quot;, &quot;dijit/registry&quot;], function(array, registry){
+    array.forEach(registry.toArray(), ...);
+});</textarea></div><p>Note that for backwards compatibility, the dijit.registry global variable (as opposed to the dijit/registry module)
+includes array iterator methods (forEach, filter, byClass, map, every, and some).
+However, AMD code should not expect these functions to be available in the Object returned from
+require([&#8220;dijit/registry&#8221;]).</p>
+</div>
+</div>
+<div class="section" id="data-dojo-id-dijit-registry-byid-and-dojo-dom-byid">
+<h2><a class="toc-backref" href="#id5">data-dojo-id, dijit/registry.byId() and dojo/dom.byId()</a><a class="headerlink" href="#data-dojo-id-dijit-registry-byid-and-dojo-dom-byid" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">registry.byId</span></code> and <code class="docutils literal"><span class="pre">dom.byId</span></code> are often confused, particularly by first time users. <code class="docutils literal"><span class="pre">registry.byId</span></code> function should be used when you wish to obtain a direct reference to the JavaScript object instance of your widget and access functions of that widget. <code class="docutils literal"><span class="pre">dom.byId</span></code> should be used when you want to directly access a DOM node.</p>
+<p>Consider the following simple ContentPane widget which has an id property (standard HTML attribute for any tag)
+and a data-dojo-id attribute (dojo specific id attribute explained below):</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;myDivId&quot;</span>
+     <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/layout/ContentPane&quot;</span>
+     <span class="na">data-dojo-id=</span><span class="s">&quot;myDojoId&quot;</span><span class="nt">&gt;</span>
+   Hello Everyone!
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;myDivId&quot;
+     data-dojo-type=&quot;dijit/layout/ContentPane&quot;
+     data-dojo-id=&quot;myDojoId&quot;&gt;
+   Hello Everyone!
+&lt;/div&gt;</textarea></div><div class="section" id="dom-byid">
+<h3>dom.byId()<a class="headerlink" href="#dom-byid" title="Permalink to this headline">¶</a></h3>
+<p>dom.byId() is no different than the often used document.getElementById() to access the DOM node for the div tag:
+simply pass in the tag’s id attribute value.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;myDivId&quot;</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="s1">&#39;300px&#39;</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dom.byId(&quot;myDivId&quot;).style.height = '300px';</textarea></div><p>This would set a style height property.</p>
+</div>
+<div class="section" id="registry-byid">
+<span id="dijit-registry-byid"></span><h3>registry.byId()<a class="headerlink" href="#registry-byid" title="Permalink to this headline">¶</a></h3>
+<p>registry.byId() is a little different.
+First off, it only works on parsed dijits either declared in markup with a data-dojo-type attribute or programmatically.
+The same id attribute is used as a parameter, but what is returned in this case is an object that was created
+by the dojo widget system when the markup is parsed and transformed into a dijit.
+This allows you to change dojo-specific attributes for the widget or call methods defined in the class
+the dijit corresponds to (in this case, we can call methods of the ContentPane class).
+For example, we can set the content of the ContentPane via set(&#8220;content&#8221;, value).</p>
+<div class="highlight"><pre><span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;myDivId&quot;</span><span class="p">).</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">registry.byId(&quot;myDivId&quot;).set(&quot;content&quot;, &quot;Hello World!&quot;);</textarea></div><p>You could also change the style like we did with dom.byId() above using the domNode property of the ContentPane.
+(Actually, domNode is defined higher up the inheritance tree so every dijit has a domNode property.  Very convenient!)
+This example also saves the results of registry.byId() into a local variable.</p>
+<div class="highlight"><pre><span class="nx">myContentPane</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;myDivId&quot;</span><span class="p">);</span>
+<span class="nx">myContentPane</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="s1">&#39;300px&#39;</span><span class="p">;</span>
+<span class="nx">myContentPane</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myContentPane = registry.byId(&quot;myDivId&quot;);
+myContentPane.domNode.style.height = '300px';
+myContentPane.set(&quot;content&quot;, &quot;Hello World!&quot;);</textarea></div></div>
+<div class="section" id="data-dojo-id-jsid-before-dojo-1-6">
+<h3>data-dojo-id (jsId before dojo 1.6)<a class="headerlink" href="#data-dojo-id-jsid-before-dojo-1-6" title="Permalink to this headline">¶</a></h3>
+<p>HTML attribute data-dojo-id saves you one more step in working with widgets by automatically creating a global JavaScript variable for you (the dojo parser does this).
+This variable contains the same object as returned by registry.byId().
+Whatever value you give to the data-dojo-id attribute becomes the name of the global variable so watch out for reserved words or having two widgets with the same data-dojo-id!
+Since my Content Pane has a data-dojo-id attribute value of myDojoId I could simplify the above code a little by removing the registry.byId() and using my data-dojo-id attribute as the variable name:</p>
+<div class="highlight"><pre><span class="nx">myDojoId</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="s1">&#39;300px&#39;</span><span class="p">;</span>
+<span class="nx">myDojoId</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;content&quot;</span><span class="p">,</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myDojoId.domNode.style.height = '300px';
+myDojoId.set(&quot;content&quot;, &quot;Hello World!&quot;);</textarea></div><p>Attribute data-dojo-id is not required, it is there as a convenience.</p>
+</div>
+<div class="section" id="comparing-dom-byid-and-registry-byid">
+<h3>Comparing dom.byId and registry.byId<a class="headerlink" href="#comparing-dom-byid-and-registry-byid" title="Permalink to this headline">¶</a></h3>
+<p><em>This example shows how the output of each is different.</em></p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/registry&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/form/TextBox&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">parser</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">registry</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+
+    <span class="c1">// Locate the JS object.</span>
+    <span class="kd">var</span> <span class="nx">dibiWidget</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;myTextBox3&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">dobiWidget</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;myTextBox3&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">dibiDOM</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;textNode3&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">dobiDOM</span> <span class="o">=</span> <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;textNode3&quot;</span><span class="p">);</span>
+
+
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;textNode3&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;registry.byId for widget id returned: &quot;</span> <span class="o">+</span> <span class="nx">dibiWidget</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span> <span class="o">+</span>
+                                  <span class="s2">&quot;dom.byId for widget id returned: &quot;</span> <span class="o">+</span> <span class="nx">dobiWidget</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span> <span class="o">+</span>
+                                  <span class="s2">&quot;registry.byId for dom id returned: &quot;</span> <span class="o">+</span> <span class="nx">dibiDOM</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span> <span class="o">+</span>
+                                  <span class="s2">&quot;dom.byId for dom id returned: &quot;</span> <span class="o">+</span> <span class="nx">dobiDOM</span> <span class="o">+</span> <span class="s2">&quot;&lt;br&gt;&quot;</span><span class="p">;</span>
+  <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/parser&quot;, &quot;dojo/dom&quot;, &quot;dijit/registry&quot;, &quot;dijit/form/TextBox&quot;, &quot;dojo/domReady!&quot;],
+function(parser, dom, registry) {
+
+    parser.parse();
+
+    // Locate the JS object.
+    var dibiWidget = registry.byId(&quot;myTextBox3&quot;);
+    var dobiWidget = dom.byId(&quot;myTextBox3&quot;);
+    var dibiDOM = registry.byId(&quot;textNode3&quot;);
+    var dobiDOM = dom.byId(&quot;textNode3&quot;);
+
+
+    dom.byId(&quot;textNode3&quot;).innerHTML = &quot;registry.byId for widget id returned: &quot; + dibiWidget + &quot;&lt;br&gt;&quot; +
+                                  &quot;dom.byId for widget id returned: &quot; + dobiWidget + &quot;&lt;br&gt;&quot; +
+                                  &quot;registry.byId for dom id returned: &quot; + dibiDOM + &quot;&lt;br&gt;&quot; +
+                                  &quot;dom.byId for dom id returned: &quot; + dobiDOM + &quot;&lt;br&gt;&quot;;
+  });</textarea></div><div class="highlight"><pre><span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">&quot;myTextBox3&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/TextBox&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">value=</span><span class="s">&quot;Default Value&quot;</span><span class="nt">&gt;&lt;/input&gt;</span>
+<span class="nt">&lt;br&gt;&lt;br&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;textNode3&quot;</span> <span class="na">style=</span><span class="s">&quot;background-color: lightgray&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;input id=&quot;myTextBox3&quot; data-dojo-type=&quot;dijit/form/TextBox&quot; type=&quot;text&quot; value=&quot;Default Value&quot;&gt;&lt;/input&gt;
+&lt;br&gt;&lt;br&gt;
+&lt;div id=&quot;textNode3&quot; style=&quot;background-color: lightgray&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../dojo/dom.html#dojo-dom-byid"><span>dom.byId</span></a></li>
+<li><a class="reference internal" href="WidgetSet.html#dijit-widgetset"><span>dijit.WidgetSet</span></a></li>
+<li><a class="reference internal" href="../dojo/NodeList.html#dojo-nodelist"><span>dojo.NodeList</span></a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

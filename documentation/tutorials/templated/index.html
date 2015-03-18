@@ -1,0 +1,348 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no">
+<link rel="stylesheet" href="/css/index.css">
+<link rel="icon" href="/images/favicons/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="/images/favicons/apple-touch-icon-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+		<link rel="stylesheet" href="/css/tutorials.css">
+		<title>Dojo Toolkit Tutorial</title>
+	</head>
+	<body>
+		<div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+		<main>
+			<div class="row">
+				<div class="large-9 large-offset-1 columns content tutorial">
+					<h2 id="creating-template-based-widgets">Creating Template-based Widgets</h2>
+<p>In this tutorial, you&#39;ll learn about the importance of Dijit&#39;s <code>_TemplatedMixin</code> mixin, and how to use templates to quickly create your own custom widgets.</p>
+<ul>
+<li><span>Difficulty:</span> Intermediate</li>
+<li><span>Dojo Version:</span> 1.10</li>
+</ul>
+<h3 id="getting-started">Getting Started</h3>
+<p>If you are not already familiar with the basics of creating widgets with Dijit you will want to
+first read the <a href="../understanding_widgetbase/">Understanding _WidgetBase tutorial</a>. The
+<a href="../recipes/custom_widget">Creating a custom widget tutorial</a> and <a href="/reference-guide/1.10/quickstart/writingWidgets.html">Writing Your Own Widget
+guide</a> will also help you learn to create widgets.</p>
+<p>Dijit&#39;s <code>_WidgetBase</code> provides a fantastic foundation for creating widgets, but the
+    <code>_TemplatedMixin</code> mixin is where Dijit really shines.  With <code>_TemplatedMixin</code> and
+    <code>_WidgetsInTemplateMixin</code>, you can quickly create widgets that are highly maintainable, quickly
+    modifiable and easy to manipulate.</p>
+<p>The basic concept of <code>_TemplatedMixin</code> is simple enough: it allows a developer to create a small HTML
+    file that has a few small extensions, and loads this HTML file as a string at run-time (or inlined during the
+    build process) for re-use by all instances of the templated widget.</p>
+<p>Let&#39;s walk through what <code>_TemplatedMixin</code> defines (and why), and then build a simple widget from scratch
+    using its functionality.</p>
+<p>Note that <code>_TemplatedMixin</code> is intended to be used as a <em>mixin</em>, and not directly
+    inherited from.  In class-based parlance, that means that is more like an interface than a class (although with
+    JavaScript, the difference between the two is muddied).  See the <a href="../declare/">Dojo Declare Tutorial</a> for
+    more information on how classes work in Dojo.</p>
+<h3 id="what-_templatedmixin-provides">What <code>_TemplatedMixin</code> Provides</h3>
+<p>For the working developer, mixing <code>_TemplatedMixin</code> into a widget definition provides you with the
+    following additional properties on your widget:</p>
+<pre class="brush: js;">
+templateString        //    a string representing the HTML of the template
+</pre>
+
+<p>This property is deceptively simple &mdash; after all, how can so much power come from so little?  The
+    answer lies in what else <code>_TemplatedMixin</code> adds to your widget&#39;s definition.</p>
+<p>A small note: <code>templatePath</code> is also added, but no longer used for template loading. It
+    is still there for backwards-compatibility.  We&#39;ll show you later on how to use <code>dojo/text!</code> to load a
+    widget&#39;s template.</p>
+<h4 id="overridden-methods">Overridden Methods</h4>
+<p>In addition to the property above, <code>_TemplatedMixin</code> overrides two methods defined in Dijit&#39;s widget
+    architecture: <code>buildRendering</code> and <code>destroyRendering</code>.  These two methods handle the parsing
+    and filling out of the template (<code>buildRendering</code>) and destroying the widget&#39;s DOM correctly
+    (<code>destroyRendering</code>).</p>
+<p>Because both methods are critical to the templating process, if you override either of these methods
+    in your custom code &mdash; make sure that you include a call to the parent version by adding
+    <code>this.inherited(arguments)</code> in your overridden method.  See the <a href="../understanding_widgetbase/">
+    Understanding _WidgetBase Tutorial</a> for more information on the widget lifecycle.</p>
+<h4 id="using-_templatedmixin-">Using <code>_TemplatedMixin</code></h4>
+<p>To make your custom widget &quot;templatable&quot;, all you need to do is add <code>dijit/_TemplatedMixin</code> as the
+    second or subsequent argument in the array of class declarations for your widget.  For example, a SomeWidget
+    widget might be declared like so:</p>
+<pre class="brush: js;">
+define([
+    "dojo/_base/declare",
+    "dijit/_WidgetBase",
+    "dijit/_TemplatedMixin",
+    "dojo/text!./templates/SomeWidget.html"
+], function(declare, _WidgetBase, _TemplatedMixin, template) {
+
+    return declare([_WidgetBase, _TemplatedMixin], {
+        templateString: template
+    });
+
+});
+</pre>
+
+<p>Dijit adheres to a standard of creating a separate directory called <code>templates</code> in the folder containing the widget module &mdash; a standard we&#39;d advise you follow in your own code.</p>
+<p>Notice that in our bare-bones declaration above, we used the <code>templateString</code> property in conjunction
+    with a template loaded via <code>dojo/text!{path}</code>.  This is the recommended way of setting up references to
+    your template files, as it ensures that the files can be loaded asynchronously and properly integrated when
+    creating a build of the Dojo Toolkit.</p>
+<p>Now that we&#39;ve set up our widget declaration to be template-based, let&#39;s write a template and talk about some of
+    the special hooks in them that are available.</p>
+<h3 id="writing-templates">Writing Templates</h3>
+<p>A template is an HTML document fragment in which you define a DOM structure, along with any special &quot;hooks&quot; to tie
+    things back into your widget declaration.  Let&#39;s look at a quick example before diving into each of these hooks,
+    and how variable substitution takes place in a template.  Here&#39;s a hypothetical template for our SomeWidget,
+    above:</p>
+<pre class="brush: js; html-script: true;">
+&lt;div class="${baseClass}"&gt;
+    &lt;div class="${baseClass}Title" data-dojo-attach-point="titleNode"
+            data-dojo-attach-event="onclick:_onClick"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<p>While simple, this template demonstrates three of the most important aspects of the Dijit template system: variable
+    substitution, attach points, and event attachments.</p>
+<p>Note that when you define a template, it can only have <strong>one</strong> root node definition (
+    just like with XML documents). Multiple nodes at the top level is not allowed.</p>
+<h4 id="variable-substitution">Variable Substitution</h4>
+<p>A template can have values set on DOM rendering though the use of a simple variable placeholder syntax, which looks
+    like this:</p>
+<pre class="brush: js;">
+${property}
+</pre>
+
+<p>The variable name is any property or field defined in your widget declaration; the example above used the property
+    <code>baseClass</code> (available with any widget), but custom fields work just as fine &mdash; for instance, if
+    we&#39;d defined a property called <code>foo</code> in our SomeWidget, we would simply use <code>${foo}</code> in our
+    template.  If the property in question happens to be a reference to an object, and you want to use the value of a
+    property in that object, you may easily do so via normal object reference notation:</p>
+<pre class="brush: js;">
+${propertyObject.property}
+</pre>
+
+<p>To prevent <code>_TemplatedMixin</code> from escaping quotations within a string, place a &quot;!&quot; before the full
+    variable name, like so:</p>
+<pre class="brush: js;">
+    ${!property}
+</pre>
+
+<p>Variable substitution in a template is only recommended <em>for values that will not be changed
+    during the lifetime of the widget</em>.  In other words, if you expect to be able to set the value of a property
+    in a widget during the lifetime of your application programmatically, we recommend instead using your widget&#39;s
+    <code>postCreate</code> method to set any variables programmatically through your widget&#39;s <code>set()</code> method.</p>
+<h4 id="attach-points">Attach Points</h4>
+<p>Dijit&#39;s template system has a special attribute it will look for in your templates called an
+    <strong>attach point</strong> &mdash; implemented using HTML5&#39;s data attribute syntax.  An attach point tells the
+    template renderer that when a DOM element is created with a <code>data-dojo-attach-point</code> attribute defined,
+    to set the value of that attribute as a property of your widget to be a reference to the DOM element created.  For
+    example, the template for SomeWidget (above) defines two DOM elements.  The main element (the outer
+    <code>div</code>) can be referenced in your code through the property <code>domNode</code>, and the inner
+    <code>div</code> element can be referenced in your code through the property <code>titleNode</code>.</p>
+<p>Normally, the root node of your template becomes the <code>domNode</code> property of your widget,
+    so you wouldn&#39;t normally include an attach point attribute in your definition.  However, sometimes this is done in
+    the template to allow the root node to also function with other subsystems, such as Dijit&#39;s focus manager.</p>
+<h4 id="the-containernode-attach-point">The <code>containerNode</code> Attach Point</h4>
+<p>Dijit also defines a &quot;magical&quot; attach point called a <em>containerNode</em>. The basic concept of a container node
+    is to provide some place for any additional markup to go if a widget is created declaratively.  For example, given
+    the template for SomeWidget:</p>
+<pre class="brush: js; html-script: true">
+&lt;div class="${baseClass}"&gt;
+    &lt;div class="${baseClass}Title" data-dojo-attach-point="titleNode"
+            data-dojo-attach-event="ondijitclick:_onClick"&gt;&lt;/div&gt;
+    &lt;!-- And our container: --&gt;
+    &lt;div class="${baseClass}Container"
+            data-dojo-attach-point="containerNode"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<p><p>We might use it in declarative markup like so:</p>
+<pre class="brush: js; html-script: true">
+&lt;div data-dojo-type="demo/SomeWidget"
+        data-dojo-props="title: 'Our Some Widget'"&gt;
+    &lt;p&gt;This is arbitrary content!&lt;/p&gt;
+    &lt;p&gt;More arbitrary content!&lt;/p&gt;
+&lt;/div&gt;
+</pre>
+
+<p>When the Dojo parser traverses the document, it will find our example widget and instantiate it &mdash; and as part
+    of that instantiation, <em>any markup inside the widget will be appended to the containerNode</em>.  So when the
+    widget is finished with its startup, the resulting DOM will look like this:</p>
+<pre class="brush: js; html-script: true">
+&lt;div id="demo_SomeWidget_0" class="someWidgetBase"&gt;
+    &lt;div class="someWidgetTitle"&gt;Our Some Widget&lt;/div&gt;
+    &lt;div class="someWidgetContainer"&gt;
+        &lt;p&gt;This is arbitrary content!&lt;/p&gt;
+        &lt;p&gt;More arbitrary content!&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<p>Note that we removed some of the custom attributes for brevity; Dijit does not remove them
+    when rendering templates.</p>
+<p>Also be aware that if you embed other widget definitions in the main markup, and your widget has a
+    <code>containerNode</code> attach point, any widgets will be instantiated inside the container node.  For example,
+    the following is a typical scenario when assembling an application:</p>
+<pre class="brush: js; html-script: true">
+&lt;div data-dojo-type="demo/SomeWidget"&gt;
+    &lt;p&gt;This is arbitrary content!&lt;/p&gt;
+    &lt;div data-dojo-type="dijit/form/Button"&gt;My Button&lt;/div&gt;
+    &lt;p&gt;More arbitrary content!&lt;/p&gt;
+&lt;/div&gt;
+</pre>
+
+<h4 id="event-attachments">Event Attachments</h4>
+<p>In addition to attach points, the Dijit template system gives you a way of attaching native DOM events to methods
+    in your custom widget.  It does this through the use of the HTML5 data attribute
+    <code>data-dojo-attach-event</code>. This is a comma-delimited string of key/value pairs (separated by colon); the
+    key is the native DOM event to attach a handler to, and the value is the name of your widget&#39;s method to execute
+    when that event is fired.  If only a single event needs to be handled, omit a trailing comma.  For example, here&#39;s
+    the <code>dojo-data-attach-event</code> attribute defined on Dijit&#39;s MenuBarItem:</p>
+<pre class="brush: js; html-script: true">
+data-dojo-attach-event="onmouseenter:_onHover,onmouseleave:_onUnhover,ondijitclick:_onClick"
+</pre>
+
+<p>When your widget is instantiated and the DOM fragment is created from your template, the Dijit template system will
+    then go through any attached event definitions and &quot;auto-magically&quot; wire these events (using <code>dojo/on</code>)
+    from the resulting DOM and your widget object &mdash; making it incredibly simple to wire your visual
+    representation to your controlling code.  In  addition, when those event handlers are fired, the same arguments
+    normally passed by the native DOM event mechanism will be passed along to your widget&#39;s handler so that you have
+    full access to what the browser is reporting.</p>
+<p>Also, we want to use the <code>dijit/_OnDijitClickMixin</code> which adds in a modified event that supports more functionality than the standard DOM <code>onclick</code> event.  Therefore we need to modify our widget declaration:</p>
+<pre class="brush: js;">
+define([
+    "dojo/_base/declare",
+    "dijit/_WidgetBase",
+    "dijit/_OnDijitClickMixin",
+    "dijit/_TemplatedMixin",
+    "dojo/text!./templates/SomeWidget.html"
+], function(declare, _WidgetBase, _OnDijitClickMixin, _TemplatedMixin,
+        template) {
+
+    return declare([_WidgetBase, _OnDijitClickMixin, _TemplatedMixin], {
+        templateString: template
+        //    any custom code goes here
+    });
+
+});
+</pre>
+
+<p>We also need to modify our widget template:</p>
+<pre class="brush: js; html-script: true">
+&lt;div class="${baseClass}"&gt;
+    &lt;div class="${baseClass}Title"
+        data-dojo-attach-point="titleNode"
+        data-dojo-attach-event="ondijitclick:_onClick"&gt;&lt;/div&gt;
+    &lt;div&gt;And our container:&lt;/div&gt;
+    &lt;div class="${baseClass}Container"
+        data-dojo-attach-point="containerNode"&gt;&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<p><a href="demo/templated-demo.php">View Demo</a></p>
+<div class="proTip">
+Demo files:
+
+<em>   <a href="demo/SomeWidget.js"><code>demo/SomeWidget.js</code></a>
+</em>   <a href="demo/templates/SomeWidget.html"><code>demo/templates/SomeWidget.html</code></a>
+</div>
+
+<h3 id="the-_widgetsintemplatemixin-mixin">The <code>_WidgetsInTemplateMixin</code> Mixin</h3>
+<p>Finally, Dijit&#39;s template system allows you to create more complex widgets from templates through the use of the
+<code>_WidgetsInTemplateMixin</code> mixin.  This mixin tells the template system that your template has other widgets
+in it and to instantiate them when your widget is instantiated.</p>
+<p>For example, let&#39;s modify both our declaration to always include a Dijit button:</p>
+<pre class="brush: js;">
+define([
+    "dojo/_base/declare",
+    "dijit/_WidgetBase",
+    "dijit/_OnDijitClickMixin",
+    "dijit/_TemplatedMixin",
+    "dijit/_WidgetsInTemplateMixin",
+    "dijit/form/Button",
+    "dojo/text!./templates/SomeWidget.html"
+], function(declare, _WidgetBase, _OnDijitClickMixin, _TemplatedMixin,
+            _WidgetsInTemplateMixin, Button, template) {
+
+    return declare("example.SomeWidget", [_WidgetBase, _OnDijitClickMixin,
+        _TemplatedMixin, _WidgetsInTemplateMixin
+    ], {
+        templateString: template
+        //    your custom code goes here
+    });
+
+});
+</pre>
+
+<p>And then we would create a template like:</p>
+<pre class="brush: js; html-script: true;">
+&lt;div class="${baseClass}" data-dojo-attach-point="focusNode"
+        data-dojo-attach-event="ondijitclick:_onClick"
+        role="menuitem" tabIndex="-1"&gt;
+    &lt;div data-dojo-type="dijit/form/Button"
+        data-dojo-attach-point="buttonWidget"&gt;
+        My Button
+    &lt;/div&gt;
+    &lt;span data-dojo-attach-point="containerNode"&gt;&lt;/span&gt;
+&lt;/div&gt;
+</pre>
+
+<p>Notice that in our modified template, we&#39;ve added an attach point called <code>buttonWidget</code> along with the
+    button&#39;s markup.  This is an additional bonus of Dijit&#39;s attach point system; because the definition in question
+    is to be a widget, the added property to our widget &mdash; <code>myWidget.buttonWidget</code> &mdash; will be a
+    reference to the actual button widget, and <strong>not</strong> a reference to a DOM element.  This allows you to
+    create &quot;uber-widgets&quot; out of simpler building blocks, such as a widget to view a list of emails, a toolbar that
+    has preset widgets in it, and a lot more.</p>
+<p>Also, notice that you should require in any widgets into the module that are used by the template.  You cannot take
+    advantage of the &quot;auto-require&quot; feature of the <code>dojo/parser</code> introduced in Dojo 1.8 with widget
+    templates because the creation life-cycle is synchronous but the auto-require feature has to run
+    asynchronously.</p>
+<p>Unless you have an explicit need to define widgets in your templates, don&#39;t mixin
+    <code>dijit/_WidgetsInTemplateMixin</code>. The extra overhead that it incurs can affect the performance of the
+    widget, and your application, if overused.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>In this tutorial, we&#39;ve learned about Dijit&#39;s powerful template system as implemented by the mixins
+    <code>_TemplatedMixin</code> and <code>_WidgetsInTemplateMixin</code>, and how you can use this system to quickly
+    create your own custom widgets for use in your applications. We&#39;ve reviewed how the template system&#39;s <em>attach
+    points</em> and <em>event attachments</em> allow you to quickly bind DOM elements to your code, and how to replace
+    values in your template &mdash; as well as how to include other widgets in your widget template to create
+    &quot;uber-widgets&quot;.</p>
+<p>Happy widget building!</p>
+
+				</div>
+			</div>
+		</main>
+		<div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+	</body>
+</html>

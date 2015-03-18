@@ -1,0 +1,161 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojox/json/query" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojox/json/query.html</div>
+<h1 class="functionIcon36 jsdoc-title module-title">dojox/json/query<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-full-summary"><p>Performs a JSONQuery on the provided object and returns the results.
+If no object is provided (just a query), it returns a &quot;compiled&quot; function that evaluates objects
+according to the provided query.</p>
+</div>
+<div class="jsdoc-full-summary"><p>JSONQuery provides a comprehensive set of data querying tools including filtering,
+recursive search, sorting, mapping, range selection, and powerful expressions with
+wildcard string comparisons and various operators. JSONQuery generally supersets
+JSONPath and provides syntax that matches and behaves like JavaScript where
+possible.
+
+</p>
+<p>JSONQuery evaluations begin with the provided object, which can referenced with
+$. From
+the starting object, various operators can be successively applied, each operating
+on the result of the last operation.
+
+</p>
+<h2>Supported Operators</h2>
+<ul>
+<li>.property - This will return the provided property of the object, behaving exactly
+like JavaScript.</li>
+<li>[expression] - This returns the property name/index defined by the evaluation of
+the provided expression, behaving exactly like JavaScript.</li>
+<li>[?expression] - This will perform a filter operation on an array, returning all the
+items in an array that match the provided expression. This operator does not
+need to be in brackets, you can simply use ?expression, but since it does not
+have any containment, no operators can be used afterwards when used
+without brackets.</li>
+<li>[^?expression] - This will perform a distinct filter operation on an array. This behaves
+as [?expression] except that it will remove any duplicate values/objects from the
+result set.</li>
+<li>[/expression], [\expression], [/expression, /expression] - This performs a sort
+operation on an array, with sort based on the provide expression. Multiple comma delimited sort
+expressions can be provided for multiple sort orders (first being highest priority). /
+indicates ascending order and \ indicates descending order</li>
+<li>[=expression] - This performs a map operation on an array, creating a new array
+with each item being the evaluation of the expression for each item in the source array.</li>
+<li>[start:end:step] - This performs an array slice/range operation, returning the elements
+from the optional start index to the optional end index, stepping by the optional step number.</li>
+<li>[expr,expr] - This a union operator, returning an array of all the property/index values from
+the evaluation of the comma delimited expressions.</li>
+<li>.<em> or [</em>] - This returns the values of all the properties of the current object.</li>
+<li>$ - This is the root object, If a JSONQuery expression does not being with a $,
+it will be auto-inserted at the beginning.</li>
+<li>@ - This is the current object in filter, sort, and map expressions. This is generally
+not necessary, names are auto-converted to property references of the current object
+in expressions.</li>
+<li>..property - Performs a recursive search for the given property name, returning
+an array of all values with such a property name in the current object and any subobjects</li>
+<li>expr = expr - Performs a comparison (like JS&#39;s ==). When comparing to
+a string, the comparison string may contain wildcards * (matches any number of
+characters) and ? (matches any single character).</li>
+<li>expr ~ expr - Performs a string comparison with case insensitivity.</li>
+<li>..[?expression] - This will perform a deep search filter operation on all the objects and
+subobjects of the current data. Rather than only searching an array, this will search
+property values, arrays, and their children.</li>
+<li>$1,$2,$3, etc. - These are references to extra parameters passed to the query
+function or the evaluator function.</li>
+<li>+, -, /, *, &amp;, |, %, (, ), &lt;, &gt;, &lt;=, &gt;=, != - These operators behave just as they do
+in JavaScript.</li>
+</ul>
+<pre><code>dojox.json.query(queryString,object)</pre></code>
+<p>and
+
+
+</p>
+<pre><code>dojox.json.query(queryString)(object)</pre></code>
+<p>always return identical results. The first one immediately evaluates, the second one returns a
+
+</p>
+<p>function that then evaluates the object.
+</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature">query<span class="parameters">(query,obj);</span>
+  </div>
+</div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">query</td>
+    <td class="jsdoc-param-type">String</td>
+    <td class="jsdoc-param-description"><p>Query string</p>
+
+    </td>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">obj</td>
+    <td class="jsdoc-param-type">Object</td>
+    <td class="jsdoc-param-description">
+      <div><em>Optional</em></div><p>Target of the JSONQuery</p>
+
+    </td>
+  </tr>
+</table>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><pre><code>dojox.json.query(&quot;foo&quot;,{foo:&quot;bar&quot;})</code></pre>
+<p>This will return &quot;bar&quot;.
+
+</p>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 2</h3><pre><code>evaluator = dojox.json.query(&quot;?foo=&#39;bar&#39;&amp;rating&gt;3&quot;);</code></pre>
+<p>This creates a function that finds all the objects in an array with a property
+
+</p>
+<p>foo that is equals to &quot;bar&quot; and with a rating property with a value greater
+than 3.
+
+</p>
+<pre><code>evaluator([{foo:&quot;bar&quot;,rating:4},{foo:&quot;baz&quot;,rating:2}])</code></pre>
+<p>This returns:
+
+
+</p>
+<pre><code>{foo:&quot;bar&quot;,rating:4}</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 3</h3><pre><code>evaluator = dojox.json.query(&quot;$[?price&lt;15.00][\rating][0:10]&quot;);</code></pre>
+<p>This finds objects in array with a price less than 15.00 and sorts then
+
+</p>
+<p>by rating, highest rated first, and returns the first ten items in from this
+filtered and sorted list.</p>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojox/json/query" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

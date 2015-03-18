@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Building a widget from scratch &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Building a widget from scratch</a><ul>
+<li><a class="reference internal" href="#hiding-the-built-in-file-upload-box">Hiding the Built-In File Upload Box</a></li>
+<li><a class="reference internal" href="#connecting-the-elements-with-events">Connecting the Elements with Events</a></li>
+<li><a class="reference internal" href="#wiring-it-all-together">Wiring It All Together</a></li>
+<li><a class="reference internal" href="#future-plans">Future Plans</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="building-a-widget-from-scratch">
+<span id="quickstart-writingwidgets-example"></span><h1>Building a widget from scratch<a class="headerlink" href="#building-a-widget-from-scratch" title="Permalink to this headline">¶</a></h1>
+<p>So now, we&#8217;ll build a widget to solve a practical problem. Your site is all neatly designed and feng-shui&#8217;ed ... except this one &lt;input type=&#8221;file&#8221;&gt; tag. The user clicks on the button, and all of a sudden gets an operating system-styled box that doesn&#8217;t look right, and is completely out of your control. Ugggh.</p>
+<p>This is a perennial thorn-in-the-side for web developers. A Google search finds the ever-useful web site quirksmode, and they have a pretty simple solution: hide the file input, put a real input directly beneath where it would be, and make your own button off to the side. Logical enough. How hard would that be to make a widget?</p>
+<p>Not hard at all, it turns out. Here&#8217;s the plan:</p>
+<ul class="simple">
+<li>Hide the input boxes and draw our own</li>
+<li>Use Dojo to handle all my connections and fancy stuff</li>
+<li>Wrap it all up using dijit.form._FormWidget and diijt._Templated to take care of everything else</li>
+</ul>
+<div class="section" id="hiding-the-built-in-file-upload-box">
+<h2>Hiding the Built-In File Upload Box<a class="headerlink" href="#hiding-the-built-in-file-upload-box" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ll use the programmatic method here. First we&#8217;ll need a location on-disk for our widget. Since others have expressed interest in this widget, and we hope to contribute it to dojox, we&#8217;ll place the widget in dojox/widget/FileInput.js. This means we&#8217;ll be able to require() and provide() the module &#8220;dojox.widget.FileInput&#8221; as per the package system conventions. To get additional behavior we&#8217;ll need to require() mixin classes, in case we don&#8217;t already have them. So here&#8217;s a stub for the class:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">provide</span><span class="p">(</span><span class="s2">&quot;dojox.widget.FileInput&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form._FormWidget&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit._Templated&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;dojox.widget.FileInput&quot;</span><span class="p">,</span>
+      <span class="p">[</span><span class="nx">dijit</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">_FormWidget</span><span class="p">,</span> <span class="nx">dijit</span><span class="p">.</span><span class="nx">_Templated</span><span class="p">],</span>
+      <span class="p">{</span>
+      <span class="c1">// summary: A styled input type=&quot;file&quot;</span>
+      <span class="c1">//</span>
+      <span class="c1">// description: A input type=&quot;file&quot; form widget, with a button for uploading to be styled via css,</span>
+      <span class="c1">//      a cancel button to clear selection, and FormWidget mixin to provide standard</span>
+      <span class="c1">//      dijit.form.Form</span>
+      <span class="c1">//</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.provide(&quot;dojox.widget.FileInput&quot;);
+dojo.require(&quot;dijit.form._FormWidget&quot;);
+dojo.require(&quot;dijit._Templated&quot;);
+dojo.declare(&quot;dojox.widget.FileInput&quot;,
+      [dijit.form._FormWidget, dijit._Templated],
+      {
+      // summary: A styled input type=&quot;file&quot;
+      //
+      // description: A input type=&quot;file&quot; form widget, with a button for uploading to be styled via css,
+      //      a cancel button to clear selection, and FormWidget mixin to provide standard
+      //      dijit.form.Form
+      //
+});</textarea></div><p>Next we&#8217;ll need a template, a label for our submit button, a label for our cancel button, and the name of the input:</p>
+<div class="highlight"><pre><span class="c1">// label: String</span>
+<span class="c1">//      the title text of the &quot;Browse&quot; button</span>
+<span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;Browse ...&quot;</span><span class="p">,</span>
+
+<span class="c1">// cancelText: String</span>
+<span class="c1">//      the title of the &quot;Cancel&quot; button</span>
+<span class="nx">cancelText</span><span class="o">:</span> <span class="s2">&quot;Cancel&quot;</span><span class="p">,</span>
+
+<span class="c1">// name: String</span>
+<span class="c1">//      ugh, this should be pulled from this.domNode</span>
+<span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;uploadFile&quot;</span><span class="p">,</span>
+
+<span class="nx">templatePath</span><span class="o">:</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">moduleUrl</span><span class="p">(</span><span class="s2">&quot;dojox.widget&quot;</span><span class="p">,</span> <span class="s2">&quot;FileInput/FileInput.html&quot;</span><span class="p">),</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// label: String
+//      the title text of the &quot;Browse&quot; button
+label: &quot;Browse ...&quot;,
+
+// cancelText: String
+//      the title of the &quot;Cancel&quot; button
+cancelText: &quot;Cancel&quot;,
+
+// name: String
+//      ugh, this should be pulled from this.domNode
+name: &quot;uploadFile&quot;,
+
+templatePath: dojo.moduleUrl(&quot;dojox.widget&quot;, &quot;FileInput/FileInput.html&quot;),</textarea></div><p>Also note that whenever we use template variables , it&#8217;s good practice to supply a default, e.g. &#8220;Browse ...&#8221; for the label. Otherwise, if your widget user omits the label attribute, the parser will complain.</p>
+<p>As we said earlier, it&#8217;s preferable to separate the template out into a different file. Ours will look like the following, placed in dojox/widget/FileInput/FileInput.html:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;dijitFileInput&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;input</span> <span class="na">id=</span><span class="s">&quot;${id}&quot;</span> <span class="na">class=</span><span class="s">&quot;dijitFileInputReal&quot;</span> <span class="na">type=</span><span class="s">&quot;file&quot;</span>
+                 <span class="na">data-dojo-attach-point=</span><span class="s">&quot;fileInput&quot;</span> <span class="na">name=</span><span class="s">&quot;${name}&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;dijitFakeInput&quot;</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;input</span> <span class="na">class=</span><span class="s">&quot;dijitFileInputVisible&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+                         <span class="na">data-dojo-attach-point=</span><span class="s">&quot;focusNode, inputNode&quot;</span> <span class="nt">/&gt;</span>
+              <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;dijitFileInputText&quot;</span>
+                         <span class="na">data-dojo-attach-point=</span><span class="s">&quot;titleNode&quot;</span><span class="nt">&gt;</span>${label}<span class="nt">&lt;/span&gt;</span>
+              <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;dijitFileInputButton&quot;</span> <span class="na">data-dojo-attach-point=</span><span class="s">&quot;cancelNode&quot;</span>
+                      <span class="na">data-dojo-attach-event=</span><span class="s">&quot;onclick:_onClick&quot;</span><span class="nt">&gt;</span>
+                      ${cancelText}
+              <span class="nt">&lt;/span&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div class=&quot;dijitFileInput&quot;&gt;
+      &lt;input id=&quot;${id}&quot; class=&quot;dijitFileInputReal&quot; type=&quot;file&quot;
+                 data-dojo-attach-point=&quot;fileInput&quot; name=&quot;${name}&quot; /&gt;
+      &lt;div class=&quot;dijitFakeInput&quot;&gt;
+              &lt;input class=&quot;dijitFileInputVisible&quot; type=&quot;text&quot;
+                         data-dojo-attach-point=&quot;focusNode, inputNode&quot; /&gt;
+              &lt;span class=&quot;dijitFileInputText&quot;
+                         data-dojo-attach-point=&quot;titleNode&quot;&gt;${label}&lt;/span&gt;
+              &lt;span class=&quot;dijitFileInputButton&quot; data-dojo-attach-point=&quot;cancelNode&quot;
+                      data-dojo-attach-event=&quot;onclick:_onClick&quot;&gt;
+                      ${cancelText}
+              &lt;/span&gt;
+      &lt;/div&gt;
+&lt;/div&gt;</textarea></div><p>Note how we assign classes to each major part, so we can apply design as CSS styles. We&#8217;re also using data-dojo-attach-point=&#8221;aString&#8221; so the parser makes these nodes available to us in code at the location this.fileInput.</p>
+<p>There&#8217;s one more thing: the base class _Widget automatically copies certain attributes like <cite>id</cite> and <cite>name</cite> to the widget&#8217;s top level node.
+Since we don&#8217;t want that functionality in this case, we should override it, by adding the following code to the widget&#8217;s
+JavaScript:</p>
+<div class="highlight"><pre><span class="nx">_setIdAttr</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
+<span class="nx">_setNameAttr</span><span class="o">:</span> <span class="kc">null</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">_setIdAttr: null,
+_setNameAttr: null</textarea></div><p>OK, let&#8217;s make sure our widget starts up, and looks right. Let&#8217;s make some simple css rules using the class names we set in our template:</p>
+<div class="highlight"><pre><span class="nc">.dijitFileInput</span> <span class="p">{</span>
+      <span class="k">position</span><span class="o">:</span><span class="k">relative</span><span class="p">;</span>
+      <span class="k">height</span><span class="o">:</span><span class="m">1.3em</span><span class="p">;</span>
+      <span class="k">padding</span><span class="o">:</span><span class="m">2px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.dijitFileInputReal</span> <span class="p">{</span>
+      <span class="k">position</span><span class="o">:</span><span class="k">absolute</span><span class="p">;</span>
+      <span class="k">z-index</span><span class="o">:</span><span class="m">2</span><span class="p">;</span>
+      <span class="k">opacity</span><span class="o">:</span><span class="m">0</span><span class="p">;</span>
+      <span class="n">filter</span><span class="o">:</span><span class="n">alpha</span><span class="p">(</span><span class="k">opacity</span><span class="o">:</span><span class="m">0</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nc">.dijitFileInputButton</span><span class="o">,</span>
+<span class="nc">.dijitFileInputText</span> <span class="p">{</span>
+      <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#333</span><span class="p">;</span>
+      <span class="k">padding</span><span class="o">:</span><span class="m">2px</span> <span class="m">12px</span> <span class="m">2px</span> <span class="m">12px</span><span class="p">;</span>
+      <span class="k">cursor</span><span class="o">:</span><span class="k">pointer</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.dijitFileInputButton</span> <span class="p">{</span>
+      <span class="k">opacity</span><span class="o">:</span><span class="m">0</span><span class="p">;</span>
+      <span class="n">filter</span><span class="o">:</span><span class="n">alpha</span><span class="p">(</span><span class="k">opacity</span><span class="o">:</span><span class="m">0</span><span class="p">);</span>
+      <span class="k">z-index</span><span class="o">:</span><span class="m">3</span><span class="p">;</span>
+      <span class="k">visibility</span><span class="o">:</span><span class="k">hidden</span><span class="p">;</span>
+
+<span class="p">}</span>
+<span class="nc">.dijitFakeInput</span> <span class="p">{</span> <span class="k">position</span><span class="o">:</span><span class="k">absolute</span><span class="p">;</span> <span class="k">top</span><span class="o">:</span><span class="m">0</span><span class="p">;</span> <span class="k">left</span><span class="o">:</span><span class="m">0</span><span class="p">;</span> <span class="k">z-index</span><span class="o">:</span><span class="m">1</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">.dijitFileInput {
+      position:relative;
+      height:1.3em;
+      padding:2px;
+}
+.dijitFileInputReal {
+      position:absolute;
+      z-index:2;
+      opacity:0;
+      filter:alpha(opacity:0);
+}
+.dijitFileInputButton,
+.dijitFileInputText {
+      border:1px solid #333;
+      padding:2px 12px 2px 12px;
+      cursor:pointer;
+}
+.dijitFileInputButton {
+      opacity:0;
+      filter:alpha(opacity:0);
+      z-index:3;
+      visibility:hidden;
+
+}
+.dijitFakeInput { position:absolute; top:0; left:0; z-index:1; }</textarea></div><p>Looks good!</p>
+</div>
+<div class="section" id="connecting-the-elements-with-events">
+<h2>Connecting the Elements with Events<a class="headerlink" href="#connecting-the-elements-with-events" title="Permalink to this headline">¶</a></h2>
+<p>data-dojo-attach-event=&#8221;onclick: _onClick&#8221; connects the onclick event of this.cancelNode to this._onClick, the method we are about to define (otherwise dojo.hitch will throw an error mentioning something about _onClick not having properties). We&#8217;ll get to the onClick handler for the cancel button, and the reasons for having to do it later.</p>
+<p>We also need to implement a simple onchange listener, like the article hints, so that when our onchange is detected in on our real file input (this.fileInput), we will call this._matchValue() to steal the value from it, and populate our visible input:</p>
+<div class="highlight"><pre><span class="nx">startup</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">// summary:</span>
+        <span class="c1">//     Listen for changes on our real file input</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_listener</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">,</span> <span class="s2">&quot;onchange&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="s2">&quot;_matchValue&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_keyListener</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">,</span> <span class="s2">&quot;onkeyup&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="s2">&quot;_matchValue&quot;</span><span class="p">);</span>
+<span class="p">},</span>
+<span class="nx">_matchValue</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">// summary:</span>
+        <span class="c1">//     Set the content of the upper input based on the semi-hidden file input</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">inputNode</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">inputNode</span><span class="p">.</span><span class="nx">value</span><span class="p">){</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">cancelNode</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;visible&quot;</span><span class="p">;</span>
+                <span class="nx">dojo</span><span class="p">.</span><span class="nx">fadeIn</span><span class="p">({</span> <span class="nx">node</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">cancelNode</span><span class="p">,</span> <span class="nx">duration</span><span class="o">:</span><span class="mi">275</span> <span class="p">}).</span><span class="nx">play</span><span class="p">();</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">startup: function(){
+        // summary:
+        //     Listen for changes on our real file input
+        this.inherited(arguments);
+        this._listener = dojo.connect(this.fileInput, &quot;onchange&quot;, this, &quot;_matchValue&quot;);
+        this._keyListener = dojo.connect(this.fileInput, &quot;onkeyup&quot;, this, &quot;_matchValue&quot;);
+},
+_matchValue: function(){
+        // summary:
+        //     Set the content of the upper input based on the semi-hidden file input
+        this.inputNode.value = this.fileInput.value;
+        if(this.inputNode.value){
+                this.cancelNode.style.visibility = &quot;visible&quot;;
+                dojo.fadeIn({ node: this.cancelNode, duration:275 }).play();
+        }
+}</textarea></div><p>You&#8217;ve probably also noticed we added an onkeyup connection, running the same code. This way, if we type in the input, our changes will be reflected after each key press. Fortunately for this example, we&#8217;ll ignore little nitpicks like &#8220;holding backspace doesn&#8217;t fire onkeyup&#8221;.</p>
+<p>The _matchValue() function simply steals the file input value, sets it to the visible input value and fades in the cancel button (which we set earlier to visibility:hidden in FileInput.css).</p>
+<p>So next, we need a reset button. Unfortunately because we&#8217;re faking HTML out a bit, a plain old Reset button won&#8217;t work. Since we aren&#8217;t allowed write access to the file input, we can&#8217;t just null the data. So our _onClick method actually destroys the &lt;input type=&#8221;file&#8221;&gt; and reads it.</p>
+<div class="highlight"><pre><span class="nx">_onClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="cm">/*Event*/</span> <span class="nx">e</span><span class="p">){</span>
+      <span class="c1">// summary: on click of cancel button, since we can&#39;t clear the input because of</span>
+      <span class="c1">//      security reasons, we destroy it, and add a new one in it&#39;s place.</span>
+      <span class="c1">// Disconnect the listeners so they&#39;re not orphaned, and cleanly remove the tag</span>
+      <span class="nx">dojo</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_listener</span><span class="p">);</span>
+      <span class="nx">dojo</span><span class="p">.</span><span class="nx">disconnect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_keyListener</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">);</span>
+      <span class="c1">// Fade our the cancel button so we no longer can press it</span>
+      <span class="nx">dojo</span><span class="p">.</span><span class="nx">fadeOut</span><span class="p">({</span> <span class="nx">node</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">cancelNode</span><span class="p">,</span> <span class="nx">duration</span><span class="o">:</span><span class="mi">275</span> <span class="p">}).</span><span class="nx">play</span><span class="p">();</span>
+      <span class="c1">// Create an identical input tag</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;input&#39;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">id</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+      <span class="nx">dojo</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">,</span> <span class="s2">&quot;dijitFileInputReal&quot;</span><span class="p">);</span>
+      <span class="c1">// this.domNode is the root DOM node of the widget</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">);</span>
+      <span class="c1">// Finally, connect the listeners to this new node.</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_keyListener</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">,</span> <span class="s2">&quot;onkeyup&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="s2">&quot;_matchValue&quot;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_listener</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fileInput</span><span class="p">,</span> <span class="s2">&quot;onchange&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="s2">&quot;_matchValue&quot;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">inputNode</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">_onClick: function(/*Event*/ e){
+      // summary: on click of cancel button, since we can't clear the input because of
+      //      security reasons, we destroy it, and add a new one in it's place.
+      // Disconnect the listeners so they're not orphaned, and cleanly remove the tag
+      dojo.disconnect(this._listener);
+      dojo.disconnect(this._keyListener);
+      this.domNode.removeChild(this.fileInput);
+      // Fade our the cancel button so we no longer can press it
+      dojo.fadeOut({ node: this.cancelNode, duration:275 }).play();
+      // Create an identical input tag
+      this.fileInput = document.createElement('input');
+      this.fileInput.setAttribute(&quot;type&quot;, &quot;file&quot;);
+      this.fileInput.setAttribute(&quot;id&quot;, this.id);
+      this.fileInput.setAttribute(&quot;name&quot;, this.name);
+      dojo.addClass(this.fileInput, &quot;dijitFileInputReal&quot;);
+      // this.domNode is the root DOM node of the widget
+      this.domNode.appendChild(this.fileInput);
+      // Finally, connect the listeners to this new node.
+      this._keyListener = dojo.connect(this.fileInput, &quot;onkeyup&quot;, this, &quot;_matchValue&quot;);
+      this._listener = dojo.connect(this.fileInput, &quot;onchange&quot;, this, &quot;_matchValue&quot;);
+      this.inputNode.value = &quot;&quot;;
+}</textarea></div></div>
+<div class="section" id="wiring-it-all-together">
+<h2>Wiring It All Together<a class="headerlink" href="#wiring-it-all-together" title="Permalink to this headline">¶</a></h2>
+<p>So now we have our widget and our basic styles. We include this widget in our page declaratively by:</p>
+<div class="highlight"><pre><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;file&quot;</span> <span class="na">name=</span><span class="s">&quot;uploadFile&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.widget.FileInput&quot;</span><span class="nt">&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;input type=&quot;file&quot; name=&quot;uploadFile&quot; data-dojo-type=&quot;dojox.widget.FileInput&quot;&gt;</textarea></div><p>The real file input tag in the DOM goes away our templated input gets put in it&#8217;s place. But if JavaScript is not present, it stays a regular HTML input tag, so it degrades nicely. Here is a sample test page to work with:</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot;</span>
+<span class="cp">      &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+      <span class="nt">&lt;title&gt;</span>dojox.widget.FileInput | The Dojo Toolkit<span class="nt">&lt;/title&gt;</span>
+      <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+              <span class="k">@import</span> <span class="s2">&quot;../../../dojo/resources/dojo.css&quot;</span><span class="p">;</span>
+              <span class="k">@import</span> <span class="s2">&quot;../../../dijit/themes/dijit.css&quot;</span><span class="p">;</span>
+              <span class="k">@import</span> <span class="s2">&quot;../FileInput/FileInput.css&quot;</span><span class="p">;</span>
+      <span class="nt">&lt;/style&gt;</span>
+      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;../../../dojo/dojo.js&quot;</span>
+                 <span class="na">data-dojo-config=</span><span class="s">&quot;isDebug:true, parseOnLoad: true&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+              <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.widget.FileInput&quot;</span><span class="p">);</span>
+              <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.parser&quot;</span><span class="p">);</span>    <span class="c1">// scan page for widgets and instantiate them</span>
+      <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+      <span class="nt">&lt;h3&gt;</span>A standard file input:<span class="nt">&lt;/h3&gt;</span>
+      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;file&quot;</span> <span class="na">id=</span><span class="s">&quot;normal&quot;</span> <span class="na">name=</span><span class="s">&quot;inputFile&quot;</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;h3&gt;</span>The default dojox.widget.FileInput:<span class="nt">&lt;/h3&gt;</span>
+
+      <span class="nt">&lt;input</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.widget.FileInput&quot;</span> <span class="na">id=</span><span class="s">&quot;default&quot;</span> <span class="na">name=</span><span class="s">&quot;uploadFile&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot;
+      &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+      &lt;title&gt;dojox.widget.FileInput | The Dojo Toolkit&lt;/title&gt;
+      &lt;style type=&quot;text/css&quot;&gt;
+              &#64;import &quot;../../../dojo/resources/dojo.css&quot;;
+              &#64;import &quot;../../../dijit/themes/dijit.css&quot;;
+              &#64;import &quot;../FileInput/FileInput.css&quot;;
+      &lt;/style&gt;
+      &lt;script type=&quot;text/javascript&quot; src=&quot;../../../dojo/dojo.js&quot;
+                 data-dojo-config=&quot;isDebug:true, parseOnLoad: true&quot;&gt;&lt;/script&gt;
+      &lt;script type=&quot;text/javascript&quot;&gt;
+              dojo.require(&quot;dojox.widget.FileInput&quot;);
+              dojo.require(&quot;dojo.parser&quot;);    // scan page for widgets and instantiate them
+      &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+      &lt;h3&gt;A standard file input:&lt;/h3&gt;
+      &lt;input type=&quot;file&quot; id=&quot;normal&quot; name=&quot;inputFile&quot; /&gt;
+      &lt;h3&gt;The default dojox.widget.FileInput:&lt;/h3&gt;
+
+      &lt;input data-dojo-type=&quot;dojox.widget.FileInput&quot; id=&quot;default&quot; name=&quot;uploadFile&quot; /&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea></div><p>In theory, it will work inside of a tag just as the original element did.</p>
+<p>Because we&#8217;re big fans of re-using code, we can steal some CSS stuff from tundra.css and soria.css to provide theme-specific styles, so our input nodes look like they would in with all the other dijit.form Widgets (like ComboBox, FilteringSelect, ValidationTextBox, etc):</p>
+<div class="highlight"><pre><span class="c">/*tundra*/</span>
+<span class="nc">.tundra</span> <span class="nc">.dijitProgressOverlay</span> <span class="p">{</span>
+      <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#84a3d1</span><span class="p">;</span>
+      <span class="k">background-color</span><span class="o">:</span><span class="m">#cad2de</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.tundra</span> <span class="nc">.dijitFakeInput</span> <span class="nt">input</span> <span class="p">{</span>
+      <span class="k">font-size</span><span class="o">:</span> <span class="k">inherit</span><span class="p">;</span>
+      <span class="k">background</span><span class="o">:</span><span class="m">#fff</span>
+          <span class="sx">url(&quot;../../../dijit/themes/tundra/images/validationInputBg.png&quot;)</span>
+          <span class="k">repeat-x</span> <span class="k">top</span> <span class="k">left</span><span class="p">;</span>
+      <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#9b9b9b</span><span class="p">;</span>
+      <span class="k">line-height</span><span class="o">:</span> <span class="k">normal</span><span class="p">;</span>
+      <span class="k">padding</span><span class="o">:</span> <span class="m">0.2em</span> <span class="m">0.3em</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.tundra</span> <span class="nc">.dijitFileInputButton</span><span class="o">,</span>
+<span class="nc">.tundra</span> <span class="nc">.dijitFileInputText</span> <span class="p">{</span>
+      <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#9b9b9b</span><span class="p">;</span>
+      <span class="k">padding</span><span class="o">:</span><span class="m">2px</span> <span class="m">12px</span> <span class="m">2px</span> <span class="m">12px</span><span class="p">;</span> <span class="c">/* .3em .4em .2em .4em; */</span>
+      <span class="k">background</span><span class="o">:</span><span class="m">#e9e9e9</span>
+          <span class="sx">url(&quot;../../../dijit/themes/tundra/images/buttonEnabled.png&quot;)</span>
+          <span class="k">repeat-x</span> <span class="k">top</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c">/*Soria*/</span>
+<span class="nc">.soria</span> <span class="nc">.dijitProgressOverlay</span> <span class="p">{</span>
+      <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#333</span><span class="p">;</span>
+      <span class="k">background-color</span><span class="o">:</span><span class="m">#cad2de</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.soria</span> <span class="nc">.dijitFakeInput</span> <span class="nt">input</span> <span class="p">{</span>
+      <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#333</span><span class="p">;</span>
+      <span class="k">background</span><span class="o">:</span><span class="m">#fff</span>
+          <span class="sx">url(&quot;../../../dijit/themes/soria/images/gradientInverseTopBg.png&quot;)</span>
+          <span class="k">repeat-x</span> <span class="k">top</span> <span class="k">left</span><span class="p">;</span>
+      <span class="k">line-height</span><span class="o">:</span><span class="k">normal</span><span class="p">;</span>
+      <span class="k">background-position</span><span class="o">:</span><span class="m">0</span> <span class="m">-30px</span><span class="p">;</span>
+      <span class="k">padding</span><span class="o">:</span><span class="m">0.2em</span> <span class="m">0.3em</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.soria</span> <span class="nc">.dijitFileInputButton</span><span class="o">,</span>
+<span class="nc">.soria</span> <span class="nc">.dijitFileInputText</span> <span class="p">{</span>
+      <span class="k">border</span><span class="o">:</span><span class="m">1px</span> <span class="k">solid</span> <span class="m">#333</span><span class="p">;</span>
+      <span class="k">padding</span><span class="o">:</span><span class="m">2px</span> <span class="m">12px</span> <span class="m">2px</span> <span class="m">12px</span><span class="p">;</span>
+      <span class="k">background</span><span class="o">:</span><span class="m">#b7cdee</span>
+          <span class="sx">url(&#39;../../../dijit/themes/soria/images/gradientTopBg.png&#39;)</span> <span class="k">repeat-x</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">/*tundra*/
+.tundra .dijitProgressOverlay {
+      border:1px solid #84a3d1;
+      background-color:#cad2de;
+}
+.tundra .dijitFakeInput input {
+      font-size: inherit;
+      background:#fff
+          url(&quot;../../../dijit/themes/tundra/images/validationInputBg.png&quot;)
+          repeat-x top left;
+      border:1px solid #9b9b9b;
+      line-height: normal;
+      padding: 0.2em 0.3em;
+}
+.tundra .dijitFileInputButton,
+.tundra .dijitFileInputText {
+      border:1px solid #9b9b9b;
+      padding:2px 12px 2px 12px; /* .3em .4em .2em .4em; */
+      background:#e9e9e9
+          url(&quot;../../../dijit/themes/tundra/images/buttonEnabled.png&quot;)
+          repeat-x top;
+}
+
+/*Soria*/
+.soria .dijitProgressOverlay {
+      border:1px solid #333;
+      background-color:#cad2de;
+}
+.soria .dijitFakeInput input {
+      border:1px solid #333;
+      background:#fff
+          url(&quot;../../../dijit/themes/soria/images/gradientInverseTopBg.png&quot;)
+          repeat-x top left;
+      line-height:normal;
+      background-position:0 -30px;
+      padding:0.2em 0.3em;
+}
+.soria .dijitFileInputButton,
+.soria .dijitFileInputText {
+      border:1px solid #333;
+      padding:2px 12px 2px 12px;
+      background:#b7cdee
+          url('../../../dijit/themes/soria/images/gradientTopBg.png') repeat-x;
+}</textarea></div></div>
+<div class="section" id="future-plans">
+<h2>Future Plans<a class="headerlink" href="#future-plans" title="Permalink to this headline">¶</a></h2>
+<p>If you&#8217;ve been paying attention all this way, you probably noticed a class up there that we didn&#8217;t define. .dijitProgressOverlay ... it doesn&#8217;t exist anywhere in the dojox.widget.FileInput template or code.</p>
+<p>The Dojo folks are building an extension to this widget called dojox.widget.FileInputAuto. It works like FileInput except it submits itself after a delay following a blur() on the element. For details (as yet undocumented), get the latest nightly build of Dojo and look for it in dojox.widget.</p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

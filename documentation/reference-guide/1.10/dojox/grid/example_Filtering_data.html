@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Filtering data &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Filtering data</a></li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="filtering-data">
+<span id="dojox-grid-example-filtering-data"></span><h1>Filtering data<a class="headerlink" href="#filtering-data" title="Permalink to this headline">¶</a></h1>
+<p>The Grid offers a filter() method, to filter data from the current query (client-side filtering).</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.DataGrid&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.data.CsvStore&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.Button&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.grid.DataGrid&quot;);
+dojo.require(&quot;dojox.data.CsvStore&quot;);
+dojo.require(&quot;dijit.form.Button&quot;);</textarea></div><div class="highlight"><pre><span class="nt">&lt;span</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.data.CsvStore&quot;</span>
+    <span class="err">//</span> <span class="na">We</span> <span class="na">use</span> <span class="na">the</span> <span class="na">store</span> <span class="na">from</span> <span class="na">the</span> <span class="na">examples</span> <span class="na">above</span><span class="err">.</span>
+    <span class="err">//</span> <span class="na">Please</span> <span class="na">uncomment</span> <span class="na">this</span> <span class="na">line</span><span class="err">,</span> <span class="na">if</span> <span class="na">you</span> <span class="na">need</span> <span class="na">your</span> <span class="na">own</span> <span class="na">store:</span>
+    <span class="err">//</span> <span class="na">data-dojo-id=</span><span class="s">&quot;store2&quot;</span> <span class="na">url=</span><span class="s">&quot;{{dataUrl}}dojox/grid/tests/support/movies.csv&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/span&gt;</span>
+
+<span class="nt">&lt;div&gt;</span>
+    Click on the button &quot;filter movies&quot; to filter the current data (only movies with title &quot;T*&quot; will be visible).
+    Click on the button &quot;show all movies&quot; to remove the filter.
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;table</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.grid.DataGrid&quot;</span>
+    <span class="na">data-dojo-id=</span><span class="s">&quot;grid3&quot;</span>
+    <span class="na">data-dojo-props=</span><span class="s">&quot;store:store2,</span>
+<span class="s">    query:{ Title: &#39;*&#39; },</span>
+<span class="s">    clientSort:true,</span>
+<span class="s">    rowSelector:&#39;20px&#39;&quot;</span>
+    <span class="na">style=</span><span class="s">&quot;width: 400px; height: 200px;&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;thead&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th</span> <span class="na">width=</span><span class="s">&quot;300px&quot;</span> <span class="na">field=</span><span class="s">&quot;Title&quot;</span><span class="nt">&gt;</span>Title of Movie<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th</span> <span class="na">width=</span><span class="s">&quot;50px&quot;</span><span class="nt">&gt;</span>Year<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th</span> <span class="na">colspan=</span><span class="s">&quot;2&quot;</span><span class="nt">&gt;</span>Producer<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/thead&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit.form.Button&quot;</span><span class="nt">&gt;</span>
+    filter movies
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;dojo/method&quot;</span> <span class="na">data-dojo-event=</span><span class="s">&quot;onClick&quot;</span> <span class="na">data-dojo-args=</span><span class="s">&quot;evt&quot;</span><span class="nt">&gt;</span>
+        <span class="c1">// Filter the movies from the data store:</span>
+        <span class="nx">grid3</span><span class="p">.</span><span class="nx">filter</span><span class="p">({</span><span class="nx">Title</span><span class="o">:</span> <span class="s2">&quot;T*&quot;</span><span class="p">});</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit.form.Button&quot;</span><span class="nt">&gt;</span>
+    show all movies
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;dojo/method&quot;</span> <span class="na">data-dojo-event=</span><span class="s">&quot;onClick&quot;</span> <span class="na">data-dojo-args=</span><span class="s">&quot;evt&quot;</span><span class="nt">&gt;</span>
+        <span class="c1">// reset the filter:</span>
+        <span class="nx">grid3</span><span class="p">.</span><span class="nx">filter</span><span class="p">({</span><span class="nx">Title</span><span class="o">:</span> <span class="s2">&quot;*&quot;</span><span class="p">});</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;span data-dojo-type=&quot;dojox.data.CsvStore&quot;
+    // We use the store from the examples above.
+    // Please uncomment this line, if you need your own store:
+    // data-dojo-id=&quot;store2&quot; url=&quot;{{dataUrl}}dojox/grid/tests/support/movies.csv&quot;&gt;
+&lt;/span&gt;
+
+&lt;div&gt;
+    Click on the button &quot;filter movies&quot; to filter the current data (only movies with title &quot;T*&quot; will be visible).
+    Click on the button &quot;show all movies&quot; to remove the filter.
+&lt;/div&gt;
+
+&lt;table data-dojo-type=&quot;dojox.grid.DataGrid&quot;
+    data-dojo-id=&quot;grid3&quot;
+    data-dojo-props=&quot;store:store2,
+    query:{ Title: '*' },
+    clientSort:true,
+    rowSelector:'20px'&quot;
+    style=&quot;width: 400px; height: 200px;&quot;&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th width=&quot;300px&quot; field=&quot;Title&quot;&gt;Title of Movie&lt;/th&gt;
+            &lt;th width=&quot;50px&quot;&gt;Year&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;th colspan=&quot;2&quot;&gt;Producer&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+&lt;/table&gt;
+
+&lt;div data-dojo-type=&quot;dijit.form.Button&quot;&gt;
+    filter movies
+    &lt;script type=&quot;dojo/method&quot; data-dojo-event=&quot;onClick&quot; data-dojo-args=&quot;evt&quot;&gt;
+        // Filter the movies from the data store:
+        grid3.filter({Title: &quot;T*&quot;});
+    &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;div data-dojo-type=&quot;dijit.form.Button&quot;&gt;
+    show all movies
+    &lt;script type=&quot;dojo/method&quot; data-dojo-event=&quot;onClick&quot; data-dojo-args=&quot;evt&quot;&gt;
+        // reset the filter:
+        grid3.filter({Title: &quot;*&quot;});
+    &lt;/script&gt;
+&lt;/div&gt;</textarea></div><div class="highlight"><pre><span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dijit/themes/nihilo/nihilo.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dojox/grid/resources/nihiloGrid.css&quot;</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">&#64;import &quot;{{baseUrl}}dijit/themes/nihilo/nihilo.css&quot;;
+&#64;import &quot;{{baseUrl}}dojox/grid/resources/nihiloGrid.css&quot;;</textarea></div></div></div></div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

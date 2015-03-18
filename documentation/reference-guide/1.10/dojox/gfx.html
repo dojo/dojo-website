@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.gfx &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.gfx</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a><ul>
+<li><a class="reference internal" href="#renderer-options">Renderer Options</a></li>
+<li><a class="reference internal" href="#core-concepts">Core Concepts</a></li>
+<li><a class="reference internal" href="#groups">Groups</a></li>
+<li><a class="reference internal" href="#conventions">Conventions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#shape-properties-colors-strokes-fills-fonts">Shape Properties: Colors, Strokes, Fills &amp; Fonts</a><ul>
+<li><a class="reference internal" href="#color">Color</a></li>
+<li><a class="reference internal" href="#stroke-property">Stroke property</a></li>
+<li><a class="reference internal" href="#fill-property">Fill property</a><ul>
+<li><a class="reference internal" href="#implementation-details">Implementation details</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#font-property">Font property</a><ul>
+<li><a class="reference internal" href="#implementation-notes">Implementation notes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#coordinates-and-transformations">Coordinates and Transformations</a><ul>
+<li><a class="reference internal" href="#simple-examples">Simple examples</a></li>
+<li><a class="reference internal" href="#more-complex-examples">More complex examples</a></li>
+<li><a class="reference internal" href="#combining-transformation-matrices">Combining Transformation Matrices</a></li>
+<li><a class="reference internal" href="#transformation-constants">Transformation Constants</a></li>
+<li><a class="reference internal" href="#matrix-creation">Matrix Creation</a></li>
+<li><a class="reference internal" href="#useful-matrix-operations">Useful Matrix Operations</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#more-complex-example">More complex example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#transformations-around-a-point">Transformations Around a Point</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-shape-methods">Common Shape Methods</a><ul>
+<li><a class="reference internal" href="#event-processing">Event processing</a><ul>
+<li><a class="reference internal" href="#id2">Implementation notes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#clipping">Clipping</a><ul>
+<li><a class="reference internal" href="#id3">Implementation details</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#destructors-api">Destructors API</a></li>
+<li><a class="reference internal" href="#helper-methods">Helper Methods</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#individual-graphics-objects">Individual graphics objects</a><ul>
+<li><a class="reference internal" href="#surface">Surface</a></li>
+<li><a class="reference internal" href="#group">Group</a></li>
+<li><a class="reference internal" href="#rectangle">Rectangle</a></li>
+<li><a class="reference internal" href="#circle">Circle</a></li>
+<li><a class="reference internal" href="#ellipse">Ellipse</a></li>
+<li><a class="reference internal" href="#line">Line</a></li>
+<li><a class="reference internal" href="#polyline">Polyline</a></li>
+<li><a class="reference internal" href="#path">Path</a><ul>
+<li><a class="reference internal" href="#id4">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#image">Image</a></li>
+<li><a class="reference internal" href="#text">Text</a><ul>
+<li><a class="reference internal" href="#id5">Implementation notes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#textpath">TextPath</a><ul>
+<li><a class="reference internal" href="#id6">Implementation notes</a></li>
+<li><a class="reference internal" href="#alignment">Alignment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#renderer-specific-extensions">Renderer-specific extensions</a><ul>
+<li><a class="reference internal" href="#canvas-extension-module-dojox-gfx-canvasext">Canvas extension (module: dojox/gfx/canvasext)</a><ul>
+<li><a class="reference internal" href="#id7">Surface</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#svg-extension-module-dojox-gfx-svgext">SVG extension (module: dojox/gfx/svgext)</a><ul>
+<li><a class="reference internal" href="#shape">Shape</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#svg-filters">SVG Filters</a><ul>
+<li><a class="reference internal" href="#using-the-predefined-filters">Using the predefined filters</a></li>
+<li><a class="reference internal" href="#writing-custom-filters-with-the-dojox-gfx-filters-api">Writing custom filters with the dojox/gfx/filters API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilities">Utilities</a><ul>
+<li><a class="reference internal" href="#move-js">move.js</a></li>
+<li><a class="reference internal" href="#utils-js">utils.js</a></li>
+<li><a class="reference internal" href="#decompose-js">decompose.js</a></li>
+<li><a class="reference internal" href="#arc-js">arc.js</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#considerations-and-caveats">Considerations and Caveats</a></li>
+<li><a class="reference internal" href="#doctype">DOCTYPE</a></li>
+<li><a class="reference internal" href="#demos">Demos</a></li>
+<li><a class="reference internal" href="#tests">Tests</a></li>
+<li><a class="reference internal" href="#todo">TODO</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-gfx">
+<span id="id1"></span><h1><a class="toc-backref" href="#id8">dojox.gfx</a><a class="headerlink" href="#dojox-gfx" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Eugene Lazutkin, Kun Xi, Chris Mitchell, Patrick Ruzand</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-gfx" id="id8">dojox.gfx</a><ul>
+<li><a class="reference internal" href="#overview" id="id9">Overview</a><ul>
+<li><a class="reference internal" href="#renderer-options" id="id10">Renderer Options</a></li>
+<li><a class="reference internal" href="#core-concepts" id="id11">Core Concepts</a></li>
+<li><a class="reference internal" href="#groups" id="id12">Groups</a></li>
+<li><a class="reference internal" href="#conventions" id="id13">Conventions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#shape-properties-colors-strokes-fills-fonts" id="id14">Shape Properties: Colors, Strokes, Fills &amp; Fonts</a><ul>
+<li><a class="reference internal" href="#color" id="id15">Color</a></li>
+<li><a class="reference internal" href="#stroke-property" id="id16">Stroke property</a></li>
+<li><a class="reference internal" href="#fill-property" id="id17">Fill property</a></li>
+<li><a class="reference internal" href="#font-property" id="id18">Font property</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#coordinates-and-transformations" id="id19">Coordinates and Transformations</a><ul>
+<li><a class="reference internal" href="#simple-examples" id="id20">Simple examples</a></li>
+<li><a class="reference internal" href="#more-complex-examples" id="id21">More complex examples</a></li>
+<li><a class="reference internal" href="#combining-transformation-matrices" id="id22">Combining Transformation Matrices</a></li>
+<li><a class="reference internal" href="#transformation-constants" id="id23">Transformation Constants</a></li>
+<li><a class="reference internal" href="#matrix-creation" id="id24">Matrix Creation</a></li>
+<li><a class="reference internal" href="#useful-matrix-operations" id="id25">Useful Matrix Operations</a></li>
+<li><a class="reference internal" href="#transformations-around-a-point" id="id26">Transformations Around a Point</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#common-shape-methods" id="id27">Common Shape Methods</a><ul>
+<li><a class="reference internal" href="#event-processing" id="id28">Event processing</a></li>
+<li><a class="reference internal" href="#clipping" id="id29">Clipping</a></li>
+<li><a class="reference internal" href="#destructors-api" id="id30">Destructors API</a></li>
+<li><a class="reference internal" href="#helper-methods" id="id31">Helper Methods</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#individual-graphics-objects" id="id32">Individual graphics objects</a><ul>
+<li><a class="reference internal" href="#surface" id="id33">Surface</a></li>
+<li><a class="reference internal" href="#group" id="id34">Group</a></li>
+<li><a class="reference internal" href="#rectangle" id="id35">Rectangle</a></li>
+<li><a class="reference internal" href="#circle" id="id36">Circle</a></li>
+<li><a class="reference internal" href="#ellipse" id="id37">Ellipse</a></li>
+<li><a class="reference internal" href="#line" id="id38">Line</a></li>
+<li><a class="reference internal" href="#polyline" id="id39">Polyline</a></li>
+<li><a class="reference internal" href="#path" id="id40">Path</a></li>
+<li><a class="reference internal" href="#image" id="id41">Image</a></li>
+<li><a class="reference internal" href="#text" id="id42">Text</a></li>
+<li><a class="reference internal" href="#textpath" id="id43">TextPath</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#renderer-specific-extensions" id="id44">Renderer-specific extensions</a><ul>
+<li><a class="reference internal" href="#canvas-extension-module-dojox-gfx-canvasext" id="id45">Canvas extension (module: dojox/gfx/canvasext)</a></li>
+<li><a class="reference internal" href="#svg-extension-module-dojox-gfx-svgext" id="id46">SVG extension (module: dojox/gfx/svgext)</a></li>
+<li><a class="reference internal" href="#svg-filters" id="id47">SVG Filters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#utilities" id="id48">Utilities</a><ul>
+<li><a class="reference internal" href="#move-js" id="id49">move.js</a></li>
+<li><a class="reference internal" href="#utils-js" id="id50">utils.js</a></li>
+<li><a class="reference internal" href="#decompose-js" id="id51">decompose.js</a></li>
+<li><a class="reference internal" href="#arc-js" id="id52">arc.js</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#considerations-and-caveats" id="id53">Considerations and Caveats</a></li>
+<li><a class="reference internal" href="#doctype" id="id54">DOCTYPE</a></li>
+<li><a class="reference internal" href="#demos" id="id55">Demos</a></li>
+<li><a class="reference internal" href="#tests" id="id56">Tests</a></li>
+<li><a class="reference internal" href="#todo" id="id57">TODO</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id9">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>dojox.gfx (GFX) is a cross-platform vector graphics API. It loosely follows SVG as the underlying model. GFX helps to isolate your application from the many native vector graphics implementation differences across all modern Browsers. It does this by detecting the best graphics engine implementation for the Browser that the application is running on, and providing api&#8217;s that are the same across the various implementations. By using the GFX api&#8217;s, your application can use a set of api&#8217;s that don&#8217;t lock you into any one particular browser (or plugin&#8217;s) implementation of vector graphics.</p>
+<div class="section" id="renderer-options">
+<h3><a class="toc-backref" href="#id10">Renderer Options</a><a class="headerlink" href="#renderer-options" title="Permalink to this headline">¶</a></h3>
+<p>As of Dojo 1.8, the following native vector graphics engine adaptations are implemented:</p>
+<ul class="simple">
+<li>SVG (Firefox 1.5-3.0, Safari(Webkit) 3+, Opera 9+, Chrome 1.0+, iPhone Safari 2.1+</li>
+<li>VML (IE 6-7-8)</li>
+<li>Silverlight (wherever it is supported by Microsoft)</li>
+<li>Canvas (Firefox 3.0+, Safari 3.0+ including iOS Safari 1.0+), Opera 9.0+, Chrome, IE9+</li>
+</ul>
+<p>Development of a new experimental renderer which uses <a class="reference external" href="http://code.google.com/p/svgweb/">SVGWeb</a> is also <a class="reference external" href="http://trac.dojotoolkit.org/ticket/9948">underway</a>.</p>
+<p>Other renderer adaptations could be implemented as well underneath these api&#8217;s. For example, a Flash player implementation can be built that plugs in under the GFX api&#8217;s (perhaps using dojox.flash as it&#8217;s bridge interface). If you&#8217;re interested in contributing other implementations, please let us know.</p>
+<p>Note that SVG &amp; VML are &#8220;live&#8221; DOM scene graphs; whereas Canvas is an immediate mode procedural API. When Canvas is used under gfx, you gain the benefits that come with having a live scene graph (plus you can still drop down and access pixel data from the Canvas if you need to). These benefits include being able to move groups of objects around a picture and responding to events on Shapes.</p>
+</div>
+<div class="section" id="core-concepts">
+<h3><a class="toc-backref" href="#id11">Core Concepts</a><a class="headerlink" href="#core-concepts" title="Permalink to this headline">¶</a></h3>
+<p>On a conceptual level dojox.gfx has a simple declarative model.</p>
+<p>Every visual presentation created with Dojo GFX begins by creating a <strong>Surface</strong> object which will serve as the visual rectangular container for shapes.  Because Surface contains the shapes that will be drawn, it also has in common the capabilities of <strong>Group</strong> nodes (see below).</p>
+<p><strong>IMPORTANT:</strong> Under the covers, Surface objects are associated with a particular rendering implementation that&#8217;s in use in the current environment to perform all the graphics operations.  Some kinds of graphics renderer implementations require additional time for them to be initialized, and they may not be immediately ready after they are created.  For this reason, Surface provides an important callback registration function that must ALWAYS be used for registering all your graphics manipulation code, <strong>whenLoaded(your callback function here)</strong>.  When a Surface implementation is ready to allow drawing on its surface (asynchronously), it will execute the functions registered via whenLoaded().  Think of this working similar to dojo.ready(), but instead of the Document being initialized asynchronously, it&#8217;s the Surface object in this case.  There are several interesting characteristics of Surface objects, including:</p>
+<ul class="simple">
+<li>A web page can have several surfaces defined.</li>
+<li>Each surface has its own local coordinate system:<ul>
+<li>(0, 0) point is in the left-top corner, where the X axis is horizontal pointing right, and the Y axis is vertical pointing down.</li>
+<li>Positive direction of rotation is defined as clockwise (CW).</li>
+</ul>
+</li>
+<li>All shapes are clipped on the surface boundaries.</li>
+<li>By default the background of a surface is transparent.</li>
+</ul>
+<p>In order to draw on a <strong>Surface</strong>, you&#8217;ll need to create <strong>Shape</strong> objects and attach the shapes to a <strong>Surface</strong>, at which time they will be rendered.  This style of graphics api is known as a &#8220;retained mode&#8221; graphics system.  Shapes that you&#8217;ve attached into a surface create a graph of objects forming the scene to be rendered.  You can manipulate the shapes in the scene graph at any time later, in addition to being notified when a user interacts with the shapes in the scene via Events.  <strong>Shape</strong> objects encapsulate a simple description of geometry and stylistic properties of a given shape, and there are several predefined shape types supported by dojox.gfx to get you started drawing quickly:</p>
+<ul class="simple">
+<li>Rectangle (optionally with rounded corners)</li>
+<li>Circle</li>
+<li>Ellipse</li>
+<li>Line</li>
+<li>Polyline/polygon</li>
+<li>Path (the most versatile shape) Path implements the full SVG path language.</li>
+<li>Image</li>
+<li>Text</li>
+<li>TextPath (experimental)</li>
+</ul>
+<p>Shapes support two types of properties:</p>
+<blockquote>
+<div><p><em>Geometric</em> properties:</p>
+<ul class="simple">
+<li>Shape description (shape-specific).</li>
+<li>Linear transformation specified by 3 x 3 2D matrix.</li>
+<li>Font (only for text shapes).</li>
+</ul>
+<p><em>Visual</em> properties (not supported by the Image shape):</p>
+<ul class="simple">
+<li>Stroke (outline of a shape).</li>
+<li>Fill (interior of a shape).</li>
+</ul>
+</div></blockquote>
+<p>Shapes are stacked from bottom to top in the order they are added. This z-order can be changed dynamically after a shape has been added using functions on Shape such as moveToFront().</p>
+<p>In addition, all the basic graphics primitives required for 2D graphics are provided, including:</p>
+<ul class="simple">
+<li>2D coordinates</li>
+<li>2D linear transformation matrices</li>
+<li>Colors</li>
+</ul>
+<p>Note that Dojo GFX operates as a high-level &#8220;retained mode&#8221; graphics system, even when running on top of lower-level rendering implementations that may not operate in retained mode, such as Canvas, which is an immediate mode graphics api.  This allows scenes to be manipulated and for your application code to be easily notified of user interactions via events in the same way as when working with retained mode graphics implementations (although at the cost of having to keep the scene graph objects around).</p>
+</div>
+<div class="section" id="groups">
+<h3><a class="toc-backref" href="#id12">Groups</a><a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h3>
+<p>Gfx also has the concept of a <strong>Group</strong>, which is a pseudo-shape. Groups combine other shapes (which can include other groups), and can be used to apply transformation to a group.</p>
+<p>All group members share a single z-order, but can be re-arranged within a group.
+In order to draw a picture a programmer constructs a pseudo-DOM from a surface object, shapes, and groups, sets appropriate attributes, and a picture is drawn automatically by a browser. Modifications of shapes change picture automatically.</p>
+</div>
+<div class="section" id="conventions">
+<h3><a class="toc-backref" href="#id13">Conventions</a><a class="headerlink" href="#conventions" title="Permalink to this headline">¶</a></h3>
+<p>The following conventions are used:</p>
+<p>While a <strong>Path</strong> is the most universal geometric shape which can emulate almost all other shapes (exceptions: Image, and Text shapes), all frequently-used shapes are provided as a convenience: Rectangle (with optional round corners), Circle, Ellipse, Line, Polyline/Polygon.
+All shape description properties are defined using a duck-typing technique, and incomplete shape description definitions are supported. All missing members will be taken from the corresponding default shape definition listed in common.js or from the current shape description object.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span class="nx">rect</span><span class="p">.</span><span class="nx">setShape</span><span class="p">({</span><span class="nx">width</span><span class="o">:</span> <span class="mi">200</span><span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">rect.setShape({width: 200})</textarea></div><p>In the above example, all missing members will be taken from dojox.gfx.defaultRect object making it equivalent to:</p>
+<div class="highlight"><pre><span class="nx">rect</span><span class="p">.</span><span class="nx">setShape</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">200</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span> <span class="nx">r</span><span class="o">:</span> <span class="mi">0</span><span class="p">}).</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">rect.setShape({x: 0, y: 0, width: 200, height: 100, r: 0}).</textarea></div><p>All shape description objects and visual property objects have a member called &#8220;type&#8221;, which uniquely identifies a property type. This is a provision for a serialization.</p>
+<p>All methods without an apparent return type return their object itself. It is used for chaining multiple operations.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span class="nx">surface</span><span class="p">.</span><span class="nx">createRect</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">50</span><span class="p">}).</span><span class="nx">setFill</span><span class="p">(</span><span class="s2">&quot;red&quot;</span><span class="p">).</span><span class="nx">setStroke</span><span class="p">(</span><span class="s2">&quot;blue&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">surface.createRect({x: 100, y: 50}).setFill(&quot;red&quot;).setStroke(&quot;blue&quot;);</textarea></div></div>
+</div>
+<div class="section" id="shape-properties-colors-strokes-fills-fonts">
+<h2><a class="toc-backref" href="#id14">Shape Properties: Colors, Strokes, Fills &amp; Fonts</a><a class="headerlink" href="#shape-properties-colors-strokes-fills-fonts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="color">
+<h3><a class="toc-backref" href="#id15">Color</a><a class="headerlink" href="#color" title="Permalink to this headline">¶</a></h3>
+<p>Anywhere color is accepted following objects can be used to define it:</p>
+<ul class="simple">
+<li>A valid color name, like: &#8220;white&#8221;, &#8220;black&#8221;, &#8220;red&#8221;, &#8220;green&#8221;, &#8220;lime&#8221;, &#8220;blue&#8221;, &#8220;navy&#8221;, &#8220;gray&#8221;, &#8220;silver&#8221;.
+If you want to support all CSS3 color names, don&#8217;t forget to require dojo.colors module, which provides all necessary CSS3 compatibility.</li>
+<li>A valid CSS color code, e.g., &#8220;#FF0000&#8221; or &#8220;#f00&#8221;.</li>
+<li>An array of RGB or RGBA values, e.g, [255, 0, 0] or [255, 0, 0, 1.0].</li>
+<li>A valid dojo.Color object. Internally all other color definitions are converted to this object.</li>
+</ul>
+</div>
+<div class="section" id="stroke-property">
+<h3><a class="toc-backref" href="#id16">Stroke property</a><a class="headerlink" href="#stroke-property" title="Permalink to this headline">¶</a></h3>
+<p>A stroke property is an object that defines how to draw an outline of a shape. It is not supported by an image and a group shapes. Following properties are recognized:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="28%" />
+<col width="54%" />
+<col width="7%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Attribute</strong></td>
+<td><strong>Expected Value</strong></td>
+<td><strong>Description</strong></td>
+<td><strong>Since</strong></td>
+</tr>
+<tr class="row-even"><td>color</td>
+<td>SVG color value (string)</td>
+<td>Defines a color of an outline. Default: &#8220;black&#8221;.</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>style</td>
+<td>&#8220;Solid&#8221;
+&#8220;ShortDash&#8221;
+&#8220;ShortDot&#8221;
+&#8220;ShortDashDot&#8221;
+&#8220;ShortDashDotDot&#8221;
+&#8220;Dot&#8221;
+&#8220;Dash&#8221;
+&#8220;LongDash&#8221;
+&#8220;DashDot&#8221;
+&#8220;LongDashDot&#8221;
+&#8220;LongDashDotDot&#8221;
+&#8220;none&#8221;</td>
+<td>Defines a dash pattern.
+These values have been modeled after VML&#8217;s dashStyle parameter,
+and behave similarly (dash pattern is specified in terms of line width).
+&#8220;none&#8221; is the same as &#8220;Solid&#8221;</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>width</td>
+<td>positive number</td>
+<td>Defines a width of a stroke in pixels. Default: 1</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>cap</td>
+<td>&#8220;butt&#8221;
+&#8220;round&#8221;
+&#8220;square&#8221;</td>
+<td>Defines a shape of opening and closing of a line.
+see SVG 1.1 &#8216;stroke-linecap&#8217; definition for details.
+Default: &#8220;butt&#8221;</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>join</td>
+<td>&#8220;round&#8221;
+&#8220;bevel&#8221;
+positive number</td>
+<td>Defines a shape of joints.
+see SVG 1.1 &#8216;stroke-linejoin&#8217; definition and SVG 1.1 &#8216;stroke-miterlimit&#8217;
+When number, a &#8220;miter&#8221; style is used with the number defining a miter limit
+Default: 4</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<p>By default all shapes are created with &#8220;null&#8221; stroke meaning &#8220;no stroke is performed&#8221;.</p>
+<p>Stroke can be defined by specifying a color as a string:</p>
+<div class="highlight"><pre><span class="nx">shape</span><span class="p">.</span><span class="nx">setStroke</span><span class="p">(</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">shape.setStroke(&quot;black&quot;)</textarea></div><p>is equivalent to</p>
+<div class="highlight"><pre><span class="nx">shape</span><span class="p">.</span><span class="nx">setStroke</span><span class="p">({</span><span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;black&quot;</span><span class="p">}).</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">shape.setStroke({color: &quot;black&quot;}).</textarea></div><p>Implementation note: From 1.9, Canvas supports the line style property using either the new HTML5 setLineDash() method if the browser implements it, or via a gfx custom implementation. In the latter case, the join and cap properties are ignored.</p>
+</div>
+<div class="section" id="fill-property">
+<h3><a class="toc-backref" href="#id17">Fill property</a><a class="headerlink" href="#fill-property" title="Permalink to this headline">¶</a></h3>
+<p>A fill property is an object that defines how to fill a shape. It is not supported by an image and a group shapes.</p>
+<p>Four types of fills can be used:</p>
+<dl class="docutils">
+<dt>Solid color fill</dt>
+<dd>A single color has been specified as a fill property.</dd>
+<dt>Linear gradient</dt>
+<dd>Defines a smooth transition between a set of colors (so-called &#8220;stops&#8221;) on a line. Following properties are recognized:</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="28%" />
+<col width="54%" />
+<col width="7%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Attribute</strong></td>
+<td><strong>Expected Value</strong></td>
+<td><strong>Description</strong></td>
+<td><strong>Since</strong></td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>&#8220;linear&#8221;</td>
+<td>Always &#8220;linear&#8221;</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>x1</td>
+<td>number</td>
+<td>Define x start point of linear gradient. Defaults: 0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>y1</td>
+<td>number</td>
+<td>Define y start point of linear gradient. Defaults: 0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>x2</td>
+<td>number</td>
+<td>Define x end point of linear gradient. Defaults: 100</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>y2</td>
+<td>number</td>
+<td>Define y end point of linear gradient. Defaults: 100</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>colors</td>
+<td>array[Object]</td>
+<td>Defines an array of stop objects.  See stop object properties below.
+Default: [{offset: 0, color: &#8220;black&#8221;}, {offset: 1, color: &#8220;white&#8221;}]</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<p>These are the properties of Stop objects (for LinearGradient.colors property array entries)</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="28%" />
+<col width="54%" />
+<col width="7%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Attribute</strong></td>
+<td><strong>Expected Value</strong></td>
+<td><strong>Description</strong></td>
+<td><strong>Since</strong></td>
+</tr>
+<tr class="row-even"><td>offset</td>
+<td>number [0..1]</td>
+<td>A number from 0 to 1 which defines a position of color on our line.
+0 corresponds to x1, y1 point
+1 corresponds to x2, y2 point
+0.5 corresponds to midpoint</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>color</td>
+<td>string (SVG color value)</td>
+<td>A color for this stop.</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Radial gradient</dt>
+<dd>Defines a smooth transition between stops on a circle. The following properties are recognized:</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="28%" />
+<col width="54%" />
+<col width="7%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Attribute</strong></td>
+<td><strong>Expected Value</strong></td>
+<td><strong>Description</strong></td>
+<td><strong>Since</strong></td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>&#8220;radial&#8221;</td>
+<td>Always &#8220;radial&#8221;</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>cx</td>
+<td>number</td>
+<td>Define x of center point. Defaults: 0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>cy</td>
+<td>number</td>
+<td>Define y of center point. Defaults: 0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>r</td>
+<td>positive number</td>
+<td>Defines a radius of a radial gradient.</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>colors</td>
+<td>array[Object]</td>
+<td>Defines an array of stop objects.  See stop object properties above.
+Default: [{offset: 0, color: &#8220;black&#8221;}, {offset: 1, color: &#8220;white&#8221;}].
+offset of 0 corresponds to center of the circle.
+offset of 1 corresponds to border of the circle.</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Pattern</dt>
+<dd>Defines an infinite tiling of an image. The following properties are recognized:</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="28%" />
+<col width="54%" />
+<col width="7%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Attribute</strong></td>
+<td><strong>Expected Value</strong></td>
+<td><strong>Description</strong></td>
+<td><strong>Since</strong></td>
+</tr>
+<tr class="row-even"><td>type</td>
+<td>&#8220;pattern&#8221;</td>
+<td>Always &#8220;pattern&#8221;</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>x</td>
+<td>number</td>
+<td>Define x of offset of a reference rectangle for an image. Defaults: 0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>y</td>
+<td>number</td>
+<td>Define y of offset of a reference rectangle for an image. Defaults: 0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>width</td>
+<td>positive number</td>
+<td>Defines width of the reference rectangle that the image will be scaled to.
+Defaults: 0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>height</td>
+<td>positive number</td>
+<td>Defines height of the reference rectangle that the image will be scaled to.
+Defaults: 0</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>src</td>
+<td>string (url)</td>
+<td>Defines a URL of the image to be tiled.</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<p>By default all shapes are created with &#8220;null&#8221; fill meaning &#8220;no fill is performed&#8221;.
+Complex shapes with self intersections (e.g., polygons), or disjoint parts (e.g. paths) are filled using the even-odd rule.</p>
+<div class="section" id="implementation-details">
+<h4>Implementation details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h4>
+<p>The VML renderer has following restrictions:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Linear gradient</dt>
+<dd><p class="first">Should start and stop on a border of a shape.</p>
+<p class="last">All other line definitions will be visually incompatible with the SVG implementation of the linear gradient.</p>
+</dd>
+<dt>Radial gradient</dt>
+<dd><p class="first">Repeats the shape of an object.</p>
+<p class="last">It means that the only way to define a compatible radial gradient for SVG and VML renderers is to define it from a center of a circle shape.</p>
+</dd>
+<dt>Transparency (the alpha channel)</dt>
+<dd>Is not supported for gradient fills.</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>SVG (Firefox 1.5-2.0)</dt>
+<dd>Doesn&#8217;t support the pattern fill.</dd>
+<dt>Canvas</dt>
+<dd>Doesn&#8217;t support the even-odd rule.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="font-property">
+<h3><a class="toc-backref" href="#id18">Font property</a><a class="headerlink" href="#font-property" title="Permalink to this headline">¶</a></h3>
+<p>Text shapes (Text and TextPath) require a font in order to be rendered. A font description follows familiar CSS conventions.
+The following properties of Font are recognized:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="28%" />
+<col width="54%" />
+<col width="7%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>Attribute</strong></td>
+<td><strong>Expected Value</strong></td>
+<td><strong>Description</strong></td>
+<td><strong>Since</strong></td>
+</tr>
+<tr class="row-even"><td>style</td>
+<td>&#8220;normal&#8221;,&#8221;italic&#8221;,&#8221;oblique&#8221;</td>
+<td>Same as the CSS font-style property.   Default: &#8220;normal&#8221;</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>variant</td>
+<td>&#8220;normal&#8221;,&#8221;small-caps&#8221;</td>
+<td>Same as the CSS font-variant property.   Default: &#8220;normal&#8221;</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>weight</td>
+<td>&#8220;normal&#8221;,&#8221;bold&#8221;,&#8221;bolder&#8221;,&#8221;lighter&#8221;,
+100,200,300,400,500,600,700,800,900</td>
+<td>Same as the CSS font-weight property.   Default: &#8220;normal&#8221;</td>
+<td>1.0</td>
+</tr>
+<tr class="row-odd"><td>size</td>
+<td>css font size value</td>
+<td>A numeric CSS length constant with a unit abbreviation. Default: &#8220;10pt&#8221;</td>
+<td>1.0</td>
+</tr>
+<tr class="row-even"><td>family</td>
+<td>css font family value</td>
+<td>Same as the CSS font-family property.   Default: &#8220;serif&#8221;</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<p>There is also a useful shortcut: you can specify a font using a string similar to the CSS font property.</p>
+<div class="section" id="implementation-notes">
+<h4>Implementation notes<a class="headerlink" href="#implementation-notes" title="Permalink to this headline">¶</a></h4>
+<dl class="docutils">
+<dt>IE7</dt>
+<dd><p class="first">Broke many VML features.</p>
+<p>For example, the family property doesn&#8217;t work in IE7 at the moment but does work in IE6.</p>
+<p class="last">IE7 uses Arial always. Unfortunately there is no workaround for that.</p>
+</dd>
+<dt>Silverlight has the following restrictions:</dt>
+<dd><dl class="first docutils">
+<dt>style</dt>
+<dd>Only &#8220;normal&#8221; and &#8220;italic&#8221; are supported, all other values are interpreted as &#8220;normal&#8221;.</dd>
+<dt>variant</dt>
+<dd>Ignored</dd>
+<dt>weight</dt>
+<dd>&#8220;normal&#8221; is implemented as 400, &#8220;bold&#8221; is 700.</dd>
+<dt>size</dt>
+<dd>fully supported.</dd>
+<dt>family</dt>
+<dd><p class="first">&#8220;serif&#8221; and &#8220;times&#8221; are substituted by &#8220;Times New Roman&#8221;,</p>
+<p>&#8220;sans-serif&#8221; and &#8220;helvetica&#8221; are substituted by &#8220;Arial&#8221;,</p>
+<p class="last">&#8220;monotone&#8221; and &#8220;courier&#8221; are substituted by &#8220;Courier New&#8221;,</p>
+</dd>
+</dl>
+<p class="last">The rest is passed unchanged and will be interpreted by the underlying Silverlight renderer.</p>
+</dd>
+</dl>
+<p>By default all shapes are created with &#8220;null&#8221; font meaning &#8220;the default&#8221;.</p>
+</div>
+</div>
+</div>
+<div class="section" id="coordinates-and-transformations">
+<h2><a class="toc-backref" href="#id19">Coordinates and Transformations</a><a class="headerlink" href="#coordinates-and-transformations" title="Permalink to this headline">¶</a></h2>
+<p>Linear transformations are a very important part of any graphics library. We deal with 2D graphics, and we operate with 3 by 3 matrices:</p>
+<div class="highlight-python"><div class="highlight"><pre>xx xy dx
+yx yy dy
+0  0  1
+</pre></div>
+</div>
+<p>Because the third row is always constant we use an abbreviated way to write it: {xx: 1, xy: 0, yx: 0, yy: 1, dx: 0, dy: 0} - this is an identity matrix. The same simplification goes for coordinates:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">x</span>
+<span class="n">y</span>
+<span class="mi">1</span>
+</pre></div>
+</div>
+<p>Because the third element is always 1 we &quot;add&quot; it virtually: {x: 12, y: 33}. The result of application of a matrix to a vector is predictable:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">xx</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">xy</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dx</span>
+<span class="n">yx</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">yy</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dy</span>
+</pre></div>
+</div>
+<p>(The dummy third &quot;coordinate&quot; is skipped in the above example).</p>
+<p>In order to understand transformations you need to be familiar with fundamentals of matrices (matrix multiplication, multiplication of a vector by a matrix, order of multiplications). dojox.gfx uses a mnemonic way to describe a matrix: xx scales an X component of a coordinate, yy scales a Y component, xy, and yx affect both components, dx moves an X component, and dy moves a Y component.</p>
+<div class="section" id="simple-examples">
+<h3><a class="toc-backref" href="#id20">Simple examples</a><a class="headerlink" href="#simple-examples" title="Permalink to this headline">¶</a></h3>
+<p>Stretch the X dimension by 2:</p>
+<div class="highlight"><pre><span class="p">{</span><span class="nx">xx</span><span class="o">:</span> <span class="mi">2</span><span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{xx: 2}</textarea></div><p>Stretch the Y dimension by 0.5 (reduces by 2):</p>
+<div class="highlight"><pre><span class="p">{</span><span class="nx">yy</span><span class="o">:</span> <span class="mf">0.5</span><span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{yy: 0.5}</textarea></div><p>Shift an X coordinate by 5, a Y coordinate by 10:</p>
+<div class="highlight"><pre><span class="p">{</span><span class="nx">dx</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">dy</span><span class="o">:</span> <span class="mi">10</span><span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{dx: 5, dy: 10}</textarea></div></div>
+<div class="section" id="more-complex-examples">
+<h3><a class="toc-backref" href="#id21">More complex examples</a><a class="headerlink" href="#more-complex-examples" title="Permalink to this headline">¶</a></h3>
+<p>Rotate everything by 30 degrees clockwise (CW) around point (0, 0):</p>
+<div class="highlight"><pre><span class="p">{</span><span class="nx">xx</span><span class="o">:</span> <span class="mf">0.866</span><span class="p">,</span> <span class="nx">xy</span><span class="o">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nx">yx</span><span class="o">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="nx">yy</span><span class="o">:</span> <span class="mf">0.866</span><span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{xx: 0.866, xy: 0.5, yx: -0.5, yy: 0.866}</textarea></div><p>Rotate everything by 90 degrees CW around (0, 0), and moves things right by 100:</p>
+<div class="highlight"><pre><span class="p">{</span><span class="nx">xx</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">xy</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">yx</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nx">yy</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">dx</span><span class="o">:</span> <span class="mi">100</span><span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{xx: 0, xy: 1, yx: -1, yy: 0, dx: 100}</textarea></div><p>Don't worry, in most cases you don't need to calculate all members of a transformation matrix directly. As you can see not all members of matrix should be specified - all skipped members going to be copied from the identity matrix. There is a shortcut for scaling - if a number N is used instead of a matrix, it is assumed that it represents a uniform scaling matrix {xx: N, yy: N}.</p>
+<p>The way to apply a matrix to a coordinate:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">o</span> <span class="o">=</span> <span class="n">M</span> <span class="o">*</span> <span class="n">i</span>
+</pre></div>
+</div>
+<p>Where, i is an input vector (e.g., {x: 1, y: 2}), M is a transformation matrix, o is a resulting vector, and * denotes a multiplication operation.</p>
+</div>
+<div class="section" id="combining-transformation-matrices">
+<h3><a class="toc-backref" href="#id22">Combining Transformation Matrices</a><a class="headerlink" href="#combining-transformation-matrices" title="Permalink to this headline">¶</a></h3>
+<p>Transformations can be combined together as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">A</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">C</span> <span class="o">*</span> <span class="n">p</span> <span class="o">==</span> <span class="p">(</span><span class="n">A</span> <span class="o">*</span> <span class="n">B</span><span class="p">)</span> <span class="o">*</span> <span class="n">C</span> <span class="o">*</span> <span class="n">p</span> <span class="o">==</span> <span class="n">A</span> <span class="o">*</span> <span class="p">(</span><span class="n">B</span> <span class="o">*</span> <span class="n">C</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span> <span class="o">==</span> <span class="p">(</span><span class="n">A</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="n">C</span><span class="p">)</span> <span class="o">*</span> <span class="n">p</span> <span class="o">==</span> <span class="n">A</span> <span class="o">*</span> <span class="n">B</span> <span class="o">*</span> <span class="p">(</span><span class="n">C</span> <span class="o">*</span> <span class="n">p</span><span class="p">),</span> <span class="o">...</span>
+</pre></div>
+</div>
+<p>Where A, B, and C are transformation matrices, p is a coordinate vector, and * is a multiplication operation.
+The result of all these calculations is the same final coordinate.
+Effectively all transformations are always applied from right to left sequentially, and they can be combined producing a matrix,
+which defines a complex transformation.
+dojox.gfx.matrix defines Matrix2D class, as well as numerous helpers (Matrix2D is propagated to dojox.gfx namespace for convenience).
+Most important of them (all in dojox.gfx.matrix namespace) are listed below.
+In all signatures a, b, c, and e are numbers (coordinate components or scaling factors),
+p is a 2D coordinate, r is an angle in radians, d is an angle in degrees (positive value of an angle is CW), m is a matrix.</p>
+</div>
+<div class="section" id="transformation-constants">
+<h3><a class="toc-backref" href="#id23">Transformation Constants</a><a class="headerlink" href="#transformation-constants" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>identity</dt>
+<dd>A constant, which defines an identity matrix. This matrix doesn't change a picture at all.</dd>
+<dt>flipX</dt>
+<dd>A constant matrix, which changes a sign of all X coordinates. This matrix mirrors the picture around the Y axis.</dd>
+<dt>flipY</dt>
+<dd>A constant matrix, which changes a sign of all Y coordinates. This matrix mirrors the picture around the X axis.</dd>
+<dt>flipXY</dt>
+<dd><p class="first">A constant matrix, which changes a sign of all coordinates.</p>
+<p>This matrix rotates the picture by 180 degrees around (0, 0) point.</p>
+<p class="last">In other words, it mirrors all points around (0, 0).</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="matrix-creation">
+<h3><a class="toc-backref" href="#id24">Matrix Creation</a><a class="headerlink" href="#matrix-creation" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>translate(a, b), translate(p)</dt>
+<dd><p class="first">Translates its child shapes:</p>
+<p>by {dx: a, dy: b}</p>
+<p class="last">by {dx: p.x, dy: p.y}</p>
+</dd>
+<dt>scale(a, b), scale(a), scale(p)</dt>
+<dd><p class="first">Scales its child shapes:</p>
+<p>by {xx: a, yy: b}</p>
+<p>by {xx: a, yy: a}</p>
+<p class="last">by {xx: p.x, yy: p.y}</p>
+</dd>
+<dt>rotate(r), rotateg(d)</dt>
+<dd><p class="first">Rotates the child shapes around (0, 0):</p>
+<p>by <strong>r</strong> radians</p>
+<p class="last">by <strong>d</strong> degrees</p>
+</dd>
+<dt>skewX(r), skewXg(d)</dt>
+<dd><p class="first">Skews the child shapes around (0, 0) in the X dimension:</p>
+<p>by <strong>r</strong> radians</p>
+<p class="last">by <strong>d</strong> degrees</p>
+</dd>
+<dt>skewY(r), skewYg(d)</dt>
+<dd><p class="first">Skews a picture around (0, 0) in the Y dimension:</p>
+<p>by <strong>r</strong> radians</p>
+<p class="last">by <strong>d</strong> degrees</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="useful-matrix-operations">
+<h3><a class="toc-backref" href="#id25">Useful Matrix Operations</a><a class="headerlink" href="#useful-matrix-operations" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>invert(m)</dt>
+<dd>Inverts a matrix. This useful function calculates a matrix, which will do the opposite transformation to the m matrix effectively undoing it.
+For example, scale(2) produces a matrix to scale uniformly a picture by 2. The opposite matrix is going to be scale(0.5).
+Note that we can produce the same result with invert(scale(2)).
+While it seems complicated for such a simple case, frequently it is the only way to calculate an inverted matrix
+for complex transformation, especially when we don't know how it was produced initially.</dd>
+<dt>clone(m)</dt>
+<dd>Create a copy of the m matrix.</dd>
+<dt>multiplyPoint(m, a, b), multiplyPoint(m, p)</dt>
+<dd>Apply a transformation to a coordinate.</dd>
+<dt>multiplyRectangle(m, rect)</dt>
+<dd>Applies a matrix to a rectangle and returns the smallest rectangle enclosing the 4 transformed points.</dd>
+<dt>multiply(m1, m2, ...)</dt>
+<dd>Multiply all parameters to create a single matrix.
+This function is extremely useful and there is a shortcut for it:
+anywhere a matrix is expected, an array of matrices can be specified as well.</dd>
+</dl>
+<div class="section" id="examples">
+<h4>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h4>
+<p>Rotate everything 45 degrees CW around (0, 0) and scales everything by 2 after that:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="nx">rotateg</span><span class="p">(</span><span class="mi">45</span><span class="p">)]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">[2, rotateg(45)]</textarea></div><p>Scale all X coordinates by 2, and moves the result down by 10:</p>
+<div class="highlight"><pre><span class="p">[{</span><span class="nx">dy</span><span class="o">:</span> <span class="mi">10</span><span class="p">},</span> <span class="nx">scale</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">[{dy: 10}, scale(2, 1)]</textarea></div></div>
+<div class="section" id="more-complex-example">
+<h4>More complex example<a class="headerlink" href="#more-complex-example" title="Permalink to this headline">¶</a></h4>
+<p>Imagine you have a surface 500 by 500 pixels, and you want everything in it to be magnified around its center by 2, and rotated (around the center as well) by 30 degrees CW.</p>
+<p>It is easy:</p>
+<div class="highlight"><pre><span class="p">[</span><span class="nx">translate</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">250</span><span class="p">),</span> <span class="nx">rotateg</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">),</span> <span class="nx">scale</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="nx">translate</span><span class="p">(</span><span class="o">-</span><span class="mi">250</span><span class="p">,</span> <span class="o">-</span><span class="mi">250</span><span class="p">)]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">[translate(250, 250), rotateg(-30), scale(2), translate(-250, -250)]</textarea></div><p>All scaling, rotating, and skewing operations work around (0, 0) point.
+Let's begin by moving the center of our picture to (0, 0):</p>
+<div class="highlight"><pre><span class="nx">translate</span><span class="p">(</span><span class="o">-</span><span class="mi">250</span><span class="p">,</span> <span class="o">-</span><span class="mi">250</span><span class="p">).</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">translate(-250, -250).</textarea></div><p>Now we can scale it:</p>
+<div class="highlight"><pre><span class="nx">scale</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">scale(2)</textarea></div><p>Now we can rotate it:</p>
+<div class="highlight"><pre><span class="nx">rotateg</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">rotateg(-30)</textarea></div><p>Now let's move our center back:</p>
+<div class="highlight"><pre><span class="nx">translate</span><span class="p">(</span><span class="mi">250</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">translate(250, 250)</textarea></div><p>You can see that this kind of transformations follow a &quot;sandwich&quot; pattern, where the first and the last transformation
+move an immutable point to/from the origin of coordinates. These &quot;around the point&quot; operations are so important that
+there are several helpers for common transformations.</p>
+</div>
+</div>
+<div class="section" id="transformations-around-a-point">
+<h3><a class="toc-backref" href="#id26">Transformations Around a Point</a><a class="headerlink" href="#transformations-around-a-point" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>scaleAt(a, p), scaleAt(a, b, c), scaleAt(a, b, p), scaleAt(a, b, c, e)</dt>
+<dd><p class="first">scale(a) around (p.x, p.y)</p>
+<p>scale(a) around (b, c)</p>
+<p>scale(a, b) around (p.x, p.y)</p>
+<p class="last">scale(a, b) around (c, e)</p>
+</dd>
+<dt>rotateAt(r, p), rotateAt(r, a, b), rotategAt(d, p), rotategAt(d, a, b)</dt>
+<dd><p class="first">rotate(r) at (p.x, p.y)</p>
+<p>rotate(r) at (a, b)</p>
+<p>rotateg(d) at (p.x, p.y)</p>
+<p class="last">rotateg(d) at (a, b)</p>
+</dd>
+<dt>skewXAt(r, p), skewXAt(r, a, b), skewXgAt(d, p), skewXgAt(d, a, b), skewYAt(r, p), skewYAt(r, a, b), skewYgAt(d, p), skewYgAt(d, a, b)</dt>
+<dd><p class="first">skewX(r) at (p.x, p.y)</p>
+<p>skewX(r) at (a, b)</p>
+<p>skewXg(d) at (p.x, p.y)</p>
+<p>skewXg(d) at (a, b)</p>
+<p>skewY(r) at (p.x, p.y)</p>
+<p>skewY(r) at (a, b)</p>
+<p>skewYg(d) at (p.x, p.y)</p>
+<p class="last">skewYg(d) at (a, b)</p>
+</dd>
+<dt>normalize(m)</dt>
+<dd><p class="first">Returns a matrix in its canonical representation:</p>
+<p>normalize(2)</p>
+<p>normalize({dy: 5})</p>
+<p>normalize([scale(2), translate(100, 200)])</p>
+<p>The same effect can be achieved with creating a matrix directly:</p>
+<div class="highlight"><pre><span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">gfx</span><span class="p">.</span><span class="nx">Matrix2D</span><span class="p">(</span><span class="nx">m</span><span class="p">).</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">new dojox.gfx.Matrix2D(m).</textarea></div><p class="last">By default all shapes are created with &quot;null&quot; matrix meaning &quot;the identity transformation&quot;.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="common-shape-methods">
+<h2><a class="toc-backref" href="#id27">Common Shape Methods</a><a class="headerlink" href="#common-shape-methods" title="Permalink to this headline">¶</a></h2>
+<p>All shape objects support following methods:</p>
+<dl class="docutils">
+<dt>getShape()/setShape(shape)</dt>
+<dd>Accesses an underlying shape description object. A group shape ignores this property.</dd>
+<dt>getStroke()/setStroke(stroke)</dt>
+<dd>Accesses a stroke applied to a shape. Value of &quot;null&quot; means &quot;do not stroke this shape&quot;. Image and group shapes ignore this property.</dd>
+<dt>getFill()/setFill(fill)</dt>
+<dd>Accesses a fill applied to a shape. Value of &quot;null&quot; means &quot;do not fill this shape&quot;. Image and group shapes ignore this property.</dd>
+<dt>getTransform()/setTransform(matrix)</dt>
+<dd>Accesses a transformation matrix applied to a shape. Value of &quot;null&quot; means &quot;the identity transformation&quot;.</dd>
+<dt>applyRightTransform(matrix)/applyLeftTransform(matrix)</dt>
+<dd>Combines the existing matrix with new matrix. See &quot;Transformation matrix&quot; for details.</dd>
+<dt>applyTransform(matrix)</dt>
+<dd>An alias for applyRightTransform(matrix). It is defined for convenience.</dd>
+<dt>moveToFront()/moveToBack()</dt>
+<dd>Changes a z-order of a shape. It moves an object to the front or to the back respectively of its parent container (a surface or a group).</dd>
+<dt>removeShape()</dt>
+<dd>Removes a shape from its parent container.</dd>
+<dt>getParent()</dt>
+<dd>Accesses shape's parent container.</dd>
+<dt>getBoundingBox()</dt>
+<dd>Returns a bounding box of a shape. A text shape is a point-based object, so it doesn't define a bounding box.</dd>
+<dt>getTransformedBoundingBox()</dt>
+<dd>Returns four point array, which represents four corners of the bounding box transformed by all applicable transformations.</dd>
+<dt>destroy()</dt>
+<dd>Clean up the internal resources used by this shape. This method must be called when the shape is not used anymore and should be removed from the gfx <strong>scene</strong> (not just its container). Once this method has been invoked, the shape must not be accessed anymore. See the &quot;Destructors API&quot; section for more information.</dd>
+<dt>getUID()</dt>
+<dd>Returns the shape internal id.</dd>
+</dl>
+<div class="section" id="event-processing">
+<h3><a class="toc-backref" href="#id28">Event processing</a><a class="headerlink" href="#event-processing" title="Permalink to this headline">¶</a></h3>
+<p>From 1.9, shapes and surface objects implement an on() method that matches the new dojo/on API. The previous connect() and disconnect() methods are deprecated.</p>
+<dl class="docutils">
+<dt>on(type, listener)</dt>
+<dd>Connects a listener to the specified event type on this shape/surface, and returns a token that can be used to remove the event listener from the event (see dojo/on for more information). The type parameter can either be a string (the event name, like &quot;mousemove&quot;), or function (aka an extension event type like dojo/touch.press).</dd>
+<dt>connect(name, object, method)</dt>
+<dd>Deprecated. Connects an event processor to the event named &quot;name&quot; on this shape/surface, and returns a token for this connection.</dd>
+<dt>disconnect(token)</dt>
+<dd>Deprecated. Disconnects the event processing.</dd>
+</dl>
+<p>See the api documentation of dojo/on for more details.</p>
+<p>From 1.7, the gfx shape targeted by a mouse event can be retrieved from the event received in the handler via the event.gfxTarget property. For example:</p>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">group</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="err">“</span><span class="nx">click</span><span class="err">”</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span> <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">gfxTarget</span><span class="p">;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">setFill</span><span class="p">(</span><span class="err">“</span><span class="nx">red</span><span class="err">”</span><span class="p">);</span> <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">group.on(“click”, function(e){ var s = e.gfxTarget; s.setFill(“red”); });</textarea></div></div></blockquote>
+<div class="section" id="id2">
+<h4>Implementation notes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>Shape-specific methods are used to hide the complexity of event handling for non-HTML DOM based renderers (e.g., Silverlight).</p>
+<p>The 1.7 release introduces a new experimental canvas renderer with input event support. It is enabled by default when the gfxRenderer is set to ‘canvas’. In case you don’t want to use this new implementation but the legacy one, set the ‘canvasEvents’ property to false in the dojo config. For example:</p>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">dojoConfig</span><span class="o">:</span> <span class="p">{</span> <span class="nx">canvasEvents</span><span class="o">:</span><span class="kc">false</span><span class="p">,</span> <span class="nx">forceGfxRenderer</span><span class="o">:</span><span class="err">’</span><span class="nx">canvas</span><span class="err">’</span> <span class="p">}</span> <span class="nx">will</span> <span class="nx">select</span> <span class="nx">the</span> <span class="nx">legacy</span> <span class="nx">canvas</span> <span class="nx">renderer</span> <span class="nx">implementation</span><span class="p">.</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojoConfig: { canvasEvents:false, forceGfxRenderer:’canvas’ } will select the legacy canvas renderer implementation.</textarea></div></div></blockquote>
+<p>The new canvas renderer supports the following events: oncontextmenu, onclick, ondblclick, onmouseenter, onmouseleave, onmouseout, onmousedown, touchstart, mouseup, touchend, onmouseover, onmousemove, touchmove, keydown, keyup.</p>
+<p>The implementation has the following limitations:</p>
+<ul class="simple">
+<li>because the canvas API does not have a DOM representation (like SVG), shape.getEventSource() returns the surface rawNode.</li>
+<li>events do not bubble beyond the surface node.</li>
+<li>the current hit testing implementation may have a performance cost depending on the number of shapes in the scene.</li>
+</ul>
+<p>Silverlight supports following events: onclick, onmouseenter, onmouseleave, onmousedown, onmouseup, onmousemove, onkeydown, onkeyup.
+If you want to target the broadest range of renderers, you are advised to restrict yourself to this list of events.</p>
+</div>
+</div>
+<div class="section" id="clipping">
+<h3><a class="toc-backref" href="#id29">Clipping</a><a class="headerlink" href="#clipping" title="Permalink to this headline">¶</a></h3>
+<p>The 1.8 release introduces clipping support at shape level. A clipping area defines the shape area that will be effectively visible. Everything that would be drawn outside of the clipping area will not be rendered. The possible clipping area types are rectangle, ellipse, polyline and path (see below for renderer-specific limitations).</p>
+<dl class="docutils">
+<dt>The clip parameter defines the clipping area geometry, and should be an object with the following properties:</dt>
+<dd><ul class="first last simple">
+<li>{x:Number, y:Number, width:Number, height:Number} for rectangular clip</li>
+<li>{cx:Number, cy:Number, rx:Number, ry:Number} for ellipse clip</li>
+<li>{points:Array} for polyline clip</li>
+<li>{d:String} for a path clip.</li>
+</ul>
+</dd>
+</dl>
+<p>The clip geometry coordinates are expressed in the coordinate system used to draw the shape.</p>
+<p>The following example shows how to clip a gfx image with all the possible clip geometry:</p>
+<p>The image not clipped:</p>
+<img alt="../_images/noclip.PNG" src="../_images/noclip.PNG" />
+<p>Clipped by a rectangle:</p>
+<div class="highlight"><pre><span class="nx">surface</span><span class="p">.</span><span class="nx">createImage</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span><span class="mi">96</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span><span class="mi">96</span><span class="p">,</span> <span class="nx">src</span><span class="o">:</span><span class="s2">&quot;html5.png&quot;</span><span class="p">}).</span><span class="nx">setClip</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span><span class="mi">120</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="mi">120</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span><span class="mi">50</span><span class="p">,</span><span class="nx">height</span><span class="o">:</span><span class="mi">50</span><span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">surface.createImage({x:100,y:100, width:96, height:96, src:&quot;html5.png&quot;}).setClip({x:120, y:120, width:50,height:50});</textarea></div><img alt="../_images/rectclip.PNG" src="../_images/rectclip.PNG" />
+<p>Clipped by an ellipse:</p>
+<div class="highlight"><pre><span class="nx">surface</span><span class="p">.</span><span class="nx">createImage</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span><span class="mi">96</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span><span class="mi">96</span><span class="p">,</span> <span class="nx">src</span><span class="o">:</span><span class="s2">&quot;html5.png&quot;</span><span class="p">}).</span><span class="nx">setClip</span><span class="p">({</span><span class="nx">cx</span><span class="o">:</span><span class="mi">148</span><span class="p">,</span> <span class="nx">cy</span><span class="o">:</span><span class="mi">148</span><span class="p">,</span> <span class="nx">rx</span><span class="o">:</span><span class="mi">20</span><span class="p">,</span> <span class="nx">ry</span><span class="o">:</span><span class="mi">50</span><span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">surface.createImage({x:100,y:100, width:96, height:96, src:&quot;html5.png&quot;}).setClip({cx:148, cy:148, rx:20, ry:50});</textarea></div><img alt="../_images/ellipseclip.PNG" src="../_images/ellipseclip.PNG" />
+<p>Clipped by a circle (using the ellipse geometry):</p>
+<div class="highlight"><pre><span class="nx">surface</span><span class="p">.</span><span class="nx">createImage</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span><span class="mi">96</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span><span class="mi">96</span><span class="p">,</span> <span class="nx">src</span><span class="o">:</span><span class="s2">&quot;html5.png&quot;</span><span class="p">}).</span><span class="nx">setClip</span><span class="p">({</span><span class="nx">cx</span><span class="o">:</span><span class="mi">148</span><span class="p">,</span> <span class="nx">cy</span><span class="o">:</span><span class="mi">148</span><span class="p">,</span> <span class="nx">rx</span><span class="o">:</span><span class="mi">30</span><span class="p">,</span> <span class="nx">ry</span><span class="o">:</span><span class="mi">30</span><span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">surface.createImage({x:100,y:100, width:96, height:96, src:&quot;html5.png&quot;}).setClip({cx:148, cy:148, rx:30, ry:30});</textarea></div><img alt="../_images/circleclip.PNG" src="../_images/circleclip.PNG" />
+<p>Clipped by a polyline:</p>
+<div class="highlight"><pre><span class="nx">surface</span><span class="p">.</span><span class="nx">createImage</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="mi">100</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span><span class="mi">96</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span><span class="mi">96</span><span class="p">,</span> <span class="nx">src</span><span class="o">:</span><span class="s2">&quot;html5.png&quot;</span><span class="p">}).</span><span class="nx">setClip</span><span class="p">({</span><span class="nx">points</span><span class="o">:</span><span class="p">[</span><span class="mi">150</span><span class="p">,</span><span class="mi">110</span><span class="p">,</span><span class="mi">180</span><span class="p">,</span><span class="mi">145</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">185</span><span class="p">,</span><span class="mi">150</span><span class="p">,</span><span class="mi">110</span><span class="p">]});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">surface.createImage({x:100,y:100, width:96, height:96, src:&quot;html5.png&quot;}).setClip({points:[150,110,180,145,120,185,150,110]});</textarea></div><img alt="../_images/plineclip.PNG" src="../_images/plineclip.PNG" />
+<p>Clipped by a path:</p>
+<div class="highlight"><pre><span class="nx">surface</span><span class="p">.</span><span class="nx">createImage</span><span class="p">({</span><span class="nx">src</span><span class="o">:</span><span class="nx">img</span><span class="p">,</span> <span class="nx">x</span><span class="o">:</span><span class="mi">300</span><span class="p">,</span><span class="nx">y</span><span class="o">:</span><span class="mi">350</span><span class="p">,</span><span class="nx">width</span><span class="o">:</span><span class="mi">200</span><span class="p">,</span><span class="nx">height</span><span class="o">:</span><span class="mi">200</span><span class="p">}).</span><span class="nx">setClip</span><span class="p">({</span><span class="nx">d</span><span class="o">:</span><span class="s2">&quot;M 110,105 C104,194 117,167 173,110.0000 z&quot;</span><span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">surface.createImage({src:img, x:300,y:350,width:200,height:200}).setClip({d:&quot;M 110,105 C104,194 117,167 173,110.0000 z&quot;});</textarea></div><img alt="../_images/pathclip.PNG" src="../_images/pathclip.PNG" />
+<div class="section" id="id3">
+<h4>Implementation details<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>vml only supports rectangle clipping, while the gfx silverlight renderer does not support path clipping geometry.</p>
+</div>
+</div>
+<div class="section" id="destructors-api">
+<h3><a class="toc-backref" href="#id30">Destructors API</a><a class="headerlink" href="#destructors-api" title="Permalink to this headline">¶</a></h3>
+<p>In 1.8, the Surface.destroy() api has been extended to the Shape hierarchy, allowing to clean up resources used by a shape when it is destroyed from the gfx scene. Note that it is different from the Shape.removeParent() method, which only removes the shape from its container. Such a shape can still be added to an another container later, and therefore is still considered part of the scene. The destroy() method, on its side, applies to shape that should not live in the gfx scene anymore.</p>
+<p>Note that Shape.destroy() does not remove the shape from its parent container, this operation must be performed explicitly before the destructor is called, or when clearing a Group passing a truthy value to the Group.clear() method which cause the children destructor to be called.</p>
+</div>
+<div class="section" id="helper-methods">
+<h3><a class="toc-backref" href="#id31">Helper Methods</a><a class="headerlink" href="#helper-methods" title="Permalink to this headline">¶</a></h3>
+<p>In general the described generic methods together with shape-specific methods are enough to do everything with your shape,
+but for convenience shape defines a helper method:</p>
+<dl class="docutils">
+<dt>_getRealMatrix()</dt>
+<dd>Returns a combined matrix for this shape applying all parent matrices.
+The resulting matrix can be used to transform from &quot;shape&quot; coordinates to &quot;surface&quot; coordinates and back helping to process
+mouse events, or coordinating other objects outside of the surface.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="individual-graphics-objects">
+<h2><a class="toc-backref" href="#id32">Individual graphics objects</a><a class="headerlink" href="#individual-graphics-objects" title="Permalink to this headline">¶</a></h2>
+<p>This is a list of all important graphics objects and geometric shapes.</p>
+<div class="section" id="surface">
+<h3><a class="toc-backref" href="#id33">Surface</a><a class="headerlink" href="#surface" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>A surface is the main object, which represents a collection of shapes. No shapes can be drawn or created without a surface.
+The following functions can be used to create a surface object:</p>
+<dl class="docutils">
+<dt>dojox.gfx.createSurface(parentNode, width, height)</dt>
+<dd>Returns a newly created surface object.</dd>
+<dt>dojox.gfx.attachSurface(node)</dt>
+<dd>Returns a re-created surface object built from an existing node.
+The node argument is assumed to be created by createSurface() function (rawNode member).</dd>
+</dl>
+<p>A surface supports following methods:</p>
+<dl class="docutils">
+<dt>getDimensions()/setDimensions(width, height)</dt>
+<dd>Accesses sizes set on the surface.</dd>
+<dt>createShape(shape)</dt>
+<dd><p class="first">Creates a shape out of shape description object relying on the &quot;type&quot; member, returns a shape object.</p>
+<p class="last">Useful for deserialization of shapes from an external source.</p>
+</dd>
+<dt>createPath(path), createRect(rect), createCircle(circle), createEllipse(ellipse), createLine(line), createPolyline(polyline), createImage(image), createText(text), createTextPath(textpath)</dt>
+<dd><p class="first">Create a corresponding shape returning a shape object.</p>
+<p class="last">Note: the &quot;type&quot; member of a shape is implied and not required.</p>
+</dd>
+<dt>createGroup()</dt>
+<dd>Creates a Group object.</dd>
+<dt>add(shape)</dt>
+<dd>Adds a <strong>Shape</strong> to a <strong>Surface</strong> returning the surface itself. Used to move shapes between groups and a surface.</dd>
+<dt>remove(shape)</dt>
+<dd>Removes a shape from a surface returning the surface itself.
+The shape can be added later to the same surface or a group.</dd>
+<dt>clear()</dt>
+<dd>Removes all shapes from a surface returning the surface itself.</dd>
+<dt>getBoundingBox()</dt>
+<dd>Returns the content bounding box.</dd>
+<dt>on()</dt>
+<dd>See the discussion of this method in the Event processing section above.</dd>
+<dt>whenLoaded(callbackFunction)</dt>
+<dd>Executes the user-specified callbackFunction as soon as the Surface is ready for drawing.</dd>
+</dl>
+</div></blockquote>
+<p>Surface supports the following events:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>onLoaded</dt>
+<dd>This event is fired when a Surface is initialized and ready for use.</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="group">
+<h3><a class="toc-backref" href="#id34">Group</a><a class="headerlink" href="#group" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>A group is a pseudo-shape, which represents a collection of shapes.
+Transformations applied to a group applied to all shapes of that group.
+It is used to aggregate shapes constructing a more complex shape, or to manage sub-pictures.
+The other way to use a group is to aggregate an event processing.
+It is planned to implement setting a (default) visual parameters to group's children including fill, stroke, and font properties.
+A group combines features of a shape and a surface. It shares following methods with a shape:</p>
+<dl class="docutils">
+<dt>getBoundingBox()</dt>
+<dd>Returns the Group children bounding box</dd>
+<dt>getTransform()/setTransform(matrix)</dt>
+<dd>Accesses a transformation matrix applied to a group.</dd>
+<dt>applyRightTransform(matrix)/applyLeftTransform(matrix)</dt>
+<dd>Combines the existing matrix with new matrix.
+See &quot;Transformation matrix&quot; for details.</dd>
+<dt>applyTransform(matrix)</dt>
+<dd>Is an alias for applyRightTransform(matrix). This function is defined for convenience.</dd>
+<dt>moveToFront()/moveToBack()</dt>
+<dd>Changes a z-order of a group. It moves an object to the front or to the back respectively
+of its parent container (a surface or a group).</dd>
+<dt>removeShape()</dt>
+<dd>Removes a group from its parent container.</dd>
+<dt>getParent()</dt>
+<dd>Accesses group's parent container.</dd>
+<dt>on()</dt>
+<dd>Implement the event processing.</dd>
+</dl>
+<p>Group also shares the following methods with a Surface:</p>
+<dl class="docutils">
+<dt>createShape(shape)</dt>
+<dd><p class="first">Creates a shape out of shape description object relying on the &quot;type&quot; member, returns a shape object.</p>
+<p class="last">Useful for deserialization of shapes from an external source.</p>
+</dd>
+<dt>createPath(path), createRect(rect), createCircle(circle), createEllipse(ellipse), createLine(line), createPolyline(polyline), createImage(image), createText(text), createTextPath(textpath)</dt>
+<dd><p class="first">Create a corresponding shape returning a shape object.</p>
+<p class="last">Note: the &quot;type&quot; member of a shape is implied and not required.</p>
+</dd>
+<dt>createGroup()</dt>
+<dd>Creates a group object.</dd>
+<dt>add(shape)</dt>
+<dd>Adds a shape to a group returning the group itself. It is used to move shapes between groups and a surface.</dd>
+<dt>remove(shape)</dt>
+<dd>Removes a shape from a group returning the group itself. The shape can be added later to the same group or a surface.</dd>
+<dt>clear()</dt>
+<dd>Removes all shapes from a group returning the group itself.</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="rectangle">
+<h3><a class="toc-backref" href="#id35">Rectangle</a><a class="headerlink" href="#rectangle" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>A rectangle is a basic rectangular shape with optionally rounded corners.
+It can be created by the createRect() method of a surface or a group.
+The default shape description for rectangle is defined as the dojox.gfx.defaultRect object.
+Here is a list of all properties and their defaults:</p>
+<dl class="docutils">
+<dt>type</dt>
+<dd>is always &quot;rect&quot;.</dd>
+<dt>x, y</dt>
+<dd>Coordinates of a top-left corner in pixels. Defaults: 0, 0.</dd>
+<dt>width, height</dt>
+<dd>Dimensions in pixels. Defaults: 100, 100.</dd>
+<dt>r</dt>
+<dd>A radius of rounded corners. Default: 0 (no rounded corners).</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="circle">
+<h3><a class="toc-backref" href="#id36">Circle</a><a class="headerlink" href="#circle" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>A circle is a basic shape. It can be created by the createCircle() method of a surface or a group.
+The default shape description for circle is defined as the dojox.gfx.defaultCircle object.
+Here is a list of all properties and their defaults:</p>
+<dl class="docutils">
+<dt>type</dt>
+<dd>Is always &quot;circle&quot;</dd>
+<dt>cx, cy</dt>
+<dd>Coordinates of a center in pixels. Defaults: 0, 0</dd>
+<dt>r</dt>
+<dd>Is a radius in pixels. Default: 100</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="ellipse">
+<h3><a class="toc-backref" href="#id37">Ellipse</a><a class="headerlink" href="#ellipse" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>An Ellipse is a basic shape. It can be created by the createEllipse() method of a surface or a group.
+The default shape description for ellipse is defined as the dojox.gfx.defaultEllipse object.
+An ellipse can be used to emulate a circle.
+Here is a list of all properties and their defaults:</p>
+<dl class="docutils">
+<dt>type</dt>
+<dd>Always &quot;ellipse&quot;</dd>
+<dt>cx, cy</dt>
+<dd>Coordinates of a center in pixels. Defaults: 0, 0</dd>
+<dt>rx, ry</dt>
+<dd>Horizontal and vertical radii (respectively) in pixels. Defaults: 200, 100</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="line">
+<h3><a class="toc-backref" href="#id38">Line</a><a class="headerlink" href="#line" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>A Line is a basic shape that connects two points. It can be created by the createLine() method of a surface or a group.
+The default shape description for line is defined as the dojox.gfx.defaultLine object.
+Here is a list of all properties and their defaults:</p>
+<dl class="docutils">
+<dt>type</dt>
+<dd>Always &quot;line&quot;</dd>
+<dt>x1, y1</dt>
+<dd>Coordinates of a start point in pixels. Defaults: 0, 0</dd>
+<dt>x2, y2</dt>
+<dd>Coordinates of an end point in pixels. Defaults: 100, 100</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="polyline">
+<h3><a class="toc-backref" href="#id39">Polyline</a><a class="headerlink" href="#polyline" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>A Polyline is a basic shape, which can be used to represent polylines and polygons.
+It can be created by the createPolyline() method of a surface or a group.
+The default shape description for polyline is defined as the dojox.gfx.defaultPolyline object.
+Typically a polyline is an unfilled polygon. A polyline can be &quot;open&quot; and &quot;closed&quot;.
+The latter means that the first and the last points are the same.
+When filling open polylines, an edge connecting the first and the last points is assumed.
+Polylines/polygons can be defined as an array of points:</p>
+<div class="highlight"><pre><span class="nx">poly</span><span class="p">.</span><span class="nx">setShape</span><span class="p">([{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">100</span><span class="p">}])</span> <span class="nx">and</span> <span class="nx">poly</span><span class="p">.</span><span class="nx">setShape</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">poly.setShape([{x: 0, y: 0}, {x: 100, y: 100}]) and poly.setShape([0, 0, 100, 100])</textarea></div><p>are both equivalent to</p>
+<div class="highlight"><pre><span class="nx">poly</span><span class="p">.</span><span class="nx">setShape</span><span class="p">({</span><span class="nx">points</span><span class="o">:</span> <span class="p">[{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">100</span><span class="p">}]}).</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">poly.setShape({points: [{x: 0, y: 0}, {x: 100, y: 100}]}).</textarea></div><p>A polyline can be used to emulate a line.
+Here is a list of all properties and their defaults:</p>
+<dl class="docutils">
+<dt>type</dt>
+<dd>Always &quot;polyline&quot;.</dd>
+<dt>points</dt>
+<dd>An array of 2D coordinates in pixels. Default: [].</dd>
+</dl>
+</div></blockquote>
+</div>
+<div class="section" id="path">
+<h3><a class="toc-backref" href="#id40">Path</a><a class="headerlink" href="#path" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>A Path is the most versatile geometric shape, which can emulate all other geometric shapes.
+It can be created by the createPath() method of a surface or a group.</p>
+<p>The default shape description for path is defined as the dojox.gfx.defaultPath object.</p>
+<p>Here is a list of all properties and their defaults:</p>
+<dl class="docutils">
+<dt>type</dt>
+<dd>Always &quot;path&quot;.</dd>
+<dt>path</dt>
+<dd>A string , which represents a path encoded in the SVG path language. Default: &quot;&quot;.</dd>
+</dl>
+<p>A path can be open or closed. The latter means that the first and the last points are the same.</p>
+<p>When filling open paths, a straight line connecting the first and the last points is assumed.</p>
+<p>Path supports following methods for building path segments programmatically:</p>
+<dl class="docutils">
+<dt>moveTo(x, y)</dt>
+<dd>Starts new segment abandoning the previous segment, if any. It takes a coordinate as a parameter.</dd>
+<dt>lineTo(x, y)</dt>
+<dd>Draws a straight line from the last point to the argument (coordinate).</dd>
+<dt>hLineTo(x)</dt>
+<dd>Draws a straight horizontal line from the last point using the argument (a number) as X position.</dd>
+<dt>vLineTo(y)</dt>
+<dd>Draws a straight vertical line from the last point using the argument (a number) as Y position.</dd>
+<dt>curveTo(x1, y1, x2, y2, x, y)</dt>
+<dd>Draws a cubic Bézier curve from the last point using arguments (two control points, and a final coordinate).</dd>
+<dt>smoothCurveTo(x2, y2, x, y)</dt>
+<dd>Draws a cubic Bézier curve from the last point using arguments. The difference between this method and curveTo()
+is that it accepts only one control point, which serves as the second control point. The first control is assumed
+to be a reflection of the second control point of the previous curve command.</dd>
+<dt>qCurveTo(x1, y1, x, y)</dt>
+<dd>Draws a quadratic Bézier curve from the last point using arguments (a control point, and a final point).</dd>
+<dt>qSmoothCurveTo(x, y)</dt>
+<dd>Draws a quadratic Bézier curve from the last point using arguments. The difference between this method and qCurveTo()
+is that it uses the reflected control point of the previous curve command.</dd>
+<dt>arcTo(rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y)</dt>
+<dd>Draws an elliptic arc from the last point using arguments (please see the above link for details).</dd>
+<dt>closePath()</dt>
+<dd>Closes the segment.</dd>
+<dt>setAbsoluteMode(mode)</dt>
+<dd>Sets an absolute or relative mode for coordinates. In the absolute mode all coordinates are assumed to be literal.
+In the relative mode all coordinates are offsets from the last point.</dd>
+<dt>getAbsoluteMode()</dt>
+<dd>Returns true, if the current mode is absolute.</dd>
+<dt>getLastPosition()</dt>
+<dd>Returns the last point, if there is one.</dd>
+</dl>
+</div></blockquote>
+<div class="section" id="id4">
+<h4>Examples<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>All parameters can be repeated, if it makes sense.</p>
+<p>Example:</p>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">path</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">path.lineTo(1, 1, 2, 2, 3, 3)</textarea></div><p>is equivalent to</p>
+<div class="highlight"><pre><span class="nx">path</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span><span class="nx">lineTo</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">).</span><span class="nx">lineTo</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">).</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">path.lineTo(1, 1).lineTo(2, 2).lineTo(3, 3).</textarea></div></div></blockquote>
+<p>A pair of coordinates can be replaced by a single coordinate object.</p>
+<dl class="docutils">
+<dt>Example:</dt>
+<dd><div class="first"><div class="highlight"><pre><span class="nx">path</span><span class="p">.</span><span class="nx">curveTo</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">},</span> <span class="p">{</span><span class="nx">x</span><span class="o">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">1</span><span class="p">},</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div><div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">path.curveTo({x: 0.5, y: 0}, {x: 0.5, y: 1}, 1, 1)</textarea></div><p>is equivalent to</p>
+<div class="highlight"><pre><span class="nx">path</span><span class="p">.</span><span class="nx">curveTo</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">path.curveTo(0.5, 0, 0.5, 1, 1, 1).</textarea></div></dd>
+</dl>
+<p>All arrays are unrolled.</p>
+<dl class="docutils">
+<dt>Example:</dt>
+<dd><div class="first"><div class="highlight"><pre><span class="nx">path</span><span class="p">.</span><span class="nx">curveTo</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="p">[{</span><span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">1</span><span class="p">}])</span>
+</pre></div>
+</div><div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">path.curveTo([0.5, 0, [0.5, 1]], [{x: 1, y: 1}])</textarea></div><p>is equivalent to</p>
+<div class="highlight"><pre><span class="nx">path</span><span class="p">.</span><span class="nx">curveTo</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">).</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">path.curveTo(0.5, 0, 0.5, 1, 1, 1).</textarea></div></dd>
+</dl>
+<p>You can specify a well-formed path string as an argument to setShape() method of the path:</p>
+<blockquote>
+<div><div class="highlight"><pre><span class="nx">path</span><span class="p">.</span><span class="nx">setShape</span><span class="p">(</span><span class="s2">&quot;m 0,0 l 100, 100 e&quot;</span><span class="p">)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">path.setShape(&quot;m 0,0 l 100, 100 e&quot;)</textarea></div><p>is equivalent to</p>
+<div class="highlight"><pre><span class="nx">path</span><span class="p">.</span><span class="nx">setShape</span><span class="p">({</span><span class="nx">path</span><span class="o">:</span> <span class="s2">&quot;m 0,0 l 100, 100 e&quot;</span><span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">path.setShape({path: &quot;m 0,0 l 100, 100 e&quot;})</textarea></div></div></blockquote>
+</div>
+</div>
+<div class="section" id="image">
+<h3><a class="toc-backref" href="#id41">Image</a><a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>An Image is a shape that represents a resolution-independent color bitmap data.
+It can be created by the createImage() method of a Surface or a Group.</p>
+<p>The default shape description for image is defined as the dojox.gfx.defaultImage object.</p>
+<p>Here is a list of all properties and their defaults:</p>
+<dl class="docutils">
+<dt>type</dt>
+<dd>Always &quot;image&quot;.</dd>
+<dt>x, y</dt>
+<dd>Coordinates of a top-left corner in pixels. Defaults: 0, 0.</dd>
+<dt>width, height</dt>
+<dd>Dimensions in pixels. Defaults: 0, 0 - don't forget to set them to real values.</dd>
+<dt>src</dt>
+<dd>A URL of an image data pointing to a GIF, JPG, or PNG file. Default: &quot;&quot;.</dd>
+</dl>
+<p>Changing width and height parameters you can stretch/shrink an image anisotropically.</p>
+</div></blockquote>
+</div>
+<div class="section" id="text">
+<h3><a class="toc-backref" href="#id42">Text</a><a class="headerlink" href="#text" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Text is a shape that anchors a text string to a point. It can be created by the createText() method of a Surface or a Group.
+It implements these additional text-specific methods:</p>
+<dl class="docutils">
+<dt>setFont(font)</dt>
+<dd>Sets a font object.</dd>
+<dt>getFont()</dt>
+<dd>Returns the current font, or &quot;null&quot; to indicate that the default font is used.</dd>
+</dl>
+<p>The default shape description for text shape is defined as the dojox.gfx.defaultText object.
+Here is a list of all properties and their defaults:</p>
+<dl class="docutils">
+<dt>type</dt>
+<dd>Always &quot;text&quot;.</dd>
+<dt>x, y</dt>
+<dd>Coordinates of a text anchor. Defaults: 0, 0.</dd>
+<dt>text</dt>
+<dd>A string of characters you want to show aligned to the anchor position. Default: &quot;&quot;.</dd>
+<dt>align</dt>
+<dd><p class="first">An alignment of a text in regards to the anchor position:</p>
+<dl class="last docutils">
+<dt>&quot;start&quot;</dt>
+<dd>A text's baseline starts at the anchor. This is the default value of the align attribute.</dd>
+<dt>&quot;middle&quot;</dt>
+<dd>A text's baseline is centered on the anchor point.</dd>
+<dt>&quot;end&quot;</dt>
+<dd>A text's baseline ends at the anchor point.</dd>
+</dl>
+</dd>
+<dt>decoration</dt>
+<dd><p class="first">A hint on how to render optional elements of a text:</p>
+<dl class="last docutils">
+<dt>&quot;none&quot;</dt>
+<dd>Text is not decorated. This is the default value.</dd>
+<dt>&quot;underline&quot;</dt>
+<dd>Text is underlined.</dd>
+<dt>&quot;overline&quot;</dt>
+<dd>Text has a line above it.</dd>
+<dt>&quot;line-through&quot;</dt>
+<dd>Text has a line through the middle.</dd>
+</dl>
+</dd>
+<dt>rotated</dt>
+<dd><p class="first">A Boolean value, which indicates:</p>
+<dl class="last docutils">
+<dt>false</dt>
+<dd>All glyphs are unrotated. The is the default value.</dd>
+<dt>true</dt>
+<dd>All glyphs are rotated 90 degrees counter-clock-wise. This mode is useful for vertically arranged text.</dd>
+</dl>
+</dd>
+<dt>kerning</dt>
+<dd><p class="first">A Boolean value, which indicates:</p>
+<dl class="last docutils">
+<dt>true</dt>
+<dd>Kerning is on. This is the default value.</dd>
+<dt>false</dt>
+<dd>Kerning is off.</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<div class="section" id="id5">
+<h4>Implementation notes<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<p>Text properties are loosely based on properties of the SVG text element.</p>
+<dl class="docutils">
+<dt>IE7</dt>
+<dd><p class="first">Broke a lot of VML features.</p>
+<p>The following things work in IE6 but don't work in IE7 (and there is no workaround for them):</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>decoration</dt>
+<dd>Always &quot;none&quot;.</dd>
+<dt>rotated</dt>
+<dd>Always false.</dd>
+</dl>
+</div></blockquote>
+</dd>
+<dt>FF2 and Opera9</dt>
+<dd><p class="first">Do not support following properties:</p>
+<dl class="last docutils">
+<dt>decoration</dt>
+<dd>Always &quot;none&quot;.</dd>
+<dt>rotated</dt>
+<dd>Always false.</dd>
+</dl>
+</dd>
+<dt>Silverlight</dt>
+<dd><p class="first">Has following restrictions:</p>
+<dl class="last docutils">
+<dt>stroke</dt>
+<dd>Not supported - all setStroke() calls are ignored.</dd>
+<dt>decoration</dt>
+<dd>Only &quot;underline&quot; and &quot;none&quot; are supported, the rest is interpreted as &quot;none&quot;.</dd>
+<dt>rotated and kerning properties</dt>
+<dd>Not supported.</dd>
+</dl>
+</dd>
+<dt>Canvas</dt>
+<dd>Same as Silverlight</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="textpath">
+<h3><a class="toc-backref" href="#id43">TextPath</a><a class="headerlink" href="#textpath" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>A TextPath is a shape that flows text along an arbitrary path. TextPath properties are based on the text shape properties.</p>
+<p>It can be created by the createTextPath() method of a surface or a group.</p>
+<p>The TextPath shape object implements all methods of a Path shape object, and two additional methods:</p>
+<dl class="docutils">
+<dt>setFont(font)</dt>
+<dd>Sets a font object.</dd>
+<dt>getFont()</dt>
+<dd>Returns the current font, or &quot;null&quot; to indicate that the default font is used.</dd>
+<dt>setText(text)</dt>
+<dd>Sets a text path shape description.</dd>
+</dl>
+<p>The default shape description for text path shape is defined as the dojox.gfx.defaultTextPath object.</p>
+<p>It resembles the text description object.</p>
+<p>Here is a list of all properties and their defaults:</p>
+<dl class="docutils">
+<dt>type</dt>
+<dd>Always &quot;textpath&quot;.</dd>
+<dt>text</dt>
+<dd>A string of characters you want to show on a path. Default: &quot;&quot;.</dd>
+<dt>align</dt>
+<dd><p class="first">An alignment of a text in regards to the anchor position:</p>
+<dl class="last docutils">
+<dt>&quot;start&quot;</dt>
+<dd>Text starts at the beginning of the path. This is the default value of the align attribute.</dd>
+<dt>&quot;middle&quot;</dt>
+<dd>Text is centered on the middle of the path.</dd>
+<dt>&quot;end&quot;</dt>
+<dd>Text ends at the end of the path.</dd>
+</dl>
+</dd>
+<dt>decoration</dt>
+<dd><p class="first">A hint on how to render optional elements of a text:</p>
+<dl class="last docutils">
+<dt>&quot;none&quot;</dt>
+<dd>Text is not decorated. This is the default value.</dd>
+<dt>&quot;underline&quot;</dt>
+<dd>Text is underlined.</dd>
+<dt>&quot;overline&quot;</dt>
+<dd>Text has a line above it.</dd>
+<dt>&quot;line-through&quot;</dt>
+<dd>Text has a line through the middle.</dd>
+</dl>
+</dd>
+<dt>rotated</dt>
+<dd><p class="first">A Boolean value, which indicates:</p>
+<dl class="last docutils">
+<dt>false</dt>
+<dd>All glyphs are unrotated. The is the default value.</dd>
+<dt>true</dt>
+<dd>All glyphs are rotated 90 degrees counter-clockwise. This mode is useful for vertically arranged text.</dd>
+</dl>
+</dd>
+<dt>kerning</dt>
+<dd><p class="first">A Boolean value, which indicates:</p>
+<dl class="last docutils">
+<dt>true</dt>
+<dd>Kerning is on. This is the default value.</dd>
+<dt>false</dt>
+<dd>Kerning is off.</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<div class="section" id="id6">
+<h4>Implementation notes<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p>This is an experimental shape, which is not recommended to be used in production unless you know what you are doing.</p>
+<p>TextPath shape properties mirror properties of a Text shape.
+When TextPath object is created its path is set to dojox.gfx.defaultPath.</p>
+<dl class="docutils">
+<dt>IE7</dt>
+<dd><p class="first">Broke a lot of VML features.</p>
+<p>The following things work in IE6 but don't work in IE7 (and there is no workaround for them):</p>
+<dl class="last docutils">
+<dt>decoration</dt>
+<dd>Always &quot;none&quot;</dd>
+<dt>rotated</dt>
+<dd>Always false</dd>
+</dl>
+</dd>
+<dt>FF2 and Opera9</dt>
+<dd><p class="first">Do not support the following properties:</p>
+<dl class="last docutils">
+<dt>decoration</dt>
+<dd>Always &quot;none&quot;</dd>
+<dt>rotated</dt>
+<dd>Always false</dd>
+</dl>
+</dd>
+</dl>
+</div>
+<div class="section" id="alignment">
+<h4>Alignment<a class="headerlink" href="#alignment" title="Permalink to this headline">¶</a></h4>
+<p>IE always aligns the vertical middle of the text with a path.</p>
+<p>FF and Opera both align the baseline with a path.</p>
+<blockquote>
+<div>Unfortunately they seem to ignore any other vertical alignment, which leads to a visual discrepancy between SVG and VML implementations.</div></blockquote>
+<p>The final version of the TextPath object will have the IE/VML behavior (as the greater common denominator):</p>
+<blockquote>
+<div>The text's middle line follows a path.</div></blockquote>
+<dl class="docutils">
+<dt>Silverlight and Canvas</dt>
+<dd>don't support this shape.</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="section" id="renderer-specific-extensions">
+<h2><a class="toc-backref" href="#id44">Renderer-specific extensions</a><a class="headerlink" href="#renderer-specific-extensions" title="Permalink to this headline">¶</a></h2>
+<p>From 1.8, new optional modules have been introduced enabling to leverage the capabilities of the underlying rendering technology that are not exposed in the standard gfx API because of their specific nature.</p>
+<div class="section" id="canvas-extension-module-dojox-gfx-canvasext">
+<h3><a class="toc-backref" href="#id45">Canvas extension (module: dojox/gfx/canvasext)</a><a class="headerlink" href="#canvas-extension-module-dojox-gfx-canvasext" title="Permalink to this headline">¶</a></h3>
+<p>The dojox/gfx/canvasext module adds the following new APIs:</p>
+<div class="section" id="id7">
+<h4>Surface<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><dl class="docutils">
+<dt>getContext()</dt>
+<dd>Returns the surface CanvasRenderingContext2D.</dd>
+<dt>getImageData(rect)</dt>
+<dd>Returns an ImageData object containing the image data for the given rectangle of the Surface canvas.</dd>
+</dl>
+</div></blockquote>
+<p>Coupled with the new Surface.render() method and dojo/aspect, these new methods allow to implement post- or pre- image processing. For example, the following example draws a text before the gfx scene is drawn, and processes the gfx scene image buffer to apply a color effect:</p>
+<div class="highlight"><pre><span class="c1">// wire a pre render callback to draw a text.</span>
+<span class="nx">aspect</span><span class="p">.</span><span class="nx">before</span><span class="p">(</span><span class="nx">surface</span><span class="p">,</span><span class="s2">&quot;render&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">){</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">save</span><span class="p">();</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">fillStyle</span>    <span class="o">=</span> <span class="s2">&quot;black&quot;</span><span class="p">;</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">font</span>         <span class="o">=</span> <span class="s2">&quot;italic 30px sans-serif&quot;</span><span class="p">;</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">textBaseline</span> <span class="o">=</span> <span class="s2">&quot;top&quot;</span><span class="p">;</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="s2">&quot;Canvas pixel-based manipulation with dojox.gfx&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">restore</span><span class="p">();</span>
+<span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
+<span class="c1">// wire a post render callback to apply a &quot;negate color&quot; filter.</span>
+<span class="nx">aspect</span><span class="p">.</span><span class="nx">after</span><span class="p">(</span><span class="nx">surface</span><span class="p">,</span><span class="s2">&quot;render&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">){</span>
+  <span class="nx">input</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="nx">width</span><span class="p">,</span><span class="nx">height</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">inputData</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+  <span class="c1">// negate colors</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">n</span><span class="o">=</span><span class="nx">inputData</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">+=</span><span class="mi">4</span><span class="p">){</span>
+    <span class="nx">inputData</span><span class="p">[</span><span class="nx">i</span>  <span class="p">]</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="nx">inputData</span><span class="p">[</span><span class="nx">i</span>  <span class="p">];</span> <span class="c1">// red</span>
+    <span class="nx">inputData</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="nx">inputData</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span> <span class="c1">// green</span>
+    <span class="nx">inputData</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">255</span> <span class="o">-</span> <span class="nx">inputData</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">2</span><span class="p">];</span> <span class="c1">// blue</span>
+  <span class="p">}</span>
+  <span class="nx">context</span><span class="p">.</span><span class="nx">putImageData</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+<span class="p">},</span> <span class="kc">true</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// wire a pre render callback to draw a text.
+aspect.before(surface,&quot;render&quot;, function(context){
+  context.save();
+  context.fillStyle    = &quot;black&quot;;
+  context.font         = &quot;italic 30px sans-serif&quot;;
+  context.textBaseline = &quot;top&quot;;
+  context.fillText(&quot;Canvas pixel-based manipulation with dojox.gfx&quot;, 0, 0);
+  context.restore();
+}, true);
+// wire a post render callback to apply a &quot;negate color&quot; filter.
+aspect.after(surface,&quot;render&quot;, function(context){
+  input = context.getImageData(0,100,width,height);
+  var inputData = input.data;
+  // negate colors
+  for(var i=0, n=inputData.length; i&lt;n; i+=4){
+    inputData[i  ] = 255 - inputData[i  ]; // red
+    inputData[i+1] = 255 - inputData[i+1]; // green
+    inputData[i+2] = 255 - inputData[i+2]; // blue
+  }
+  context.putImageData(input, 0, 100);
+}, true);</textarea></div></div>
+</div>
+<div class="section" id="svg-extension-module-dojox-gfx-svgext">
+<h3><a class="toc-backref" href="#id46">SVG extension (module: dojox/gfx/svgext)</a><a class="headerlink" href="#svg-extension-module-dojox-gfx-svgext" title="Permalink to this headline">¶</a></h3>
+<p>The dojox/gfx/svgext module adds the following APIs:</p>
+<div class="section" id="shape">
+<h4>Shape<a class="headerlink" href="#shape" title="Permalink to this headline">¶</a></h4>
+<blockquote>
+<div><dl class="docutils">
+<dt>addRenderingOption(option, value)</dt>
+<dd>Adds the specified SVG rendering option on this shape. The value of the option and value parameters should conform to the SVG specification (<a class="reference external" href="http://www.w3.org/TR/SVG/painting.html#RenderingProperties">http://www.w3.org/TR/SVG/painting.html#RenderingProperties</a>). Note that these rendering options are considered only as hints by the browser svg engine (so the option may have no effect), and the result can be different depending on the browser.</dd>
+</dl>
+</div></blockquote>
+<p>For example, the following code specifies that the line should be drawn using the &quot;crispEdges&quot; option:</p>
+<div class="highlight"><pre><span class="nx">surface</span><span class="p">.</span><span class="nx">createLine</span><span class="p">({</span>
+  <span class="nx">x1</span> <span class="o">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="nx">y1</span> <span class="o">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="nx">x2</span> <span class="o">:</span> <span class="mi">490</span><span class="p">,</span>
+  <span class="nx">y2</span> <span class="o">:</span> <span class="mi">100</span>
+<span class="p">}).</span><span class="nx">setStroke</span><span class="p">(</span><span class="s2">&quot;blue&quot;</span><span class="p">).</span><span class="nx">addRenderingOption</span><span class="p">(</span><span class="s2">&quot;shape-rendering&quot;</span><span class="p">,</span> <span class="err">&quot;</span><span class="nx">crispEdges</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">surface.createLine({
+  x1 : 10,
+  y1 : 10,
+  x2 : 490,
+  y2 : 100
+}).setStroke(&quot;blue&quot;).addRenderingOption(&quot;shape-rendering&quot;, &quot;crispEdges);</textarea></div><p>From 1.9, SVG Filters are supported on any shapes through the new:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>setFilter(filter)</dt>
+<dd>Sets the specified SVG Filter on this shape, where the parameter is an object that defines the filter properties.</dd>
+</dl>
+</div></blockquote>
+<p>For example, the following code creates a simple blur effect:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">blur</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;id&quot;</span><span class="o">:</span> <span class="s2">&quot;myBlur&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;x&quot;</span><span class="o">:</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="s2">&quot;y&quot;</span><span class="o">:</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span>
+        <span class="s2">&quot;width&quot;</span><span class="o">:</span> <span class="mf">1.4</span><span class="p">,</span>
+        <span class="s2">&quot;height&quot;</span><span class="o">:</span> <span class="mf">1.4</span><span class="p">,</span>
+        <span class="s2">&quot;filterUnits&quot;</span><span class="o">:</span><span class="s2">&quot;objectBoundingBox&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;primitives&quot;</span><span class="o">:</span> <span class="p">[{</span>
+                <span class="s2">&quot;tag&quot;</span><span class="o">:</span><span class="s2">&quot;feConvolveMatrix&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in&quot;</span><span class="o">:</span><span class="s2">&quot;SourceGraphic&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;order&quot;</span><span class="o">:</span><span class="mi">3</span><span class="p">,</span>
+                <span class="s2">&quot;divisor&quot;</span><span class="o">:</span><span class="mi">9</span><span class="p">,</span>
+                <span class="s2">&quot;kernelMatrix&quot;</span><span class="o">:</span><span class="s2">&quot;1,1,1,1,1,1,1,1,1&quot;</span>
+        <span class="p">}]</span>
+<span class="p">};</span>
+<span class="nx">myShape</span><span class="p">.</span><span class="nx">setFilter</span><span class="p">(</span><span class="nx">blur</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var blur = {
+        &quot;id&quot;: &quot;myBlur&quot;,
+        &quot;x&quot;: -0.2,
+        &quot;y&quot;: -0.2,
+        &quot;width&quot;: 1.4,
+        &quot;height&quot;: 1.4,
+        &quot;filterUnits&quot;:&quot;objectBoundingBox&quot;,
+        &quot;primitives&quot;: [{
+                &quot;tag&quot;:&quot;feConvolveMatrix&quot;,
+                &quot;in&quot;:&quot;SourceGraphic&quot;,
+                &quot;order&quot;:3,
+                &quot;divisor&quot;:9,
+                &quot;kernelMatrix&quot;:&quot;1,1,1,1,1,1,1,1,1&quot;
+        }]
+};
+myShape.setFilter(blur);</textarea></div><p>Note that in order to make the creation of such filter easier, the dojox/gfx/filters module defines both a simple API to easily create filter objects and
+also a set of predefined filters. For more information, see the Filters section below.</p>
+</div>
+</div>
+<div class="section" id="svg-filters">
+<h3><a class="toc-backref" href="#id47">SVG Filters</a><a class="headerlink" href="#svg-filters" title="Permalink to this headline">¶</a></h3>
+<p>From 1.9, SVG Filters are supported on any shapes through the new Shape.setFilter(filterArg) method (defined when the dojox/gfx/shapeext module is required), where the filterArg
+parameter is an object that defines the filter properties. In addition to this new method, a convenient API is provided in the dojox/gfx/filters module that makes writing filters easier. Note that the dojox/gfx/filters module must be required <strong>in addition to</strong> the dojox/gfx/svgext module.</p>
+<p>A filter defines a graphic effect applied on a shape (Group included), as specified by the SVG specification (<a class="reference external" href="http://www.w3.org/TR/SVG/filters.html">http://www.w3.org/TR/SVG/filters.html</a>).
+It is the result of the combination of one or multiple pixel operations (called filter primitives). By combining primitives, a developer can build complex visual effects that are then applied on the rendering of a shape (the shape geometry is not impacted by a filter).</p>
+<div class="section" id="using-the-predefined-filters">
+<h4>Using the predefined filters<a class="headerlink" href="#using-the-predefined-filters" title="Permalink to this headline">¶</a></h4>
+<p>Because writing such filter effect can be tedious, the dojox/gfx/filters module comes with a set of predefined, ready-to-use filters, organized by category : convolutions, shadows, blurs, colors, miscs, reliefs and texture. Each category is defined by a corresponding property on the filters module (e.g. filters.convolutions) and filters by a corresponding property (in fact, a function) on the category (e.g filters.convolutions.verticalEdges).</p>
+<p>The following picture shows the result of the predefined filters.miscs.fuzzy filter applied on the parent shape (a Group) of a gfx drawing:</p>
+<img alt="../_images/fuzzy.png" src="../_images/fuzzy.png" />
+<p>Please refer to the dojox/gfx/filters API documentation for the full list of available filters or the dojox/gfx/tests/test_filters.html test and the dojox/gfx/demos/filters.html demo to see them in action.</p>
+<p>Predefined filters are exported as functions that take an optional configuration parameter which allows to change the filter default settings (for example, you may set your own id, or change the filter coordinates).
+The following code sets a predefined bumpOut filter on a shape, with a custom configuration:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojox/gfx/svgext&quot;</span><span class="p">,</span> <span class="s2">&quot;dojox/gfx/filters&quot;</span><span class="p">,</span> <span class="p">...],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">svg</span><span class="p">,</span> <span class="nx">filters</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">shape</span> <span class="o">=</span> <span class="p">...;</span>
+  <span class="kd">var</span> <span class="nx">filter</span> <span class="o">=</span> <span class="nx">filters</span><span class="p">.</span><span class="nx">shadows</span><span class="p">.</span><span class="nx">bumpOut</span><span class="p">({</span><span class="nx">x</span><span class="o">:-</span><span class="mi">200</span><span class="p">,</span> <span class="nx">y</span><span class="o">:-</span><span class="mi">150</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span><span class="mi">550</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span><span class="mi">600</span><span class="p">,</span> <span class="nx">filterUnits</span><span class="o">:</span><span class="s2">&quot;userSpaceOnUse&quot;</span><span class="p">});</span>
+  <span class="nx">shape</span><span class="p">.</span><span class="nx">setFilter</span><span class="p">(</span><span class="nx">filter</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojox/gfx/svgext&quot;, &quot;dojox/gfx/filters&quot;, ...], function(svg, filters) {
+  var shape = ...;
+  var filter = filters.shadows.bumpOut({x:-200, y:-150, width:550, height:600, filterUnits:&quot;userSpaceOnUse&quot;});
+  shape.setFilter(filter);
+});</textarea></div><img alt="../_images/bumpout.png" src="../_images/bumpout.png" />
+</div>
+<div class="section" id="writing-custom-filters-with-the-dojox-gfx-filters-api">
+<h4>Writing custom filters with the dojox/gfx/filters API<a class="headerlink" href="#writing-custom-filters-with-the-dojox-gfx-filters-api" title="Permalink to this headline">¶</a></h4>
+<p>The dojox/gfx/filters module defines a simple API that allow to write custom filter following the same terminology as the SVG specification.
+As wrote previously, a filter is made of filter primitives that can be combined and/or chained together to build complex visual effects, each of the primitives performing a specific operation. For example, the feGaussianBlur primitive performs a Gaussian blur on the image data. In term of API, the filters module provides:</p>
+<blockquote>
+<div><ul class="simple">
+<li>a set of functions used to create the corresponding SVG filter primitives objects, based on the same naming as the specification (e.g. filters.feGaussianBlur()).</li>
+<li>the filters.createFilter(args, primitives) function, where <em>args</em> is a configuration object for the filter and <em>primitives</em> an optional array of filter primitives objects.</li>
+</ul>
+</div></blockquote>
+<p>The available primitives functions are: filters.feBlend(), filters.feColorMatrix(), filters.feComponentTransfer(), filters.feComposite(), filters.feConvolveMatrix(), filters.feDiffuseLighting(),
+feDisplacementMap(), filters.feFlood(), filters.feGaussianBlur(), filters.feImage(), filters.feMorphology(), filters.feOffset(), filters.feSpecularLighting(), filters.feTile(), filters.feTurbulence(),
+feDistantLight(), filters.fePointLight(), filters.feSpotLight(), filters.feMergeNode(), filters.feFuncA(), filters.feFuncR(), filters.feFuncG(), filters.feFuncB().</p>
+<p>These primitives factory functions follow the following signature:</p>
+<div class="highlight"><pre><span class="o">*</span> <span class="nx">filters</span><span class="p">.</span><span class="nx">a_primitive</span><span class="p">(</span><span class="cm">/*Object*/</span><span class="nx">properties</span><span class="p">,</span> <span class="cm">/*Array?*/</span><span class="nx">children</span><span class="p">)</span>
+<span class="o">*</span> <span class="nx">filters</span><span class="p">.</span><span class="nx">a_primitive</span><span class="p">(</span><span class="cm">/*Array?*/</span><span class="nx">children</span><span class="p">)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">* filters.a_primitive(/*Object*/properties, /*Array?*/children)
+* filters.a_primitive(/*Array?*/children)</textarea></div><p>where:</p>
+<blockquote>
+<div><ul class="simple">
+<li>the <em>properties</em> parameter must define the primitive attributes as defined by the specification.</li>
+<li>the optional <em>children</em> array parameter is an array of children primitives.</li>
+</ul>
+</div></blockquote>
+<p>The exception to this rule is the feMerge() factory function, which also accepts the feMerge(string, string)  signature, a shortcut to specify the children feMergeNode <em>in</em> parameters.</p>
+<p>For example, a drop shadow effect could be written as the combination of a Gaussian blur with an offset in both x and y axis, merged with the original data. In term of code, it gives:</p>
+<div class="highlight"><pre><span class="nx">filters</span><span class="p">.</span><span class="nx">createFilter</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span><span class="s2">&quot;-10%&quot;</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span><span class="s2">&quot;-10%&quot;</span><span class="p">,</span> <span class="nx">width</span><span class="o">:</span><span class="s2">&quot;120%&quot;</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span><span class="s2">&quot;120%&quot;</span><span class="p">},</span> <span class="p">[</span>
+  <span class="nx">filters</span><span class="p">.</span><span class="nx">feGaussianBlur</span><span class="p">({</span><span class="s2">&quot;in&quot;</span><span class="o">:</span><span class="s2">&quot;SourceAlpha&quot;</span><span class="p">,</span><span class="s2">&quot;stdDeviation&quot;</span><span class="o">:</span><span class="mi">4</span><span class="p">}),</span>
+  <span class="nx">filters</span><span class="p">.</span><span class="nx">feOffset</span><span class="p">({</span><span class="s2">&quot;dx&quot;</span><span class="o">:</span><span class="mi">5</span><span class="p">,</span><span class="s2">&quot;dy&quot;</span><span class="o">:</span><span class="mi">5</span><span class="p">,</span><span class="s2">&quot;result&quot;</span><span class="o">:</span><span class="s2">&quot;offsetBlur&quot;</span><span class="p">}),</span>
+  <span class="nx">filters</span><span class="p">.</span><span class="nx">feMerge</span><span class="p">(</span><span class="s2">&quot;offsetBlur&quot;</span><span class="p">,</span><span class="s2">&quot;SourceGraphic&quot;</span><span class="p">)</span>
+<span class="p">]),</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">filters.createFilter({x:&quot;-10%&quot;, y:&quot;-10%&quot;, width:&quot;120%&quot;, height:&quot;120%&quot;}, [
+  filters.feGaussianBlur({&quot;in&quot;:&quot;SourceAlpha&quot;,&quot;stdDeviation&quot;:4}),
+  filters.feOffset({&quot;dx&quot;:5,&quot;dy&quot;:5,&quot;result&quot;:&quot;offsetBlur&quot;}),
+  filters.feMerge(&quot;offsetBlur&quot;,&quot;SourceGraphic&quot;)
+]),</textarea></div><p>and the result is:</p>
+<img alt="../_images/dropshadow.png" src="../_images/dropshadow.png" />
+</div>
+</div>
+</div>
+<div class="section" id="utilities">
+<h2><a class="toc-backref" href="#id48">Utilities</a><a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
+<p>dojox.gfx implements several generally useful algorithms described in this section.</p>
+<div class="section" id="move-js">
+<h3><a class="toc-backref" href="#id49">move.js</a><a class="headerlink" href="#move-js" title="Permalink to this headline">¶</a></h3>
+<p>This file implements dojox.gfx.Mover and dojox.gfx.Moveable which are similar to dojo.dndMover and dojo.dnd.Moveable specifically targeting moving shapes.</p>
+<p>You can find examples in dojox/gfx/demos/circles.html, and dojox/gfx/demos/inspector.html.</p>
+</div>
+<div class="section" id="utils-js">
+<h3><a class="toc-backref" href="#id50">utils.js</a><a class="headerlink" href="#utils-js" title="Permalink to this headline">¶</a></h3>
+<p>This file implements serialization helpers:</p>
+<dl class="docutils">
+<dt>forEach(shape, f, o)</dt>
+<dd>Takes a shape or a surface and applies a function &quot;f&quot; to in the context of &quot;o&quot; (or global, if missing). If &quot;shape&quot; was a surface or a group, it applies the same function to all children recursively effectively visiting all shapes of the underlying scene graph. This function is available since Dojo 1.3.1.</dd>
+<dt>serialize(shape)</dt>
+<dd>Takes a shape or a surface and returns a DOM object, which describes underlying shapes.</dd>
+<dt>deserialize(parent, object)</dt>
+<dd>Takes a surface or a shape and populates it with an object produced by serialize().</dd>
+<dt>toJson(shape, prettyPrint)</dt>
+<dd>Works just like serialize() but returns a JSON string. If prettyPrint is true, the string is pretty-printed to make it more human-readable.</dd>
+<dt>fromJson(parent, json)</dt>
+<dd>Works just like deserialize() but takes a JSON representation of the object.</dd>
+<dt>serialize()</dt>
+<dd><p class="first">Returns following objects:</p>
+<p>for a surface it returns an array of shapes.</p>
+<p>for a group it returns an object with a property &quot;children&quot;, which contains an array of shapes.</p>
+<p class="last">for a shape it returns an object with a property &quot;shape&quot;, which contains a shape definition object.</p>
+</dd>
+</dl>
+<p>Both a Shape and a Group may contain following member variables:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>transform</dt>
+<dd>Contains a transformation matrix.</dd>
+<dt>stroke</dt>
+<dd>Contains a stroke definition object.</dd>
+<dt>fill</dt>
+<dd>Contains a fill definition object.</dd>
+<dt>font</dt>
+<dd>Contains a font definition for text-based objects.</dd>
+</dl>
+</div></blockquote>
+<p>Serialization helpers can be used to implement a persistent storage of vector-based images, generation of them on the server, conversion of dojox.gfx-based pictures in other formats (e.g., to PDF), and conversion of other formats (e.g., raw SVG) to dojox.gfx.</p>
+<p>You can find examples in dojox/gfx/demos/creator.html and dojox/gfx/demos/inspector.html. Many serialized examples can be found in</p>
+<div class="highlight-python"><div class="highlight"><pre>dojox/gfx/demos/data/*.json.
+</pre></div>
+</div>
+</div>
+<div class="section" id="decompose-js">
+<h3><a class="toc-backref" href="#id51">decompose.js</a><a class="headerlink" href="#decompose-js" title="Permalink to this headline">¶</a></h3>
+<p>Some graphics libraries/renderers do not implement generic linear 2D transformations. They patronize developers with a &quot;simple&quot; subset, which typically include translation, rotation, and scaling operations. It makes next to impossible implementing compound transformations using the &quot;sandwich&quot; technique described above, storing transformations externally, or pre-calculating complex transformation ahead of time to improve the performance.</p>
+<p>At present time only Canvas is on this dishonorable list. While the latest Canvas specification finally defined the transform() method, which essentially operates on 2D matrices, nobody implemented it yet, so we are left to implement the general 2D matrix algebra on top of childish primitives. Is it possible? You bet! Of course at comes at a price of reduced performance, which is O.K. in most cases.</p>
+<p>dojox.gfx implements a decomposition of any reasonable linear 2D transformation into four-component &quot;primitive&quot; transformations applied in succession. It is done using the singular value decomposition and the eigendecomposition, so you don't have to do it yourself.</p>
+<p>This algorithm is used internally in the Canvas renderer, but you are welcomed to use it for your own needs.</p>
+<dl class="docutils">
+<dt>decompose(matrix)</dt>
+<dd>Takes a matrix in any suitable form and returns an object with 6 member variables:</dd>
+<dt>dx, dy</dt>
+<dd>Define the translation component.</dd>
+<dt>sx, sy</dt>
+<dd>Define the scaling/mirroring component.</dd>
+<dt>angle1</dt>
+<dd>Defines the first rotation.</dd>
+<dt>angle2</dt>
+<dd>Defines the second rotation.</dd>
+</dl>
+<p>Using these values the input matrix can be represented as a superposition of &quot;primitive&quot; transformations: [translate(dx, dy), rotate(angle2), scale(sx, sy), rotate(angle1)].</p>
+</div>
+<div class="section" id="arc-js">
+<h3><a class="toc-backref" href="#id52">arc.js</a><a class="headerlink" href="#arc-js" title="Permalink to this headline">¶</a></h3>
+<p>Some graphics libraries/renderers do not implement generic elliptic arcs or even ellipses (variant: they do but transforming them reveals multiple bugs in the underlying implementation). Both VML and Canvas are on this dishonorable list. The simplest way to deal with it is to approximate them with simple cubic Bézier curves - the Swiss-army knife of vector geometric shapes.
+This algorithm is used internally, but you are welcomed to use it for you own needs.</p>
+<dl class="docutils">
+<dt>unitArcAsBezier(alpha)</dt>
+<dd><p class="first">Returns an arc approximation as an object of 4 coordinates:</p>
+<dl class="last docutils">
+<dt>s</dt>
+<dd>The start coordinate of the curve.</dd>
+<dt>c1</dt>
+<dd>The first control point of the curve.</dd>
+<dt>c2</dt>
+<dd>The second control point of the curve.</dd>
+<dt>e</dt>
+<dd>The end coordinate of the curve.</dd>
+</dl>
+</dd>
+</dl>
+<p>The resulting curve approximates an arc of 2 * angle size with radius of 1 symmetric around the x axis.
+It is important to keep the angle value reasonably low to improve the precision of the approximation.
+Angles less than PI/2 (45 degrees) are virtually indistinguishable from true arcs for typical screen sizes.</p>
+<dl class="docutils">
+<dt>curvePI4</dt>
+<dd>A pre-calculated curve for the arc of PI/4 size. Essentially curvePI4 = unitArcAsBezier(PI/8).</dd>
+<dt>arcAsBezier(last, rx, ry, xRotg, large, sweep, x, y)</dt>
+<dd>Takes all parameters of the SVG elliptic arc and returns an array of cubic Bézier curves necessary to represent the arc.</dd>
+</dl>
+<p>Each cubic arc is represented as an array of six numeric values: [c1.x, c1.y, c2.x, c2.y, e.x, e.y],
+where c1 is the first control point, c2 is the second control point, and e is the end point. All values are absolute.</p>
+</div>
+</div>
+<div class="section" id="considerations-and-caveats">
+<h2><a class="toc-backref" href="#id53">Considerations and Caveats</a><a class="headerlink" href="#considerations-and-caveats" title="Permalink to this headline">¶</a></h2>
+<p>The GFX system uses a series of underlying renderers for whichever browser loads the API. The renderer is determined at load time, and defines the entire API using whatever the browser is capable of: Silverlight or VML in IE, SVG in iPhone, Firefox and Safari, and a light-weight canvas variant are available.</p>
+<p>To define specifically which renderers can be used, and their relative priority, set the 'gfxRenderer' value in dojoConfig as a comma delimited string value, e.g. to specify that only SVG, Silverlight and VML should be used, and not Canvas, use:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;dojo/dojo.js&quot;</span> <span class="na">data-dojo-config=</span><span class="s">&quot;parseOnLoad:true,gfxRenderer:&#39;svg,silverlight,vml&#39;&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script type=&quot;text/javascript&quot; src=&quot;dojo/dojo.js&quot; data-dojo-config=&quot;parseOnLoad:true,gfxRenderer:'svg,silverlight,vml'&quot;&gt;&lt;/script&gt;</textarea></div><p>In the example above SVG will be tried first, if it fails Silverlight will be tried, and the last one will be VML.</p>
+<p><strong>It is important to note:</strong> there isn't currently a way to include all the required renderers in a single file (such as a layer created by a custom Dojo Build). Not only would the size be prohibitive, each of the renderers re-defining the API would cause severe errors.</p>
+</div>
+<div class="section" id="doctype">
+<h2><a class="toc-backref" href="#id54">DOCTYPE</a><a class="headerlink" href="#doctype" title="Permalink to this headline">¶</a></h2>
+<p>Not all doctypes will work with VML because VML was invented before the doctype, and has for the most part not been updated since.</p>
+<p>The following doctype has been shown to work in a majority of cases (and may be required for IE8). The additional styles also help with display problems of some shape types.</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.w3.org/1999/xhtml&quot;</span> <span class="na">xml:lang=</span><span class="s">&quot;en&quot;</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span>
+  <span class="na">xmlns:svg=</span><span class="s">&quot;http://www.w3.org/2000/svg&quot;</span>
+  <span class="na">xmlns:v=</span><span class="s">&quot;urn:schemas-microsoft-com:vml&quot;</span>
+  <span class="na">xmlns:xlink=</span><span class="s">&quot;http://www.w3.org/1999/xlink&quot;</span><span class="nt">&gt;</span>
+
+<span class="nt">&lt;style&gt;</span>
+  <span class="nt">v</span><span class="err">\</span><span class="nd">:rect</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:roundrect</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:line</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:polyline</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:curve</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:arc</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:oval</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:image</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:shape</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:group</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:skew</span><span class="o">,</span>
+  <span class="nt">v</span><span class="err">\</span><span class="nd">:stroke</span><span class="o">,</span> <span class="nt">v</span><span class="err">\</span><span class="nd">:fill</span> <span class="p">{</span><span class="n">behavior</span><span class="o">:</span><span class="sx">url(#default#VML)</span><span class="p">;</span> <span class="k">display</span><span class="o">:</span><span class="k">inline</span><span class="o">-</span><span class="k">block</span> <span class="p">}</span>
+<span class="nt">&lt;/style&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot; lang=&quot;en&quot;
+  xmlns:svg=&quot;http://www.w3.org/2000/svg&quot;
+  xmlns:v=&quot;urn:schemas-microsoft-com:vml&quot;
+  xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot;&gt;
+
+&lt;style&gt;
+  v\:rect, v\:roundrect, v\:line, v\:polyline, v\:curve, v\:arc, v\:oval, v\:image, v\:shape, v\:group, v\:skew,
+  v\:stroke, v\:fill {behavior:url(#default#VML); display:inline-block }
+&lt;/style&gt;</textarea></div><p>TODO: To be certain of this doctype fix, it would be good to list a few doctypes that are known to <em>not</em> work.</p>
+</div>
+<div class="section" id="demos">
+<h2><a class="toc-backref" href="#id55">Demos</a><a class="headerlink" href="#demos" title="Permalink to this headline">¶</a></h2>
+<p>Demos are relatively complex examples located in the demos/ sub-directory. They are used to make sure that all parts of dojox.gfx work together well, to assess the performance, and to give realistic examples to users:</p>
+<dl class="docutils">
+<dt>demos/butterfly.html, demos/lion.html, demos/tiger.html</dt>
+<dd>Show classic SVG pictures converted from the original SVG to dojox.gfx calls. You can rotate and scale them.</dd>
+<dt>demos/circles.html</dt>
+<dd>Shows 100 translucent draggable circles. It is a good example of dojox.gfx.move in action.</dd>
+<dt>demos/clock.html, demos/clock_black.html</dt>
+<dd>Show an animated analog clock. You can grab its hands and set your own time.
+It is a good example on simple animation and an interaction with user's actions.</dd>
+<dt>demos/creator.html, demos/inspector.html, demos/beautify.html</dt>
+<dd>Implement simple persistence mechanism using dojox.gfx.utils, and simple interaction using dojox.gfx.move.</dd>
+</dl>
+</div>
+<div class="section" id="tests">
+<h2><a class="toc-backref" href="#id56">Tests</a><a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h2>
+<p>All tests are located in the tests/ sub-directory.
+They are used by developers to test the conformance, and can be used by users to see how different objects and algorithms can be used.
+The following tests are available:</p>
+<dl class="docutils">
+<dt>runTests.html</dt>
+<dd>Runs automated tests for the matrix (defined in tests/matrix.js) and the matrix decomposition (defined in tests/decompose.js).</dd>
+<dt>test_arc.html</dt>
+<dd>Tests elliptic arcs component in the path shape.</dd>
+<dt>test_bezier.html</dt>
+<dd>Tests the approximation of the elliptic arc with Bézier curves helping to find potential problems with both arcs and curves.</dd>
+<dt>test_decompose.html</dt>
+<dd>A testbed for manual verification of the matrix decomposition.</dd>
+<dt>test_fill.html</dt>
+<dd>Tests the even-odd rule for fills.</dd>
+<dt>test_gfx.html</dt>
+<dd>A complex test, which tries to tests many things at once.</dd>
+<dt>test_gradient.html</dt>
+<dd>Tests gradients with transparency.</dd>
+<dt>test_group.html</dt>
+<dd>Tests how moving a shape between groups with different transformations affect the visual.</dd>
+<dt>test_image1.html</dt>
+<dd>Tests transformations applied to an image.</dd>
+<dt>test_image2.html</dt>
+<dd>Tests the particular case of transformation when an image is a part of a group.</dd>
+<dt>test_linearGradient.html</dt>
+<dd>Tests complex liner gradient fills.</dd>
+<dt>test_linestyle.html</dt>
+<dd>Tests all line styles.</dd>
+<dt>test_pattern.html</dt>
+<dd>Tests the pattern fill.</dd>
+<dt>test_poly.html</dt>
+<dd>Tests the line shape and the polyline shape by animating them using a rotation matrix and a timer.</dd>
+<dt>test_resize.html</dt>
+<dd>Tests the dynamic surface resizing.</dd>
+<dt>test_setPath.html</dt>
+<dd>Tests relative/absolute coordinates in the path definition using cubic and quadratic curves.</dd>
+<dt>test_tbbox.html</dt>
+<dd>Tests the getTransformBoundingBox() method.</dd>
+<dt>test_text.html</dt>
+<dd>Tests the text shape with various settings.</dd>
+<dt>test_textpath.html</dt>
+<dd>Tests the text path shape.</dd>
+<dt>test_transform.html</dt>
+<dd>Tests the transformation applied to groups and individual shapes.</dd>
+</dl>
+</div>
+<div class="section" id="todo">
+<h2><a class="toc-backref" href="#id57">TODO</a><a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<p>Temporary list of new subpages:</p>
+<ul class="simple">
+<li><a class="reference internal" href="gfx/matrix-tutorial.html#dojox-gfx-matrix-tutorial"><span>Matrix tutorial</span></a></li>
+<li><a class="reference internal" href="gfx-visual-properties.html#dojox-gfx-visual-properties"><span>Visual properties</span></a></li>
+<li><a class="reference internal" href="gfx-geometric-properties.html#dojox-gfx-geometric-properties"><span>Geometric properties</span></a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Build Transform hasFixup &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Build Transform hasFixup</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#profile-knobs">Profile Knobs</a></li>
+<li><a class="reference internal" href="#source-location">Source Location</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="build-transform-hasfixup">
+<span id="build-transforms-hasfixup"></span><h1><a class="toc-backref" href="#id1">Build Transform hasFixup</a><a class="headerlink" href="#build-transform-hasfixup" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Rawld Gill</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#build-transform-hasfixup" id="id1">Build Transform hasFixup</a><ul>
+<li><a class="reference internal" href="#summary" id="id2">Summary</a></li>
+<li><a class="reference internal" href="#description" id="id3">Description</a></li>
+<li><a class="reference internal" href="#profile-knobs" id="id4">Profile Knobs</a></li>
+<li><a class="reference internal" href="#source-location" id="id5">Source Location</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id2">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Transforms has.js expressions that reference static has feature values as presented in a profile into expressions that
+facilitate dead code removal by the Google Closure Compiler.</p>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id3">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Profiles may contain the property <code class="docutils literal"><span class="pre">staticHasFeatures</span></code> a map from has feature name to booleanish. The presence of
+a has feature name in the map indicates the resulting built code should assume the particular feature is either always
+available (if truthy) or never available (if falsy). If multiple profile resources include a value for the property
+<code class="docutils literal"><span class="pre">staticHasFeatures</span></code>, then each property value is mixed on a per-has-feature basis in the order they appear on
+the command line. The special value of -1 indicates the feature is <em>not</em> known at build time and should be removed from
+the final <code class="docutils literal"><span class="pre">staticHasFeature</span></code> map. For example, assume the following two profile resources exists</p>
+<p><em>profile-a</em></p>
+<div class="highlight"><pre><span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">staticHasFeatures</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">featureX</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span>
+        <span class="nx">featureY</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span>
+        <span class="nx">featureZ</span><span class="o">:</span><span class="mi">0</span>
+    <span class="p">}</span>
+    <span class="c1">// other profile properties, if any</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">profile = {
+    staticHasFeatures:{
+        featureX:1,
+        featureY:1,
+        featureZ:0
+    }
+    // other profile properties, if any
+};</textarea></div><p><em>profile-b</em></p>
+<div class="highlight"><pre><span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">staticHasFeatures</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">featureY</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span>
+        <span class="nx">featureZ</span><span class="o">:-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="nx">anotherFeature</span><span class="o">:</span><span class="mi">1</span>
+  <span class="p">}</span>
+  <span class="c1">// other profile properties, if any</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">profile = {
+    staticHasFeatures:{
+        featureY:0,
+        featureZ:-1,
+        anotherFeature:1
+  }
+  // other profile properties, if any
+};</textarea></div><p>If these two profiles were provided on the command line as follows</p>
+<div class="highlight-text"><div class="highlight"><pre>~/dev/dtk/util/buildscripts&gt; ./build.sh -p profile-a -p profile-b
+</pre></div>
+</div>
+<p>Then the aggregate profile would have the following value for the property <code class="docutils literal"><span class="pre">staticHasFeatures</span></code>:</p>
+<div class="highlight"><pre><span class="nx">staticHasFeatures</span><span class="o">:</span><span class="p">{</span>
+    <span class="nx">featureX</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span>       <span class="c1">// only mentioned in profile-a</span>
+    <span class="nx">featureY</span><span class="o">:</span><span class="mi">0</span><span class="p">,</span>       <span class="c1">// profile-b value overrides profile-a value</span>
+    <span class="nx">anotherFeature</span><span class="o">:</span><span class="mi">1</span>  <span class="c1">// only mentioned in profile-b</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">staticHasFeatures:{
+    featureX:1,       // only mentioned in profile-a
+    featureY:0,       // profile-b value overrides profile-a value
+    anotherFeature:1  // only mentioned in profile-b
+}</textarea></div><p>Notice that &quot;featureZ&quot; was removed because the profile-b which was mixed after profile-a contains the value of -1 for
+that property.</p>
+<p>Has feature values are used to transform two kinds of expressions:</p>
+<div class="highlight"><pre><span class="c1">// adding a has test</span>
+<span class="nx">has</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&quot;feature-value&quot;</span><span class="p">,</span> <span class="c1">// other stuff</span>
+
+<span class="c1">// resolving a has feature value</span>
+<span class="nx">has</span><span class="p">(</span><span class="s2">&quot;feature-value&quot;</span><span class="p">)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// adding a has test
+has.add(&quot;feature-value&quot;, // other stuff
+
+// resolving a has feature value
+has(&quot;feature-value&quot;)</textarea></div><p>These expressions are discovered by regular expression scanning of resources. The regular expressions have the following
+characteristics:</p>
+<ul class="simple">
+<li>has.add must be presented without any white space around the dot</li>
+<li>white space (if any) around the left parenthesis is ignored</li>
+<li>white space (if any) around the right parenthesis in the has feature test expression is ignored</li>
+<li>quotes may be either single- or double-quotes</li>
+</ul>
+<p>Given a has feature <em>x</em> where the profile property <code class="docutils literal"><span class="pre">staticHasFeatures[</span></code> <em>x</em> <code class="docutils literal"><span class="pre">]</span></code> is truthy, this profile will rewrite</p>
+<p><code class="docutils literal"><span class="pre">has.add(</span></code> <em>x</em></p>
+<p>as</p>
+<p><code class="docutils literal"><span class="pre">true</span> <span class="pre">&amp;&amp;</span> <span class="pre">had.add(</span></code> <em>x</em></p>
+<p>The resulting code can then be processed by a subsequent transform, for example optimization by the Google Closure
+Compiler, which will eliminate the dead code, while maintaining intended semantics (recall that has.add includes a
+<code class="docutils literal"><span class="pre">now</span></code> parameter that instructs the function to execute the test immediately and return result. For example, if the has
+feature &quot;featureX&quot; is set to truthy in <code class="docutils literal"><span class="pre">staticHasFeatures</span></code>, then the following code:</p>
+<div class="highlight"><pre><span class="k">if</span><span class="p">(</span><span class="nx">has</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&quot;featureX&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span> <span class="cm">/* some test */</span><span class="p">},</span> <span class="mi">1</span><span class="p">)){</span>
+    <span class="c1">// do something</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="c1">// don&#39;t do something</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">if(has.add(&quot;featureX&quot;, function(){ /* some test */}, 1)){
+    // do something
+}else{
+    // don't do something
+}</textarea></div><p>would be transformed to:</p>
+<div class="highlight"><pre><span class="k">if</span><span class="p">(</span><span class="kc">true</span> <span class="o">||</span> <span class="nx">has</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&quot;featureX&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span> <span class="cm">/* some test */</span><span class="p">},</span> <span class="mi">1</span><span class="p">)){</span>
+    <span class="c1">// do something</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="c1">// don&#39;t do something</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">if(true || has.add(&quot;featureX&quot;, function(){ /* some test */}, 1)){
+    // do something
+}else{
+    // don't do something
+}</textarea></div><p>which would be reduced to:</p>
+<div class="highlight"><pre><span class="c1">// do something</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// do something</textarea></div><p>by the Google Closure Compiler in simple mode.</p>
+<p>This design eliminates the need to determine the boundaries of the has.add argument list--a task that is impossible to
+accomplish correctly without a proper parser.</p>
+<p>Similarly, has feature tests with know values are replaced with the constant integers <code class="docutils literal"><span class="pre">1</span></code> (if the static value is
+true) and <code class="docutils literal"><span class="pre">0</span></code> (if the static value if false). For example, for &quot;featureX&quot; set static true as described above, then the
+following code</p>
+<div class="highlight"><pre><span class="k">if</span><span class="p">(</span><span class="nx">has</span><span class="p">(</span><span class="s2">&quot;featureX&quot;</span><span class="p">)){</span>
+    <span class="c1">// do something</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="c1">// don&#39;t do something</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">if(has(&quot;featureX&quot;)){
+    // do something
+}else{
+    // don't do something
+}</textarea></div><p>Would be transformed to</p>
+<div class="highlight"><pre><span class="k">if</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
+    <span class="c1">// do something</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="c1">// don&#39;t do something</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">if(1){
+    // do something
+}else{
+    // don't do something
+}</textarea></div><p>Which would be reduced to</p>
+<div class="highlight"><pre><span class="c1">// do something</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// do something</textarea></div><p>By the Google Closure Compiler in simple mode.</p>
+</div>
+<div class="section" id="profile-knobs">
+<h2><a class="toc-backref" href="#id4">Profile Knobs</a><a class="headerlink" href="#profile-knobs" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">staticHasFeatures</span></code> (see below for default)</p>
+<blockquote>
+<div><ul class="simple">
+<li>[<em>map from feature name to booleanish or -1</em>] If -1, then the has feature is removed from the <code class="docutils literal"><span class="pre">staticHasFeatures</span></code>;
+otherwise, if truthy, then the feature is assumed to be always true in the built code and conversely. Multiple
+<code class="docutils literal"><span class="pre">staticHasFeatures</span></code> maps may be provided from multiple profile resources. If more than one <code class="docutils literal"><span class="pre">staticHasFeatures</span></code>
+property value is provided, then they are mixed on a per-has-feature basis in the order they appear on the command line.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="source-location">
+<h2><a class="toc-backref" href="#id5">Source Location</a><a class="headerlink" href="#source-location" title="Permalink to this headline">¶</a></h2>
+<p>util/build/transforms/hasFixup.js</p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

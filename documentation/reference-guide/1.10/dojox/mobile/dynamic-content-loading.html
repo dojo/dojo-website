@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dynamic Content Loading &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Dynamic Content Loading</a><ul>
+<li><a class="reference internal" href="#the-url-property-of-itembase">The &#8220;url&#8221; property of _ItemBase</a><ul>
+<li><a class="reference internal" href="#create-a-view-from-html-fragment">Create a View from Html Fragment</a></li>
+<li><a class="reference internal" href="#create-a-view-from-json-data">Create a View from JSON data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#listitem-actions">ListItem Actions</a><ul>
+<li><a class="reference internal" href="#update-existing-view-content-and-perform-transition">Update Existing View Content and Perform Transition</a></li>
+<li><a class="reference internal" href="#load-content-into-existing-view-and-perform-transition">Load Content into Existing View and Perform Transition</a></li>
+<li><a class="reference internal" href="#perform-transition-and-load-content-into-existing-view">Perform Transition and Load Content into Existing View</a></li>
+<li><a class="reference internal" href="#create-a-new-view-and-perform-transition">Create a New View and Perform Transition</a></li>
+<li><a class="reference internal" href="#update-datalist">Update DataList</a></li>
+<li><a class="reference internal" href="#partial-update-using-dojox-mobile-contentpane">Partial Update Using dojox/mobile/ContentPane</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dynamic-content-loading">
+<span id="dojox-mobile-dynamic-content-loading"></span><h1><a class="toc-backref" href="#id1">Dynamic Content Loading</a><a class="headerlink" href="#dynamic-content-loading" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Yoshiroh Kamiyama</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dynamic-content-loading" id="id1">Dynamic Content Loading</a><ul>
+<li><a class="reference internal" href="#the-url-property-of-itembase" id="id2">The &#8220;url&#8221; property of _ItemBase</a></li>
+<li><a class="reference internal" href="#listitem-actions" id="id3">ListItem Actions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Before or after performing a view transition, sometimes you may want to create a new target view content dynamically using an ajax call. There are several ways to lazy-load contents to update or create a view.</p>
+<div class="section" id="the-url-property-of-itembase">
+<h2><a class="toc-backref" href="#id2">The &#8220;url&#8221; property of _ItemBase</a><a class="headerlink" href="#the-url-property-of-itembase" title="Permalink to this headline">¶</a></h2>
+<p>The _ItemBase class has a &#8220;url&#8221; property that allows you to specify an html fragment page or a JSON data that will become the new view content after performing the view transition. The content is loaded either with a sync XHR call or an async XHR call according to the value of the &#8220;sync&#8221; property. The _ItemBase class is a base class of ListItem, IconItem, TabBarButton, ToolBarButton, and IconMenuItem. You can use the url property from those subclasses.</p>
+<p>If you perform a transition, a new view is created as a sibling of the current view by default. If you want to add it into another node, you can specify its node id with the urlTarget property.</p>
+<p>Usage of the url property is as follows.</p>
+<div class="highlight"><pre><span class="nt">&lt;ul</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/RoundRectList&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;li</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/ListItem&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;transition:&quot;slide&quot;, url:&quot;view1.html&quot;&#39;</span><span class="nt">&gt;</span>
+      External View #1 (sync)
+   <span class="nt">&lt;/li&gt;</span>
+   <span class="nt">&lt;li</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/ListItem&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;transition:&quot;flip&quot;, url:&quot;view2.html&quot;, sync:false&#39;</span><span class="nt">&gt;</span>
+      External View #2 (async)
+   <span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;ul data-dojo-type=&quot;dojox/mobile/RoundRectList&quot;&gt;
+   &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot; data-dojo-props='transition:&quot;slide&quot;, url:&quot;view1.html&quot;'&gt;
+      External View #1 (sync)
+   &lt;/li&gt;
+   &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot; data-dojo-props='transition:&quot;flip&quot;, url:&quot;view2.html&quot;, sync:false'&gt;
+      External View #2 (async)
+   &lt;/li&gt;
+&lt;/ul&gt;</textarea></div><div class="section" id="create-a-view-from-html-fragment">
+<h3>Create a View from Html Fragment<a class="headerlink" href="#create-a-view-from-html-fragment" title="Permalink to this headline">¶</a></h3>
+<p>Below is an example of an html fragment that represents a view. A parser (dojo/parser or dojox/mobile/parser) is called to parse the html fragment. The top level widget must be dojox/mobile/View or its subclass, because the entire html fragment will become a new transition target view. The new view will be created as a sibling of the current view. &lt;script&gt; tags cannot be included in the html fragment.</p>
+<p>Example of view html fragment:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/View&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Heading&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;back:&quot;Home&quot;, moveTo:&quot;foo&quot;&#39;</span><span class="nt">&gt;</span>view1.html<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;ul</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/EdgeToEdgeList&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/ListItem&quot;</span><span class="nt">&gt;</span>
+        Jack Coleman
+    <span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/ListItem&quot;</span><span class="nt">&gt;</span>
+        James Evans
+    <span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/ListItem&quot;</span><span class="nt">&gt;</span>
+        Jason Griffin
+    <span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props='back:&quot;Home&quot;, moveTo:&quot;foo&quot;'&gt;view1.html&lt;/h1&gt;
+    &lt;ul data-dojo-type=&quot;dojox/mobile/EdgeToEdgeList&quot;&gt;
+    &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot;&gt;
+        Jack Coleman
+    &lt;/li&gt;
+    &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot;&gt;
+        James Evans
+    &lt;/li&gt;
+    &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot;&gt;
+        Jason Griffin
+    &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;</textarea></div></div>
+<div class="section" id="create-a-view-from-json-data">
+<h3>Create a View from JSON data<a class="headerlink" href="#create-a-view-from-json-data" title="Permalink to this headline">¶</a></h3>
+<p>Below is an example of JSON data that represents a view. It is equivalent to the above html fragment example, and thus you will get the same view. However, note that an html fragment cannot always be converted to JSON, because when some items are placed into a hash, the order information is lost. No such information loss occurs with the html format.</p>
+<p>Example of view JSON data:</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="s2">&quot;dojox.mobile.View&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;dojox.mobile.Heading&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;@back&quot;</span><span class="o">:</span> <span class="s2">&quot;Home&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;@moveTo&quot;</span><span class="o">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;@label&quot;</span><span class="o">:</span> <span class="s2">&quot;view1.json&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;dojox.mobile.EdgeToEdgeList&quot;</span><span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;dojox.mobile.ListItem&quot;</span><span class="o">:</span> <span class="p">[{</span>
+        <span class="s2">&quot;@label&quot;</span><span class="o">:</span> <span class="s2">&quot;Jack Coleman&quot;</span>
+      <span class="p">},</span> <span class="p">{</span>
+        <span class="s2">&quot;@label&quot;</span><span class="o">:</span> <span class="s2">&quot;James Evans&quot;</span>
+      <span class="p">},</span> <span class="p">{</span>
+        <span class="s2">&quot;@label&quot;</span><span class="o">:</span> <span class="s2">&quot;Jason Griffin&quot;</span>
+      <span class="p">}]</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{
+  &quot;dojox.mobile.View&quot;: {
+    &quot;dojox.mobile.Heading&quot;: {
+      &quot;&#64;back&quot;: &quot;Home&quot;,
+      &quot;&#64;moveTo&quot;: &quot;foo&quot;,
+      &quot;&#64;label&quot;: &quot;view1.json&quot;
+    },
+    &quot;dojox.mobile.EdgeToEdgeList&quot;: {
+      &quot;dojox.mobile.ListItem&quot;: [{
+        &quot;&#64;label&quot;: &quot;Jack Coleman&quot;
+      }, {
+        &quot;&#64;label&quot;: &quot;James Evans&quot;
+      }, {
+        &quot;&#64;label&quot;: &quot;Jason Griffin&quot;
+      }]
+    }
+  }
+}</textarea></div></div>
+</div>
+<div class="section" id="listitem-actions">
+<h2><a class="toc-backref" href="#id3">ListItem Actions</a><a class="headerlink" href="#listitem-actions" title="Permalink to this headline">¶</a></h2>
+<p>ListItem can have an action handler by simply adding an onclick event handler as follows. You can control a view transition programmatically in your action handler. In that case, specify moveTo=&#8221;#&#8221; to disable the default view transition while displaying the arrow icon at the right of the list item. (If you omit the moveTo attribute here, the default view transition is disabled, and the arrow icon disappears to indicate that this item does not perform a view transition.)</p>
+<div class="highlight"><pre><span class="nt">&lt;li</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/ListItem&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;moveTo:&quot;#&quot;, onClick:myAction&#39;</span><span class="nt">&gt;</span>
+   Update View
+<span class="nt">&lt;/li&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot; data-dojo-props='moveTo:&quot;#&quot;, onClick:myAction'&gt;
+   Update View
+&lt;/li&gt;</textarea></div><p>dojox/mobile/tests/test_ListItem-actions.html is a complete example.</p>
+<div class="section" id="update-existing-view-content-and-perform-transition">
+<h3>Update Existing View Content and Perform Transition<a class="headerlink" href="#update-existing-view-content-and-perform-transition" title="Permalink to this headline">¶</a></h3>
+<p>In the action handler, you can update the transition target view, and then programmatically perform a transition to it as follows. The ListItem widget that initiated the action can be accessed via dijit.byNode(li). The transition can be performed by calling the transitionTo method of the source view.</p>
+<div class="highlight"><pre><span class="nx">myAction1</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">rect</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;rect1&quot;</span><span class="p">);</span>
+    <span class="nx">rect</span><span class="p">.</span><span class="nx">containerNode</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">transitionTo</span><span class="p">(</span><span class="s2">&quot;view1&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myAction1 = function(){
+    var rect = registry.byId(&quot;rect1&quot;);
+    rect.containerNode.innerHTML = new Date();
+    this.transitionTo(&quot;view1&quot;);
+}</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;view1&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/View&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;h1</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Heading&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;back:&quot;Home&quot;, moveTo:&quot;home&quot;&#39;</span><span class="nt">&gt;</span>Current Status<span class="nt">&lt;/h1&gt;</span>
+   <span class="nt">&lt;h2</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/RoundRectCategory&quot;</span><span class="nt">&gt;</span>Local Time<span class="nt">&lt;/h2&gt;</span>
+   <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;rect1&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/RoundRect&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;shadow:true&#39;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;view1&quot; data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+   &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props='back:&quot;Home&quot;, moveTo:&quot;home&quot;'&gt;Current Status&lt;/h1&gt;
+   &lt;h2 data-dojo-type=&quot;dojox/mobile/RoundRectCategory&quot;&gt;Local Time&lt;/h2&gt;
+   &lt;div id=&quot;rect1&quot; data-dojo-type=&quot;dojox/mobile/RoundRect&quot; data-dojo-props='shadow:true'&gt;&lt;/div&gt;
+&lt;/div&gt;</textarea></div></div>
+<div class="section" id="load-content-into-existing-view-and-perform-transition">
+<h3>Load Content into Existing View and Perform Transition<a class="headerlink" href="#load-content-into-existing-view-and-perform-transition" title="Permalink to this headline">¶</a></h3>
+<p>In this example, the view content is loaded asynchronously, the destination view is updated with the loaded content, and then a transition is performed. The ProgressIndicator is used since the loading is async.</p>
+<div class="highlight"><pre><span class="nx">myAction2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">view2</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;view2&quot;</span><span class="p">);</span> <span class="c1">// destination view</span>
+    <span class="kd">var</span> <span class="nx">listItem</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">prog</span> <span class="o">=</span> <span class="nx">ProgressIndicator</span><span class="p">.</span><span class="nx">getInstance</span><span class="p">();</span>
+    <span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">().</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">prog</span><span class="p">.</span><span class="nx">domNode</span><span class="p">);</span>
+    <span class="nx">prog</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+    <span class="nx">view2</span><span class="p">.</span><span class="nx">destroyDescendants</span><span class="p">();</span>
+
+    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">&quot;http://...&quot;</span><span class="p">;</span> <span class="c1">// or var url = listItem.url;</span>
+    <span class="nx">xhr</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">handleAs</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span>
+    <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">view2</span><span class="p">.</span><span class="nx">containerNode</span><span class="p">;</span>
+        <span class="nx">container</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">response</span><span class="p">;</span>
+        <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">container</span><span class="p">);</span>
+        <span class="nx">prog</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+        <span class="nx">listItem</span><span class="p">.</span><span class="nx">transitionTo</span><span class="p">(</span><span class="s2">&quot;view2&quot;</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myAction2 = function(){
+    var view2 = registry.byId(&quot;view2&quot;); // destination view
+    var listItem = this;
+    var prog = ProgressIndicator.getInstance();
+    win.body().appendChild(prog.domNode);
+    prog.start();
+    view2.destroyDescendants();
+
+    var url = &quot;http://...&quot;; // or var url = listItem.url;
+    xhr(url, {
+        handleAs: &quot;text&quot;
+    }).then(function(response) {
+        var container = view2.containerNode;
+        container.innerHTML = response;
+        parser.parse(container);
+        prog.stop();
+        listItem.transitionTo(&quot;view2&quot;);
+    });
+}</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;view2&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/View&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;view2&quot; data-dojo-type=&quot;dojox/mobile/View&quot;&gt;&lt;/div&gt;</textarea></div></div>
+<div class="section" id="perform-transition-and-load-content-into-existing-view">
+<h3>Perform Transition and Load Content into Existing View<a class="headerlink" href="#perform-transition-and-load-content-into-existing-view" title="Permalink to this headline">¶</a></h3>
+<p>This example is almost the same as the previous one, but in this example, view transition is performed first, and then content loading is performed.</p>
+<div class="highlight"><pre><span class="nx">myAction3</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">view3</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;view3&quot;</span><span class="p">);</span> <span class="c1">// destination view</span>
+    <span class="kd">var</span> <span class="nx">listItem</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">prog</span> <span class="o">=</span> <span class="nx">ProgressIndicator</span><span class="p">.</span><span class="nx">getInstance</span><span class="p">();</span>
+    <span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">().</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">prog</span><span class="p">.</span><span class="nx">domNode</span><span class="p">);</span>
+    <span class="nx">prog</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+    <span class="nx">view3</span><span class="p">.</span><span class="nx">destroyDescendants</span><span class="p">();</span>
+    <span class="nx">listItem</span><span class="p">.</span><span class="nx">transitionTo</span><span class="p">(</span><span class="s2">&quot;view3&quot;</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s2">&quot;http://...&quot;</span><span class="p">;</span> <span class="c1">// or var url = listItem.url;</span>
+    <span class="nx">xhr</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
+        <span class="nx">handleAs</span><span class="o">:</span> <span class="s2">&quot;text&quot;</span>
+    <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">view3</span><span class="p">.</span><span class="nx">containerNode</span><span class="p">;</span>
+        <span class="nx">container</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">response</span><span class="p">;</span>
+        <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">container</span><span class="p">);</span>
+        <span class="nx">prog</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myAction3 = function(){
+    var view3 = registry.byId(&quot;view3&quot;); // destination view
+    var listItem = this;
+    var prog = ProgressIndicator.getInstance();
+    win.body().appendChild(prog.domNode);
+    prog.start();
+    view3.destroyDescendants();
+    listItem.transitionTo(&quot;view3&quot;);
+
+    var url = &quot;http://...&quot;; // or var url = listItem.url;
+    xhr(url, {
+        handleAs: &quot;text&quot;
+    }).then(function(response) {
+        var container = view3.containerNode;
+        container.innerHTML = response;
+        parser.parse(container);
+        prog.stop();
+    });
+}</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;view3&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/View&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;view3&quot; data-dojo-type=&quot;dojox/mobile/View&quot;&gt;&lt;/div&gt;</textarea></div></div>
+<div class="section" id="create-a-new-view-and-perform-transition">
+<h3>Create a New View and Perform Transition<a class="headerlink" href="#create-a-new-view-and-perform-transition" title="Permalink to this headline">¶</a></h3>
+<p>The above three examples are examples of updating an existing view. In this example, however, a view (and its content as well) is created programmatically, and then a view transition is performed.</p>
+<div class="highlight"><pre><span class="nx">myAction4</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;view4&quot;</span><span class="p">)){</span>
+        <span class="kd">var</span> <span class="nx">view4</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">View</span><span class="p">({</span>
+            <span class="nx">id</span><span class="o">:</span> <span class="s2">&quot;view4&quot;</span><span class="p">,</span>
+            <span class="nx">selected</span><span class="o">:</span> <span class="kc">true</span>
+        <span class="p">},</span> <span class="nx">domConstruct</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s2">&quot;DIV&quot;</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">()));</span>
+        <span class="nx">view4</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+
+        <span class="kd">var</span> <span class="nx">heading1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Heading</span><span class="p">({</span>
+            <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;Dynamic View&quot;</span><span class="p">,</span>
+            <span class="nx">back</span><span class="o">:</span> <span class="s2">&quot;Home&quot;</span><span class="p">,</span>
+            <span class="nx">moveTo</span><span class="o">:</span> <span class="s2">&quot;home&quot;</span>
+        <span class="p">});</span>
+        <span class="nx">heading1</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="nx">view4</span><span class="p">.</span><span class="nx">containerNode</span><span class="p">);</span>
+        <span class="nx">heading1</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+
+        <span class="kd">var</span> <span class="nx">categ1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RoundRectCategory</span><span class="p">({</span>
+            <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;Documents&quot;</span>
+        <span class="p">});</span>
+        <span class="nx">categ1</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="nx">view4</span><span class="p">.</span><span class="nx">containerNode</span><span class="p">);</span>
+        <span class="nx">categ1</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+
+        <span class="kd">var</span> <span class="nx">list1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RoundRectList</span><span class="p">();</span>
+        <span class="nx">list1</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="nx">view4</span><span class="p">.</span><span class="nx">containerNode</span><span class="p">);</span>
+        <span class="nx">list1</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+
+        <span class="kd">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+        <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">item1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ListItem</span><span class="p">({</span>
+                <span class="nx">icon</span><span class="o">:</span> <span class="s2">&quot;images/i-icon-&quot;</span><span class="o">+</span><span class="nx">i</span><span class="o">+</span><span class="s2">&quot;.png&quot;</span><span class="p">,</span>
+                <span class="nx">label</span><span class="o">:</span> <span class="s2">&quot;Document 000&quot;</span><span class="o">+</span><span class="nx">counter</span>
+            <span class="p">});</span>
+            <span class="nx">item1</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="nx">list1</span><span class="p">.</span><span class="nx">containerNode</span><span class="p">);</span>
+            <span class="nx">item1</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+            <span class="nx">counter</span><span class="o">++</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">transitionTo</span><span class="p">(</span><span class="s2">&quot;view4&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myAction4 = function(){
+    if(!registry.byId(&quot;view4&quot;)){
+        var view4 = new View({
+            id: &quot;view4&quot;,
+            selected: true
+        }, domConstruct.create(&quot;DIV&quot;, null, win.body()));
+        view4.startup();
+
+        var heading1 = new Heading({
+            label: &quot;Dynamic View&quot;,
+            back: &quot;Home&quot;,
+            moveTo: &quot;home&quot;
+        });
+        heading1.placeAt(view4.containerNode);
+        heading1.startup();
+
+        var categ1 = new RoundRectCategory({
+            label: &quot;Documents&quot;
+        });
+        categ1.placeAt(view4.containerNode);
+        categ1.startup();
+
+        var list1 = new RoundRectList();
+        list1.placeAt(view4.containerNode);
+        list1.startup();
+
+        var counter = 4;
+        for(var i = 1; i &lt;= 3; i++){
+            var item1 = new ListItem({
+                icon: &quot;images/i-icon-&quot;+i+&quot;.png&quot;,
+                label: &quot;Document 000&quot;+counter
+            });
+            item1.placeAt(list1.containerNode);
+            item1.startup();
+            counter++;
+        }
+    }
+    this.transitionTo(&quot;view4&quot;);
+}</textarea></div></div>
+<div class="section" id="update-datalist">
+<h3>Update DataList<a class="headerlink" href="#update-datalist" title="Permalink to this headline">¶</a></h3>
+<p>This example updates an existing RoundRectDataList via a dojo/data datastore, and then performs a transition.</p>
+<div class="highlight"><pre><span class="nx">myAction5</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">list1</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;list1&quot;</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">list1</span><span class="p">.</span><span class="nx">store</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">store1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ItemFileReadStore</span><span class="p">({</span><span class="nx">data</span><span class="o">:</span> <span class="nx">static_data</span><span class="p">});</span>
+        <span class="nx">list1</span><span class="p">.</span><span class="nx">setStore</span><span class="p">(</span><span class="nx">store1</span><span class="p">,</span> <span class="p">{</span><span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;*e&#39;</span><span class="p">});</span> <span class="c1">// items whose label ends with &#39;e&#39;</span>
+    <span class="p">}</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">transitionTo</span><span class="p">(</span><span class="s2">&quot;view5&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myAction5 = function(){
+    var list1 = registry.byId(&quot;list1&quot;);
+    if(!list1.store){
+        var store1 = new ItemFileReadStore({data: static_data});
+        list1.setStore(store1, {label: '*e'}); // items whose label ends with 'e'
+    }
+    this.transitionTo(&quot;view5&quot;);
+}</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;view5&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/View&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;h1</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Heading&quot;</span><span class="nt">&gt;</span>RoundRectDataList<span class="nt">&lt;/h1&gt;</span>
+   <span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">&quot;list1&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/RoundRectDataList&quot;</span><span class="nt">&gt;&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;view5&quot; data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+   &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot;&gt;RoundRectDataList&lt;/h1&gt;
+   &lt;ul id=&quot;list1&quot; data-dojo-type=&quot;dojox/mobile/RoundRectDataList&quot;&gt;&lt;/ul&gt;
+&lt;/div&gt;</textarea></div></div>
+<div class="section" id="partial-update-using-dojox-mobile-contentpane">
+<h3>Partial Update Using dojox/mobile/ContentPane<a class="headerlink" href="#partial-update-using-dojox-mobile-contentpane" title="Permalink to this headline">¶</a></h3>
+<p>In this example, there is a dojox/mobile/ContentPane widget in the transition target view. dojox/mobile/ContentPane is a very simple container widget, so it can be thought of as a &lt;div&gt; with the &#8220;href&#8221; attribute. This example updates the ContentPane with an external html fragment, and then performs a transition.</p>
+<div class="highlight"><pre><span class="nx">myAction6</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">pane1</span> <span class="o">=</span> <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;pane1&quot;</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">pane1</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">){</span> <span class="c1">// nothing has been loaded yet</span>
+        <span class="nx">pane1</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="nx">lang</span><span class="p">.</span><span class="nx">hitch</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+            <span class="c1">// onLoad fires when the content is ready</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">transitionTo</span><span class="p">(</span><span class="s2">&quot;view6&quot;</span><span class="p">);</span>
+        <span class="p">}));</span>
+        <span class="nx">pane1</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;href&quot;</span><span class="p">,</span> <span class="s2">&quot;fragment1.html&quot;</span><span class="p">);</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">transitionTo</span><span class="p">(</span><span class="s2">&quot;view6&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myAction6 = function(){
+    var pane1 = registry.byId(&quot;pane1&quot;);
+    if(!pane1.domNode.innerHTML){ // nothing has been loaded yet
+        pane1.on(&quot;load&quot;, lang.hitch(this, function(){
+            // onLoad fires when the content is ready
+            this.transitionTo(&quot;view6&quot;);
+        }));
+        pane1.set(&quot;href&quot;, &quot;fragment1.html&quot;);
+    }else{
+        this.transitionTo(&quot;view6&quot;);
+    }
+}</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;view6&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/ScrollableView&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;h1</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Heading&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;back:&quot;Home&quot;, moveTo:&quot;home&quot;, fixed:&quot;top&quot;&#39;</span><span class="nt">&gt;</span>Partial Update<span class="nt">&lt;/h1&gt;</span>
+   <span class="nt">&lt;h2</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/RoundRectCategory&quot;</span><span class="nt">&gt;</span>Dynamic Content<span class="nt">&lt;/h2&gt;</span>
+   <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;pane1&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/ContentPane&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+   <span class="nt">&lt;ul</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/RoundRectList&quot;</span><span class="nt">&gt;</span>
+       <span class="nt">&lt;li</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/ListItem&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;moveTo:&quot;home&quot;, transitionDir:-1&#39;</span><span class="nt">&gt;</span>
+           Home
+       <span class="nt">&lt;/li&gt;</span>
+   <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;view6&quot; data-dojo-type=&quot;dojox/mobile/ScrollableView&quot;&gt;
+   &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props='back:&quot;Home&quot;, moveTo:&quot;home&quot;, fixed:&quot;top&quot;'&gt;Partial Update&lt;/h1&gt;
+   &lt;h2 data-dojo-type=&quot;dojox/mobile/RoundRectCategory&quot;&gt;Dynamic Content&lt;/h2&gt;
+   &lt;div id=&quot;pane1&quot; data-dojo-type=&quot;dojox/mobile/ContentPane&quot;&gt;&lt;/div&gt;
+   &lt;ul data-dojo-type=&quot;dojox/mobile/RoundRectList&quot;&gt;
+       &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot; data-dojo-props='moveTo:&quot;home&quot;, transitionDir:-1'&gt;
+           Home
+       &lt;/li&gt;
+   &lt;/ul&gt;
+&lt;/div&gt;</textarea></div></div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

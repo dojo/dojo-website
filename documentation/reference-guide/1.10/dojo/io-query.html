@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/io-query &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/io-query</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#objecttoquery">objectToQuery()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#querytoobject">queryToObject()</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-io-query">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/io-query</a><a class="headerlink" href="#dojo-io-query" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-io-query" id="id2">dojo/io-query</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#querytoobject" id="id5">queryToObject()</a></li>
+<li><a class="reference internal" href="#examples" id="id6">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id7">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/io-query</strong> defines query string processing functions which contain <code class="docutils literal"><span class="pre">objectToQuery</span></code> and <code class="docutils literal"><span class="pre">queryToObject</span></code>.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">dojo/io-query</span></code> provides two utility functions for converting between JavaScript objects and query strings that are
+part of a URL.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="objecttoquery">
+<span id="dojo-io-query-objecttoquery"></span><h3>objectToQuery()<a class="headerlink" href="#objecttoquery" title="Permalink to this headline">¶</a></h3>
+<p>Takes a name/value mapping object and returns a string representing a URL-encoded version of that object.</p>
+<p>This function is one of many helpers used by the <code class="docutils literal"><span class="pre">dojo/request</span></code> subsystem for handling AJAX style requests.  This
+particular function takes a JavaScript object and converts it to a query string suitable to append onto a URI.  This
+function is useful in constructing URIs quickly and cleanly, with the proper special character encoding.  The resulting
+query string can be converted back to a JavaScript object by the function <code class="docutils literal"><span class="pre">queryToObject()</span></code>.</p>
+<p>Usage is simple and straightforward, you pass the object you wish converted to a query string and the function will
+return the query string.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/io-query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ioQuery</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">uri</span> <span class="o">=</span> <span class="s2">&quot;http://some.server.org/somecontext/&quot;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;bar2&quot;</span><span class="p">],</span>
+    <span class="nx">bit</span><span class="o">:</span> <span class="s2">&quot;byte&quot;</span>
+  <span class="p">};</span>
+
+  <span class="c1">// Assemble the new uri with its query string attached.</span>
+  <span class="kd">var</span> <span class="nx">queryStr</span> <span class="o">=</span> <span class="nx">ioQuery</span><span class="p">.</span><span class="nx">objectToQuery</span><span class="p">(</span><span class="nx">query</span><span class="p">);</span>
+  <span class="nx">uri</span> <span class="o">=</span> <span class="nx">uri</span> <span class="o">+</span> <span class="s2">&quot;?&quot;</span> <span class="o">+</span> <span class="nx">queryStr</span><span class="p">;</span>
+
+  <span class="c1">// The uri should look like:</span>
+  <span class="c1">// http://some.server.org/somecontext/?foo=bar&amp;foo=bar2&amp;bit=byte</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/io-query&quot;], function(ioQuery){
+  var uri = &quot;http://some.server.org/somecontext/&quot;;
+  var query = {
+    foo: [&quot;bar&quot;, &quot;bar2&quot;],
+    bit: &quot;byte&quot;
+  };
+
+  // Assemble the new uri with its query string attached.
+  var queryStr = ioQuery.objectToQuery(query);
+  uri = uri + &quot;?&quot; + queryStr;
+
+  // The uri should look like:
+  // http://some.server.org/somecontext/?foo=bar&amp;foo=bar2&amp;bit=byte
+});</textarea></div></div>
+</div>
+<div class="section" id="querytoobject">
+<span id="dojo-io-query-querytoobject"></span><h2><a class="toc-backref" href="#id5">queryToObject()</a><a class="headerlink" href="#querytoobject" title="Permalink to this headline">¶</a></h2>
+<p>Helper function for converting a URI query string to a JavaScript Object.</p>
+<p>This function is one of many helpers used by the <code class="docutils literal"><span class="pre">dojo/request</span></code> subsystem for handling AJAX style requests.  This
+particular function takes the query portion of a URI and returns a JavaScript object of the name/value pairs.  It
+handles both single and multi-valued query parameters.  This function is useful in deconstructing URIs for display in
+page forms and the like.  It can also be used as a way to modify a query by converting to JavaScript, making changes to
+parameters, then converting it back to a query string via <code class="docutils literal"><span class="pre">objectToQuery()</span></code>.</p>
+<p>Usage is simple and straightforward, you pass the query string of the URI as the parameter to the function and it will
+return it in JavaScript object form.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/io-query&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ioQuery</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">uri</span> <span class="o">=</span> <span class="s2">&quot;http://some.server.org/somecontext/?foo=bar&amp;foo=bar2&amp;bit=byte&quot;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">uri</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="nx">uri</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">uri</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">queryObject</span> <span class="o">=</span> <span class="nx">ioQuery</span><span class="p">.</span><span class="nx">queryToObject</span><span class="p">(</span><span class="nx">query</span><span class="p">);</span>
+
+  <span class="c1">// The structure of queryObject will be:</span>
+  <span class="c1">// {</span>
+  <span class="c1">//   foo: [&quot;bar&quot;, &quot;bar2&quot;],</span>
+  <span class="c1">//   bit: &quot;byte&quot;</span>
+  <span class="c1">// }</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/io-query&quot;], function(ioQuery){
+  var uri = &quot;http://some.server.org/somecontext/?foo=bar&amp;foo=bar2&amp;bit=byte&quot;;
+  var query = uri.substring(uri.indexOf(&quot;?&quot;) + 1, uri.length);
+  var queryObject = ioQuery.queryToObject(query);
+
+  // The structure of queryObject will be:
+  // {
+  //   foo: [&quot;bar&quot;, &quot;bar2&quot;],
+  //   bit: &quot;byte&quot;
+  // }
+});</textarea></div></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id6">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Using <code class="docutils literal"><span class="pre">objectToQuery()</span></code> to create a query string and assign it to a URI</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/io-query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="nx">ioQuery</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;convertQuery&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">uri</span> <span class="o">=</span>  <span class="s2">&quot;http://uri.some.org/context&quot;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="nx">foo</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="s2">&quot;bar2&quot;</span><span class="p">],</span>
+      <span class="nx">bit</span><span class="o">:</span> <span class="s2">&quot;byte&quot;</span>
+    <span class="p">};</span>
+
+    <span class="c1">// Assemble the new URI.</span>
+    <span class="kd">var</span> <span class="nx">queryStr</span> <span class="o">=</span> <span class="nx">ioQuery</span><span class="p">.</span><span class="nx">objectToQuery</span><span class="p">(</span><span class="nx">query</span><span class="p">);</span>
+    <span class="nx">uri</span> <span class="o">=</span> <span class="nx">uri</span> <span class="o">+</span> <span class="s2">&quot;?&quot;</span> <span class="o">+</span> <span class="nx">queryStr</span><span class="p">;</span>
+
+    <span class="c1">// Attach it into the dom</span>
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">uri</span><span class="p">;</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom&quot;, &quot;dojo/io-query&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(dom, ioQuery, on){
+  on(dom.byId(&quot;convertQuery&quot;), &quot;click&quot;, function(){
+    var uri =  &quot;http://uri.some.org/context&quot;;
+    var query = {
+      foo: [&quot;bar&quot;, &quot;bar2&quot;],
+      bit: &quot;byte&quot;
+    };
+
+    // Assemble the new URI.
+    var queryStr = ioQuery.objectToQuery(query);
+    uri = uri + &quot;?&quot; + queryStr;
+
+    // Attach it into the dom
+    dom.byId(&quot;query&quot;).innerHTML = uri;
+  });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;convertQuery&quot;</span><span class="nt">&gt;</span>
+    Click to update the URI with a query generated from an object<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>The URI<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;pre&gt;</span>http://uri.some.org/context<span class="nt">&lt;/pre&gt;</span>
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>The modified URI with a query string.:<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;pre</span> <span class="na">id=</span><span class="s">&quot;query&quot;</span><span class="nt">&gt;&lt;/pre&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button type=&quot;button&quot; id=&quot;convertQuery&quot;&gt;
+    Click to update the URI with a query generated from an object&lt;/button&gt;
+&lt;p&gt;&lt;strong&gt;The URI&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;http://uri.some.org/context&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;The modified URI with a query string.:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre id=&quot;query&quot;&gt;&lt;/pre&gt;</textarea></div></div></div><div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Using <code class="docutils literal"><span class="pre">queryToObject()</span></code> to create a JavaScript form of a query</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/io-query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/json&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="nx">ioQuery</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;convertQuery&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">uri</span> <span class="o">=</span>  <span class="s2">&quot;http://uri.some.org/context?foo=bar&amp;foo=bar2&amp;bit=byte&quot;</span><span class="p">;</span>
+
+    <span class="c1">// Isolate the query portion of the URI and convert it.</span>
+    <span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">uri</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="nx">uri</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">uri</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+    <span class="nx">query</span> <span class="o">=</span> <span class="nx">ioQuery</span><span class="p">.</span><span class="nx">queryToObject</span><span class="p">(</span><span class="nx">query</span><span class="p">);</span>
+
+    <span class="c1">// Attach it into the don as pretty-printed text.</span>
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;query&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom&quot;, &quot;dojo/io-query&quot;, &quot;dojo/json&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(dom, ioQuery, JSON, on){
+  on(dom.byId(&quot;convertQuery&quot;), &quot;click&quot;, function(){
+    var uri =  &quot;http://uri.some.org/context?foo=bar&amp;foo=bar2&amp;bit=byte&quot;;
+
+    // Isolate the query portion of the URI and convert it.
+    var query = uri.substring(uri.indexOf(&quot;?&quot;) + 1, uri.length);
+    query = ioQuery.queryToObject(query);
+
+    // Attach it into the don as pretty-printed text.
+    dom.byId(&quot;query&quot;).innerHTML = JSON.stringify(query, true);
+  });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;convertQuery&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>
+    Click to convert query portion of URI<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>The URI<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;pre&gt;</span>http://uri.some.org/context?foo=bar<span class="err">&amp;</span>foo=bar2<span class="err">&amp;</span>bit=byte<span class="nt">&lt;/pre&gt;</span>
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>The Query converted to a JavaScript Object:<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;pre</span> <span class="na">id=</span><span class="s">&quot;query&quot;</span><span class="nt">&gt;&lt;/pre&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button id=&quot;convertQuery&quot; type=&quot;button&quot;&gt;
+    Click to convert query portion of URI&lt;/button&gt;
+&lt;p&gt;&lt;strong&gt;The URI&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;http://uri.some.org/context?foo=bar&amp;foo=bar2&amp;bit=byte&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;The Query converted to a JavaScript Object:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre id=&quot;query&quot;&gt;&lt;/pre&gt;</textarea></div></div></div><div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Using queryToObject and objectToQuery to alter query strings</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/io-query&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/json&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">dom</span><span class="p">,</span> <span class="nx">ioQuery</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+    <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;alterQuery&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+       <span class="kd">var</span> <span class="nx">uri</span> <span class="o">=</span> <span class="s2">&quot;http://uri.some.org/context?foo=bar&amp;foo=bar2&amp;bit=byte&quot;</span><span class="p">;</span>
+
+       <span class="c1">// Isolate the query portion of the URI and convert it.</span>
+       <span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">uri</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="nx">uri</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">uri</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+       <span class="nx">query</span> <span class="o">=</span> <span class="nx">ioQuery</span><span class="p">.</span><span class="nx">queryToObject</span><span class="p">(</span><span class="nx">query</span><span class="p">);</span>
+
+       <span class="c1">// let&#39;s make some changes.</span>
+       <span class="nx">query</span><span class="p">.</span><span class="nx">foo</span> <span class="o">=</span> <span class="s2">&quot;alteredFoo&quot;</span><span class="p">;</span>
+       <span class="nx">query</span><span class="p">.</span><span class="nx">newParam</span> <span class="o">=</span> <span class="s2">&quot;I&#39;m new!&quot;</span><span class="p">;</span>
+
+       <span class="c1">// Write the new URI out.</span>
+       <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;alteredQuery&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">uri</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">uri</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">ioQuery</span><span class="p">.</span><span class="nx">objectToQuery</span><span class="p">(</span><span class="nx">query</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/dom&quot;, &quot;dojo/io-query&quot;, &quot;dojo/json&quot;, &quot;dojo/on&quot;, &quot;dojo/domReady!&quot;],
+function(dom, ioQuery, JSON, on){
+    on(dom.byId(&quot;alterQuery&quot;), &quot;click&quot;, function(){
+       var uri = &quot;http://uri.some.org/context?foo=bar&amp;foo=bar2&amp;bit=byte&quot;;
+
+       // Isolate the query portion of the URI and convert it.
+       var query = uri.substring(uri.indexOf(&quot;?&quot;) + 1, uri.length);
+       query = ioQuery.queryToObject(query);
+
+       // let's make some changes.
+       query.foo = &quot;alteredFoo&quot;;
+       query.newParam = &quot;I'm new!&quot;;
+
+       // Write the new URI out.
+       dom.byId(&quot;alteredQuery&quot;).innerHTML = uri.substring(0, uri.indexOf(&quot;?&quot;) + 1) + ioQuery.objectToQuery(query);
+    });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;alterQuery&quot;</span><span class="nt">&gt;</span>Click to alter the query string<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;p&gt;&lt;strong&gt;</span>The URI<span class="nt">&lt;/strong&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;pre&gt;</span>http://uri.some.org/context?foo=bar<span class="err">&amp;</span>foo=bar2<span class="err">&amp;</span>bit=byte<span class="nt">&lt;/pre&gt;</span>
+<span class="nt">&lt;strong&gt;</span>The modified query string in the URI:<span class="nt">&lt;/strong&gt;</span>
+<span class="nt">&lt;pre</span> <span class="na">id=</span><span class="s">&quot;alteredQuery&quot;</span><span class="nt">&gt;&lt;/pre&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button id=&quot;alterQuery&quot;&gt;Click to alter the query string&lt;/button&gt;
+&lt;p&gt;&lt;strong&gt;The URI&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;http://uri.some.org/context?foo=bar&amp;foo=bar2&amp;bit=byte&lt;/pre&gt;
+&lt;strong&gt;The modified query string in the URI:&lt;/strong&gt;
+&lt;pre id=&quot;alteredQuery&quot;&gt;&lt;/pre&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id7">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="dom-form.html#dojo-dom-form"><span>dojo/dom-form</span></a> - HTML form conversion utility functions.</li>
+<li><a class="reference internal" href="hash.html#dojo-hash"><span>dojo/hash</span></a> - Manage and control the browsers hash.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

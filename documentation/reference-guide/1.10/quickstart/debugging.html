@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Debugging Tutorial &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Debugging Tutorial</a><ul>
+<li><a class="reference internal" href="#use-firebug-or-firebug-lite">Use Firebug or Firebug Lite</a></li>
+<li><a class="reference internal" href="#faulty-dojo-require-s-and-the-firebug-console">Faulty dojo.require&#8217;s and the Firebug Console</a></li>
+<li><a class="reference internal" href="#errors-in-dojo-method-and-dojo-event-code">Errors In Dojo/Method and Dojo/Event Code</a></li>
+<li><a class="reference internal" href="#method-1-logging">Method 1: Logging</a></li>
+<li><a class="reference internal" href="#method-2-the-debugger-statement">Method 2: The &#8220;debugger&#8221; Statement</a></li>
+<li><a class="reference internal" href="#to-follow-the-dojo-require-trail-use-dojo-locally">To Follow The dojo.require Trail, Use Dojo Locally</a></li>
+<li><a class="reference internal" href="#that-doesn-t-look-right-dom-inspection">That Doesn&#8217;t Look Right ... DOM Inspection</a></li>
+<li><a class="reference internal" href="#debugging-external-classes-with-debugatallcosts">Debugging External Classes With debugAtAllCosts</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="debugging-tutorial">
+<span id="quickstart-debugging"></span><h1><a class="toc-backref" href="#id1">Debugging Tutorial</a><a class="headerlink" href="#debugging-tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#debugging-tutorial" id="id1">Debugging Tutorial</a><ul>
+<li><a class="reference internal" href="#use-firebug-or-firebug-lite" id="id2">Use Firebug or Firebug Lite</a></li>
+<li><a class="reference internal" href="#faulty-dojo-require-s-and-the-firebug-console" id="id3">Faulty dojo.require&#8217;s and the Firebug Console</a></li>
+<li><a class="reference internal" href="#errors-in-dojo-method-and-dojo-event-code" id="id4">Errors In Dojo/Method and Dojo/Event Code</a></li>
+<li><a class="reference internal" href="#method-1-logging" id="id5">Method 1: Logging</a></li>
+<li><a class="reference internal" href="#method-2-the-debugger-statement" id="id6">Method 2: The &#8220;debugger&#8221; Statement</a></li>
+<li><a class="reference internal" href="#to-follow-the-dojo-require-trail-use-dojo-locally" id="id7">To Follow The dojo.require Trail, Use Dojo Locally</a></li>
+<li><a class="reference internal" href="#that-doesn-t-look-right-dom-inspection" id="id8">That Doesn&#8217;t Look Right ... DOM Inspection</a></li>
+<li><a class="reference internal" href="#debugging-external-classes-with-debugatallcosts" id="id9">Debugging External Classes With debugAtAllCosts</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>Deprecated</em>, this document is deprecated.</p>
+<p>Dojo is very lean and speedy, and uses some very clever tricks to save memory and time. The downside: Dojo does not contain much error trapping, which would bloat and slow down the code. If your code is not behaving, some of the resulting errors can look mighty puzzling at first.</p>
+<p>No worries! Here are a few tips to make you a confident, successful bug finder. Knowing these ahead of time will make your Dojo learning curve less steep.</p>
+<div class="section" id="use-firebug-or-firebug-lite">
+<h2><a class="toc-backref" href="#id2">Use Firebug or Firebug Lite</a><a class="headerlink" href="#use-firebug-or-firebug-lite" title="Permalink to this headline">¶</a></h2>
+<p>We can&#8217;t stress this enough. Firebug, an open source debugging extension for Firefox, is &#8216;&#8217;essential&#8217;&#8217; for JavaScript, HTML and CSS debugging. You can download it from the <a class="reference external" href="http://getfirebug.com">Firebug web site</a>.</p>
+<p>If you use Internet Explorer or Safari, you can use the Firebug Lite library, bundled with Dojo. This gives you some of the logging and command line features of Firebug. It&#8217;s not a full emulation, but it&#8217;s a fairly good alternative and is fully API-compatible.</p>
+<p>To use Firebug Lite, you must include the isDebug config parameter like so:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.7/dojo/dojo.js&quot;</span>
+        <span class="na">data-dojo-config=</span><span class="s">&quot;parseOnLoad: true, isDebug: true&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script type=&quot;text/javascript&quot; src=&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.7/dojo/dojo.js&quot;
+        data-dojo-config=&quot;parseOnLoad: true, isDebug: true&quot;&gt;&lt;/script&gt;</textarea></div><p>This parameter has no effect on Firefox browsers with Firebug already present. So including this parameter makes your debugging code usable in IE, Safari, and Firefox with no changes.</p>
+<p>Note that while it is possible to debug to some extent against prebuilt releases
+such as those on CDN, serious debugging will be far easier against an
+uncompressed version of Dojo&#8217;s source.  You can download the source via
+one of the &#8220;-src&#8221; packages at <a class="reference external" href="http://download.dojotoolkit.org/">download.dojotoolkit.org</a>.</p>
+</div>
+<div class="section" id="faulty-dojo-require-s-and-the-firebug-console">
+<h2><a class="toc-backref" href="#id3">Faulty dojo.require&#8217;s and the Firebug Console</a><a class="headerlink" href="#faulty-dojo-require-s-and-the-firebug-console" title="Permalink to this headline">¶</a></h2>
+<p>The following code has a subtle bug:</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>Fix me!<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+        <span class="k">@import</span> <span class="s2">&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.7/dijit/themes/claro/claro.css&quot;</span><span class="p">;</span>
+        <span class="k">@import</span> <span class="s2">&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.7/dojo/resources/dojo.css&quot;</span><span class="p">;</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.7/dojo/dojo.js&quot;</span>
+        <span class="na">data-dojo-config=</span><span class="s">&quot;parseOnLoad: true, isDebug: true&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+        <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.parser&quot;</span><span class="p">);</span>
+        <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.Textbox&quot;</span><span class="p">);</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">&quot;claro&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;form&gt;</span>
+  What&#39;s the 411? <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">size=</span><span class="s">&quot;20&quot;</span> <span class="na">name=</span><span class="s">&quot;info&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/TextBox&quot;</span>
+           <span class="na">data-dojo-props=</span><span class="s">&quot;trim:true, propercase:true&quot;</span> <span class="nt">/&gt;&lt;br&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Fix me!&lt;/title&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+        &#64;import &quot;http://ajax.googleapis.com/ajax/libs/dojo/1.7/dijit/themes/claro/claro.css&quot;;
+        &#64;import &quot;http://ajax.googleapis.com/ajax/libs/dojo/1.7/dojo/resources/dojo.css&quot;;
+    &lt;/style&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.7/dojo/dojo.js&quot;
+        data-dojo-config=&quot;parseOnLoad: true, isDebug: true&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        dojo.require(&quot;dojo.parser&quot;);
+        dojo.require(&quot;dijit.form.Textbox&quot;);
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body class=&quot;claro&quot;&gt;
+  &lt;form&gt;
+  What's the 411? &lt;input type=&quot;text&quot; size=&quot;20&quot; name=&quot;info&quot; data-dojo-type=&quot;dijit/form/TextBox&quot;
+           data-dojo-props=&quot;trim:true, propercase:true&quot; /&gt;&lt;br&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea></div><p>Without Firebug, this code may pop up an unhelpful dialog box (IE) or display nothing (Firefox). In either case the textbox doesn&#8217;t look right. You check this by entering a lowercase name and tabbing out of the box ... the propercase attribute should capitalize the first letter. It doesn&#8217;t.</p>
+<p>With Firebug the error is easier to spot. First, there&#8217;s an indicator at the bottom right hand corner.</p>
+<img alt="Debugging with Firebug" src="../_images/debugging1a.png" />
+<p>You click on the &#8220;1 Error&#8221; message and the Firebug console pops up:</p>
+<img alt="Firebug console" src="../_images/debugging2.png" />
+<p>Looking back at your code, you notice the capitalization on &#8220;Textbox&#8221; in the dojo.require is wrong. That&#8217;s a common mistake, but easily fixed. It&#8217;s also common to forget the dojo.require, or to misspell the class in the data-dojo-type attribute. In each case, Firebug will set you straight.</p>
+<p>Firebug Lite will give you a similar console, but it will appear naturally at the bottom of your browser window. To turn it off, you must set the isDebug flag to false and run the page again.</p>
+</div>
+<div class="section" id="errors-in-dojo-method-and-dojo-event-code">
+<h2><a class="toc-backref" href="#id4">Errors In Dojo/Method and Dojo/Event Code</a><a class="headerlink" href="#errors-in-dojo-method-and-dojo-event-code" title="Permalink to this headline">¶</a></h2>
+<p>The following code has an error:</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>Fix me!<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+        <span class="c">/* FIXME: adjust to goog cdn url */</span>
+        <span class="k">@import</span> <span class="s2">&quot;http://o.aolcdn.com/dojo/1.6/dijit/themes/tundra/tundra.css&quot;</span><span class="p">;</span>
+        <span class="k">@import</span> <span class="s2">&quot;http://o.aolcdn.com/dojo/1.6/dojo/resources/dojo.css&quot;</span><span class="p">;</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.7/dojo/dojo.js&quot;</span>
+            <span class="na">data-dojo-config=</span><span class="s">&quot;parseOnLoad: true&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+        <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.parser&quot;</span><span class="p">);</span>
+        <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.Button&quot;</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">newWidth</span> <span class="o">=</span> <span class="s1">&#39;200px&#39;</span><span class="p">;</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">&quot;claro&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span><span class="nt">&gt;</span>
+   Click to break!
+   <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;dojo/event&quot;</span> <span class="na">data-dojo-event=</span><span class="s">&quot;onClick&quot;</span><span class="nt">&gt;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">newWidth</span><span class="p">;</span>
+   <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Fix me!&lt;/title&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+        /* FIXME: adjust to goog cdn url */
+        &#64;import &quot;http://o.aolcdn.com/dojo/1.6/dijit/themes/tundra/tundra.css&quot;;
+        &#64;import &quot;http://o.aolcdn.com/dojo/1.6/dojo/resources/dojo.css&quot;;
+    &lt;/style&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.7/dojo/dojo.js&quot;
+            data-dojo-config=&quot;parseOnLoad: true&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        dojo.require(&quot;dojo.parser&quot;);
+        dojo.require(&quot;dijit.form.Button&quot;);
+        var newWidth = '200px';
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body class=&quot;claro&quot;&gt;
+&lt;div data-dojo-type=&quot;dijit/form/Button&quot;&gt;
+   Click to break!
+   &lt;script type=&quot;dojo/event&quot; data-dojo-event=&quot;onClick&quot;&gt;
+      this.domNode.style.width = dojo.newWidth;
+   &lt;/script&gt;
+&lt;/div&gt;
+&lt;/html&gt;</textarea></div><p>But when you look at the console, there&#8217;s no apparent error. If you were programming in other languages, you might use a debugger and set a breakpoint on the &#8220;this.domNode&#8221; line. Firebug&#8217;s debugger lets you do that, but not on this particular code. Scripts of type &#8220;dojo/event&#8221; and &#8220;dojo/method&#8221; are compiled and interpreted differently than &#8220;text/javascript&#8221; ones. But there are a couple of alternate debugging methods.</p>
+</div>
+<div class="section" id="method-1-logging">
+<h2><a class="toc-backref" href="#id5">Method 1: Logging</a><a class="headerlink" href="#method-1-logging" title="Permalink to this headline">¶</a></h2>
+<p>The first method is &#8216;&#8217;logging&#8217;&#8216;, and if you&#8217;ve used modern logging tools like log4j you&#8217;ll find it familiar. The idea is to write trace messages to a log which you can then use to find variable values or the last executed bit of code.</p>
+<p>Why not just use alert() ? The trusty JavaScript alert() is a favorite debugging tool, but it suffers from the following problems:</p>
+<blockquote>
+<div><ul class="simple">
+<li>If you have many alerts, it&#8217;s annoying to keep clicking [OK]</li>
+<li>Too much text can make the dialog box overflow the screen</li>
+<li>You must remember to remove every alert() before release</li>
+<li>alert() in a tight loop might make it impossible to stop without killing the browser process</li>
+<li>You cannot easily print object contents or arrays</li>
+</ul>
+</div></blockquote>
+<p>Clearly alert is just not powerful enough. In Dojo logging, you can associate messages with severity, just like in log4j. The following code illustrates the five severity levels:</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Nothing happening&quot;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;Checking to make sure nothing happened&quot;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="s2">&quot;Something might happen.&quot;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s2">&quot;Something happened, but it&#39;s no big deal.&quot;</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s2">&quot;Cough cough!&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">console.log(&quot;Nothing happening&quot;);
+console.debug(&quot;Checking to make sure nothing happened&quot;);
+console.info(&quot;Something might happen.&quot;);
+console.warn(&quot;Something happened, but it's no big deal.&quot;);
+console.error(&quot;Cough cough!&quot;);</textarea></div><p>In the Firebug console, the messages will appear like this:</p>
+<img alt="Firebug logging" src="../_images/firebug_logging.png" />
+<p>In IE, they will appear like this:</p>
+<img alt="Firebug logging" src="../_images/firebug_ie_capture.png" />
+<p>Another useful method, console.dir() dumps variable contents to the screen. While console.log works fine for strings and integers, console.dir prints more complex variables - objects, arrays, arrays of objects, or whatever. For example:</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">dir</span><span class="p">([</span>
+   <span class="p">{</span><span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;last_name&quot;</span><span class="p">,</span> <span class="nx">sortDescending</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span>
+   <span class="p">{</span><span class="nx">fruits</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;apple&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s2">&quot;pear&quot;</span><span class="p">],</span> <span class="nx">sortDescending</span><span class="o">:</span> <span class="kc">true</span><span class="p">}</span>
+<span class="p">]);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">console.dir([
+   {attribute: &quot;last_name&quot;, sortDescending: true},
+   {fruits: [&quot;apple&quot;, &quot;orange&quot;, &quot;pear&quot;], sortDescending: true}
+]);</textarea></div><p>produces:</p>
+<img alt="Firebug logging" src="../_images/firebug_logging2.png" />
+<p>So in our example above, we write:</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">debug</span><span class="p">(</span><span class="s2">&quot;dojo.newWidth is&quot;</span> <span class="o">+</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">newWidth</span><span class="p">);</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">newWidth</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">console.debug(&quot;dojo.newWidth is&quot; + dojo.newWidth);
+this.domNode.style.width = dojo.newWidth;</textarea></div><p>Running this, we quickly find that dojo.newWidth is undefined. Maybe we spelled it wrong? To quickly find out, we change the debugging statement to:</p>
+<div class="highlight"><pre><span class="nx">console</span><span class="p">.</span><span class="nx">dir</span><span class="p">(</span><span class="s2">&quot;dojo is&quot;</span> <span class="o">+</span> <span class="nx">dojo</span><span class="p">);</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">newWidth</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">console.dir(&quot;dojo is&quot; + dojo);
+this.domNode.style.width = dojo.newWidth;</textarea></div><p>Nope, there&#8217;s no property in dojo that looks like newWidth. Finally, we spot our error and change the right hand side to &#8220;newWidth.&#8221; Case closed.</p>
+</div>
+<div class="section" id="method-2-the-debugger-statement">
+<h2><a class="toc-backref" href="#id6">Method 2: The &#8220;debugger&#8221; Statement</a><a class="headerlink" href="#method-2-the-debugger-statement" title="Permalink to this headline">¶</a></h2>
+<p>Alternatively you can set a &#8220;poor man&#8217;s breakpoint&#8221; in the code. Just insert the debugger; statement, which is a legal JavaScript reserved word.</p>
+<div class="highlight"><pre><span class="kr">debugger</span><span class="p">;</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">newWidth</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">debugger;
+this.domNode.style.width = dojo.newWidth;</textarea></div><p>This statement stops the code and brings you to a Firebug command prompt. It appears the code has stopped at ... huh?</p>
+<p>That&#8217;s a side effect of running dojo/event code. The breakpoints don&#8217;t seem correct at all.</p>
+<p>But just click the Console tab and now you can examine variables or execute just about any JavaScript you want. In this case, we look at the dojo.newWidth property, which has nothing in it. But &#8220;dojo&#8221; does and we examine it by console.dir(dojo). Basically all the logging features of method 1 are available to type here.</p>
+<img alt="Firebug console" src="../_images/debugging3.png" />
+</div>
+<div class="section" id="to-follow-the-dojo-require-trail-use-dojo-locally">
+<h2><a class="toc-backref" href="#id7">To Follow The dojo.require Trail, Use Dojo Locally</a><a class="headerlink" href="#to-follow-the-dojo-require-trail-use-dojo-locally" title="Permalink to this headline">¶</a></h2>
+<p>Since that code is now running, we try a minor variant which sets the button to blue:</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot;</span>
+<span class="cp">            &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>Fix me!<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+        <span class="k">@import</span> <span class="s2">&quot;http://o.aolcdn.com/dojo/1.6/dijit/themes/tundra/tundra.css&quot;</span><span class="p">;</span>
+        <span class="k">@import</span> <span class="s2">&quot;http://o.aolcdn.com/dojo/1.6/dojo/resources/dojo.css&quot;</span><span class="p">;</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;http://o.aolcdn.com/dojo/1.0.0/dojo/dojo.xd.js&quot;</span>
+            <span class="na">data-dojo-config=</span><span class="s">&quot;parseOnLoad: true&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+        <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.parser&quot;</span><span class="p">);</span>
+        <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.Button&quot;</span><span class="p">);</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">&quot;tundra&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span><span class="nt">&gt;</span>
+   Click to break!
+   <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;dojo/event&quot;</span> <span class="na">data-dojo-event=</span><span class="s">&quot;onClick&quot;</span><span class="nt">&gt;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">domNode</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">Color</span><span class="p">.</span><span class="nx">named</span><span class="p">.</span><span class="nx">aliceblue</span><span class="p">;</span>
+   <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot;
+            &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Fix me!&lt;/title&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+        &#64;import &quot;http://o.aolcdn.com/dojo/1.6/dijit/themes/tundra/tundra.css&quot;;
+        &#64;import &quot;http://o.aolcdn.com/dojo/1.6/dojo/resources/dojo.css&quot;;
+    &lt;/style&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;http://o.aolcdn.com/dojo/1.0.0/dojo/dojo.xd.js&quot;
+            data-dojo-config=&quot;parseOnLoad: true&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        dojo.require(&quot;dojo.parser&quot;);
+        dojo.require(&quot;dijit.form.Button&quot;);
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body class=&quot;tundra&quot;&gt;
+&lt;div data-dojo-type=&quot;dijit/form/Button&quot;&gt;
+   Click to break!
+   &lt;script type=&quot;dojo/event&quot; data-dojo-event=&quot;onClick&quot;&gt;
+      this.domNode.style.backgroundColor = dojo.Color.named.aliceblue;
+   &lt;/script&gt;
+&lt;/div&gt;
+&lt;/html&gt;</textarea></div><p>You check the console ... no errors there. But that dojo.Color.named.aliceblue is a little questionable. You know that dojo.colors needs to be included, but you thought dijit.form.Button already did that.</p>
+<p>You can find out for sure by using a local copy of Dojo. CDN Dojo is very quiet about the modules it loads. Local Dojo is very noisy. So, assuming our local copy of Dojo is installed on the web server underneath /dojoroot, the following change:</p>
+<div class="highlight"><pre><span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+        <span class="k">@import</span> <span class="s2">&quot;/dojoroot/dijit/themes/tundra/tundra.css&quot;</span><span class="p">;</span>
+        <span class="k">@import</span> <span class="s2">&quot;/dojoroot/dojo/resources/dojo.css&quot;</span><span class="p">;</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/dojoroot/dojo/dojo.js&quot;</span>
+            <span class="na">data-dojo-config=</span><span class="s">&quot;parseOnLoad: true&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;style type=&quot;text/css&quot;&gt;
+        &#64;import &quot;/dojoroot/dijit/themes/tundra/tundra.css&quot;;
+        &#64;import &quot;/dojoroot/dojo/resources/dojo.css&quot;;
+    &lt;/style&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;/dojoroot/dojo/dojo.js&quot;
+            data-dojo-config=&quot;parseOnLoad: true&quot;&gt;&lt;/script&gt;</textarea></div><p>Yields the following on the console</p>
+<img alt="Firebug http requests" src="../_images/debugging4.png" />
+<p>You see every Dojo Core and Dijit Component loaded. Sure enough, dojo.colors is not in the list, so we add a dojo.require statement</p>
+</div>
+<div class="section" id="that-doesn-t-look-right-dom-inspection">
+<h2><a class="toc-backref" href="#id8">That Doesn&#8217;t Look Right ... DOM Inspection</a><a class="headerlink" href="#that-doesn-t-look-right-dom-inspection" title="Permalink to this headline">¶</a></h2>
+<p>Unfortunately, that doesn&#8217;t fix the problem either. When styling errors occur, it&#8217;s a good time to use Firebug&#8217;s DOM Inspector. You can think of it as View Source on steroids.</p>
+<blockquote>
+<div><ul class="simple">
+<li>It displays the &#8216;&#8217;current&#8217;&#8217; DOM tree, not the one initially loaded (which is what View Source shows)</li>
+<li>You can examine the DOM properties of nodes by inspecting them - that is, pressing Inspect and pointing</li>
+</ul>
+</div></blockquote>
+<p>So we click Inspect and point at the screen button</p>
+<img alt="Firebug DOM inspection" src="../_images/debugging5.png" />
+<p>The right-hand side of the console tells what styles and style rules are applied to this class. Crossed-off lines are styles that have been overridden. Very nice!</p>
+</div>
+<div class="section" id="debugging-external-classes-with-debugatallcosts">
+<h2><a class="toc-backref" href="#id9">Debugging External Classes With debugAtAllCosts</a><a class="headerlink" href="#debugging-external-classes-with-debugatallcosts" title="Permalink to this headline">¶</a></h2>
+<p><strong>Note:</strong> <code class="docutils literal"><span class="pre">debugAtAllCosts</span></code> does not work with Dojo version 1.6
+(<a class="reference external" href="http://bugs.dojotoolkit.org/ticket/12608">http://bugs.dojotoolkit.org/ticket/12608</a>).
+As of Dojo 1.7, <code class="docutils literal"><span class="pre">debugAtAllCosts</span></code> is no longer supported;
+see the <a class="reference internal" href="../releasenotes/1.7.html#releasenotes-1-7"><span>release notes</span></a> for details.</p>
+<p>dojo/method and dojo/event scripts are good for short, non-reusable snippets of code. But when you start building reusable components, you&#8217;ll be storing your code into Dojo-declared classes instead. The good news is the more you make this switch, the easier your debugging task will be.</p>
+<p>So here&#8217;s a piece of HTML code and a reusable Dojo-based widget:</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot;</span>
+<span class="cp">            &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;title&gt;</span>Fix me!<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+        <span class="k">@import</span> <span class="s2">&quot;/dojoroot/dijit/themes/tundra/tundra.css&quot;</span><span class="p">;</span>
+        <span class="k">@import</span> <span class="s2">&quot;/dojoroot/dojo/resources/dojo.css&quot;</span><span class="p">;</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/dojoroot/dojo/dojo.js&quot;</span>
+            <span class="na">data-dojo-config=</span><span class="s">&quot;parseOnLoad: true&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+        <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.parser&quot;</span><span class="p">);</span>
+        <span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojobook.online-book.debugging.BuggyWidget&quot;</span><span class="p">);</span>
+    <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body</span> <span class="na">class=</span><span class="s">&quot;tundra&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojobook.online-book.debugging.BuggyWidget&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot;
+            &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Fix me!&lt;/title&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+        &#64;import &quot;/dojoroot/dijit/themes/tundra/tundra.css&quot;;
+        &#64;import &quot;/dojoroot/dojo/resources/dojo.css&quot;;
+    &lt;/style&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;/dojoroot/dojo/dojo.js&quot;
+            data-dojo-config=&quot;parseOnLoad: true&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+        dojo.require(&quot;dojo.parser&quot;);
+        dojo.require(&quot;dojobook.online-book.debugging.BuggyWidget&quot;);
+    &lt;/script&gt;
+&lt;/head&gt;
+&lt;body class=&quot;tundra&quot;&gt;
+    &lt;div data-dojo-type=&quot;dojobook.online-book.debugging.BuggyWidget&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</textarea></div><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">provide</span><span class="p">(</span><span class="s2">&quot;dojobook.online-book.debugging.BuggyWidget&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit._Widget&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span>
+<span class="s2">&quot;dojobook.online-book.debugging.BuggyWidget&quot;</span><span class="p">,</span>
+<span class="p">[</span><span class="nx">dijit</span><span class="p">.</span><span class="nx">_Widget</span><span class="p">],</span>
+<span class="p">{</span>
+   <span class="nx">postCreate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">dojo</span><span class="p">.</span><span class="nx">nonExistentMethod</span><span class="p">();</span>
+   <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.provide(&quot;dojobook.online-book.debugging.BuggyWidget&quot;);
+dojo.require(&quot;dijit._Widget&quot;);
+dojo.declare(
+&quot;dojobook.online-book.debugging.BuggyWidget&quot;,
+[dijit._Widget],
+{
+   postCreate: function(){
+      dojo.nonExistentMethod();
+   }
+});</textarea></div><p>Running this code, you will see an error appear, but it&#8217;s nowhere near the right location:</p>
+<img alt="Debugging without debugAtAllCosts" src="../_images/debugging6.png" />
+<p>But by simply setting the debugAtAllCosts flag to true:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;/dojoroot/dojo/dojo.js&quot;</span>
+            <span class="na">data-dojo-config=</span><span class="s">&quot;parseOnLoad: true, debugAtAllCosts: true&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script type=&quot;text/javascript&quot; src=&quot;/dojoroot/dojo/dojo.js&quot;
+            data-dojo-config=&quot;parseOnLoad: true, debugAtAllCosts: true&quot;&gt;&lt;/script&gt;</textarea></div><p>the displayed error location will now be correct:</p>
+<img alt="Debugging with debugAtAllCosts" src="../_images/debugging7.png" />
+<p>&#8216;&#8217;&#8216;Important!&#8217;&#8216;&#8217; you should always remove debugAtAllCosts from production code. It slows down the client unnecessarily. Rather than manually inserting and removing them, I like to delegate that job to a server side language like PHP:</p>
+<div class="highlight"><pre><span class="cp">&lt;?php</span>
+<span class="cp">$dojoConfig   = $inProduction ? &quot;parseOnLoad: true&quot; : &quot;parseOnLoad: true, debugAtAllCosts: true&quot;;</span>
+<span class="cp">$loadLocation = $inProduction ? &quot;http://o.aolcdn.com/dojo/1.?&quot; : &quot;/dojoroot&quot;;</span>
+<span class="cp">$useXd        = $inProduction ? &quot;.xd&quot; : &quot;&quot;;</span>
+<span class="cp">?&gt;</span>
+    <span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+        <span class="k">@import</span> <span class="s2">&quot;&lt;?= $loadLocation ?&gt;/dijit/themes/tundra/tundra.css&quot;</span><span class="p">;</span>
+        <span class="k">@import</span> <span class="s2">&quot;&lt;?= $loadLocation ?&gt;/dojo/resources/dojo.css&quot;</span><span class="p">;</span>
+    <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;&lt;?= $loadLocation ?&gt;/dojo/dojo&lt;?= $useXd ?&gt;.js&quot;</span>
+            <span class="na">data-dojo-config=</span><span class="s">&quot;&lt;?= $dojoConfig ?&gt;&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;?php
+$dojoConfig   = $inProduction ? &quot;parseOnLoad: true&quot; : &quot;parseOnLoad: true, debugAtAllCosts: true&quot;;
+$loadLocation = $inProduction ? &quot;http://o.aolcdn.com/dojo/1.?&quot; : &quot;/dojoroot&quot;;
+$useXd        = $inProduction ? &quot;.xd&quot; : &quot;&quot;;
+?&gt;
+    &lt;style type=&quot;text/css&quot;&gt;
+        &#64;import &quot;&lt;?= $loadLocation ?&gt;/dijit/themes/tundra/tundra.css&quot;;
+        &#64;import &quot;&lt;?= $loadLocation ?&gt;/dojo/resources/dojo.css&quot;;
+    &lt;/style&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;&lt;?= $loadLocation ?&gt;/dojo/dojo&lt;?= $useXd ?&gt;.js&quot;
+            data-dojo-config=&quot;&lt;?= $dojoConfig ?&gt;&quot;&gt;&lt;/script&gt;</textarea></div></div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

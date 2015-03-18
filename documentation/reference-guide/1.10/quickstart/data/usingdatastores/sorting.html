@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sorting &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../../index.html">Startpage</a></li>
+          <li><a href="../../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Sorting</a><ul>
+<li><a class="reference internal" href="#sorting-items">Sorting Items</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#showing-how-sort-attributes-affect-ordering">Showing how sort attributes affect ordering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="sorting">
+<span id="quickstart-data-usingdatastores-sorting"></span><h1><a class="toc-backref" href="#id1">Sorting</a><a class="headerlink" href="#sorting" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#sorting" id="id1">Sorting</a><ul>
+<li><a class="reference internal" href="#sorting-items" id="id2">Sorting Items</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a><ul>
+<li><a class="reference internal" href="#showing-how-sort-attributes-affect-ordering" id="id4">Showing how sort attributes affect ordering</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="sorting-items">
+<h2><a class="toc-backref" href="#id2">Sorting Items</a><a class="headerlink" href="#sorting-items" title="Permalink to this headline">¶</a></h2>
+<p>Items are, in general, returned in an indeterminate order. This isn&#8217;t always what you want to happen; there are definite cases where sorting items based on specific attributes is important. Fortunately, you do not have to do the sorting yourself because dojo.data provides a mechanism to do it for you. The mechanism is just another option passed to fetch, the sort array.</p>
+<p>The sort array will look something like the following example:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">sortKeys</span> <span class="o">=</span> <span class="p">[{</span><span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;aisle&quot;</span><span class="p">,</span> <span class="nx">descending</span><span class="o">:</span> <span class="kc">true</span><span class="p">}];</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var sortKeys = [{attribute: &quot;aisle&quot;, descending: true}];</textarea></div><p>Each sort key has an attribute, which should be an attribute in the data store item, and a descending boolean flag. If an attribute passed isn&#8217;t an actual attribute of the item, it will generally be ignored by the sorting; it is treated as an undefined comparison. You can effectively think of the sort attributes as similar to the SQL <em>order by</em> modifier.</p>
+<p>For compound sorts, you can define as many sort keys as you want. The order in the array defines which keys take priority over other keys when sorting. The following example shows this:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">sortKeys</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span><span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;aisle&quot;</span><span class="p">,</span> <span class="nx">descending</span><span class="o">:</span> <span class="kc">true</span><span class="p">},</span>
+  <span class="p">{</span><span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nx">descending</span><span class="o">:</span> <span class="kc">false</span><span class="p">}</span>
+<span class="p">];</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var sortKeys = [
+  {attribute: &quot;aisle&quot;, descending: true},
+  {attribute: &quot;name&quot;, descending: false}
+];</textarea></div></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>While that seems simple, nothing is as useful as a complete example. So, below is an example that will take a simple case and show how to use the dojo.data API to sort data items. This example uses the same data used in examples elsewhere, the simple grocery data.</p>
+<div class="section" id="showing-how-sort-attributes-affect-ordering">
+<h3><a class="toc-backref" href="#id4">Showing how sort attributes affect ordering</a><a class="headerlink" href="#showing-how-sort-attributes-affect-ordering" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.data.ItemFileReadStore&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dijit.form.Button&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">storeData</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">identifier</span><span class="o">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span>
+  <span class="nx">items</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Adobo&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Mexican&#39;</span><span class="p">,</span> <span class="nx">price</span><span class="o">:</span> <span class="mf">3.01</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Balsamic vinegar&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span> <span class="nx">price</span><span class="o">:</span> <span class="mf">4.01</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Basil&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Spices&#39;</span><span class="p">,</span> <span class="nx">price</span><span class="o">:</span> <span class="mf">3.59</span>  <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Bay leaf&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Spices&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">2.01</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Beef Bouillon Granules&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Soup&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">5.01</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Vinegar&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">1.99</span>  <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;White cooking wine&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">2.01</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Worcestershire Sauce&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Condiments&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">3.99</span> <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;pepper&#39;</span><span class="p">,</span> <span class="nx">aisle</span><span class="o">:</span> <span class="s1">&#39;Spices&#39;</span><span class="p">,</span>  <span class="nx">price</span><span class="o">:</span> <span class="mf">1.01</span>  <span class="p">}</span>
+  <span class="p">]};</span>
+
+  <span class="c1">// This function performs some basic dojo initialization. In this case it connects the button</span>
+  <span class="c1">// onClick to a function which invokes the fetch(). The fetch function queries for all items</span>
+  <span class="c1">// and provides callbacks to use for completion of data retrieval or reporting of errors.</span>
+  <span class="kd">function</span> <span class="nx">init</span><span class="p">(){</span>
+     <span class="c1">// Function to perform a fetch on the datastore when a button is clicked</span>
+     <span class="kd">function</span> <span class="nx">getAllItems</span><span class="p">(){</span>
+
+       <span class="c1">// Callback to perform an action when the data items are starting to be returned:</span>
+       <span class="kd">function</span> <span class="nx">clearSortedList</span><span class="p">(</span><span class="nx">size</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+         <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;sortedList&quot;</span><span class="p">);</span>
+         <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+           <span class="k">while</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">){</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">);</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+       <span class="p">}</span>
+
+       <span class="kd">function</span> <span class="nx">clearUnSortedList</span><span class="p">(</span><span class="nx">size</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+         <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;unSortedList&quot;</span><span class="p">);</span>
+         <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+           <span class="k">while</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">){</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">removeChild</span><span class="p">(</span><span class="nx">list</span><span class="p">.</span><span class="nx">firstChild</span><span class="p">);</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+       <span class="p">}</span>
+
+       <span class="c1">// Callback for processing a returned list of items.</span>
+       <span class="kd">function</span> <span class="nx">gotSortedItems</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+         <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;sortedList&quot;</span><span class="p">);</span>
+         <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+           <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+           <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+             <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+             <span class="kd">var</span> <span class="nx">field</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">);</span>
+             <span class="nx">field</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;Aisle: &quot;</span><span class="p">));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">field</span><span class="p">);</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">foodStore</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="s2">&quot;aisle&quot;</span><span class="p">)));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">));</span>
+             <span class="nx">field</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">);</span>
+             <span class="nx">field</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;Name: &quot;</span><span class="p">));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">field</span><span class="p">);</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">foodStore</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+       <span class="p">}</span>
+
+       <span class="c1">// Callback for processing a returned list of unsorted items.</span>
+       <span class="kd">function</span> <span class="nx">gotUnSortedItems</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+         <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;unSortedList&quot;</span><span class="p">);</span>
+         <span class="k">if</span><span class="p">(</span><span class="nx">list</span><span class="p">){</span>
+           <span class="kd">var</span> <span class="nx">i</span><span class="p">;</span>
+           <span class="k">for</span><span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+             <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">items</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+             <span class="kd">var</span> <span class="nx">field</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">);</span>
+             <span class="nx">field</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;Aisle: &quot;</span><span class="p">));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">field</span><span class="p">);</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">foodStore</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="s2">&quot;aisle&quot;</span><span class="p">)));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">));</span>
+             <span class="nx">field</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">);</span>
+             <span class="nx">field</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;Name: &quot;</span><span class="p">));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">field</span><span class="p">);</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">foodStore</span><span class="p">.</span><span class="nx">getValue</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">)));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="s2">&quot;  &quot;</span><span class="p">));</span>
+             <span class="nx">list</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;br&quot;</span><span class="p">));</span>
+           <span class="p">}</span>
+         <span class="p">}</span>
+       <span class="p">}</span>
+
+       <span class="c1">// Callback for if the lookup fails.</span>
+       <span class="kd">function</span> <span class="nx">fetchFailed</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+          <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;lookup failed.&quot;</span><span class="p">);</span>
+       <span class="p">}</span>
+
+       <span class="c1">// Fetch the data in a sorted order.</span>
+       <span class="nx">foodStore</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span><span class="nx">onBegin</span><span class="o">:</span> <span class="nx">clearSortedList</span><span class="p">,</span> <span class="nx">onComplete</span><span class="o">:</span> <span class="nx">gotSortedItems</span><span class="p">,</span> <span class="nx">onError</span><span class="o">:</span> <span class="nx">fetchFailed</span><span class="p">,</span> <span class="nx">sort</span><span class="o">:</span> <span class="p">[{</span> <span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;aisle&quot;</span><span class="p">},{</span><span class="nx">attribute</span><span class="o">:</span> <span class="s2">&quot;name&quot;</span><span class="p">}]});</span>
+
+       <span class="c1">// Fetch the data in an unsorted order.</span>
+       <span class="nx">foodStore</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span><span class="nx">onBegin</span><span class="o">:</span> <span class="nx">clearUnSortedList</span><span class="p">,</span> <span class="nx">onComplete</span><span class="o">:</span> <span class="nx">gotUnSortedItems</span><span class="p">,</span> <span class="nx">onError</span><span class="o">:</span> <span class="nx">fetchFailed</span><span class="p">});</span>
+     <span class="p">}</span>
+     <span class="c1">// Link the click event of the button to driving the fetch.</span>
+     <span class="nx">dojo</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="s2">&quot;onClick&quot;</span><span class="p">,</span> <span class="nx">getAllItems</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="c1">// Set the init function to run when dojo loading and page parsing has completed.</span>
+  <span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="nx">init</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojo.data.ItemFileReadStore&quot;);
+dojo.require(&quot;dijit.form.Button&quot;);
+
+var storeData = { identifier: 'name',
+  items: [
+    { name: 'Adobo', aisle: 'Mexican', price: 3.01 },
+    { name: 'Balsamic vinegar', aisle: 'Condiments', price: 4.01 },
+    { name: 'Basil', aisle: 'Spices', price: 3.59  },
+    { name: 'Bay leaf', aisle: 'Spices',  price: 2.01 },
+    { name: 'Beef Bouillon Granules', aisle: 'Soup',  price: 5.01 },
+    { name: 'Vinegar', aisle: 'Condiments',  price: 1.99  },
+    { name: 'White cooking wine', aisle: 'Condiments',  price: 2.01 },
+    { name: 'Worcestershire Sauce', aisle: 'Condiments',  price: 3.99 },
+    { name: 'pepper', aisle: 'Spices',  price: 1.01  }
+  ]};
+
+  // This function performs some basic dojo initialization. In this case it connects the button
+  // onClick to a function which invokes the fetch(). The fetch function queries for all items
+  // and provides callbacks to use for completion of data retrieval or reporting of errors.
+  function init(){
+     // Function to perform a fetch on the datastore when a button is clicked
+     function getAllItems(){
+
+       // Callback to perform an action when the data items are starting to be returned:
+       function clearSortedList(size, request){
+         var list = dojo.byId(&quot;sortedList&quot;);
+         if(list){
+           while(list.firstChild){
+             list.removeChild(list.firstChild);
+           }
+         }
+       }
+
+       function clearUnSortedList(size, request){
+         var list = dojo.byId(&quot;unSortedList&quot;);
+         if(list){
+           while(list.firstChild){
+             list.removeChild(list.firstChild);
+           }
+         }
+       }
+
+       // Callback for processing a returned list of items.
+       function gotSortedItems(items, request){
+         var list = dojo.byId(&quot;sortedList&quot;);
+         if(list){
+           var i;
+           for(i = 0; i &lt; items.length; i++){
+             var item = items[i];
+             var field = document.createElement(&quot;b&quot;);
+             field.appendChild(document.createTextNode(&quot;Aisle: &quot;));
+             list.appendChild(field);
+             list.appendChild(document.createTextNode(foodStore.getValue(item, &quot;aisle&quot;)));
+             list.appendChild(document.createTextNode(&quot;  &quot;));
+             field = document.createElement(&quot;b&quot;);
+             field.appendChild(document.createTextNode(&quot;Name: &quot;));
+             list.appendChild(field);
+             list.appendChild(document.createTextNode(foodStore.getValue(item, &quot;name&quot;)));
+             list.appendChild(document.createTextNode(&quot;  &quot;));
+             list.appendChild(document.createElement(&quot;br&quot;));
+           }
+         }
+       }
+
+       // Callback for processing a returned list of unsorted items.
+       function gotUnSortedItems(items, request){
+         var list = dojo.byId(&quot;unSortedList&quot;);
+         if(list){
+           var i;
+           for(i = 0; i &lt; items.length; i++){
+             var item = items[i];
+             var field = document.createElement(&quot;b&quot;);
+             field.appendChild(document.createTextNode(&quot;Aisle: &quot;));
+             list.appendChild(field);
+             list.appendChild(document.createTextNode(foodStore.getValue(item, &quot;aisle&quot;)));
+             list.appendChild(document.createTextNode(&quot;  &quot;));
+             field = document.createElement(&quot;b&quot;);
+             field.appendChild(document.createTextNode(&quot;Name: &quot;));
+             list.appendChild(field);
+             list.appendChild(document.createTextNode(foodStore.getValue(item, &quot;name&quot;)));
+             list.appendChild(document.createTextNode(&quot;  &quot;));
+             list.appendChild(document.createElement(&quot;br&quot;));
+           }
+         }
+       }
+
+       // Callback for if the lookup fails.
+       function fetchFailed(error, request){
+          alert(&quot;lookup failed.&quot;);
+       }
+
+       // Fetch the data in a sorted order.
+       foodStore.fetch({onBegin: clearSortedList, onComplete: gotSortedItems, onError: fetchFailed, sort: [{ attribute: &quot;aisle&quot;},{attribute: &quot;name&quot;}]});
+
+       // Fetch the data in an unsorted order.
+       foodStore.fetch({onBegin: clearUnSortedList, onComplete: gotUnSortedItems, onError: fetchFailed});
+     }
+     // Link the click event of the button to driving the fetch.
+     dojo.connect(button, &quot;onClick&quot;, getAllItems);
+  }
+  // Set the init function to run when dojo loading and page parsing has completed.
+  dojo.ready(init);</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojo/data/ItemFileReadStore&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;data:storeData&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;foodStore&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>Click me to show sorted and unsorted lists!<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;b&gt;</span>Sorted List (Sorted by Aisle first and Name second):<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;sortedList&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;b&gt;</span>Unsorted List:<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;br&gt;</span>
+<span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">&quot;unSortedList&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/span&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dojo/data/ItemFileReadStore&quot; data-dojo-props=&quot;data:storeData&quot; data-dojo-id=&quot;foodStore&quot;&gt;&lt;/div&gt;
+&lt;div data-dojo-type=&quot;dijit/form/Button&quot; data-dojo-id=&quot;button&quot;&gt;Click me to show sorted and unsorted lists!&lt;/div&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;Sorted List (Sorted by Aisle first and Name second):&lt;/b&gt;
+&lt;br&gt;
+&lt;span id=&quot;sortedList&quot;&gt;
+&lt;/span&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;Unsorted List:&lt;/b&gt;
+&lt;br&gt;
+&lt;span id=&quot;unSortedList&quot;&gt;
+&lt;/span&gt;</textarea></div></div></div></div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

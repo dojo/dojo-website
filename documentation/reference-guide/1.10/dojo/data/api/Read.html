@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo.data Read API &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../../index.html">Startpage</a></li>
+          <li><a href="../../index.html">Dojo</a></li>
+          <li><a href="../../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo.data Read API</a><ul>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#listing-the-apis-supported-by-a-datastore">Listing the APIs supported by a datastore</a></li>
+<li><a class="reference internal" href="#testing-if-an-object-is-a-store-item">Testing if an object is a store item</a></li>
+<li><a class="reference internal" href="#listing-the-attributes-of-an-item">Listing the attributes of an item</a></li>
+<li><a class="reference internal" href="#testing-an-item-for-an-attribute">Testing an item for an attribute</a></li>
+<li><a class="reference internal" href="#getting-the-label-of-an-item">Getting the label of an item</a></li>
+<li><a class="reference internal" href="#fetching-all-the-items-from-the-store">Fetching all the items from the store</a></li>
+<li><a class="reference internal" href="#further-examples">Further examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-data-read-api">
+<span id="dojo-data-api-read"></span><h1><a class="toc-backref" href="#id1">dojo.data Read API</a><a class="headerlink" href="#dojo-data-read-api" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-data-read-api" id="id1">dojo.data Read API</a><ul>
+<li><a class="reference internal" href="#examples" id="id2">Examples</a><ul>
+<li><a class="reference internal" href="#listing-the-apis-supported-by-a-datastore" id="id3">Listing the APIs supported by a datastore</a></li>
+<li><a class="reference internal" href="#testing-if-an-object-is-a-store-item" id="id4">Testing if an object is a store item</a></li>
+<li><a class="reference internal" href="#listing-the-attributes-of-an-item" id="id5">Listing the attributes of an item</a></li>
+<li><a class="reference internal" href="#testing-an-item-for-an-attribute" id="id6">Testing an item for an attribute</a></li>
+<li><a class="reference internal" href="#getting-the-label-of-an-item" id="id7">Getting the label of an item</a></li>
+<li><a class="reference internal" href="#fetching-all-the-items-from-the-store" id="id8">Fetching all the items from the store</a></li>
+<li><a class="reference internal" href="#further-examples" id="id9">Further examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>Deprecated</em>, <a class="reference internal" href="../../store.html#dojo-store"><span>dojo/store</span></a> will eventually replace the <code class="docutils literal"><span class="pre">dojo/data</span></code> API.</p>
+<p>The most fundamental API of dojo.data is the Read API. All stores will implement this API because all stores need the ability to retrieve and process data items. The Read API is designed to be extremely flexible in how items are handled. The Read API provides the ability to:</p>
+<ul class="simple">
+<li>Introspect any datastore to determine the APIs the datastore implements through the getFeatures() call.</li>
+<li>Introspect, On an item by item basis, what attributes each item has in a way that is agnostic to the data format.</li>
+<li>Get values of attributes in a way that is agnostic to the data format.</li>
+<li>Test attributes of items to see if they contain a specific value.</li>
+<li>Test any JavaScript object to see if it is an item from the store.</li>
+<li>Test to see if an item has been fully loaded from its source or if it is just the stub of an item that needs to be fully loaded.</li>
+<li>Load stub items (lazy-loading).</li>
+<li>Search for items that match a query.</li>
+<li>Sort items in a search.</li>
+<li>Page across items in a search.</li>
+<li>Filter items by the query and wildcard matching.</li>
+<li>Obtain a human-readable label of the item if possible.</li>
+</ul>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id2">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The following examples, guidelines, and complete API documentation provide further information on the Read API:</p>
+<div class="section" id="listing-the-apis-supported-by-a-datastore">
+<h3><a class="toc-backref" href="#id3">Listing the APIs supported by a datastore</a><a class="headerlink" href="#listing-the-apis-supported-by-a-datastore" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">some</span><span class="p">.</span><span class="nx">Datastore</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">features</span> <span class="o">=</span> <span class="nx">store</span><span class="p">.</span><span class="nx">getFeatures</span><span class="p">();</span>
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">features</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Store supports feature: &quot;</span> <span class="o">+</span> <span class="nx">i</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var store = new some.Datastore();
+var features = store.getFeatures();
+for(var i in features){
+  console.log(&quot;Store supports feature: &quot; + i);
+}</textarea></div></div>
+<div class="section" id="testing-if-an-object-is-a-store-item">
+<h3><a class="toc-backref" href="#id4">Testing if an object is a store item</a><a class="headerlink" href="#testing-if-an-object-is-a-store-item" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">some</span><span class="p">.</span><span class="nx">Datastore</span><span class="p">();</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">store</span><span class="p">.</span><span class="nx">isItem</span><span class="p">(</span><span class="nx">someObject</span><span class="p">)){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Object was an item.&quot;</span><span class="p">);</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Object was NOT an item.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var store = new some.Datastore();
+if(store.isItem(someObject)){
+  console.log(&quot;Object was an item.&quot;);
+}else{
+  console.log(&quot;Object was NOT an item.&quot;);
+}</textarea></div></div>
+<div class="section" id="listing-the-attributes-of-an-item">
+<h3><a class="toc-backref" href="#id5">Listing the attributes of an item</a><a class="headerlink" href="#listing-the-attributes-of-an-item" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">some</span><span class="p">.</span><span class="nx">Datastore</span><span class="p">();</span>
+<span class="p">...</span> <span class="c1">// Assume that someItem is an item we got from a load.</span>
+<span class="kd">var</span> <span class="nx">attributes</span> <span class="o">=</span> <span class="nx">store</span><span class="p">.</span><span class="nx">getAttributes</span><span class="p">(</span><span class="nx">someItem</span><span class="p">);</span>
+<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Item has attribute: &quot;</span> <span class="o">+</span> <span class="nx">attributes</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var store = new some.Datastore();
+... // Assume that someItem is an item we got from a load.
+var attributes = store.getAttributes(someItem);
+for(var i = 0; i &lt; attributes.length; i++){
+  console.log(&quot;Item has attribute: &quot; + attributes[i]);
+}</textarea></div></div>
+<div class="section" id="testing-an-item-for-an-attribute">
+<h3><a class="toc-backref" href="#id6">Testing an item for an attribute</a><a class="headerlink" href="#testing-an-item-for-an-attribute" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">some</span><span class="p">.</span><span class="nx">Datastore</span><span class="p">();</span>
+<span class="p">...</span>
+<span class="c1">// Assume that someItem is an item we got from a load.</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">store</span><span class="p">.</span><span class="nx">hasAttribute</span><span class="p">(</span><span class="nx">someItem</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;item has attribute foo.&quot;</span><span class="p">);</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;item DOES NOT have attribute foo.&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var store = new some.Datastore();
+...
+// Assume that someItem is an item we got from a load.
+if(store.hasAttribute(someItem, &quot;foo&quot;)){
+  console.log(&quot;item has attribute foo.&quot;);
+}else{
+  console.log(&quot;item DOES NOT have attribute foo.&quot;);
+}</textarea></div></div>
+<div class="section" id="getting-the-label-of-an-item">
+<h3><a class="toc-backref" href="#id7">Getting the label of an item</a><a class="headerlink" href="#getting-the-label-of-an-item" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">some</span><span class="p">.</span><span class="nx">Datastore</span><span class="p">();</span>
+<span class="p">...</span>
+<span class="c1">// Assume that someItem is an item we got from a load.</span>
+<span class="kd">var</span> <span class="nx">label</span> <span class="o">=</span> <span class="nx">store</span><span class="p">.</span><span class="nx">getLabel</span><span class="p">(</span><span class="nx">someItem</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;item has label: &quot;</span> <span class="o">+</span> <span class="nx">label</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var store = new some.Datastore();
+...
+// Assume that someItem is an item we got from a load.
+var label = store.getLabel(someItem);
+console.log(&quot;item has label: &quot; + label);</textarea></div></div>
+<div class="section" id="fetching-all-the-items-from-the-store">
+<h3><a class="toc-backref" href="#id8">Fetching all the items from the store</a><a class="headerlink" href="#fetching-all-the-items-from-the-store" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">some</span><span class="p">.</span><span class="nx">Datastore</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">gotItems</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">items</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Number of items located: &quot;</span> <span class="o">+</span> <span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">store</span><span class="p">.</span><span class="nx">fetch</span><span class="p">({</span><span class="nx">onComplete</span><span class="o">:</span> <span class="nx">gotItems</span><span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var store = new some.Datastore();
+var gotItems = function(items, request){
+  console.log(&quot;Number of items located: &quot; + items.length);
+};
+store.fetch({onComplete: gotItems});</textarea></div></div>
+<div class="section" id="further-examples">
+<h3><a class="toc-backref" href="#id9">Further examples</a><a class="headerlink" href="#further-examples" title="Permalink to this headline">¶</a></h3>
+<p>Further examples of the API usage are covered in the <a class="reference internal" href="../../../quickstart/data/usingdatastores.html#quickstart-data-usingdatastores"><span>Using Datastores</span></a> section. Refer to it for examples on paging, sorting, selecting, and so forth.</p>
+</div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

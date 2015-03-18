@@ -1,0 +1,989 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojox/data/CdfStore" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojox/data/CdfStore.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/data/CdfStore<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-full-summary"><p>IMPORTANT: The CDF Store is designed to work with Tibco GI, and references Tibco&#39;s
+JSX3 JavaScript library and will not work without it.
+
+</p>
+<p>The CDF Store implements dojo.data.Read, Write, and Identity api&#39;s.  It is a local
+(in memory) store that handles XML documents formatted according to the
+Common Data Format (CDF) spec:
+<a href="http://www.tibco.com/devnet/resources/gi/3_1/tips_and_techniques/CommonDataFormatCDF.pdf">http://www.tibco.com/devnet/resources/gi/3_1/tips_and_techniques/CommonDataFormatCDF.pdf</a>
+
+</p>
+<p>The purpose of this store is to provide a glue between a jsx3 CDF file and a Dijit.
+
+</p>
+<p>While a CDF document is an XML file, other than the initial input, all data returned
+from and written to this store should be in object format.</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature"><span class="keyword">var</span> foo = new CdfStore<span class="parameters">(args);</span>
+  </div>
+</div>
+<div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/documentation/api/1.9/dojox/data/CdfStore">dojox/data/CdfStore</a></div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">args</td>
+    <td class="jsdoc-param-type">Object</td>
+    <td class="jsdoc-param-description">
+    </td>
+  </tr>
+</table>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="objectIcon public"><a href="1_9dojox_data_CdfStore_data">data</a>
+        </li><span>A object that will be converted into the xmlStr property, and then parsed into a CDF.</span>
+        <li class="stringIcon public"><a href="1_9dojox_data_CdfStore_identity">identity</a>
+        </li><span>The unique identifier for each item.</span>
+        <li class="stringIcon public"><a href="1_9dojox_data_CdfStore_label">label</a>
+        </li><span>The property within each item used to define the item.</span>
+        <li class="numberIcon public"><a href="1_9dojox_data_CdfStore_mode">mode</a>
+        </li><span></span>
+        <li class="stringIcon public"><a href="1_9dojox_data_CdfStore_url">url</a>
+        </li><span></span>
+        <li class="stringIcon public"><a href="1_9dojox_data_CdfStore_xmlStr">xmlStr</a>
+        </li><span>A string that can be parsed into an XML document and should be formatted according
+to the CDF spec.</span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_9dojox_data_CdfStore__getItems">_getItems</a><span class="parameters"></span><span class="parameters">(cdfDoc,request) </span><span>Internal method.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_data_CdfStore__loadCDF">_loadCDF</a><span class="parameters"></span><span class="parameters">() </span><span>Internal method.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_data_CdfStore__makeDirty">_makeDirty</a><span class="parameters"></span><span class="parameters">(item) </span><span>Internal method.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_9dojox_data_CdfStore__makeXmlString">_makeXmlString</a><span class="parameters"></span><span class="parameters">(obj) </span><span>Internal method.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_byId">byId</a><span class="parameters"></span><span class="parameters">(args) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_close">close</a><span class="parameters"></span><span class="parameters">(request) </span><span>See dojo/data/api/Read.close()</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_containsValue">containsValue</a><span class="parameters"></span><span class="parameters">(item,property,value) </span><span>Check whether an item contains a value</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_deleteItem">deleteItem</a><span class="parameters"></span><span class="parameters">(item) </span><span>Delete an jsx3.xml.Entity (wrapper to a XML element).</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_fetch">fetch</a><span class="parameters"></span><span class="parameters">(request) </span><span>Returns an Array of items based on the request arguments.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_fetchItemByIdentity">fetchItemByIdentity</a><span class="parameters"></span><span class="parameters">(args) </span><span>See dojo/data/api/Identity.fetchItemByIdentity(keywordArgs).</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_getAttributes">getAttributes</a><span class="parameters"></span><span class="parameters">(item) </span><span>Return an array of property names</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_getFeatures">getFeatures</a><span class="parameters"></span><span class="parameters">() </span><span>Return supported data APIs</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_getIdentity">getIdentity</a><span class="parameters"></span><span class="parameters">(item) </span><span>Returns the identifier for an item.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_getIdentityAttributes">getIdentityAttributes</a><span class="parameters"></span><span class="parameters">(item) </span><span>Returns the property used for the identity.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_getLabel">getLabel</a><span class="parameters"></span><span class="parameters">(item) </span><span>See dojo/data/api/Read.getLabel()</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_getLabelAttributes">getLabelAttributes</a><span class="parameters"></span><span class="parameters">(item) </span><span>returns an array of what properties of the item that were used
+to generate its label
+See dojo/data/api/Read.getLabelAttributes()</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_getValue">getValue</a><span class="parameters"></span><span class="parameters">(item,property,defaultValue) </span><span>Return an property value of an item</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_getValues">getValues</a><span class="parameters"></span><span class="parameters">(item,property) </span><span>Return an array of values</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_hasAttribute">hasAttribute</a><span class="parameters"></span><span class="parameters">(item,property) </span><span>Check whether an item has a property</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_hasProperty">hasProperty</a><span class="parameters"></span><span class="parameters">(item,property) </span><span>Alias for hasAttribute</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_isDirty">isDirty</a><span class="parameters"></span><span class="parameters">(item) </span><span>Check whether an item is new, modified or deleted.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_isItem">isItem</a><span class="parameters"></span><span class="parameters">(something) </span><span>Check whether the object is an item (jsx3.xml.Entity)</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_isItemLoaded">isItemLoaded</a><span class="parameters"></span><span class="parameters">(something) </span><span>Check whether the object is a jsx3.xml.Entity object and loaded</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_loadItem">loadItem</a><span class="parameters"></span><span class="parameters">(keywordArgs) </span><span>Load an item</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_newItem">newItem</a><span class="parameters"></span><span class="parameters">(keywordArgs,parentInfo) </span><span>Creates a jsx3.xml.Entity item and inserts it either inside the
+parent or appends it to the root</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_revert">revert</a><span class="parameters"></span><span class="parameters">() </span><span>Invalidate changes (new and/or modified elements)
+Resets data by simply deleting the reference to the cdfDoc.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_setValue">setValue</a><span class="parameters"></span><span class="parameters">(item,property,value) </span><span>Set an property value</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_setValues">setValues</a><span class="parameters"></span><span class="parameters">(item,property,values) </span><span>Set property values.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_data_CdfStore_unsetAttribute">unsetAttribute</a><span class="parameters"></span><span class="parameters">(item,property) </span><span>Remove an property</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_data"></a><span class="objectIcon">data</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-summary"><p>A object that will be converted into the xmlStr property, and then parsed into a CDF.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_identity"></a><span class="stringIcon">identity</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-summary"><p>The unique identifier for each item. Defaults to &quot;jsxid&quot; which is standard for a CDF
+document. Should not be changed.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_label"></a><span class="stringIcon">label</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-summary"><p>The property within each item used to define the item.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_mode"></a><span class="numberIcon">mode</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_url"></a><span class="stringIcon">url</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_xmlStr"></a><span class="stringIcon">xmlStr</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-summary"><p>A string that can be parsed into an XML document and should be formatted according
+to the CDF spec.</p>
+</div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore__getItems"></a><span class="functionIcon">_getItems</span><span class="parameters">(cdfDoc,request)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal method.
+Requests the items from jsx3.xml.Entity with an xpath query.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">cdfDoc</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">request</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore__loadCDF"></a><span class="functionIcon">_loadCDF</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal method.
+If a cdfDoc exists, return it. Otherwise, get one from JSX3,
+load the data or url, and return the doc or a deferred.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined | instance</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore__makeDirty"></a><span class="functionIcon">_makeDirty</span><span class="parameters">(item)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal method.
+Marks items as modified, deleted or new.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore__makeXmlString"></a><span class="functionIcon">_makeXmlString</span><span class="parameters">(obj)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal method.
+Converts an object into an XML string.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">obj</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_byId"></a><span class="functionIcon">byId</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">Object | String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_close"></a><span class="functionIcon">close</span><span class="parameters">(request)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>See dojo/data/api/Read.close()</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">request</td>
+            <td class="jsdoc-param-type"><a class="jsdoc-link" href="/documentation/api/1.9/dojo/data/api/Request">dojo/data/api/Request</a> | Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_containsValue"></a><span class="functionIcon">containsValue</span><span class="parameters">(item,property,value)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Check whether an item contains a value</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">anything</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_deleteItem"></a><span class="functionIcon">deleteItem</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Delete an jsx3.xml.Entity (wrapper to a XML element).</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_fetch"></a><span class="functionIcon">fetch</span><span class="parameters">(request)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns an Array of items based on the request arguments.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Returns an Array of items based on the request arguments.
+If the store is in ASYNC mode, the items should be expected in an onComplete
+method passed in the request object. If store is in SYNC mode, the items will
+be return directly as well as within the onComplete method.
+
+</p>
+<p>note:
+The mode can be set on store initialization or during a fetch as one of the
+parameters.
+
+</p>
+<p>See:
+
+</p>
+<ul>
+<li><a href="http://www.tibco.com/devnet/resources/gi/3_7/api/html/jsx3/xml/Entity.html#method:selectNodes">http://www.tibco.com/devnet/resources/gi/3_7/api/html/jsx3/xml/Entity.html#method:selectNodes</a></li>
+<li><a href="http://www.w3.org/TR/xpath">http://www.w3.org/TR/xpath</a></li>
+<li><a href="http://msdn.microsoft.com/en-us/library/ms256086.aspx">http://msdn.microsoft.com/en-us/library/ms256086.aspx</a></li>
+</ul>
+<p>See dojo.data.Read.fetch():
+
+</p>
+<ul>
+<li>onBegin</li>
+<li>onComplete</li>
+<li>onItem</li>
+<li>onError</li>
+<li>scope</li>
+<li>start</li>
+<li>count</li>
+<li>sort</li>
+</ul>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">request</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>The items in the store are treated as objects, but this is reading an XML
+document. Further, the actual querying of the items takes place in Tibco GI&#39;s
+jsx3.xml.Entity. Therefore, we are using their syntax which is xpath.
+
+</p>
+<p>Note:
+As conforming to a CDF document, most, if not all nodes are considered &quot;records&quot;
+and their tagNames are as such. The root node is named &quot;data&quot;.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean | undefined</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><p>All items:
+
+</p>
+<pre><code>store.fetch({query:&quot;*&quot;});</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 2</h3><p>Item with a jsxid attribute equal to &quot;1&quot; (note you could use byId for this)
+
+</p>
+<pre><code>store.fetch({query:&quot;//record[@jsxid=&#39;1&#39;]&quot;});</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 3</h3><p>All items with any jsxid attribute:
+
+</p>
+<pre><code>&quot;//record[@jsxid=&#39;*&#39;]&quot;</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 4</h3><p>The items with a jsxid of &#39;1&#39; or &#39;4&#39;:
+
+</p>
+<pre><code>&quot;//record[@jsxid=&#39;4&#39; or @jsxid=&#39;1&#39;]&quot;</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 5</h3><p>All children within a &quot;group&quot; node (could be multiple group nodes):
+&quot;//group/record&quot;</p>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 6</h3><p>All children within a specific group node:
+&quot;//group[@name=&#39;mySecondGroup&#39;]/record&quot;</p>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 7</h3><p>Any record, anywhere in the document:
+
+</p>
+<pre><code>&quot;//record&quot;</code></pre>
+<p>Only the records beneath the root (data) node:
+
+
+</p>
+<pre><code>&quot;//data/record&quot;</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_fetchItemByIdentity"></a><span class="functionIcon">fetchItemByIdentity</span><span class="parameters">(args)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>See dojo/data/api/Identity.fetchItemByIdentity(keywordArgs).
+
+</p>
+<p>Note:
+This method can be synchronous if mode is set.
+Also, there is a more finger friendly alias of this method, byId();</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">args</td>
+            <td class="jsdoc-param-type">Object | String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_getAttributes"></a><span class="functionIcon">getAttributes</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Return an array of property names</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_getFeatures"></a><span class="functionIcon">getFeatures</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Return supported data APIs</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_getIdentity"></a><span class="functionIcon">getIdentity</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns the identifier for an item.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_getIdentityAttributes"></a><span class="functionIcon">getIdentityAttributes</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns the property used for the identity.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_getLabel"></a><span class="functionIcon">getLabel</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>See dojo/data/api/Read.getLabel()</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined | object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_getLabelAttributes"></a><span class="functionIcon">getLabelAttributes</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns an array of what properties of the item that were used
+to generate its label
+See dojo/data/api/Read.getLabelAttributes()</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array | null</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_getValue"></a><span class="functionIcon">getValue</span><span class="parameters">(item,property,defaultValue)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Return an property value of an item</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">defaultValue</td>
+            <td class="jsdoc-param-type">value</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_getValues"></a><span class="functionIcon">getValues</span><span class="parameters">(item,property)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Return an array of values</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Array</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_hasAttribute"></a><span class="functionIcon">hasAttribute</span><span class="parameters">(item,property)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Check whether an item has a property</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_hasProperty"></a><span class="functionIcon">hasProperty</span><span class="parameters">(item,property)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Alias for hasAttribute</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_isDirty"></a><span class="functionIcon">isDirty</span><span class="parameters">(item)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Check whether an item is new, modified or deleted.
+If no item is passed, checks if anything in the store has changed.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity </td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_isItem"></a><span class="functionIcon">isItem</span><span class="parameters">(something)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Check whether the object is an item (jsx3.xml.Entity)</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">something</td>
+            <td class="jsdoc-param-type">anything</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_isItemLoaded"></a><span class="functionIcon">isItemLoaded</span><span class="parameters">(something)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Check whether the object is a jsx3.xml.Entity object and loaded</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">something</td>
+            <td class="jsdoc-param-type">anything</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_loadItem"></a><span class="functionIcon">loadItem</span><span class="parameters">(keywordArgs)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Load an item</p>
+</div>
+        <div class="jsdoc-full-summary"><p>The store always loads all items, so if it&#39;s an item, then it&#39;s loaded.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">keywordArgs</td>
+            <td class="jsdoc-param-type">object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_newItem"></a><span class="functionIcon">newItem</span><span class="parameters">(keywordArgs,parentInfo)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Creates a jsx3.xml.Entity item and inserts it either inside the
+parent or appends it to the root</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">keywordArgs</td>
+            <td class="jsdoc-param-type">object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">parentInfo</td>
+            <td class="jsdoc-param-type">Object | String</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_revert"></a><span class="functionIcon">revert</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Invalidate changes (new and/or modified elements)
+Resets data by simply deleting the reference to the cdfDoc.
+Subsequent fetches will load the new data.
+
+</p>
+<p>Note:
+Any items outside the store will no longer be valid and may cause errors.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_setValue"></a><span class="functionIcon">setValue</span><span class="parameters">(item,property,value)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Set an property value</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">value</td>
+            <td class="jsdoc-param-type">almost anything</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_setValues"></a><span class="functionIcon">setValues</span><span class="parameters">(item,property,values)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Set property values.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">values</td>
+            <td class="jsdoc-param-type">array</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_data_CdfStore_unsetAttribute"></a><span class="functionIcon">unsetAttribute</span><span class="parameters">(item,property)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/data/CdfStore" class="jsdoc-link">dojox/data/CdfStore</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Remove an property</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">item</td>
+            <td class="jsdoc-param-type">jsx3.xml.Entity</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">property</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">boolean</span></div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojox/data/CdfStore" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/store/util/SimpleQueryEngine &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../../index.html">Startpage</a></li>
+          <li><a href="../../index.html">Dojo</a></li>
+          <li><a href="../../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/store/util/SimpleQueryEngine</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-store-util-simplequeryengine">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/store/util/SimpleQueryEngine</a><a class="headerlink" href="#dojo-store-util-simplequeryengine" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V1.6</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-store-util-simplequeryengine" id="id2">dojo/store/util/SimpleQueryEngine</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#options" id="id4">Options</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The SimpleQueryEngine utility provides basic querying functionality for JavaScript objects. The main export of SimpleQueryEngine is a function that can be called with a query (and options optionally) and returns another function that will execute queries against an array. The query can be an object in which case the results are filtered to objects with properties that match the name value pairs provided by the query object. The query can be a function in which case the results are filtered to objects that when passed to the provided function return a truthy value. The query can also be a string, in which case the string is used to lookup up a method on the store that acts as the filter function.</p>
+</div>
+<div class="section" id="options">
+<h2><a class="toc-backref" href="#id4">Options</a><a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<p>The SimpleQueryEngine also handles sorting and paging per the dojo/store API. The query options argument (the second argument) may be an object with the following properties:</p>
+<ul class="simple">
+<li>start - The start offset of the results</li>
+<li>count - The (maximum) number of objects to return in the results</li>
+<li>sort - An array of sort objects (that have an &#8220;attribute&#8221; and &#8220;descending&#8221; property) to describe the sort order. Alternately this may be a function that can be passed to the standard Array.prototype.sort() method.</li>
+</ul>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/store/util/SimpleQueryEngine&quot;</span><span class="p">],</span>
+    <span class="kd">function</span><span class="p">(</span><span class="nx">SimpleQueryEngine</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">someData</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="nx">id</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;One&quot;</span><span class="p">},</span>
+            <span class="p">{</span><span class="nx">id</span><span class="o">:</span><span class="mi">2</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s2">&quot;Two&quot;</span><span class="p">}</span>
+        <span class="p">];</span>
+        <span class="nx">SimpleQueryEngine</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span><span class="s2">&quot;One&quot;</span><span class="p">})(</span><span class="nx">someData</span><span class="p">);</span> <span class="c1">// Returns an array with just the first object</span>
+
+        <span class="nx">SimpleQueryEngine</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">){</span>
+            <span class="k">return</span> <span class="nx">object</span><span class="p">.</span><span class="nx">id</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="p">})(</span><span class="nx">someData</span><span class="p">);</span> <span class="c1">// Returns an array with just the first object</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/store/util/SimpleQueryEngine&quot;],
+    function(SimpleQueryEngine){
+        var someData = [
+            {id:1, name:&quot;One&quot;},
+            {id:2, name:&quot;Two&quot;}
+        ];
+        SimpleQueryEngine({name:&quot;One&quot;})(someData); // Returns an array with just the first object
+
+        SimpleQueryEngine(function(object){
+            return object.id &gt; 1;
+        })(someData); // Returns an array with just the first object
+});</textarea></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<p>The dojo/store/Memory store uses the SimpleQueryEngine for querying. SimpleQueryEngine can also be used with JsonRest store to make it Observable.</p>
+<p><a class="reference internal" href="../Memory.html#dojo-store-memory"><span>dojo/store/Memory</span></a></p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

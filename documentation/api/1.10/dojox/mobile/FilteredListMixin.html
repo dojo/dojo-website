@@ -1,0 +1,611 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.10/dojox/mobile/FilteredListMixin" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.10/dojox/mobile/FilteredListMixin.html</div>
+<h1 class="constructorIcon36 jsdoc-title module-title">dojox/mobile/FilteredListMixin<span style="font-size:11px;color:#999;"> (version 1.10)</span></h1>
+<div class="jsdoc-full-summary"><p>Mixin for filtered lists.</p>
+</div>
+<div class="jsdoc-full-summary"><p>This mixin adds filtering capabilities to all <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile">dojox/mobile</a> list widgets:
+<a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/RoundRectList">dojox/mobile/RoundRectList</a> and any of its subclasses (RoundRectStoreList, 
+RoundRectDataList, EdgeToEdgeList, EdgeToEdgeStoreList, EdgeToEdgeDataList).
+When mixing this class into a list widget, the list items are dynamically 
+filtered depending on the filtering string that the user enters in a 
+<a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a>. 
+
+</p>
+<p>This mixin supports the following use-cases:
+1. For user&#39;s convenience, by simply mixing this class into a list widget 
+the mixin creates a <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a> and a <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/ScrollableView">dojox/mobile/ScrollableView</a>. 
+The list is placed inside the ScrollableView and the SearchBox, which allows
+filtering the list, is placed on top of the ScrollableView.
+2. Alternatively, the user can create (and style) the instance of <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a>, 
+and specify its id using the property filterBoxRef of this mixin. This allows
+placing the SearchBox anywhere in the DOM, while the mixin takes care of 
+the necessary glue to ensure the list is filtered according to the filter criteria
+entered in the SearchBox.
+
+</p>
+<p>The filtering works for lists backed by a store (dojo/store or dojo/data), as well 
+as for lists not backed by a store. When filtering a list backed by a store 
+containing hierarchical data (data items that are children of a parent data item), 
+the store must support recursive search queries such that the filtering can match 
+child items.
+
+</p>
+<p>For configuration purposes, the instance of <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a> can be retrieved
+using the method getFilterBox(). If a <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/ScrollableView">dojox/mobile/ScrollableView</a> is created by
+this mixin, it can be retrieved using getScrollableView().
+</p>
+</div>
+<p>See the<a href="/reference-guide/1.10/dojox/mobile/FilteredListMixin.html" target="_blank">dojox/mobile/FilteredListMixin reference documentation</a> for more information.</p>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><pre><code>&lt;!-- Markup use-case: --&gt;
+&lt;!-- SearchBox and ScrollableView created by the mixin. --&gt;
+&lt;!-- Filtered EdgeToEdgeStoreList created in markup. --&gt;
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;ul data-dojo-type=&quot;dojox/mobile/EdgeToEdgeStoreList&quot;
+        data-dojo-mixins=&quot;dojox/mobile/FilteredListMixin&quot;
+        data-dojo-props=&quot;placeHolder: &#39;Search&#39;, store: myStore&quot;&gt;&lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 2</h3><pre><code>&lt;!-- Markup use-case: --&gt;
+&lt;!-- SearchBox and ScrollableView created by the mixin. --&gt;
+&lt;!-- Filtered RoundRectList created in markup. --&gt; 
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;ul id=&quot;list&quot; data-dojo-type=&quot;dojox/mobile/RoundRectList&quot;
+        data-dojo-mixins=&quot;dojox/mobile/FilteredListMixin&quot;
+        data-dojo-props=&quot;placeHolder: &#39;Search&#39;&quot;&gt;
+        &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot;&gt;Item 1&lt;/li&gt;
+        &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot;&gt;Item 2&lt;/li&gt;
+        ...
+    &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 3</h3><pre><code>// Programmatic use-case:
+// SearchBox and ScrollableView created by the mixin.
+// Filtered EdgeToEdgeStoreList created programmatically.
+require([&quot;dojo/_base/declare&quot;, &quot;dojo/ready&quot;, &quot;dojox/mobile&quot;, &quot;dojox/mobile/EdgeToEdgeStoreList&quot;, 
+        &quot;dojox/mobile/FilteredListMixin&quot;, ...], function(declare, ready, registry, ...){
+    ready(function(){
+        var listWidget =
+            new declare([EdgeToEdgeStoreList, FilteredListMixin])(
+                {placeHolder: &#39;Search&#39;, store: myStore, &quot;filteredList&quot;});
+        listWidget.startup();
+    });
+});
+...
+&lt;div id=&quot;view&quot; data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;div id=&quot;filteredList&quot;&gt;
+&lt;/div&gt;</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 4</h3><pre><code>&lt;!-- Markup use-case: --&gt;
+&lt;!-- SearchBox and ScrollableView provided by the user. --&gt;
+&lt;!-- Filtered EdgeToEdgeDataList created in markup. --&gt; 
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;input id=&quot;filterBox&quot; data-dojo-type=&quot;dojox/mobile/SearchBox&quot; type=&quot;search&quot;
+        class=&quot;mblFilteredEdgeToEdgeListSearchBox&quot;&gt;     
+    &lt;div data-dojo-type=&quot;dojox/mobile/ScrollableView&quot;&gt;
+        &lt;ul data-dojo-type=&quot;dojox/mobile/EdgeToEdgeDataList&quot; 
+            data-dojo-mixins=&quot;dojox/mobile/FilteredListMixin&quot;
+            data-dojo-props=&quot;filterBoxRef: &#39;filterBox&#39;, placeHolder: &#39;Search&#39;, store: myStore&quot;&gt;&lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 5</h3><pre><code>// Programmatic use-case:
+// SearchBox and ScrollableView provided by the user.
+// Filtered EdgeToEdgeStoreList created programmatically.
+require([&quot;dojo/_base/declare&quot;, &quot;dojo/ready&quot;, &quot;dijit/registry&quot;, &quot;dojox/mobile&quot;,
+        &quot;dojox/mobile/EdgeToEdgeStoreList&quot;, &quot;dojox/mobile/FilteredListMixin&quot;,
+        &quot;dojox/mobile/ScrollableView&quot;, ...], function(declare, ready, registry, ...){
+    ready(function(){
+        var view = registry.byId(&quot;scrollableView&quot;);
+        var listWidget =
+            new declare([EdgeToEdgeStoreList, FilteredListMixin])(
+                {id:&quot;list&quot;, filterBoxRef: &#39;filterBox&#39;, placeHolder: &#39;Search&#39;, store: myStore});
+        listWidget.placeAt(view.containerNode);
+        listWidget.startup();
+    });
+});
+...
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;input id=&quot;filterBox&quot; data-dojo-type=&quot;dojox/mobile/SearchBox&quot; type=&quot;search&quot;
+        class=&quot;mblFilteredEdgeToEdgeListSearchBox&quot;&gt;     
+    &lt;div id=&quot;scrollableView&quot; data-dojo-type=&quot;dojox/mobile/ScrollableView&quot;&gt;
+&lt;/div&gt;</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="objectIcon private"><a href="1_10dojox_mobile_FilteredListMixin__createdFilterBox">_createdFilterBox</a>
+        </li><span>The instance of dojox/mobile/SearchBox created by this mixin, or null if none
+has been created.<span title="private" class="jsdoc-private"></span></span>
+        <li class="objectIcon private"><a href="1_10dojox_mobile_FilteredListMixin__createdScrollableView">_createdScrollableView</a>
+        </li><span>The instance of dojox/mobile/ScrollableView created by this mixin, if any.<span title="private" class="jsdoc-private"></span></span>
+        <li class="objectIcon private"><a href="1_10dojox_mobile_FilteredListMixin__filterBox">_filterBox</a>
+        </li><span>The instance of dojox/mobile/SearchBox used by this mixin.<span title="private" class="jsdoc-private"></span></span>
+        <li class="stringIcon public"><a href="1_10dojox_mobile_FilteredListMixin_filterBoxRef">filterBoxRef</a>
+        </li><span>The reference for the search box allowing to enter the filtering criteria.</span>
+        <li class="booleanIcon public"><a href="1_10dojox_mobile_FilteredListMixin_filterBoxVisible">filterBoxVisible</a>
+        </li><span>A flag which allows to show or hide the dojox/mobile/SearchBox associated with
+the list.</span>
+        <li class="stringIcon public"><a href="1_10dojox_mobile_FilteredListMixin_placeHolder">placeHolder</a>
+        </li><span>Defines a hint to help users fill out the input field (as defined in HTML 5) of the 
+dojox/mobile/SearchBox.</span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a href="#1_10dojox_mobile_FilteredListMixin__createStore">_createStore</a><span class="parameters"></span><span class="parameters">(initStoreFunction) </span><span>Creates the store.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_10dojox_mobile_FilteredListMixin__initStore">_initStore</a><span class="parameters"></span><span class="parameters">() </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_10dojox_mobile_FilteredListMixin__setFilterBoxVisibleAttr">_setFilterBoxVisibleAttr</a><span class="parameters"></span><span class="parameters">(visible) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_10dojox_mobile_FilteredListMixin__setPlaceHolderAttr">_setPlaceHolderAttr</a><span class="parameters"></span><span class="parameters">(placeHolder) </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_mobile_FilteredListMixin_destroy">destroy</a><span class="parameters"></span><span class="parameters">(preserveDom) </span><span>Destroys the widget.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_mobile_FilteredListMixin_getFilterBox">getFilterBox</a><span class="parameters"></span><span class="parameters">() </span><span>Returns the dojox/mobile/SearchBox widget used for entering the filtering criteria.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_mobile_FilteredListMixin_getScrollableView">getScrollableView</a><span class="parameters"></span><span class="parameters">() </span><span>Returns the instance of dojox/mobile/ScrollableView created by this mixin,
+or null if none has been created.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_10dojox_mobile_FilteredListMixin_startup">startup</a><span class="parameters"></span><span class="parameters">() </span><span></span>
+        </li>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Event Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private"><a #{link}="#{link}">_onFilter</a><span class="parameters">
+            <results></results>,
+            <query></query>,
+            <options></options>,</span><span>Internal handler for filtering events.</span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a #{link}="#{link}">onFilter</a><span class="parameters">
+            <results></results>,
+            <query></query>,
+            <options></options>,</span><span>User-defined function to handle filter actions.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin__createdFilterBox"></a><span class="objectIcon">_createdFilterBox</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-summary"><p>The instance of <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a> created by this mixin, or null if none
+has been created. Stored for being able to destroy it together with the list widget.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin__createdScrollableView"></a><span class="objectIcon">_createdScrollableView</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-summary"><p>The instance of <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/ScrollableView">dojox/mobile/ScrollableView</a> created by this mixin, if any. 
+Stored for getScrollableView() and for being able to destroy it together 
+with the list widget.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin__filterBox"></a><span class="objectIcon">_filterBox</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-summary"><p>The instance of <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a> used by this mixin. 
+Stored for getFilterBox().</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin_filterBoxRef"></a><span class="stringIcon">filterBoxRef</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-summary"><p>The reference for the search box allowing to enter the filtering criteria.
+Only used at construction time:
+- If unspecified, the mixin creates a <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a> and 
+a <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/ScrollableView">dojox/mobile/ScrollableView</a>. The list is placed inside the ScrollableView and the
+SearchBox, wrapped in a DIV, is placed on top of the ScrollableView.
+- If the string is the id of a widget which is an instance of <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a> 
+or a subclass, the mixin uses this SearchBox for filtering the list.
+- If the id is specified but does not reference a <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a> or 
+subclass, an error is thrown. </p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin_filterBoxVisible"></a><span class="booleanIcon">filterBoxVisible</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-summary"><p>A flag which allows to show or hide the <a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a> associated with
+the list.</p>
+</div>
+      </div>
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin_placeHolder"></a><span class="stringIcon">placeHolder</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-summary"><p>Defines a hint to help users fill out the input field (as defined in HTML 5) of the 
+<a class="jsdoc-link" href="/documentation/api/1.10/dojox/mobile/SearchBox">dojox/mobile/SearchBox</a>. This should only contain plain text (no HTML markup).
+When the SearchBox is provided by the user (not created by this mixin), its placeHolder
+property takes precedence.</p>
+</div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin__createStore"></a><span class="functionIcon">_createStore</span><span class="parameters">(initStoreFunction)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Creates the store.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>This method is used when the list is not backed by a store. In this case,
+a store is created and filled with items containing the text of the list items.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">initStoreFunction</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin__initStore"></a><span class="functionIcon">_initStore</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <div class="jsdoc-full-summary"><p>Initializes the store.</p>
+</div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin__setFilterBoxVisibleAttr"></a><span class="functionIcon">_setFilterBoxVisibleAttr</span><span class="parameters">(visible)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">visible</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin__setPlaceHolderAttr"></a><span class="functionIcon">_setPlaceHolderAttr</span><span class="parameters">(placeHolder)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">placeHolder</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin_destroy"></a><span class="functionIcon">destroy</span><span class="parameters">(preserveDom)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Destroys the widget. If the list has created dojox/mobile/SearchBox 
+or dojox/mobile/ScrollableView widgets, these widgets are also destroyed.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">preserveDom</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>If true, this method will leave the original DOM structure alone.</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin_getFilterBox"></a><span class="functionIcon">getFilterBox</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns the dojox/mobile/SearchBox widget used for entering the filtering criteria.
+If an instance has been referenced at construction time using the property filterBoxRef,
+this instance is returned. Otherwise, returns the instance created by the mixin.
+This function allows the user to get the instance of SearchBox in order to customize
+its parameters. </p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin_getScrollableView"></a><span class="functionIcon">getScrollableView</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns the instance of dojox/mobile/ScrollableView created by this mixin,
+or null if none has been created. The mixin creates a ScrollableView if and
+only if the property filterBoxRef is unspecified.
+This function allows the user to get the instance of ScrollableView in order to
+customize its parameters.</p>
+</div>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin_startup"></a><span class="functionIcon">startup</span><span class="parameters">()</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+    </div>
+    <h2>Events</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin__onFilter"></a><span class="functionIcon">_onFilter</span><span class="parameters">(results,query,options)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Internal handler for filtering events.</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>&lt;!-- Markup use-case: --&gt;
+&lt;!-- SearchBox and ScrollableView created by the mixin. --&gt;
+&lt;!-- Filtered EdgeToEdgeStoreList created in markup. --&gt;
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;ul data-dojo-type=&quot;dojox/mobile/EdgeToEdgeStoreList&quot;
+        data-dojo-mixins=&quot;dojox/mobile/FilteredListMixin&quot;
+        data-dojo-props=&quot;placeHolder: &#39;Search&#39;, store: myStore&quot;&gt;&lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 2</h3><pre><code>&lt;!-- Markup use-case: --&gt;
+&lt;!-- SearchBox and ScrollableView created by the mixin. --&gt;
+&lt;!-- Filtered RoundRectList created in markup. --&gt; 
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;ul id=&quot;list&quot; data-dojo-type=&quot;dojox/mobile/RoundRectList&quot;
+        data-dojo-mixins=&quot;dojox/mobile/FilteredListMixin&quot;
+        data-dojo-props=&quot;placeHolder: &#39;Search&#39;&quot;&gt;
+        &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot;&gt;Item 1&lt;/li&gt;
+        &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot;&gt;Item 2&lt;/li&gt;
+        ...
+    &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 3</h3><pre><code>// Programmatic use-case:
+// SearchBox and ScrollableView created by the mixin.
+// Filtered EdgeToEdgeStoreList created programmatically.
+require([&quot;dojo/_base/declare&quot;, &quot;dojo/ready&quot;, &quot;dojox/mobile&quot;, &quot;dojox/mobile/EdgeToEdgeStoreList&quot;, 
+        &quot;dojox/mobile/FilteredListMixin&quot;, ...], function(declare, ready, registry, ...){
+    ready(function(){
+        var listWidget =
+            new declare([EdgeToEdgeStoreList, FilteredListMixin])(
+                {placeHolder: &#39;Search&#39;, store: myStore, &quot;filteredList&quot;});
+        listWidget.startup();
+    });
+});
+...
+&lt;div id=&quot;view&quot; data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;div id=&quot;filteredList&quot;&gt;
+&lt;/div&gt;</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 4</h3><pre><code>&lt;!-- Markup use-case: --&gt;
+&lt;!-- SearchBox and ScrollableView provided by the user. --&gt;
+&lt;!-- Filtered EdgeToEdgeDataList created in markup. --&gt; 
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;input id=&quot;filterBox&quot; data-dojo-type=&quot;dojox/mobile/SearchBox&quot; type=&quot;search&quot;
+        class=&quot;mblFilteredEdgeToEdgeListSearchBox&quot;&gt;     
+    &lt;div data-dojo-type=&quot;dojox/mobile/ScrollableView&quot;&gt;
+        &lt;ul data-dojo-type=&quot;dojox/mobile/EdgeToEdgeDataList&quot; 
+            data-dojo-mixins=&quot;dojox/mobile/FilteredListMixin&quot;
+            data-dojo-props=&quot;filterBoxRef: &#39;filterBox&#39;, placeHolder: &#39;Search&#39;, store: myStore&quot;&gt;&lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 5</h3><pre><code>// Programmatic use-case:
+// SearchBox and ScrollableView provided by the user.
+// Filtered EdgeToEdgeStoreList created programmatically.
+require([&quot;dojo/_base/declare&quot;, &quot;dojo/ready&quot;, &quot;dijit/registry&quot;, &quot;dojox/mobile&quot;,
+        &quot;dojox/mobile/EdgeToEdgeStoreList&quot;, &quot;dojox/mobile/FilteredListMixin&quot;,
+        &quot;dojox/mobile/ScrollableView&quot;, ...], function(declare, ready, registry, ...){
+    ready(function(){
+        var view = registry.byId(&quot;scrollableView&quot;);
+        var listWidget =
+            new declare([EdgeToEdgeStoreList, FilteredListMixin])(
+                {id:&quot;list&quot;, filterBoxRef: &#39;filterBox&#39;, placeHolder: &#39;Search&#39;, store: myStore});
+        listWidget.placeAt(view.containerNode);
+        listWidget.startup();
+    });
+});
+...
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;input id=&quot;filterBox&quot; data-dojo-type=&quot;dojox/mobile/SearchBox&quot; type=&quot;search&quot;
+        class=&quot;mblFilteredEdgeToEdgeListSearchBox&quot;&gt;     
+    &lt;div id=&quot;scrollableView&quot; data-dojo-type=&quot;dojox/mobile/ScrollableView&quot;&gt;
+&lt;/div&gt;</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_10dojox_mobile_FilteredListMixin_onFilter"></a><span class="functionIcon">onFilter</span><span class="parameters">(results,query,options)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="jsdoc-link">dojox/mobile/FilteredListMixin</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>User-defined function to handle filter actions. If the function returns false,
+the filtering is cancelled.</p>
+</div>
+        <params>= event.parameters</params>
+        <returnTypes>= event.returnTypes</returnTypes>
+        <returnDescription>= event.returnDescription</returnDescription>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>&lt;!-- Markup use-case: --&gt;
+&lt;!-- SearchBox and ScrollableView created by the mixin. --&gt;
+&lt;!-- Filtered EdgeToEdgeStoreList created in markup. --&gt;
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;ul data-dojo-type=&quot;dojox/mobile/EdgeToEdgeStoreList&quot;
+        data-dojo-mixins=&quot;dojox/mobile/FilteredListMixin&quot;
+        data-dojo-props=&quot;placeHolder: &#39;Search&#39;, store: myStore&quot;&gt;&lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 2</h3><pre><code>&lt;!-- Markup use-case: --&gt;
+&lt;!-- SearchBox and ScrollableView created by the mixin. --&gt;
+&lt;!-- Filtered RoundRectList created in markup. --&gt; 
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;ul id=&quot;list&quot; data-dojo-type=&quot;dojox/mobile/RoundRectList&quot;
+        data-dojo-mixins=&quot;dojox/mobile/FilteredListMixin&quot;
+        data-dojo-props=&quot;placeHolder: &#39;Search&#39;&quot;&gt;
+        &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot;&gt;Item 1&lt;/li&gt;
+        &lt;li data-dojo-type=&quot;dojox/mobile/ListItem&quot;&gt;Item 2&lt;/li&gt;
+        ...
+    &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 3</h3><pre><code>// Programmatic use-case:
+// SearchBox and ScrollableView created by the mixin.
+// Filtered EdgeToEdgeStoreList created programmatically.
+require([&quot;dojo/_base/declare&quot;, &quot;dojo/ready&quot;, &quot;dojox/mobile&quot;, &quot;dojox/mobile/EdgeToEdgeStoreList&quot;, 
+        &quot;dojox/mobile/FilteredListMixin&quot;, ...], function(declare, ready, registry, ...){
+    ready(function(){
+        var listWidget =
+            new declare([EdgeToEdgeStoreList, FilteredListMixin])(
+                {placeHolder: &#39;Search&#39;, store: myStore, &quot;filteredList&quot;});
+        listWidget.startup();
+    });
+});
+...
+&lt;div id=&quot;view&quot; data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;div id=&quot;filteredList&quot;&gt;
+&lt;/div&gt;</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 4</h3><pre><code>&lt;!-- Markup use-case: --&gt;
+&lt;!-- SearchBox and ScrollableView provided by the user. --&gt;
+&lt;!-- Filtered EdgeToEdgeDataList created in markup. --&gt; 
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;input id=&quot;filterBox&quot; data-dojo-type=&quot;dojox/mobile/SearchBox&quot; type=&quot;search&quot;
+        class=&quot;mblFilteredEdgeToEdgeListSearchBox&quot;&gt;     
+    &lt;div data-dojo-type=&quot;dojox/mobile/ScrollableView&quot;&gt;
+        &lt;ul data-dojo-type=&quot;dojox/mobile/EdgeToEdgeDataList&quot; 
+            data-dojo-mixins=&quot;dojox/mobile/FilteredListMixin&quot;
+            data-dojo-props=&quot;filterBoxRef: &#39;filterBox&#39;, placeHolder: &#39;Search&#39;, store: myStore&quot;&gt;&lt;/ul&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+          </div>
+          <div class="jsdoc-example">
+            <h3>Example 5</h3><pre><code>// Programmatic use-case:
+// SearchBox and ScrollableView provided by the user.
+// Filtered EdgeToEdgeStoreList created programmatically.
+require([&quot;dojo/_base/declare&quot;, &quot;dojo/ready&quot;, &quot;dijit/registry&quot;, &quot;dojox/mobile&quot;,
+        &quot;dojox/mobile/EdgeToEdgeStoreList&quot;, &quot;dojox/mobile/FilteredListMixin&quot;,
+        &quot;dojox/mobile/ScrollableView&quot;, ...], function(declare, ready, registry, ...){
+    ready(function(){
+        var view = registry.byId(&quot;scrollableView&quot;);
+        var listWidget =
+            new declare([EdgeToEdgeStoreList, FilteredListMixin])(
+                {id:&quot;list&quot;, filterBoxRef: &#39;filterBox&#39;, placeHolder: &#39;Search&#39;, store: myStore});
+        listWidget.placeAt(view.containerNode);
+        listWidget.startup();
+    });
+});
+...
+&lt;div data-dojo-type=&quot;dojox/mobile/View&quot;&gt;
+    &lt;h1 data-dojo-type=&quot;dojox/mobile/Heading&quot; data-dojo-props=&quot;fixed: &#39;top&#39;&quot;&gt;Some heading&lt;/h1&gt;
+    &lt;input id=&quot;filterBox&quot; data-dojo-type=&quot;dojox/mobile/SearchBox&quot; type=&quot;search&quot;
+        class=&quot;mblFilteredEdgeToEdgeListSearchBox&quot;&gt;     
+    &lt;div id=&quot;scrollableView&quot; data-dojo-type=&quot;dojox/mobile/ScrollableView&quot;&gt;
+&lt;/div&gt;</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.10/dojox/mobile/FilteredListMixin" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

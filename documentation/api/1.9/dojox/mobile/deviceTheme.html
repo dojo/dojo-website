@@ -1,0 +1,232 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojox/mobile/deviceTheme" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojox/mobile/deviceTheme.html</div>
+<h1 class="objectIcon36 jsdoc-title module-title">dojox/mobile/deviceTheme<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-full-summary"><p>Automatic theme loader.</p>
+</div>
+<div class="jsdoc-full-summary"><p>This module detects the user agent of the browser and loads the
+appropriate theme files. It can be enabled by simply including 
+the <a class="jsdoc-link" href="/documentation/api/1.9/dojox/mobile/deviceTheme">dojox/mobile/deviceTheme</a> script in your application as follows:
+
+
+</p>
+<pre><code>&lt;script src=&quot;dojox/mobile/deviceTheme.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;dojo/dojo.js&quot; data-dojo-config=&quot;parseOnLoad: true&quot;&gt;&lt;/script&gt;</pre></code>
+<p>Using the script tag as above is the recommended way to load the 
+deviceTheme. Trying to load it using the AMD loader can lead to styles 
+being applied too late, because the loading of the theme files would 
+be performed asynchronously by the browser, so you could not assume 
+that the loading has been completed when your widgets are initialized.
+However, loading deviceTheme using the script tag has the drawback that 
+deviceTheme.js cannot be included in a build.
+
+</p>
+<p>You can also pass an additional query parameter string:
+theme={theme id} to force a specific theme through the browser
+URL input. The available theme ids are Android, Holodark (theme introduced in Android 3.0), 
+BlackBerry, Custom, iPhone, and iPad. The theme names are case-sensitive. If the given
+id does not match, the iPhone theme is used.
+
+
+</p>
+<pre><code>http://your.server.com/yourapp.html // automatic detection
+http://your.server.com/yourapp.html?theme=Android // forces Android theme
+http://your.server.com/yourapp.html?theme=Holodark // forces Holodark theme
+http://your.server.com/yourapp.html?theme=BlackBerry // forces Blackberry theme
+http://your.server.com/yourapp.html?theme=Custom // forces Custom theme
+http://your.server.com/yourapp.html?theme=iPhone // forces iPhone theme
+http://your.server.com/yourapp.html?theme=iPad // forces iPad theme</pre></code>
+<p>To simulate a particular device from the application code, the user agent
+can be forced by setting dojoConfig.mblUserAgent as follows:
+
+
+</p>
+<pre><code>&lt;script src=&quot;dojox/mobile/deviceTheme.js&quot; data-dojo-config=&quot;mblUserAgent: &#39;Holodark&#39;&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;dojo/dojo.js&quot; data-dojo-config=&quot;parseOnLoad: true&quot;&gt;&lt;/script&gt;</pre></code>
+<p>By default, an all-in-one theme file (e.g. themes/iphone/iphone.css) is
+loaded. The all-in-one theme files contain style sheets for all the
+<a class="jsdoc-link" href="/documentation/api/1.9/dojox/mobile">dojox/mobile</a> widgets regardless of whether they are used in your
+application or not.
+
+</p>
+<p>If you want to choose what theme files to load, you can specify them
+via dojoConfig or data-dojo-config as shown in the following example:
+
+
+</p>
+<pre><code>&lt;script src=&quot;dojox/mobile/deviceTheme.js&quot;
+    data-dojo-config=&quot;mblThemeFiles:[&#39;base&#39;,&#39;Button&#39;]&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;dojo/dojo.js&quot; data-dojo-config=&quot;parseOnLoad: true&quot;&gt;&lt;/script&gt;</pre></code>
+<p>In the case of this example, if iphone is detected, for example, the
+following files will be loaded:
+
+
+</p>
+<pre><code>dojox/mobile/themes/iphone/base.css
+dojox/mobile/themes/iphone/Button.css</pre></code>
+<p>If you want to load style sheets for your own custom widgets, you can
+specify a package name along with a theme file name in an array.
+
+
+</p>
+<pre><code>[&#39;base&#39;,[&#39;com.acme&#39;,&#39;MyWidget&#39;]]</pre></code>
+<p>In this case, the following files will be loaded.
+
+
+</p>
+<pre><code>dojox/mobile/themes/iphone/base.css
+com/acme/themes/iphone/MyWidget.css</pre></code>
+<p>If you specify &#39;@theme&#39; as a theme file name, it will be replaced with
+the theme folder name (e.g. &#39;iphone&#39;). For example,
+
+
+</p>
+<pre><code>[&#39;@theme&#39;,[&#39;com.acme&#39;,&#39;MyWidget&#39;]]</pre></code>
+<p>will load the following files:
+
+
+</p>
+<pre><code>dojox/mobile/themes/iphone/iphone.css
+com/acme/themes/iphone/MyWidget.css</pre></code>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="objectIcon public"><a href="1_9dojox_mobile_deviceTheme_themeMap">themeMap</a>
+        </li><span></span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a href="#1_9dojox_mobile_deviceTheme_loadCssFile">loadCssFile</a><span class="parameters"></span><span class="parameters">(file) </span><span>Loads the given CSS file programmatically.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_mobile_deviceTheme_loadDeviceTheme">loadDeviceTheme</a><span class="parameters"></span><span class="parameters">(userAgent) </span><span>Loads a device-specific theme according to the user-agent
+string.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_mobile_deviceTheme_setDm">setDm</a><span class="parameters"></span><span class="parameters">(_dm) </span><span>Replaces the dojox/mobile object.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojox_mobile_deviceTheme_toUrl">toUrl</a><span class="parameters"></span><span class="parameters">(path) </span><span>A wrapper for require.toUrl to support non-dojo usage.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_9dojox_mobile_deviceTheme_themeMap"></a><span class="objectIcon">themeMap</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.9/dojox/mobile/deviceTheme" class="jsdoc-link">dojox/mobile/deviceTheme</a>
+        </div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_mobile_deviceTheme_loadCssFile"></a><span class="functionIcon">loadCssFile</span><span class="parameters">(file)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/mobile/deviceTheme" class="jsdoc-link">dojox/mobile/deviceTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Loads the given CSS file programmatically.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">file</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_mobile_deviceTheme_loadDeviceTheme"></a><span class="functionIcon">loadDeviceTheme</span><span class="parameters">(userAgent)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/mobile/deviceTheme" class="jsdoc-link">dojox/mobile/deviceTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Loads a device-specific theme according to the user-agent
+string.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>This function is automatically called when this module is
+evaluated.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">userAgent</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_mobile_deviceTheme_setDm"></a><span class="functionIcon">setDm</span><span class="parameters">(_dm)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/mobile/deviceTheme" class="jsdoc-link">dojox/mobile/deviceTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Replaces the dojox/mobile object.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>When this module is loaded from a script tag, dm is a plain
+local object defined at the begining of this module.
+common.js will replace the local dm object with the
+real <a class="jsdoc-link" href="/documentation/api/1.9/dojox/mobile">dojox/mobile</a> object through this method.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">_dm</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojox_mobile_deviceTheme_toUrl"></a><span class="functionIcon">toUrl</span><span class="parameters">(path)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojox/mobile/deviceTheme" class="jsdoc-link">dojox/mobile/deviceTheme</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>A wrapper for require.toUrl to support non-dojo usage.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">path</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojox/mobile/deviceTheme" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

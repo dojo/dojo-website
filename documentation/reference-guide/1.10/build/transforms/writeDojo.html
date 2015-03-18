@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Build Transform writeDojo &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Build Transform writeDojo</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#profile-knobs">Profile Knobs</a></li>
+<li><a class="reference internal" href="#source-location">Source Location</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="build-transform-writedojo">
+<span id="build-transforms-writedojo"></span><h1><a class="toc-backref" href="#id1">Build Transform writeDojo</a><a class="headerlink" href="#build-transform-writedojo" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Rawld Gill</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#build-transform-writedojo" id="id1">Build Transform writeDojo</a><ul>
+<li><a class="reference internal" href="#summary" id="id2">Summary</a></li>
+<li><a class="reference internal" href="#description" id="id3">Description</a></li>
+<li><a class="reference internal" href="#profile-knobs" id="id4">Profile Knobs</a></li>
+<li><a class="reference internal" href="#source-location" id="id5">Source Location</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id2">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Writes the dojo loader and any layers that are designated as boot layers to destination locations.</p>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id3">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This transform writes the dojo loader to the loader destination, usually dojo.js in the dojo package directory. It also
+writes any layers with a truthy <code class="docutils literal"><span class="pre">boot</span></code> property to their destination resources by prefixing the normal layer text,
+as computed by the writeAmd transform, with the dojo loader text, thereby causing the layer to include the loader and be
+&#8220;bootable&#8221;.</p>
+<p>The dojo loader is not an AMD module. The source version of the loader looks like this:</p>
+<p><em>dojo/dojo.js</em></p>
+<div class="highlight"><pre><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">userConfig</span><span class="p">,</span> <span class="nx">defaultConfig</span><span class="p">){</span>
+
+  <span class="c1">// dojo loader definition goes here</span>
+
+<span class="p">})</span>
+<span class="c1">//&gt;&gt;excludeStart(&quot;replaceLoaderConfig&quot;, kwArgs.replaceLoaderConfig);</span>
+<span class="p">(</span>
+    <span class="c1">// userConfig</span>
+    <span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+        <span class="c1">// make sure we&#39;re looking at global dojoConfig etc.</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">dojoConfig</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">djConfig</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">require</span> <span class="o">||</span> <span class="p">{};</span>
+    <span class="p">})(),</span>
+
+    <span class="c1">// defaultConfig</span>
+    <span class="p">{</span>
+        <span class="c1">// the default configuration as provided by the source version of dojo goes here</span>
+        <span class="c1">// see dojo/dojo.js for details</span>
+    <span class="p">}</span>
+<span class="p">);</span>
+<span class="c1">//&gt;&gt;excludeEnd(&quot;replaceLoaderConfig&quot;)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">(function(userConfig, defaultConfig){
+
+  // dojo loader definition goes here
+
+})
+//&gt;&gt;excludeStart(&quot;replaceLoaderConfig&quot;, kwArgs.replaceLoaderConfig);
+(
+    // userConfig
+    (function(){
+        // make sure we're looking at global dojoConfig etc.
+        return this.dojoConfig || this.djConfig || this.require || {};
+    })(),
+
+    // defaultConfig
+    {
+        // the default configuration as provided by the source version of dojo goes here
+        // see dojo/dojo.js for details
+    }
+);
+//&gt;&gt;excludeEnd(&quot;replaceLoaderConfig&quot;)</textarea></div><p>The build system defines the profile argument <code class="docutils literal"><span class="pre">replaceLoaderConfig</span></code> as truthy which causes the application to the
+loader factory to be deleted. This transform constructs user configuration and default configuration objects and writes
+these to along with the transformed loader factory text.</p>
+<p>The user configuration object may be specified in the profile property <code class="docutils literal"><span class="pre">userConfig</span></code>. If <code class="docutils literal"><span class="pre">userConfig</span></code> is a string,
+then it is used verbatim; otherwise, it must be a JavaScript object giving a loader configuration see xxx. The object
+need not be a JSON object and may contain functions. For example,</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">userConfig</span><span class="o">:</span><span class="p">{</span>
+        <span class="nx">hasCache</span><span class="o">:</span><span class="p">{</span>
+            <span class="nx">someFeature</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">global</span><span class="p">,</span> <span class="nx">doc</span><span class="p">,</span> <span class="nx">element</span><span class="p">){</span>
+                <span class="c1">// the has feature test for someFeature</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var profile = {
+    userConfig:{
+        hasCache:{
+            someFeature:function(global, doc, element){
+                // the has feature test for someFeature
+            }
+        }
+    }
+};</textarea></div><p>If no value if given for <code class="docutils literal"><span class="pre">userConfig</span></code>, then it defaults to the string <code class="docutils literal"><span class="pre">&quot;this.dojoConfig</span> <span class="pre">||</span> <span class="pre">this.djConfig</span> <span class="pre">||</span>
+<span class="pre">this.require</span> <span class="pre">||</span> <span class="pre">{}&quot;</span></code>, which causes the built loader to select the various possible locations for a loader user
+configuration. This behavior is identical to the source version of the loader.</p>
+<p><strong>Warning</strong>: When a user configuration is given by providing a value of for the profile property <code class="docutils literal"><span class="pre">userConfig</span></code>, the
+resulting loader will not automatically consume a global <code class="docutils literal"><span class="pre">dojoConfig</span></code>, <code class="docutils literal"><span class="pre">djConfig</span></code>, or <code class="docutils literal"><span class="pre">require</span></code> loader
+configuration object.</p>
+<p>The default configuration object, is built up from various profile properties:</p>
+<ul class="simple">
+<li>if the profile property <code class="docutils literal"><span class="pre">baseUrl</span></code> exists, then the loader configuration property <code class="docutils literal"><span class="pre">baseUrl</span></code> is set accordingly</li>
+<li>a package configuration is constructed for each package given in the build<ul>
+<li>For all packages, the <code class="docutils literal"><span class="pre">name</span></code> property is set to the value of <code class="docutils literal"><span class="pre">destName</span></code> in the package configuration (see xxx);
+similarly for <code class="docutils literal"><span class="pre">main</span></code> and <code class="docutils literal"><span class="pre">destMain</span></code>.</li>
+<li>For the dojo package, <code class="docutils literal"><span class="pre">location</span></code> property is set to &#8221;.&#8221; This has the net effect of causing the dojo package to
+reside at the value of <code class="docutils literal"><span class="pre">baseUrl</span></code> during run time.</li>
+<li>For all packages other than dojo, the <code class="docutils literal"><span class="pre">location</span></code> property is computed by examining the <code class="docutils literal"><span class="pre">destLocation</span></code> package
+configuration property, and computing the equivalent path expressed as a relative path to the path that holds the
+dojo package; this equivalent path is used for the package <code class="docutils literal"><span class="pre">location</span></code> property in each package
+configuration. Notice that since the path that holds the dojo package is assumed to be equivalent to <code class="docutils literal"><span class="pre">baseUrl</span></code>,
+making every other package relative to the dojo package has the net effect of making those package locations
+relative to <code class="docutils literal"><span class="pre">baseUrl</span></code>.</li>
+<li>After the package configuration properties described above are computed for package <em>package-name</em>, any properties
+defined at the profile property <code class="docutils literal"><span class="pre">defaultConfig.packages[</span></code> <em>package-name</em> <code class="docutils literal"><span class="pre">]]</span></code> are mixed in to the computed
+package configuration object. This provides a method to override any of the default package configuration
+computations.</li>
+</ul>
+</li>
+<li>all properties of the profile property <code class="docutils literal"><span class="pre">defaultConfig</span></code>, with the exception of the property <code class="docutils literal"><span class="pre">packages</span></code> are then
+mixed into the default configuration object.</li>
+</ul>
+<p>The resulting user configuration and default configuration objects are stringified (if necessary&#8211;the userConfiguration
+may already be a string) and added to the transformed loader factory text to express an application of the loader
+factory. This effectively replaces the block marked by the &#8220;replaceLoaderConfig&#8221; dojo pragma arguments. The resulting
+loader factory text can then be used to write the loader resource (usually dojo.js) and prefix any bootable layers.</p>
+<p>By default, the dojo/dojo module is a layer module that includes the single module dojo/main which results in loader
+so-called &#8220;dojo base&#8221;. At the time of writing, dojo/main includes the following modules:</p>
+<blockquote>
+<div>dojo/main
+dojo/_base/kernel
+dojo/has
+dojo/_base/config
+dojo/_base/sniff
+dojo/_base/lang
+dojo/_base/array
+dojo/ready
+dojo/domReady
+dojo/_base/declare
+dojo/_base/Deferred
+dojo/_base/json
+dojo/json
+dojo/_base/Color
+dojo/_base/browser
+dojo/_base/connect
+dojo/on
+dojo/topic
+dojo/Evented
+dojo/aspect
+dojo/_base/event
+dojo/dom-geometry
+dojo/_base/window
+dojo/dom
+dojo/dom-style
+dojo/mouse
+dojo/keys
+dojo/_base/unload
+dojo/_base/html
+dojo/dom-attr
+dojo/dom-prop
+dojo/dom-construct
+dojo/dom-class
+dojo/_base/NodeList
+dojo/query
+dojo/selector/_loader
+dojo/NodeList-dom
+dojo/_base/xhr
+dojo/io-query
+dojo/dom-form
+dojo/_base/fx</div></blockquote>
+<p>This default may be overridden by providing an explicit dojo/dojo layer configuration (see xxx writeAmd). Historically,
+this technique has been termed building a &#8220;custom base&#8221;. However, as of v1.7, specifying the contents of the dojo/dojo
+layer is no different than specifying the contents of any other module, so it&#8217;s no longer considered a particularly
+complex or advanced feature.</p>
+<p>Lastly, during the construction of the dojo/dojo layer, if the profile property <code class="docutils literal"><span class="pre">version</span></code> is present, then it is used
+as a replacement for any embedded version numbers found in the layer. The property <code class="docutils literal"><span class="pre">version</span></code> must have the form</p>
+<blockquote>
+<div><em>major</em> <strong>.</strong> <em>minor</em> <strong>.</strong> <em>patch</em> <strong>.</strong> <em>flag</em></div></blockquote>
+<p>Where major, minor, and patch must all be positive integers and flag can be anything. Any less significant subset may be
+omitted; omitted minor and patch segments default to &#8220;0&#8221;; an omitted flag segment defaults to an empty string.</p>
+<p>If present, the dojo/dojo layer is searched for the pattern</p>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">/major:\s*\d*,\s*minor:\s*\d*,\s*patch:\s*\d*,\s*flag:\s*&quot;.*?&quot;\s*,/</span></code></div></blockquote>
+<p>If the pattern is found and the profile property <code class="docutils literal"><span class="pre">version</span></code> was provided, then property values in the resource text
+are replaced with the in the obvious manner.</p>
+<p>The transform writes the dojo/dojo resource text, after transforming as described above, the destination
+location. Additionally, the resource text for all bootable layers (see xxx) is written to their destination locations
+after prefixing that text with the dojo/dojo resource text.</p>
+</div>
+<div class="section" id="profile-knobs">
+<h2><a class="toc-backref" href="#id4">Profile Knobs</a><a class="headerlink" href="#profile-knobs" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">defaultConfig</span></code> (default = see below)</dt>
+<dd><ul class="first last simple">
+<li>[<em>object that gives the default loader configuration</em>] Used to build up the default loader configuration. Typically
+not provided.</li>
+</ul>
+</dd>
+<dt><code class="docutils literal"><span class="pre">userConfig</span></code> (default = <code class="docutils literal"><span class="pre">&quot;this.dojoConfig</span> <span class="pre">||</span> <span class="pre">this.djConfig</span> <span class="pre">||</span> <span class="pre">this.require</span> <span class="pre">||</span> <span class="pre">{}&quot;</span></code>)</dt>
+<dd><ul class="first simple">
+<li>[<em>string</em>] The explicit text to write for the user configuration applied to the loader factory.</li>
+<li>[<em>object</em>] The object to user for the user configuration applied to the loader factory. The object need not be a
+strict JSON object.</li>
+</ul>
+<p class="last"><strong>Warning</strong>: When a user configuration is given by providing a value of for the profile property <code class="docutils literal"><span class="pre">userConfig</span></code>, the
+resulting loader will not automatically consume a global <code class="docutils literal"><span class="pre">dojoConfig</span></code>, <code class="docutils literal"><span class="pre">djConfig</span></code>, or <code class="docutils literal"><span class="pre">require</span></code> loader
+configuration object.</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">version</span></code> (default = <em>the version given by the dojo package</em>)</dt>
+<dd><ul class="first last simple">
+<li>[<em>string</em>] A string with the format <em>major</em> <strong>.</strong> minor* <strong>.</strong> <em>patch</em> <strong>.</strong> <em>flag</em>, where major, minor, and patch
+must all be positive integers and flag can be anything. Any less significant subset may be omitted; omitted minor
+and patch segments default to &#8220;0&#8221;; an omitted flag segment defaults to an empty string.</li>
+</ul>
+</dd>
+<dt><code class="docutils literal"><span class="pre">dojo/dojo</span></code> layer configuration</dt>
+<dd>The dojo/dojo layer configuration gives the contents of the dojo layer, usually written to dojo/dojo.js. The default
+value of the dojo/dojo layer is given as follows:</dd>
+</dl>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="nx">include</span><span class="o">:</span><span class="p">[</span><span class="s2">&quot;dojo/main&quot;</span><span class="p">],</span>
+    <span class="nx">exclude</span><span class="o">:</span><span class="p">[],</span>
+    <span class="nx">boot</span><span class="o">:</span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{
+    include:[&quot;dojo/main&quot;],
+    exclude:[],
+    boot:true
+}</textarea></div></div>
+<div class="section" id="source-location">
+<h2><a class="toc-backref" href="#id5">Source Location</a><a class="headerlink" href="#source-location" title="Permalink to this headline">¶</a></h2>
+<p>util/build/transforms/writeDojo.js</p>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

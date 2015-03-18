@@ -1,0 +1,216 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.9/dojo/aspect" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.9/dojo/aspect.html</div>
+<h1 class="objectIcon36 jsdoc-title module-title">dojo/aspect<span style="font-size:11px;color:#999;"> (version 1.9)</span></h1>
+<div class="jsdoc-full-summary"><p>provides aspect oriented programming functionality, allowing for
+one to add before, around, or after advice on existing methods.</p>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><pre><code>define([&quot;dojo/aspect&quot;], function(aspect){
+    var signal = aspect.after(targetObject, &quot;methodName&quot;, function(someArgument){
+        this will be called when targetObject.methodName() is called, after the original function is called
+    });</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 2</h3><p>The returned signal object can be used to cancel the advice.
+
+</p>
+<pre><code>signal.remove(); // this will stop the advice from being executed anymore
+aspect.before(targetObject, &quot;methodName&quot;, function(someArgument){
+    // this will be called when targetObject.methodName() is called, before the original function is called
+ });</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a href="#1_9dojo_aspect_after">after</a><span class="parameters"></span><span class="parameters">(target,methodName,advice,receiveArguments) </span><span>The &quot;after&quot; export of the aspect module is a function that can be used to attach
+&quot;after&quot; advice to a method.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_aspect_around">around</a><span class="parameters"></span><span class="parameters">(target,methodName,advice) </span><span>The &quot;around&quot; export of the aspect module is a function that can be used to attach
+&quot;around&quot; advice to a method.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_9dojo_aspect_before">before</a><span class="parameters"></span><span class="parameters">(target,methodName,advice) </span><span>The &quot;before&quot; export of the aspect module is a function that can be used to attach
+&quot;before&quot; advice to a method.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_aspect_after"></a><span class="functionIcon">after</span><span class="parameters">(target,methodName,advice,receiveArguments)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/aspect" class="jsdoc-link">dojo/aspect</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>The &quot;after&quot; export of the aspect module is a function that can be used to attach
+&quot;after&quot; advice to a method. This function will be executed after the original method
+is executed. By default the function will be called with a single argument, the return
+value of the original method, or the the return value of the last executed advice (if a previous one exists).
+The fourth (optional) argument can be set to true to so the function receives the original
+arguments (from when the original method was called) rather than the return value.
+If there are multiple &quot;after&quot; advisors, they are executed in the order they were registered.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">target</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>This is the target object</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">methodName</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>This is the name of the method to attach to.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">advice</td>
+            <td class="jsdoc-param-type">Function</td>
+            <td class="jsdoc-param-description"><p>This is function to be called after the original method</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">receiveArguments</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>If this is set to true, the advice function receives the original arguments (from when the original mehtod
+was called) rather than the return value of the original/previous method.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">any</span></div>
+        <div class="jsdoc-return-description"><p>A signal object that can be used to cancel the advice. If remove() is called on this signal object, it will
+stop the advice function from being executed.</p>
+</div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_aspect_around"></a><span class="functionIcon">around</span><span class="parameters">(target,methodName,advice)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/aspect" class="jsdoc-link">dojo/aspect</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>The &quot;around&quot; export of the aspect module is a function that can be used to attach
+&quot;around&quot; advice to a method. The advisor function is immediately executed when
+the around() is called, is passed a single argument that is a function that can be
+called to continue execution of the original method (or the next around advisor).
+The advisor function should return a function, and this function will be called whenever
+the method is called. It will be called with the arguments used to call the method.
+Whatever this function returns will be returned as the result of the method call (unless after advise changes it).</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">target</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>This is the target object</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">methodName</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>This is the name of the method to attach to.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">advice</td>
+            <td class="jsdoc-param-type">Function</td>
+            <td class="jsdoc-param-description"><p>This is function to be called around the original method</p>
+
+            </td>
+          </tr>
+        </table>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><p>If there are multiple &quot;around&quot; advisors, the most recent one is executed first,
+which can then delegate to the next one and so on. For example:
+
+</p>
+<pre><code>around(obj, &quot;foo&quot;, function(originalFoo){
+    return function(){
+        var start = new Date().getTime();
+        var results = originalFoo.apply(this, arguments); // call the original
+        var end = new Date().getTime();
+        console.log(&quot;foo execution took &quot; + (end - start) + &quot; ms&quot;);
+        return results;
+    };
+});</code></pre>
+
+          </div>
+        </div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_9dojo_aspect_before"></a><span class="functionIcon">before</span><span class="parameters">(target,methodName,advice)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.9/dojo/aspect" class="jsdoc-link">dojo/aspect</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>The &quot;before&quot; export of the aspect module is a function that can be used to attach
+&quot;before&quot; advice to a method. This function will be executed before the original method
+is executed. This function will be called with the arguments used to call the method.
+This function may optionally return an array as the new arguments to use to call
+the original method (or the previous, next-to-execute before advice, if one exists).
+If the before method doesn&#39;t return anything (returns undefined) the original arguments
+will be preserved.
+If there are multiple &quot;before&quot; advisors, they are executed in the reverse order they were registered.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">target</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>This is the target object</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">methodName</td>
+            <td class="jsdoc-param-type">String</td>
+            <td class="jsdoc-param-description"><p>This is the name of the method to attach to.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">advice</td>
+            <td class="jsdoc-param-type">Function</td>
+            <td class="jsdoc-param-description"><p>This is function to be called before the original method</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.9/dojo/aspect" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

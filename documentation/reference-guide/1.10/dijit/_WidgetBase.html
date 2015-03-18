@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dijit._WidgetBase &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dijit._WidgetBase</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#lifecycle">Lifecycle</a><ul>
+<li><a class="reference internal" href="#other-methods">Other methods</a></li>
+<li><a class="reference internal" href="#this-inherited">this.inherited()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#attributes">Attributes</a><ul>
+<li><a class="reference internal" href="#custom-setters-getters">Custom setters/getters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dijit-widgetbase">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dijit._WidgetBase</a><a class="headerlink" href="#dijit-widgetbase" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dijit-widgetbase" id="id2">dijit._WidgetBase</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#lifecycle" id="id5">Lifecycle</a></li>
+<li><a class="reference internal" href="#attributes" id="id6">Attributes</a></li>
+<li><a class="reference internal" href="#see-also" id="id7">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>dijit._WidgetBase is the base class for all widgets in dijit,
+and in general is the base class for all dojo based widgets.
+Usually widgets also extend other mixins such as <a class="reference internal" href="_TemplatedMixin.html#dijit-templatedmixin"><span>dijit._TemplatedMixin</span></a>.</p>
+<p>Note that the underscore in the name implies not that _WidgetBase is a private class, but rather that it&#8217;s a base
+class, rather than a widget directly usable.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>All widgets are created by calling <a class="reference internal" href="../dojo/declare.html#dojo-declare"><span>dojo.declare()</span></a>, extending from _WidgetBase:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">declare</span><span class="p">(</span><span class="s2">&quot;MyWidget&quot;</span><span class="p">,</span> <span class="nx">dijit</span><span class="p">.</span><span class="nx">_WidgetBase</span><span class="p">,</span> <span class="p">{</span> <span class="p">...</span> <span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.declare(&quot;MyWidget&quot;, dijit._WidgetBase, { ... });</textarea></div><p>and then redefining a number of methods for the widget <a class="reference internal" href="#lifecycle">lifecycle</a>...</p>
+</div>
+<div class="section" id="lifecycle">
+<h2><a class="toc-backref" href="#id5">Lifecycle</a><a class="headerlink" href="#lifecycle" title="Permalink to this headline">¶</a></h2>
+<p>The lifecycle of a widget describes the phases of its creation and destruction which you can hook into.
+It&#8217;s useful to understand exactly what happens when.
+Whether you are sub-classing an existing widget, using dojo/method script blocks, or passing in method overrides to the constructor, these are your entry points for making a widget do what you want it to do.</p>
+<p>Widgets are classes, created with dojo.declare.
+All widgets inherit from dijit._WidgetBase, and most get the _Templated mixin.
+That provides you the following extension points (methods) you can override and provide implementation for:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>constructor</dt>
+<dd><p class="first last">Your constructor method will be called before the parameters are mixed into the widget,
+and can be used to initialize arrays, etc.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>parameters are mixed into the widget instance</dt>
+<dd><p class="first last">This is when attributes in the markup (ex: &lt;button iconClass=...&gt;) are mixed in or,
+if you are instantiating directly, the properties object you passed into the constructor
+(ex: new dijit.form.Button({label: &#8220;hi&#8221;})).
+This step itself is not overridable, but you can play with the result in...</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>postMixInProperties</dt>
+<dd><p class="first last">If you provide a postMixInProperties method for your widget, it will be invoked before rendering occurs,
+and before any dom nodes are created.
+If you need to add or change the instance&#8217;s properties before the widget is rendered - this is the place to do it.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>buildRendering</dt>
+<dd><p class="first last"><a class="reference internal" href="_Templated.html#dijit-templated"><span>dijit._Templated</span></a> provides an implementation of buildRendering
+that most times will do what you need.
+The template is fetched/read, nodes created and events hooked up during buildRendering.
+The end result is assigned to this.domNode.
+If you don&#8217;t mixin <a class="reference internal" href="_Templated.html#dijit-templated"><span>dijit._Templated</span></a> (and most OOTB dijits do)
+and want to handle rendering yourself
+(e.g. to really streamline a simple widget, or even use a different templating system) this is where you&#8217;d do it.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>setters are called</dt>
+<dd><p class="first last">Setters are called for all attributes with custom setters
+(see the &#8220;Attributes&#8221; section in <a class="reference internal" href="../quickstart/writingWidgets.html#quickstart-writingwidgets"><span>Writing Your Own Widget</span></a>)
+and that were either specified as constructor parameters or have non-null non-blank non-zero default values.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>postCreate</dt>
+<dd><p class="first last">This is typically the workhorse of a custom widget. The widget has been rendered
+(but note that child widgets in the containerNode have not!).
+The widget though may not be attached to the DOM yet so <em>you shouldn&#8217;t do any sizing calculations in this method</em>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>startup</dt>
+<dd><p class="first last">If you need to be sure parsing and creation of any child widgets has completed, use startup.
+This is often used for layout widgets like BorderContainer.
+If the widget does JS sizing, then startup() should call resize(), which does the sizing.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>destroy</dt>
+<dd><p class="first last">Implement destroy if you have special tear-down work to do (the superclasses will take care of most of it for you.
+Examples on how to destroy a widget:</p>
+</dd>
+</dl>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">widget</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dijit</span><span class="p">.</span><span class="nx">form</span><span class="p">.</span><span class="nx">TextBox</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;firstname&quot;</span><span class="p">},</span> <span class="s2">&quot;inputId&quot;</span><span class="p">);</span>
+<span class="nx">widget</span><span class="p">.</span><span class="nx">destroy</span><span class="p">();</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var widget = new dijit.form.TextBox({name: &quot;firstname&quot;}, &quot;inputId&quot;);
+widget.destroy();</textarea></div><div class="highlight"><pre><span class="nx">dijit</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;dijitId&quot;</span><span class="p">).</span><span class="nx">destroy</span><span class="p">();</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dijit.byId(&quot;dijitId&quot;).destroy();</textarea></div></li>
+</ul>
+<div class="section" id="other-methods">
+<h3>Other methods<a class="headerlink" href="#other-methods" title="Permalink to this headline">¶</a></h3>
+<ul>
+<li><dl class="first docutils">
+<dt>resize</dt>
+<dd><p class="first last">All widgets that do JS sizing should have a method called resize(), that lays out the widget.
+Resize() should be called from startup() and will also be called by parent widgets like
+<a class="reference internal" href="layout/ContentPane.html#dijit-layout-contentpane"><span>dijit.layout.ContentPane</span></a>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="this-inherited">
+<h3>this.inherited()<a class="headerlink" href="#this-inherited" title="Permalink to this headline">¶</a></h3>
+<p>In all cases its good practice to assume that you are overriding a method
+that may do something important in a class up the inheritance chain.
+So, call this.inherited() before or after your own code.
+E.g.</p>
+<div class="highlight"><pre><span class="nx">postCreate</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span>
+   <span class="c1">// do my stuff, then...</span>
+   <span class="k">this</span><span class="p">.</span><span class="nx">inherited</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">postCreate: function(){
+   // do my stuff, then...
+   this.inherited(arguments);
+}</textarea></div></div>
+</div>
+<div class="section" id="attributes">
+<h2><a class="toc-backref" href="#id6">Attributes</a><a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<p>Perhaps the most important feature of _WidgetBase is the ability to set attributes at widget initialization,
+or to change their values later on in the widget&#8217;s lifecycle.</p>
+<p>dijit._WidgetBase has implemented the set() method to do this.
+For example, this call will set a DateTextBox&#8217;s value to the current date:</p>
+<div class="highlight"><pre><span class="nx">myDateTextBox</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">())</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myDateTextBox.set('value', new Date())</textarea></div><p>There&#8217;s also a get() method to retrieve an attribute&#8217;s value.
+This call will tell us if a TitlePane is opened or closed:</p>
+<div class="highlight"><pre><span class="nx">myTitlePane</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;open&#39;</span><span class="p">)</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myTitlePane.get('open')</textarea></div><p>Finally, there&#8217;s a watch() method to detect when attribute values change:</p>
+<div class="highlight"><pre><span class="nx">myTitlePane</span><span class="p">.</span><span class="nx">watch</span><span class="p">(</span><span class="s2">&quot;open&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">attr</span><span class="p">,</span> <span class="nx">oldVal</span><span class="p">,</span> <span class="nx">newVal</span><span class="p">){</span>
+   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;pane is now &quot;</span> <span class="o">+</span> <span class="p">(</span><span class="nx">newVal</span> <span class="o">?</span> <span class="s2">&quot;opened&quot;</span> <span class="o">:</span> <span class="s2">&quot;closed&quot;</span><span class="p">));</span>
+<span class="p">})</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">myTitlePane.watch(&quot;open&quot;, function(attr, oldVal, newVal){
+   console.log(&quot;pane is now &quot; + (newVal ? &quot;opened&quot; : &quot;closed&quot;));
+})</textarea></div><div class="section" id="custom-setters-getters">
+<span id="dijit-widgetbase-custom-setters-getters"></span><h3>Custom setters/getters<a class="headerlink" href="#custom-setters-getters" title="Permalink to this headline">¶</a></h3>
+<p>get()/set() make use of custom setters/getters, which can map a widget attribute to a
+DOMNode attribute, or perform any arbitrary code.
+For details, see the <a class="reference internal" href="../quickstart/writingWidgets.html#quickstart-writingwidgets"><span>Writing Widgets QuickStart</span></a> guide.</p>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id7">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../quickstart/writingWidgets.html#quickstart-writingwidgets"><span>Writing Widgets</span></a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

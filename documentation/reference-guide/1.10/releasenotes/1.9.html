@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dojo 1.9 Release Notes &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="../dojo/index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Dojo 1.9 Release Notes</a><ul>
+<li><a class="reference internal" href="#user-agent-support">User Agent Support</a></li>
+<li><a class="reference internal" href="#dojo-core">Dojo Core</a><ul>
+<li><a class="reference internal" href="#dojo-node">dojo/node</a></li>
+<li><a class="reference internal" href="#dojo-parser">dojo/parser</a></li>
+<li><a class="reference internal" href="#dojo-touch">dojo/touch</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dijit">Dijit</a><ul>
+<li><a class="reference internal" href="#mobile-support-in-dijit">Mobile support in Dijit</a></li>
+<li><a class="reference internal" href="#dijit-and-dojo-domready">dijit and dojo/domReady!</a></li>
+<li><a class="reference internal" href="#server-side-rendering">Server side rendering</a></li>
+<li><a class="reference internal" href="#dijit-keynavmixin">dijit/_KeyNavMixin</a></li>
+<li><a class="reference internal" href="#dijit-widgetsintemplatemixin">dijit/_WidgetsInTemplateMixin</a></li>
+<li><a class="reference internal" href="#dijit-a11yclick">dijit/a11yclick</a></li>
+<li><a class="reference internal" href="#dijit-backgroundiframe">dijit/BackgroundIframe</a></li>
+<li><a class="reference internal" href="#dijit-declaration">dijit/Declaration</a></li>
+<li><a class="reference internal" href="#dijit-dialog">dijit/Dialog</a></li>
+<li><a class="reference internal" href="#dijit-fieldset">dijit/Fieldset</a></li>
+<li><a class="reference internal" href="#dijit-menu">dijit/Menu</a></li>
+<li><a class="reference internal" href="#dijit-tree">dijit/Tree</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojox">DojoX</a><ul>
+<li><a class="reference internal" href="#dojox-mobile">dojox/mobile</a></li>
+<li><a class="reference internal" href="#dojox-charting">dojox/charting</a></li>
+<li><a class="reference internal" href="#dojox-app">dojox/app</a></li>
+<li><a class="reference internal" href="#dojox-calendar">dojox/calendar</a></li>
+<li><a class="reference internal" href="#dojox-gfx">dojox/gfx</a></li>
+<li><a class="reference internal" href="#dojox-treemap">dojox/treemap</a></li>
+<li><a class="reference internal" href="#dojox-form-manager">dojox/form/manager</a></li>
+<li><a class="reference internal" href="#dojox-form-uploader">dojox/form/Uploader</a></li>
+<li><a class="reference internal" href="#dojox-date">dojox/date</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#util">Util</a><ul>
+<li><a class="reference internal" href="#doh">DOH</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demos">Demos</a></li>
+<li><a class="reference internal" href="#migration-notes">Migration Notes</a><ul>
+<li><a class="reference internal" href="#dijit-calendar">dijit/Calendar</a></li>
+<li><a class="reference internal" href="#dijit-container-addchild">dijit/_Container::addChild()</a></li>
+<li><a class="reference internal" href="#dijit-keypress-to-keydown">dijit: keypress to keydown</a></li>
+<li><a class="reference internal" href="#dijit-template-changes">dijit Template Changes</a></li>
+<li><a class="reference internal" href="#dijit-editor">dijit/Editor</a></li>
+<li><a class="reference internal" href="#stackcontainer-tabcontainer">StackContainer, TabContainer</a></li>
+<li><a class="reference internal" href="#id8">dijit/Tree</a></li>
+<li><a class="reference internal" href="#dijit-bidi-support">dijit bidi support</a></li>
+<li><a class="reference internal" href="#dojox-charting-migration">dojox/charting migration</a></li>
+<li><a class="reference internal" href="#id9">DOH</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-1-9-release-notes">
+<span id="releasenotes-1-9"></span><h1><a class="toc-backref" href="#id10">Dojo 1.9 Release Notes</a><a class="headerlink" href="#dojo-1-9-release-notes" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-1-9-release-notes" id="id10">Dojo 1.9 Release Notes</a><ul>
+<li><a class="reference internal" href="#user-agent-support" id="id11">User Agent Support</a></li>
+<li><a class="reference internal" href="#dojo-core" id="id12">Dojo Core</a><ul>
+<li><a class="reference internal" href="#dojo-node" id="id13">dojo/node</a></li>
+<li><a class="reference internal" href="#dojo-parser" id="id14">dojo/parser</a></li>
+<li><a class="reference internal" href="#dojo-touch" id="id15">dojo/touch</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dijit" id="id16">Dijit</a><ul>
+<li><a class="reference internal" href="#mobile-support-in-dijit" id="id17">Mobile support in Dijit</a></li>
+<li><a class="reference internal" href="#dijit-and-dojo-domready" id="id18">dijit and dojo/domReady!</a></li>
+<li><a class="reference internal" href="#server-side-rendering" id="id19">Server side rendering</a></li>
+<li><a class="reference internal" href="#dijit-keynavmixin" id="id20">dijit/_KeyNavMixin</a></li>
+<li><a class="reference internal" href="#dijit-widgetsintemplatemixin" id="id21">dijit/_WidgetsInTemplateMixin</a></li>
+<li><a class="reference internal" href="#dijit-a11yclick" id="id22">dijit/a11yclick</a></li>
+<li><a class="reference internal" href="#dijit-backgroundiframe" id="id23">dijit/BackgroundIframe</a></li>
+<li><a class="reference internal" href="#dijit-declaration" id="id24">dijit/Declaration</a></li>
+<li><a class="reference internal" href="#dijit-dialog" id="id25">dijit/Dialog</a></li>
+<li><a class="reference internal" href="#dijit-fieldset" id="id26">dijit/Fieldset</a></li>
+<li><a class="reference internal" href="#dijit-menu" id="id27">dijit/Menu</a></li>
+<li><a class="reference internal" href="#dijit-tree" id="id28">dijit/Tree</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojox" id="id29">DojoX</a><ul>
+<li><a class="reference internal" href="#dojox-mobile" id="id30">dojox/mobile</a></li>
+<li><a class="reference internal" href="#dojox-charting" id="id31">dojox/charting</a></li>
+<li><a class="reference internal" href="#dojox-app" id="id32">dojox/app</a></li>
+<li><a class="reference internal" href="#dojox-calendar" id="id33">dojox/calendar</a></li>
+<li><a class="reference internal" href="#dojox-gfx" id="id34">dojox/gfx</a></li>
+<li><a class="reference internal" href="#dojox-treemap" id="id35">dojox/treemap</a></li>
+<li><a class="reference internal" href="#dojox-form-manager" id="id36">dojox/form/manager</a></li>
+<li><a class="reference internal" href="#dojox-form-uploader" id="id37">dojox/form/Uploader</a></li>
+<li><a class="reference internal" href="#dojox-date" id="id38">dojox/date</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#util" id="id39">Util</a><ul>
+<li><a class="reference internal" href="#doh" id="id40">DOH</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#demos" id="id41">Demos</a></li>
+<li><a class="reference internal" href="#migration-notes" id="id42">Migration Notes</a><ul>
+<li><a class="reference internal" href="#dijit-calendar" id="id43">dijit/Calendar</a></li>
+<li><a class="reference internal" href="#dijit-container-addchild" id="id44">dijit/_Container::addChild()</a></li>
+<li><a class="reference internal" href="#dijit-keypress-to-keydown" id="id45">dijit: keypress to keydown</a></li>
+<li><a class="reference internal" href="#dijit-template-changes" id="id46">dijit Template Changes</a></li>
+<li><a class="reference internal" href="#dijit-editor" id="id47">dijit/Editor</a></li>
+<li><a class="reference internal" href="#stackcontainer-tabcontainer" id="id48">StackContainer, TabContainer</a></li>
+<li><a class="reference internal" href="#id8" id="id49">dijit/Tree</a></li>
+<li><a class="reference internal" href="#dijit-bidi-support" id="id50">dijit bidi support</a></li>
+<li><a class="reference internal" href="#dojox-charting-migration" id="id51">dojox/charting migration</a></li>
+<li><a class="reference internal" href="#id9" id="id52">DOH</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="user-agent-support">
+<h2><a class="toc-backref" href="#id11">User Agent Support</a><a class="headerlink" href="#user-agent-support" title="Permalink to this headline">¶</a></h2>
+<p>The following user agents have been tested and are supported in this release. If a user agent version is not listed as supported, it still may work, especially on browsers with rapid release cycles (Chrome, Firefox). Future minor releases of Dojo might include fixes to support future releases of these browsers, but it is not guaranteed. Also please note that even if IE6 and 7 code paths have not been removed, Dojo 1.9 is removing official support  for those browsers.</p>
+<p><strong>Desktop</strong></p>
+<ul class="simple">
+<li>Firefox 3.6-25</li>
+<li>Safari 5-6</li>
+<li>Chrome 13-31</li>
+<li>IE 8-11</li>
+<li>Opera 10.50-12 (Dojo core only)</li>
+</ul>
+<p><strong>Mobile (dojox/mobile)</strong></p>
+<ul class="simple">
+<li>iOS 4.x, 5.x (Mobile Safari) and 6.x (including all Dijit widgets except Editor)</li>
+<li>Android 2.2-2.3, 3.1-3.2, 4.0-4.2 (Platform browser)</li>
+<li>BlackBerry 6-7 &amp; 10 (Platform browser)</li>
+<li>Windows Phone 8 (IE10)</li>
+<li>Mobile compatibility on desktop browsers: IE 8-10, Firefox 4-20, Safari 5-6, Chrome 13-26</li>
+</ul>
+<p><strong>Server-Side User Agents</strong></p>
+<ul class="simple">
+<li>Node 0.6.X, 0.8.X</li>
+</ul>
+</div>
+<div class="section" id="dojo-core">
+<h2><a class="toc-backref" href="#id12">Dojo Core</a><a class="headerlink" href="#dojo-core" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dojo-node">
+<h3><a class="toc-backref" href="#id13">dojo/node</a><a class="headerlink" href="#dojo-node" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo/node</span></code> now properly loads CommonJS modules that depend on modules that support both CommonJS and AMD but assume
+that if and AMD environment is detected, don&#8217;t return anything for the CommonJS module
+(<a class="reference external" href="http://bugs.dojotoolkit.org/ticket/16414">#16414</a>).</p>
+</div>
+<div class="section" id="dojo-parser">
+<h3><a class="toc-backref" href="#id14">dojo/parser</a><a class="headerlink" href="#dojo-parser" title="Permalink to this headline">¶</a></h3>
+<p>The parser now supports the ability to pass a context <code class="docutils literal"><span class="pre">require()</span></code> when parsing a document via adding it to the
+<code class="docutils literal"><span class="pre">options</span></code> hash passed during parse (<a class="reference external" href="http://bugs.dojotoolkit.org/ticket/16112">#16112</a>).  This allows for the use
+of relative MIDs to be used, specifically in Widget templates.</p>
+<p>Also, a widget&#8217;s markupFactory() method may now return a Promise for the new widget, and the parser will wait for that
+promise to resolve before calling startup() on all the widgets.</p>
+</div>
+<div class="section" id="dojo-touch">
+<h3><a class="toc-backref" href="#id15">dojo/touch</a><a class="headerlink" href="#dojo-touch" title="Permalink to this headline">¶</a></h3>
+<p>There have been many improvements to dojo/touch w.r.t. touch device behavior.   (Behavior on mouse devices remains the
+same.)   Some of the fixes are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>works for newer devices with both touch screens and mice</li>
+<li>the dojo/touch::release event consistently fires based on the node the finger was over when it was removed from the screen, consistent with mouseup behavior</li>
+<li>support for Microsoft Surface (with MSPointer* events instead of touchstart/touchend/etc.)</li>
+<li>dojoClick property: DOMNodes with the dojoClick property will get click events instantly rather than
+after 300ms, and won&#8217;t get phantom mousedown/mouseup events 300ms after the touchend event</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="dijit">
+<h2><a class="toc-backref" href="#id16">Dijit</a><a class="headerlink" href="#dijit" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mobile-support-in-dijit">
+<h3><a class="toc-backref" href="#id17">Mobile support in Dijit</a><a class="headerlink" href="#mobile-support-in-dijit" title="Permalink to this headline">¶</a></h3>
+<p>The dijit code has been improved to work better on mobile.
+Dojox/mobile is still the preferred way to write mobile applications, but dijit is working better than before
+for writing hybrid applications to run on desktop and mobile.</p>
+</div>
+<div class="section" id="dijit-and-dojo-domready">
+<h3><a class="toc-backref" href="#id18">dijit and dojo/domReady!</a><a class="headerlink" href="#dijit-and-dojo-domready" title="Permalink to this headline">¶</a></h3>
+<p>Dijit has been upgraded to be able to work with the dojo/domReady! plugin.
+Previously using dojo/ready was recommended, but now using dojo/domReady! is recommended.
+The only caveat is that if you are using the parser and
+have custom javascript code to run, you should run the parser manually rather than setting parseOnLoad:true.</p>
+<p>Example usage:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;dojo/parser&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/store/Memory&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parser</span><span class="p">,</span> <span class="nx">Memory</span><span class="p">){</span>
+   <span class="c1">// script code that needs to run before parse</span>
+   <span class="nx">myMemoryStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Memory</span><span class="p">(...);</span>
+   <span class="p">...</span>
+
+   <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">();</span>
+
+   <span class="c1">// script code that needs to run after parse</span>
+   <span class="p">...</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;dojo/parser&quot;, &quot;dojo/store/Memory&quot;, &quot;dojo/domReady!&quot;], function(parser, Memory){
+   // script code that needs to run before parse
+   myMemoryStore = new Memory(...);
+   ...
+
+   parser.parse();
+
+   // script code that needs to run after parse
+   ...
+});</textarea></div></div>
+<div class="section" id="server-side-rendering">
+<h3><a class="toc-backref" href="#id19">Server side rendering</a><a class="headerlink" href="#server-side-rendering" title="Permalink to this headline">¶</a></h3>
+<p>There are two enhancements to dijit to make server side (pre)rendering of templates easier.</p>
+<p><a class="reference internal" href="../dijit/_AttachMixin.html#dijit-attachmixin"><span>dijit/_AttachMixin</span></a> is a new mixin to perform the data-dojo-attach-point and
+data-dojo-attach-event hookup normally done by <a class="reference internal" href="../dijit/_TemplatedMixin.html#dijit-templatedmixin"><span>dijit/_TemplatedMixin</span></a>.
+It&#8217;s useful for custom widgets where the template is
+(always) expanded on the server, so on the client you just need to hookup the attach points and event listeners.</p>
+<p>Also, <a class="reference internal" href="../dijit/_TemplatedMixin.html#dijit-templatedmixin"><span>dijit/_TemplatedMixin</span></a> has a new _rendered parameter to the constructor, that&#8217;s useful
+for when standard widgets have
+<a class="reference external" href="http://jamesthom.as/blog/2013/01/15/server-side-dijit/">their templates pre-expanded on the server</a>.</p>
+<p>Expected usage is to have markup like below on your main page:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;dijit dijitReset dijitInline dijitLeft&quot;</span> <span class="na">id=</span><span class="s">&quot;widget_fname&quot;</span> <span class="na">role=</span><span class="s">&quot;presentation&quot;</span>
+    <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/TextBox&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;_rendered: true, id: &#39;fname&#39;, name: &#39;fname&#39;&quot;</span>
+        <span class="nt">&gt;&lt;div</span> <span class="na">class=</span><span class="s">&quot;dijitReset dijitInputField dijitInputContainer&quot;</span>
+                <span class="nt">&gt;&lt;input</span> <span class="na">class=</span><span class="s">&quot;dijitReset dijitInputInner&quot;</span> <span class="na">data-dojo-attach-point=</span><span class="s">&#39;textbox,focusNode&#39;</span> <span class="na">autocomplete=</span><span class="s">&quot;off&quot;</span>
+                        <span class="na">name=</span><span class="s">&quot;fname&quot;</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+        <span class="nt">/&gt;&lt;/div</span>
+<span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div class=&quot;dijit dijitReset dijitInline dijitLeft&quot; id=&quot;widget_fname&quot; role=&quot;presentation&quot;
+    data-dojo-type=&quot;dijit/form/TextBox&quot; data-dojo-props=&quot;_rendered: true, id: 'fname', name: 'fname'&quot;
+        &gt;&lt;div class=&quot;dijitReset dijitInputField dijitInputContainer&quot;
+                &gt;&lt;input class=&quot;dijitReset dijitInputInner&quot; data-dojo-attach-point='textbox,focusNode' autocomplete=&quot;off&quot;
+                        name=&quot;fname&quot; type=&quot;text&quot;
+        /&gt;&lt;/div
+&gt;&lt;/div&gt;</textarea></div></div>
+<div class="section" id="dijit-keynavmixin">
+<h3><a class="toc-backref" href="#id20">dijit/_KeyNavMixin</a><a class="headerlink" href="#dijit-keynavmixin" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference internal" href="../dijit/_KeyNavMixin.html#dijit-keynavmixin"><span>dijit/_KeyNavMixin</span></a> is a new mixin to enable keyboard navigation between a widget&#8217;s descendants.
+Navigation can be performed via arrow keys and HOME/END keys, and also a letter key search.
+<a class="reference internal" href="../dijit/Tree.html#dijit-tree"><span>dijit/Tree</span></a> and <a class="reference internal" href="../dijit/form/Select.html#dijit-form-select"><span>dijit/form/Select</span></a> are examples of widgets that extend _KeyNavMixin.</p>
+<p>It&#8217;s similar to <a class="reference internal" href="../dijit/_KeyNavContainer.html#dijit-keynavcontainer"><span>dijit/_KeyNavContainer</span></a> but can be user for any widgets,
+not just subclasses of <a class="reference internal" href="../dijit/_Container.html#dijit-container"><span>dijit/_Container</span></a>.</p>
+</div>
+<div class="section" id="dijit-widgetsintemplatemixin">
+<h3><a class="toc-backref" href="#id21">dijit/_WidgetsInTemplateMixin</a><a class="headerlink" href="#dijit-widgetsintemplatemixin" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">_WidgetsInTemplateMixin</span></code> supports using relative MIDs in the widget template (
+<a class="reference external" href="http://bugs.dojotoolkit.org/ticket/16112">#16112</a>).  For example the following is now valid:</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">([</span><span class="s2">&quot;require&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/declare&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_WidgetBase&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_TemplatedMixin&quot;</span><span class="p">,</span>
+   <span class="s2">&quot;dijit/_WidgetsInTemplateMixin&quot;</span><span class="p">,</span> <span class="s2">&quot;./OtherWidget&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">,</span> <span class="nx">declare</span><span class="p">,</span> <span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">,</span> <span class="nx">_WidgetsInTemplateMixin</span><span class="p">){</span>
+   <span class="k">return</span> <span class="nx">declare</span><span class="p">([</span><span class="nx">_WidgetBase</span><span class="p">,</span> <span class="nx">_TemplatedMixin</span><span class="p">,</span> <span class="nx">_WidgetsInTemplateMixin</span><span class="p">],</span> <span class="p">{</span>
+      <span class="nx">templateString</span><span class="o">:</span> <span class="s1">&#39;&lt;div&gt;&lt;div data-dojo-type=&quot;./OtherWidget&quot;&gt;&lt;/div&gt;&lt;/div&gt;&#39;</span><span class="p">,</span>
+      <span class="nx">contextRequire</span><span class="o">:</span> <span class="nx">require</span>
+   <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">define([&quot;require&quot;, &quot;dojo/_base/declare&quot;, &quot;dijit/_WidgetBase&quot;, &quot;dijit/_TemplatedMixin&quot;,
+   &quot;dijit/_WidgetsInTemplateMixin&quot;, &quot;./OtherWidget&quot;],
+function(require, declare, _WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin){
+   return declare([_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+      templateString: '&lt;div&gt;&lt;div data-dojo-type=&quot;./OtherWidget&quot;&gt;&lt;/div&gt;&lt;/div&gt;',
+      contextRequire: require
+   });
+});</textarea></div><p>Also, <code class="docutils literal"><span class="pre">dijit/InlineEditBox</span></code> and <code class="docutils literal"><span class="pre">dijit/_editor/plugins/FontChoice</span></code> were updated to take advantage of this new
+feature.</p>
+<p><strong>Note</strong> Because of the synchronous nature of the widget lifecycle, you still have to require in any modules used in the
+template, as the auto-require feature will not work properly with widgets.</p>
+</div>
+<div class="section" id="dijit-a11yclick">
+<h3><a class="toc-backref" href="#id22">dijit/a11yclick</a><a class="headerlink" href="#dijit-a11yclick" title="Permalink to this headline">¶</a></h3>
+<p>The a11yclick module was updated with new synthetic events &#8220;press&#8221; and &#8220;release&#8221; that fire for mousedown/mouseup,
+touchstart/touchend (or Microsoft equivalents), or keydown/keyup.  They only call the listener when the events will
+trigger a click.   I.E. for keyboard, it&#8217;s the SPACE or ENTER key, and for mouse, it&#8217;s the left mouse button.</p>
+<p>Many modules were updated to take advantage of this, including _CssStateMixin (which now show feedback while pressing
+a button via keyboard, by showing the button in its active state between keydown and keyup.</p>
+<p>Also, the allyclick module was updated to support the keyboard equivalent of mouse clicks with modifiers.
+I.E. an app can setup a listener on a11yclick.click, and regardless of whether the user does a ctrl-left-mouse-click
+or a ctrl-ENTER key, the listener will be called where evt.ctrlKey == true.</p>
+</div>
+<div class="section" id="dijit-backgroundiframe">
+<h3><a class="toc-backref" href="#id23">dijit/BackgroundIframe</a><a class="headerlink" href="#dijit-backgroundiframe" title="Permalink to this headline">¶</a></h3>
+<p>There&#8217;s now a &#8220;config-bgIframe&#8221; <code class="docutils literal"><span class="pre">has()</span></code> flag that can be used to explicitly turn on/off the background iframe behind
+popups that&#8217;s useful when a page contains applets, and also for older versions of IE with the bleed through select
+problem.</p>
+<p>Usage is:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;../../dojo/dojo.js&quot;</span>
+  <span class="na">data-dojo-config=</span><span class="s">&quot;has: {&#39;config-bgIframe&#39;: true}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script type=&quot;text/javascript&quot; src=&quot;../../dojo/dojo.js&quot;
+  data-dojo-config=&quot;has: {'config-bgIframe': true}&quot;&gt;&lt;/script&gt;</textarea></div><p>It can also be specified as a build parameter in the staticHasFlags section.</p>
+<p>By default it&#8217;s turned on for desktop pages, but turned off for mobile.</p>
+</div>
+<div class="section" id="dijit-declaration">
+<h3><a class="toc-backref" href="#id24">dijit/Declaration</a><a class="headerlink" href="#dijit-declaration" title="Permalink to this headline">¶</a></h3>
+<p>Declaration now supports <code class="docutils literal"><span class="pre">&lt;script</span> <span class="pre">type=&quot;dojo/aspect&quot;&gt;</span></code>, in addition to the <code class="docutils literal"><span class="pre">&lt;script</span> <span class="pre">type=&quot;dojo/connect&quot;&gt;</span></code> syntax
+which is now deprecated (and will be removed for 2.0). For example:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/Declaration&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;widgetClass:&quot;MyWidget&quot;&#39;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;dojo/aspect&quot;</span> <span class="na">data-dojo-method=</span><span class="s">&quot;startup&quot;</span> <span class="na">data-dojo-advice=</span><span class="s">&quot;before&quot;</span><span class="nt">&gt;</span>
+                <span class="c1">// ...</span>
+        <span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dijit/Declaration&quot; data-dojo-props='widgetClass:&quot;MyWidget&quot;'&gt;
+        &lt;script type=&quot;dojo/aspect&quot; data-dojo-method=&quot;startup&quot; data-dojo-advice=&quot;before&quot;&gt;
+                // ...
+        &lt;/script&gt;
+&lt;/div&gt;</textarea></div></div>
+<div class="section" id="dijit-dialog">
+<h3><a class="toc-backref" href="#id25">dijit/Dialog</a><a class="headerlink" href="#dijit-dialog" title="Permalink to this headline">¶</a></h3>
+<p>There&#8217;s a new closable property that can be set to false, to hide the [x] icon for closing the dialog and prevent
+the ESC key from closing it.   Example usage:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;unclosable&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/Dialog&quot;</span> <span class="na">title=</span><span class="s">&quot;Unclosable Dialog&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&quot;closable:false&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;dijitDialogPaneContentArea&quot;</span><span class="nt">&gt;</span>
+                This dialog has no close icon and the ESCAPE key won&#39;t close it.  You need to use the buttons.
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;dijitDialogPaneActionBar&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;unclosableSubmit&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>OK<span class="nt">&lt;/button&gt;</span>
+                <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;unclosableCancel&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/form/Button&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span>
+                                <span class="na">onClick=</span><span class="s">&#39;dijit.byId(&quot;unclosable&quot;).onCancel();&#39;</span><span class="nt">&gt;</span>Cancel<span class="nt">&lt;/button&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;unclosable&quot; data-dojo-type=&quot;dijit/Dialog&quot; title=&quot;Unclosable Dialog&quot; data-dojo-props=&quot;closable:false&quot;&gt;
+        &lt;div class=&quot;dijitDialogPaneContentArea&quot;&gt;
+                This dialog has no close icon and the ESCAPE key won't close it.  You need to use the buttons.
+        &lt;/div&gt;
+        &lt;div class=&quot;dijitDialogPaneActionBar&quot;&gt;
+                &lt;button id=&quot;unclosableSubmit&quot; data-dojo-type=&quot;dijit/form/Button&quot; type=&quot;submit&quot;&gt;OK&lt;/button&gt;
+                &lt;button id=&quot;unclosableCancel&quot; data-dojo-type=&quot;dijit/form/Button&quot; type=&quot;button&quot;
+                                onClick='dijit.byId(&quot;unclosable&quot;).onCancel();'&gt;Cancel&lt;/button&gt;
+        &lt;/div&gt;
+&lt;/div&gt;</textarea></div></div>
+<div class="section" id="dijit-fieldset">
+<h3><a class="toc-backref" href="#id26">dijit/Fieldset</a><a class="headerlink" href="#dijit-fieldset" title="Permalink to this headline">¶</a></h3>
+<p>There&#8217;s a new Fieldset widget, which is a collapsible fieldset similar to dijit/TitlePane.  Example usage:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;tp2&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/Fieldset&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;legend&gt;</span>My legend<span class="nt">&lt;/legend&gt;</span>
+    Click legend to close me.
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;tp2&quot; data-dojo-type=&quot;dijit/Fieldset&quot;&gt;
+    &lt;legend&gt;My legend&lt;/legend&gt;
+    Click legend to close me.
+&lt;/div&gt;</textarea></div></div>
+<div class="section" id="dijit-menu">
+<h3><a class="toc-backref" href="#id27">dijit/Menu</a><a class="headerlink" href="#dijit-menu" title="Permalink to this headline">¶</a></h3>
+<p>There&#8217;s a new RadioMenuItem widget that (similar to CheckedMenuItem) can be used to make menus with radio button
+choices, only one of which is selected at a time.  For example:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;menu&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/DropDownMenu&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;g1r1&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;g1r1&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/RadioMenuItem&quot;</span>
+                 <span class="na">data-dojo-props=</span><span class="s">&quot;group: &#39;g1&#39;&quot;</span><span class="nt">&gt;</span>small<span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;g1r2&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;g1r2&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/RadioMenuItem&quot;</span>
+                 <span class="na">data-dojo-props=</span><span class="s">&quot;group: &#39;g1&#39;, checked:true&quot;</span><span class="nt">&gt;</span>medium<span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;g1r3&quot;</span> <span class="na">data-dojo-id=</span><span class="s">&quot;g1r3&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/RadioMenuItem&quot;</span>
+                 <span class="na">data-dojo-props=</span><span class="s">&quot;group: &#39;g1&#39;&quot;</span><span class="nt">&gt;</span>large<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;menu&quot; data-dojo-type=&quot;dijit/DropDownMenu&quot;&gt;
+        &lt;div id=&quot;g1r1&quot; data-dojo-id=&quot;g1r1&quot; data-dojo-type=&quot;dijit/RadioMenuItem&quot;
+                 data-dojo-props=&quot;group: 'g1'&quot;&gt;small&lt;/div&gt;
+        &lt;div id=&quot;g1r2&quot; data-dojo-id=&quot;g1r2&quot; data-dojo-type=&quot;dijit/RadioMenuItem&quot;
+                 data-dojo-props=&quot;group: 'g1', checked:true&quot;&gt;medium&lt;/div&gt;
+        &lt;div id=&quot;g1r3&quot; data-dojo-id=&quot;g1r3&quot; data-dojo-type=&quot;dijit/RadioMenuItem&quot;
+                 data-dojo-props=&quot;group: 'g1'&quot;&gt;large&lt;/div&gt;
+&lt;/div&gt;</textarea></div><p>Also, there&#8217;s a new passivePopupDelay property on MenuBars (and also Menus) that, when set to a finite value, merely
+hovering the menu will open the dropdown.   Usually the user needs to click the menu to show the drop down menu.
+Example usage:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dijit/Menu&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;passivePopupDelay: 500&#39;</span><span class="nt">&gt;</span>
+        ...
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div data-dojo-type=&quot;dijit/Menu&quot; data-dojo-props='passivePopupDelay: 500'&gt;
+        ...
+&lt;/div&gt;</textarea></div></div>
+<div class="section" id="dijit-tree">
+<h3><a class="toc-backref" href="#id28">dijit/Tree</a><a class="headerlink" href="#dijit-tree" title="Permalink to this headline">¶</a></h3>
+<p>dijit/tree/ObjectStoreModel now supports a labelType parameter like dijit/form/ComboBox, allowing Tree labels to be
+HTML rather than plain text.  The default is still plain text.  Example usage:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+    <span class="s2">&quot;dojo/store/Memory&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/tree/ObjectStoreModel&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/Tree&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Memory</span><span class="p">,</span> <span class="nx">ObjectStoreModel</span><span class="p">,</span> <span class="nx">Tree</span><span class="p">){</span>
+
+    <span class="c1">// Create test store, adding the getChildren() method required by ObjectStoreModel</span>
+    <span class="kd">var</span> <span class="nx">myStore</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Memory</span><span class="p">({</span>
+        <span class="nx">data</span><span class="o">:</span> <span class="p">[</span>
+            <span class="p">{</span> <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span><span class="s1">&#39;&lt;i&gt;rich text&lt;/i&gt;The earth&#39;</span><span class="p">,</span> <span class="nx">type</span><span class="o">:</span><span class="s1">&#39;planet&#39;</span><span class="p">,</span> <span class="nx">population</span><span class="o">:</span> <span class="s1">&#39;6 billion&#39;</span><span class="p">},</span>
+            <span class="p">...</span>
+        <span class="p">],</span>
+        <span class="nx">getChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">){</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">parent</span><span class="o">:</span> <span class="nx">object</span><span class="p">.</span><span class="nx">id</span><span class="p">});</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="c1">// Create the model</span>
+    <span class="kd">var</span> <span class="nx">myModel</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ObjectStoreModel</span><span class="p">({</span>
+        <span class="nx">store</span><span class="o">:</span> <span class="nx">myStore</span><span class="p">,</span>
+        <span class="nx">labelType</span><span class="o">:</span> <span class="s2">&quot;html&quot;</span><span class="p">,</span>
+        <span class="nx">query</span><span class="o">:</span> <span class="p">{</span><span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;world&#39;</span><span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="c1">// Create the Tree.</span>
+    <span class="kd">var</span> <span class="nx">tree</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Tree</span><span class="p">({</span>
+        <span class="nx">model</span><span class="o">:</span> <span class="nx">myModel</span>
+    <span class="p">});</span>
+    <span class="nx">tree</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">());</span>
+    <span class="nx">tree</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+    &quot;dojo/store/Memory&quot;, &quot;dijit/tree/ObjectStoreModel&quot;, &quot;dijit/Tree&quot;, &quot;dojo/domReady!&quot;
+], function(Memory, ObjectStoreModel, Tree){
+
+    // Create test store, adding the getChildren() method required by ObjectStoreModel
+    var myStore = new Memory({
+        data: [
+            { id: 'world', name:'&lt;i&gt;rich text&lt;/i&gt;The earth', type:'planet', population: '6 billion'},
+            ...
+        ],
+        getChildren: function(object){
+            return this.query({parent: object.id});
+        }
+    });
+
+    // Create the model
+    var myModel = new ObjectStoreModel({
+        store: myStore,
+        labelType: &quot;html&quot;,
+        query: {id: 'world'}
+    });
+
+    // Create the Tree.
+    var tree = new Tree({
+        model: myModel
+    });
+    tree.placeAt(win.body());
+    tree.startup();
+});</textarea></div></div>
+</div>
+<div class="section" id="dojox">
+<h2><a class="toc-backref" href="#id29">DojoX</a><a class="headerlink" href="#dojox" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dojox-mobile">
+<h3><a class="toc-backref" href="#id30">dojox/mobile</a><a class="headerlink" href="#dojox-mobile" title="Permalink to this headline">¶</a></h3>
+<p><em>Features</em></p>
+<blockquote>
+<div><ul>
+<li><p class="first">dojox/mobile data-aware lists now support an itemRenderer property allowing
+to change the type of <code class="docutils literal"><span class="pre">ListItem</span></code> instances created by the list.</p>
+</li>
+<li><p class="first">dojox/mobile list widgets now provide filtering capabilities.
+For details, see <a class="reference internal" href="../dojox/mobile/FilteredListMixin.html#dojox-mobile-filteredlistmixin"><span>dojox/mobile/FilteredListMixin</span></a>.</p>
+</li>
+<li><p class="first">dojox/mobile editable list widgets now have callback functions on user actions.
+For details, see <a class="reference internal" href="../dojox/mobile/RoundRectList.html#dojox-mobile-roundrectlist-editable-list-example"><span>dojox/mobile/RoundRectList</span></a>.</p>
+</li>
+<li><p class="first">Internet Explorer 10 is now supported &#8220;natively&#8221; (that is, without compatibility code
+and CSS): since IE10 supports CSS3 transitions, animations and gradients,
+compatibility mode is disabled for IE10, and Dojo Mobile uses the non-prefixed CSS3
+properties supported by IE10 in addition to the webkit-prefixed properties.</p>
+</li>
+<li><p class="first">A new Windows theme is available (in <code class="docutils literal"><span class="pre">dojox/mobile/themes/windows/</span></code>) and provides a look and feel
+inspired by the Windows 8 / Windows Phone 8 &#8220;Metro&#8221; interface. If you use the <code class="docutils literal"><span class="pre">dojox/mobile/deviceTheme</span></code>
+module, the Windows theme is selected by default on Internet Explorer 10 (so, for example,
+on Windows 8 tablets and on smartphones running Windows Phone 8). Note: the Windows theme is marked
+as experimental for now, because some widgets have a very different layout, so using it may disturb the layout
+of the application.</p>
+</li>
+<li><p class="first">FormLayout container: a responsive container for creating mobile forms.</p>
+</li>
+<li><p class="first">The user agent tests that were previously done in <code class="docutils literal"><span class="pre">dojox/mobile/sniff</span></code> have been
+moved to <code class="docutils literal"><span class="pre">dojo/sniff</span></code>, so the use of <code class="docutils literal"><span class="pre">dojox/mobile/sniff</span></code> is deprecated,
+You should now use <code class="docutils literal"><span class="pre">dojo/sniff</span></code> instead. The <code class="docutils literal"><span class="pre">dojox/mobile/sniff</span></code> module is still present
+in this release for compatibility, but it will be removed in a future release.</p>
+</li>
+<li><p class="first">The <code class="docutils literal"><span class="pre">has(&quot;ios&quot;)</span></code> feature test defined in <code class="docutils literal"><span class="pre">dojo/sniff</span></code> now returns the iOS version
+(instead of a Boolean). In previous versions, you used <code class="docutils literal"><span class="pre">has(&quot;iphone&quot;)</span></code> to detect
+any iOS device (iPhone, iPad or iPod). You should now use <code class="docutils literal"><span class="pre">has(&quot;ios&quot;)</span></code> instead.
+The <code class="docutils literal"><span class="pre">dojox/mobile/sniff</span></code> module still sets the <code class="docutils literal"><span class="pre">&quot;iphone&quot;</span></code> feature to the iOS version
+on all iOS devices for compatibility, but in future releases it will be set only
+for an iPhone device.</p>
+</li>
+<li><p class="first">The <code class="docutils literal"><span class="pre">dojox/mobile/RoundRectStoreList</span></code> and <code class="docutils literal"><span class="pre">dojox/mobile/EdgeToEdgeStoreList</span></code> widgets
+now support updating existing store items. When a <code class="docutils literal"><span class="pre">put</span></code> operation is performed on the store,
+the corresponding list item is updated with the new properties of the store item. A new
+<code class="docutils literal"><span class="pre">onAdd</span></code> method has been added to <code class="docutils literal"><span class="pre">dojox/mobile/_StoreMixin</span></code> to better distinguish add
+and put operations.</p>
+</li>
+<li><p class="first">To address performance problems with very long lists in scrollable views, a new
+<a class="reference internal" href="../dojox/mobile/LongListMixin.html#dojox-mobile-longlistmixin"><span>dojox/mobile/LongListMixin</span></a> module has been added.
+This module can be mixed in any Dojo Mobile
+list (<code class="docutils literal"><span class="pre">dojox/mobile/RoundRectList</span></code>, <code class="docutils literal"><span class="pre">dojox/mobile/EdgeToEdgeList</span></code>, and their data-aware variants)
+using <code class="docutils literal"><span class="pre">data-dojo-mixins=&quot;dojox/mobile/LongListMixin&quot;</span></code>. This will transparently enable listeners
+on the scrollable view to keep only a subset of the items in the DOM, which will significantly speed up
+scrolling.</p>
+</li>
+<li><p class="first">A subset of widgets (<code class="docutils literal"><span class="pre">Button</span></code>, <code class="docutils literal"><span class="pre">CheckBox</span></code>, <code class="docutils literal"><span class="pre">Heading</span></code>, <code class="docutils literal"><span class="pre">ListItem</span></code>, <code class="docutils literal"><span class="pre">RadioButton</span></code>,
+<code class="docutils literal"><span class="pre">Slider</span></code>, <code class="docutils literal"><span class="pre">Switch</span></code>, <code class="docutils literal"><span class="pre">ToggleButton</span></code>, and <code class="docutils literal"><span class="pre">View</span></code>) can now be templated.
+For details, see <a class="reference internal" href="../dojox/mobile/templating-mobile-widgets.html#dojox-mobile-templating-mobile-widgets"><span>Templating dojox/mobile widgets</span></a>.</p>
+</li>
+<li><dl class="first docutils">
+<dt>Support for HTML5-compliant attributes has been introduced:</dt>
+<dd><ul class="first last simple">
+<li>Fixed header and footer: for headers or footers which are not widgets, the attribute
+<code class="docutils literal"><span class="pre">data-mobile-fixed</span></code> can now be used in markup. For backward compatibility, the attribute
+<code class="docutils literal"><span class="pre">fixed</span></code> is still supported but it is deprecated and will be removed in a future release.</li>
+<li><code class="docutils literal"><span class="pre">ListItem</span></code>: the attributes <code class="docutils literal"><span class="pre">data-mobile-layout</span></code> and <code class="docutils literal"><span class="pre">data-mobile-prevent-touch</span></code> can now
+be used in markup on children which are not widgets. For backward compatibility, the attributes
+<code class="docutils literal"><span class="pre">layout</span></code> and <code class="docutils literal"><span class="pre">preventTouch</span></code> are still supported but are deprecated and will be
+removed in a future release.</li>
+<li><code class="docutils literal"><span class="pre">Carousel</span></code>: for the lazy loading of children of type <code class="docutils literal"><span class="pre">SwapView</span></code>, it is no longer
+necessary to use the non-HTML5 compliant attribute <code class="docutils literal"><span class="pre">lazy</span></code>. <code class="docutils literal"><span class="pre">Carousel</span></code> now dynamically
+extends <code class="docutils literal"><span class="pre">SwapView</span></code> adding to it the property <code class="docutils literal"><span class="pre">lazy</span></code>, which can now be specified in
+markup using the <code class="docutils literal"><span class="pre">data-dojo-props</span></code> attribute. For backward compatibility, the attribute
+<code class="docutils literal"><span class="pre">lazy</span></code> is still supported but it is deprecated and will be removed in a future release.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Building themes: A new folder <code class="docutils literal"><span class="pre">dojox/mobile/themes/utils</span></code> now contains scripts and
+documentation for building  mobile themes. The number of required <code class="docutils literal"><span class="pre">.less</span></code> files for a
+particular theme has been drastically reduced.</p>
+</li>
+<li><p class="first">The &#8216;Custom&#8217; theme is now generated from 2 main colors, facilitating the creation of a new theme
+based on arbitrary colors.</p>
+</li>
+<li><p class="first">The <code class="docutils literal"><span class="pre">dojox/mobile/TabBar</span></code> widget now supports resizing its children so that they evenly fill all the space
+available in the bar. This is done by setting the new attribute &#8220;fill&#8221; to the value &#8220;always&#8221;.</p>
+</li>
+<li><p class="first">&#8220;beforescroll&#8221; and &#8220;afterscroll&#8221; events added to scrollable widgets (<code class="docutils literal"><span class="pre">dojox/mobile/ScrollableView</span></code>, ...). The beforescroll event handler can return false to cancel the scroll. See the <code class="docutils literal"><span class="pre">dojox/mobile/ScrollableView</span></code> API doc for more informations on these new events.</p>
+</li>
+<li><p class="first">Dojo Mobile sets the <code class="docutils literal"><span class="pre">dojoClick</span></code> property on the document body, so all Mobile widgets benefit from
+the new dojo/touch features (in particular, click events are fired instantly on touchend events).
+See the dojo/touch section in Dojo Core above.</p>
+</li>
+<li><p class="first">New Android Holo dark theme used by default on Android 3.x and 4.x devices. For
+backward compatibility, you can force &#8216;Android&#8217; theme on all Android devices by
+configuring <code class="docutils literal"><span class="pre">deviceTheme</span></code>:</p>
+</li>
+</ul>
+</div></blockquote>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;../deviceTheme.js&quot;</span> <span class="na">data-dojo-config=</span><span class="s">&quot;mblUserAgent:navigator.userAgent.match(&#39;Android&#39;)?&#39;Android&#39;:null&quot;</span><span class="nt">&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script src=&quot;../deviceTheme.js&quot; data-dojo-config=&quot;mblUserAgent:navigator.userAgent.match('Android')?'Android':null&quot;&gt;</textarea></div><p><em>Incompatibilities</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Using the dojox/mobile/scrollable.js module without Dojo is not supported any more.
+The <code class="docutils literal"><span class="pre">dojostub.js</span></code> module, which was provided in <code class="docutils literal"><span class="pre">dojox/mobile/tests</span></code> to emulate some
+Dojo features and let you use <code class="docutils literal"><span class="pre">scrollable.js</span></code> outside of Dojo, is no longer provided.
+The tests for this use case are also removed.</li>
+<li>The <code class="docutils literal"><span class="pre">endTransition</span></code> method of the <code class="docutils literal"><span class="pre">dojox/mobile/TransitionEvent</span></code> class has been removed
+since it was never called by the dojox/mobile framework.</li>
+<li><code class="docutils literal"><span class="pre">dojox/mobile/sniff</span></code> module does not anymore require <code class="docutils literal"><span class="pre">dojo/_base/sniff</span></code> but <code class="docutils literal"><span class="pre">dojo/sniff</span></code>.
+This means you can&#8217;t use anymore <code class="docutils literal"><span class="pre">isXX</span></code> methods (such as <code class="docutils literal"><span class="pre">isIE</span></code>); you should use <code class="docutils literal"><span class="pre">has</span></code>
+flags instead (such as <code class="docutils literal"><span class="pre">has(&quot;ie&quot;)</span></code>).</li>
+<li>As a consequence of the new support for templating on some widgets (see above), old code that was already
+attempting to mix <code class="docutils literal"><span class="pre">dijit/_TemplatedMixin</span></code> into mobile widgets may not work any more.
+The new behavior is that, when a widget is templated, Dojo Mobile assumes that the template contains
+the whole widget contents, and no children nodes will be created by the widget code. For example,
+in a templated <code class="docutils literal"><span class="pre">dojox/mobile/ListItem</span></code>, the template must contain a <code class="docutils literal"><span class="pre">labelNode</span></code> attach point
+(whereas, in 1.8, the label node was always created internally). So, old code using templates with
+mobile widgets should be modified and the necessary attach points should be added to the templates.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="dojox-charting">
+<h3><a class="toc-backref" href="#id31">dojox/charting</a><a class="headerlink" href="#dojox-charting" title="Permalink to this headline">¶</a></h3>
+<p><em>Features</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Threshold indicators (dojox/charting/plot2d/Indicator) can now easily be drawn on top of the chart.</li>
+<li>Axis (dojox/charting/axis2d/Default) now supports rendering ticks inside of the plot area instead of outside of the axis. For that specify a negative length for the ticks.</li>
+<li>Mouse indicator action (dojox/charting/action2d/MouseIndicator) now supports over mode in addition to mouse drag. The mouse indicator can also be further customized (ability to remove the label, ...).</li>
+<li>Grids (dojox/charting/plot2d/Grid) now support grid stripes in addition to grid lines.</li>
+<li>Ability to render labels on data points for Bubble/Columns/Default/Scatter plots by setting labels property to true.</li>
+<li>Charting bidi features (bi-directional text and mirroring) can be enabled using the dojo-bidi has flag you should not use BidiSupport modules anymore. See <a class="reference internal" href="#dojox-charting-migration">dojox/charting migration</a> for details.</li>
+<li>Charting now supports bidi mirroring. You can perform mirroring by calling myChart.setDir(&#8220;rtl&#8221;) once bidi features have been included using dojo-bidi.</li>
+<li>Most plots now supports a filter property which allows to apply an SVG filter to the plot elements when using gfx SVG renderer.</li>
+</ul>
+</div></blockquote>
+<p><em>Incompatibilities</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Tooltip on stacked plots now display the value of the hovered data point not of the stacked value. One can go back to previous behavior if needed by customizing the text function of the Tooltip action.</li>
+<li>Tooltip, highlight and magnify actions are not anymore hardcoded into the spider plot (dojox/charting/plot2d/Spider). One needs to explicitly set them up on the plot to get them activated. See <a class="reference internal" href="#dojox-charting-migration">dojox/charting migration</a> for details.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="dojox-app">
+<h3><a class="toc-backref" href="#id32">dojox/app</a><a class="headerlink" href="#dojox-app" title="Permalink to this headline">¶</a></h3>
+<p><em>Features</em></p>
+<blockquote>
+<div><ul>
+<li><p class="first">dojox/app now provides a build system extension that allows you to easily build your application from the config file.</p>
+</li>
+<li><p class="first">One can now use the <cite>type</cite> property for a view in the config file to specify alternate view class extending dojox/view/ViewBase.</p>
+</li>
+<li><p class="first">Configuration of views now accept a <cite>nls</cite> property to specify an AMD internationalization root module for a view.</p>
+</li>
+<li><p class="first">Custom Layout controller support is available with a dojox/app/controllers/LayoutBase which can be extended with a custom layout controller.</p>
+</li>
+<li><p class="first">Support for a constraint setting on a view in the config has been added, which will add data-app-constraint to the domNode for the view, and place the view into the specified constraint (or region).</p>
+</li>
+<li><p class="first">A new BorderLayout controller has been provided, which uses a dijit/layout/BorderContainer to layout views, and uses constraint settings on views in the config to determine which constraint (or region) a view should be placed into.</p>
+</li>
+<li><p class="first">One can now specify an alternate transition animation function by using the <cite>transit</cite> property in top level section of the configuration file.</p>
+</li>
+<li><dl class="first docutils">
+<dt>The activate &amp; deactivate function of the view lifecycle now accept two arguments:</dt>
+<dd><ul class="first last simple">
+<li>respectively the previousView or nextView for the current view at its position</li>
+<li>a raw data object that can be passed from one view to another by specifying a data attribute in the transition options.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">Support was added to allow multiple views to be included in the DefaultViews in the config as well as on transitions and the url used in the transition. This allows multiple views to be displayed with different constraints (or regions) at the same time.  It is also now possible to transition views in regions other than the center.  To specify multiple views the view names would listed separated by a &#8220;+&#8221; for example &#8220;view1+view2&#8221; or &#8220;view1,subviewA+view2&#8221;.  Support has also been added to be able to use a &#8220;-&#8221; to hide a view.  So if &#8220;view1+view2&#8221; are displayed and a transition is requested for &#8220;view3-view1&#8221; then view3 would be displayed (replacing view2 assuming they have the same constraint) and view1 would be hidden.</p>
+</li>
+<li><p class="first">Support was added to allow view specific params.  To specify params for a specific view the params must contain the view name with the view specific params set with the view name, for example:</p>
+</li>
+</ul>
+</div></blockquote>
+<div class="highlight"><pre><span class="nx">MainOption1</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">views</span> <span class="o">=</span> <span class="s2">&quot;navLeft+mainCenter+lastRight&quot;</span>
+        <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;mainCenter&quot;</span><span class="o">:</span><span class="p">{</span><span class="s1">&#39;mainSel&#39;</span><span class="o">:</span><span class="s2">&quot;MainOption1&quot;</span><span class="p">,</span><span class="s2">&quot;tparam1&quot;</span><span class="o">:</span><span class="s2">&quot;tValue1&quot;</span><span class="p">}};</span>
+        <span class="kd">var</span> <span class="nx">transOpts</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="nx">title</span><span class="o">:</span> <span class="nx">views</span><span class="p">,</span>
+                <span class="nx">target</span><span class="o">:</span> <span class="nx">views</span><span class="p">,</span>
+                <span class="nx">url</span><span class="o">:</span> <span class="s2">&quot;#&quot;</span><span class="o">+</span><span class="nx">views</span><span class="p">,</span>
+                <span class="nx">params</span><span class="o">:</span><span class="nx">params</span>
+        <span class="p">};</span>
+        <span class="k">new</span> <span class="nx">TransitionEvent</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">,</span><span class="nx">transOpts</span><span class="p">,</span><span class="nx">e</span><span class="p">).</span><span class="nx">dispatch</span><span class="p">();</span>
+<span class="p">},</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">MainOption1: function(e){
+        var views = &quot;navLeft+mainCenter+lastRight&quot;
+        var params = {&quot;mainCenter&quot;:{'mainSel':&quot;MainOption1&quot;,&quot;tparam1&quot;:&quot;tValue1&quot;}};
+        var transOpts = {
+                title: views,
+                target: views,
+                url: &quot;#&quot;+views,
+                params:params
+        };
+        new TransitionEvent(e.target,transOpts,e).dispatch();
+},</textarea></div><dl class="docutils">
+<dt><em>Features (continued)</em></dt>
+<dd><ul class="first last simple">
+<li>A new config setting for &#8220;transition&#8221; has been added to set the transition animation type to use for the view transition. If a &#8220;transition&#8221; is set on a view or parent it will override the transition set on the transitionEvent or the defaultTransition in the config.</li>
+<li>Observable support for stores via the config has been added. Setting &#8220;observable&#8221;: true on a store will have the store wrapped in a dojo/store/Observable.</li>
+<li>dojox/app is changing it&#8217;s recommendation for the file structure used for an app.  The recommendation now is to place the “controller” (.js files) and the “template” (.html files) in the same folders for related parts of the app. This makes it much easier to reuse code between apps.</li>
+<li>It is no longer necessary to set a view controller to &#8220;none&#8221; when the view does not use a controller. Now when view does not set a controller in the config, no controller will be loaded for the view.</li>
+<li>In order to make it easier to access the loaded stores from a view, dojox/app will now have access to the loaded stores via a loadedStores object on the view.  Support has also been added to allow stores to be defined for a specific view in the config, previously stores could only be created globally for the application.</li>
+<li>dojox/app now provides &#8220;has&#8221; test support for the config file, so there is no longer a need for multiple configs for an app.  In the example below dojox/app/main would process the has sections and merge the appropriate sections into the config.  Properties set on the config at the same level as the has will be replaced by the value set in the has section, and items in an array will be added to config array with the same name and at the same level as the has section.</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight"><pre><span class="c1">// The app would have code like this:</span>
+<span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/text!&quot;</span><span class="o">+</span><span class="nx">configurationFile</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">configJson</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">config</span> <span class="o">=</span> <span class="nx">json</span><span class="p">.</span><span class="nx">fromJson</span><span class="p">(</span><span class="nx">configJson</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">width</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">clientWidth</span><span class="p">;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">width</span> <span class="o">&lt;=</span> <span class="mi">600</span><span class="p">){</span>
+                <span class="nx">has</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&quot;phone&quot;</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="nx">has</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&quot;ie9orLess&quot;</span><span class="p">,</span> <span class="nx">has</span><span class="p">(</span><span class="s2">&quot;ie&quot;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">has</span><span class="p">(</span><span class="s2">&quot;ie&quot;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">9</span><span class="p">));</span>
+        <span class="nx">Application</span><span class="p">(</span><span class="nx">config</span><span class="p">);</span>
+<span class="p">});</span>
+
+
+<span class="c1">// The config would include something like this:</span>
+<span class="s2">&quot;has&quot;</span> <span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;phone&quot;</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;defaultView&quot;</span><span class="o">:</span> <span class="s2">&quot;configuration&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;!phone&quot;</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;defaultView&quot;</span><span class="o">:</span> <span class="s2">&quot;configuration+TestInfo&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;ie9orLess&quot;</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;controllers&quot;</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;dojox/app/controllers/HistoryHash&quot;</span>
+                <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;!ie9orLess&quot;</span> <span class="o">:</span> <span class="p">{</span>
+                <span class="s2">&quot;controllers&quot;</span><span class="o">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;dojox/app/controllers/History&quot;</span>
+                <span class="p">]</span>
+        <span class="p">}</span>
+<span class="p">},</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// The app would have code like this:
+require([&quot;dojo/text!&quot;+configurationFile], function(configJson){
+        var config = json.fromJson(configJson);
+        var width = window.innerWidth || document.documentElement.clientWidth;
+        if(width &lt;= 600){
+                has.add(&quot;phone&quot;, true);
+        }
+        has.add(&quot;ie9orLess&quot;, has(&quot;ie&quot;) &amp;&amp; (has(&quot;ie&quot;) &lt;= 9));
+        Application(config);
+});
+
+
+// The config would include something like this:
+&quot;has&quot; : {
+        &quot;phone&quot; : {
+                &quot;defaultView&quot;: &quot;configuration&quot;
+        },
+        &quot;!phone&quot; : {
+                &quot;defaultView&quot;: &quot;configuration+TestInfo&quot;
+        },
+        &quot;ie9orLess&quot; : {
+                &quot;controllers&quot;: [
+                        &quot;dojox/app/controllers/HistoryHash&quot;
+                ]
+        },
+        &quot;!ie9orLess&quot; : {
+                &quot;controllers&quot;: [
+                        &quot;dojox/app/controllers/History&quot;
+                ]
+        }
+},</textarea></div><p><em>Incompatibilities</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>data-app-region has been changed to data-app-constraint.</li>
+<li>The property name used in the config for the view&#8217;s .js file has been changed from “definition” to “controller”, config files will have to be updated to use &#8220;controller&#8221; instead of &#8220;definition&#8221; in the view.</li>
+<li>The option to be able to load a default controller for a view (when the controller is not set) has been removed.  The view must specify a controller if the controller is to be loaded. If the view does not have a controller module to load, it should not set a controller.  Setting the controller to &#8220;none&#8221; is no longer supported.</li>
+<li>Since &#8220;+&#8221; and &#8220;-&#8221; can now be used to indicate multiple views on a transition, those characters are no longer allowed in a view name.</li>
+<li>The events used in the Layout controllers have changed from layout -&gt; app-initLayout and  select -&gt; app-layoutView, and the other events used by dojox/app have also been changed to have an app- prefix for example, load -&gt; app-load, init -&gt; app-init, domNode -&gt; app-domNode, and transition -&gt; app-transition.</li>
+<li>zIndex is no longer automatically set on views depending upon whether they are in the center or not.  In the past the zIndex was automatically set higher on the left pane of a tablet view to avoid having the transition for the center show over that left pane.</li>
+<li>In 1.8 dojox/app would automatically require a model and mvc controller if it was listed in the config and not included in the list of dependencies.  In 1.9 the model and mvc controller will need to be listed in the dependencies. For example:</li>
+</ul>
+</div></blockquote>
+<div class="highlight"><pre><span class="s2">&quot;dependencies&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">&quot;dojox/app/utils/simpleModel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dojox/app/utils/mvcModel&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dojox/mvc/EditStoreRefListController&quot;</span><span class="p">,</span>
+        <span class="c1">// ...</span>
+<span class="p">]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">&quot;dependencies&quot;: [
+        &quot;dojox/app/utils/simpleModel&quot;,
+        &quot;dojox/app/utils/mvcModel&quot;,
+        &quot;dojox/mvc/EditStoreRefListController&quot;,
+        // ...
+]</textarea></div><dl class="docutils">
+<dt><em>Incompatibilities (continued)</em></dt>
+<dd><ul class="first last simple">
+<li>In 1.8 dojox/app would automatically include the Load, Transition and Layout controllers, unless &#8220;noAutoLoadControllers&#8221; was set to true in the config.  In 1.9 the controllers are no longer automatically loaded, and the noAutoLoadControllers option has been removed.  So the config must include the necessary controllers. For example:</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight"><pre><span class="s2">&quot;controllers&quot;</span><span class="o">:</span> <span class="p">[</span>
+        <span class="s2">&quot;dojox/app/controllers/Load&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dojox/app/controllers/Transition&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dojox/app/controllers/Layout&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dojox/app/controllers/History&quot;</span>
+<span class="p">]</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">&quot;controllers&quot;: [
+        &quot;dojox/app/controllers/Load&quot;,
+        &quot;dojox/app/controllers/Transition&quot;,
+        &quot;dojox/app/controllers/Layout&quot;,
+        &quot;dojox/app/controllers/History&quot;
+]</textarea></div></div>
+<div class="section" id="dojox-calendar">
+<h3><a class="toc-backref" href="#id33">dojox/calendar</a><a class="headerlink" href="#dojox-calendar" title="Permalink to this headline">¶</a></h3>
+<p><em>Features</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Better support of asynchronous stores. Interactive event creation is now working with asynchronous stores (event is added to store at the end of the gesture). Event renderers are notified of the current store state (being created but not added yet to store, being added/updated, in store). An example is available (tests/asynchStore.html)</li>
+<li>New properties have been added to further customize the the row header of the column view.</li>
+<li>Grid cells can now be customized either programmatically by providing a custom function (styleGridCellFunc property of views) or by CSS (ex .dojoxCalendarGrid .Wed.H12 { ... } ). See tests/calendarStyleGridCell.html and tests/calendarStyleGridCellCSS.html.</li>
+<li>Query options to be set when querying the store can now be specified on the calendar using queryOptions property.</li>
+</ul>
+</div></blockquote>
+<p><em>Incompatibilities</em></p>
+<blockquote>
+<div><ul>
+<li><p class="first">In 1.8, the Date constructor was used as last resort to decode a Date string. In 1.9, as it is not reliable, the Date constructor is not used, and time.newDate() will throw an error if parameter is string and it cannot be decoded using ISO decoder (dojo/date/stamp).</p>
+</li>
+<li><p class="first">In 1.8, the renderers life cycle events (onRendererXXXX) have the renderer as parameter. In 1.9, an event is passed as parameter. This event will provide the renderer but also the view where this renderer is used and for &#8220;rendererCreated&#8221; and &#8220;rendererReused&#8221; events the data item displayed by this renderer.</p>
+</li>
+<li><p class="first">The ColumnView.styleGridColumn has been renamed into styleGridCell and two arguments have been added.</p>
+</li>
+<li><p class="first">The calendar is now complying with the resize policy of Dojo. If the calendar, and especially the Matrix View, is <em>not</em> in a Dijit container or a Dojo mobile container, the application developer must call the resize() method of the calendar (or the view if used as standalone).</p>
+</li>
+<li><dl class="first docutils">
+<dt>In 1.8, the itemEditEnd event item property was inconsistent with the other editing events because it was representing the store item instead of the render item. In 1.9, each editing event is containing two properties:</dt>
+<dd><ul class="first last simple">
+<li>item: The render item. To change editing behavior set the startTime and/or endTime of this object.</li>
+<li>storeItem: the store item. You may want to access some properties of the store item to determine the editing logic.</li>
+<li>The tests/editing.html shows an example.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">In 1.8, the dojox/calendar/Calendar methods called isItemEditable, isItemMoveEnabled and isItemResizeEnabled took as first parameter the internal render item which that was not useful. Now the store data item is passed.</p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="dojox-gfx">
+<h3><a class="toc-backref" href="#id34">dojox/gfx</a><a class="headerlink" href="#dojox-gfx" title="Permalink to this headline">¶</a></h3>
+<p><em>Features</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>Add dashed stroke support to canvas renderer. If the browser implements the (new) HTML5 dash api (context2d.setLineDash()) then the gfx renderer uses it. Otherwise, it relies on a custom (canvas- specific) implementation.</li>
+<li>Extend batch mode support to canvas renderer. When enabled, repaint requests are suspended for the target container until the current batch is closed via a call to closeBatch().</li>
+<li>Add SVG filter support. The dojox/gfx/svgext module adds a new Shape.setFilter() method to set a filter object on a shape. A filter objects should define a set of properties to configure the filter (like x, y, etc.) and the list of filter primitives (as an array) that make this filter, as specified by the SVG specification (<a class="reference external" href="http://www.w3.org/TR/SVG/filters.html">http://www.w3.org/TR/SVG/filters.html</a>). In addition, the new dojox/gfx/filters module defines a minimal convenient API to write filter objects as well as a set of predefined, ready-to-use filters. See dojox/gfx/tests/test_filter.html for an example of this new API, and the Dojox Gfx reference guide for more information. Note: IE9 does not support SVG filters.</li>
+<li>The gfx.shape.Text class implements getBoundingBox() (all renderers).</li>
+<li>Add gfx.shape.Shape.on() and Surface.on() methods. The connect()/disconnect() API is deprecated.</li>
+</ul>
+</div></blockquote>
+<p><em>Incompatibilities</em></p>
+<blockquote>
+<div><ul class="simple">
+<li>The gfx registry API (gfx.shape.byId(), gfx.shape.getUID(), gfx.shape.register(), gfx.shape.dispose()), is now optional, and is disabled by default. If an application uses it, it must explicitly require the dojox/gfx/registry module.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="dojox-treemap">
+<h3><a class="toc-backref" href="#id35">dojox/treemap</a><a class="headerlink" href="#dojox-treemap" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Query options to be set when querying the store can now be specified on the treemap using queryOptions property.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="dojox-form-manager">
+<h3><a class="toc-backref" href="#id36">dojox/form/manager</a><a class="headerlink" href="#dojox-form-manager" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">dojox/form/Form</span></code> now inherits from <code class="docutils literal"><span class="pre">dijit/_WidgetsInTemplateMixin</span></code>.</li>
+<li>The <code class="docutils literal"><span class="pre">dojox/form/manager</span></code> package has been converted to use dojo/on instead of <code class="docutils literal"><span class="pre">dojo/connect</span></code> (<a class="reference external" href="http://bugs.dojotoolkit.org/ticket/16288">#16288</a>) and the test pages have been made more robust and converted to AMD (<a class="reference external" href="http://bugs.dojotoolkit.org/ticket/16289">#16289</a>).</li>
+<li>The <code class="docutils literal"><span class="pre">observer</span></code> attribute used by <code class="docutils literal"><span class="pre">dojox/form/Manager</span></code> has been changed to the HTML5-valid <code class="docutils literal"><span class="pre">data-dojo-observer</span></code> (<a class="reference external" href="http://bugs.dojotoolkit.org/ticket/13449">#13449</a>).</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="dojox-form-uploader">
+<h3><a class="toc-backref" href="#id37">dojox/form/Uploader</a><a class="headerlink" href="#dojox-form-uploader" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">dojox/form/Uploader</span></code> is now AMD compatible and works declaratively in HTML markup</li>
+<li>The AMD update necessitated discarding the previously implemented plugin system. All dependencies are loaded by default. Using the deprecated plugin style should throw warnings in the console. The <code class="docutils literal"><span class="pre">force</span></code> parameter is still used to choose between HTML5, Flash or IFrame.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="dojox-date">
+<h3><a class="toc-backref" href="#id38">dojox/date</a><a class="headerlink" href="#dojox-date" title="Permalink to this headline">¶</a></h3>
+<p>A new alternate calendar system, Um AlQura (Hijri) calendar, was added. See
+<a class="reference internal" href="../dojox/date/umalqura.html#dojox-date-umalqura"><span>dojox/date/umalqura</span></a></p>
+</div>
+</div>
+<div class="section" id="util">
+<h2><a class="toc-backref" href="#id39">Util</a><a class="headerlink" href="#util" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="doh">
+<h3><a class="toc-backref" href="#id40">DOH</a><a class="headerlink" href="#doh" title="Permalink to this headline">¶</a></h3>
+<p>Support added for returning a <code class="docutils literal"><span class="pre">dojo/promise/Promise</span></code> or <code class="docutils literal"><span class="pre">dojo/Deferred</span></code> from a test fixture.  Before, you could
+only return a <code class="docutils literal"><span class="pre">doh.Deferred</span></code> or a <code class="docutils literal"><span class="pre">dojo/_base/Deferred</span></code>.</p>
+</div>
+</div>
+<div class="section" id="demos">
+<h2><a class="toc-backref" href="#id41">Demos</a><a class="headerlink" href="#demos" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="migration-notes">
+<h2><a class="toc-backref" href="#id42">Migration Notes</a><a class="headerlink" href="#migration-notes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dijit-calendar">
+<h3><a class="toc-backref" href="#id43">dijit/Calendar</a><a class="headerlink" href="#dijit-calendar" title="Permalink to this headline">¶</a></h3>
+<p>To avoid accessibility issues, the <code class="docutils literal"><span class="pre">dijit/Calendar</span></code> template was changed so that the month name and arrows, plus the
+previous, current and next year, are not contained within the <code class="docutils literal"><span class="pre">&lt;table&gt;</span></code> node.   CSS was correspondingly changed.</p>
+</div>
+<div class="section" id="dijit-container-addchild">
+<h3><a class="toc-backref" href="#id44">dijit/_Container::addChild()</a><a class="headerlink" href="#dijit-container-addchild" title="Permalink to this headline">¶</a></h3>
+<p>In 1.8, the behavior of <code class="docutils literal"><span class="pre">dijit/_Container</span></code> (and subclasses) <code class="docutils literal"><span class="pre">.addChild()</span></code> method was undefined if some of the
+<code class="docutils literal"><span class="pre">_Container.containerNode</span></code> direct children were plain DOM nodes, rather than widgets.</p>
+<p>In practice though, when <code class="docutils literal"><span class="pre">addChild(widget,</span> <span class="pre">n)</span></code> would count to the <em>n</em>&#8216;th position, it would skip over the plain
+DOMNodes and only include the child widgets in the count.</p>
+<p>Further, if the existing child widgets were not direct children of <code class="docutils literal"><span class="pre">this.containerNode</span></code>, then <code class="docutils literal"><span class="pre">.addChild()</span></code> would
+tend to place the new widget as a next or previous sibling of an existing child widget, rather than as a direct child of
+<code class="docutils literal"><span class="pre">this.containerNode</span></code>.</p>
+<p>In 1.9, <code class="docutils literal"><span class="pre">parent.addChild(widget,</span> <span class="pre">n)</span></code> places <code class="docutils literal"><span class="pre">widget.domNode</span></code> as the <em>n</em>&#8216;th DOMNode child of
+<code class="docutils literal"><span class="pre">parent.containerNode</span></code>, just like <code class="docutils literal"><span class="pre">dojo/dom-construct::place()</span></code> does.</p>
+<p>If your application was calling <code class="docutils literal"><span class="pre">parent.addChild()</span></code> on a widget that contained plain DOM nodes, and depending on the
+undefined behavior listed above, you may need to update your logic.</p>
+</div>
+<div class="section" id="dijit-keypress-to-keydown">
+<h3><a class="toc-backref" href="#id45">dijit: keypress to keydown</a><a class="headerlink" href="#dijit-keypress-to-keydown" title="Permalink to this headline">¶</a></h3>
+<p>For performance, a number of widgets were changed to use the native keydown event rather than the synthetic (and
+deprecated) dojo/_base/connect._keypress event.</p>
+<p>This include changes to the template like <code class="docutils literal"><span class="pre">data-dojo-attach-event=&quot;onkeydown:</span> <span class="pre">_onKeyDown&quot;</span></code> rather than
+<code class="docutils literal"><span class="pre">data-dojo-attach-event=&quot;onkeypress:</span> <span class="pre">_onKeyPress&quot;</span></code>, and in the class definitions code renaming <code class="docutils literal"><span class="pre">_onKeyPressed()</span></code> to
+<code class="docutils literal"><span class="pre">_onKeyDown()</span></code>, and accessing <code class="docutils literal"><span class="pre">evt.keyDown</span></code> rather than <code class="docutils literal"><span class="pre">evt.charOrCode</span></code>.</p>
+<p>Changed widgets:</p>
+<ul class="simple">
+<li>Menu (dijit/templates/Menu, DropDownMenu.js, MenuBar.js)</li>
+<li>Slider</li>
+<li>NumberSpinner</li>
+<li>InlineEditBox (onkeypress handler removed, onkeydown not added)</li>
+<li>StackContainer, StackController, TabController, ScrollingTabController</li>
+<li>AccordionContainer (technically, AccordionButton)</li>
+<li>BorderContainer</li>
+<li>Editor</li>
+</ul>
+<p>Note that <code class="docutils literal"><span class="pre">_TextBoxMixin</span></code> still creates it&#8217;s own normalized event object defining <code class="docutils literal"><span class="pre">evt.charOrCode</span></code>, and passes it to
+<code class="docutils literal"><span class="pre">._onInput()</span></code>.</p>
+</div>
+<div class="section" id="dijit-template-changes">
+<h3><a class="toc-backref" href="#id46">dijit Template Changes</a><a class="headerlink" href="#dijit-template-changes" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dijit/templates/InlineEditBox.html</span></code> and <code class="docutils literal"><span class="pre">dijit/form/robot/DropDownBox.html</span></code> were changed in this release.</p>
+<p>If you have subclasses of <code class="docutils literal"><span class="pre">InlineEditBox</span></code>, <code class="docutils literal"><span class="pre">ComboBox</span></code>, <code class="docutils literal"><span class="pre">FilteringSelect</span></code>, or <code class="docutils literal"><span class="pre">DateTextBox</span></code> that have modified
+those templates, you may need to update your templates.</p>
+<p>Also, a number of widget templates were changed from using &lt;img&gt; nodes to &lt;span&gt; nodes for icons.  If you have custom
+CSS that depends on the img tag name, you probably need to change it.</p>
+</div>
+<div class="section" id="dijit-editor">
+<h3><a class="toc-backref" href="#id47">dijit/Editor</a><a class="headerlink" href="#dijit-editor" title="Permalink to this headline">¶</a></h3>
+<p>If you are creating Editor widgets programatically, be sure to call startup() on them.</p>
+</div>
+<div class="section" id="stackcontainer-tabcontainer">
+<h3><a class="toc-backref" href="#id48">StackContainer, TabContainer</a><a class="headerlink" href="#stackcontainer-tabcontainer" title="Permalink to this headline">¶</a></h3>
+<p>There was a wrapper div added around each StackContainer child for accessibility reasons.
+Also, pane2button is now a function rather than a hash.</p>
+</div>
+<div class="section" id="id8">
+<h3><a class="toc-backref" href="#id49">dijit/Tree</a><a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>Tree::persist was changed to false by default.  Also, persisting a Tree no longer saves/restores which TreeNodes
+are selected, but just which TreeNodes are open.</p>
+</div>
+<div class="section" id="dijit-bidi-support">
+<h3><a class="toc-backref" href="#id50">dijit bidi support</a><a class="headerlink" href="#dijit-bidi-support" title="Permalink to this headline">¶</a></h3>
+<p>Dijit bidi functionality is not enabled anymore by the dijit/_BidiSupport module.  Instead you should be
+using the <code class="docutils literal"><span class="pre">dojo-bidi</span></code> flag.</p>
+<p>Replace code like:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;dojo.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+  <span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dijit/Dialog&quot;</span><span class="p">,</span> <span class="s2">&quot;dijit/_BidiSupport&quot;</span><span class="p">],</span> <span class="p">...);</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script src=&quot;dojo.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  require([&quot;dijit/Dialog&quot;, &quot;dijit/_BidiSupport&quot;], ...);
+&lt;/script&gt;</textarea></div><p>by</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;dojo.js&quot;</span> <span class="na">data-dojo-config=</span><span class="s">&quot;has:{&#39;dojo-bidi&#39;: true}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+  <span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dijit/Dialog&quot;</span><span class="p">],</span> <span class="p">...);</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script src=&quot;dojo.js&quot; data-dojo-config=&quot;has:{'dojo-bidi': true}&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  require([&quot;dijit/Dialog&quot;], ...);
+&lt;/script&gt;</textarea></div></div>
+<div class="section" id="dojox-charting-migration">
+<h3><a class="toc-backref" href="#id51">dojox/charting migration</a><a class="headerlink" href="#dojox-charting-migration" title="Permalink to this headline">¶</a></h3>
+<p>Tooltip, highlight and magnify actions are no longer &#8220;hardcoded&#8221; into the spider plot
+(<code class="docutils literal"><span class="pre">dojox/charting/plot2d/Spider</span></code>). The need to be explicitly setup on the plot to utilize them, for example:</p>
+<div class="highlight"><pre><span class="k">new</span> <span class="nx">Tooltip</span><span class="p">(</span><span class="nx">spiderchart</span><span class="p">);</span>
+<span class="k">new</span> <span class="nx">Highlight</span><span class="p">(</span><span class="nx">spiderchart</span><span class="p">);</span>
+<span class="k">new</span> <span class="nx">Magnify</span><span class="p">(</span><span class="nx">spiderchart</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">duration</span><span class="o">:</span> <span class="mi">800</span><span class="p">,</span> <span class="nx">scale</span><span class="o">:</span> <span class="mf">1.5</span><span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">new Tooltip(spiderchart);
+new Highlight(spiderchart);
+new Magnify(spiderchart, &quot;default&quot;, {duration: 800, scale: 1.5});</textarea></div><p>Charting bidi features are not enabled anymore by the BidiSupport and BidiSupport3D modules. Instead you should be
+using the <code class="docutils literal"><span class="pre">dojo-bidi</span></code> flag.</p>
+<p>Replace code like:</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;dojo.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+  <span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojox/charting/Chart&quot;</span><span class="p">,</span> <span class="s2">&quot;dojox/charting/BidiSupport&quot;</span><span class="p">],</span> <span class="p">...);</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script src=&quot;dojo.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  require([&quot;dojox/charting/Chart&quot;, &quot;dojox/charting/BidiSupport&quot;], ...);
+&lt;/script&gt;</textarea></div><p>by</p>
+<div class="highlight"><pre><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;dojo.js&quot;</span> <span class="na">data-dojo-config=</span><span class="s">&quot;has:{&#39;dojo-bidi&#39;: true}&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+  <span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojox/charting/Chart&quot;</span><span class="p">],</span> <span class="p">...);</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;script src=&quot;dojo.js&quot; data-dojo-config=&quot;has:{'dojo-bidi': true}&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+  require([&quot;dojox/charting/Chart&quot;], ...);
+&lt;/script&gt;</textarea></div></div>
+<div class="section" id="id9">
+<h3><a class="toc-backref" href="#id52">DOH</a><a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p>The doh object used to have all the dojo/_base methods, for example dojo.forEach() was accessible via doh.forEach().
+This is no longer the case.  Those methods should be accessed via the dojo global, or better yet via AMD require
+of the proper module (dojo/_base/array in this case).</p>
+</div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

@@ -1,0 +1,372 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.8/dojo/on" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.8/dojo/on.html</div>
+<h1 class="functionIcon36 jsdoc-title module-title">dojo/on<span style="font-size:11px;color:#999;"> (version 1.8)</span></h1>
+<div class="jsdoc-full-summary"><p>A function that provides core event listening functionality. With this function
+you can provide a target, event type, and listener to be notified of
+future matching events that are fired.</p>
+</div>
+<div class="jsdoc-full-summary"><p>To listen for &quot;click&quot; events on a button node, we can do:
+
+</p>
+<pre><code>define([&quot;dojo/on&quot;], function(listen){
+    on(button, &quot;click&quot;, clickHandler);
+    ...</pre></code>
+<p>Evented JavaScript objects can also have their own events.
+
+
+</p>
+<pre><code>var obj = new Evented;
+on(obj, &quot;foo&quot;, fooHandler);</pre></code>
+<p>And then we could publish a &quot;foo&quot; event:
+
+
+</p>
+<pre><code>on.emit(obj, &quot;foo&quot;, {key: &quot;value&quot;});</pre></code>
+<p>We can use extension events as well. For example, you could listen for a tap gesture:
+
+
+</p>
+<pre><code>define([&quot;dojo/on&quot;, &quot;dojo/gesture/tap&quot;, function(listen, tap){
+    on(button, tap, tapHandler);
+    ...</pre></code>
+<p>which would trigger fooHandler. Note that for a simple object this is equivalent to calling:
+
+
+</p>
+<pre><code>obj.onfoo({key:&quot;value&quot;});</pre></code>
+<p>If you use on.emit on a DOM node, it will use native event dispatching when possible.
+</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature">on<span class="parameters">(target,type,listener,dontFix);</span>
+  </div>
+</div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">target</td>
+    <td class="jsdoc-param-type">Element | Object</td>
+    <td class="jsdoc-param-description"><p>This is the target object or DOM element that to receive events from</p>
+
+    </td>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">type</td>
+    <td class="jsdoc-param-type">String | Function</td>
+    <td class="jsdoc-param-description"><p>This is the name of the event to listen for or an extension event type.</p>
+
+    </td>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">listener</td>
+    <td class="jsdoc-param-type">Function</td>
+    <td class="jsdoc-param-description"><p>This is the function that should be called when the event fires.</p>
+
+    </td>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">dontFix</td>
+    <td class="jsdoc-param-type">undefined</td>
+    <td class="jsdoc-param-description">
+    </td>
+  </tr>
+</table>
+<div><strong>Returns:</strong><span class="jsdoc-return-type">Object | undefined</span></div>
+<div class="jsdoc-return-description"><p>An object with a remove() method that can be used to stop listening for this
+event.</p>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon private extension-module"><a href="#1_8dojo_on__fixEvent">_fixEvent</a><span class="parameters"></span><span class="parameters">(evt,se) </span><span></span><span title="private" class="jsdoc-private"></span><span title="Must manually require () dojo/_base/event to access" class="jsdoc-extension"></span>
+        </li>
+        <li class="functionIcon private"><a href="#1_8dojo_on__preventDefault">_preventDefault</a><span class="parameters"></span><span class="parameters">() </span><span></span><span title="private" class="jsdoc-private"></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_on_emit">emit</a><span class="parameters"></span><span class="parameters">(target,type,event) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_on_once">once</a><span class="parameters"></span><span class="parameters">(target,type,listener,dontFix) </span><span>This function acts the same as on(), but will only call the listener once.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_on_parse">parse</a><span class="parameters"></span><span class="parameters">(target,type,listener,addListener,dontFix,matchesTarget) </span><span></span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_on_pausable">pausable</a><span class="parameters"></span><span class="parameters">(target,type,listener,dontFix) </span><span>This function acts the same as on(), but with pausable functionality.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_on_selector">selector</a><span class="parameters"></span><span class="parameters">(selector,eventType,children) </span><span>Creates a new extension event with event delegation.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private extension-module">
+        <div class="jsdoc-title"><a name="1_8dojo_on__fixEvent"></a><span class="functionIcon">_fixEvent</span><span class="parameters">(evt,se)</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/_base/event" class="jsdoc-link">dojo/_base/event</a><span title="Must manually require () dojo/_base/event to access" class="jsdoc-extension"></span>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">evt</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">se</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojo_on__preventDefault"></a><span class="functionIcon">_preventDefault</span><span class="parameters">()</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/on" class="jsdoc-link">dojo/on</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_on_emit"></a><span class="functionIcon">emit</span><span class="parameters">(target,type,event)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/on" class="jsdoc-link">dojo/on</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">target</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">type</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">event</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_on_once"></a><span class="functionIcon">once</span><span class="parameters">(target,type,listener,dontFix)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/on" class="jsdoc-link">dojo/on</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>This function acts the same as on(), but will only call the listener once. The 
+listener will be called for the first
+event that takes place and then listener will automatically be removed.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">target</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">type</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">listener</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">dontFix</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_on_parse"></a><span class="functionIcon">parse</span><span class="parameters">(target,type,listener,addListener,dontFix,matchesTarget)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/on" class="jsdoc-link">dojo/on</a>
+        </div>
+        <div class="jsdoc-full-summary"></div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">target</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">type</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">listener</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">addListener</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">dontFix</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">matchesTarget</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_on_pausable"></a><span class="functionIcon">pausable</span><span class="parameters">(target,type,listener,dontFix)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/on" class="jsdoc-link">dojo/on</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>This function acts the same as on(), but with pausable functionality. The
+returned signal object has pause() and resume() functions. Calling the
+pause() method will cause the listener to not be called for future events. Calling the
+resume() method will cause the listener to again be called for future events.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">target</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">type</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">listener</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">dontFix</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_on_selector"></a><span class="functionIcon">selector</span><span class="parameters">(selector,eventType,children)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/on" class="jsdoc-link">dojo/on</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Creates a new extension event with event delegation. This is based on
+the provided event type (can be extension event) that
+only calls the listener when the CSS selector matches the target of the event.
+
+</p>
+<p>The application must require() an appropriate level of dojo/query to handle the selector.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">selector</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The CSS selector to use for filter events and determine the |this| of the event listener.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">eventType</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>The event to listen for</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">children</td>
+            <td class="jsdoc-param-type">undefined</td>
+            <td class="jsdoc-param-description"><p>Indicates if children elements of the selector should be allowed. This defaults to 
+true</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">summary:</span></div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>require([&quot;dojo/on&quot;, &quot;dojo/mouse&quot;, &quot;dojo/query!css2&quot;], function(listen, mouse){
+    on(node, on.selector(&quot;.my-class&quot;, mouse.enter), handlerForMyHover);</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.8/dojo/on" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

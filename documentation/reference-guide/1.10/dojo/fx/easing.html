@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/fx/easing &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/fx/easing</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#easing-functions">Easing Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-playing-with-easing">Example: Playing with Easing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-fx-easing">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/fx/easing</a><a class="headerlink" href="#dojo-fx-easing" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Peter Higgins, Nikolai Onken, Marcus Reimann, Jared Jurkiewicz</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Developers:</th><td class="field-body">Bryan Forbes, Peter Higgins, Eugene Lazutkin, Bill Keese, Adam Peller, Alex Russell, Dylan Schiemann,
+sjmiles</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V1.2</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-fx-easing" id="id2">dojo/fx/easing</a><ul>
+<li><a class="reference internal" href="#usage" id="id3">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id4">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id5">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Have you ever wanted a fade-out, fade-in, wipe-in, etc. effect to play in a a non-linear way? For example, wouldn&#8217;t it
+be cool to have a fade in accelerate the rate at which the node appears the further along in the animation duration it
+is? This is handled through the <code class="docutils literal"><span class="pre">easing</span></code> property of the arguments passed to the animation creation functions.</p>
+<p>Instead of having to write the easing function yourself, Dojo provides a collection of easing functions to use as this
+parameter to get a variety of effects.</p>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id3">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The module returns an objection that contains the various easing functions, that then can be used in an animation:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/fx/easing&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/_base/fx&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">easing</span><span class="p">,</span> <span class="nx">baseFx</span><span class="p">){</span>
+  <span class="nx">baseFx</span><span class="p">.</span><span class="nx">animateProperty</span><span class="p">({</span>
+    <span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;someNode&quot;</span><span class="p">,</span>
+    <span class="nx">properties</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">width</span><span class="o">:</span> <span class="mi">300</span>
+    <span class="p">},</span>
+    <span class="nx">easing</span><span class="o">:</span> <span class="nx">easing</span><span class="p">.</span><span class="nx">linear</span>
+  <span class="p">}).</span><span class="nx">play</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/fx/easing&quot;, &quot;dojo/_base/fx&quot;], function(easing, baseFx){
+  baseFx.animateProperty({
+    node: &quot;someNode&quot;,
+    properties: {
+      width: 300
+    },
+    easing: easing.linear
+  }).play();
+});</textarea></div><div class="section" id="easing-functions">
+<h3>Easing Functions<a class="headerlink" href="#easing-functions" title="Permalink to this headline">¶</a></h3>
+<p>All functions follow a simple naming convention of &#8220;ease type&#8221; plus &#8220;when&#8221;. If the name of the function ends in Out, the
+easing described appears towards the end of the animation. &#8220;In&#8221; means during the beginning, and InOut means both ranges
+of the Animation will applied, both beginning and end.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Function</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>linear</td>
+<td>The most basic easing function (and the default for animations), apply the effect linearly over time.</td>
+</tr>
+<tr class="row-odd"><td>quadIn</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 2 over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>quadOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 2 over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>quadInOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 2 over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>cubicIn</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 3 over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>cubicOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 3 over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>cubicInOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 3 over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>quartIn</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 4 over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>quartOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 4 over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>quartInOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 4 over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>quintIn</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 5 over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>quintOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 5 over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>quintInOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 5 over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>sineIn</td>
+<td><p class="first">A function to apply the rate of the effect by the sine function over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>sineOut</td>
+<td><p class="first">A function to apply the rate of the effect by the sine function over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>sineInOut</td>
+<td><p class="first">A function to apply the rate of the effect by the sine function over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>expoIn</td>
+<td><p class="first">A function to apply the rate of the effect exponentially over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>expoOut</td>
+<td><p class="first">A function to apply the rate of the effect exponentially over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>expoInOut</td>
+<td><p class="first">A function to apply the rate of the effect exponentially over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>circIn</td>
+<td><p class="first">A function to apply the rate of the effect circularly over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>circOut</td>
+<td><p class="first">A function to apply the rate of the effect circularly over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>circInOut</td>
+<td><p class="first">A function to apply the rate of the effect circularly over time at the beginning and the end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>backIn</td>
+<td>A function where the rate of change starts away from the target, but quickly accelerates towards it.</td>
+</tr>
+<tr class="row-odd"><td>backOut</td>
+<td>A function where the end value actually goes past the end, then pops back to the end value.</td>
+</tr>
+<tr class="row-even"><td>backInOut</td>
+<td>A function that applies both backIn and backOut to the animation behavior.</td>
+</tr>
+<tr class="row-odd"><td>elasticIn</td>
+<td>A function where the rate of change snaps elastically from the start value.</td>
+</tr>
+<tr class="row-even"><td>elasticOut</td>
+<td>A function where the rate of change snaps elastically around the end value.</td>
+</tr>
+<tr class="row-odd"><td>elasticInOut</td>
+<td>A function that elastically snaps around the value, near the beginning and end of the Animation.</td>
+</tr>
+<tr class="row-even"><td>bounceIn</td>
+<td>A function where the rate of change &#8220;bounces&#8221; near the beginning value</td>
+</tr>
+<tr class="row-odd"><td>bounceOut</td>
+<td>A function where the rate of change &#8220;bounces&#8221; near the ending value</td>
+</tr>
+<tr class="row-even"><td>bounceInOut</td>
+<td>A function that &#8220;bounces&#8221; near the beginning and end of the animation</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-playing-with-easing">
+<h3>Example: Playing with Easing<a class="headerlink" href="#example-playing-with-easing" title="Permalink to this headline">¶</a></h3>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Select the desired easing function from the dropdown and press &#8216;move the div&#8217;</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/_base/fx&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/fx/easing&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-prop&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-style&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">baseFx</span><span class="p">,</span> <span class="nx">easing</span><span class="p">,</span> <span class="nx">on</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">domProp</span><span class="p">,</span> <span class="nx">style</span><span class="p">){</span>
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;moveButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">style</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s2">&quot;moveableNode&quot;</span><span class="p">,</span> <span class="s2">&quot;marginLeft&quot;</span><span class="p">,</span> <span class="s2">&quot;0px&quot;</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">easeType</span> <span class="o">=</span> <span class="nx">domProp</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;easingSelector&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
+        <span class="nx">ef</span> <span class="o">=</span> <span class="nx">easing</span><span class="p">[</span><span class="nx">easeType</span><span class="p">];</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">ef</span><span class="p">){</span>
+      <span class="nx">baseFx</span><span class="p">.</span><span class="nx">animateProperty</span><span class="p">({</span>
+        <span class="nx">node</span><span class="o">:</span> <span class="s2">&quot;moveableNode&quot;</span><span class="p">,</span>
+        <span class="nx">properties</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">marginLeft</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">start</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nx">end</span><span class="o">:</span> <span class="mi">400</span><span class="p">,</span>
+            <span class="nx">unit</span><span class="o">:</span> <span class="s2">&quot;px&quot;</span>
+          <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="nx">easing</span><span class="o">:</span> <span class="nx">ef</span><span class="p">,</span>
+        <span class="nx">duration</span><span class="o">:</span> <span class="mi">5000</span>
+      <span class="p">}).</span><span class="nx">play</span><span class="p">();</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/_base/fx&quot;, &quot;dojo/fx/easing&quot;, &quot;dojo/on&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-prop&quot;, &quot;dojo/dom-style&quot;,
+    &quot;dojo/domReady!&quot;],
+function(baseFx, easing, on, dom, domProp, style){
+  on(dom.byId(&quot;moveButton&quot;), &quot;click&quot;, function(){
+    style.set(&quot;moveableNode&quot;, &quot;marginLeft&quot;, &quot;0px&quot;);
+    var easeType = domProp.get(&quot;easingSelector&quot;, &quot;value&quot;),
+        ef = easing[easeType];
+    if(ef){
+      baseFx.animateProperty({
+        node: &quot;moveableNode&quot;,
+        properties: {
+          marginLeft: {
+            start: 0,
+            end: 400,
+            unit: &quot;px&quot;
+          }
+        },
+        easing: ef,
+        duration: 5000
+      }).play();
+    }
+  });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">&quot;easingSelector&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;option&gt;</span>linear<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>quadIn<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>quadOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>quadInOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>cubicIn<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>cubicOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>cubicInOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>quartIn<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>quartOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>quartInOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>quintIn<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>quintOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>quintInOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>sineIn<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>sineOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>sineInOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>expoIn<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>expoOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>expoInOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>circIn<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>circOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>circInOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>backIn<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>backOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>backInOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>elasticIn<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>elasticOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>elasticInOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>bounceIn<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>bounceOut<span class="nt">&lt;/option&gt;</span>
+  <span class="nt">&lt;option&gt;</span>bounceInOut<span class="nt">&lt;/option&gt;</span>
+<span class="nt">&lt;/select&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;moveButton&quot;</span><span class="nt">&gt;</span>Move the div!<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;moveableNode&quot;</span> <span class="na">style=</span><span class="s">&quot;width: 100px; height: 100px; background-color: red; margin-left: 0px;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;select id=&quot;easingSelector&quot;&gt;
+  &lt;option&gt;linear&lt;/option&gt;
+  &lt;option&gt;quadIn&lt;/option&gt;
+  &lt;option&gt;quadOut&lt;/option&gt;
+  &lt;option&gt;quadInOut&lt;/option&gt;
+  &lt;option&gt;cubicIn&lt;/option&gt;
+  &lt;option&gt;cubicOut&lt;/option&gt;
+  &lt;option&gt;cubicInOut&lt;/option&gt;
+  &lt;option&gt;quartIn&lt;/option&gt;
+  &lt;option&gt;quartOut&lt;/option&gt;
+  &lt;option&gt;quartInOut&lt;/option&gt;
+  &lt;option&gt;quintIn&lt;/option&gt;
+  &lt;option&gt;quintOut&lt;/option&gt;
+  &lt;option&gt;quintInOut&lt;/option&gt;
+  &lt;option&gt;sineIn&lt;/option&gt;
+  &lt;option&gt;sineOut&lt;/option&gt;
+  &lt;option&gt;sineInOut&lt;/option&gt;
+  &lt;option&gt;expoIn&lt;/option&gt;
+  &lt;option&gt;expoOut&lt;/option&gt;
+  &lt;option&gt;expoInOut&lt;/option&gt;
+  &lt;option&gt;circIn&lt;/option&gt;
+  &lt;option&gt;circOut&lt;/option&gt;
+  &lt;option&gt;circInOut&lt;/option&gt;
+  &lt;option&gt;backIn&lt;/option&gt;
+  &lt;option&gt;backOut&lt;/option&gt;
+  &lt;option&gt;backInOut&lt;/option&gt;
+  &lt;option&gt;elasticIn&lt;/option&gt;
+  &lt;option&gt;elasticOut&lt;/option&gt;
+  &lt;option&gt;elasticInOut&lt;/option&gt;
+  &lt;option&gt;bounceIn&lt;/option&gt;
+  &lt;option&gt;bounceOut&lt;/option&gt;
+  &lt;option&gt;bounceInOut&lt;/option&gt;
+&lt;/select&gt;
+&lt;button type=&quot;button&quot; id=&quot;moveButton&quot;&gt;Move the div!&lt;/button&gt;
+&lt;div id=&quot;moveableNode&quot; style=&quot;width: 100px; height: 100px; background-color: red; margin-left: 0px;&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id5">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../_base/fx.html#dojo-base-fx-fadein"><span>dojo/_base/fx::fadeIn()</span></a> - Examples show using the <code class="docutils literal"><span class="pre">expoOut</span></code> easing.</li>
+<li><a class="reference internal" href="../_base/fx.html#dojo-base-fx-fadeout"><span>dojo/_base/fx::fadeOut()</span></a> - Examples show using the <code class="docutils literal"><span class="pre">expoOut</span></code> easing.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

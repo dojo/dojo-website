@@ -1,0 +1,401 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.8/dojo/_base/declare" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.8/dojo/_base/declare.html</div>
+<h1 class="functionIcon36 jsdoc-title module-title">dojo/_base/declare<span style="font-size:11px;color:#999;"> (version 1.8)</span></h1>
+<div class="jsdoc-full-summary"><p>Create a feature-rich constructor from compact notation.</p>
+</div>
+<div class="jsdoc-full-summary"><p>Create a constructor using a compact notation for inheritance and
+prototype extension.
+
+</p>
+<p>Mixin ancestors provide a type of multiple inheritance.
+Prototypes of mixin ancestors are copied to the new class:
+changes to mixin prototypes will not affect classes to which
+they have been mixed in.
+
+</p>
+<p>Ancestors can be compound classes created by this version of
+declare(). In complex cases all base classes are going to be
+linearized according to C3 MRO algorithm
+(see <a href="http://www.python.org/download/releases/2.3/mro/">http://www.python.org/download/releases/2.3/mro/</a> for more
+details).
+
+</p>
+<p>&quot;className&quot; is cached in &quot;declaredClass&quot; property of the new class,
+if it was supplied. The immediate super class will be cached in
+&quot;superclass&quot; property of the new class.
+
+</p>
+<p>Methods in &quot;props&quot; will be copied and modified: &quot;nom&quot; property
+(the declared name of the method) will be added to all copied
+functions to help identify them for the internal machinery. Be
+very careful, while reusing methods: if you use the same
+function under different names, it can produce errors in some
+cases.
+
+</p>
+<p>It is possible to use constructors created &quot;manually&quot; (without
+declare()) as bases. They will be called as usual during the
+creation of an instance, their methods will be chained, and even
+called by &quot;this.inherited()&quot;.
+
+</p>
+<p>Special property &quot;-chains-&quot; governs how to chain methods. It is
+a dictionary, which uses method names as keys, and hint strings
+as values. If a hint string is &quot;after&quot;, this method will be
+called after methods of its base classes. If a hint string is
+&quot;before&quot;, this method will be called before methods of its base
+classes.
+
+</p>
+<p>If &quot;constructor&quot; is not mentioned in &quot;-chains-&quot; property, it will
+be chained using the legacy mode: using &quot;after&quot; chaining,
+calling preamble() method before each constructor, if available,
+and calling postscript() after all constructors were executed.
+If the hint is &quot;after&quot;, it is chained as a regular method, but
+postscript() will be called after the chain of constructors.
+&quot;constructor&quot; cannot be chained &quot;before&quot;, but it allows
+a special hint string: &quot;manual&quot;, which means that constructors
+are not going to be chained in any way, and programmer will call
+them manually using this.inherited(). In the latter case
+postscript() will be called after the construction.
+
+</p>
+<p>All chaining hints are &quot;inherited&quot; from base classes and
+potentially can be overridden. Be very careful when overriding
+hints! Make sure that all chained methods can work in a proposed
+manner of chaining.
+
+</p>
+<p>Once a method was chained, it is impossible to unchain it. The
+only exception is &quot;constructor&quot;. You don&#39;t need to define a
+method in order to supply a chaining hint.
+
+</p>
+<p>If a method is chained, it cannot use this.inherited() because
+all other methods in the hierarchy will be called automatically.
+
+</p>
+<p>Usually constructors and initializers of any kind are chained
+using &quot;after&quot; and destructors of any kind are chained as
+&quot;before&quot;. Note that chaining assumes that chained methods do not
+return any value: any returned value will be discarded.
+</p>
+</div>
+<div class="jsdoc-function-information">
+  <h2>Usage:</h2>
+  <div class="function-signature">declare<span class="parameters">(className,superclass,props);</span>
+  </div>
+</div>
+<table class="jsdoc-parameters">
+  <tr>
+    <th>Parameter</th>
+    <th>Type</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">className</td>
+    <td class="jsdoc-param-type">String</td>
+    <td class="jsdoc-param-description">
+      <div><em>Optional</em></div><p>The optional name of the constructor (loosely, a &quot;class&quot;)
+stored in the &quot;declaredClass&quot; property in the created prototype.
+It will be used as a global name for a created constructor.</p>
+
+    </td>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">superclass</td>
+    <td class="jsdoc-param-type">Function | Function[]</td>
+    <td class="jsdoc-param-description"><p>May be null, a Function, or an Array of Functions. This argument
+specifies a list of bases (the left-most one is the most deepest
+base).</p>
+
+    </td>
+  </tr>
+  <tr>
+    <td class="jsdoc-param-name">props</td>
+    <td class="jsdoc-param-type">Object</td>
+    <td class="jsdoc-param-description"><p>An object whose properties are copied to the created prototype.
+Add an instance-initialization function by making it a property
+named &quot;constructor&quot;.</p>
+
+    </td>
+  </tr>
+</table>
+<div><strong>Returns:</strong><span class="jsdoc-return-type"><a class="jsdoc-link" href="/documentation/api/1.8/dojo/_base/declare.__DeclareCreatedObject">dojo/_base/declare.__DeclareCreatedObject</a> | undefined</span></div>
+<div class="jsdoc-return-description"><p>New constructor function.</p>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <div class="jsdoc-examples">
+      <h2>Examples</h2>
+      <div class="jsdoc-example">
+        <h3>Example 1</h3><pre><code>declare(&quot;my.classes.bar&quot;, my.classes.foo, {
+    // properties to be added to the class prototype
+    someValue: 2,
+    // initialization function
+    constructor: function(){
+        this.myComplicatedObject = new ReallyComplicatedObject();
+    },
+    // other functions
+    someMethod: function(){
+        doStuff();
+    }
+});</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 2</h3><pre><code>var MyBase = declare(null, {
+    // constructor, properties, and methods go here
+    // ...
+});
+var MyClass1 = declare(MyBase, {
+    // constructor, properties, and methods go here
+    // ...
+});
+var MyClass2 = declare(MyBase, {
+    // constructor, properties, and methods go here
+    // ...
+});
+var MyDiamond = declare([MyClass1, MyClass2], {
+    // constructor, properties, and methods go here
+    // ...
+});</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 3</h3><pre><code>var F = function(){ console.log(&quot;raw constructor&quot;); };
+F.prototype.method = function(){
+    console.log(&quot;raw method&quot;);
+};
+var A = declare(F, {
+    constructor: function(){
+        console.log(&quot;A.constructor&quot;);
+    },
+    method: function(){
+        console.log(&quot;before calling F.method...&quot;);
+        this.inherited(arguments);
+        console.log(&quot;...back in A&quot;);
+    }
+});
+new A().method();
+// will print:
+// raw constructor
+// A.constructor
+// before calling F.method...
+// raw method
+// ...back in A</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 4</h3><pre><code>var A = declare(null, {
+    &quot;-chains-&quot;: {
+        destroy: &quot;before&quot;
+    }
+});
+var B = declare(A, {
+    constructor: function(){
+        console.log(&quot;B.constructor&quot;);
+    },
+    destroy: function(){
+        console.log(&quot;B.destroy&quot;);
+    }
+});
+var C = declare(B, {
+    constructor: function(){
+        console.log(&quot;C.constructor&quot;);
+    },
+    destroy: function(){
+        console.log(&quot;C.destroy&quot;);
+    }
+});
+new C().destroy();
+// prints:
+// B.constructor
+// C.constructor
+// C.destroy
+// B.destroy</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 5</h3><pre><code>var A = declare(null, {
+    &quot;-chains-&quot;: {
+        constructor: &quot;manual&quot;
+    }
+});
+var B = declare(A, {
+    constructor: function(){
+        // ...
+        // call the base constructor with new parameters
+        this.inherited(arguments, [1, 2, 3]);
+        // ...
+    }
+});</code></pre>
+
+      </div>
+      <div class="jsdoc-example">
+        <h3>Example 6</h3><pre><code>var A = declare(null, {
+    &quot;-chains-&quot;: {
+        m1: &quot;before&quot;
+    },
+    m1: function(){
+        console.log(&quot;A.m1&quot;);
+    },
+    m2: function(){
+        console.log(&quot;A.m2&quot;);
+    }
+});
+var B = declare(A, {
+    &quot;-chains-&quot;: {
+        m2: &quot;after&quot;
+    },
+    m1: function(){
+        console.log(&quot;B.m1&quot;);
+    },
+    m2: function(){
+        console.log(&quot;B.m2&quot;);
+    }
+});
+var x = new B();
+x.m1();
+// prints:
+// B.m1
+// A.m1
+x.m2();
+// prints:
+// A.m2
+// B.m2</code></pre>
+
+      </div>
+    </div>
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="objectIcon private"><a href="1_8dojo__base_declare___DeclareCreatedObject">__DeclareCreatedObject</a>
+        </li><span>dojo/_base/declare() returns a constructor C.   new C() returns an Object with the following
+methods, in addition to the methods and properties specified via the arguments passed to declare().<span title="private" class="jsdoc-private"></span></span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a href="#1_8dojo__base_declare_safeMixin">safeMixin</a><span class="parameters"></span><span class="parameters">(target,source) </span><span>Mix in properties skipping a constructor and decorating functions
+like it is done by declare().</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field private">
+        <div class="jsdoc-title"><a name="1_8dojo__base_declare___DeclareCreatedObject"></a><span class="objectIcon">__DeclareCreatedObject</span><span title="private" class="jsdoc-private"></span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojo/_base/declare" class="jsdoc-link">dojo/_base/declare</a>
+        </div>
+        <div class="jsdoc-summary"><p><a class="jsdoc-link" href="/documentation/api/1.8/dojo/_base/declare">dojo/_base/declare()</a> returns a constructor <code>C</code>.   <code>new C()</code> returns an Object with the following
+methods, in addition to the methods and properties specified via the arguments passed to declare().</p>
+</div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo__base_declare_safeMixin"></a><span class="functionIcon">safeMixin</span><span class="parameters">(target,source)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/_base/declare" class="jsdoc-link">dojo/_base/declare</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Mix in properties skipping a constructor and decorating functions
+like it is done by declare().</p>
+</div>
+        <div class="jsdoc-full-summary"><p>This function is used to mix in properties like lang.mixin does,
+but it skips a constructor property and decorates functions like
+declare() does.
+
+</p>
+<p>It is meant to be used with classes and objects produced with
+declare. Functions mixed in with dojo.safeMixin can use
+this.inherited() like normal methods.
+
+</p>
+<p>This function is used to implement extend() method of a constructor
+produced with declare().
+</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">target</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>Target object to accept new properties.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">source</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>Source object for new properties.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Object</span></div>
+        <div class="jsdoc-return-description"><p>Target object to accept new properties.</p>
+</div>
+        <div class="jsdoc-examples">
+          <h2>Examples</h2>
+          <div class="jsdoc-example">
+            <h3>Example 1</h3><pre><code>var A = declare(null, {
+    m1: function(){
+        console.log(&quot;A.m1&quot;);
+    },
+    m2: function(){
+        console.log(&quot;A.m2&quot;);
+    }
+});
+var B = declare(A, {
+    m1: function(){
+        this.inherited(arguments);
+        console.log(&quot;B.m1&quot;);
+    }
+});
+B.extend({
+    m2: function(){
+        this.inherited(arguments);
+        console.log(&quot;B.m2&quot;);
+    }
+});
+var x = new B();
+dojo.safeMixin(x, {
+    m1: function(){
+        this.inherited(arguments);
+        console.log(&quot;X.m1&quot;);
+    },
+    m2: function(){
+        this.inherited(arguments);
+        console.log(&quot;X.m2&quot;);
+    }
+});
+x.m2();
+// prints:
+// A.m1
+// B.m1
+// X.m1</code></pre>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.8/dojo/_base/declare" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

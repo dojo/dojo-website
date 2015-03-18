@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/date/stamp &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/date/stamp</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#features">Features</a><ul>
+<li><a class="reference internal" href="#fromisostring">fromISOString()</a><ul>
+<li><a class="reference internal" href="#attributes">Attributes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#toisostring">toISOString()</a><ul>
+<li><a class="reference internal" href="#id2">Attributes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-date-stamp">
+<span id="id1"></span><h1><a class="toc-backref" href="#id3">dojo/date/stamp</a><a class="headerlink" href="#dojo-date-stamp" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-date-stamp" id="id3">dojo/date/stamp</a><ul>
+<li><a class="reference internal" href="#introduction" id="id4">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id5">Usage</a></li>
+<li><a class="reference internal" href="#features" id="id6">Features</a></li>
+<li><a class="reference internal" href="#examples" id="id7">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id8">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/date/stamp</strong> is a module that provides date handling functions for ISO-8601 standard formatting of date/time
+stamps. The standard return variable for this module is <code class="docutils literal"><span class="pre">stamp</span></code>.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id4">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Methods of <code class="docutils literal"><span class="pre">dojo/date/stamp</span></code> module use a profile of the ISO8601 as defined by <a class="reference external" href="http://www.ietf.org/rfc/rfc3339.txt">[RFC3339]</a> to handle dates in a way that is unambiguous, culturally and location
+independent, fast, and easily machine readable. The format is <code class="docutils literal"><span class="pre">yyyy-MM-ddTHH:mm:ss.SSS</span></code> where the fields do
+not all need to be specified, and either local time, GMT offset or &#8220;Zulu&#8221; may be used.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id5">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/date/stamp&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">stamp</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">date1</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">selector</span><span class="o">:</span> <span class="s2">&quot;date&quot;</span><span class="p">,</span>
+    <span class="nx">zulu</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">};</span>
+
+  <span class="nx">stamp</span><span class="p">.</span><span class="nx">toISOString</span><span class="p">(</span><span class="nx">date1</span><span class="p">);</span>
+  <span class="nx">stamp</span><span class="p">.</span><span class="nx">toISOString</span><span class="p">(</span><span class="nx">date1</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+
+  <span class="nx">stamp</span><span class="p">.</span><span class="nx">fromISOString</span><span class="p">(</span><span class="s2">&quot;2008-10-17T00:00:00Z&quot;</span><span class="p">);</span>
+  <span class="nx">stamp</span><span class="p">.</span><span class="nx">fromISOString</span><span class="p">(</span><span class="s2">&quot;T23:59:59.999-04:00&quot;</span><span class="p">,</span> <span class="nx">date1</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/date/stamp&quot;], function(stamp){
+  var date1 = new Date();
+  var options = {
+    selector: &quot;date&quot;,
+    zulu: true
+  };
+
+  stamp.toISOString(date1);
+  stamp.toISOString(date1, options);
+
+  stamp.fromISOString(&quot;2008-10-17T00:00:00Z&quot;);
+  stamp.fromISOString(&quot;T23:59:59.999-04:00&quot;, date1);
+});</textarea></div></div>
+<div class="section" id="features">
+<h2><a class="toc-backref" href="#id6">Features</a><a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fromisostring">
+<h3>fromISOString()<a class="headerlink" href="#fromisostring" title="Permalink to this headline">¶</a></h3>
+<p>Returns a Date object given a string formatted according to a subset of the ISO-8601 standard.</p>
+<div class="section" id="attributes">
+<h4>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="6%" />
+<col width="81%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>formattedString</td>
+<td>String</td>
+<td>A string such as <code class="docutils literal"><span class="pre">2005-06-30T08:05:00-07:00</span></code> or <code class="docutils literal"><span class="pre">2005-06-30</span></code> or <code class="docutils literal"><span class="pre">T08:05:00</span></code></td>
+</tr>
+<tr class="row-odd"><td>defaultTime</td>
+<td>Number?</td>
+<td>Used for defaults for fields omitted in the formattedString. Uses <code class="docutils literal"><span class="pre">1970-01-01T00:00:00.0Z</span></code> by
+default.</td>
+</tr>
+</tbody>
+</table>
+<p>The function returns a Date.</p>
+</div>
+</div>
+<div class="section" id="toisostring">
+<h3>toISOString()<a class="headerlink" href="#toisostring" title="Permalink to this headline">¶</a></h3>
+<p>Format a Date object as a string according a subset of the ISO-8601 standard.</p>
+<div class="section" id="id2">
+<h4>Attributes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="6%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dateObject</td>
+<td>Date</td>
+<td>The Date to be converted</td>
+</tr>
+<tr class="row-odd"><td>options</td>
+<td>Object?</td>
+<td><em>Optional argument</em> Options on how the date should be formatted.  Refer to the API documentation for
+full details</td>
+</tr>
+</tbody>
+</table>
+<p>The function returns a String.</p>
+</div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id7">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/date/stamp&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">stamp</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">date1</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2008</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">17</span><span class="p">);</span>
+    <span class="nx">date1</span><span class="p">.</span><span class="nx">setUTCHours</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="nx">stamp</span><span class="p">.</span><span class="nx">toISOString</span><span class="p">(</span><span class="nx">date1</span><span class="p">,</span> <span class="p">{</span><span class="nx">zulu</span><span class="o">:</span> <span class="kc">true</span><span class="p">})</span> <span class="o">+</span> <span class="s2">&quot;&lt;/br&gt;&quot;</span><span class="p">;</span>
+
+    <span class="nx">output</span> <span class="o">+=</span> <span class="nx">stamp</span><span class="p">.</span><span class="nx">toISOString</span><span class="p">(</span><span class="nx">date1</span><span class="p">,</span> <span class="p">{</span><span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;date&#39;</span><span class="p">})</span> <span class="o">+</span> <span class="s2">&quot;&lt;br/&gt;&quot;</span><span class="p">;</span>
+
+    <span class="nx">output</span> <span class="o">+=</span> <span class="nx">stamp</span><span class="p">.</span><span class="nx">fromISOString</span><span class="p">(</span><span class="s2">&quot;2008-10-17T00:00:00Z&quot;</span><span class="p">).</span><span class="nx">toGMTString</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;&lt;br/&gt;&quot;</span><span class="p">;</span>
+    <span class="c1">// note toGMTString output is implementation-dependent</span>
+
+    <span class="nx">output</span> <span class="o">+=</span> <span class="nx">stamp</span><span class="p">.</span><span class="nx">fromISOString</span><span class="p">(</span><span class="s2">&quot;T23:59:59.999-04:00&quot;</span><span class="p">,</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">2008</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">17</span><span class="p">)).</span><span class="nx">toGMTString</span><span class="p">();</span>
+
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">output</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/date/stamp&quot;, &quot;dojo/dom&quot;, &quot;dojo/domReady!&quot;],
+function(stamp, dom){
+    var date1 = new Date(2008, 9, 17);
+    date1.setUTCHours(0);
+
+    var output = stamp.toISOString(date1, {zulu: true}) + &quot;&lt;/br&gt;&quot;;
+
+    output += stamp.toISOString(date1, {selector: 'date'}) + &quot;&lt;br/&gt;&quot;;
+
+    output += stamp.fromISOString(&quot;2008-10-17T00:00:00Z&quot;).toGMTString() + &quot;&lt;br/&gt;&quot;;
+    // note toGMTString output is implementation-dependent
+
+    output += stamp.fromISOString(&quot;T23:59:59.999-04:00&quot;, new Date(2008,9,17)).toGMTString();
+
+    dom.byId(&quot;output&quot;).innerHTML = output;
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;strong&gt;</span>Output:<span class="nt">&lt;/strong&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;strong&gt;Output:&lt;/strong&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id8">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../date.html#dojo-date"><span>dojo/date</span></a></li>
+<li><a class="reference internal" href="locale.html#dojo-date-locale"><span>dojo/date/locale</span></a></li>
+<li><a class="reference external" href="http://wikipedia.org/wiki/ISO_8601">ISO-8601</a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

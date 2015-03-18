@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/store &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/store</a><ul>
+<li><a class="reference internal" href="#api">API</a><ul>
+<li><a class="reference internal" href="#methods">Methods</a></li>
+<li><a class="reference internal" href="#properties">Properties</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#returned-objects">Returned Objects</a></li>
+<li><a class="reference internal" href="#observing-result-sets">Observing Result Sets</a></li>
+<li><a class="reference internal" href="#modules">Modules</a></li>
+<li><a class="reference internal" href="#design">Design</a><ul>
+<li><a class="reference internal" href="#notification-rational">Notification Rational</a></li>
+<li><a class="reference internal" href="#design-goals">Design Goals</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-store">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/store</a><a class="headerlink" href="#dojo-store" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">1.6.0</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-store" id="id2">dojo/store</a><ul>
+<li><a class="reference internal" href="#api" id="id3">API</a></li>
+<li><a class="reference internal" href="#returned-objects" id="id4">Returned Objects</a></li>
+<li><a class="reference internal" href="#observing-result-sets" id="id5">Observing Result Sets</a></li>
+<li><a class="reference internal" href="#modules" id="id6">Modules</a></li>
+<li><a class="reference internal" href="#design" id="id7">Design</a></li>
+<li><a class="reference internal" href="#see-also" id="id8">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/store</strong> is an uniform interface for the access and manipulation of stored data. <code class="docutils literal"><span class="pre">dojo/store</span></code> is intended to
+supersede, integrate, and improve upon the <a class="reference internal" href="data.html#dojo-data"><span>dojo/data</span></a> API and <a class="reference internal" href="../dojox/storage.html#dojox-storage"><span>dojox/storage</span></a>
+API with a simple, easy to implement and extend API, based on
+<a class="reference external" href="http://www.w3.org/TR/IndexedDB/#object-store-sync">HTML5/W3C&#8217;s IndexedDB object store API</a>. The <code class="docutils literal"><span class="pre">dojox/storage</span></code>
+API is already a compatible subset of the Dojo object store API.</p>
+<div class="section" id="api">
+<h2><a class="toc-backref" href="#id3">API</a><a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="methods">
+<h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
+<p>Every method in the API is optional, it&#8217;s presence indicating support for that feature. Every method can return a promise (except where noted otherwise) to represent an asynchronous completion of the action. (Some of these are still wavering a bit in W3C&#8217;s object store API):</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="60%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>get(id)</td>
+<td>Retrieves an object by its identifier, returning the object.</td>
+</tr>
+<tr class="row-odd"><td>query(query, <em>options</em>)</td>
+<td><p class="first">Queries the store using the provided query.</p>
+<p>The returned value should be an array or a promise with <code class="docutils literal"><span class="pre">forEach()</span></code>
+, <code class="docutils literal"><span class="pre">map()</span></code>, <code class="docutils literal"><span class="pre">filter()</span></code>, <code class="docutils literal"><span class="pre">reduce()</span></code>, and
+optional <code class="docutils literal"><span class="pre">close()</span></code> methods, and a <code class="docutils literal"><span class="pre">total</span></code>
+property (the <code class="docutils literal"><span class="pre">total</span></code> may be a promise). The <code class="docutils literal"><span class="pre">options</span></code> parameter
+may include the following properties (all are optional):</p>
+<ul class="last">
+<li><p class="first"><code class="docutils literal"><span class="pre">start</span></code> - Starting offset</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">count</span></code> - Number of objects to return</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">sort</span></code> - This is an array of sort definitions, where each
+definition contains an <code class="docutils literal"><span class="pre">attribute</span></code> property indicating which
+property to sort on and a <code class="docutils literal"><span class="pre">descending</span></code> property indicating the
+direction of sort.</p>
+<p>For example: <code class="docutils literal"><span class="pre">[{attribute:&quot;price,</span> <span class="pre">descending:</span> <span class="pre">true}]</span></code>. If the
+sort parameter is omitted, then the natural order of the store may
+be applied if there is a natural order.</p>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td>put(object, <em>options</em>)</td>
+<td><p class="first">Saves the given object. The (optional) <code class="docutils literal"><span class="pre">options</span></code> argument may be
+an object with the following properties (each of these is optional
+and advisory, stores are not required to implement or respond to
+each property):</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">overwrite</span></code> - If this is provided as a boolean it indicates that
+the object should or should not overwrite an existing object. A
+value of <code class="docutils literal"><span class="pre">true</span></code> indicates that a new object should not be
+created, the operation should update an existing object. A value
+of <code class="docutils literal"><span class="pre">false</span></code> indicates that an existing object should not be
+updated, a new object should be created (which is the same as an
+<code class="docutils literal"><span class="pre">add()</span></code> operation). When this property is not provided, either
+an update or creation is acceptable.</li>
+<li><code class="docutils literal"><span class="pre">id</span></code> - Indicates the identity of the object if a new object is
+created.</li>
+<li><code class="docutils literal"><span class="pre">before</span></code> - If the collection of objects in the store has a
+natural ordering, this indicates that the created or updated
+object should be placed before the object specified by the value
+of this property. A value of null indicates that the object should
+be last.</li>
+<li><code class="docutils literal"><span class="pre">parent</span></code> - If the store is hierarchical (with single parenting)
+this property indicates the new parent of the created or updated
+object.</li>
+<li><code class="docutils literal"><span class="pre">oldParent</span></code> - This can be used in conjunction with <code class="docutils literal"><span class="pre">parent</span></code>
+to indicate the old parent of an updated child object (so that a
+previous link can be removed).</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td>add(object, <em>options</em>)</td>
+<td>Create a new object. The (optional) <code class="docutils literal"><span class="pre">options</span></code> argument is defined
+the same as <code class="docutils literal"><span class="pre">put()</span></code> (except <code class="docutils literal"><span class="pre">overwrite</span></code> is assumed to be
+<code class="docutils literal"><span class="pre">false</span></code>).</td>
+</tr>
+<tr class="row-even"><td>remove(id)</td>
+<td>Delete the object by <code class="docutils literal"><span class="pre">id</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>getIdentity(object)</td>
+<td>Returns an <code class="docutils literal"><span class="pre">object</span></code>&#8216;s identity. This must always execute synchronously.</td>
+</tr>
+<tr class="row-even"><td>queryEngine(query, <em>options</em>)</td>
+<td>This takes a query and query options and returns a function that
+can execute the provided <code class="docutils literal"><span class="pre">query</span></code> on a JavaScript array. The
+<code class="docutils literal"><span class="pre">queryEngine</span></code> may be replace to provide more sophisticated
+querying capabilities. The returned query function may have a
+<code class="docutils literal"><span class="pre">matches</span></code> property that can be used to determine if an object
+matches the query.</td>
+</tr>
+<tr class="row-odd"><td>transaction()</td>
+<td><p class="first">Starts a transaction and returns a transaction object.</p>
+<p>The transaction object should include:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">commit()</span></code> - Commits all the changes that took place during the
+transaction.</li>
+<li><code class="docutils literal"><span class="pre">abort()</span></code> - Aborts all the changes that took place during the
+transaction.</li>
+</ul>
+<p class="last">Note that a store user might not call <code class="docutils literal"><span class="pre">transaction()</span></code> prior to
+using <code class="docutils literal"><span class="pre">put</span></code>, <code class="docutils literal"><span class="pre">delete</span></code>, etc. in which case these operations
+effectively could be thought of as &#8220;auto-commit&#8221; style actions. Also
+note that within a transaction, notification events may still occur
+immediately, rather after a commit. Consequently, aborting a
+transaction may require sending new notification events to notify of
+the rollback of the data.</p>
+</td>
+</tr>
+<tr class="row-even"><td>getChildren(object, <em>options</em>)</td>
+<td>Returns the children of an object. The <code class="docutils literal"><span class="pre">options</span></code> parameter may
+include the same properties as <code class="docutils literal"><span class="pre">query()</span></code> options.</td>
+</tr>
+<tr class="row-odd"><td>getMetadata(object)</td>
+<td><p class="first">Returns any metadata about the object.</p>
+<p class="last">This may include attribution, cache directives, history, or version
+information.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="properties">
+<h3>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="14%" />
+<col width="77%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>idProperty</td>
+<td>String</td>
+<td>Name of the property to use as the identifier</td>
+</tr>
+<tr class="row-odd"><td>data</td>
+<td>Array of Objects</td>
+<td>If the store has a collection of cached objects, it can make this available in this
+property. This is included so an additional layer could add referential integrity
+cleanup on object deletion (which is a pain to implement).</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="returned-objects">
+<h2><a class="toc-backref" href="#id4">Returned Objects</a><a class="headerlink" href="#returned-objects" title="Permalink to this headline">¶</a></h2>
+<p>Objects returned from a <code class="docutils literal"><span class="pre">dojo/store</span></code> should primarily be treated as normal hash objects and have standard JavaScript
+properties to access their data and modify their data. However, methods may also be defined on the objects returned by
+the store (once again, they are optional). These methods should <strong>not</strong> be the object&#8217;s own properties (
+<code class="docutils literal"><span class="pre">hasOwnProperty(methodName)</span></code> should return <code class="docutils literal"><span class="pre">false</span></code>), but rather should be inherited from one of the object&#8217;s
+prototypes). This is to ensure ease of enumeration of data properties.  In particular, a store may choose to return
+objects that are instances of <a class="reference internal" href="Stateful.html#dojo-stateful"><span>dojo/Stateful</span></a> (although none of the core stores do this).</p>
+</div>
+<div class="section" id="observing-result-sets">
+<h2><a class="toc-backref" href="#id5">Observing Result Sets</a><a class="headerlink" href="#observing-result-sets" title="Permalink to this headline">¶</a></h2>
+<p>When a store is wrapped with <code class="docutils literal"><span class="pre">dojo/store/Observable</span></code>, one can listen for changes in data through the observe method on the result set (the object returned from a query). The observe method has the following signature:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="48%" />
+<col width="52%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>observe(listener, includeObjectUpdates)</td>
+<td><p class="first">The listener function is called with following arguments:</p>
+<div class="highlight"><pre><span class="nx">listener</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">removedFrom</span><span class="p">,</span> <span class="nx">insertedInto</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">listener(object, removedFrom, insertedInto);</textarea></div><ul class="simple">
+<li>The <code class="docutils literal"><span class="pre">object</span></code> parameter indicates the object that was
+create, modified, or deleted.</li>
+<li>The <code class="docutils literal"><span class="pre">removedFrom</span></code> parameter indicates the index in the
+result array where the object used to be. If the value is
+<code class="docutils literal"><span class="pre">-1</span></code>, then the object is an addition to this result set
+(due to a new object being created, or changed such that
+it is a part of the result set).</li>
+<li>The <code class="docutils literal"><span class="pre">insertedInto</span></code> parameter indicates the index in the
+result array where the object should be now. If the value
+is <code class="docutils literal"><span class="pre">-1</span></code>, then the object is a removal from this result
+set (due to an object being deleted, or changed such that
+it is not a part of the result set).</li>
+</ul>
+<p class="last">The <code class="docutils literal"><span class="pre">includeObjectUpdates</span></code> argument indicates whether or
+not to include updates to objects that don&#8217;t affect the
+inclusion or order of the changed object. If this is not set
+to true, object updates that don&#8217;t result in addition,
+removal, or change in order won&#8217;t trigger the listener.</p>
+</td>
+</tr>
+<tr class="row-odd"><td>close()</td>
+<td>When <code class="docutils literal"><span class="pre">close()</span></code> is called on a result set, notifications
+will no longer be fired.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="modules">
+<h2><a class="toc-backref" href="#id6">Modules</a><a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<p>The following stores, store wrappers, and utilities are part of Dojo Core. These provide a solid base of good modular
+components for using stores and building more complex store technology. The following two core stores based on the
+typical pattern of in-memory and server-based data stores:</p>
+<ul>
+<li><p class="first"><a class="reference internal" href="store/Memory.html#dojo-store-memory"><span>dojo/store/Memory</span></a></p>
+<p>An in-memory object store that queries, modifies, and accesses client-side in-memory data. This can be created with
+a simple array of JavaScript objects.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="store/JsonRest.html#dojo-store-jsonrest"><span>dojo/store/JsonRest</span></a></p>
+<p>An server-oriented JSON/REST object store that queries, modifies, and accesses data through RESTful HTTP requests.
+This would fulfill the conceptual role of <a class="reference internal" href="../dojox/data/JsonRestStore.html#dojox-data-jsonreststore"><span>dojox/data/JsonRestStore</span></a>,
+<a class="reference internal" href="../dojox/data/QueryReadStore.html#dojox-data-queryreadstore"><span>dojox/data/QueryReadStore</span></a> and
+<a class="reference internal" href="../dojox/data/ServiceStore.html#dojox-data-servicestore"><span>dojox/data/ServiceStore</span></a>.</p>
+</li>
+</ul>
+<p>There is also an adapter store for using legacy <code class="docutils literal"><span class="pre">dojo/data</span></code> stores with the new API:</p>
+<ul class="simple">
+<li><a class="reference internal" href="store/DataStore.html#dojo-store-datastore"><span>dojo/store/DataStore</span></a></li>
+</ul>
+<p>And there is an adapter that allows you to use a new <code class="docutils literal"><span class="pre">dojo/store</span></code> with the old <code class="docutils literal"><span class="pre">dojo/data</span></code> API:</p>
+<ul class="simple">
+<li><a class="reference internal" href="data/ObjectStore.html#dojo-data-objectstore"><span>dojo/data/ObjectStore</span></a></li>
+</ul>
+<p>We are also moving in the direction of providing composable functionality by providing store &#8220;wrappers&#8221; or store
+&#8220;middleware&#8221; that takes a store and adds functionality. Several key store wrappers:</p>
+<ul>
+<li><p class="first"><a class="reference internal" href="store/Observable.html#dojo-store-observable"><span>dojo/store/Observable</span></a></p>
+<p>This augments a store with the data monitoring capability, adding a observe method on the query result sets that
+notifies of data changes.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="store/Cache.html#dojo-store-cache"><span>dojo/store/Cache</span></a></p>
+<p>Adds caching capability to the store. This eliminates the need for a base store to deal with caching concerns.</p>
+</li>
+</ul>
+<p>With this one can easily mix and match wrappers and base stores to achieve various types of functionality. A common
+pattern may be:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/store/Memory&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/store/Observable&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Memory</span><span class="p">,</span> <span class="nx">Observable</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="nx">Observable</span><span class="p">(</span><span class="k">new</span> <span class="nx">Memory</span><span class="p">({</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">someData</span> <span class="p">}));</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/store/Memory&quot;, &quot;dojo/store/Observable&quot;], function(Memory, Observable){
+  var store = Observable(new Memory({ data: someData }));
+});</textarea></div><p>There are also a couple of utility modules:</p>
+<ul>
+<li><p class="first"><a class="reference internal" href="store/util/SimpleQueryEngine.html#dojo-store-util-simplequeryengine"><span>dojo/store/util/SimpleQueryEngine</span></a></p>
+<p>This is basic query engine that provides simple object hash style filtering or function based filtering.</p>
+</li>
+<li><p class="first"><a class="reference internal" href="store/util/QueryResults.html#dojo-store-util-queryresults"><span>dojo/store/util/QueryResults</span></a></p>
+<p>This utility will take an array or a promise for an array and return a result set object with all the standard
+iterative methods that should be available on a result set (<code class="docutils literal"><span class="pre">forEach()</span></code>, <code class="docutils literal"><span class="pre">map()</span></code>, and <code class="docutils literal"><span class="pre">filter()</span></code>).</p>
+</li>
+</ul>
+</div>
+<div class="section" id="design">
+<h2><a class="toc-backref" href="#id7">Design</a><a class="headerlink" href="#design" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="notification-rational">
+<h3>Notification Rational<a class="headerlink" href="#notification-rational" title="Permalink to this headline">¶</a></h3>
+<p>The purpose of using this style of notifications in <code class="docutils literal"><span class="pre">dojo/store</span></code> (instead of the <code class="docutils literal"><span class="pre">dojo/data</span></code> notification style of
+events on the store) is to deal with several problems that have been observed with <code class="docutils literal"><span class="pre">dojo/data</span></code> notifications. First,
+it neglects that fact that most of the time users only want to listen to events from the queried subset of the items
+in the store, and that subscriptions can be costly. While subscriptions are usually cheap on the client side, <em>carte
+blanche</em> subscriptions can actually be very expensive on the server side (with Comet-style notifications), forcing the
+server to send excessive events and then forcing the client to filter them.</p>
+<p>Also, this subscription deals with an issue that has been experienced with <code class="docutils literal"><span class="pre">dojo/data</span></code> in that often new items and
+item changes can affect query results in ways that the widget can not understand because the queries are opaque to the
+widget. For example with a grid, all <code class="docutils literal"><span class="pre">onNew</span></code> items result in an addition of a row, regardless of whether they are a
+new item and actually match the query. The grid itself knows nothing (and should know nothing) of how queries work,
+and so it can&#8217;t filter these events. By putting notifications on the query action itself, notifications can be stated
+in terms of how they affect a given query result set, which is what the widget ultimately cares about.</p>
+<p>Different event names have been used to be clear that the semantics are different than the <code class="docutils literal"><span class="pre">dojo/data</span></code> notifications.
+The distinctive events are defined by how they affect the query result set (not whether they have come into or gone
+out of existence by some definition of existence). Also, the <code class="docutils literal"><span class="pre">onUpdate()</span></code> applies to an entire object, not per
+property modifications.</p>
+</div>
+<div class="section" id="design-goals">
+<h3>Design Goals<a class="headerlink" href="#design-goals" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>It should be very easy to for people to implement their own object stores, essentially one should easily be able to
+write something up handle the communication to their server without having to deal with much more than writing the
+<a class="reference internal" href="request.html#dojo-request"><span>dojo/request</span></a> calls. Higher level functionality can be built on this. A key to this strategy is
+a very simple API, that requires a minimal amount of required complexity to implement.</li>
+<li>Maintain the same level of functionality that <a class="reference internal" href="data.html#dojo-data"><span>dojo/data</span></a> provided. While there are very few core
+parts of the object store API that MUST be implemented, there are numerous parts that can be implemented to
+incrementally add functionality. Optional functionality is determined through feature detection (checking to see if
+a method exists). Having lots of optional features does shift some complexity from the store implementors to the
+anyone who wishes to use stores in a completely generic fashion. However, it is believed that the widgets are the
+primary generic store users, and that most application developers are working with a known store, with a known set
+of implemented features. In particular, if they know they are using a sync store, the interaction with the store
+becomes extremely simple. Every method should be optional, and the presence of the method indicates support for that
+feature. However, practically one would at least need to implement <code class="docutils literal"><span class="pre">get()</span></code> and <code class="docutils literal"><span class="pre">query()</span></code>, a store without read
+capabilities is pretty useless, but that should be self-evident.</li>
+<li>Every method can be implemented sync or async. The interface is the exactly the same for sync and async except that
+async returns promises/Deferreds instead of plain values. The interface requires no other knowledge of specific
+callbacks to operate.</li>
+<li>Objects returned from the data store (via <code class="docutils literal"><span class="pre">query()</span></code> or <code class="docutils literal"><span class="pre">get()</span></code>) should be plain JavaScript objects whose
+properties can be typically accessed and modified through standard property access.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id8">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://www.sitepen.com/blog/2011/02/15/dojo-object-stores/">SitePen Blog Post on Object Stores</a></li>
+<li><a class="reference external" href="http://dojotoolkit.org/documentation/tutorials/1.7/intro_dojo_store/">Dojo Store Tutorial</a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

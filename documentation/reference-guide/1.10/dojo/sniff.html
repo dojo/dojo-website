@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/sniff &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../index.html">Startpage</a></li>
+          <li><a href="index.html">Dojo</a></li>
+          <li><a href="../dijit/index.html">Dijit</a></li>
+          <li><a href="../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/sniff</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-sniff">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/sniff</a><a class="headerlink" href="#dojo-sniff" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Peter Higgins, Ben Lowery</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-sniff" id="id2">dojo/sniff</a><ul>
+<li><a class="reference internal" href="#usage" id="id3">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id4">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id5">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>You should always try to use feature detection (See general overview
+<a class="reference external" href="http://dev.opera.com/articles/view/using-capability-detection/">Using Capability Detection</a>)
+whenever possible to write forward-compatible code branches.
+The <a class="reference external" href="dojo/has">dojo/has</a> API is designed to help in this endeavor.</p>
+<p>For when feature detection is not an option, Dojo provides user agent sniffing code in the module,
+<code class="docutils literal"><span class="pre">dojo/sniff</span></code>.  The sniff module augments the basic set of has() tests (see <a class="reference internal" href="has.html#dojo-has"><span>dojo/has</span></a>)
+with additional user agent based tests, so you can use the base has() api to test for browser environment
+and versions, just like you do for other features.
+Using this approach in conjunction with an optimizing compiler at build time, it is possible to optimize
+out unwanted code paths for specific browsers. This
+reduces the size and increases the performance of your code.</p>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id3">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The module can be used in two ways, because the module adds features to <code class="docutils literal"><span class="pre">dojo/has</span></code> and returns <code class="docutils literal"><span class="pre">dojo/has</span></code> as
+its return value. Both examples below are functionally equivalent:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/sniff&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">has</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">has</span><span class="p">(</span><span class="s2">&quot;ie&quot;</span><span class="p">){</span>
+    <span class="c1">// Do something specific for IE.</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/sniff&quot;], function(has){
+  if(has(&quot;ie&quot;){
+    // Do something specific for IE.
+  });
+});</textarea></div><div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/has&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/sniff&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">has</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">has</span><span class="p">(</span><span class="s2">&quot;ie&quot;</span><span class="p">)){</span>
+    <span class="c1">// Do something specific for IE.</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/has&quot;, &quot;dojo/sniff&quot;], function(has){
+  if(has(&quot;ie&quot;)){
+    // Do something specific for IE.
+  }
+});</textarea></div><p>The module defines the following has-features:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Feature</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">air</span></code></td>
+<td>Detects Adobe AIR Environments</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">khtml</span></code></td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">webkit</span></code></td>
+<td>Detects Webkit based environments 1.3+</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">mac</span></code></td>
+<td>Detects if the platform is Mac OSX</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">quirks</span></code></td>
+<td>If the browser is running in &#8220;quirks&#8221; mode</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">ios</span></code></td>
+<td>Detects iOS devices</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">android</span></code></td>
+<td>Detects Android devices</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">bb</span></code></td>
+<td>Detects BlackBerry devices</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">chrome</span></code></td>
+<td>Detects Google Chrome 1.3+ browser</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">safari</span></code></td>
+<td>Detects Safari browser</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">opera</span></code></td>
+<td>Detects Opera browser</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">mozilla</span></code></td>
+<td>Detects Mozilla browser</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">ff</span></code></td>
+<td>Detects Firefox browser.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">ie</span></code></td>
+<td>Detects Internet Explorer browser.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">wii</span></code></td>
+<td>Detects if running on a Nintendo Wii</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">svg</span></code></td>
+<td>Detects SVG support</td>
+</tr>
+</tbody>
+</table>
+<p>Each feature will only return a truthy value if the specified browser is being used.  For example if you are using
+Internet Explorer <code class="docutils literal"><span class="pre">has(&quot;ie&quot;)</span></code> will only return a truthy value, where as <code class="docutils literal"><span class="pre">has(&quot;chrome&quot;)</span></code> will return false.</p>
+<p>The value returned, where appropriate, will provide the version number of the browser, so specific code checks can be
+done for versions. For example:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/has&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/sniff&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">has</span><span class="p">){</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">has</span><span class="p">(</span><span class="s2">&quot;ie&quot;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">6</span><span class="p">){</span> <span class="c1">// only IE6 and below</span>
+    <span class="c1">// ...</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span><span class="p">(</span><span class="nx">has</span><span class="p">(</span><span class="s2">&quot;ff&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">){</span> <span class="c1">// only Firefox 2.x and lower</span>
+    <span class="c1">// ...</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span><span class="p">(</span><span class="nx">has</span><span class="p">(</span><span class="s2">&quot;ie&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span><span class="p">){</span> <span class="c1">// only IE7</span>
+    <span class="c1">// ...</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/has&quot;, &quot;dojo/sniff&quot;], function(has){
+  if(has(&quot;ie&quot;) &lt;= 6){ // only IE6 and below
+    // ...
+  }
+
+  if(has(&quot;ff&quot;) &lt; 3){ // only Firefox 2.x and lower
+    // ...
+  }
+
+  if(has(&quot;ie&quot;) == 7){ // only IE7
+    // ...
+  }
+});</textarea></div></div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'async: true, parseOnLoad: false', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>Basic browser detection example.</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/has&quot;</span><span class="p">,</span> <span class="c1">// alias has API to &quot;has&quot;</span>
+    <span class="s2">&quot;dojo/_base/array&quot;</span><span class="p">,</span> <span class="c1">// alias array API to &quot;arrayUtil&quot;</span>
+    <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="c1">// alias DOM API to &quot;dom&quot;</span>
+    <span class="s2">&quot;dojo/sniff&quot;</span><span class="p">,</span> <span class="c1">// load browser-related has features</span>
+    <span class="s2">&quot;dojo/domReady!&quot;</span> <span class="c1">// wait until DOM is loaded</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">has</span><span class="p">,</span> <span class="nx">array</span><span class="p">,</span> <span class="nx">dom</span><span class="p">){</span>
+
+  <span class="kd">function</span> <span class="nx">makeFancyAnswer</span><span class="p">(</span><span class="nx">who</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">has</span><span class="p">(</span><span class="nx">who</span><span class="p">)){</span>
+      <span class="k">return</span> <span class="s2">&quot;Yes, it&#39;s version &quot;</span> <span class="o">+</span> <span class="nx">has</span><span class="p">(</span><span class="nx">who</span><span class="p">);</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+      <span class="k">return</span> <span class="s2">&quot;No&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">makeAtLeastAnswer</span><span class="p">(</span><span class="nx">who</span><span class="p">,</span> <span class="nx">version</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">answer</span> <span class="o">=</span> <span class="p">(</span><span class="nx">has</span><span class="p">(</span><span class="nx">who</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nx">version</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&quot;Yes&quot;</span> <span class="o">:</span> <span class="s2">&quot;No&quot;</span><span class="p">;</span>
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;isAtLeast&quot;</span> <span class="o">+</span> <span class="nx">who</span> <span class="o">+</span> <span class="nx">version</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">answer</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">array</span><span class="p">.</span><span class="nx">forEach</span><span class="p">([</span><span class="s2">&quot;ie&quot;</span><span class="p">,</span> <span class="s2">&quot;mozilla&quot;</span><span class="p">,</span> <span class="s2">&quot;ff&quot;</span><span class="p">,</span> <span class="s2">&quot;opera&quot;</span><span class="p">,</span> <span class="s2">&quot;webkit&quot;</span><span class="p">,</span> <span class="s2">&quot;chrome&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+    <span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;answerIs&quot;</span> <span class="o">+</span> <span class="nx">n</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">makeFancyAnswer</span><span class="p">(</span><span class="nx">n</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">makeAtLeastAnswer</span><span class="p">(</span><span class="s2">&quot;ie&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">);</span>
+  <span class="nx">makeAtLeastAnswer</span><span class="p">(</span><span class="s2">&quot;ff&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+  <span class="nx">makeAtLeastAnswer</span><span class="p">(</span><span class="s2">&quot;opera&quot;</span><span class="p">,</span> <span class="mi">9</span><span class="p">);</span>
+
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/has&quot;, // alias has API to &quot;has&quot;
+    &quot;dojo/_base/array&quot;, // alias array API to &quot;arrayUtil&quot;
+    &quot;dojo/dom&quot;, // alias DOM API to &quot;dom&quot;
+    &quot;dojo/sniff&quot;, // load browser-related has features
+    &quot;dojo/domReady!&quot; // wait until DOM is loaded
+], function(has, array, dom){
+
+  function makeFancyAnswer(who){
+    if(has(who)){
+      return &quot;Yes, it's version &quot; + has(who);
+    }else{
+      return &quot;No&quot;;
+    }
+  }
+
+  function makeAtLeastAnswer(who, version){
+    var answer = (has(who) &gt;= version) ? &quot;Yes&quot; : &quot;No&quot;;
+    dom.byId(&quot;isAtLeast&quot; + who + version).innerHTML = answer;
+  }
+
+  array.forEach([&quot;ie&quot;, &quot;mozilla&quot;, &quot;ff&quot;, &quot;opera&quot;, &quot;webkit&quot;, &quot;chrome&quot;], function(n){
+    dom.byId(&quot;answerIs&quot; + n).innerHTML = makeFancyAnswer(n);
+  });
+
+  makeAtLeastAnswer(&quot;ie&quot;, 7);
+  makeAtLeastAnswer(&quot;ff&quot;, 3);
+  makeAtLeastAnswer(&quot;opera&quot;, 9);
+
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;dl&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>Is this Internet Explorer?<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd</span> <span class="na">id=</span><span class="s">&quot;answerIsie&quot;</span><span class="nt">&gt;&lt;/dd&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>Is this Firefox?<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd</span> <span class="na">id=</span><span class="s">&quot;answerIsff&quot;</span><span class="nt">&gt;&lt;/dd&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>Is this Mozilla?<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd</span> <span class="na">id=</span><span class="s">&quot;answerIsmozilla&quot;</span><span class="nt">&gt;&lt;/dd&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>Is this Opera?<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd</span> <span class="na">id=</span><span class="s">&quot;answerIsopera&quot;</span><span class="nt">&gt;&lt;/dd&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>Is this WebKit? (Dojo 1.3)<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd</span> <span class="na">id=</span><span class="s">&quot;answerIswebkit&quot;</span><span class="nt">&gt;&lt;/dd&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>Is this Chrome? (Dojo 1.3)<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd</span> <span class="na">id=</span><span class="s">&quot;answerIschrome&quot;</span><span class="nt">&gt;&lt;/dd&gt;</span>
+<span class="nt">&lt;/dl&gt;</span>
+<span class="nt">&lt;dl&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>Is this at least IE 7?<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd</span> <span class="na">id=</span><span class="s">&quot;isAtLeastie7&quot;</span><span class="nt">&gt;&lt;/dd&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>Is this at least Firefox 3?<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd</span> <span class="na">id=</span><span class="s">&quot;isAtLeastff3&quot;</span><span class="nt">&gt;&lt;/dd&gt;</span>
+  <span class="nt">&lt;dt&gt;</span>Is this at least Opera 9?<span class="nt">&lt;/dt&gt;</span>
+  <span class="nt">&lt;dd</span> <span class="na">id=</span><span class="s">&quot;isAtLeastopera9&quot;</span><span class="nt">&gt;&lt;/dd&gt;</span>
+<span class="nt">&lt;/dl&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;dl&gt;
+  &lt;dt&gt;Is this Internet Explorer?&lt;/dt&gt;
+  &lt;dd id=&quot;answerIsie&quot;&gt;&lt;/dd&gt;
+  &lt;dt&gt;Is this Firefox?&lt;/dt&gt;
+  &lt;dd id=&quot;answerIsff&quot;&gt;&lt;/dd&gt;
+  &lt;dt&gt;Is this Mozilla?&lt;/dt&gt;
+  &lt;dd id=&quot;answerIsmozilla&quot;&gt;&lt;/dd&gt;
+  &lt;dt&gt;Is this Opera?&lt;/dt&gt;
+  &lt;dd id=&quot;answerIsopera&quot;&gt;&lt;/dd&gt;
+  &lt;dt&gt;Is this WebKit? (Dojo 1.3)&lt;/dt&gt;
+  &lt;dd id=&quot;answerIswebkit&quot;&gt;&lt;/dd&gt;
+  &lt;dt&gt;Is this Chrome? (Dojo 1.3)&lt;/dt&gt;
+  &lt;dd id=&quot;answerIschrome&quot;&gt;&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;dl&gt;
+  &lt;dt&gt;Is this at least IE 7?&lt;/dt&gt;
+  &lt;dd id=&quot;isAtLeastie7&quot;&gt;&lt;/dd&gt;
+  &lt;dt&gt;Is this at least Firefox 3?&lt;/dt&gt;
+  &lt;dd id=&quot;isAtLeastff3&quot;&gt;&lt;/dd&gt;
+  &lt;dt&gt;Is this at least Opera 9?&lt;/dt&gt;
+  &lt;dd id=&quot;isAtLeastopera9&quot;&gt;&lt;/dd&gt;
+&lt;/dl&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id5">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="has.html#dojo-has"><span>dojo/has</span></a> - The main feature detection module of Dojo.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox/mobile/SimpleDialog &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox/mobile/SimpleDialog</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#constructor-parameters">Constructor Parameters</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#declarative-example">Declarative example</a></li>
+<li><a class="reference internal" href="#programmatic-example">Programmatic example</a></li>
+<li><a class="reference internal" href="#mixin-example">Mixin example</a></li>
+<li><a class="reference internal" href="#large-dialog-example-for-tablet">Large dialog example for Tablet</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-mobile-simpledialog">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox/mobile/SimpleDialog</a><a class="headerlink" href="#dojox-mobile-simpledialog" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Yoshiroh Kamiyama</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Developers:</th><td class="field-body">Yoshiroh Kamiyama</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V1.8</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-mobile-simpledialog" id="id2">dojox/mobile/SimpleDialog</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#constructor-parameters" id="id4">Constructor Parameters</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>The dojox/mobile/SimpleDialog widget is a dialog box for mobile. Compared with dijit/Dialog,</dt>
+<dd>its code size is much smaller and its functionality is more limited.</dd>
+</dl>
+<p>When a SimpleDialog is created, it is initially hidden (display=&#8221;none&#8221;). To show it, you must
+get a reference to the widget and call its show() method.</p>
+<p>The contents can be arbitrary HTML, text, or widgets. Note, however, that the widget is i
+nitially hidden. You need to be careful when you place in a SimpleDialog elements that
+cannot be initialized in hidden state.</p>
+<p>After a SimpleDialog is created, its DOM node is moved right under the &lt;body&gt; element
+so that it is positioned correctly at the center of the screen and can be placed over
+the translucent cover that blocks the entire screen.</p>
+<img alt="../../_images/SimpleDialog.png" src="../../_images/SimpleDialog.png" />
+</div>
+<div class="section" id="constructor-parameters">
+<h2><a class="toc-backref" href="#id4">Constructor Parameters</a><a class="headerlink" href="#constructor-parameters" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="7%" />
+<col width="24%" />
+<col width="58%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Parameter</td>
+<td>Type</td>
+<td>Default</td>
+<td>Description</td>
+</tr>
+<tr class="row-even"><td>top</td>
+<td>String</td>
+<td>&#8220;auto&#8221;</td>
+<td>The top edge position of the widget. If &#8220;auto&#8221;, the widget is placed at the
+middle of the screen. Otherwise, the value (ex. &#8220;20px&#8221;) is used as the top style
+of widget&#8217;s domNode.</td>
+</tr>
+<tr class="row-odd"><td>left</td>
+<td>String</td>
+<td>&#8220;auto&#8221;</td>
+<td>The left edge position of the widget. If &#8220;auto&#8221;, the widget is placed at the
+center of the screen. Otherwise, the value (ex. &#8220;20px&#8221;) is used as the left style
+of widget&#8217;s domNode.</td>
+</tr>
+<tr class="row-even"><td>modal</td>
+<td>Boolean</td>
+<td>true</td>
+<td>If true, a translucent cover is added over the entire page to prevent the user
+from interacting with elements on the page.</td>
+</tr>
+<tr class="row-odd"><td>closeButton</td>
+<td>Boolean</td>
+<td>false</td>
+<td>If true, a button to close the dialog box is displayed at the top-right corner.</td>
+</tr>
+<tr class="row-even"><td>closeButtonClass</td>
+<td>String</td>
+<td>&#8220;mblDomButtonSilverCircleRedCross&#8221;</td>
+<td>A class name of a DOM button to be used as a close button.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="declarative-example">
+<h3>Declarative example<a class="headerlink" href="#declarative-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="c1">// Java Script</span>
+<span class="nx">require</span><span class="p">([</span>
+  <span class="s2">&quot;dijit/registry&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dojox/mobile&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dojox/mobile/parser&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dojox/mobile/SimpleDialog&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dojox/mobile/Button&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">registry</span><span class="p">){</span>
+  <span class="nx">show</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dlg</span><span class="p">){</span>
+    <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="nx">dlg</span><span class="p">).</span><span class="nx">show</span><span class="p">();</span>
+  <span class="p">};</span>
+  <span class="nx">hide</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">dlg</span><span class="p">){</span>
+    <span class="nx">registry</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="nx">dlg</span><span class="p">).</span><span class="nx">hide</span><span class="p">();</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">// Java Script
+require([
+  &quot;dijit/registry&quot;,
+  &quot;dojox/mobile&quot;,
+  &quot;dojox/mobile/parser&quot;,
+  &quot;dojox/mobile/SimpleDialog&quot;,
+  &quot;dojox/mobile/Button&quot;
+], function(registry){
+  show = function(dlg){
+    registry.byId(dlg).show();
+  };
+  hide = function(dlg){
+    registry.byId(dlg).hide();
+  };
+});</textarea></div><div class="highlight"><pre><span class="c">/* Style */</span>
+<span class="nc">.mblSimpleDialogButton</span> <span class="p">{</span>
+  <span class="k">margin</span><span class="o">:</span> <span class="m">7px</span> <span class="m">0</span> <span class="m">0</span><span class="p">;</span>
+  <span class="k">width</span><span class="o">:</span> <span class="m">262px</span><span class="p">;</span>
+  <span class="k">font-size</span><span class="o">:</span> <span class="m">17px</span><span class="p">;</span>
+  <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span><span class="p">;</span>
+  <span class="k">opacity</span><span class="o">:</span> <span class="m">0</span><span class="o">.</span><span class="m">95</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.mblSimpleDialogButton2l</span> <span class="p">{</span>
+  <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+  <span class="k">width</span><span class="o">:</span> <span class="m">127px</span><span class="p">;</span>
+  <span class="k">margin</span><span class="o">:</span> <span class="m">7px</span> <span class="m">0</span> <span class="m">0</span><span class="p">;</span>
+  <span class="k">font-size</span><span class="o">:</span> <span class="m">17px</span><span class="p">;</span>
+  <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span><span class="p">;</span>
+  <span class="k">opacity</span><span class="o">:</span> <span class="m">0</span><span class="o">.</span><span class="m">95</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.mblSimpleDialogButton2r</span> <span class="p">{</span>
+  <span class="k">float</span><span class="o">:</span> <span class="k">right</span><span class="p">;</span>
+  <span class="k">width</span><span class="o">:</span> <span class="m">127px</span><span class="p">;</span>
+  <span class="k">margin</span><span class="o">:</span> <span class="m">7px</span> <span class="m">0</span> <span class="m">0</span><span class="p">;</span>
+  <span class="k">font-size</span><span class="o">:</span> <span class="m">17px</span><span class="p">;</span>
+  <span class="k">font-weight</span><span class="o">:</span> <span class="k">bold</span><span class="p">;</span>
+  <span class="k">opacity</span><span class="o">:</span> <span class="m">0</span><span class="o">.</span><span class="m">95</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.mblSimpleDialog</span> <span class="nc">.mblProgressIndicator</span> <span class="p">{</span>
+  <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+  <span class="k">margin</span><span class="o">:</span> <span class="m">14px</span> <span class="m">0</span> <span class="m">7px</span><span class="p">;</span>
+  <span class="k">top</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">/* Style */
+.mblSimpleDialogButton {
+  margin: 7px 0 0;
+  width: 262px;
+  font-size: 17px;
+  font-weight: bold;
+  opacity: 0.95;
+}
+.mblSimpleDialogButton2l {
+  float: left;
+  width: 127px;
+  margin: 7px 0 0;
+  font-size: 17px;
+  font-weight: bold;
+  opacity: 0.95;
+}
+.mblSimpleDialogButton2r {
+  float: right;
+  width: 127px;
+  margin: 7px 0 0;
+  font-size: 17px;
+  font-weight: bold;
+  opacity: 0.95;
+}
+.mblSimpleDialog .mblProgressIndicator {
+  position: relative;
+  margin: 14px 0 7px;
+  top: 0;
+}</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;dlg_message&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/SimpleDialog&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mblSimpleDialogTitle&quot;</span><span class="nt">&gt;</span>Information<span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mblSimpleDialogText&quot;</span><span class="nt">&gt;</span>This is a sample dialog.<span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Button&quot;</span> <span class="na">class=</span><span class="s">&quot;mblSimpleDialogButton&quot;</span>
+          <span class="na">style=</span><span class="s">&quot;width:100px;&quot;</span> <span class="na">onclick=</span><span class="s">&quot;hide(&#39;dlg_message&#39;)&quot;</span><span class="nt">&gt;</span>OK<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;show(&#39;dlg_message&#39;)&quot;</span><span class="nt">&gt;</span>Show Dialog<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;dlg_message&quot; data-dojo-type=&quot;dojox/mobile/SimpleDialog&quot;&gt;
+  &lt;div class=&quot;mblSimpleDialogTitle&quot;&gt;Information&lt;/div&gt;
+  &lt;div class=&quot;mblSimpleDialogText&quot;&gt;This is a sample dialog.&lt;/div&gt;
+  &lt;button data-dojo-type=&quot;dojox/mobile/Button&quot; class=&quot;mblSimpleDialogButton&quot;
+          style=&quot;width:100px;&quot; onclick=&quot;hide('dlg_message')&quot;&gt;OK&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;button onclick=&quot;show('dlg_message')&quot;&gt;Show Dialog&lt;/button&gt;</textarea></div><img alt="../../_images/SimpleDialog-example1.png" src="../../_images/SimpleDialog-example1.png" />
+</div>
+<div class="section" id="programmatic-example">
+<h3>Programmatic example<a class="headerlink" href="#programmatic-example" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span>
+  <span class="s2">&quot;dojo/_base/window&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dojox/mobile/SimpleDialog&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dojox/mobile/ProgressIndicator&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dojox/mobile/Button&quot;</span>
+<span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">win</span><span class="p">,</span> <span class="nx">domConstruct</span><span class="p">,</span> <span class="nx">SimpleDialog</span><span class="p">,</span> <span class="nx">ProgressIndicator</span><span class="p">,</span> <span class="nx">Button</span><span class="p">){</span>
+  <span class="nx">showProgIndDlg</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">piIns</span> <span class="o">=</span> <span class="nx">ProgressIndicator</span><span class="p">.</span><span class="nx">getInstance</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">hideProgIndDlg</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">simpleDlg</span><span class="p">){</span>
+      <span class="nx">piIns</span><span class="p">.</span><span class="nx">stop</span><span class="p">();</span>
+      <span class="nx">simpleDlg</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">dlg</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SimpleDialog</span><span class="p">();</span>
+    <span class="nx">win</span><span class="p">.</span><span class="nx">body</span><span class="p">().</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dlg</span><span class="p">.</span><span class="nx">domNode</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">msgBox</span> <span class="o">=</span> <span class="nx">domConstruct</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span>
+                                     <span class="p">{</span><span class="kr">class</span><span class="o">:</span> <span class="s2">&quot;mblSimpleDialogText&quot;</span><span class="p">,</span>
+                                      <span class="nx">innerHTML</span><span class="o">:</span> <span class="s2">&quot;Processing...&quot;</span><span class="p">},</span>
+                                      <span class="nx">dlg</span><span class="p">.</span><span class="nx">domNode</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">piBox</span> <span class="o">=</span> <span class="nx">domConstruct</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="s2">&quot;div&quot;</span><span class="p">,</span>
+                                    <span class="p">{</span><span class="kr">class</span><span class="o">:</span> <span class="s2">&quot;mblSimpleDialogText&quot;</span><span class="p">},</span>
+                                     <span class="nx">dlg</span><span class="p">.</span><span class="nx">domNode</span><span class="p">);</span>
+    <span class="nx">piBox</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">piIns</span><span class="p">.</span><span class="nx">domNode</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">cancelBtn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Button</span><span class="p">({</span><span class="kr">class</span><span class="o">:</span> <span class="s2">&quot;mblSimpleDialogButton mblRedButton&quot;</span><span class="p">,</span>
+                                <span class="nx">innerHTML</span><span class="o">:</span> <span class="s2">&quot;Cancel&quot;</span><span class="p">});</span>
+    <span class="nx">cancelBtn</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">cancelBtn</span><span class="p">.</span><span class="nx">domNode</span><span class="p">,</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span>
+                      <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span><span class="nx">hideProgIndDlg</span><span class="p">(</span><span class="nx">dlg</span><span class="p">)});</span>
+    <span class="nx">cancelBtn</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="nx">dlg</span><span class="p">.</span><span class="nx">domNode</span><span class="p">);</span>
+    <span class="nx">dlg</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
+    <span class="nx">piIns</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span>
+
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="cm">/*</span>
+<span class="cm">       * Write your lengthy task here. Once finished, hide the dialog:</span>
+<span class="cm">       */</span>
+      <span class="nx">hideProgIndDlg</span><span class="p">(</span><span class="nx">dlg</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">3000</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([
+  &quot;dojo/_base/window&quot;,
+  &quot;dojo/dom-construct&quot;,
+  &quot;dojox/mobile/SimpleDialog&quot;,
+  &quot;dojox/mobile/ProgressIndicator&quot;,
+  &quot;dojox/mobile/Button&quot;
+], function(win, domConstruct, SimpleDialog, ProgressIndicator, Button){
+  showProgIndDlg = function(){
+    var piIns = ProgressIndicator.getInstance();
+    var hideProgIndDlg = function(simpleDlg){
+      piIns.stop();
+      simpleDlg.hide();
+    }
+
+    var dlg = new SimpleDialog();
+    win.body().appendChild(dlg.domNode);
+    var msgBox = domConstruct.create(&quot;div&quot;,
+                                     {class: &quot;mblSimpleDialogText&quot;,
+                                      innerHTML: &quot;Processing...&quot;},
+                                      dlg.domNode);
+    var piBox = domConstruct.create(&quot;div&quot;,
+                                    {class: &quot;mblSimpleDialogText&quot;},
+                                     dlg.domNode);
+    piBox.appendChild(piIns.domNode);
+    var cancelBtn = new Button({class: &quot;mblSimpleDialogButton mblRedButton&quot;,
+                                innerHTML: &quot;Cancel&quot;});
+    cancelBtn.connect(cancelBtn.domNode, &quot;click&quot;,
+                      function(e){hideProgIndDlg(dlg)});
+    cancelBtn.placeAt(dlg.domNode);
+    dlg.show();
+    piIns.start();
+
+    setTimeout(function(){
+      /*
+       * Write your lengthy task here. Once finished, hide the dialog:
+       */
+      hideProgIndDlg(dlg);
+    }, 3000);
+  }
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;showProgIndDlg();&quot;</span><span class="nt">&gt;</span>Show Dialog<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;button onclick=&quot;showProgIndDlg();&quot;&gt;Show Dialog&lt;/button&gt;</textarea></div><img alt="../../_images/SimpleDialog-example2.png" src="../../_images/SimpleDialog-example2.png" />
+</div>
+<div class="section" id="mixin-example">
+<h3>Mixin example<a class="headerlink" href="#mixin-example" title="Permalink to this headline">¶</a></h3>
+<p>This is an example of creating a SimpleDialog from HTML fragment by mixing in dojox/mobile/_ContentPaneMixin using the &#8216;data-dojo-mixins&#8217; attribute.</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;dlg_volume&quot;</span>
+     <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/SimpleDialog&quot;</span>
+     <span class="na">data-dojo-mixins=</span><span class="s">&quot;dojox/mobile/_ContentPaneMixin&quot;</span>
+     <span class="na">data-dojo-props=</span><span class="s">&#39;href:&quot;dialog.html&quot;&#39;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;dlg_volume&quot;
+     data-dojo-type=&quot;dojox/mobile/SimpleDialog&quot;
+     data-dojo-mixins=&quot;dojox/mobile/_ContentPaneMixin&quot;
+     data-dojo-props='href:&quot;dialog.html&quot;'&gt;&lt;/div&gt;</textarea></div><div class="highlight"><pre><span class="c">&lt;!-- dialog.html (HTML fragment file) --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mblSimpleDialogTitle&quot;</span><span class="nt">&gt;</span>Volume<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mblSimpleDialogText&quot;</span><span class="nt">&gt;</span>Ringtone<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;input</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Slider&quot;</span>
+       <span class="na">data-dojo-props=</span><span class="s">&#39;value:&quot;0&quot;, min:&quot;0&quot;, max:&quot;20&quot;, step:&quot;0.1&quot;, type:&quot;range&quot;&#39;</span>
+       <span class="na">style=</span><span class="s">&quot;width:90%;&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mblSimpleDialogText&quot;</span><span class="nt">&gt;</span>Media<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;input</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Slider&quot;</span>
+       <span class="na">data-dojo-props=</span><span class="s">&#39;value:&quot;0&quot;, min:&quot;0&quot;, max:&quot;20&quot;, step:&quot;0.1&quot;, type:&quot;range&quot;&#39;</span>
+       <span class="na">style=</span><span class="s">&quot;width:90%;&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;mblSimpleDialogText&quot;</span><span class="nt">&gt;</span>Alarm<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;input</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Slider&quot;</span>
+       <span class="na">data-dojo-props=</span><span class="s">&#39;value:&quot;0&quot;, min:&quot;0&quot;, max:&quot;20&quot;, step:&quot;0.1&quot;, type:&quot;range&quot;&#39;</span>
+       <span class="na">style=</span><span class="s">&quot;width:90%;&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Button&quot;</span>
+        <span class="na">class=</span><span class="s">&quot;mblSimpleDialogButton2l&quot;</span> <span class="na">onclick=</span><span class="s">&quot;hide(&#39;dlg_volume&#39;)&quot;</span><span class="nt">&gt;</span>OK<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Button&quot;</span>
+        <span class="na">class=</span><span class="s">&quot;mblSimpleDialogButton2r&quot;</span> <span class="na">onclick=</span><span class="s">&quot;hide(&#39;dlg_volume&#39;)&quot;</span><span class="nt">&gt;</span>Cancel<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;!-- dialog.html (HTML fragment file) --&gt;
+&lt;div class=&quot;mblSimpleDialogTitle&quot;&gt;Volume&lt;/div&gt;
+&lt;div class=&quot;mblSimpleDialogText&quot;&gt;Ringtone&lt;/div&gt;
+&lt;input data-dojo-type=&quot;dojox/mobile/Slider&quot;
+       data-dojo-props='value:&quot;0&quot;, min:&quot;0&quot;, max:&quot;20&quot;, step:&quot;0.1&quot;, type:&quot;range&quot;'
+       style=&quot;width:90%;&quot;&gt;
+&lt;div class=&quot;mblSimpleDialogText&quot;&gt;Media&lt;/div&gt;
+&lt;input data-dojo-type=&quot;dojox/mobile/Slider&quot;
+       data-dojo-props='value:&quot;0&quot;, min:&quot;0&quot;, max:&quot;20&quot;, step:&quot;0.1&quot;, type:&quot;range&quot;'
+       style=&quot;width:90%;&quot;&gt;
+&lt;div class=&quot;mblSimpleDialogText&quot;&gt;Alarm&lt;/div&gt;
+&lt;input data-dojo-type=&quot;dojox/mobile/Slider&quot;
+       data-dojo-props='value:&quot;0&quot;, min:&quot;0&quot;, max:&quot;20&quot;, step:&quot;0.1&quot;, type:&quot;range&quot;'
+       style=&quot;width:90%;&quot;&gt;
+&lt;button data-dojo-type=&quot;dojox/mobile/Button&quot;
+        class=&quot;mblSimpleDialogButton2l&quot; onclick=&quot;hide('dlg_volume')&quot;&gt;OK&lt;/button&gt;
+&lt;button data-dojo-type=&quot;dojox/mobile/Button&quot;
+        class=&quot;mblSimpleDialogButton2r&quot; onclick=&quot;hide('dlg_volume')&quot;&gt;Cancel&lt;/button&gt;</textarea></div><img alt="../../_images/SimpleDialog-example3.png" src="../../_images/SimpleDialog-example3.png" />
+</div>
+<div class="section" id="large-dialog-example-for-tablet">
+<h3>Large dialog example for Tablet<a class="headerlink" href="#large-dialog-example-for-tablet" title="Permalink to this headline">¶</a></h3>
+<div class="highlight"><pre><span class="c">/* Style */</span>
+<span class="nf">#dlg1</span> <span class="p">{</span>
+  <span class="k">top</span><span class="o">:</span> <span class="m">25%</span><span class="p">;</span>
+  <span class="k">left</span><span class="o">:</span> <span class="m">25%</span><span class="p">;</span>
+  <span class="k">width</span><span class="o">:</span> <span class="m">550px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#dlg1</span> <span class="nt">INPUT</span><span class="o">,</span> <span class="nf">#dlg1</span> <span class="nt">TEXTAREA</span> <span class="p">{</span>
+  <span class="k">background-color</span><span class="o">:</span> <span class="m">#000000</span><span class="p">;</span>
+  <span class="k">color</span><span class="o">:</span> <span class="m">#ffffff</span><span class="p">;</span>
+  <span class="k">width</span><span class="o">:</span> <span class="m">95%</span><span class="p">;</span>
+  <span class="k">font-size</span><span class="o">:</span> <span class="m">17px</span><span class="p">;</span>
+  <span class="k">margin</span><span class="o">:</span> <span class="m">4px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#dlg1</span> <span class="nt">TEXTAREA</span> <span class="p">{</span>
+  <span class="k">height</span><span class="o">:</span> <span class="m">160px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nc">.dlgTitle</span> <span class="p">{</span>
+  <span class="k">font-family</span><span class="o">:</span> <span class="n">Helvetica</span><span class="p">;</span>
+  <span class="k">font-size</span><span class="o">:</span> <span class="m">17px</span><span class="p">;</span>
+  <span class="k">margin</span><span class="o">:</span> <span class="m">14px</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">/* Style */
+#dlg1 {
+  top: 25%;
+  left: 25%;
+  width: 550px;
+}
+#dlg1 INPUT, #dlg1 TEXTAREA {
+  background-color: #000000;
+  color: #ffffff;
+  width: 95%;
+  font-size: 17px;
+  margin: 4px;
+}
+#dlg1 TEXTAREA {
+  height: 160px;
+}
+.dlgTitle {
+  font-family: Helvetica;
+  font-size: 17px;
+  margin: 14px;
+}</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;dlg1&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/SimpleDialog&quot;</span> <span class="na">data-dojo-props=</span><span class="s">&#39;closeButton:true&#39;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;dlgTitle&quot;</span><span class="nt">&gt;</span>Account Information
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">&quot;btn1&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/Button&quot;</span>
+            <span class="na">class=</span><span class="s">&quot;mblBlueButton&quot;</span> <span class="na">style=</span><span class="s">&quot;margin-top:-5px;width:60px;float:right;&quot;</span><span class="nt">&gt;</span>Edit<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+  <span class="nt">&lt;hr/&gt;</span>
+  <span class="nt">&lt;table</span> <span class="na">style=</span><span class="s">&quot;width:100%&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;tr&gt;</span>
+      <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">&quot;width:250px&quot;</span><span class="nt">&gt;&lt;img</span> <span class="na">alt=</span><span class="s">&quot;&quot;</span> <span class="na">src=</span><span class="s">&quot;images/pic1.jpg&quot;</span> <span class="na">width=</span><span class="s">&quot;230&quot;</span> <span class="na">height=</span><span class="s">&quot;230&quot;</span><span class="nt">&gt;&lt;/td&gt;</span>
+      <span class="nt">&lt;td</span> <span class="na">style=</span><span class="s">&quot;vertical-align:top&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/TextBox&quot;</span> <span class="na">value=</span><span class="s">&quot;Kirena Kobe&quot;</span> <span class="na">readOnly=</span><span class="s">&quot;readOnly&quot;</span><span class="nt">&gt;&lt;br&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/TextBox&quot;</span> <span class="na">value=</span><span class="s">&quot;123-456-7891&quot;</span><span class="nt">&gt;&lt;br&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox/mobile/TextBox&quot;</span> <span class="na">value=</span><span class="s">&quot;kkobe@acme.com&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;/td&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;tr&gt;</span>
+      <span class="nt">&lt;td</span> <span class="na">colspan=</span><span class="s">&quot;2&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;textarea&gt;</span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.<span class="nt">&lt;/textarea&gt;&lt;/td&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+  <span class="nt">&lt;/table&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;dlg1&quot; data-dojo-type=&quot;dojox/mobile/SimpleDialog&quot; data-dojo-props='closeButton:true'&gt;
+  &lt;div class=&quot;dlgTitle&quot;&gt;Account Information
+    &lt;button id=&quot;btn1&quot; data-dojo-type=&quot;dojox/mobile/Button&quot;
+            class=&quot;mblBlueButton&quot; style=&quot;margin-top:-5px;width:60px;float:right;&quot;&gt;Edit&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;hr/&gt;
+  &lt;table style=&quot;width:100%&quot;&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;width:250px&quot;&gt;&lt;img alt=&quot;&quot; src=&quot;images/pic1.jpg&quot; width=&quot;230&quot; height=&quot;230&quot;&gt;&lt;/td&gt;
+      &lt;td style=&quot;vertical-align:top&quot;&gt;
+        &lt;input data-dojo-type=&quot;dojox/mobile/TextBox&quot; value=&quot;Kirena Kobe&quot; readOnly=&quot;readOnly&quot;&gt;&lt;br&gt;
+        &lt;input data-dojo-type=&quot;dojox/mobile/TextBox&quot; value=&quot;123-456-7891&quot;&gt;&lt;br&gt;
+        &lt;input data-dojo-type=&quot;dojox/mobile/TextBox&quot; value=&quot;kkobe&#64;acme.com&quot;&gt;
+      &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td colspan=&quot;2&quot;&gt;
+        &lt;textarea&gt;Lorem ipsum dolor sit amet, consectetuer adipiscing elit.&lt;/textarea&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</textarea></div><img alt="../../_images/SimpleDialog-example4.png" src="../../_images/SimpleDialog-example4.png" />
+</div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

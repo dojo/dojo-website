@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.grid.EnhancedGrid.plugins.Filter &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../../../index.html">Startpage</a></li>
+          <li><a href="../../../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojox.grid.EnhancedGrid.plugins.Filter</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#plugin-declaration">Plugin Declaration</a></li>
+<li><a class="reference internal" href="#column-configuration">Column Configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#filter-bar">Filter Bar</a></li>
+<li><a class="reference internal" href="#filter-definition-dialog">Filter Definition Dialog</a></li>
+<li><a class="reference internal" href="#filter-status-tooltip">Filter Status Tooltip</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#introduction-to-server-side-filtering">Introduction to Server-Side Filtering</a><ul>
+<li><a class="reference internal" href="#basic-protocol">Basic Protocol</a></li>
+<li><a class="reference internal" href="#the-filter-definition">The Filter Definition</a></li>
+<li><a class="reference internal" href="#supported-operators">Supported Operators</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojox-grid-enhancedgrid-plugins-filter">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.grid.EnhancedGrid.plugins.Filter</a><a class="headerlink" href="#dojox-grid-enhancedgrid-plugins-filter" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Oliver Zhu</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Evan Huang</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V.1.6</td>
+</tr>
+</tbody>
+</table>
+<p>Filter plugin provides row filtering functionality for grid.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-grid-enhancedgrid-plugins-filter" id="id2">dojox.grid.EnhancedGrid.plugins.Filter</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#configuration" id="id4">Configuration</a></li>
+<li><a class="reference internal" href="#usage" id="id5">Usage</a></li>
+<li><a class="reference internal" href="#introduction-to-server-side-filtering" id="id6">Introduction to Server-Side Filtering</a></li>
+<li><a class="reference internal" href="#see-also" id="id7">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Filter is a plugin for dojox.grid.EnhancedGrid. It&#8217;s designed to filter the grid data with a set of conditions. The grid data have types (number, string, date, time, and boolean) so, accordingly, users are able to specify filters with different conditions for different data types. This plugin not only provides a default client-side implementation, it also defines a simple protocol for server-side filtering to use where the data store is too large to be handled client-side. This plugin is independent of data store, just like grid itself. It only relies on the dojo.data.api.Read interface.</p>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'480', height:'500', toolbar:'themes, versions, dir', themename:'claro'"><div class="CodeGlassMiniInner"><div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojo.data.ItemFileWriteStore&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.EnhancedGrid&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.enhanced.plugins.Filter&quot;</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">identifier</span><span class="o">:</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span>
+    <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;id&#39;</span><span class="p">,</span>
+    <span class="nx">items</span><span class="o">:</span> <span class="p">[]</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">data_list</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Easy Listening&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Bette Midler&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">2003</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Bette Midler Sings the Rosemary Clooney Songbook&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Hey There&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;03:31&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Ross, Jerry 1926-1956 -w Adler, Richard 1921-&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;1923/4/9&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;04:32:49&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Classic Rock&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Jimi Hendrix&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1993</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Are You Experienced&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Love Or Confusion&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;03:15&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Jimi Hendrix&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;1947/12/6&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;03:47:49&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Jazz&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Andy Narell&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1992</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Down the Road&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Sugar Street&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;07:00&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">8</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Andy Narell&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;1906/3/22&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;21:56:15&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Progressive Rock&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Emerson, Lake &amp; Palmer&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1992</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;The Atlantic Years&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Tarkus&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;20:40&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Greg Lake/Keith Emerson&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;1994/11/29&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;03:25:19&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Rock&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Blood, Sweat &amp; Tears&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1968</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Child Is Father To The Man&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Somethin&#39; Goin&#39; On&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;08:00&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">9</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;1973/9/11&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;19:49:41&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Jazz&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Andy Narell&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1989</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Little Secrets&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Armchair Psychology&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;08:20&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Andy Narell&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;2010/4/15&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;01:13:08&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Easy Listening&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Frank Sinatra&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1991</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Sinatra Reprise: The Very Good Years&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Luck Be A Lady&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;05:16&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;F. Loesser&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;2035/4/12&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;06:16:53&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Progressive Rock&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Dixie dregs&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1977</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Free Fall&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Sleep&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;01:58&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Steve Morse&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;2032/11/21&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;08:23:26&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Classic Rock&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Black Sabbath&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">2004</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Master of Reality&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Sweet Leaf&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;05:04&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Bill Ward/Geezer Butler/Ozzy Osbourne/Tony Iommi&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;2036/5/26&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;22:10:19&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Blues&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Buddy Guy&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1991</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Damn Right, I&#39;ve Got The Blues&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Five Long Years&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;08:27&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Eddie Boyd/John Lee Hooker&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;1904/4/4&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;18:28:08&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Easy Listening&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Frank Sinatra&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1991</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Sinatra Reprise: The Very Good Years&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;The Way You Look Tonight&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;03:23&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;D. Fields/J. Kern&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;1902/10/12&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;23:09:23&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;World&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Andy Statman &amp; David Grisman&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1995</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Songs Of Our Fathers&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Chassidic Medley: Adir Hu / Moshe Emes&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;04:14&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Shlomo Carlebach; Trad.&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;2035/2/9&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;00:11:15&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Classic Rock&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Jimi Hendrix&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1968</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;Electric Ladyland&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;Long Hot Summer Night&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;03:27&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">6</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Jimi Hendrix&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;1902/4/7&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;16:58:08&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;Heard&quot;</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="s2">&quot;Checked&quot;</span><span class="o">:</span> <span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;Genre&quot;</span><span class="o">:</span><span class="s2">&quot;Progressive Rock&quot;</span><span class="p">,</span> <span class="s2">&quot;Artist&quot;</span><span class="o">:</span><span class="s2">&quot;Dixie dregs&quot;</span><span class="p">,</span> <span class="s2">&quot;Year&quot;</span><span class="o">:</span><span class="mi">1978</span><span class="p">,</span> <span class="s2">&quot;Album&quot;</span><span class="o">:</span><span class="s2">&quot;What if&quot;</span><span class="p">,</span> <span class="s2">&quot;Name&quot;</span><span class="o">:</span><span class="s2">&quot;What if&quot;</span><span class="p">,</span> <span class="s2">&quot;Length&quot;</span><span class="o">:</span><span class="s2">&quot;05:02&quot;</span><span class="p">,</span> <span class="s2">&quot;Track&quot;</span><span class="o">:</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Composer&quot;</span><span class="o">:</span><span class="s2">&quot;Steve Morse&quot;</span><span class="p">,</span> <span class="s2">&quot;Download Date&quot;</span><span class="o">:</span><span class="s2">&quot;1992/3/28&quot;</span><span class="p">,</span> <span class="s2">&quot;Last Played&quot;</span><span class="o">:</span><span class="s2">&quot;00:22:30&quot;</span><span class="p">}</span>
+<span class="p">];</span>
+
+<span class="kd">var</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">len</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">data_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">){</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">dojo</span><span class="p">.</span><span class="nx">mixin</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="o">:</span> <span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">},</span> <span class="nx">data_list</span><span class="p">[</span><span class="nx">i</span> <span class="o">%</span> <span class="nx">len</span><span class="p">]));</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">layout</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span><span class="s2">&quot;number&quot;</span><span class="p">},</span>
+    <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Genre&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span><span class="s2">&quot;string&quot;</span><span class="p">},</span>
+    <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Artist&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+        <span class="c1">// Declare that we need the ComboBox for suggestions (autoComplete by default)</span>
+        <span class="nx">autoComplete</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Album&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+        <span class="c1">// Declare that we need the ComboBox for suggestions</span>
+        <span class="nx">autoComplete</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="c1">// Configure the ComboBox, so that it does not auto-complete our input</span>
+        <span class="nx">dataTypeArgs</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">autoComplete</span><span class="o">:</span> <span class="kc">false</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span><span class="s2">&quot;string&quot;</span><span class="p">,</span>
+        <span class="c1">// Declare that we do not need the following conditions for this column</span>
+        <span class="nx">disabledConditions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;contains&quot;</span><span class="p">,</span> <span class="s2">&quot;notcontains&quot;</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Track&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span><span class="s2">&quot;number&quot;</span><span class="p">},</span>
+    <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Download Date&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span><span class="s2">&quot;date&quot;</span><span class="p">,</span>
+        <span class="c1">// Declare how the data in store should be parsed to a Date object.</span>
+        <span class="nx">dataTypeArgs</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">datePattern</span><span class="o">:</span> <span class="s2">&quot;yyyy/M/d&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="p">{</span> <span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Last Played&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span><span class="s2">&quot;time&quot;</span><span class="p">,</span>
+        <span class="c1">// Declare how the data in store should be parsed to a Date object.</span>
+        <span class="nx">dataTypeArgs</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">timePattern</span><span class="o">:</span> <span class="s2">&quot;HH:mm:ss&quot;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">];</span>
+
+<span class="c1">// In case you&#39;ve close the filter bar, here&#39;s a way to bring it up.</span>
+<span class="kd">function</span> <span class="nx">showFilterBar</span><span class="p">(){</span>
+    <span class="nx">dijit</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s1">&#39;grid&#39;</span><span class="p">).</span><span class="nx">showFilterBar</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+
+    <span class="kd">var</span> <span class="nx">store</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojo</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">ItemFileWriteStore</span><span class="p">({</span><span class="nx">data</span><span class="o">:</span> <span class="nx">data</span><span class="p">});</span>
+
+    <span class="kd">var</span> <span class="nx">grid</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">grid</span><span class="p">.</span><span class="nx">EnhancedGrid</span><span class="p">({</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="s1">&#39;grid&#39;</span><span class="p">,</span>
+        <span class="nx">store</span><span class="o">:</span> <span class="nx">store</span><span class="p">,</span>
+        <span class="nx">structure</span><span class="o">:</span> <span class="nx">layout</span><span class="p">,</span>
+        <span class="nx">plugins</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">filter</span><span class="o">:</span> <span class="p">{</span>
+                <span class="c1">// Show the closeFilterbarButton at the filter bar</span>
+                <span class="nx">closeFilterbarButton</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+                <span class="c1">// Set the maximum rule count to 5</span>
+                <span class="nx">ruleCount</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span>
+                <span class="c1">// Set the name of the items</span>
+                <span class="nx">itemsName</span><span class="o">:</span> <span class="s2">&quot;songs&quot;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    <span class="nx">grid</span><span class="p">.</span><span class="nx">placeAt</span><span class="p">(</span><span class="s1">&#39;gridContainer&#39;</span><span class="p">);</span>
+    <span class="nx">grid</span><span class="p">.</span><span class="nx">startup</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojo.data.ItemFileWriteStore&quot;);
+dojo.require(&quot;dojox.grid.EnhancedGrid&quot;);
+dojo.require(&quot;dojox.grid.enhanced.plugins.Filter&quot;);
+
+var data = {
+    identifier: 'id',
+    label: 'id',
+    items: []
+};
+var data_list = [
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Easy Listening&quot;, &quot;Artist&quot;:&quot;Bette Midler&quot;, &quot;Year&quot;:2003, &quot;Album&quot;:&quot;Bette Midler Sings the Rosemary Clooney Songbook&quot;, &quot;Name&quot;:&quot;Hey There&quot;, &quot;Length&quot;:&quot;03:31&quot;, &quot;Track&quot;:4, &quot;Composer&quot;:&quot;Ross, Jerry 1926-1956 -w Adler, Richard 1921-&quot;, &quot;Download Date&quot;:&quot;1923/4/9&quot;, &quot;Last Played&quot;:&quot;04:32:49&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Classic Rock&quot;, &quot;Artist&quot;:&quot;Jimi Hendrix&quot;, &quot;Year&quot;:1993, &quot;Album&quot;:&quot;Are You Experienced&quot;, &quot;Name&quot;:&quot;Love Or Confusion&quot;, &quot;Length&quot;:&quot;03:15&quot;, &quot;Track&quot;:4, &quot;Composer&quot;:&quot;Jimi Hendrix&quot;, &quot;Download Date&quot;:&quot;1947/12/6&quot;, &quot;Last Played&quot;:&quot;03:47:49&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Jazz&quot;, &quot;Artist&quot;:&quot;Andy Narell&quot;, &quot;Year&quot;:1992, &quot;Album&quot;:&quot;Down the Road&quot;, &quot;Name&quot;:&quot;Sugar Street&quot;, &quot;Length&quot;:&quot;07:00&quot;, &quot;Track&quot;:8, &quot;Composer&quot;:&quot;Andy Narell&quot;, &quot;Download Date&quot;:&quot;1906/3/22&quot;, &quot;Last Played&quot;:&quot;21:56:15&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Progressive Rock&quot;, &quot;Artist&quot;:&quot;Emerson, Lake &amp; Palmer&quot;, &quot;Year&quot;:1992, &quot;Album&quot;:&quot;The Atlantic Years&quot;, &quot;Name&quot;:&quot;Tarkus&quot;, &quot;Length&quot;:&quot;20:40&quot;, &quot;Track&quot;:5, &quot;Composer&quot;:&quot;Greg Lake/Keith Emerson&quot;, &quot;Download Date&quot;:&quot;1994/11/29&quot;, &quot;Last Played&quot;:&quot;03:25:19&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Rock&quot;, &quot;Artist&quot;:&quot;Blood, Sweat &amp; Tears&quot;, &quot;Year&quot;:1968, &quot;Album&quot;:&quot;Child Is Father To The Man&quot;, &quot;Name&quot;:&quot;Somethin' Goin' On&quot;, &quot;Length&quot;:&quot;08:00&quot;, &quot;Track&quot;:9, &quot;Composer&quot;:&quot;&quot;, &quot;Download Date&quot;:&quot;1973/9/11&quot;, &quot;Last Played&quot;:&quot;19:49:41&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Jazz&quot;, &quot;Artist&quot;:&quot;Andy Narell&quot;, &quot;Year&quot;:1989, &quot;Album&quot;:&quot;Little Secrets&quot;, &quot;Name&quot;:&quot;Armchair Psychology&quot;, &quot;Length&quot;:&quot;08:20&quot;, &quot;Track&quot;:5, &quot;Composer&quot;:&quot;Andy Narell&quot;, &quot;Download Date&quot;:&quot;2010/4/15&quot;, &quot;Last Played&quot;:&quot;01:13:08&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Easy Listening&quot;, &quot;Artist&quot;:&quot;Frank Sinatra&quot;, &quot;Year&quot;:1991, &quot;Album&quot;:&quot;Sinatra Reprise: The Very Good Years&quot;, &quot;Name&quot;:&quot;Luck Be A Lady&quot;, &quot;Length&quot;:&quot;05:16&quot;, &quot;Track&quot;:4, &quot;Composer&quot;:&quot;F. Loesser&quot;, &quot;Download Date&quot;:&quot;2035/4/12&quot;, &quot;Last Played&quot;:&quot;06:16:53&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Progressive Rock&quot;, &quot;Artist&quot;:&quot;Dixie dregs&quot;, &quot;Year&quot;:1977, &quot;Album&quot;:&quot;Free Fall&quot;, &quot;Name&quot;:&quot;Sleep&quot;, &quot;Length&quot;:&quot;01:58&quot;, &quot;Track&quot;:6, &quot;Composer&quot;:&quot;Steve Morse&quot;, &quot;Download Date&quot;:&quot;2032/11/21&quot;, &quot;Last Played&quot;:&quot;08:23:26&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Classic Rock&quot;, &quot;Artist&quot;:&quot;Black Sabbath&quot;, &quot;Year&quot;:2004, &quot;Album&quot;:&quot;Master of Reality&quot;, &quot;Name&quot;:&quot;Sweet Leaf&quot;, &quot;Length&quot;:&quot;05:04&quot;, &quot;Track&quot;:1, &quot;Composer&quot;:&quot;Bill Ward/Geezer Butler/Ozzy Osbourne/Tony Iommi&quot;, &quot;Download Date&quot;:&quot;2036/5/26&quot;, &quot;Last Played&quot;:&quot;22:10:19&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Blues&quot;, &quot;Artist&quot;:&quot;Buddy Guy&quot;, &quot;Year&quot;:1991, &quot;Album&quot;:&quot;Damn Right, I've Got The Blues&quot;, &quot;Name&quot;:&quot;Five Long Years&quot;, &quot;Length&quot;:&quot;08:27&quot;, &quot;Track&quot;:3, &quot;Composer&quot;:&quot;Eddie Boyd/John Lee Hooker&quot;, &quot;Download Date&quot;:&quot;1904/4/4&quot;, &quot;Last Played&quot;:&quot;18:28:08&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Easy Listening&quot;, &quot;Artist&quot;:&quot;Frank Sinatra&quot;, &quot;Year&quot;:1991, &quot;Album&quot;:&quot;Sinatra Reprise: The Very Good Years&quot;, &quot;Name&quot;:&quot;The Way You Look Tonight&quot;, &quot;Length&quot;:&quot;03:23&quot;, &quot;Track&quot;:5, &quot;Composer&quot;:&quot;D. Fields/J. Kern&quot;, &quot;Download Date&quot;:&quot;1902/10/12&quot;, &quot;Last Played&quot;:&quot;23:09:23&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;World&quot;, &quot;Artist&quot;:&quot;Andy Statman &amp; David Grisman&quot;, &quot;Year&quot;:1995, &quot;Album&quot;:&quot;Songs Of Our Fathers&quot;, &quot;Name&quot;:&quot;Chassidic Medley: Adir Hu / Moshe Emes&quot;, &quot;Length&quot;:&quot;04:14&quot;, &quot;Track&quot;:2, &quot;Composer&quot;:&quot;Shlomo Carlebach; Trad.&quot;, &quot;Download Date&quot;:&quot;2035/2/9&quot;, &quot;Last Played&quot;:&quot;00:11:15&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Classic Rock&quot;, &quot;Artist&quot;:&quot;Jimi Hendrix&quot;, &quot;Year&quot;:1968, &quot;Album&quot;:&quot;Electric Ladyland&quot;, &quot;Name&quot;:&quot;Long Hot Summer Night&quot;, &quot;Length&quot;:&quot;03:27&quot;, &quot;Track&quot;:6, &quot;Composer&quot;:&quot;Jimi Hendrix&quot;, &quot;Download Date&quot;:&quot;1902/4/7&quot;, &quot;Last Played&quot;:&quot;16:58:08&quot;},
+    {&quot;Heard&quot;: true, &quot;Checked&quot;: &quot;True&quot;, &quot;Genre&quot;:&quot;Progressive Rock&quot;, &quot;Artist&quot;:&quot;Dixie dregs&quot;, &quot;Year&quot;:1978, &quot;Album&quot;:&quot;What if&quot;, &quot;Name&quot;:&quot;What if&quot;, &quot;Length&quot;:&quot;05:02&quot;, &quot;Track&quot;:3, &quot;Composer&quot;:&quot;Steve Morse&quot;, &quot;Download Date&quot;:&quot;1992/3/28&quot;, &quot;Last Played&quot;:&quot;00:22:30&quot;}
+];
+
+var i, len;
+for(i=0, len = data_list.length; i &lt; len; ++i){
+    data.items.push(dojo.mixin({'id': i + 1 }, data_list[i % len]));
+}
+
+var layout = [
+    { field: &quot;id&quot;, datatype:&quot;number&quot;},
+    { field: &quot;Genre&quot;, datatype:&quot;string&quot;},
+    { field: &quot;Artist&quot;, datatype:&quot;string&quot;,
+        // Declare that we need the ComboBox for suggestions (autoComplete by default)
+        autoComplete: true
+    },
+    { field: &quot;Album&quot;, datatype:&quot;string&quot;,
+        // Declare that we need the ComboBox for suggestions
+        autoComplete: true,
+        // Configure the ComboBox, so that it does not auto-complete our input
+        dataTypeArgs: {
+            autoComplete: false
+        }
+    },
+    { field: &quot;Name&quot;, datatype:&quot;string&quot;,
+        // Declare that we do not need the following conditions for this column
+        disabledConditions: [&quot;contains&quot;, &quot;notcontains&quot;]
+    },
+    { field: &quot;Track&quot;, datatype:&quot;number&quot;},
+    { field: &quot;Download Date&quot;, datatype:&quot;date&quot;,
+        // Declare how the data in store should be parsed to a Date object.
+        dataTypeArgs: {
+            datePattern: &quot;yyyy/M/d&quot;
+        }
+    },
+    { field: &quot;Last Played&quot;, datatype:&quot;time&quot;,
+        // Declare how the data in store should be parsed to a Date object.
+        dataTypeArgs: {
+            timePattern: &quot;HH:mm:ss&quot;
+        }
+    }
+];
+
+// In case you've close the filter bar, here's a way to bring it up.
+function showFilterBar(){
+    dijit.byId('grid').showFilterBar(true);
+}
+
+dojo.ready(function(){
+
+    var store = new dojo.data.ItemFileWriteStore({data: data});
+
+    var grid = new dojox.grid.EnhancedGrid({
+        id: 'grid',
+        store: store,
+        structure: layout,
+        plugins: {
+            filter: {
+                // Show the closeFilterbarButton at the filter bar
+                closeFilterbarButton: true,
+                // Set the maximum rule count to 5
+                ruleCount: 5,
+                // Set the name of the items
+                itemsName: &quot;songs&quot;
+            }
+        }
+    });
+    grid.placeAt('gridContainer');
+    grid.startup();
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;gridContainer&quot;</span> <span class="na">style=</span><span class="s">&quot;width: 100%; height: 400px;&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&#39;showFilterBar()&#39;</span><span class="nt">&gt;</span>Show Filter Bar<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;gridContainer&quot; style=&quot;width: 100%; height: 400px;&quot;&gt;&lt;/div&gt;
+&lt;button onclick='showFilterBar()'&gt;Show Filter Bar&lt;/button&gt;</textarea></div><div class="highlight"><pre><span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dojo/resources/dojo.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dijit/themes/claro/claro.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dijit/themes/claro/document.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dojox/grid/enhanced/resources/claro/EnhancedGrid.css&quot;</span><span class="p">;</span>
+<span class="k">@import</span> <span class="s2">&quot;{{baseUrl}}dojox/grid/enhanced/resources/EnhancedGrid_rtl.css&quot;</span><span class="p">;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="css"><textarea style="display:none">&#64;import &quot;{{baseUrl}}dojo/resources/dojo.css&quot;;
+&#64;import &quot;{{baseUrl}}dijit/themes/claro/claro.css&quot;;
+&#64;import &quot;{{baseUrl}}dijit/themes/claro/document.css&quot;;
+&#64;import &quot;{{baseUrl}}dojox/grid/enhanced/resources/claro/EnhancedGrid.css&quot;;
+&#64;import &quot;{{baseUrl}}dojox/grid/enhanced/resources/EnhancedGrid_rtl.css&quot;;</textarea></div></div></div></div>
+<div class="section" id="configuration">
+<h2><a class="toc-backref" href="#id4">Configuration</a><a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>This filter plugin is only available for EnhancedGrid. Use the following statements in the head of your HTML file:</p>
+<div class="highlight"><pre><span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.EnhancedGrid&quot;</span><span class="p">);</span>
+<span class="nx">dojo</span><span class="p">.</span><span class="nx">require</span><span class="p">(</span><span class="s2">&quot;dojox.grid.enhanced.plugins.Filter&quot;</span><span class="p">);</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">dojo.require(&quot;dojox.grid.EnhancedGrid&quot;);
+dojo.require(&quot;dojox.grid.enhanced.plugins.Filter&quot;);</textarea></div></div>
+<div class="section" id="plugin-declaration">
+<h3>Plugin Declaration<a class="headerlink" href="#plugin-declaration" title="Permalink to this headline">¶</a></h3>
+<p>The declaration name of this plugin is <code class="docutils literal"><span class="pre">filter</span></code> . It is declared in the <code class="docutils literal"><span class="pre">plugins</span></code> property of grid.</p>
+<p>If your grid is created declaratively:</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;grid&quot;</span> <span class="na">data-dojo-type=</span><span class="s">&quot;dojox.grid.EnhancedGrid&quot;</span>
+  <span class="na">store=</span><span class="s">&quot;mystore&quot;</span> <span class="na">structure=</span><span class="s">&quot;mystructure&quot;</span>
+  <span class="na">plugins=</span><span class="s">&quot;{</span>
+<span class="s">    filter: /* a Boolean value or an configuration object */{}</span>
+<span class="s">}&quot;</span> <span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;div id=&quot;grid&quot; data-dojo-type=&quot;dojox.grid.EnhancedGrid&quot;
+  store=&quot;mystore&quot; structure=&quot;mystructure&quot;
+  plugins=&quot;{
+    filter: /* a Boolean value or an configuration object */{}
+}&quot; &gt;&lt;/div&gt;</textarea></div><p>If your grid is created in JavaScript:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">grid</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">grid</span><span class="p">.</span><span class="nx">EnhancedGrid</span><span class="p">({</span>
+  <span class="nx">id</span><span class="o">:</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+  <span class="nx">store</span><span class="o">:</span><span class="s2">&quot;mystore&quot;</span><span class="p">,</span>
+  <span class="nx">structure</span><span class="o">:</span><span class="s2">&quot;mystructure&quot;</span><span class="p">,</span>
+  <span class="nx">plugins</span><span class="o">:</span><span class="p">{</span>
+    <span class="nx">filter</span><span class="o">:</span> <span class="cm">/* a Boolean value or an configuration object */</span><span class="p">{}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var grid = new dojox.grid.EnhancedGrid({
+  id:&quot;grid&quot;,
+  store:&quot;mystore&quot;,
+  structure:&quot;mystructure&quot;,
+  plugins:{
+    filter: /* a Boolean value or an configuration object */{}
+  }
+});</textarea></div><p>As shown in the above code, you can simply set the <code class="docutils literal"><span class="pre">filter</span></code> property to true or false (disabled), or further configure it in an configuration object.</p>
+<p>All the available configuration properties are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="5%" />
+<col width="9%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Type</th>
+<th class="head">Default Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>itemsName</td>
+<td>String</td>
+<td>&#8220;items&#8221;</td>
+<td>The name of the items in the data store.
+For example, if the data in the store are records of songs, you may set it to &#8220;songs&#8221;,
+so the filter bar will display &#8220;10 of 100 songs&#8221; instead of &#8220;10 of 100 items&#8221; when there&#8217;s some filter applied.</td>
+</tr>
+<tr class="row-odd"><td>closeFilterbarButton</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Whether to show the close-filterbar button.</td>
+</tr>
+<tr class="row-even"><td>ruleCount</td>
+<td>Number</td>
+<td>3</td>
+<td>The maximum rule count of a filter. Default to 3. If set to 0 or Infinity, infinite rules are supported.</td>
+</tr>
+<tr class="row-odd"><td>ruleCountToConfirmClearFilter</td>
+<td>Number</td>
+<td>2</td>
+<td>If the filter rule count is larger than or equal to this value, then a confirm dialog will show when
+clearing filter. If set to less than 1 or null, then always show the confirm dialog. If set to Infinity,
+then never show the confirm dialog. Default to 2.</td>
+</tr>
+<tr class="row-even"><td>disabledConditions</td>
+<td>Object</td>
+<td>undefined</td>
+<td>Disable some condition for some type or &#8220;anycolumn&#8221;, so the user will not see them in the condition Select box.</td>
+</tr>
+<tr class="row-odd"><td>isServerSide</td>
+<td>Boolean</td>
+<td>false</td>
+<td>If this is true, the actual filtering work will be taken over by the server.
+This is used to switch between client-side filter and server-side filter.</td>
+</tr>
+<tr class="row-even"><td>isStateful</td>
+<td>Boolean</td>
+<td>false</td>
+<td>If this is true, and isServerSide is set to true, the filter definition will only be sent when it is defined,
+and it should be remembered at server side until it is changed.</td>
+</tr>
+<tr class="row-odd"><td>url</td>
+<td>String</td>
+<td>&#8220;&#8221;</td>
+<td>When both isServerSide and isStateful are true, this is a place to set the server url,
+if it cannot be retrieved by store.url.</td>
+</tr>
+<tr class="row-even"><td>setupFilterQuery</td>
+<td>Function</td>
+<td>undefined</td>
+<td>If you&#8217;d like to use a stateless server side filter, you&#8217;ll have to modify the request object, so as to add in
+the filter definition. The signature of this function is setupFilterQuery(commands, request). See the last
+section for details.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="column-configuration">
+<h3>Column Configuration<a class="headerlink" href="#column-configuration" title="Permalink to this headline">¶</a></h3>
+<p>Filter provides different conditions for different data types, but the store does not have any information of types. So users should explicitly declare the data types in the structure of grid.
+For example:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">structure</span> <span class="o">=</span> <span class="p">[{</span>
+  <span class="nx">cells</span><span class="o">:</span><span class="p">[</span>
+    <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span> <span class="nx">autoComplete</span><span class="o">:</span> <span class="kc">true</span> <span class="p">},</span>
+    <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Age&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span> <span class="s2">&quot;number&quot;</span> <span class="p">},</span>
+    <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Register Date&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span> <span class="s2">&quot;date&quot;</span> <span class="p">},</span>
+    <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;dummy&quot;</span><span class="p">,</span> <span class="nx">filterable</span><span class="o">:</span> <span class="kc">false</span><span class="p">},</span> <span class="c1">// set this column to be not filterable</span>
+    <span class="p">{</span><span class="nx">field</span><span class="o">:</span> <span class="s2">&quot;Register Time&quot;</span><span class="p">,</span> <span class="nx">datatype</span><span class="o">:</span> <span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="nx">disabledConditions</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;startsWith&quot;</span><span class="p">,</span> <span class="s2">&quot;notStartsWith&quot;</span><span class="p">]}</span>
+  <span class="p">]</span>
+<span class="p">}];</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var structure = [{
+  cells:[
+    {field: &quot;Name&quot;, datatype: &quot;string&quot;, autoComplete: true },
+    {field: &quot;Age&quot;, datatype: &quot;number&quot; },
+    {field: &quot;Register Date&quot;, datatype: &quot;date&quot; },
+    {field: &quot;dummy&quot;, filterable: false}, // set this column to be not filterable
+    {field: &quot;Register Time&quot;, datatype: &quot;time&quot;, disabledConditions: [&quot;startsWith&quot;, &quot;notStartsWith&quot;]}
+  ]
+}];</textarea></div><p>The following properties are available for column configuration:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="17%" />
+<col width="20%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Type</th>
+<th class="head">Default Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>filterable</td>
+<td>Boolean</td>
+<td>true</td>
+<td>To set whether this column can be filtered.</td>
+</tr>
+<tr class="row-odd"><td>datatype</td>
+<td>String</td>
+<td>&#8220;string&#8221;</td>
+<td>The data type of this column, determining what conditions could be applied.</td>
+</tr>
+<tr class="row-even"><td>autoComplete</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Only valid for &#8220;string&#8221; type. If set to true, a ComboBox instead of a TextBox will be used.</td>
+</tr>
+<tr class="row-odd"><td>disabledConditions</td>
+<td>String[]</td>
+<td>[]</td>
+<td>To disable some conditions for this column. For a full list of condition names, see below.</td>
+</tr>
+<tr class="row-even"><td>dataTypeArgs</td>
+<td>Object</td>
+<td>{}</td>
+<td>A place to put data type specific arguments.</td>
+</tr>
+<tr class="row-odd"><td>dataTypeArgs(for date/time type)</td>
+<td>dojo.date.locale.__FormatOptions</td>
+<td>{}</td>
+<td>Defines how to parse the date/time data shown in the grid.</td>
+</tr>
+<tr class="row-even"><td>dataTypeArgs(for boolean type)</td>
+<td>Object</td>
+<td>{trueLabel: &#8220;True&#8221;, falseLabel: &#8220;False&#8221;}</td>
+<td>Set the label text for true value or false value.</td>
+</tr>
+</tbody>
+</table>
+<p>Here is a list of all the condition names (case insensitive)</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="39%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Condition Name</th>
+<th class="head">Available Data Types</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>equalTo</td>
+<td>number, string, date, time, boolean</td>
+</tr>
+<tr class="row-odd"><td>lessThan</td>
+<td>number, date, time</td>
+</tr>
+<tr class="row-even"><td>lessThanOrEqualTo</td>
+<td>number</td>
+</tr>
+<tr class="row-odd"><td>largerThan</td>
+<td>number, date, time</td>
+</tr>
+<tr class="row-even"><td>largerThanOrEqualTo</td>
+<td>number</td>
+</tr>
+<tr class="row-odd"><td>contains</td>
+<td>string</td>
+</tr>
+<tr class="row-even"><td>startsWith</td>
+<td>string</td>
+</tr>
+<tr class="row-odd"><td>endsWith</td>
+<td>string</td>
+</tr>
+<tr class="row-even"><td>notEqualTo</td>
+<td>number, string</td>
+</tr>
+<tr class="row-odd"><td>notContains</td>
+<td>string</td>
+</tr>
+<tr class="row-even"><td>notStartsWith</td>
+<td>string</td>
+</tr>
+<tr class="row-odd"><td>notEndsWith</td>
+<td>string</td>
+</tr>
+<tr class="row-even"><td>range</td>
+<td>date, time</td>
+</tr>
+<tr class="row-odd"><td>isEmpty</td>
+<td>number, string, date, time, boolean</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id5">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The UI of this plugin consists of 3 components: a filter bar within the grid, a definition dialog, and a status tooltip.</p>
+<div class="section" id="filter-bar">
+<h3>Filter Bar<a class="headerlink" href="#filter-bar" title="Permalink to this headline">¶</a></h3>
+<img alt="../../../../_images/filterbar-1.png" src="../../../../_images/filterbar-1.png" />
+<p>Clicking the button on the filter bar will show the Filter Definition Dialog with a default value of &#8220;Any Column&#8221;.</p>
+<img alt="../../../../_images/filterbar-definefilterbtn-1.png" src="../../../../_images/filterbar-definefilterbtn-1.png" />
+<p>Clicking directly on the filter bar will also show the Filter Definition Dialog, but setting the value of the &#8220;Column&#8221; field to the column that the mouse is over.</p>
+<img alt="../../../../_images/filterbar-somecolumn-1.png" src="../../../../_images/filterbar-somecolumn-1.png" />
+<p>Hovering over the filterbar for 300 msec will trigger the Filter Status Tooltip.</p>
+<img alt="../../../../_images/filterbar-showtooltip-1.png" src="../../../../_images/filterbar-showtooltip-1.png" />
+<p>When there&#8217;s a filter defined, the clear filter button will be shown, and the status tip will look like this:</p>
+<img alt="../../../../_images/filterbar-clearbtn-1.png" src="../../../../_images/filterbar-clearbtn-1.png" />
+<p>If <code class="docutils literal"><span class="pre">closeFilterbarButton</span></code> is true, there will be a close-filterbar button at the right end of the filter bar.</p>
+<img alt="../../../../_images/filterbar-closebtn-1.png" src="../../../../_images/filterbar-closebtn-1.png" />
+<p>When the filter bar is hidden, there is a function to bring it out: <code class="docutils literal"><span class="pre">showFilterBar</span></code></p>
+<p>Actually there&#8217;s a set of APIs related to filterbar:</p>
+<dl class="docutils">
+<dt>showFilterBar(toShow, useAnim, animArgs):</dt>
+<dd>Show/Hide filter bar</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="17%" />
+<col width="25%" />
+<col width="44%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Optional/Mandatory</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>toShow</td>
+<td>Boolean</td>
+<td>Mandatory</td>
+<td>To show or to hide</td>
+</tr>
+<tr class="row-odd"><td>useAnim</td>
+<td>Boolean</td>
+<td>Optional(default to true)</td>
+<td>When showing/hiding, whether to use animation.</td>
+</tr>
+<tr class="row-even"><td>animArgs</td>
+<td>dojo.__AnimArgs</td>
+<td>Optional</td>
+<td>Customized animation properties.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>toggleFilterBar(useAnim, animArgs):</dt>
+<dd>Toggle the filter bar. Will call <code class="docutils literal"><span class="pre">showFilterBar</span></code>. Please refer to the useAnim/animArgs arguments for showFilterBar method.</dd>
+<dt>isFilterBarShown():</dt>
+<dd>Check the visibility of filter bar. Return boolean.</dd>
+</dl>
+</div>
+<div class="section" id="filter-definition-dialog">
+<h3>Filter Definition Dialog<a class="headerlink" href="#filter-definition-dialog" title="Permalink to this headline">¶</a></h3>
+<img alt="../../../../_images/defdialog.png" src="../../../../_images/defdialog.png" />
+<p>The Filter Definition Dialog is designed to define filter conditions with either of the following structures:</p>
+<ol class="arabic simple">
+<li>[rule 1 for column A] and [rule 2 for column B] and [rule 3 for column C]</li>
+<li>[rule 1 for column A] or [rule 2 for column B] or [rule 3 for column C]</li>
+</ol>
+<img alt="../../../../_images/defdialog-rulerelation.png" src="../../../../_images/defdialog-rulerelation.png" />
+<p>Use the &#8220;Add Rule&#8221; button to add a rule. If there are already 3 rules, this button will be disabled.
+Every rule is regarded as a simple sentence with the following structure:</p>
+<p><code class="docutils literal"><span class="pre">[Column]</span> <span class="pre">[Condition</span> <span class="pre">Verb]</span> <span class="pre">[Value]</span></code></p>
+<p>For example: <code class="docutils literal"><span class="pre">Column</span> <span class="pre">&quot;Age&quot;,</span> <span class="pre">&quot;is</span> <span class="pre">less</span> <span class="pre">than&quot;,</span> <span class="pre">26</span></code></p>
+<p>Different data types have different sets of conditions and different kinds of form widgets.</p>
+<p>The value field for Number type only accepts number.</p>
+<img alt="../../../../_images/defdialog-numbervaluebox-1.png" src="../../../../_images/defdialog-numbervaluebox-1.png" />
+<p>The value field for String type can have auto-complete capability (if set autoComplete in the grid structure).</p>
+<img alt="../../../../_images/defdialog-stringvaluebox.png" src="../../../../_images/defdialog-stringvaluebox.png" />
+<p>DateTextBox and TimeTextBox are used for Date and Time types, respectively.</p>
+<img alt="../../../../_images/defdialog-timevaluebox.png" src="../../../../_images/defdialog-timevaluebox.png" />
+<p>And the <code class="docutils literal"><span class="pre">range</span></code> condition for <code class="docutils literal"><span class="pre">date</span></code> and <code class="docutils literal"><span class="pre">time</span></code> types represents a closed range.</p>
+<img alt="../../../../_images/defdialog-rangevaluebox.png" src="../../../../_images/defdialog-rangevaluebox.png" />
+</div>
+<div class="section" id="filter-status-tooltip">
+<h3>Filter Status Tooltip<a class="headerlink" href="#filter-status-tooltip" title="Permalink to this headline">¶</a></h3>
+<img alt="../../../../_images/statustooltip-multirule.png" src="../../../../_images/statustooltip-multirule.png" />
+<p>When a filter exists, the Filter Status Tooltip shows every rule of the current filter. If there are multiple rules, you can delete some of them by clicking the red &#8216;X&#8217; at the right side of every rule.</p>
+</div>
+</div>
+<div class="section" id="introduction-to-server-side-filtering">
+<h2><a class="toc-backref" href="#id6">Introduction to Server-Side Filtering</a><a class="headerlink" href="#introduction-to-server-side-filtering" title="Permalink to this headline">¶</a></h2>
+<p>If the store is too big to perform efficient client-side filtering, you can implement your own server-side filter logic along with your data store implementation.</p>
+<p>To enable server-side filtering, just set the <code class="docutils literal"><span class="pre">isServerSide</span></code> property to true.</p>
+<div class="section" id="basic-protocol">
+<h3>Basic Protocol<a class="headerlink" href="#basic-protocol" title="Permalink to this headline">¶</a></h3>
+<p>By default, the server side is assumed to be stateless (REST style). In this case, you should send the filter definition to server side along with the fetch request of the store.
+You can do this by modifying the request object every time before store.fetch is called.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">grid</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">grid</span><span class="p">.</span><span class="nx">EnhancedGrid</span><span class="p">({</span>
+  <span class="nx">id</span><span class="o">:</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+  <span class="nx">store</span><span class="o">:</span><span class="s2">&quot;mystore&quot;</span><span class="p">,</span>
+  <span class="nx">structure</span><span class="o">:</span><span class="s2">&quot;mystructure&quot;</span><span class="p">,</span>
+  <span class="nx">plugins</span><span class="o">:</span><span class="p">{</span>
+    <span class="nx">filter</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">isServerSide</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="nx">setupFilterQuery</span><span class="o">:</span> <span class="nx">setupFilter</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">setupFilter</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">commands</span><span class="p">,</span> <span class="nx">request</span><span class="p">){</span>
+  <span class="c1">// the commands object here is the same as the POSTed commands object for stateful server, see below.</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">commands</span><span class="p">.</span><span class="nx">filter</span> <span class="o">&amp;&amp;</span> <span class="nx">commands</span><span class="p">.</span><span class="nx">enable</span><span class="p">){</span>
+    <span class="c1">// some filter is defined and valid. You can modify the request object here.</span>
+  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="c1">// no filter is valid.</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var grid = new dojox.grid.EnhancedGrid({
+  id:&quot;grid&quot;,
+  store:&quot;mystore&quot;,
+  structure:&quot;mystructure&quot;,
+  plugins:{
+    filter: {
+      isServerSide: true,
+      setupFilterQuery: setupFilter
+    }
+  }
+});
+var setupFilter = function(commands, request){
+  // the commands object here is the same as the POSTed commands object for stateful server, see below.
+  if(commands.filter &amp;&amp; commands.enable){
+    // some filter is defined and valid. You can modify the request object here.
+  }else{
+    // no filter is valid.
+  }
+};</textarea></div><p>Thus the filter definition will be sent to the server along with the request.</p>
+<p>If you&#8217;d like to use a stateful server, which means the filter definition will only be sent when it is defined, and it should be remembered at serverside until it is changed, you can set the &#8216;&#8217;&#8216;isStateful&#8217;&#8216;&#8217; property:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">grid</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">dojox</span><span class="p">.</span><span class="nx">grid</span><span class="p">.</span><span class="nx">EnhancedGrid</span><span class="p">({</span>
+  <span class="nx">id</span><span class="o">:</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span>
+  <span class="nx">store</span><span class="o">:</span><span class="s2">&quot;mystore&quot;</span><span class="p">,</span>
+  <span class="nx">structure</span><span class="o">:</span><span class="s2">&quot;mystructure&quot;</span><span class="p">,</span>
+  <span class="nx">plugins</span><span class="o">:</span><span class="p">{</span>
+    <span class="nx">filter</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">isServerSide</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="nx">isStateful</span><span class="o">:</span> <span class="kc">true</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">var grid = new dojox.grid.EnhancedGrid({
+  id:&quot;grid&quot;,
+  store:&quot;mystore&quot;,
+  structure:&quot;mystructure&quot;,
+  plugins:{
+    filter: {
+      isServerSide: true,
+      isStateful: true
+    }
+  }
+});</textarea></div><p>Then the filter store layer will send the commands via POST before normal store fetch. There are at most 4 fields in this posted data:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="7%" />
+<col width="10%" />
+<col width="12%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Data Type</th>
+<th class="head">Always Available</th>
+<th class="head">Value For Example</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>cmdlayer</td>
+<td>String</td>
+<td>Yes</td>
+<td>&#8220;filter&#8221;</td>
+<td>The name of the current store layer. In this case, it&#8217;s always &#8220;filter&#8221;.</td>
+</tr>
+<tr class="row-odd"><td>enable</td>
+<td>Integer</td>
+<td>Yes</td>
+<td>true</td>
+<td>A command to enable/disable the current store layer (in this case, the filter layer).
+If it is false, the server-side should not filter the data. This field is always valid.</td>
+</tr>
+<tr class="row-even"><td>clear</td>
+<td>Boolean</td>
+<td>No</td>
+<td>true</td>
+<td>Only meaningful for stateful server. A command to clear the filter definition.
+When this field exists and equals to true, it means the user has cleared the filter,
+so the server should return unfiltered data in later fetches.
+This field should not co-exist with the &#8220;filter&#8221; field.
+If they both exist, the &#8220;filter&#8221; field has higher priority</td>
+</tr>
+<tr class="row-odd"><td>filter</td>
+<td>JSON String</td>
+<td>No</td>
+<td>{...}</td>
+<td>A command to set the filter definition.
+When this field exists, it means the user has defined a new filter,
+so the server should re-filter the data using this new filter, and return filtered data in later fetches.
+This field should not co-exist with the &#8220;clear&#8221; field. If they both exist, this field has higher priority.</td>
+</tr>
+</tbody>
+</table>
+<p>When the web page loads, the first POST that the server receives is the <code class="docutils literal"><span class="pre">clear</span></code> command. It ensures that there&#8217;s no filter defined in the session.</p>
+<p>Every time the user defines a filter, the server will receive a <code class="docutils literal"><span class="pre">filter</span></code> command. This command contains a JSON string representing the filter definition, which is covered in the next section.</p>
+<p>After receiving the filter command, the server should respond with the count of filtered rows in this format:</p>
+<div class="highlight"><pre><span class="mi">200</span><span class="p">,</span><span class="mi">1000</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">200,1000</textarea></div><p>The first number is the count of the filtered rows, while the second is the total count of rows in store.</p>
+<p>Note that stateless servers don&#8217;t need to do this, because the filter definition is sent together with the fetch arguments.</p>
+</div>
+<div class="section" id="the-filter-definition">
+<h3>The Filter Definition<a class="headerlink" href="#the-filter-definition" title="Permalink to this headline">¶</a></h3>
+<p>The Filter plugin will create a JSON object for the defined filter with the following recursive structure:</p>
+<img alt="../../../../_images/serverfilter-datastruct.png" src="../../../../_images/serverfilter-datastruct.png" />
+<p>This structure represents an expression, which consists of operators and operands (data). The operands can further contain expressions, that is, deeper level of operators and operands.</p>
+<p>All available properties in this filter definition JSON are listed below:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="3%" />
+<col width="5%" />
+<col width="9%" />
+<col width="10%" />
+<col width="73%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Data Type</th>
+<th class="head">Always Available</th>
+<th class="head">Value For Example</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>op</td>
+<td>String</td>
+<td>Yes</td>
+<td>&#8220;equal&#8221;</td>
+<td>The name of an operator or a data type. Currently supported operators are:
+and | or | not | all | any | equal | less | lessEqual | larger | largerEqual | contains | startsWith | endsWith
+Currently supported datatypes are:
+string | number | date | time | boolean</td>
+</tr>
+<tr class="row-odd"><td>data</td>
+<td>Object</td>
+<td>Yes</td>
+<td>{...}</td>
+<td>The data of the corresponding &#8220;op&#8221;.
+If &#8220;op&#8221; is actually an operator, this field must be an array, which contains a list of deeper level filter expressions.
+If &#8220;op&#8221; is a data type, and there is no &#8220;isCol&#8221; field, this &#8220;data&#8221; field is a value of this type.</td>
+</tr>
+<tr class="row-even"><td>isCol</td>
+<td>Boolean</td>
+<td>No</td>
+<td>true</td>
+<td>If &#8220;op&#8221; is a datatype, and the property &#8220;isCol&#8221; is true, this &#8220;data&#8221; field represents the field name of a column in the data store,
+so the server implementer can get the value of this field, and transform it to the specified datatype.</td>
+</tr>
+</tbody>
+</table>
+<p>So the JSON object is nothing more than an object with 2 fields: <code class="docutils literal"><span class="pre">op</span></code> and <code class="docutils literal"><span class="pre">data</span></code>. For example, The following filter definition means:</p>
+<p>The data of the &#8220;Field Name&#8221; column, whose data type is string, equals to &#8220;some message&#8221;.</p>
+<div class="highlight"><pre><span class="p">{</span>
+  <span class="c1">// op: String</span>
+  <span class="c1">// The name of an operator or a data type. Currently supported operators are:</span>
+  <span class="c1">//  and | or | not | all | any | equal | less | lessEqual | larger | largerEqual | contains | startsWith | endsWith</span>
+  <span class="c1">// Currently supported datatypes are:</span>
+  <span class="c1">//  string | number | date | time</span>
+  <span class="nx">op</span><span class="o">:</span> <span class="s2">&quot;equal&quot;</span><span class="p">,</span>
+
+  <span class="c1">// data: Array | string | number</span>
+  <span class="c1">// The data of the corresponding &quot;op&quot;. If &quot;op&quot; is actually an operator, this field must be an array,</span>
+  <span class="c1">// which contains a list of deeper level filter expressions.</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nx">op</span><span class="o">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+
+      <span class="c1">// data: Array | string | number</span>
+      <span class="c1">// If &quot;op&quot; is a datatype, and there is no &quot;isCol&quot; field, this &quot;data&quot; field is a value of this type.</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="s2">&quot;some message&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="nx">op</span><span class="o">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+
+      <span class="c1">// isCol: Boolean</span>
+      <span class="c1">// If this field exists and is, or can be converted to, true,</span>
+      <span class="c1">// then this expression represents a column in the store,</span>
+      <span class="c1">// and the corresponding &quot;data&quot; field represents the field name of this column.</span>
+      <span class="nx">isCol</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+
+      <span class="c1">// data: Array | string | number</span>
+      <span class="c1">// If &quot;op&quot; is a datatype, and the property &quot;isCol&quot; is true,</span>
+      <span class="c1">// this &quot;data&quot; field represents the field name of a column in the data store,</span>
+      <span class="c1">// so the server implementer can get the value of this field, and transform it to the specified datatype.</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="s2">&quot;Field Name&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">{
+  // op: String
+  // The name of an operator or a data type. Currently supported operators are:
+  //  and | or | not | all | any | equal | less | lessEqual | larger | largerEqual | contains | startsWith | endsWith
+  // Currently supported datatypes are:
+  //  string | number | date | time
+  op: &quot;equal&quot;,
+
+  // data: Array | string | number
+  // The data of the corresponding &quot;op&quot;. If &quot;op&quot; is actually an operator, this field must be an array,
+  // which contains a list of deeper level filter expressions.
+  data: [
+    {
+      op: &quot;string&quot;,
+
+      // data: Array | string | number
+      // If &quot;op&quot; is a datatype, and there is no &quot;isCol&quot; field, this &quot;data&quot; field is a value of this type.
+      data: &quot;some message&quot;
+    },
+    {
+      op: &quot;string&quot;,
+
+      // isCol: Boolean
+      // If this field exists and is, or can be converted to, true,
+      // then this expression represents a column in the store,
+      // and the corresponding &quot;data&quot; field represents the field name of this column.
+      isCol: true,
+
+      // data: Array | string | number
+      // If &quot;op&quot; is a datatype, and the property &quot;isCol&quot; is true,
+      // this &quot;data&quot; field represents the field name of a column in the data store,
+      // so the server implementer can get the value of this field, and transform it to the specified datatype.
+      data: &quot;Field Name&quot;
+    }
+  ]
+}</textarea></div></div>
+<div class="section" id="supported-operators">
+<h3>Supported Operators<a class="headerlink" href="#supported-operators" title="Permalink to this headline">¶</a></h3>
+<p>Here is a summary of all supported operators used in filter definition. The &#8220;Name&#8221; of each operator is passed as the <code class="docutils literal"><span class="pre">op</span></code> field in the filter definition.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="24%" />
+<col width="15%" />
+<col width="53%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Valid Data Types</th>
+<th class="head">Number of Operands</th>
+<th class="head">Meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>and</td>
+<td>boolean</td>
+<td>2</td>
+<td>Logic AND</td>
+</tr>
+<tr class="row-odd"><td>or</td>
+<td>boolean</td>
+<td>2</td>
+<td>Logic OR</td>
+</tr>
+<tr class="row-even"><td>not</td>
+<td>boolean</td>
+<td>1</td>
+<td>Logic NOT</td>
+</tr>
+<tr class="row-odd"><td>all</td>
+<td>boolean</td>
+<td>1 ~ ruleCount</td>
+<td>A general version of &#8220;and&#8221;</td>
+</tr>
+<tr class="row-even"><td>any</td>
+<td>boolean</td>
+<td>1 ~ ruleCount</td>
+<td>A general version of &#8220;or&#8221;</td>
+</tr>
+<tr class="row-odd"><td>equal</td>
+<td>string, number, date, time, boolean</td>
+<td>2</td>
+<td>The value of 2 operands are equal</td>
+</tr>
+<tr class="row-even"><td>less</td>
+<td>number, date, time</td>
+<td>2</td>
+<td>The value of the 1st operand is less than that of the 2nd operand</td>
+</tr>
+<tr class="row-odd"><td>lessEqual</td>
+<td>number</td>
+<td>2</td>
+<td>The value of the 1st operand is less than or equal to that of the 2nd operand</td>
+</tr>
+<tr class="row-even"><td>larger</td>
+<td>number, date, time</td>
+<td>2</td>
+<td>The value of the 1st operand is larger than that of the 2nd operand</td>
+</tr>
+<tr class="row-odd"><td>largerEqual</td>
+<td>number</td>
+<td>2</td>
+<td>The value of the 1st operand is larger than or equal to that of the 2nd operand</td>
+</tr>
+<tr class="row-even"><td>contains</td>
+<td>string</td>
+<td>2</td>
+<td>The value of the 1st operand contains that of the 2nd operand</td>
+</tr>
+<tr class="row-odd"><td>startsWith</td>
+<td>string</td>
+<td>2</td>
+<td>The value of the 1st operand starts with that of the 2nd operand</td>
+</tr>
+<tr class="row-even"><td>endsWith</td>
+<td>string</td>
+<td>2</td>
+<td>The value of the 1st operand ends with that of the 2nd operand</td>
+</tr>
+<tr class="row-odd"><td>isEmpty</td>
+<td>string, number, date, time, boolean</td>
+<td>1</td>
+<td>The value is empty</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id7">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../../DataGrid.html#dojox-grid-datagrid"><span>dojox.grid.DataGrid</span></a> - The base grid</li>
+<li><a class="reference internal" href="../../EnhancedGrid.html#dojox-grid-enhancedgrid"><span>dojox.grid.EnhancedGrid</span></a> - The enhanced grid supporting plugins</li>
+<li><a class="reference internal" href="../plugins.html#dojox-grid-enhancedgrid-plugins"><span>dojox.grid.EnhancedGrid.plugins</span></a> - Overview of the plugins of enhanced grid</li>
+<li><a class="reference internal" href="../../TreeGrid.html#dojox-grid-treegrid"><span>dojox.grid.TreeGrid</span></a> - Grid with collapsible rows and model-based (<a class="reference internal" href="../../../../dijit/tree/ForestStoreModel.html#dijit-tree-foreststoremodel"><span>dijit.tree.ForestStoreModel</span></a>) structure</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

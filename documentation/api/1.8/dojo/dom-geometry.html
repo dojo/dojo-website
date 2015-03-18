@@ -1,0 +1,662 @@
+
+<script type="text/javascript">
+  <!-- If user loads this page directly, redirect to index page, with parameter to initially show tab for this module.-->
+  <!-- If google loads this page directly it will hopefully ignore this script and just index the documentation below.-->
+  <!-- Also, when this page is loaded via XHR this script block should be ignored.-->
+  <location>= "/documentation/api/?qs=1.8/dojo/dom-geometry" + location.hash;</location>
+</script>
+<div style="display:none" class="jsdoc-permalink">/documentation/api/1.8/dojo/dom-geometry.html</div>
+<h1 class="objectIcon36 jsdoc-title module-title">dojo/dom-geometry<span style="font-size:11px;color:#999;"> (version 1.8)</span></h1>
+<div class="jsdoc-full-summary"><p>This module defines the core dojo DOM geometry API.</p>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-field-list">
+    <h2 class="jsdoc-summary-heading">Property Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="stringIcon public"><a href="1_8dojo_dom-geometry_boxModel">boxModel</a>
+        </li><span></span>
+      </ul>
+    </div>
+    <h2 class="jsdoc-summary-heading">Method Summary<span class="jsdoc-summary-toggle"></span></h2>
+    <div class="jsdoc-summary-list">
+      <ul class="jsdoc-property-list">
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_docScroll">docScroll</a><span class="parameters"></span><span class="parameters">(doc) </span><span>Returns an object with {node, x, y} with corresponding offsets.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_fixIeBiDiScrollLeft">fixIeBiDiScrollLeft</a><span class="parameters"></span><span class="parameters">(scrollLeft,doc) </span><span>In RTL direction, scrollLeft should be a negative value, but IE
+returns a positive one.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_getBorderExtents">getBorderExtents</a><span class="parameters"></span><span class="parameters">(node,computedStyle) </span><span>returns an object with properties useful for noting the border
+dimensions.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_getContentBox">getContentBox</a><span class="parameters"></span><span class="parameters">(node,computedStyle) </span><span>Returns an object that encodes the width, height, left and top
+positions of the node&#39;s content box, irrespective of the
+current box model.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_getIeDocumentElementOffset">getIeDocumentElementOffset</a><span class="parameters"></span><span class="parameters">(doc) </span><span>returns the offset in x and y from the document body to the
+visual edge of the page for IE</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_getMarginBox">getMarginBox</a><span class="parameters"></span><span class="parameters">(node,computedStyle) </span><span>returns an object that encodes the width, height, left and top
+positions of the node&#39;s margin box.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_getMarginExtents">getMarginExtents</a><span class="parameters"></span><span class="parameters">(node,computedStyle) </span><span>returns object with properties useful for box fitting with
+regards to box margins (i.e., the outer-box).
+
+
+
+l/t = marginLeft, marginTop, respectively
+w = total width, margin inclusive
+h = total height, margin inclusive
+
+The w/h are used for calculating boxes.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_getMarginSize">getMarginSize</a><span class="parameters"></span><span class="parameters">(node,computedStyle) </span><span>returns an object that encodes the width and height of
+the node&#39;s margin box</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_getPadBorderExtents">getPadBorderExtents</a><span class="parameters"></span><span class="parameters">(node,computedStyle) </span><span>Returns object with properties useful for box fitting with
+regards to padding.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_getPadExtents">getPadExtents</a><span class="parameters"></span><span class="parameters">(node,computedStyle) </span><span>Returns object with special values specifically useful for node
+fitting.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_isBodyLtr">isBodyLtr</a><span class="parameters"></span><span class="parameters">(doc) </span><span>Returns true if the current language is left-to-right, and false otherwise.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_normalizeEvent">normalizeEvent</a><span class="parameters"></span><span class="parameters">(event) </span><span>Normalizes the geometry of a DOM event, normalizing the pageX, pageY,
+offsetX, offsetY, layerX, and layerX properties</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_position">position</a><span class="parameters"></span><span class="parameters">(node,includeScroll) </span><span>Gets the position and size of the passed element relative to
+the viewport (if includeScroll==false), or relative to the
+document root (if includeScroll==true).</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_setContentSize">setContentSize</a><span class="parameters"></span><span class="parameters">(node,box,computedStyle) </span><span>Sets the size of the node&#39;s contents, irrespective of margins,
+padding, or borders.</span>
+        </li>
+        <li class="functionIcon"><a href="#1_8dojo_dom-geometry_setMarginBox">setMarginBox</a><span class="parameters"></span><span class="parameters">(node,box,computedStyle) </span><span>sets the size of the node&#39;s margin box and placement
+(left/top), irrespective of box model.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="jsdoc-children">
+  <div class="jsdoc-fields">
+    <h2>Properties</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field public">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_boxModel"></a><span class="stringIcon">boxModel</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by:&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+      </div>
+    </div>
+    <h2>Methods</h2>
+    <div class="jsdoc-property-list">
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_docScroll"></a><span class="functionIcon">docScroll</span><span class="parameters">(doc)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns an object with {node, x, y} with corresponding offsets.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">doc</td>
+            <td class="jsdoc-param-type">Document</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>Optional document to query.   If unspecified, use win.doc.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Object | undefined</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_fixIeBiDiScrollLeft"></a><span class="functionIcon">fixIeBiDiScrollLeft</span><span class="parameters">(scrollLeft,doc)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>In RTL direction, scrollLeft should be a negative value, but IE
+returns a positive one. All codes using documentElement.scrollLeft
+must call this function to fix this error, otherwise the position
+will offset to right when there is a horizontal scrollbar.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">scrollLeft</td>
+            <td class="jsdoc-param-type">Number</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">doc</td>
+            <td class="jsdoc-param-type">Document</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>Optional document to query.   If unspecified, use win.doc.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Number | number</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_getBorderExtents"></a><span class="functionIcon">getBorderExtents</span><span class="parameters">(node,computedStyle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns an object with properties useful for noting the border
+dimensions.</p>
+</div>
+        <div class="jsdoc-full-summary"><ul>
+<li>l/t/r/b = the sum of left/top/right/bottom border (respectively)</li>
+<li>w = the sum of the left and right border</li>
+<li>h = the sum of the top and bottom border</li>
+</ul>
+<p>The w/h are used for calculating boxes.
+Normally application code will not need to invoke this
+directly, and will use the ...box... functions instead.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DOMNode</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">computedStyle</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>This parameter accepts computed styles object.
+If this parameter is omitted, the functions will call
+dojo.getComputedStyle to get one. It is a better way, calling
+dojo.computedStyle once, and then pass the reference to this
+computedStyle parameter. Wherever possible, reuse the returned
+object of dojo/dom-style.getComputedStyle().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_getContentBox"></a><span class="functionIcon">getContentBox</span><span class="parameters">(node,computedStyle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns an object that encodes the width, height, left and top
+positions of the node&#39;s content box, irrespective of the
+current box model.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DOMNode</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">computedStyle</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>This parameter accepts computed styles object.
+If this parameter is omitted, the functions will call
+dojo.getComputedStyle to get one. It is a better way, calling
+dojo.computedStyle once, and then pass the reference to this
+computedStyle parameter. Wherever possible, reuse the returned
+object of dojo/dom-style.getComputedStyle().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_getIeDocumentElementOffset"></a><span class="functionIcon">getIeDocumentElementOffset</span><span class="parameters">(doc)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns the offset in x and y from the document body to the
+visual edge of the page for IE</p>
+</div>
+        <div class="jsdoc-full-summary"><p>The following values in IE contain an offset:
+
+</p>
+<pre><code>event.clientX
+event.clientY
+node.getBoundingClientRect().left
+node.getBoundingClientRect().top</pre></code>
+<p>But other position related values do not contain this offset,
+
+</p>
+<p>such as node.offsetLeft, node.offsetTop, node.style.left and
+node.style.top. The offset is always (2, 2) in LTR direction.
+When the body is in RTL direction, the offset counts the width
+of left scroll bar&#39;s width.  This function computes the actual
+offset.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">doc</td>
+            <td class="jsdoc-param-type">Document</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>Optional document to query.   If unspecified, use win.doc.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_getMarginBox"></a><span class="functionIcon">getMarginBox</span><span class="parameters">(node,computedStyle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns an object that encodes the width, height, left and top
+positions of the node&#39;s margin box.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DOMNode</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">computedStyle</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>This parameter accepts computed styles object.
+If this parameter is omitted, the functions will call
+dojo.getComputedStyle to get one. It is a better way, calling
+dojo.computedStyle once, and then pass the reference to this
+computedStyle parameter. Wherever possible, reuse the returned
+object of dojo/dom-style.getComputedStyle().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_getMarginExtents"></a><span class="functionIcon">getMarginExtents</span><span class="parameters">(node,computedStyle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns object with properties useful for box fitting with
+regards to box margins (i.e., the outer-box).
+
+</p>
+<ul>
+<li>l/t = marginLeft, marginTop, respectively</li>
+<li>w = total width, margin inclusive</li>
+<li>h = total height, margin inclusive</li>
+</ul>
+<p>The w/h are used for calculating boxes.
+Normally application code will not need to invoke this
+directly, and will use the ...box... functions instead.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DOMNode</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">computedStyle</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>This parameter accepts computed styles object.
+If this parameter is omitted, the functions will call
+dojo.getComputedStyle to get one. It is a better way, calling
+dojo.computedStyle once, and then pass the reference to this
+computedStyle parameter. Wherever possible, reuse the returned
+object of dojo/dom-style.getComputedStyle().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_getMarginSize"></a><span class="functionIcon">getMarginSize</span><span class="parameters">(node,computedStyle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>returns an object that encodes the width and height of
+the node&#39;s margin box</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DOMNode | String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">computedStyle</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>This parameter accepts computed styles object.
+If this parameter is omitted, the functions will call
+dojo.getComputedStyle to get one. It is a better way, calling
+dojo.computedStyle once, and then pass the reference to this
+computedStyle parameter. Wherever possible, reuse the returned
+object of dojo/dom-style.getComputedStyle().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_getPadBorderExtents"></a><span class="functionIcon">getPadBorderExtents</span><span class="parameters">(node,computedStyle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns object with properties useful for box fitting with
+regards to padding.</p>
+</div>
+        <div class="jsdoc-full-summary"><ul>
+<li>l/t/r/b = the sum of left/top/right/bottom padding and left/top/right/bottom border (respectively)</li>
+<li>w = the sum of the left and right padding and border</li>
+<li>h = the sum of the top and bottom padding and border</li>
+</ul>
+<p>The w/h are used for calculating boxes.
+Normally application code will not need to invoke this
+directly, and will use the ...box... functions instead.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DOMNode</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">computedStyle</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>This parameter accepts computed styles object.
+If this parameter is omitted, the functions will call
+dojo.getComputedStyle to get one. It is a better way, calling
+dojo.computedStyle once, and then pass the reference to this
+computedStyle parameter. Wherever possible, reuse the returned
+object of dojo/dom-style.getComputedStyle().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_getPadExtents"></a><span class="functionIcon">getPadExtents</span><span class="parameters">(node,computedStyle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns object with special values specifically useful for node
+fitting.</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Returns an object with <code>w</code>, <code>h</code>, <code>l</code>, <code>t</code> properties:
+
+</p>
+<pre><code>l/t/r/b = left/top/right/bottom padding (respectively)
+w = the total of the left and right padding
+h = the total of the top and bottom padding</pre></code>
+<p>If &#39;node&#39; has position, l/t forms the origin for child nodes.
+
+</p>
+<p>The w/h are used for calculating boxes.
+Normally application code will not need to invoke this
+directly, and will use the ...box... functions instead.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DOMNode</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">computedStyle</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>This parameter accepts computed styles object.
+If this parameter is omitted, the functions will call
+dojo.getComputedStyle to get one. It is a better way, calling
+dojo.computedStyle once, and then pass the reference to this
+computedStyle parameter. Wherever possible, reuse the returned
+object of dojo/dom-style.getComputedStyle().</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_isBodyLtr"></a><span class="functionIcon">isBodyLtr</span><span class="parameters">(doc)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Returns true if the current language is left-to-right, and false otherwise.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">doc</td>
+            <td class="jsdoc-param-type">Document</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>Optional document to query.   If unspecified, use win.doc.</p>
+
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Boolean | boolean</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_normalizeEvent"></a><span class="functionIcon">normalizeEvent</span><span class="parameters">(event)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Normalizes the geometry of a DOM event, normalizing the pageX, pageY,
+offsetX, offsetY, layerX, and layerX properties</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">event</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_position"></a><span class="functionIcon">position</span><span class="parameters">(node,includeScroll)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Gets the position and size of the passed element relative to
+the viewport (if includeScroll==false), or relative to the
+document root (if includeScroll==true).
+</p>
+</div>
+        <div class="jsdoc-full-summary"><p>Returns an object of the form:
+<code>{ x: 100, y: 300, w: 20, h: 15 }</code>.
+If includeScroll==true, the x and y values will include any
+document offsets that may affect the position relative to the
+viewport.
+Uses the border-box model (inclusive of border and padding but
+not margin).  Does not act as a setter.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DOMNode | String</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">includeScroll</td>
+            <td class="jsdoc-param-type">Boolean</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div>
+            </td>
+          </tr>
+        </table>
+        <div><strong>Returns:</strong><span class="jsdoc-return-type">Object | object</span></div>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_setContentSize"></a><span class="functionIcon">setContentSize</span><span class="parameters">(node,box,computedStyle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>Sets the size of the node&#39;s contents, irrespective of margins,
+padding, or borders.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DOMNode</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">box</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>hash with optional &quot;w&quot;, and &quot;h&quot; properties for &quot;width&quot;, and &quot;height&quot;
+respectively. All specified properties should have numeric values in whole pixels.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">computedStyle</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>This parameter accepts computed styles object.
+If this parameter is omitted, the functions will call
+dojo.getComputedStyle to get one. It is a better way, calling
+dojo.computedStyle once, and then pass the reference to this
+computedStyle parameter. Wherever possible, reuse the returned
+object of dojo/dom-style.getComputedStyle().</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="jsdoc-field">
+        <div class="jsdoc-title"><a name="1_8dojo_dom-geometry_setMarginBox"></a><span class="functionIcon">setMarginBox</span><span class="parameters">(node,box,computedStyle)</span>
+        </div>
+        <div class="jsdoc-inheritance">Defined by&nbsp;<a href="/documentation/api/1.8/dojo/dom-geometry" class="jsdoc-link">dojo/dom-geometry</a>
+        </div>
+        <div class="jsdoc-full-summary"><p>sets the size of the node&#39;s margin box and placement
+(left/top), irrespective of box model. Think of it as a
+passthrough to setBox that handles box-model vagaries for
+you.</p>
+</div>
+        <table class="jsdoc-parameters">
+          <tr>
+            <th>Parameter</th>
+            <th>Type</th>
+            <th>Description</th>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">node</td>
+            <td class="jsdoc-param-type">DOMNode</td>
+            <td class="jsdoc-param-description">
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">box</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description"><p>hash with optional &quot;l&quot;, &quot;t&quot;, &quot;w&quot;, and &quot;h&quot; properties for &quot;left&quot;, &quot;right&quot;, &quot;width&quot;, and &quot;height&quot;
+respectively. All specified properties should have numeric values in whole pixels.</p>
+
+            </td>
+          </tr>
+          <tr>
+            <td class="jsdoc-param-name">computedStyle</td>
+            <td class="jsdoc-param-type">Object</td>
+            <td class="jsdoc-param-description">
+              <div><em>Optional</em></div><p>This parameter accepts computed styles object.
+If this parameter is omitted, the functions will call
+dojo.getComputedStyle to get one. It is a better way, calling
+dojo.computedStyle once, and then pass the reference to this
+computedStyle parameter. Wherever possible, reuse the returned
+object of dojo/dom-style.getComputedStyle().</p>
+
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div><a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&amp;formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&amp;entry_0=/documentation/api/1.8/dojo/dom-geometry" class="feedback">Error in the documentation? Can’t find what you are looking for? Let us know!</a>

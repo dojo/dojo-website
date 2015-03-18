@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Service Mapping Description Proposal &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../../dojo/index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">Service Mapping Description Proposal</a><ul>
+<li><a class="reference internal" href="#abstract">Abstract</a></li>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#terminology">Terminology</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#type-defined-sub-services">Type Defined Sub-Services</a><ul>
+<li><a class="reference internal" href="#examples-of-sub-services">Examples of Sub-Services</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="service-mapping-description-proposal">
+<span id="dojox-rpc-smd"></span><h1><a class="toc-backref" href="#id1">Service Mapping Description Proposal</a><a class="headerlink" href="#service-mapping-description-proposal" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#service-mapping-description-proposal" id="id1">Service Mapping Description Proposal</a><ul>
+<li><a class="reference internal" href="#abstract" id="id2">Abstract</a></li>
+<li><a class="reference internal" href="#requirements" id="id3">Requirements</a></li>
+<li><a class="reference internal" href="#terminology" id="id4">Terminology</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#type-defined-sub-services" id="id6">Type Defined Sub-Services</a><ul>
+<li><a class="reference internal" href="#examples-of-sub-services" id="id7">Examples of Sub-Services</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="abstract">
+<h2><a class="toc-backref" href="#id2">Abstract</a><a class="headerlink" href="#abstract" title="Permalink to this headline">¶</a></h2>
+<p>A Service Mapping Description (SMD) is a JSON representation describing web services. An SMD can defines the various aspects of a web service such that clients can coherently interact with the web services. An SMD can be used by generic tools to generate interfaces, human and programmatic, to access available web services. A wide array of web services can be described with SMD including REST services and JSON-RPC services. The SMD format is designed to be flexible, compact, simple, readable, and easily implemented.
+Conventions</p>
+<p>The key words &#8220;MUST&#8221;, &#8220;MUST NOT&#8221;, &#8220;REQUIRED&#8221;, &#8220;SHALL&#8221;, &#8220;SHALL NOT&#8221;, &#8220;SHOULD&#8221;, &#8220;SHOULD NOT&#8221;, &#8220;RECOMMENDED&#8221;, &#8220;MAY&#8221;, and &#8220;OPTIONAL&#8221; in this document are to be interpreted as described in RFC 2119.</p>
+<p>JSON Schema is based on JSON, therefore it shares the same basic types as JSON (see <a class="reference external" href="http://www.json.org">http://www.json.org</a> or RFC 4627). Whenever this document refers to any JSON type, the first letter is always capitalized: Object, Array, String, Number, True, False, Null</p>
+</div>
+<div class="section" id="requirements">
+<h2><a class="toc-backref" href="#id3">Requirements</a><a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>This document is intended to be used by service providers to properly author SMDs, and for web service clients to properly understand SMDs and generate methods to call the services. SMDs provide information about available services, but servers may be limited in their knowledge of the services, and clients may be limited in their ability to communicate to every possible service type. Therefore compliance to this specification does not require servers or clients to fully utilize or comprehend every service type and service attribute defined. For clients, compliance to this specification requires that clients that do utilize services as described in an SMD, utilize those services in accordance with the service&#8217;s non-optional requirements in its definition. Clients that do not implement certain service types, may simply not utilize those services. For servers, compliance requires that services be operable in some form in accordance to their service definition. However, there is no requirement about how much information is provided about services, and therefore there can be no guarantee that a service request sent according to the service definition will behave as one expects. The more information that a server provides about services according to the specification, the greater level of interaction and utility a client may derive from the services as a result of the SMD. There are a few required properties in the SMD, that must be included to be a valid SMD.</p>
+</div>
+<div class="section" id="terminology">
+<h2><a class="toc-backref" href="#id4">Terminology</a><a class="headerlink" href="#terminology" title="Permalink to this headline">¶</a></h2>
+<p>Service - A service is a web endpoint that can perform an action and/or return specific information in response to a defined network request.</p>
+<p>Method - A method is a subroutine that, in the context of this document, will execute a service and return a value corresponding to the value returned by the service.
+Specification</p>
+<p>An SMD is represented as a JSON Object with properties that are used to define the interaction of the available web services. At the root level an SMD can have service properties and a methods property with an Array value, with items that correspond to the available services. Each of the services can have their own service properties. The service properties defined at the root level are inherited by the service for each property that the service does not define itself. This allows service properties that are shared by all services to be defined once in the SMD. All service properties are optional unless otherwise stated. Below are the available service properties:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>transport</strong></dt>
+<dd><p class="first">The transport property defines the transport mechanism to be used to deliver service calls to servers. The following values are defined:</p>
+<ul class="simple">
+<li>&#8220;POST&#8221; - The service call should be sent to the server using the HTTP POST method with the service message in the post body.</li>
+<li>&#8220;GET&#8221; - The service call should be sent to the server using the HTTP GET method with the service message in URL query string.</li>
+<li>&#8220;REST&#8221; - The service call can be sent to the server using standard REST HTTP methods (GET, PUT, DELETE, and POST) with parameters in the URL query string. All clients do not necessarily have authorization to use all the available HTTP methods for the provided service. A PUT and POST method require a content body for the service.</li>
+<li>&#8220;JSONP&#8221; - The service call should be sent to the server using the HTTP GET method with parameters in the URL using standard parameter encoding and the response should be prepended with a call using the JSONP protocol. The callback parameter name should be defined with the jsonpCallbackParameter property.</li>
+<li>&#8220;TCP/IP&#8221; - The service call should take place directly over TCP/IP.</li>
+</ul>
+<p class="last">The transport property defaults to &#8220;POST&#8221;.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>envelope</strong></dt>
+<dd><p class="first">An envelope defines how a service message string is created from the provided parameters.</p>
+<ul class="simple">
+<li>&#8220;URL&#8221; - The response should be value returned from the method call. For example: <code class="docutils literal"><span class="pre">name=value</span></code> would be included the query string or request body. URL encoded parameters allow multiple parameters with the same name, so it is recommended that lists/arrays should correspond to multiple parameters with the same name.</li>
+<li>&#8220;PATH&#8221; - The parameters should be included in the path of the URL. For example: <code class="docutils literal"><span class="pre">name/value</span></code> would be appended the request path.</li>
+<li>&#8220;JSON&#8221; - The parameters will be transferred as a JSON string. For example: <code class="docutils literal"><span class="pre">{&quot;name&quot;:&quot;value&quot;}</span></code> would be included in the query string or request body.</li>
+<li>&#8220;JSON-RPC-1.0&#8221; - The JSON-RPC 1.0 protocol should be used. For example: <code class="docutils literal"><span class="pre">{&quot;id&quot;:1,&quot;method&quot;:&quot;foo&quot;,&quot;params&quot;:[&quot;value&quot;]</span> <span class="pre">}</span></code> would be included in the request body.</li>
+<li>&#8220;JSON-RPC-1.1&#8221; - The JSON-RPC 1.1 protocol is deprecated and should not be used.</li>
+<li>&#8220;JSON-RPC-2.0&#8221; - The JSON-RPC 2.0 protocol should be used. For example: <code class="docutils literal"><span class="pre">{&quot;id&quot;:1,&quot;method&quot;:&quot;foo&quot;,&quot;version&quot;:&quot;json-rpc-2.0&quot;,&quot;params&quot;:{&quot;name&quot;:&quot;value&quot;}}</span></code> would be included in the request body.</li>
+</ul>
+<p class="last">The envelope property defaults to &#8220;URL&#8221;.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>contentType</strong></dt>
+<dd><p class="first last">This is the expected content type of the content returned by a service. Any valid MIME type is acceptable. This property defaults to <code class="docutils literal"><span class="pre">application/json</span></code>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>jsonpCallbackParameter</strong></dt>
+<dd><p class="first">This indicates the parameter named to be used to indicate the callback prepended on the JSON response. This defaults to &#8220;callback&#8221;. For example, a the following jsonp exchange may take place:</p>
+<div class="last highlight-python"><div class="highlight"><pre>--&gt; GET http://domain.com/service?id=3&amp;callback=call1
+&lt;-- call1({&quot;name&quot;:&quot;returned json object&quot;});
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>target</strong></dt>
+<dd><p class="first last">This should indicate what URL (or IP address in the case of TCP/IP transport) to use for the method call requests. A URL may be an absolute URL or a relative URL
+When a relative URL is used at the root level, the URL should be considered relative to the relevant context of the SMD (presumably based on the URL used to retrieve the SMD resource). When a relative URL is used in a specific service definition (instead of at the root level) it should be considered relative to the root level target (whether computed or explicit).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>additionalParameters</strong></dt>
+<dd><p class="first">If additionalParameters is false, only parameters specified on a method will be allowed. Otherwise additional unnamed parameters can be included in the requests. If the additionalParameters is an object, it is a parameter definition for any additional parameters. This property defaults to true. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre>parameters:[{&quot;name&quot;:&quot;foo&quot;,&quot;type&quot;:&quot;string&quot;}],
+additionalParameters:{&quot;type&quot;:&quot;number&quot;}
+</pre></div>
+</div>
+<p>would indicate that the parameter foo should be a string and all other parameters must be numbers. The following would be valid parameters:</p>
+<div class="last highlight-python"><div class="highlight"><pre>foo:&quot;a string&quot;,bar:4,baz:10
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>parameters</strong></dt>
+<dd><p class="first">This indicates what parameters may be supplied for the service calls. A parameters value MUST be an Array. Each value in the parameters Array should describe a parameter and follow the JSON Schema property definition. Each of parameters that are defined at the root level are inherited by each of service definition's parameters. The parameter definition follows the JSON Schema property definition with the additional properties:</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt><strong>name</strong></dt>
+<dd><p class="first last">This is the name of the parameter. If names are not provided for all the parameters, this indicates positional/ordered parameter calls MUST be used. If names are provided in the parameters this indicates that named parameters SHOULD be issued by the client making the service call, and the server MUST support named parameters, but positional parameters MAY be issued by the client and servers SHOULD support positional parameters.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>optional</strong></dt>
+<dd><p class="first last">This indicates whether or not the parameter is required to be sent on service calls.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>default</strong></dt>
+<dd><p class="first last">This defines the default value for a parameter. When used in conjunction with the <code class="docutils literal"><span class="pre">optional</span></code> property being true, the parameter does not need to be sent on the service call, the server will treat the omission of the property as the default value. If the <code class="docutils literal"><span class="pre">optional</span></code> property is not true, than the client MUST send the property, and SHOULD use the default value when a user does not provide a value.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>returns</strong></dt>
+<dd><p class="first last">This indicates the expected type of value returned from the method call. This value of this property should follow JSON Schema type definition.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>name</strong></dt>
+<dd><p class="first last">This indicates the name of the method call. This can be used by libraries for referring to methods by name. This should be unique for each method and therefore should not be inherited from the root level.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Any additional custom properties can be defined for services as well.</p>
+<p>At the root Object level only, the SMD can define the following properties (in addition to being able to OPTIONALLY define service properties at the root level):</p>
+<ul>
+<li><dl class="first docutils">
+<dt><strong>services</strong></dt>
+<dd><p class="first last">This should be an Object value where each property in the Object represents one of the available services. The property name represents the name of the service, and the value is the service description. This property MUST be included.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>SMDVersion</strong></dt>
+<dd><p class="first last">This is a string that indicates the version level of the SMD being used. This specification is at version level &quot;2.0&quot;. This property SHOULD be included.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>id</strong></dt>
+<dd><p class="first last">This is a unique identifier for the service. When possible, the id should represent the URL from which service descriptor can be accessed (relative URLs are acceptable). This property SHOULD be included.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>description</strong></dt>
+<dd><p class="first last">This a description of the service. This property SHOULD be included.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+    <span class="s">&quot;transport&quot;</span><span class="p">:</span> <span class="s">&quot;POST&quot;</span><span class="p">,</span>
+    <span class="s">&quot;envelope&quot;</span><span class="p">:</span> <span class="s">&quot;URL&quot;</span><span class="p">,</span>
+    <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;/service/&quot;</span><span class="p">,</span>
+    <span class="s">&quot;additionalParameters&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;outputType&quot;</span><span class="p">,</span>
+            <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="s">&quot;json&quot;</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;ignoreErrors&quot;</span><span class="p">,</span>
+            <span class="s">&quot;optional&quot;</span><span class="p">:</span> <span class="n">true</span>
+        <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s">&quot;services&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;foo&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;transport&quot;</span><span class="p">:</span> <span class="s">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="s">&quot;target&quot;</span><span class="p">:</span> <span class="s">&quot;executeFoo.php&quot;</span><span class="p">,</span>
+            <span class="s">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;paramOne&quot;</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;string&quot;</span><span class="p">},</span>
+                <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;paramTwo&quot;</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;integer&quot;</span><span class="p">,</span> <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">},</span>
+                <span class="p">{</span><span class="s">&quot;name&quot;</span><span class="p">:</span><span class="s">&quot;paramThree&quot;</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;integer&quot;</span><span class="p">,</span> <span class="s">&quot;optional&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="s">&quot;add&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;transport&quot;</span><span class="p">:</span> <span class="s">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="s">&quot;envelope&quot;</span><span class="p">:</span> <span class="s">&quot;JSON-RPC-2.0&quot;</span><span class="p">,</span>
+            <span class="s">&quot;additionalParameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;integer&quot;</span><span class="p">,</span> <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="s">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;integer&quot;</span><span class="p">,</span> <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+                <span class="p">{</span><span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;integer&quot;</span><span class="p">,</span> <span class="s">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In the above example, two methods are defined: foo and add. foo is declared to take named parameters, with a service endpoint of /service/executeFoo.php (derived as a relative URL) with url-encoded parameters. The following is an example of a valid service call for the <code class="docutils literal"><span class="pre">foo</span></code> method:</p>
+<div class="highlight-python"><div class="highlight"><pre>GET /service/executeFoo.php?paramOne=value&amp;paramTwo=3&amp;outputType=json
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">add</span></code> service is defined to use the service endpoint of /service/ (inherited from the root level), and takes positional parameters using JSON-RPC version 2.0. The following is an example of a valid service call for the add method:</p>
+<div class="highlight-python"><div class="highlight"><pre>POST /service/
+
+{&quot;id&quot;:1,&quot;method&quot;:&quot;add&quot;,&quot;params&quot;:[4,7,9]}
+</pre></div>
+</div>
+<p>Note that all service definition properties are optional. Therefore, a service could be defined:</p>
+<div class="highlight-python"><div class="highlight"><pre>&quot;simple&quot;: {}
+</pre></div>
+</div>
+<p>and this would indicate that any parameters may be passed in, and return value can be returned.</p>
+</div>
+</div>
+<div class="section" id="type-defined-sub-services">
+<h1><a class="toc-backref" href="#id6">Type Defined Sub-Services</a><a class="headerlink" href="#type-defined-sub-services" title="Permalink to this headline">¶</a></h1>
+<p>Some services may not only exist as services themselves, but the satisfied service (with provided parameters), may actually be an endpoint for other sub-services. In particular, it is possible for a REST service calls to be used as endpoints for JSON-RPC calls. A JSON Schema may define a methods property that has an array of available services with SMD service definitions. Service A may then define the return type of a service with a JSON Schema that defines additional available services on the objects returned by service A. This enables services to utilize object-oriented typing capabilities with method/service definitions that mirror the capabilities of programming language classes.</p>
+<div class="section" id="examples-of-sub-services">
+<h2><a class="toc-backref" href="#id7">Examples of Sub-Services</a><a class="headerlink" href="#examples-of-sub-services" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>{
+   &quot;services&quot;:{
+       &quot;person&quot;: {
+            &quot;transport&quot;: &quot;REST&quot;,
+            &quot;envelope&quot;: &quot;PATH&quot;,
+            &quot;target&quot;: &quot;person&quot;,
+            &quot;parameters&quot;: [{
+                &quot;name&quot;:&quot;id&quot;,
+                &quot;type&quot;: &quot;string&quot;
+            }],
+            &quot;returns&quot;: {
+                &quot;type&quot;: {
+                    &quot;id&quot;:{&quot;type&quot;:&quot;string&quot; },
+                    &quot;firstName&quot;:{&quot;type&quot;:&quot;string&quot;},
+                    &quot;lastName&quot;:{&quot;type&quot;:&quot;string&quot;},
+                    &quot;age&quot;:{&quot;type&quot;:&quot;number&quot;,&quot;maximum&quot;:125,&quot;minimum&quot;:0},
+                    &quot;address&quot;:{&quot;type&quot;:&quot;string&quot;}}
+                },
+                &quot;services&quot;:{
+                    &quot;sendMessage&quot;: {
+                        &quot;type&quot;: &quot;method&quot;,
+                        &quot;transport&quot;: &quot;RAW_POST&quot;,
+                        &quot;envelope&quot;: &quot;JSON-RPC-2.0&quot;,
+                        &quot;parameters&quot;: [
+                            {&quot;type&quot;: &quot;string&quot;, &quot;optional&quot;: true},
+                            {&quot;type&quot;:&quot;object&quot;}],
+                        &quot;returns&quot;: {&quot;type&quot;: &quot;boolean&quot;}
+                    }
+                }
+            }
+        }
+    }
+}
+</pre></div>
+</div>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>

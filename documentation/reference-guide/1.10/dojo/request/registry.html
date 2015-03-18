@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/request/registry &mdash; The Dojo Toolkit - Reference Guide</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.10.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <script src="/scripts/dojo/dojo/dojo.js"></script>
+    <script src="/scripts/guide/docs/guide.js"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css">
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo"><span>Dojo</span></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="">Get Dojo</a></li>
+					<li><a href="/documentation/">Docs</a></li>
+					<li><a href="">Help &amp; Support</a></li>
+					<li><a href="">Blog</a></li>
+					<li><a href="">Get Involved</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <main class="refguide">
+    <div class="row">
+
+      <div class="medium-3 columns sideNav">
+        <h4>Reference Guide</h4>
+        <div id="dtkVersion">
+          <label for="refver">Dojo Version</label>
+          <select id="refver" name="refver">
+            <option value="1.6">1.6</option>
+            <option value="1.7">1.7</option>
+            <option value="1.8">1.8</option>
+            <option value="1.9">1.9</option>
+            <option value="1.10" selected="selected">1.10</option>
+          </select>
+        </div>
+        <ul>
+          <li><a href="../../index.html">Startpage</a></li>
+          <li><a href="../index.html">Dojo</a></li>
+          <li><a href="../../dijit/index.html">Dijit</a></li>
+          <li><a href="../../dojox/index.html">DojoX</a></li>
+        </ul>
+        <ul>
+<li><a class="reference internal" href="#">dojo/request/registry</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#register">register()</a></li>
+<li><a class="reference internal" href="#get">get()</a></li>
+<li><a class="reference internal" href="#post">post()</a></li>
+<li><a class="reference internal" href="#put">put()</a></li>
+<li><a class="reference internal" href="#delete">delete()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+
+        
+
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q" size="18" />
+                    <input type="submit" value="Go" />
+                    <input type="hidden" name="check_keywords" value="yes" />
+                    <input type="hidden" name="area" value="default" />
+                 </form>
+                 <p class="searchtip" style="font-size: 90%">
+                     Enter search terms or a module, class or function name.
+                 </p>
+            </div>
+      </div>
+      <div class="medium-9 columns content">
+        
+  <div class="section" id="dojo-request-registry">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/request/registry</a><a class="headerlink" href="#dojo-request-registry" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">authors:</th><td class="field-body">Bryan Forbes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V1.8</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-request-registry" id="id2">dojo/request/registry</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/request/registry</strong> is a module that provides the ability to register providers to handle requests based on
+criteria such as the URL of the request.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">dojo/request/registry</span></code> allows for the registration of providers against a URL pattern or other criteria, which
+is then matched when a request is made. This allows using the same API call across an application while using
+multiple providers. An example of this would be using <code class="docutils literal"><span class="pre">dojo/request/xhr</span></code> for same domain requests and
+<code class="docutils literal"><span class="pre">dojo/request/script</span></code> for cross domain requests, but only ever calling <code class="docutils literal"><span class="pre">dojo/request</span></code>.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>To use the registry, you need to require it, register providers, and make your requests:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/request/registry&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/request/xhr&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/request/script&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">,</span> <span class="nx">script</span><span class="p">){</span>
+  <span class="c1">// Register with a regex</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="sr">/^foo/</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">);</span>
+
+  <span class="c1">// Register with a string</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="nx">script</span><span class="p">);</span>
+
+  <span class="c1">// Register with a function and add to the beginning</span>
+  <span class="c1">// of the list of providers using a truthy third argument</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">){</span>
+    <span class="c1">// Return a truthy value if this provider should be matched, otherwise</span>
+    <span class="c1">// return a falsey value</span>
+    <span class="k">return</span> <span class="o">!!</span><span class="nx">options</span><span class="p">.</span><span class="nx">useXHR</span><span class="p">;</span>
+  <span class="p">},</span> <span class="nx">xhr</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+
+  <span class="c1">// Will match the first registration</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;foobar.html&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">){</span>
+    <span class="c1">// Do something with the response</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Will match the second registration</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">){</span>
+    <span class="c1">// Do something with the response</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Will match the third registration because</span>
+  <span class="c1">// it was added to the beginning of the provider</span>
+  <span class="c1">// list and will match before the first registration</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;foo.html&quot;</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">useXHR</span><span class="o">:</span> <span class="kc">true</span>
+  <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">){</span>
+    <span class="c1">// Do something with the response</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Will use the fallback provider (the platform default unless explicitly set)</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;somethingelse&quot;</span><span class="p">).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
+    <span class="c1">// Do something with the response</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/request/registry&quot;, &quot;dojo/request/xhr&quot;, &quot;dojo/request/script&quot;], function(request, xhr, script){
+  // Register with a regex
+  request.register(/^foo/, xhr);
+
+  // Register with a string
+  request.register(&quot;bar&quot;, script);
+
+  // Register with a function and add to the beginning
+  // of the list of providers using a truthy third argument
+  request.register(function(url, options){
+    // Return a truthy value if this provider should be matched, otherwise
+    // return a falsey value
+    return !!options.useXHR;
+  }, xhr, true);
+
+  // Will match the first registration
+  request.get(&quot;foobar.html&quot;).then(function(text){
+    // Do something with the response
+  });
+
+  // Will match the second registration
+  request.get(&quot;bar&quot;).then(function(text){
+    // Do something with the response
+  });
+
+  // Will match the third registration because
+  // it was added to the beginning of the provider
+  // list and will match before the first registration
+  request.get(&quot;foo.html&quot;, {
+    useXHR: true
+  }).then(function(text){
+    // Do something with the response
+  });
+
+  // Will use the fallback provider (the platform default unless explicitly set)
+  request.get(&quot;somethingelse&quot;).then(function(response){
+    // Do something with the response
+  });
+});</textarea></div><p>As providers are registered, they are pushed onto the registry stack, whereby the first positive match encountered
+is used. There is an optional third argument to <code class="docutils literal"><span class="pre">register()</span></code> which, if truthy, will put the provider being
+registered at the top of the stack. If there are no matches, the registry will fallback to the platform default
+provider.</p>
+<p>The base function of the module conforms to the Request API and will use the default HTTP method of the matching
+provider.</p>
+<div class="section" id="register">
+<h3>register()<a class="headerlink" href="#register" title="Permalink to this headline">¶</a></h3>
+<p>This registers a provider.  It takes up to three arguments:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="19%" />
+<col width="73%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>url</td>
+<td>String|RegExp|Function</td>
+<td><p class="first">The criteria the registry should use to determine if <code class="docutils literal"><span class="pre">provider</span></code> should be used
+to make a request. If this is a function, it should take two arguments and return
+a truthy value if the provider should handle the request:</p>
+<ul class="last simple">
+<li><code class="docutils literal"><span class="pre">url</span></code> - The URL being requested</li>
+<li><code class="docutils literal"><span class="pre">options</span></code> - The options being set on the request</li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td>provider</td>
+<td>Function</td>
+<td>The provider that should handle the request if matched.</td>
+</tr>
+<tr class="row-even"><td>first</td>
+<td>Boolean?</td>
+<td><em>Optional</em> If truthy, the provider will be added to the beginning of the list of
+providers, possibly overriding previously registered providers.</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal"><span class="pre">register()</span></code> returns a handle that can be used to remove the matcher from the stack:</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/request/registry&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/request/xhr&quot;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">handle</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="s2">&quot;foobar&quot;</span><span class="p">,</span> <span class="nx">xhr</span><span class="p">);</span>
+
+  <span class="c1">// ...</span>
+
+  <span class="nx">handle</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/request/registry&quot;, &quot;dojo/request/xhr&quot;], function(request, xhr){
+  var handle = request.register(&quot;foobar&quot;, xhr);
+
+  // ...
+
+  handle.remove();
+});</textarea></div></div>
+<div class="section" id="get">
+<h3>get()<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
+<p>Calls the mapped provider with a method of <code class="docutils literal"><span class="pre">GET</span></code>.</p>
+</div>
+<div class="section" id="post">
+<h3>post()<a class="headerlink" href="#post" title="Permalink to this headline">¶</a></h3>
+<p>Calls the mapped provider with a method of <code class="docutils literal"><span class="pre">POST</span></code>. Note that the you need to ensure that any matched provider
+supports this method.</p>
+</div>
+<div class="section" id="put">
+<h3>put()<a class="headerlink" href="#put" title="Permalink to this headline">¶</a></h3>
+<p>Calls the mapped provider with a method of <code class="docutils literal"><span class="pre">PUT</span></code>. Note that the you need to ensure that any matched provider
+supports this method.</p>
+</div>
+<div class="section" id="delete">
+<h3>delete()<a class="headerlink" href="#delete" title="Permalink to this headline">¶</a></h3>
+<p>Calls the mapped provider with a method of <code class="docutils literal"><span class="pre">DELETE</span></code>. Note that the you need to ensure that any matched provider
+supports this method.</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div data-dojo-type="docs.MiniGlass" class="CodeGlassMini" data-dojo-props="type: 'dialog', pluginArgs:{ dojoConfig: 'parseOnLoad: true', version:'' }, width:'700', height:'400', toolbar:'', themename:'claro'"><div class="CodeGlassMiniInner"><p>This example will register a regular expression that will route anything that ends in <code class="docutils literal"><span class="pre">.jsonp.js</span></code> to the
+<code class="docutils literal"><span class="pre">dojo/request/script</span></code> provider; all other requests will go through the platform default provider (in the
+case of the browser, <code class="docutils literal"><span class="pre">dojo/request/xhr</span></code>).</p>
+<div class="highlight"><pre><span class="nx">require</span><span class="p">([</span><span class="s2">&quot;dojo/request/registry&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/request/script&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/dom-construct&quot;</span><span class="p">,</span> <span class="s2">&quot;dojo/on&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dojo/domReady!&quot;</span><span class="p">],</span>
+<span class="kd">function</span><span class="p">(</span><span class="nx">request</span><span class="p">,</span> <span class="nx">script</span><span class="p">,</span> <span class="nx">dom</span><span class="p">,</span> <span class="nx">domConst</span><span class="p">,</span> <span class="nx">on</span><span class="p">){</span>
+  <span class="c1">// Registers anything that ends in &quot;.jsonp.js&quot; be sent to the script provider</span>
+  <span class="nx">request</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="sr">/\.jsonp\.js$/i</span><span class="p">,</span> <span class="nx">script</span><span class="p">);</span>
+
+  <span class="nx">on</span><span class="p">(</span><span class="nx">dom</span><span class="p">.</span><span class="nx">byId</span><span class="p">(</span><span class="s2">&quot;startButton&quot;</span><span class="p">),</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;request: &#39;helloworld.jsonp.js&#39;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;helloworld.jsonp.js&quot;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">jsonp</span><span class="o">:</span> <span class="s2">&quot;callback&quot;</span>
+    <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+      <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;script data: &lt;code&gt;&quot;</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&lt;/code&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;request: &#39;helloworld.json&#39;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+    <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s2">&quot;helloworld.json&quot;</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">handleAs</span><span class="o">:</span> <span class="s2">&quot;json&quot;</span>
+    <span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
+      <span class="nx">domConst</span><span class="p">.</span><span class="nx">place</span><span class="p">(</span><span class="s2">&quot;&lt;p&gt;xhr data: &lt;code&gt;&quot;</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&lt;/code&gt;&lt;/p&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="javascript"><textarea style="display:none">require([&quot;dojo/request/registry&quot;, &quot;dojo/request/script&quot;, &quot;dojo/dom&quot;, &quot;dojo/dom-construct&quot;, &quot;dojo/on&quot;,
+    &quot;dojo/domReady!&quot;],
+function(request, script, dom, domConst, on){
+  // Registers anything that ends in &quot;.jsonp.js&quot; be sent to the script provider
+  request.register(/\.jsonp\.js$/i, script);
+
+  on(dom.byId(&quot;startButton&quot;), &quot;click&quot;, function(){
+    domConst.place(&quot;&lt;p&gt;request: 'helloworld.jsonp.js'&lt;/p&gt;&quot;, &quot;output&quot;);
+    request.get(&quot;helloworld.jsonp.js&quot;, {
+      jsonp: &quot;callback&quot;
+    }).then(function(data){
+      domConst.place(&quot;&lt;p&gt;script data: &lt;code&gt;&quot; + JSON.stringify(data) + &quot;&lt;/code&gt;&lt;/p&gt;&quot;, &quot;output&quot;);
+    });
+    domConst.place(&quot;&lt;p&gt;request: 'helloworld.json'&lt;/p&gt;&quot;, &quot;output&quot;);
+    request.get(&quot;helloworld.json&quot;, {
+      handleAs: &quot;json&quot;
+    }).then(function(data){
+      domConst.place(&quot;&lt;p&gt;xhr data: &lt;code&gt;&quot; + JSON.stringify(data) + &quot;&lt;/code&gt;&lt;/p&gt;&quot;, &quot;output&quot;);
+    });
+  });
+});</textarea></div><div class="highlight"><pre><span class="nt">&lt;h1&gt;</span>Output:<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;output&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="na">id=</span><span class="s">&quot;startButton&quot;</span><span class="nt">&gt;</span>Start<span class="nt">&lt;/button&gt;</span>
+</pre></div>
+<div class="CodeGlassMiniRaw" label="" lang="html"><textarea style="display:none">&lt;h1&gt;Output:&lt;/h1&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;
+&lt;button type=&quot;button&quot; id=&quot;startButton&quot;&gt;Start&lt;/button&gt;</textarea></div></div></div></div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../request.html#dojo-request"><span>dojo/request</span></a> - The Request API package</li>
+<li><a class="reference internal" href="xhr.html#dojo-request-xhr"><span>dojo/request/xhr</span></a> - The default provider for browser platforms</li>
+<li><a class="reference internal" href="node.html#dojo-request-node"><span>dojo/request/node</span></a> - The default provider for the node.js platform</li>
+<li><a class="reference internal" href="iframe.html#dojo-request-iframe"><span>dojo/request/iframe</span></a> - A provider that uses IFrame for transport</li>
+<li><a class="reference internal" href="script.html#dojo-request-script"><span>dojo/request/script</span></a> - A provider that expects the response to be embedded in a
+<code class="docutils literal"><span class="pre">&lt;script&gt;</span></code> tag.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-9 columns offset-3">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+        <div class="footer">
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+</div>
+    </div>
+  </div>
+  
+  </body>
+</html>
