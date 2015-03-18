@@ -1275,7 +1275,7 @@ define([
 	"dojo/ready", // ready
 	"dojo/sniff" // has("mozilla")
 ], function(array, NodeList, win, dom, domAttr, domClass, domConst, style, on, query, ready, has){
-	
+
 // ported from Sphinx basic theme doctools.js to use Dojo
 
 var doctools = {};
@@ -1327,9 +1327,9 @@ doctools.contains = function(arr, item){
  * span elements with the given class name.
  */
 NodeList.prototype.highlightText = function(text, className){
-	
+
 	function highlight(node){
-	
+
 		if(node.nodeType == 3){
 			var val = node.nodeValue;
 			var pos = val.toLowerCase().indexOf(text);
@@ -1399,7 +1399,7 @@ window.Documentation = {
 	* add context elements like header anchor links
 	*/
 	addContextElements : function(){
-		return;	
+		return;
 		$('div[id] > :header:first').each(function(){
 			$('<a class="headerlink">\u00B6</a>')
 				.attr('href', '#' + this.id)
@@ -1452,32 +1452,32 @@ window.Documentation = {
 	*/
 	initModIndex : function(){
 		var nodes = query('img.toggler').forEach(function(n){
-			
+
 			var shower = function(e){
 				var src = domAttr.get(n, "src");
 				var id = n.id.substr(7);
-				
+
 				console.log(query("tr.cg-" + id));
-				
+
 				if(src.substr(-9) == 'minus.png'){
 					domAttr.set(n, "src", src.substr(0, src.length - 9) + 'plus.png');
 				}else{
 					domAttr.set(n, "src", src.substr(0, src.length - 8) + 'minus.png');
 				}
 			}
-			
+
 			on(n, "click", shower);
 			style.set(n, "display", "");
-			
+
 			if(DOCUMENTATION_OPTIONS.COLLAPSE_MODINDEX){
 				shower();
 			}
 		});
-		
+
 		if(nodes.length){
 			console.log('need to fix initModIndex');
 		}
-		
+
 		/* original code
 		 var togglers = $('img.toggler').click(function(){
 			var src = $(this).attr('src');
@@ -1532,22 +1532,22 @@ ready(function(){
 			var v = e.target.value;
 			win.global.location.href = win.global.location.href.replace(/\/[12]\.[0-9]+\//i, "/" + v + "/");
 		});
-	
+
 		// Ensure the drop down version list has the right value
 		var vmatch = /\/([12]\.[0-9]+)\//i.exec(win.global.location.href);
 		if (vmatch){
 			vn.value = vmatch[1];
 		}
 	}
-	
+
 	// Init the sphynx Documentation object
 	Documentation.init();
-	
+
 	// Do some dynamic styling
 	domClass.add(win.body(), "refguide claro");
 	var sb = dom.byId("searchbox");
 	if(sb){
-		style.set(sb, "display", "block");
+		style.set(sb, "display", "inline-block");
 	}
 });
 
@@ -1569,7 +1569,7 @@ define([
 	"dojo/ready", // ready
 	"./doctools" // doctools.getQueryParameters
 ], function(array, baseFx, lang, xhr, dom, domConst, style, coreFx, query, ready, doctools){
-	
+
 /**
 * helper function to return a node containing the
 * search summary for a given text. keywords is a list
@@ -1600,7 +1600,7 @@ searchtools.makeSearchSummary = function(text, keywords, hlwords){
  * Porter Stemmer
  */
 window.PorterStemmer = function(){
-	
+
 	var step2list = {
 		ational: 'ate',
 		tional: 'tion',
@@ -1643,7 +1643,7 @@ window.PorterStemmer = function(){
 	var meq1 = "^(" + C + ")?" + V + C + "(" + V + ")?$";	// [C]VC[V] is m=1
 	var mgr1 = "^(" + C + ")?" + V + C + V + C;				// [C]VCVC... is m>1
 	var s_v = "^(" + C + ")?" + v;							// vowel in stem
-	
+
 	this.stemWord = function (w){
 
 		var stem, suffix, firstch, origword = w;
@@ -1705,7 +1705,7 @@ window.PorterStemmer = function(){
 			re = new RegExp(mgr0);
 			if(re.test(stem)) w = stem + step2list[suffix];
 		}
-		
+
 		// Step 3
 		re = /^(.+?)(icate|ative|alize|iciti|ical|ful|ness)$/;
 		if(re.test(w)){
@@ -1763,7 +1763,7 @@ window.Search = {
 	_index : null,
 	_queued_query : null,
 	_pulse_status : -1,
-	
+
 	init : function(){
 		var params = doctools.getQueryParameters();
 		if(params.q){
@@ -1885,7 +1885,7 @@ window.Search = {
 					objectResults.push([filenames[fn], module, '#module-'+module, descr]);
 				}
 			}
-			
+
 			for(var prefix in descrefs){
 				for(var name in descrefs[prefix]){
 					var fullname = (prefix ? prefix + '.' : '') + name;
@@ -1922,7 +1922,7 @@ window.Search = {
 				}
 			}
 		}
-		
+
 		// now check if the files don't contain excluded terms
 		for(var file in fileMap){
 			var valid = true;
@@ -1950,14 +1950,14 @@ window.Search = {
 			var right = b[1].toLowerCase();
 			return (left > right) ? -1 : ((left < right) ? 1 : 0);
 		});
-		
+
 		// combine both
 		var results = regularResults.concat(objectResults);
 		// print the results
 		var resultCount = results.length;
 
 		function displayNextItem(){
-			
+
 			function addListItem(listItem){
 				domConst.place(listItem, Search.output);
 				coreFx.wipeIn({
@@ -1966,7 +1966,7 @@ window.Search = {
 					onEnd: displayNextItem
 				}).play();
 			}
-			
+
 			// results left, load the summary and display it
 			if(results.length){
 				var item = results.pop();
@@ -1997,7 +1997,7 @@ window.Search = {
 					addListItem(listItem);
 				}
 			}else{
-			
+
 				// search finished, update title and status message
 				Search.stopPulse();
 				Search.title.innerHTML = 'Search Results';
@@ -2044,7 +2044,7 @@ define([
 
 	// module:
 	//		dojo/fx
-	
+
 	// For back-compat, remove in 2.0.
 	if(!dojo.isAsync){
 		ready(0, function(){
@@ -2489,7 +2489,7 @@ require([
 	ready(function(){
 		lang.setObject("docs.RstEditor", RstEditor);
 		parser.parse();
-		
+
 		var dialog = new Dialog({ title:"CodeGlass" });
 		lang.setObject("docs.masterviewer", new CodeGlassViewerMini(dialog));
 		query(".live-example").forEach(function(n){
@@ -2500,7 +2500,7 @@ require([
 				domClass.toggle(data, "closed");
 			});
 		});
-		
+
 		var linknode = dom.byId("redirectlink");
 		if(linknode){
 
@@ -2550,7 +2550,7 @@ require([
 
 		}
 	});
-	
+
 });
 
 },
@@ -2610,7 +2610,7 @@ dojo.cookie = function(/*String*/name, /*String?*/ value, /*__cookieProps?*/ pro
 	var c = document.cookie, ret;
 	if(arguments.length == 1){
 		var matches = c.match(new RegExp("(?:^|; )" + regexp.escapeString(name) + "=([^;]*)"));
-		ret = matches ? decodeURIComponent(matches[1]) : undefined; 
+		ret = matches ? decodeURIComponent(matches[1]) : undefined;
 	}else{
 		props = props || {};
 // FIXME: expires=0 seems to disappear right away, not on close? (FF3)  Change docs?
@@ -2738,17 +2738,17 @@ define([
 	"dijit/focus"
 ], function(declare, baseFx, lang, domConst, style, focus){
 	return declare("docs.CodeGlassViewerMini", null, {
-		
+
 		dialog: null,
-		
+
 		loadingMessage: "<p>Preparing Example....</p>",
-		
+
 		constructor: function(dialog){
 			this.dialog = dialog;
 		},
 
 		show: function(who){
-			// some codeglassmini instance wants us to show them. 
+			// some codeglassmini instance wants us to show them.
 
 			if(this.iframe){ domConst.destroy(this.iframe); }
 			this.dialog.set("content", this.loadingMessage);
@@ -2757,7 +2757,7 @@ define([
 				width: who.width + "px",
 				height: who.height + "px"
 			});
-			
+
 			this.dialog.show();
 
 			setTimeout(lang.hitch(this, function(){
@@ -2798,7 +2798,7 @@ define([
 					baseFx.anim(frame, { opacity:1 });
 				}
 
-			}), this.dialog.duration + 450);			
+			}), this.dialog.duration + 450);
 
 		}
 
@@ -3191,9 +3191,9 @@ return declare("dojo.Stateful", null, {
 	//
 	//		The class also provides the functionality to auto-magically manage getters
 	//		and setters for object attributes/properties.
-	//		
-	//		Getters and Setters should follow the format of _xxxGetter or _xxxSetter where 
-	//		the xxx is a name of the attribute to handle.  So an attribute of "foo" 
+	//
+	//		Getters and Setters should follow the format of _xxxGetter or _xxxSetter where
+	//		the xxx is a name of the attribute to handle.  So an attribute of "foo"
 	//		would have a custom getter of _fooGetter and a custom setter of _fooSetter.
 	//
 	// example:
@@ -3206,7 +3206,7 @@ return declare("dojo.Stateful", null, {
 	//	|	});
 
 	// _attrPairNames: Hash
-	//		Used across all instances a hash to cache attribute names and their getter 
+	//		Used across all instances a hash to cache attribute names and their getter
 	//		and setter names.
 	_attrPairNames: {},
 
@@ -3324,9 +3324,9 @@ return declare("dojo.Stateful", null, {
 		//		The value to set in the property.
 		//
 		// description:
-		//		Directly change the value of an attribute on an object, bypassing any 
-		//		accessor setter.  Also handles the calling of watch and emitting events. 
-		//		It is designed to be used by descendant class when there are two values 
+		//		Directly change the value of an attribute on an object, bypassing any
+		//		accessor setter.  Also handles the calling of watch and emitting events.
+		//		It is designed to be used by descendant class when there are two values
 		//		of attributes that are linked, but calling .set() is not appropriate.
 
 		var oldValue = this.get(name);
@@ -3648,7 +3648,7 @@ define([
 	"dojo/dom-attr", // domAttr.attr domAttr.has
 	"dojo/dom-style", // domStyle.style
 	"dojo/_base/lang", // lang.mixin()
-	"dojo/sniff", // has("ie")  1 
+	"dojo/sniff", // has("ie")  1
 	"./main"	// for exporting methods to dijit namespace
 ], function(array, dom, domAttr, domStyle, lang, has, dijit){
 
@@ -5078,7 +5078,7 @@ define(["./_base/kernel", "require", "./has", "./_base/array", "./_base/config",
 										var bundle = rollup[p],
 											match = p.match(/(.+)\/([^\/]+)$/),
 											bundleName, bundlePath;
-											
+
 											// If there is no match, the bundle is not a regular bundle from an AMD layer.
 											if (!match){continue;}
 
@@ -5612,7 +5612,7 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
 			if(node.dojoClick !== undefined){ return node; }
 		}while(node = node.parentNode);
 	}
-	
+
 	function doClicks(e, moveType, endType){
 		// summary:
 		//		Setup touch listeners to generate synthetic clicks immediately (rather than waiting for the browser
@@ -5621,14 +5621,14 @@ function(dojo, aspect, dom, domClass, lang, on, has, mouse, domReady, win){
 		//		its dojoClick property set to truthy. If a node receives synthetic clicks because one of its ancestors has its
 		//      dojoClick property set to truthy, you can disable synthetic clicks on this node by setting its own dojoClick property
 		//      to falsy.
-		
+
 		var markedNode = marked(e.target);
 		clickTracker  = !e.target.disabled && markedNode && markedNode.dojoClick; // click threshold = true, number, x/y object, or "useTarget"
 		if(clickTracker){
 			useTarget = (clickTracker == "useTarget");
 			clickTarget = (useTarget?markedNode:e.target);
 			if(useTarget){
-				// We expect a click, so prevent any other 
+				// We expect a click, so prevent any other
 				// default action on "touchpress"
 				e.preventDefault();
 			}
@@ -9453,7 +9453,7 @@ define([
 		dojoAttachEvent: "",
 		dojoAttachPoint: ""
 	});
-	
+
 	return _AttachMixin;
 });
 
@@ -12303,7 +12303,7 @@ define([
 	"dijit/Dialog",
 	"dojo/text!./resources/CodeGlassMini.html"
 ], function(array, config, declare, lang, has, domAttr, domClass, domConst, JSON, query, _WidgetBase, Dialog, template){
-	
+
 	var scriptopen = "<scr" + "ipt>",
 		scriptclose = "</" + "scri" + "pt>";
 
@@ -12319,11 +12319,11 @@ define([
 		renderedTemplate: "",
 		baseUrl: config.baseUrl + "../",
 		pluginArgs:null,
-		
+
 		constructor: function(args){
 			this.parts = args.parts || {};
 		},
-		
+
 		postCreate: function(){
 			// all we do it put a button in our self to run ourself. We don't process the content at all
 			this.closer = domConst.place("<a href='#' title='Collapse Example Code' class='CodeGlassMiniCollapser'><span class='a11y'>Collapse</span></a>", this.domNode, "first");
@@ -12335,11 +12335,11 @@ define([
 			this.inner = query(".CodeGlassMiniInner", this.domNode)[0];
 		},
 
-		
+
 		// only run processing once:
 		_hasRun: false,
 		_generateTemplate: function(){
-			if(!this._hasRun){ 
+			if(!this._hasRun){
 				this._hasRun = true;
 				try{
 					query("textarea", this.domNode).forEach(this.handlePart, this);
@@ -12355,7 +12355,7 @@ define([
 			this._generateTemplate();
 			this.show();
 		},
-		
+
 		_showCode: function(e){
 			e && e.preventDefault();
 			this._generateTemplate();
@@ -12380,7 +12380,7 @@ define([
 			e && e.preventDefault();
 			domClass.toggle(this.domNode, "closed");
 		},
-		
+
 		handlePart: function(n){
 			// this is testing the label="" and lang="" attribute. it's html/javascript/css enum
 			var t = domAttr.get(n.parentNode, "lang");
@@ -12390,12 +12390,12 @@ define([
 			var label = domAttr.get(n.parentNode, "label");
 			label && domConst.place("<p>" + label + "</p>", n.parentNode, "before");
 		},
-		
+
 		_processPart: function(type, content){
 			if(!this.parts[type]){
 				this.parts[type] = [];
 			}
-			
+
 			var orig = content;
 			var openswith = lang.trim(orig).charAt(0);
 			if(type == "javascript" && openswith == "<"){
@@ -12412,10 +12412,10 @@ define([
 			this.parts[type].push(orig)
 
 		},
-		
+
 		template: template,
 		_buildTemplate: function(){
-			
+
 			var args = this.pluginArgs,
 				dojoConfig = args.dojoConfig || args.djConfig,
 				uri = document.createElement('a');
@@ -12426,39 +12426,39 @@ define([
 				javascript: (dojoConfig ? "\t" + scriptopen + "dojoConfig = {" + dojoConfig + "}" + scriptclose + "\n" : "") +
 					"\t<scr" + "ipt src='" + (has("ie") ? config.cdn ? config.cdn + "dojo/" : config.baseUrl : config.baseUrl) +
 					"dojo.js'>" + scriptclose + "\n\t",
-				
-				htmlcode:"", 
-				
+
+				htmlcode:"",
+
 				// if we have a theme set include a link to {baseUrl}/dijit/themes/{themename}/{themename}.css first
 				// For the Dojo Mobile case, in Dojo 1.8+, if the specified theme is "deviceTheme" generate
 				// a script tag to import deviceTheme.js.
 				css: this.themename == "deviceTheme" ?
 					'\t<script type="text/javascript" src="' + this.baseUrl + 'dojox/mobile/deviceTheme.js"></script>\n\t' :
 					'\t<link rel="stylesheet" href="' + this.baseUrl + 'dijit/themes/' + this.themename + '/' + this.themename + '.css">\n\t',
-				
+
 				// if we've set RTL include dir="rtl" i guess?
 				htmlargs:"",
-				
+
 				// if we have a theme set, include class="{themename}"
-				bodyargs: this.themename == "deviceTheme" ? 
+				bodyargs: this.themename == "deviceTheme" ?
 					'style=\"visibility:hidden;\"' :
 					'class="' + this.themename + '"',
-				
-				// 
+
+				//
 				head:""
-				
+
 			};
-			
+
 			var cgMiniRe = /\{\{\s?([^\}]+)\s?\}\}/g,
 				locals = {
 					dataUrl: this.baseUrl,
 					baseUrl: this.baseUrl,
 					theme: this.themename
 				};
-			
+
 			for(var i in this.parts){
 				array.forEach(this.parts[i], function(item){
-					
+
 					var processed = lang.replace(item, locals, cgMiniRe);
 					switch(i){
 						case "javascript":
@@ -12472,12 +12472,12 @@ define([
 					}
 				}, this);
 			}
-						
+
 			// do the master template/html, then the {{codeGlass}} double ones:
 
 			this.renderedTemplate = lang.replace(this.template, templateParts);
 		},
-		
+
 		show: function(){
 			if(this.type == "dialog"){
 				docs.masterviewer.show(this);
@@ -14000,7 +14000,7 @@ define([
 					}
 					parent = parent.parentNode;
 				}
-			}			
+			}
 
 			var x = aroundNodePos.x,
 				y = aroundNodePos.y,
@@ -14819,9 +14819,9 @@ define([
 					}
 					// Ensure the filtered value does not change after being formatted. See track #17955.
 					//
-					// This check is only applied when the formatted value is not specified by the caller in order to allow the 
+					// This check is only applied when the formatted value is not specified by the caller in order to allow the
 					// behavior to be overriden. This is needed whenever value synonyms cannot be determined using parse/compare. For
-					// example, dijit/form/FilteringSelect determines the formatted value asynchronously and applies it using a 
+					// example, dijit/form/FilteringSelect determines the formatted value asynchronously and applies it using a
 					// callback to this method.
 					//
 					// TODO: Should developers be warned that they broke the round trip on format?
@@ -15499,9 +15499,9 @@ define([
 '*now':function(r){r(['dojo/i18n!*preload*docs/nls/guide*["ar","ca","cs","da","de","el","en-gb","en-us","es-es","fi-fi","fr-fr","he-il","hu","it-it","ja-jp","ko-kr","nl-nl","nb","pl","pt-br","pt-pt","ru","sk","sl","sv","th","tr","zh-tw","zh-cn","ROOT"]']);}
 }});
 require([
-	"dojo/ready", 
-	"dojo/parser", 
-	"docs/doctools", 
-	"docs/searchtools", 
+	"dojo/ready",
+	"dojo/parser",
+	"docs/doctools",
+	"docs/searchtools",
 	"docs/wiki"
 ]);
