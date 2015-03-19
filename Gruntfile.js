@@ -13,8 +13,8 @@ module.exports = function (grunt) {
 		currentDojoVersion: currentDojoVersion,
 		githubUrl: 'https://github.com/dojo',
 		tutorialsUrl: root + 'documentation/tutorials',
-		refguideUrl: root + 'documentation/reference-guide/' + currentDojoVersion,
-		apiUrl: root + 'documentation/api/',
+		refguideUrl: root + 'reference-guide/' + currentDojoVersion,
+		apiUrl: root + 'api/',
 		downloadUrl: root + '#download'
 	};
 
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
 		exec: {
 			refguide: {
 				cwd: 'src/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -a -c ./ -d '+refGuideVersion+' '+refGuideVersion+' ../../../dist/documentation/reference-guide/'+refGuideVersion
+				cmd: 'sphinx-build -b html -a -c ./ -d '+refGuideVersion+' '+refGuideVersion+' ../../../dist/reference-guide/'+refGuideVersion
 			},
 			api: {
 				cwd: 'tasks/api',

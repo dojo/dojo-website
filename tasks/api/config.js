@@ -27,7 +27,7 @@ module.exports = {
      *  i.e. if your website's context is http://yourhost/yourcontext, static links will be generated for /yourcontext/1.8/dojo/Animation etc.
      *  Running using your node app server the root context is /api
      **/
-    contextPath: '/documentation/api/',
+    contextPath: '/api/',
 
 	/**
 	 * Currently only used to write the <loc> url for the sitemap.xml

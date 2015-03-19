@@ -7,7 +7,7 @@ var fs = require('fs'),
     refdoc = require('./refdoc'),
     tree = require('./tree'),
     fsExtra = require('fs-extra'),
-    staticFolder = '../../dist/documentation/api/';
+    staticFolder = '../../dist/api/';
 
     fsExtra.ensureDir(staticFolder, function(err) {
       console.log(err);
