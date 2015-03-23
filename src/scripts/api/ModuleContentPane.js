@@ -62,10 +62,6 @@ define(["dojo/_base/declare",
             }
             link = link[0].innerHTML;
             var permalinkhtml = (link ? '<a class="jsdoc-link" href="' + link + '">Permalink</a>' : '');
-            domConstruct.create("span", {
-                className: "jsdoc-permalink",
-                innerHTML: permalinkhtml
-            }, this.domNode, "first");
 
 
             var toolbar = domConstruct.create("div", {
@@ -74,9 +70,16 @@ define(["dojo/_base/declare",
             this._createCheckBoxes(toolbar, context);
             this.adjustLists(context, this);
             this._highlighter(context);
+
+            domConstruct.create("span", {
+                className: "jsdoc-permalink",
+                innerHTML: permalinkhtml
+            }, toolbar, "first");
+
             //    make the summary sections collapsible.
             query("h2.jsdoc-summary-heading", this.domNode).forEach(function (item) {
                 on(item, "click", function (e) {
+                    domClass.toggle(item, "open");
                     var d = e.target.nextSibling;
                     while (d.nodeType !== 1 && d.nextSibling) { d = d.nextSibling; }
                     if (d) {
@@ -88,7 +91,7 @@ define(["dojo/_base/declare",
                     }
                 });
 
-                query("span.jsdoc-summary-toggle", item).addClass("closed");
+                //query("span.jsdoc-summary-toggle", item).addClass("closed");
 
                 //    probably should replace this with next or something.
                 var d = item.nextSibling;

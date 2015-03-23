@@ -10,7 +10,9 @@ var fs = require('fs'),
     staticFolder = '../../dist/api/';
 
     fsExtra.ensureDir(staticFolder, function(err) {
-      console.log(err);
+        if(err){
+            console.log(err);
+        }
     });
 
 // macro calls
@@ -72,7 +74,7 @@ config.spiderVersions.forEach(function (version) {
 // load details json (iterate over each version and generate html)
     generate.loadDetails(detailsFile,  version, function (err, details) {
         if (err) {
-            console.error(err);
+            console.log(err);
         }
         // generate modules
         Object.keys(details).forEach(function (item) {
@@ -89,12 +91,12 @@ config.spiderVersions.forEach(function (version) {
                 }
                 var html = fn({ module : retObjectItem, config: config, autoHyperLink: autoHyperlink});
                 fs.writeFileSync(versionfolder + patharr.join("/") + "/" + modname + ".html", html);
-                //console.log('Wrote at ' + new Date().toISOString() + ' - ' + versionfolder + modulefile);
+                console.log('Created: ' + modname + ".html");
             });
         });
     });
 });
 
-process.on('exit', function () {
+/*process.on('exit', function () {
     console.log("elapsed time = " + (new Date().getTime() - starttime) + " ms");
-});
+});*/

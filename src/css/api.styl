@@ -1,4 +1,13 @@
 @import variables
+@import '../scripts/dojo/dojo/resources/dojo.css'
+@import '../scripts/dojo/dijit/themes/dijit.css'
+@import 'vendor/dojo_flat/dojo/icons/*'
+@import 'vendor/dojo_flat/dojo/form/Common'
+@import 'vendor/dojo_flat/dojo/layout/TabContainer'
+@import 'vendor/dojo_flat/dojo/form/Checkbox'
+@import 'vendor/dojo_flat/dojo/form/Select'
+@import 'vendor/dojo_flat/dojo/form/Button'
+@import 'vendor/dojo_flat/dojo/Menu'
 
 body,
 html {
@@ -19,6 +28,38 @@ html {
 	position:relative;
 }
 
+.dijitTabListContainer-top,
+.selector {
+	background:$subnavBg;
+	margin-top:0;
+	height: $subnavHeight;
+	min-height: $subnavHeight;
+}
+
+.selector {
+	position: fixed;
+	padding:5px;
+	width:300px;
+	font-size:0.8rem;
+
+	#versionSelector {
+		height:29px;
+		margin-left:1em;
+	}
+}
+
+.version {
+	font-size:0.8rem;
+}
+
+.dijitTabContainerTopStrip,
+.dijitTabContainerTop-tabs {
+	height:$subnavHeight !important;
+	.dijitTab {
+		margin-top:10px;
+	}
+}
+
 #main { height: 100%; width: 100%; border: 0; }
 #header { margin: 0; }
 #loader {
@@ -32,6 +73,7 @@ html {
 	z-index:999;
 	vertical-align:middle;
 }
+
 #loaderInner {
 	position: absolute;
 	top: 50%;
@@ -63,18 +105,38 @@ html {
 	background-image: url("../images/loader_md.gif");
 }
 
-.claro .dijitTabPaneWrapper {
+.dijitTabPaneWrapper {
 	padding:0;
 }
 
+
 #content .dijitTabContainerTop-dijitContentPane {
 	min-width:100%;
-	padding:2em;
+	padding:2em 2em 0 2em;
 }
 
 h2.jsdoc-summary-heading {
 	cursor: pointer;
+	background:$lightBg;
+	border-bottom:1px solid darken($lightBg, 10%);
+	margin-bottom:0 !important;
+	padding:0.5em;
+
+	& + .jsdoc-summary-list {
+		background:$lightBg;
+	}
+
+	&:hover {
+		background: lighten($selectedBg, 90%);
+	}
+
+	&.open {
+		background:$selectedBg;
+		color:$selectedTextColor;
+	}
+
 }
+
 h2.jsdoc-summary-heading span {
 	display: inline-block;
 	width: 16px;
@@ -83,6 +145,7 @@ h2.jsdoc-summary-heading span {
 	background-repeat: no-repeat;
 	background-position: -16px 0;
 }
+
 h2.jsdoc-summary-heading .closed {
 	background-position: 0 0;
 }
@@ -96,10 +159,17 @@ pre code {
 	padding: 0;
 }
 
+#moduleTreePane {
+	margin-top:$subnavHeight;
+}
+
 #moduleTree {
 	width:100%;
 	overflow-x:hidden;
 
+	.dijitTreeRow {
+		padding:0.5em;
+	}
 	.dijitTreeRowHover {
 		background:lighten($selectedBg, 90%);
 		border-color:transparent;
@@ -109,6 +179,7 @@ pre code {
 	.dijitTreeRowSelected {
 		background: $selectedBg;
 		color: $selectedTextColor;
+		border-color:transparent;
 	}
 }
 
@@ -216,27 +287,6 @@ span.stringIcon {
 	background-repeat: no-repeat;
 }
 
-div.jsdoc-toolbar {
-	margin: -8px -8px 12px -8px;
-	padding: 4px 4px 0 4px;
-	background-color: #f2f2f2;
-	border-bottom: 1px solid #e5e3cf;
-	height: 32px;
-	position: relative;
-}
-div.jsdoc-toolbar .jsdoc-permalink {
-	position: absolute;
-	top: 10px;
-	left: 10px;
-}
-div.jsdoc-toolbar .trans-icon {
-	position: absolute;
-	top: 4px;
-	display: block;
-	width: 24px;
-	height: 24px;
-	cursor: pointer;
-}
 
 /* for /images/icons next to each property and method */
 .jsdoc-private, .jsdoc-extension, .jsdoc-inherited {
@@ -255,38 +305,89 @@ div.jsdoc-toolbar .trans-icon {
     background-image: url("/images/icons/16x16/inherited.png")
 }
 
+
 /* toolbar, to show/hide private, inherited, and extension properties */
-div.jsdoc-toolbar .jsdoc-private {
-    background-image: none;     /* done via actual <img> tag instead */
-    right: 28px;
-}
-div.jsdoc-toolbar .jsdoc-extension {
-    background-image: none;     /* done via actual <img> tag instead */
-    right: 52px;
-}
-div.jsdoc-toolbar .jsdoc-public,
-div.jsdoc-toolbar .jsdoc-inherited {
-    background-image: none;     /* done via actual <img> tag instead */
-    right: 4px;
-}
-div.jsdoc-toolbar label {
-	position: absolute;
-	top: 10px;
-	right: 84px;
-}
-/* looks naff in FF
-div.jsdoc-toolbar * {
-    opacity:1;
-}
-*/
-div.jsdoc-toolbar .off {
-	opacity: 0.25;
+.jsdoc-toolbar {
+	background: $lightBg;
+	padding: 1em;
+	position: fixed;
+    right: 20px;
+    top: $navHeight + $subnavHeight + 5px;
+    z-index: 1000;
+    font-size:0.8rem;
+
+    .dijitCheckBox {
+    	width: 15px;
+    	height: 15px;
+    }
+
+    .dijitCheckBoxIcon:before, .dijitCheckBoxChecked:before, .dijitCheckBoxCheckedDisabled:before {
+		font-size:12px;
+		line-height:15px;
+    }
+
+	.trans-icon {
+		position: absolute;
+		top: 4px;
+		display: block;
+		width: 24px;
+		height: 24px;
+		cursor: pointer;
+	}
+
+
+	.jsdoc-permalink {
+		margin-right:1em;
+	}
+
+	.jsdoc-private {
+    	background-image: none;     /* done via actual <img> tag instead */
+    	right: 28px;
+    }
+
+    .jsdoc-extension {
+	    background-image: none;     /* done via actual <img> tag instead */
+	    right: 52px;
+	}
+
+	.jsdoc-public,
+	.jsdoc-inherited {
+	    background-image: none;     /* done via actual <img> tag instead */
+	    right: 4px;
+	}
+
+	label {
+		position: relative;
+    	top: auto;
+    	right: auto;
+    	cursor: pointer;
+    	margin-left: 15px;
+
+    	&:nth-child(1) {
+    		margin-left:0;
+    	}
+	}
+
+	.off {
+		opacity: 0.25;
+	}
+
+	.jsdoc-permalink {
+	    position : initial;
+	    top : initial;
+	    left : initial;
+	    float : left;
+	    border : none;
+	    width: initial;
+	}
 }
 
+
 h1.jsdoc-title{
-	font-size: 2.5em;
+	font-size: $pageHeadingSize;
+	font-weight: $pageHeadingWeight;
 	margin: 0.35em 0;
-	font-weight: normal;
+	background-position: 0 45%;
 }
 h1.jsdoc-title img {
 	float: left;
@@ -297,7 +398,11 @@ div.jsdoc-prototype,
 div.jsdoc-mixins,
 .jsdoc-inheritance {
 	font-size: 0.8em;
+	label {
+		margin-right: 1em;
+	}
 }
+
 div.jsdoc-prototype a,
 div.jsdoc-mixins a,
 .jsdoc-inheritance a {
@@ -316,7 +421,7 @@ span.jsdoc-inheritance {
 div.jsdoc-require,
 span.jsdoc-comment-type,
 span.jsdoc-return-type {
-	font-family: Consolas, Courier New, Courier, monospace;
+	font-family: $codeFont;
 	font-weight: normal;
 }
 span.parameters{ font-weight: normal; }
@@ -333,27 +438,24 @@ div.jsdoc-full-summary {
 
 div.jsdoc-children {
 	padding-bottom: 1.5em;
+	padding-left:1em;
 }
 
-div.jsdoc-children div.jsdoc-field-list h2,
 div.jsdoc-children div.jsdoc-fields h2 {
-	font-size: 1.25em;
-	border-bottom: 1px solid #e5e3cf;
-	margin: 1.5em -5px 0.5em -5px;
-	padding: 0.25em;
+	font-size: 2rem;
+	font-weight:$pageHeadingWeight;
+	font-family:$headingFont;
+	color:$baseColor;
 }
-div.jsdoc-children div.jsdoc-fields h2 {
-	font-weight: normal;
-	font-size: 1.5em;
-	background-color: #f2f2f2;
-}
+
+
 
 div.jsdoc-children div.jsdoc-field-list div.jsdoc-field {
 	margin: 0.5em 0;
 	clear: both;
 }
 div.jsdoc-children div.jsdoc-fields div.jsdoc-field {
-	padding: 1em 0;
+	padding: 1em;
 	clear: both;
 	border-bottom: 1px dotted #ccc;
 }
@@ -363,6 +465,8 @@ div.jsdoc-children .odd {
 
 div.jsdoc-field div.jsdoc-title {
 	font-weight: bold;
+	margin-bottom:0.5em;
+	font-family:$codeFont;
 }
 
 div.jsdoc-field div.jsdoc-title span img {
@@ -417,17 +521,28 @@ div.jsdoc-summary-list ul {
 }
 div.jsdoc-summary-list ul li {
 	background-repeat: no-repeat;
-	padding-left: 20px;
+	background-position: 0.5em 50%;
+	padding:0.5em;
+	padding-left: 2em;
 	margin: 0.5em 0;
+
+	&:nth-child(1) {
+		margin-top:0
+	}
 }
 div.jsdoc-summary-list ul li a {
 	font-weight: bold;
+	font-family:$codeFont;
 }
 div.jsdoc-summary-list ul li span {
-	font-size: 0.9em;
+	font-size:0.9rem;
+	margin-left:0.8em;
+
 }
 div.jsdoc-summary-list ul li span.parameters {
 	font-size: 1em;
+	margin-left:0;
+	font-family:$codeFont;
 }
 div.jsdoc-summary-list ul li .jsdoc-returns {
 	font-weight: bold;
@@ -442,15 +557,7 @@ ul.jsdoc-legend img, ul.jsdoc-legend li > span:first-child {
 	/* align icon vertically with text; note that /images/icons in second list are <span> nodes */
 	vertical-align: middle;
 }
-/* TODO: reset of 'div.jsdoc-toolbar label' above, remove */
-div.jsdoc-toolbar label {
-    position: relative;
-    top : auto;
-    right : auto;
-    cursor : pointer;
-    color : #4477aa;
-    margin-left : 5px;
-}
+
 .dijitCheckBoxInput {
     cursor : pointer;
 }
@@ -458,37 +565,3 @@ div.jsdoc-toolbar label {
     float: right;
 }
 
-/* reset */
-div.jsdoc-toolbar {
-    margin : 0;
-}
-
-/* temp try out floating toolbar */
-div.jsdoc-toolbar {
-    position: fixed;
-    float: right;
-    right: 30px;
-    border-radius: 5px;
-    z-index: 1000;
-    border-bottom: 3px solid #E5E3CF;
-    padding: 0;
-    height : initial;
-    padding: 2px 6px 0px 6px;
-    border-right: 2px solid #E5E3CF;
-    border-top: 1px solid #E5E3CF;
-    border-left: 1px solid #E5E3CF;
-
-}
-/* temp - underline toolbar labels */
-.viewOptions label:hover {
-    text-decoration: underline;
-}
-/* temp - play with layout */
-div.jsdoc-toolbar .jsdoc-permalink {
-    position : initial;
-    top : initial;
-    left : initial;
-    float : left;
-    border : none;
-    width: initial;
-}

@@ -7,12 +7,12 @@ module.exports = {
      * set to wherever you want the application to load dojo from (shouldn't really need changed unless you want to switch DOJO script inclusion to a different location).
      * Also sets the baseUrl config
      **/
-    dojoBase: '//ajax.googleapis.com/ajax/libs/dojo/1.9.1',
+    dojoBase: '/scripts/dojo/dojo',
 
     /**
      * theme is used to configure the dijit theme and body class name to use.
      **/
-    theme: 'claro',
+    theme: '',
 
     /**
      * siteName is used in the title of the window

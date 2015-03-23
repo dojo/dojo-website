@@ -33,9 +33,10 @@ module.exports = function (grunt) {
 				template: 'src/_templates/tutorial.ejs'
 			}
 		},
-		// Compile the reference guide
+
+		// Compile the Reference Guide and API docs
 		exec: {
-			refguide: {
+			guide: {
 				cwd: 'src/documentation/reference-guide',
 				cmd: 'sphinx-build -b html -a -c ./ -d '+refGuideVersion+' '+refGuideVersion+' ../../../dist/reference-guide/'+refGuideVersion
 			},
@@ -55,7 +56,7 @@ module.exports = function (grunt) {
 			}
 		},
 		stylus: {
-			options: {'include css': true},
+			options: {'include css': true, 'compress':true},
 			index: {
 				files: {'dist/css/index.css': 'src/css/index.styl', 'dist/css/tutorials.css': 'src/css/tutorials.styl', 'dist/css/api.css': 'src/css/api.styl', 'dist/css/guide.css': 'src/css/guide.styl'}
 			}
@@ -72,7 +73,15 @@ module.exports = function (grunt) {
 			images: {
 				files: [{
 					cwd: 'src',
-					src: ['images/**', 'scripts/**'],
+					src: ['images/**'],
+					dest: 'dist',
+					expand: true
+				}]
+			},
+			scripts: {
+				files: [{
+					cwd: 'src',
+					src: ['scripts/**'],
 					dest: 'dist',
 					expand: true
 				}]
@@ -90,6 +99,10 @@ module.exports = function (grunt) {
 			md: {
 				files: ['src/documentation/tutorials/**/*.md'],
 				tasks: ['tutorials']
+			},
+			js: {
+				files: ['src/scripts/**'],
+				tasks: ['copy:scripts']
 			}
 		},
 		clean: ['dist']
@@ -104,7 +117,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-exec');
 	grunt.loadTasks('tasks');
 
-	grunt.registerTask('deploy', ['clean', 'ejs', 'stylus', 'copy', 'tutorials', 'exec']);
+	grunt.registerTask('deploy', ['clean', 'ejs', 'stylus', 'copy', 'tutorials', 'exec', 'exec:api', 'exec:guide']);
 	grunt.registerTask('default', ['clean', 'ejs', 'stylus', 'copy', 'tutorials']);
 	grunt.registerTask('docs',['exec']);
 	grunt.registerTask('develop', ['ejs', 'stylus', 'copy', 'tutorials', 'connect', 'watch']);

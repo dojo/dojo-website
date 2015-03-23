@@ -1,6 +1,6 @@
 if module.events
     h2.jsdoc-summary-heading Event Summary
-        span.jsdoc-summary-toggle
+
     div.jsdoc-summary-list
         ul.jsdoc-property-list
             each event in module.events
@@ -11,12 +11,14 @@ if module.events
                    - klass += ' extension-module'
                 li.functionIcon(class="#{klass}")
                     - var link = (module.version + module.location + '_' +event.name).replace(/\/|\./g, "_")
-                    a(#{link}) !{event.name}
+                    a(href='##{link}') !{event.name}
                     span.parameters
-                        each parm, idx in event.parameters
-                            #{parm.name}
-                            if idx < event.parameters.length-1
+                    | <span class="parameters">(
+                    each parm, idx in event.parameters
+                        | #{parm.name}
+                        if idx < event.parameters.length-1
                             | ,
+                    | ) </span>
                     span !{event.shortSummary}
                     if event.private
                         span.jsdoc-private(title="private")
@@ -24,4 +26,3 @@ if module.events
                         span.jsdoc-extension(title="Must manually require () " + event.from +" to access")
                     if event.inherited
                         span.jsdoc-inherited(title='inherited')
-
