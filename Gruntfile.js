@@ -15,7 +15,8 @@ module.exports = function (grunt) {
 		tutorialsUrl: root + 'documentation/tutorials',
 		refguideUrl: root + 'reference-guide/' + currentDojoVersion,
 		apiUrl: root + 'api/',
-		downloadUrl: root + '#download'
+		downloadUrl: root + '#download',
+		rev: Date.now()
 	};
 
 	grunt.initConfig({

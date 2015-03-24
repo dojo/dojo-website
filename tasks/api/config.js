@@ -15,6 +15,11 @@ module.exports = {
     theme: '',
 
     /**
+     * Used on css file links to bust cache when updated
+     **/
+    rev: Date.now(),
+
+    /**
      * siteName is used in the title of the window
      **/
     siteName: ' - The Dojo Toolkit',
