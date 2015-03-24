@@ -1,14 +1,15 @@
 /** @module lib/generate */
 var fs = require('fs'),
+    hljs = require('highlight.js'),
     parsedDetailsCache = {}, // static hash cache of details {versionname :details}
     _pages = {}; // another cache
 
 /**
  * Get the 'moduleObject' object, this is the module object from the details.json located by the version and modulename
- * @private 
+ * @private
  * @param {String} detailsfile - the file and path name to TODO (commonality with version and path)
- * @param {String} modulename - 
- * @returns {Function} callback with the..........   
+ * @param {String} modulename -
+ * @returns {Function} callback with the..........
  */
 function getDetails(detailsfile, modulename, version, cb) {
     var detailsCache = null;
@@ -40,7 +41,7 @@ function getDetails(detailsfile, modulename, version, cb) {
 /**
  * Get get the page object json from the whole api json - simple helper query really - maybe change
  * @param {String} moduleName - name of the module to lookup
- * @param {Object} result - the cache to lookup from (TODO - change)  
+ * @param {Object} result - the cache to lookup from (TODO - change)
  * @returns {Object} the module object
  */
 // private get the page object json from the whole api json - simple helper query really - maybe change
@@ -81,7 +82,7 @@ function loadDetails(detailsfile, version, cb) {
  * Get the normalised object for this module
  * @param {String} detailsfile - a file path to the details.json file
  * @param {String} modulename - the name of the module to lookup
- * @param {String} version - the version of the module to lookup (1.7/1.8/1.9rc2 etc)  
+ * @param {String} version - the version of the module to lookup (1.7/1.8/1.9rc2 etc)
  * @returns {Object} object.location, object.mixins, object.summary, object.description, retObjectItem.usage.from
  */
 function generate(detailsfile /* file to details.xml*/, modulename /*module object called*/, version, cb) {
@@ -205,10 +206,10 @@ function generate(detailsfile /* file to details.xml*/, modulename /*module obje
 
 /**
  * Get a normalised view of the method or event objects. This is used to "colour" in the inherited and shortSummary properties
- * @private 
+ * @private
  * @param {Object} methods - the method or event object for the specified module found in details.json
  * @param {Object} pageObject - the object for the specified module found in details.json
- * @returns {Object} object.name, object.scope, object.type, object.types, object.from, object.summary, object.description, object.private, object.returnDescription, object.returnTypes, object.parameters, object.extensionModule, object.examples, object.shortSummary, object.inherited 
+ * @returns {Object} object.name, object.scope, object.type, object.types, object.from, object.summary, object.description, object.private, object.returnDescription, object.returnTypes, object.parameters, object.extensionModule, object.examples, object.shortSummary, object.inherited
  */
 function getMethodOrEventObjects(methods, pageObject) {
     var obj, lclMethods = [], lclParms = [], usage = null;
@@ -284,11 +285,11 @@ function trimSummary(summary, firstSentence) {
 /**
  * Parse any text to convert any module type paths to links which the api parser can link to. This is intended to be used by templates and therefore exported
  *      This could probably be removed from template calls and used at loadDetails time to parse the JSON once only i.e. it should improve request time performance for modules
- *      However I don't like the markup being generated in the code itself.  
+ *      However I don't like the markup being generated in the code itself.
  * @param {String} text - the the text to be scanned and parsed
  * @param {Object} config - the config object for the application. config.contextPath & config.apiDataPath are used
- * @param {String} moduleversion - the version of the module to use. 
- * @returns {String} Returns the parsed text with appropriate links included 
+ * @param {String} moduleversion - the version of the module to use.
+ * @returns {String} Returns the parsed text with appropriate links included
  */
 function autoHyperlink(text, config, moduleversion) {
     // summary:
@@ -360,9 +361,9 @@ function compareItemsNames(item1, item2) {
 
 /**
  * Get an icon name to be used for a property type. This is intended to be used by templates and therefore exported
- * @public 
- * @param {String} type The type of the property (which was described in details.json). 
- * @returns {String} 'object'|'namespace'|'constructor'|'node'|'domNode'|'array'|'boolean'|'date'|'error'|'function'|'number'|'regexp'|'string' 
+ * @public
+ * @param {String} type The type of the property (which was described in details.json).
+ * @returns {String} 'object'|'namespace'|'constructor'|'node'|'domNode'|'array'|'boolean'|'date'|'error'|'function'|'number'|'regexp'|'string'
  */
 function convertType(type) {
 	// TODO: use a hash instead of switch?

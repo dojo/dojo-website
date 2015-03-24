@@ -1,6 +1,6 @@
 /** @module lib/refdoc */
 var fs = require('fs');
-var _refDocs = {}; // cached hash of version : refdocs 
+var _refDocs = {}; // cached hash of version : refdocs
 var _readDir = function (directory, refDocVersion, version, config) {
     //var objectArr = [];
     var baseDir = config.refDocs.dir + version;
@@ -37,7 +37,7 @@ var _getRefDocs = function (version, config) {
 };
 var hasRefDoc = function (name, version, config) {
     // summary:
-    //      Test if a reference doc exists using the modules name, version and config object for config.refDocs.suffix and config.refDocs.dir 
+    //      Test if a reference doc exists using the modules name, version and config object for config.refDocs.suffix and config.refDocs.dir
     //
     //      returns
     //          boolean
@@ -56,8 +56,8 @@ var hasRefDoc = function (name, version, config) {
  * Get the ref doc (if it exists) using the modules name, version and config object for config.refDocs.suffix and config.refDocs.dir
  * @param {String} name - module name
  * @param {String} version - version of the module
- * @param {Object} config - {config.apiDataPath} used to locate the API docs root folder  
- * @returns {String} the correct document location link if it exists or null if it doesn't 
+ * @param {Object} config - {config.apiDataPath} used to locate the API docs root folder
+ * @returns {String} the correct document location link if it exists or null if it doesn't
  */
 var getRefDoc = function (name, version, config) {
     // test if doc exists via dijit/_Templated  refDocs["dijit"]!=null && refDocs["dijit"]["_Templated"] !=null

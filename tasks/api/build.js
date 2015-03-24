@@ -7,6 +7,7 @@ var fs = require('fs'),
     refdoc = require('./refdoc'),
     tree = require('./tree'),
     fsExtra = require('fs-extra'),
+    hljs = require('highlight.js'),
     staticFolder = '../../dist/api/';
 
     fsExtra.ensureDir(staticFolder, function(err) {

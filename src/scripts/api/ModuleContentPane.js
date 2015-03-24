@@ -121,6 +121,7 @@ define(["dojo/_base/declare",
                 // run highlighter
                 SyntaxHighlighter.highlight();
             }
+
         },
         _setUpDocLinks : function (context) {
             var _this = this;

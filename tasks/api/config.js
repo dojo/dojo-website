@@ -46,13 +46,14 @@ module.exports = {
     /**
      * spiderVersions Array of versions to generate via spider.js
      **/
+    //spiderVersions : ['1.8', '1.9', "1.10"],
     spiderVersions : ['1.8', '1.9', "1.10"],
 
     /**
      * versions is used to make available versions loadable from app.js i.e. the list of versions in the version dropdown - these need to match the directory names
      * TODO: (maybe remove from tree.js, or if keeping, add a flag to enable this) Read and set the versions read from the available versions in the api directory
      **/
-    versions: ['1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9', '1.10'],
+    versions: ['1.8', '1.9', '1.10'],
     versionIgnores : /(\.git|\.md)/,
 
 
@@ -78,7 +79,7 @@ module.exports = {
         /**
          * dir - set to a local directory to search for reference documentation. You can set to an absolute path or relative to the api directory itself e.g. 'reference-guide/'
          **/
-        dir: '../../dist/documentation/reference-guide/',
+        dir: '../../dist/reference-guide/',
 
         /**
          * url - set to a URL you want the reference document to point to. The version path will be added and module full path location e.g. '/reference-guide/1.9/dojo/_base/sniff'. You can also use an absolute URL path.
