@@ -101,7 +101,7 @@ module.exports = function (grunt) {
 				tasks: ['tutorials']
 			},
 			js: {
-				files: ['src/scripts/**'],
+				files: ['src/scripts/**/*.js'],
 				tasks: ['copy:scripts']
 			}
 		},

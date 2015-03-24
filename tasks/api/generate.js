@@ -1,6 +1,5 @@
 /** @module lib/generate */
 var fs = require('fs'),
-    hljs = require('highlight.js'),
     parsedDetailsCache = {}, // static hash cache of details {versionname :details}
     _pages = {}; // another cache
 
