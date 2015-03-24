@@ -69,40 +69,42 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-		copy: {
+		sync: {
 			images: {
 				files: [{
 					cwd: 'src',
 					src: ['images/**'],
 					dest: 'dist',
-					expand: true
-				}]
+					expand: true,
+				}],
+				verbose: true
 			},
 			scripts: {
 				files: [{
 					cwd: 'src',
 					src: ['scripts/**'],
 					dest: 'dist',
-					expand: true
-				}]
+					expand: true,
+				}],
+				verbose: true
 			}
 		},
 		watch: {
 			ejs: {
 				files: ['src/**/*.ejs'],
-				tasks: ['ejs', 'tutorials']
-			},
-			stylus: {
-				files: ['src/**/*.styl'],
-				tasks: ['stylus', 'copy:images']
+				tasks: ['ejs']
 			},
 			md: {
-				files: ['src/documentation/tutorials/**/*.md'],
+				files: ['src/documentation/tutorials/**/*.ejs', '!src/**/README.md'],
 				tasks: ['tutorials']
 			},
+			stylus: {
+				files: ['src/**/*.styl', '!src/vendor/**'],
+				tasks: ['stylus', 'sync:images']
+			},
 			js: {
-				files: ['src/scripts/**/*.js'],
-				tasks: ['copy:scripts']
+				files: ['src/scripts/**/*.js', '!src/scripts/dojo/**', '!src/scripts/syntaxhighlighter/**'],
+				tasks: ['sync:scripts']
 			}
 		},
 		clean: ['dist']
@@ -115,10 +117,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-exec');
+	grunt.loadNpmTasks('grunt-sync');
 	grunt.loadTasks('tasks');
 
-	grunt.registerTask('deploy', ['clean', 'ejs', 'stylus', 'copy', 'tutorials', 'exec', 'exec:api', 'exec:guide']);
-	grunt.registerTask('default', ['clean', 'ejs', 'stylus', 'copy', 'tutorials']);
+	grunt.registerTask('deploy', ['clean', 'ejs', 'stylus', 'sync', 'tutorials', 'exec']);
+	grunt.registerTask('default', ['clean', 'ejs', 'stylus', 'sync', 'tutorials']);
 	grunt.registerTask('docs',['exec']);
-	grunt.registerTask('develop', ['ejs', 'stylus', 'copy', 'tutorials', 'connect', 'watch']);
+	grunt.registerTask('develop', ['ejs', 'stylus', 'sync', 'tutorials', 'connect', 'watch']);
 };

@@ -28,6 +28,7 @@ require([
 
     var moduleModel = null, moduleTree = null, currentVersion = null, apiSearchWidget = null;
 
+
     function buildTree() {
         if (moduleModel !== null) {
             moduleTree.destroyRecursive();
