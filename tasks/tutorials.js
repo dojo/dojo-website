@@ -31,7 +31,7 @@ module.exports = function (grunt) {
 				var langMap = {
 					js: 'javascript',
 					shell: 'bash',
-					html: 'xml',
+					html: 'xml'
 				};
 				if (lang in langMap) { lang = langMap[lang]; }
 				try {
@@ -50,14 +50,24 @@ module.exports = function (grunt) {
 
 			// We assume that any top-level markdown file is a tutorial.
 			// We record disabled tutorials to hide those from the menu
-			var names = grunt.file.expand({cwd: self.data.src}, ['**/**/*.md', '!**/**/README.md']),
-				tutorials = names.map(function (name) {
+			var names = grunt.file.expand({cwd: self.data.src}, ['**/**/*.md', '!**/**/README.md']);
+			var tutorials = names.map(function (name) {
 					return {
 						title: name.replace(/_/g, ' ').replace('.md', '').replace(/^\d+-/, ''),
 						filename: name.replace('.md', '').replace(/^\d+-/, '') + '.html',
 						disabled: name.indexOf('disabled') > -1
 					};
 				});
+
+			// copy tutorial support files
+			grunt.file.expand({
+				cwd: self.data.src,
+				filter: 'isFile'
+			}, ['**', '!**/*.md']).forEach(function (file) {
+				var src = self.data.src + file;
+				var dest = self.data.dest + file;
+				grunt.file.copy(src, dest);
+			});
 
 			// Copy each file from the source to the destination,
 			// parsing the markdown of each tutorial and rendering
