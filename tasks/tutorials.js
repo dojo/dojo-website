@@ -1,6 +1,8 @@
-var ejs = require('ejs'),
-	highlighter = require('highlight.js'),
-	marked = require('marked');
+var ejs = require('ejs');
+var highlighter = require('highlight.js');
+var marked = require('marked');
+var path = require('path');
+
 /* global module:false*/
 module.exports = function (grunt) {
 
@@ -64,8 +66,8 @@ module.exports = function (grunt) {
 				cwd: self.data.src,
 				filter: 'isFile'
 			}, ['**', '!**/*.md']).forEach(function (file) {
-				var src = self.data.src + file;
-				var dest = self.data.dest + file;
+				var src = path.join(self.data.src, file);
+				var dest = path.join(self.data.dest, file);
 				grunt.file.copy(src, dest);
 			});
 
@@ -73,10 +75,11 @@ module.exports = function (grunt) {
 			// parsing the markdown of each tutorial and rendering
 			// inside a tutorial template specified via the task config
 			names.forEach(function (name) {
-				var split = name.split('/');
 				grunt.log.ok(self.data.dest + name);
-				var src = self.data.src + name,
-					dest = self.data.dest + split[0]+'/'+split[1].toLowerCase() + '/index.html';
+				var src = path.join(self.data.src, name);
+				var dest = path.join(self.data.dest, path.dirname(name), 'index.html');
+				console.log(src);
+				console.log(dest);
 
 				grunt.file.copy(src, dest, {
 					process: function (src) {
