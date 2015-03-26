@@ -104,7 +104,7 @@ module.exports = function (grunt) {
 				tasks: ['stylus', 'sync:images']
 			},
 			js: {
-				files: ['src/scripts/**/*.js', '!src/scripts/dojo/**', '!src/scripts/syntaxhighlighter/**'],
+				files: ['src/scripts/**/*.js', 'src/scripts/*.js', '!src/scripts/dojo/**', '!src/scripts/syntaxhighlighter/**'],
 				tasks: ['sync:scripts']
 			}
 		},
