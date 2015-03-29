@@ -1,4 +1,5 @@
 /* jshint node: true */
+var path = require('path');
 
 module.exports = function (grunt) {
 
@@ -7,6 +8,7 @@ module.exports = function (grunt) {
 	var root = grunt.option('root') || '/';
 	var currentDojoVersion = '1.10';
 	var refGuideVersion = grunt.option('dojo') || currentDojoVersion;
+
 
 	var ejsOptions = {
 		root: root,

@@ -21,6 +21,8 @@ module.exports = function (grunt) {
 	grunt.registerMultiTask('tutorials', 'Compile tutorials to HTML', function () {
 		var done = this.async(),
 			self = this;
+			//grunt.log.ok(path.relative(self.data.src, "./src"));
+
 
 		marked.setOptions({
 			gfm: true,
@@ -77,8 +79,10 @@ module.exports = function (grunt) {
 			names.forEach(function (name) {
 				grunt.log.ok(self.data.dest + name);
 				var src = path.join(self.data.src, name);
+				self.data.options.root = path.relative(src, './');
 				var dest = path.join(self.data.dest, path.dirname(name), 'index.html');
-				console.log(src);
+				//console.log(self.data.options.root);
+				//console.log(src);
 				console.log(dest);
 
 				grunt.file.copy(src, dest, {

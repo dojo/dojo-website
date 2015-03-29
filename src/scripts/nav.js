@@ -3,7 +3,7 @@ require(['dojo/ready',
 		'dojo/dom-class'
 	], function (ready, on, domClass) {
 		 ready(function(){
-			/*
+
 			var nav = document.querySelector('.nav'),
 			subnav = document.querySelector('.subnav'),
 			fixpoint = document.querySelector('.nav').offsetHeight,
@@ -27,7 +27,7 @@ require(['dojo/ready',
 
 			on(window, 'scroll', handleScroll);
 			handleScroll();
-			*/
+
 
 			on(document.querySelector('.mobileMenuToggle'), 'click', function () {
 				domClass.toggle(document.body, 'menuOpen');
