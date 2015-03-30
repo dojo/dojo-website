@@ -3,34 +3,62 @@ var path = require('path');
 
 module.exports = function (grunt) {
 
-	// If this site is served from a subdirectory,
-	// it can be passed in using the --root=/subdir/path option
-	var root = grunt.option('root') || '/';
-	var currentDojoVersion = '1.10';
-	var refGuideVersion = grunt.option('dojo') || currentDojoVersion;
+	var root = '/';
+
+	// Dojo Release Version
+	var dojoVersionMajor = '1.10';
+	var dojoVersionMinor = '.4';
+	var dojoVersionFull = dojoVersionMajor + dojoVersionMinor;
+	var dojoVersionCdn = '1.10.3';
+
+
+	var refGuideVersion = grunt.option('dojo') || dojoVersionMajor;
 
 	var urls = {
 		//Internal
 		api: root + 'api/',
-		download: root + '#download',
-		guide: root + 'reference-guide/' + currentDojoVersion,
+		blog: root + 'blog/',
+		contribute: root + 'community/contribute.html',
+		docs: root + 'documentation',
+		download: root + 'download/',
+		guide: root + 'reference-guide/' + dojoVersionMajor,
+		license: root + 'license/',
+		roadmap: root + 'community/',
+		support: root + '#support',
 		tutorials: root + 'documentation/tutorials',
 
 		//External
-		bugTracker: 'https://bugs.dojotoolkit.org/',
-		commercialSupport: 'http://www.sitepen.com/support/index.html',
-		facebook: 'https://www.facebook.com/groups/4375511291/',
-		github: 'https://github.com/dojo',
-		googlePlus: 'https://plus.google.com/106701567946037375891/posts',
-		irc: 'http://irc.lc/freenode/dojo/t4nk@@@',
-		mailingList: 'http://mail.dojotoolkit.org/mailman/listinfo/dojo-contributors',
-		stackoverflow: 'http://stackoverflow.com/questions/tagged/dojo',
-		twitter: 'http://twitter.com/dojo'
+		ext: {
+			bugTracker: 'https://bugs.dojotoolkit.org/',
+			commercialSupport: 'http://www.sitepen.com/support/index.html',
+			facebook: 'https://www.facebook.com/groups/4375511291/',
+			github: 'https://github.com/dojo',
+			googlePlus: 'https://plus.google.com/106701567946037375891/posts',
+			irc: 'http://irc.lc/freenode/dojo/t4nk@@@',
+			mailingList: 'http://mail.dojotoolkit.org/mailman/listinfo/dojo-contributors',
+			stackoverflow: 'http://stackoverflow.com/questions/tagged/dojo',
+			twitter: 'http://twitter.com/dojo',
+			dojoFoundation: 'http://dojofoundation.org'
+		},
+
+		//Dojo Release URLs
+		dojo: {
+			cdn: '//ajax.googleapis.com/ajax/libs/dojo/'+dojoVersionCdn+'/dojo/dojo.js',
+			download: 'http://download.dojotoolkit.org',
+			release: this.download+'/release-'+dojoVersionMajor,
+			releaseTar: this.release+'/dojo-release-'+dojoVersionMajor+'.tar.gz',
+			releaseZip: this.release+'/dojo-release-'+dojoVersionMajor+'.zip',
+			releaseJs: this.release+'/dojo.js',
+			releaseJsUncompressed: this.release+'/dojo.js.uncompressed.js',
+		}
 	};
+
+
 
 	var ejsOptions = {
 		root: root,
-		currentDojoVersion: currentDojoVersion,
+		dojoVersionMajor: dojoVersionMajor,
+		dojoVersionFull: dojoVersionFull,
 		url: urls,
 		rev: Date.now()
 	};
