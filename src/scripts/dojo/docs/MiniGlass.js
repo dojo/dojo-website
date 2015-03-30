@@ -15,7 +15,7 @@ define("docs/MiniGlass", [
 	"dijit/Dialog",
 	"dojo/text!./resources/CodeGlassMini.html"
 ], function(array, config, declare, lang, has, domAttr, domClass, domConst, JSON, query, _WidgetBase, Dialog, template){
-	
+
 	var scriptopen = "<scr" + "ipt>",
 		scriptclose = "</" + "scri" + "pt>";
 
@@ -31,27 +31,27 @@ define("docs/MiniGlass", [
 		renderedTemplate: "",
 		baseUrl: config.baseUrl + "../",
 		pluginArgs:null,
-		
+
 		constructor: function(args){
 			this.parts = args.parts || {};
 		},
-		
+
 		postCreate: function(){
 			// all we do it put a button in our self to run ourself. We don't process the content at all
 			this.closer = domConst.place("<a href='#' title='Collapse Example Code' class='CodeGlassMiniCollapser'><span class='a11y'>Collapse</span></a>", this.domNode, "first");
-			this.showcode = domConst.place("<a href='#' title='Show Raw HTML' class='CodeGlassMiniRawHtml'><span class='a11y'>Source</span></a>", this.domNode, "first");
-			this.button = domConst.place("<a href='#' title='Run Example' class='CodeGlassMiniRunner'><span class='a11y'>Run</span></a>", this.domNode, "first");
+			this.showcode = domConst.place("<a href='#' title='Show Raw HTML' class='CodeGlassMiniRawHtml icon-code'><span class='a11y'>Source</span></a>", this.domNode, "first");
+			this.button = domConst.place("<a href='#' title='Run Example' class='CodeGlassMiniRunner icon-play'><span class='a11y'>Run</span></a>", this.domNode, "first");
 			this.connect(this.button, "onclick", "_run");
 			this.connect(this.showcode, "onclick", "_showCode");
 			this.connect(this.closer, "onclick", "_toggle");
 			this.inner = query(".CodeGlassMiniInner", this.domNode)[0];
 		},
 
-		
+
 		// only run processing once:
 		_hasRun: false,
 		_generateTemplate: function(){
-			if(!this._hasRun){ 
+			if(!this._hasRun){
 				this._hasRun = true;
 				try{
 					query("textarea", this.domNode).forEach(this.handlePart, this);
@@ -67,7 +67,7 @@ define("docs/MiniGlass", [
 			this._generateTemplate();
 			this.show();
 		},
-		
+
 		_showCode: function(e){
 			e && e.preventDefault();
 			this._generateTemplate();
@@ -92,7 +92,7 @@ define("docs/MiniGlass", [
 			e && e.preventDefault();
 			domClass.toggle(this.domNode, "closed");
 		},
-		
+
 		handlePart: function(n){
 			// this is testing the label="" and lang="" attribute. it's html/javascript/css enum
 			var t = domAttr.get(n.parentNode, "lang");
@@ -102,12 +102,12 @@ define("docs/MiniGlass", [
 			var label = domAttr.get(n.parentNode, "label");
 			label && domConst.place("<p>" + label + "</p>", n.parentNode, "before");
 		},
-		
+
 		_processPart: function(type, content){
 			if(!this.parts[type]){
 				this.parts[type] = [];
 			}
-			
+
 			var orig = content;
 			var openswith = lang.trim(orig).charAt(0);
 			if(type == "javascript" && openswith == "<"){
@@ -124,10 +124,10 @@ define("docs/MiniGlass", [
 			this.parts[type].push(orig)
 
 		},
-		
+
 		template: template,
 		_buildTemplate: function(){
-			
+
 			var args = this.pluginArgs,
 				dojoConfig = args.dojoConfig || args.djConfig,
 				uri = document.createElement('a');
@@ -138,39 +138,39 @@ define("docs/MiniGlass", [
 				javascript: (dojoConfig ? "\t" + scriptopen + "dojoConfig = {" + dojoConfig + "}" + scriptclose + "\n" : "") +
 					"\t<scr" + "ipt src='" + (has("ie") ? config.cdn ? config.cdn + "dojo/" : config.baseUrl : config.baseUrl) +
 					"dojo.js'>" + scriptclose + "\n\t",
-				
-				htmlcode:"", 
-				
+
+				htmlcode:"",
+
 				// if we have a theme set include a link to {baseUrl}/dijit/themes/{themename}/{themename}.css first
 				// For the Dojo Mobile case, in Dojo 1.8+, if the specified theme is "deviceTheme" generate
 				// a script tag to import deviceTheme.js.
 				css: this.themename == "deviceTheme" ?
 					'\t<script type="text/javascript" src="' + this.baseUrl + 'dojox/mobile/deviceTheme.js"></script>\n\t' :
 					'\t<link rel="stylesheet" href="' + this.baseUrl + 'dijit/themes/' + this.themename + '/' + this.themename + '.css">\n\t',
-				
+
 				// if we've set RTL include dir="rtl" i guess?
 				htmlargs:"",
-				
+
 				// if we have a theme set, include class="{themename}"
-				bodyargs: this.themename == "deviceTheme" ? 
+				bodyargs: this.themename == "deviceTheme" ?
 					'style=\"visibility:hidden;\"' :
 					'class="' + this.themename + '"',
-				
-				// 
+
+				//
 				head:""
-				
+
 			};
-			
+
 			var cgMiniRe = /\{\{\s?([^\}]+)\s?\}\}/g,
 				locals = {
 					dataUrl: this.baseUrl,
 					baseUrl: this.baseUrl,
 					theme: this.themename
 				};
-			
+
 			for(var i in this.parts){
 				array.forEach(this.parts[i], function(item){
-					
+
 					var processed = lang.replace(item, locals, cgMiniRe);
 					switch(i){
 						case "javascript":
@@ -184,12 +184,12 @@ define("docs/MiniGlass", [
 					}
 				}, this);
 			}
-						
+
 			// do the master template/html, then the {{codeGlass}} double ones:
 
 			this.renderedTemplate = lang.replace(this.template, templateParts);
 		},
-		
+
 		show: function(){
 			if(this.type == "dialog"){
 				docs.masterviewer.show(this);
