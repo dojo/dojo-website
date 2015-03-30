@@ -100,12 +100,12 @@ module.exports = function (grunt) {
 				ext: '.html'
 			},
 
-			//Need to compile EJS partials for ref guide build
-			guide: {
+			//Docs need to have partials compiled to HTML first
+			docs: {
 				options: ejsOptions,
 				cwd: 'src/_partials',
 				src: ['header.ejs', 'footer.ejs'],
-				dest: 'src/_templates/refguide',
+				dest: 'src/_partials/tmp',
 				expand: true,
 				ext: '.html'
 			}
@@ -177,6 +177,6 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('deploy', ['clean', 'ejs', 'stylus', 'sync', 'tutorials', 'exec']);
 	grunt.registerTask('default', ['clean', 'ejs', 'stylus', 'sync', 'tutorials']);
-	grunt.registerTask('docs',['ejs:guide', 'exec']);
+	grunt.registerTask('docs',['ejs:docs', 'exec']);
 	grunt.registerTask('develop', ['ejs', 'stylus', 'sync', 'tutorials', 'connect', 'watch']);
 };
