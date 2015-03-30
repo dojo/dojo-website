@@ -9,15 +9,29 @@ module.exports = function (grunt) {
 	var currentDojoVersion = '1.10';
 	var refGuideVersion = grunt.option('dojo') || currentDojoVersion;
 
+	var urls = {
+		//Internal
+		api: root + 'api/',
+		download: root + '#download',
+		guide: root + 'reference-guide/' + currentDojoVersion,
+		tutorials: root + 'documentation/tutorials',
+
+		//External
+		bugTracker: 'https://bugs.dojotoolkit.org/',
+		commercialSupport: 'http://www.sitepen.com/support/index.html',
+		facebook: 'https://www.facebook.com/groups/4375511291/',
+		github: 'https://github.com/dojo',
+		googlePlus: 'https://plus.google.com/106701567946037375891/posts',
+		irc: 'http://irc.lc/freenode/dojo/t4nk@@@',
+		mailingList: 'http://mail.dojotoolkit.org/mailman/listinfo/dojo-contributors',
+		stackoverflow: 'http://stackoverflow.com/questions/tagged/dojo',
+		twitter: 'http://twitter.com/dojo'
+	};
 
 	var ejsOptions = {
 		root: root,
 		currentDojoVersion: currentDojoVersion,
-		githubUrl: 'https://github.com/dojo',
-		tutorialsUrl: root + 'documentation/tutorials',
-		refguideUrl: root + 'reference-guide/' + currentDojoVersion,
-		apiUrl: root + 'api/',
-		downloadUrl: root + '#download',
+		url: urls,
 		rev: Date.now()
 	};
 
