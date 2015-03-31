@@ -110,6 +110,7 @@ module.exports = function (grunt) {
 				ext: '.html'
 			}
 		},
+
 		stylus: {
 			options: {'include css': true, 'compress':true},
 			index: {
