@@ -151,7 +151,7 @@ module.exports = function (grunt) {
 				tasks: ['ejs']
 			},
 			md: {
-				files: ['src/documentation/tutorials/**/*.ejs', '!src/**/README.md'],
+				files: ['src/documentation/tutorials/**/*.md', '!src/**/README.md'],
 				tasks: ['tutorials']
 			},
 			stylus: {
