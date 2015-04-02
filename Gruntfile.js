@@ -23,7 +23,7 @@ module.exports = function (grunt) {
 		download: root + 'download/',
 		guide: root + 'reference-guide/' + dojoVersionMajor,
 		license: root + 'license/',
-		roadmap: root + 'community/roadmap.html',
+		roadmap: root + 'community/roadmap/',
 		support: root + '#support',
 		tutorials: root + 'documentation/tutorials',
 
