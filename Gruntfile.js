@@ -143,6 +143,24 @@ module.exports = function (grunt) {
 					expand: true,
 				}],
 				verbose: true
+			},
+			blog: {
+				files: [{
+					cwd: 'src',
+					src: ['blog/wp-content/themes/dtk/**/*.*'],
+					dest: 'dist',
+					expand: true
+				}],
+				verbose: true
+			},
+			blogTemplates: {
+				files: [{
+					cwd: 'src/_partials/tmp/',
+					src:['header.html', 'footer.html'],
+					dest: 'dist/blog/wp-content/themes/dtk/inc/',
+					expand:true
+				}],
+				verbose: true
 			}
 		},
 		watch: {
@@ -161,6 +179,10 @@ module.exports = function (grunt) {
 			js: {
 				files: ['src/scripts/**/*.js', 'src/scripts/*.js', '!src/scripts/dojo/**', '!src/scripts/syntaxhighlighter/**'],
 				tasks: ['sync:scripts']
+			},
+			blog: {
+				files: ['blog/wp-content/themes/dtk/**/*.*'],
+				tasks: ['sync:blog']
 			}
 		},
 		clean: ['dist']
