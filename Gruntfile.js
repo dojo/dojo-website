@@ -1,8 +1,8 @@
 /* jshint node: true */
 var path = require('path');
+var marked = require('marked');
 
 module.exports = function (grunt) {
-
 	var root = '/';
 
 	// Dojo Release Version
@@ -60,7 +60,13 @@ module.exports = function (grunt) {
 		dojoVersionMajor: dojoVersionMajor,
 		dojoVersionFull: dojoVersionFull,
 		url: urls,
-		rev: Date.now()
+		rev: Date.now(),
+		marked: marked,
+		// Allow for 'includes' of markdown files in ejs templates.
+		// Must be relative to /src
+		md: function(filePath) {
+			return marked(grunt.file.read('src/'+filePath));
+		}
 	};
 
 	grunt.initConfig({
@@ -114,7 +120,12 @@ module.exports = function (grunt) {
 		stylus: {
 			options: {'include css': true, 'compress':true},
 			index: {
-				files: {'dist/css/index.css': 'src/css/index.styl', 'dist/css/tutorials.css': 'src/css/views/tutorials.styl', 'dist/css/api.css': 'src/css/views/api.styl', 'dist/css/guide.css': 'src/css/views/guide.styl'}
+				files: {
+						'dist/css/index.css': 'src/css/index.styl',
+						'dist/css/tutorials.css': 'src/css/views/tutorials.styl',
+						'dist/css/api.css': 'src/css/views/api.styl',
+						'dist/css/guide.css': 'src/css/views/guide.styl'
+					}
 			}
 		},
 		connect: {
