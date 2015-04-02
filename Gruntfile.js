@@ -60,13 +60,7 @@ module.exports = function (grunt) {
 		dojoVersionMajor: dojoVersionMajor,
 		dojoVersionFull: dojoVersionFull,
 		url: urls,
-		rev: Date.now(),
-		marked: marked,
-		// Allow for 'includes' of markdown files in ejs templates.
-		// Must be relative to /src
-		md: function(filePath) {
-			return marked(grunt.file.read('src/'+filePath));
-		}
+		rev: Date.now()
 	};
 
 	grunt.initConfig({
