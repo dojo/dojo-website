@@ -15,8 +15,6 @@ module.exports = function (grunt) {
 	var refGuideVersion = grunt.option('dojo') || dojoVersionMajor;
 
 
-	var packages = grunt.file.readJSON('src/community/roadmap/packages.json');
-
 
 	var urls = {
 		//Internal
@@ -58,6 +56,33 @@ module.exports = function (grunt) {
 		}
 	};
 
+	//TODO: Move to separate file
+	var packages = grunt.file.readJSON('src/community/roadmap/packages.json').packages;
+
+	var packageCounts = {
+	    total: packages.length,
+	    planning: 0,
+	    dev: 0,
+	    complete: 0
+	};
+
+	packages.forEach(function(pkg) {
+	    switch(pkg.status) {
+	        case 'planning':
+					packageCounts.planning++;
+	                break;
+
+	        case 'dev':
+	            	packageCounts.dev++;
+	            	break;
+
+	        case 'complete':
+					packageCounts.complete++;
+	            	break;
+	    }
+	});
+
+
 
 
 	var ejsOptions = {
@@ -66,7 +91,8 @@ module.exports = function (grunt) {
 		dojoVersionFull: dojoVersionFull,
 		url: urls,
 		rev: Date.now(),
-		packages: packages.packages
+		packages: packages,
+		packageCounts: packageCounts
 	};
 
 	grunt.initConfig({
