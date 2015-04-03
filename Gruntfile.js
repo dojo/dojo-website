@@ -14,6 +14,10 @@ module.exports = function (grunt) {
 
 	var refGuideVersion = grunt.option('dojo') || dojoVersionMajor;
 
+
+	var packages = grunt.file.readJSON('src/community/roadmap/packages.json');
+
+
 	var urls = {
 		//Internal
 		api: root + 'api/',
@@ -61,7 +65,8 @@ module.exports = function (grunt) {
 		dojoVersionMajor: dojoVersionMajor,
 		dojoVersionFull: dojoVersionFull,
 		url: urls,
-		rev: Date.now()
+		rev: Date.now(),
+		packages: packages.packages
 	};
 
 	grunt.initConfig({
