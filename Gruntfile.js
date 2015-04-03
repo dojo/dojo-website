@@ -48,11 +48,13 @@ module.exports = function (grunt) {
 		dojo: {
 			cdn: '//ajax.googleapis.com/ajax/libs/dojo/'+dojoVersionCdn+'/dojo/dojo.js',
 			download: 'http://download.dojotoolkit.org',
-			release: this.download+'/release-'+dojoVersionMajor,
-			releaseTar: this.release+'/dojo-release-'+dojoVersionMajor+'.tar.gz',
-			releaseZip: this.release+'/dojo-release-'+dojoVersionMajor+'.zip',
-			releaseJs: this.release+'/dojo.js',
-			releaseJsUncompressed: this.release+'/dojo.js.uncompressed.js',
+			get release(){ return this.download+'/release-'+dojoVersionFull },
+			get sourceTar() { return this.release+'/dojo-release-'+dojoVersionFull+'-src.tar.gz'},
+			get sourceZip() { return this.release+'/dojo-release-'+dojoVersionFull+'-src.zip'},
+			get releaseTar() { return this.release+'/dojo-release-'+dojoVersionFull+'.tar.gz'},
+			get releaseZip() { return this.release+'/dojo-release-'+dojoVersionFull+'.zip'},
+			get releaseJs(){ return this.release+'/dojo.js'},
+			get releaseJsUncompressed() { return this.release+'/dojo.js.uncompressed.js'},
 		}
 	};
 
