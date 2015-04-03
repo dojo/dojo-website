@@ -122,6 +122,7 @@ module.exports = function (grunt) {
 				cmd: 'node build'
 			}
 		},
+
 		ejs: {
 			all: {
 				options: ejsOptions,
@@ -143,15 +144,24 @@ module.exports = function (grunt) {
 			}
 		},
 
+		highlight: {
+		    task: {
+		      options: {},
+		      files: {
+		        'dist/download/index.html':['dist/download/index.html'],
+		      }
+			}
+		},
+
 		stylus: {
 			options: {'include css': true, 'compress':true},
 			index: {
 				files: {
-						'dist/css/index.css': 'src/css/index.styl',
-						'dist/css/tutorials.css': 'src/css/views/tutorials.styl',
-						'dist/css/api.css': 'src/css/views/api.styl',
-						'dist/css/guide.css': 'src/css/views/guide.styl'
-					}
+					'dist/css/index.css': 'src/css/index.styl',
+					'dist/css/tutorials.css': 'src/css/views/tutorials.styl',
+					'dist/css/api.css': 'src/css/views/api.styl',
+					'dist/css/guide.css': 'src/css/views/guide.styl'
+				}
 			}
 		},
 		connect: {
@@ -185,7 +195,7 @@ module.exports = function (grunt) {
 		watch: {
 			ejs: {
 				files: ['src/**/*.ejs'],
-				tasks: ['ejs']
+				tasks: ['ejs', 'highlight']
 			},
 			md: {
 				files: ['src/documentation/tutorials/**/*.md', '!src/**/README.md'],
@@ -211,10 +221,11 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-exec');
 	grunt.loadNpmTasks('grunt-sync');
+	grunt.loadNpmTasks('grunt-highlight');
 	grunt.loadTasks('tasks');
 
 	grunt.registerTask('deploy', ['clean', 'ejs', 'stylus', 'sync', 'tutorials', 'exec']);
 	grunt.registerTask('default', ['clean', 'ejs', 'stylus', 'sync', 'tutorials']);
 	grunt.registerTask('docs',['ejs:docs', 'exec']);
-	grunt.registerTask('develop', ['ejs', 'stylus', 'sync', 'tutorials', 'connect', 'watch']);
+	grunt.registerTask('develop', ['ejs', 'highlight', 'stylus', 'sync', 'tutorials', 'connect', 'watch']);
 };
