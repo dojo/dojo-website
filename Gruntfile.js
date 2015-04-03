@@ -24,6 +24,7 @@ module.exports = function (grunt) {
 		guide: root + 'reference-guide/' + dojoVersionMajor,
 		license: root + 'license/',
 		roadmap: root + 'community/roadmap/',
+		vision: '/community/roadmap/vision.html',
 		support: root + '#support',
 		tutorials: root + 'documentation/tutorials',
 
