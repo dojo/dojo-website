@@ -3,98 +3,15 @@ var path = require('path');
 var marked = require('marked');
 
 module.exports = function (grunt) {
-	var root = '/';
-
-	// Dojo Release Version
-	var dojoVersionMajor = '1.10';
-	var dojoVersionMinor = '.4';
-	var dojoVersionFull = dojoVersionMajor + dojoVersionMinor;
-	var dojoVersionCdn = '1.10.3';
-
-
-	var refGuideVersion = grunt.option('dojo') || dojoVersionMajor;
-
-
-
-	var urls = {
-		//Internal
-		api: root + 'api/',
-		blog: root + 'blog/',
-		contribute: root + 'community/contribute.html',
-		docs: root + 'documentation',
-		download: root + 'download/',
-		guide: root + 'reference-guide/' + dojoVersionMajor,
-		license: root + 'license/',
-		roadmap: root + 'community/roadmap/',
-		vision: '/community/roadmap/vision.html',
-		support: root + '#support',
-		tutorials: root + 'documentation/tutorials',
-
-		//External
-		ext: {
-			bugTracker: 'https://bugs.dojotoolkit.org/',
-			commercialSupport: 'http://www.sitepen.com/support/index.html',
-			facebook: 'https://www.facebook.com/groups/4375511291/',
-			github: 'https://github.com/dojo',
-			googlePlus: 'https://plus.google.com/106701567946037375891/posts',
-			irc: 'http://irc.lc/freenode/dojo/t4nk@@@',
-			mailingList: 'http://mail.dojotoolkit.org/mailman/listinfo/dojo-contributors',
-			stackoverflow: 'http://stackoverflow.com/questions/tagged/dojo',
-			twitter: 'http://twitter.com/dojo',
-			dojoFoundation: 'http://dojofoundation.org'
-		},
-
-		//Dojo Release URLs
-		dojo: {
-			cdn: '//ajax.googleapis.com/ajax/libs/dojo/'+dojoVersionCdn+'/dojo/dojo.js',
-			download: 'http://download.dojotoolkit.org',
-			get release(){ return this.download+'/release-'+dojoVersionFull },
-			get sourceTar() { return this.release+'/dojo-release-'+dojoVersionFull+'-src.tar.gz'},
-			get sourceZip() { return this.release+'/dojo-release-'+dojoVersionFull+'-src.zip'},
-			get releaseTar() { return this.release+'/dojo-release-'+dojoVersionFull+'.tar.gz'},
-			get releaseZip() { return this.release+'/dojo-release-'+dojoVersionFull+'.zip'},
-			get releaseJs(){ return this.release+'/dojo.js'},
-			get releaseJsUncompressed() { return this.release+'/dojo.js.uncompressed.js'},
-		}
-	};
-
-	//TODO: Move to separate file
-	var packages = grunt.file.readJSON('src/community/roadmap/packages.json').packages;
-
-	var packageCounts = {
-	    total: packages.length,
-	    planning: 0,
-	    dev: 0,
-	    complete: 0
-	};
-
-	packages.forEach(function(pkg) {
-	    switch(pkg.status) {
-	        case 'planning':
-					packageCounts.planning++;
-	                break;
-
-	        case 'dev':
-	            	packageCounts.dev++;
-	            	break;
-
-	        case 'complete':
-					packageCounts.complete++;
-	            	break;
-	    }
-	});
-
-
-
+	var config = require('./config.js')(grunt);
+	var roadmap = require('./tasks/roadmap.js')(grunt);
+	var guideVer = config.guide.ver;
 
 	var ejsOptions = {
-		root: root,
-		dojoVersionMajor: dojoVersionMajor,
-		dojoVersionFull: dojoVersionFull,
-		url: urls,
+		dojo: config.dojo,
+		url: config.urls,
 		rev: Date.now(),
-		packages: packages,
-		packageCounts: packageCounts
+		roadmap: roadmap,
 	};
 
 	grunt.initConfig({
@@ -117,7 +34,7 @@ module.exports = function (grunt) {
 		exec: {
 			guide: {
 				cwd: 'src/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -a -c ./ -d '+refGuideVersion+' '+refGuideVersion+' ../../../dist/reference-guide/'+refGuideVersion
+				cmd: 'sphinx-build -b html -a -c ./ -d '+guideVer+' '+guideVer+' ../../../dist/reference-guide/'+guideVer
 			},
 			api: {
 				cwd: 'tasks/api',
