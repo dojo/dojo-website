@@ -35,16 +35,41 @@
 				<a data-toggle="mobile">Mobile</a>
 			</div>
 				<div class="cardGrid medium-10 columns small-centered">
-					<% tutorials.forEach(function(tutorial, idx){ %>
-						<% if(idx % 2 == 0) { %>
-							<div class="row">
-						<% } %>
-						<%- include('../_partials/ui/tutorialCard', tutorial); %>
-						<% if(idx % 2) { %>
-							</div>
-						<% } %>
-					<% }); %>
+					<%
+						//tutorials.forEach(function(tutorial, idx){
+						Object.keys(tutorials).forEach(function(key) {
+    						var sectionTitle = tutorials[key].title;
+    						var cards = tutorials[key].data;
+    				%>
 
+    					<div class="section">
+    						<h2 class="subTitle"><%= sectionTitle %></h2>
+
+    				<%
+    						cards.forEach(function(tutorial, idx){
+    							console.log(idx % 2)
+    							if(idx % 2 == 0) {
+
+    				%>
+    								<div class="row cardRow">
+    				<%
+    							}
+    				%>
+    							<%- include('../_partials/ui/tutorialCard', tutorial); %>
+					<%
+								if(idx % 2) {
+					%>
+									</div>
+					<%
+								}
+					%>
+    				<%
+							});
+					%>
+						</div>
+					<%
+						});
+					%>
 				</div>
 			</div>
 		</div>

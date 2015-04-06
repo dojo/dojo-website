@@ -25,7 +25,7 @@ module.exports = function (grunt) {
 			self = this;
 			//grunt.log.ok(path.relative(self.data.src, "./src"));
 
-		var tutorials = [];
+		var tutorials = {};
 
 		marked.setOptions({
 			gfm: true,
@@ -85,23 +85,31 @@ module.exports = function (grunt) {
 							templateData.content = rendered.html;
 							$ = cheerio.load(templateData.content);
 
-							templateData.tags = '';
+							templateData.category = '';
 
-							if(rendered.meta && rendered.meta.Tags) {
-								templateData.tags = rendered.meta.Tags;
+
+							if(rendered.meta && rendered.meta.Category) {
+								templateData.category = rendered.meta.Category;
 							}
 
 							templateData.title = $('h2').first().text();
 							templateData.description = $('p').first().text();
 							templateData.tutUrl = path.join('tutorials/', path.dirname(name), 'index.html');
+							var category = templateData.category.replace(' ', '-').toLowerCase().split(',');
 
+							if(!tutorials[category]) {
+								tutorials[category] = {
+									title: templateData.category,
+									data: []
+								}
+							}
 
-							tutorials.push({
+							tutorials[category].data.push({
 								title: templateData.title,
 								description: templateData.description,
 								tutUrl: templateData.tutUrl,
-								tags: templateData.tags,
-								classes: templateData.tags.replace(' ', '-').toLowerCase().split(',')
+								category: templateData.category,
+								cssClass: category
 							});
 
 							return ejs.compile(grunt.file.read(file), {filename: file})(templateData);
@@ -111,6 +119,7 @@ module.exports = function (grunt) {
 							grunt.fail.warn('EJS failed to compile.');
 						}
 					}
+
 				});
 			});
 
@@ -122,9 +131,8 @@ module.exports = function (grunt) {
 		}
 
 		function generateIndex() {
-
 			//Generate the index page.
-
+			console.log(tutorials['fundamentals'].data)
 			try {
 				var file = self.data.indexTemplate;
 
