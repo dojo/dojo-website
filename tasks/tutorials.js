@@ -143,8 +143,18 @@ module.exports = function (grunt) {
 					'fundamentals',
 					'widgets',
 					'working-with-data',
-					'mobile'
+					'mobile',
+					'dojox/app'
 				];
+
+				// Hack to put the Hello Dojo tutorial first
+				tutorials['getting-started'].data.forEach(function(tut, idx, arr) {
+					if(tut.title == "Hello Dojo!") {
+						var tmp = arr[0];
+						arr[0] = arr[idx];
+						arr[idx] = tmp;
+					}
+				});
 
 				var templateData = {
 					tutorials: tutorials,
