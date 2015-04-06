@@ -95,11 +95,12 @@ module.exports = function (grunt) {
 							templateData.title = $('h2').first().text();
 							templateData.description = $('p').first().text();
 							templateData.tutUrl = path.join('tutorials/', path.dirname(name), 'index.html');
-							var category = templateData.category.replace(' ', '-').toLowerCase().split(',');
+							var category = templateData.category.replace(/\s/g, '-').toLowerCase().split(',');
 
 							if(!tutorials[category]) {
 								tutorials[category] = {
 									title: templateData.category,
+									titleId: category,
 									data: []
 								}
 							}
@@ -132,15 +133,25 @@ module.exports = function (grunt) {
 
 		function generateIndex() {
 			//Generate the index page.
-			console.log(tutorials['fundamentals'].data)
 			try {
 				var file = self.data.indexTemplate;
+
+				var categoryOrder = [
+					'getting-started',
+					'modules',
+					'dom-basics',
+					'fundamentals',
+					'widgets',
+					'working-with-data',
+					'mobile'
+				];
 
 				var templateData = {
 					tutorials: tutorials,
 					url: self.data.options.url,
 					rev: self.data.options.rev,
-					dojo: self.data.options.dojo
+					dojo: self.data.options.dojo,
+					categoryOrder: categoryOrder
 				}
 
 

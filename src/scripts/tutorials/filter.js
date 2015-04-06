@@ -26,34 +26,5 @@ require(['dojo/ready',
 				}
 			});
 
-			var filterToggles = query('[data-toggle]');
-			filterToggles.on('click', function(evt){
-				var node = evt.target;
-				var filterOn = domAttr.get(node, 'data-toggle');
-				var cardList = query('.card');
-				cardList.forEach(function(card){
-					if(filterOn == 'all') {
-						domClass.remove(card, 'hide');
-					}
-					else if(!domClass.contains(card, filterOn)) {
-						domClass.add(card, 'hide');
-					} else {
-						domClass.remove(card, 'hide');
-					}
-				});
-
-
-			});
-
-			var categories = [
-				'getting-started',
-				'modules',
-				'dom-basics',
-				'fundamentals',
-				'widgets',
-				'working-with-data',
-				'mobile'
-			];
-
 		});
 });

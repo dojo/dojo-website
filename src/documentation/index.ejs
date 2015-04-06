@@ -7,14 +7,6 @@
 </head>
 <body class="tutorials">
 	<%- include('../_partials/header') %>
-	<div class="subnav">
-		<div class="row">
-			<div class="medium-12 columns">
-
-			</div>
-		</div>
-	</div>
-
 	<main>
 		<div class="row">
 			<h1 class="pageTitle">Dojo Documentation</h1>
@@ -23,54 +15,14 @@
 			</div>
 		</div>
 
-		<div class="section status section alt">
+		<div class="status section alt">
 			<div class="toggleRow medium-10 columns small-centered text-center">
-				<a data-toggle="all">All Tutorials</a>
-				<a data-toggle="getting-started">Getting Started</a>
-				<a data-toggle="modules">Modules</a>
-				<a data-toggle="dom-basics">DOM-Basics</a>
-				<a data-toggle="fundamentals">Fundamentals</a>
-				<a data-toggle="widgets">Widgets</a>
-				<a data-toggle="working-with-data">Working with Data</a>
-				<a data-toggle="mobile">Mobile</a>
+				<%- include('../_partials/ui/tutorialMenu', {root: ''}) %>
 			</div>
-				<div class="cardGrid medium-10 columns small-centered">
-					<%
-						//tutorials.forEach(function(tutorial, idx){
-						Object.keys(tutorials).forEach(function(key) {
-    						var sectionTitle = tutorials[key].title;
-    						var cards = tutorials[key].data;
-    				%>
-
-    					<div class="section">
-    						<h2 class="subTitle"><%= sectionTitle %></h2>
-
-    				<%
-    						cards.forEach(function(tutorial, idx){
-    							console.log(idx % 2)
-    							if(idx % 2 == 0) {
-
-    				%>
-    								<div class="row cardRow">
-    				<%
-    							}
-    				%>
-    							<%- include('../_partials/ui/tutorialCard', tutorial); %>
-					<%
-								if(idx % 2) {
-					%>
-									</div>
-					<%
-								}
-					%>
-    				<%
-							});
-					%>
-						</div>
-					<%
-						});
-					%>
-				</div>
+			<div class="cardGrid medium-10 columns small-centered" id="tutorials">
+				<% categoryOrder.forEach(function(cat, idx, arr) { %>
+					<%- include('../_partials/ui/tutorialSection', {tutorials: tutorials[cat]}) %>
+				<% }); %>
 			</div>
 		</div>
 		<%- include('../_partials/footer') %>
