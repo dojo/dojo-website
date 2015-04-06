@@ -100,7 +100,8 @@ module.exports = function (grunt) {
 								title: templateData.title,
 								description: templateData.description,
 								tutUrl: templateData.tutUrl,
-								tags: templateData.tags
+								tags: templateData.tags,
+								classes: templateData.tags.replace(' ', '-').toLowerCase().split(',')
 							});
 
 							return ejs.compile(grunt.file.read(file), {filename: file})(templateData);
@@ -133,6 +134,7 @@ module.exports = function (grunt) {
 					rev: self.data.options.rev,
 					dojo: self.data.options.dojo
 				}
+
 
 				var dest = path.join(self.data.indexDest, 'index.html');
 				var html = ejs.compile(grunt.file.read(file), {filename: file})(templateData);
