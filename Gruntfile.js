@@ -11,7 +11,7 @@ module.exports = function (grunt) {
 		dojo: config.dojo,
 		url: config.urls,
 		rev: Date.now(),
-		roadmap: roadmap,
+		roadmap: roadmap
 	};
 
 	grunt.initConfig({
@@ -26,7 +26,9 @@ module.exports = function (grunt) {
 				options: ejsOptions,
 				src: 'src/documentation/tutorials/',
 				dest: 'dist/documentation/tutorials/',
-				template: 'src/_templates/tutorial.ejs'
+				template: 'src/_templates/tutorial.ejs',
+				indexTemplate: 'src/documentation/index.ejs',
+				indexDest: 'dist/documentation/'
 			}
 		},
 
@@ -46,7 +48,7 @@ module.exports = function (grunt) {
 			all: {
 				options: ejsOptions,
 				cwd: 'src',
-				src: ['**/*.ejs', '!_templates/**/*', '!_partials/**/*'],
+				src: ['**/*.ejs', '!_templates/**/*', '!_partials/**/*', '!documentation/**/*.ejs'],
 				dest: 'dist',
 				expand: true,
 				ext: '.html'
@@ -83,6 +85,7 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+
 		connect: {
 			server: {
 				options: {
@@ -91,6 +94,7 @@ module.exports = function (grunt) {
 				}
 			}
 		},
+
 		sync: {
 			images: {
 				files: [{
@@ -111,13 +115,15 @@ module.exports = function (grunt) {
 				verbose: true
 			}
 		},
+
 		watch: {
 			ejs: {
-				files: ['src/**/*.ejs'],
+				files: ['src/**/*.ejs', '!src/documentation/**/*'],
 				tasks: ['ejs', 'highlight']
 			},
-			md: {
-				files: ['src/documentation/tutorials/**/*.md', '!src/**/README.md'],
+
+			tutorials: {
+				files: ['src/documentation/tutorials/**/*.md', 'src/documentation/index.ejs', '!src/**/README.md'],
 				tasks: ['tutorials']
 			},
 			stylus: {
@@ -129,6 +135,7 @@ module.exports = function (grunt) {
 				tasks: ['sync:scripts']
 			}
 		},
+
 		clean: ['dist']
 	});
 
@@ -143,8 +150,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-highlight');
 	grunt.loadTasks('tasks');
 
-	grunt.registerTask('deploy', ['clean', 'ejs', 'stylus', 'sync', 'tutorials', 'exec']);
-	grunt.registerTask('default', ['clean', 'ejs', 'stylus', 'sync', 'tutorials']);
+	grunt.registerTask('deploy', ['clean', 'ejs', 'highlight', 'stylus', 'sync', 'tutorials', 'exec']);
+	grunt.registerTask('default', ['clean', 'ejs', 'highlight', 'stylus', 'sync', 'tutorials']);
 	grunt.registerTask('docs',['ejs:docs', 'exec']);
 	grunt.registerTask('develop', ['ejs', 'highlight', 'stylus', 'sync', 'tutorials', 'connect', 'watch']);
 };

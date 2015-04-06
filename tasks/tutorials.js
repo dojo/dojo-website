@@ -1,7 +1,9 @@
 var ejs = require('ejs');
 var highlighter = require('highlight.js');
-var marked = require('marked');
+var marked = require('meta-marked');
 var path = require('path');
+var cheerio = require('cheerio');
+
 
 /* global module:false*/
 module.exports = function (grunt) {
@@ -23,6 +25,7 @@ module.exports = function (grunt) {
 			self = this;
 			//grunt.log.ok(path.relative(self.data.src, "./src"));
 
+		var tutorials = [];
 
 		marked.setOptions({
 			gfm: true,
@@ -48,20 +51,9 @@ module.exports = function (grunt) {
 		});
 
 
-		function generate() {
-			grunt.log.ok(self.data.src);
+		function generateTutorials() {
 			grunt.log.ok('Generating tutorials...');
-
-			// We assume that any top-level markdown file is a tutorial.
-			// We record disabled tutorials to hide those from the menu
 			var names = grunt.file.expand({cwd: self.data.src}, ['**/**/*.md', '!**/**/README.md']);
-			var tutorials = names.map(function (name) {
-					return {
-						title: name.replace(/_/g, ' ').replace('.md', '').replace(/^\d+-/, ''),
-						filename: name.replace('.md', '').replace(/^\d+-/, '') + '.html',
-						disabled: name.indexOf('disabled') > -1
-					};
-				});
 
 			// copy tutorial support files
 			grunt.file.expand({
@@ -77,25 +69,42 @@ module.exports = function (grunt) {
 			// parsing the markdown of each tutorial and rendering
 			// inside a tutorial template specified via the task config
 			names.forEach(function (name) {
-				grunt.log.ok(self.data.dest + name);
+
 				var src = path.join(self.data.src, name);
 				self.data.options.root = path.relative(src, './');
 				var dest = path.join(self.data.dest, path.dirname(name), 'index.html');
-				//console.log(self.data.options.root);
-				//console.log(src);
-				console.log(dest);
+
+				grunt.log.ok('Converting: ' + name + ' -> ' + dest);
 
 				grunt.file.copy(src, dest, {
 					process: function (src) {
 						try {
 							var file = self.data.template;
-
 							var templateData = Object.create(self.data.options);
-							templateData.content = marked(src);
-							templateData.tutorials = tutorials;
-							templateData.title = name.replace(/_/g, ' ').replace('.md', '').replace(/^\d+-/, '');
+							var rendered = marked(src);
+							templateData.content = rendered.html;
+							$ = cheerio.load(templateData.content);
+
+							templateData.tags = '';
+
+							if(rendered.meta && rendered.meta.Tags) {
+								templateData.tags = rendered.meta.Tags;
+							}
+
+							templateData.title = $('h2').first().text();
+							templateData.description = $('p').first().text();
+							templateData.tutUrl = path.join('tutorials/', path.dirname(name), 'index.html');
+
+
+							tutorials.push({
+								title: templateData.title,
+								description: templateData.description,
+								tutUrl: templateData.tutUrl,
+								tags: templateData.tags
+							});
 
 							return ejs.compile(grunt.file.read(file), {filename: file})(templateData);
+
 						} catch (e) {
 							grunt.log.error(e);
 							grunt.fail.warn('EJS failed to compile.');
@@ -104,12 +113,39 @@ module.exports = function (grunt) {
 				});
 			});
 
+
 			// tell everyone we are done
 			grunt.log.ok('Created ' + names.length + ' files.');
 
 			done(true);
 		}
 
-		generate();
+		function generateIndex() {
+
+			//Generate the index page.
+
+			try {
+				var file = self.data.indexTemplate;
+
+				var templateData = {
+					tutorials: tutorials,
+					url: self.data.options.url,
+					rev: self.data.options.rev,
+					dojo: self.data.options.dojo
+				}
+
+				var dest = path.join(self.data.indexDest, 'index.html');
+				var html = ejs.compile(grunt.file.read(file), {filename: file})(templateData);
+				grunt.file.write(dest, html);
+
+			} catch (e) {
+				grunt.log.error(e);
+				grunt.fail.warn('EJS failed to compile.');
+			}
+
+		}
+
+		generateTutorials();
+		generateIndex();
 	});
 };
