@@ -79,7 +79,6 @@ module.exports = function (grunt) {
 			index: {
 				files: {
 					'dist/css/index.css': 'src/css/index.styl',
-					'dist/css/tutorials.css': 'src/css/views/tutorials.styl',
 					'dist/css/api.css': 'src/css/views/api.styl',
 					'dist/css/guide.css': 'src/css/views/guide.styl'
 				}

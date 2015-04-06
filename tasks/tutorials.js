@@ -136,7 +136,7 @@ module.exports = function (grunt) {
 			try {
 				var file = self.data.indexTemplate;
 
-				var categoryOrder = [
+				var tutorialOrder = [
 					'getting-started',
 					'modules',
 					'dom-basics',
@@ -151,7 +151,7 @@ module.exports = function (grunt) {
 					url: self.data.options.url,
 					rev: self.data.options.rev,
 					dojo: self.data.options.dojo,
-					categoryOrder: categoryOrder
+					categoryOrder: tutorialOrder
 				}
 
 

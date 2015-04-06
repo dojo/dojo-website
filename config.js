@@ -30,7 +30,7 @@ module.exports = function(grunt){
 		roadmap: '/community/roadmap/',
 		vision: '/community/roadmap/vision.html',
 		support: '/#support',
-		tutorials: '/documentation/tutorials',
+		tutorials: '/documentation/',
 
 		//External
 		ext: {
