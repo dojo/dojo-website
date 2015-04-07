@@ -46,6 +46,10 @@ module.exports = function(grunt){
 			dojoFoundation: 'http://dojofoundation.org'
 		},
 
+		tuts: {
+			hello_dojo: '/documentation/tutorials/'+config.dojo.ver.major+'/hello_dojo',
+		},
+
 		//Dojo Release URLs
 		dojo: {
 			cdn: '//ajax.googleapis.com/ajax/libs/dojo/'+config.dojo.ver.cdn+'/dojo/dojo.js',
