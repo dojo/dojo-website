@@ -15,11 +15,13 @@ require(['dojo/ready',
 					if (docScroll < fixpoint) {
 						scrolled = false;
 						domClass.toggle(nav, 'shrink');
+						domClass.toggle(document.body, 'scrolled');
 					}
 				}
 				else {
 					if (docScroll >= fixpoint) {
 						domClass.toggle(nav, 'shrink');
+						domClass.toggle(document.body, 'scrolled');
 						scrolled = true;
 					}
 				}

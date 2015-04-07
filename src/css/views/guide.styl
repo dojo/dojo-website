@@ -7,11 +7,11 @@
 .refguide {
 
     .row {
-        max-width:90%;
+        max-width:$maxWidth;
+    }
 
-        &.full {
-            max-width:100%;
-        }
+    .row.footer {
+        max-width:100%;
     }
 
 	.content {
@@ -57,7 +57,10 @@
 
     h3 {
         font-size: 1.5rem;
-        margin-bottom:0;
+
+        & + .CodeGlassMini {
+            margin-bottom: 2em;
+        }
     }
 
     h4 {
@@ -70,6 +73,7 @@
         padding: 1em;
         overflow:auto;
         border-radius:4px;
+        margin-bottom:1.5em;
 
         pre {
             background:transparent;
@@ -80,6 +84,35 @@
     .contents {
         display:none;
     }
+
+
+    &.claro {
+
+        .dijitDialog {
+            border:3px solid rgba($lightBg, 0.7);
+            border-radius:4px;
+            box-shadow: 0 0 3px 5px rgba($softBlack, 0.2);
+
+            .dijitDialogTitleBar {
+                background:$dojoRed;
+                border:0;
+
+                .dijitDialogTitle {
+                    color: #fff;
+                    font-family: $headingFont;
+                }
+            }
+            .dijitDialogPaneContent {
+                border:0;
+            }
+        }
+
+
+        .dijitDialogUnderlay {
+            background-color:$softBlack;
+        }
+    }
+
 }
 
 
@@ -191,6 +224,12 @@
 }
 
 .section {
+    padding-bottom:0;
+
+
+    .section {
+        padding:0;
+    }
 
     blockquote {
         color: #222222;
@@ -235,30 +274,26 @@
     }
 }
 
-.docutils {
+table.docutils {
 	border-collapse:collapse;
 	margin: 20px 0;
 
+
     th {
+        font-family: $headingFont;
         text-align:center;
         font-size:14px;
-        padding:3px 6px;
-        background-color: #DDDDDD;
-        background: #fdfdfd;
-        background: -moz-linear-gradient(top, #fdfdfd 0%, #f0f0f0 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fdfdfd), color-stop(100%,#f0f0f0));
-        background: -webkit-linear-gradient(top, #fdfdfd 0%,#f0f0f0 100%);
-        background: -o-linear-gradient(top, #fdfdfd 0%,#f0f0f0 100%);
-        background: -ms-linear-gradient(top, #fdfdfd 0%,#f0f0f0 100%);
-        background: linear-gradient(top, #fdfdfd 0%,#f0f0f0 100%);
-        border: 1px solid #E6E6E7;
+        padding:0.5em 1em;
+        background: $lightBg;
+        border: 1px solid darken($lightBg, 15%);
         color: #333333;
-        text-shadow: 0 1px 0 rgba(255,255,255,.9);
     }
+
     td {
         font-size:14px;
-        padding:3px;
+        padding:0.5em 1em;
         vertical-align: top;
+        border:1px solid darken($lightBg, 15%);
     }
     .first {
         font-weight: normal;
@@ -295,9 +330,11 @@
 
 
 #toc {
-    float: right;
+    position:fixed;
     font-size: 0.9rem;
     margin:2rem 0 2rem 2rem;
+    transition: transform 0.3s;
+
 
     &:after {
         content:'';
@@ -313,6 +350,8 @@
     .tocList {
         border-left:5px solid $lightBg;
         max-width:300px;
+        overflow-y:auto;
+        font-family:$headingFont;
     }
 
     ul {
@@ -322,7 +361,17 @@
         li {
             list-style-type: none;
             margin:0;
-            padding: 0.3em 0;
+            padding: 0.25em 0;
+        }
+    }
+}
+
+.scrolled {
+    #toc {
+        transform: translate(0,-90px);
+
+        .tocList {
+            max-height: 85vh;
         }
     }
 }
