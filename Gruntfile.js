@@ -81,7 +81,7 @@ module.exports = function (grunt) {
 					'dist/css/index.css': 'src/css/index.styl',
 					'dist/css/api.css': 'src/css/views/api.styl',
 					'dist/css/guide.css': 'src/css/views/guide.styl',
-					'dist/blog/wp-content/themes/dtk/blog.css' : 'src/css/views/blog.styl'
+					'dist/blog/wp-content/themes/dtk/style.css' : 'src/css/views/blog.styl'
 				}
 			}
 		},
