@@ -80,7 +80,8 @@ module.exports = function (grunt) {
 				files: {
 					'dist/css/index.css': 'src/css/index.styl',
 					'dist/css/api.css': 'src/css/views/api.styl',
-					'dist/css/guide.css': 'src/css/views/guide.styl'
+					'dist/css/guide.css': 'src/css/views/guide.styl',
+					'dist/blog/wp-content/themes/dtk/blog.css' : 'src/css/views/blog.styl'
 				}
 			}
 		},
@@ -112,6 +113,15 @@ module.exports = function (grunt) {
 					expand: true,
 				}],
 				verbose: true
+			},
+			blog: {
+				files: [{
+					cwd: 'src/blog',
+					src: ['dtk/**/*'],
+					dest: 'dist/blog/wp-content/themes/',
+					expand: true,
+				}],
+				verbose: true
 			}
 		},
 
@@ -124,6 +134,10 @@ module.exports = function (grunt) {
 			tutorials: {
 				files: ['src/documentation/tutorials/**/*.md', 'src/documentation/index.ejs', '!src/**/README.md'],
 				tasks: ['tutorials']
+			},
+			blog: {
+				files: ['src/blog/dtk/**/*'],
+				tasks: ['sync:blog']
 			},
 			stylus: {
 				files: ['src/**/*.styl', '!src/vendor/**'],
