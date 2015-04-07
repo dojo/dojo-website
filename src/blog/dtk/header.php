@@ -24,9 +24,6 @@
 	<title><?php wp_title( '|', true, 'right' ); ?></title>
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
-	<!--[if lt IE 9]>
-	<script src="<?php echo get_template_directory_uri(); ?>/js/html5.js"></script>
-	<![endif]-->
 	<?php wp_head(); ?>
 </head>
 
@@ -34,23 +31,32 @@
 	<div id="page" class="hfeed site">
 		<div class="nav">
 			<div class="row">
-			<div class="small-3 columns">
-				<a href="/" class="navLogo"><span>Dojo</span></a>
-			</div>
-			<div class="small-9 columns text-right">
-				<div class="mobileMenuToggle" data-menu-toggle></div>
-				<div class="menu">
-					<div class="mobileHeader">Menu</div>
-					<ul class="inline-list menuItems right">
-						<li><a href="/download/">Get Dojo</a></li>
-						<li><a href="/documentation/">Docs</a></li>
-						<li><a href="/support/">Support</a></li>
-						<li><a href="/community/roadmap/">Roadmap</a></li>
-						<li><a href="/blog/">Blog</a></li>
-					</ul>
+				<div class="small-3 columns">
+					<a href="/" class="navLogo"><span>Dojo</span></a>
+				</div>
+				<div class="small-9 columns text-right">
+					<div class="mobileMenuToggle" data-menu-toggle></div>
+					<div class="menu">
+						<div class="mobileHeader">Menu</div>
+						<ul class="inline-list menuItems right">
+							<li><a href="/download/">Get Dojo</a></li>
+							<li><a href="/documentation/">Docs</a></li>
+							<li><a href="/support/">Support</a></li>
+							<li><a href="/community/roadmap/">Roadmap</a></li>
+							<li><a href="/blog/">Blog</a></li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+		<div class="subnav">
+			<div class="row full search">
+				<div class="medium-9 columns">
 
+				</div>
+				<div class="medium-3 columns">
+					<?php echo get_search_form(); ?>
+				</div>
+			</div>
+		</div>
 	<div id="main" class="site-main">
