@@ -37,14 +37,16 @@ module.exports = function (grunt) {
 		// are made available: `content`, which is the resulting tutorial
 		// HTML, and `tutorials`, which is an array all tutorials represented
 		// as objects, each with a `filename` and `title` property.
+		config: config,
+
 		tutorials: {
 			all: {
 				options: ejsOptions,
-				src: src +'/documentation/tutorials/',
-				dest: dest +'/documentation/tutorials/',
-				template: src +'/_templates/tutorial.ejs',
-				indexTemplate: src +'/documentation/index.ejs',
-				indexDest: dest +'/documentation/'
+				src: '<%= config.src %>/documentation/tutorials/',
+				dest: '<%= config.dest %>/documentation/tutorials/',
+				template: '<%= config.src %>/_templates/tutorial.ejs',
+				indexTemplate: '<%= config.src %>/documentation/index.ejs',
+				indexDest: '<%= config.dest %>/documentation/'
 			}
 		},
 
@@ -52,7 +54,7 @@ module.exports = function (grunt) {
 		exec: {
 			guide: {
 				cwd: src +'/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -a -c ./ -d '+guideVer+' '+guideVer+' ../../../'+dest+'/reference-guide/'+guideVer
+				cmd: 'sphinx-build -b html -a -c ./ -d '+guideVer+' '+guideVer+' ../../../'+config.dest+'/reference-guide/'+guideVer
 			},
 			api: {
 				cwd: 'tasks/api',
@@ -63,9 +65,9 @@ module.exports = function (grunt) {
 		ejs: {
 			all: {
 				options: ejsOptions,
-				cwd: src,
+				cwd: config.src,
 				src: ['**/*.ejs', '!_templates/**/*', '!_partials/**/*', '!documentation/**/*.ejs'],
-				dest: dest,
+				dest: config.dest,
 				expand: true,
 				ext: '.html'
 			},
@@ -73,9 +75,9 @@ module.exports = function (grunt) {
 			//Docs need to have partials compiled to HTML first
 			docs: {
 				options: ejsOptions,
-				cwd: src +'/_partials',
+				cwd: config.src +'/_partials',
 				src: ['header.ejs', 'footer.ejs'],
-				dest: src +'/_partials/tmp',
+				dest: config.src +'/_partials/tmp',
 				expand: true,
 				ext: '.html'
 			}
@@ -84,19 +86,19 @@ module.exports = function (grunt) {
 		highlight: {
 		    task: {
 		      options: {},
-		      files: toObj([dest+'/download/index.html',[dest+'/download/index.html']])
+		      files: { '<%= config.dest %>/download/index.html':['<%= config.dest %>/download/index.html']}
 			}
 		},
 
 		stylus: {
 			options: {'include css': true, 'compress':true},
 			index: {
-				files: toObj([
-						dest + '/css/index.css', src +'/css/index.styl',
-						dest + '/css/api.css', src +'/css/views/api.styl',
-						dest + '/css/guide.css', src +'/css/views/guide.styl',
-						dest + '/blog/wp-content/themes/dtk/style.css', src +'/css/views/blog.styl'
-					]),
+				files: {
+					'<%= config.dest %>/css/index.css': '<%= config.src %>/css/index.styl',
+					'<%= config.dest %>/css/api.css': '<%= config.src %>/css/views/api.styl',
+					'<%= config.dest %>/css/guide.css': '<%= config.src %>/css/views/guide.styl',
+					'<%= config.dest %>/blog/wp-content/themes/dtk/style.css' : '<%= config.src %>/css/views/blog.styl'
+				}
 			}
 		},
 
@@ -148,7 +150,7 @@ module.exports = function (grunt) {
 					{
 						cwd: src +'/_partials/tmp',
 						src: ['header.html', 'footer.html'],
-						dest: dest +'/blog/wp-content/themes/dtk/inc'
+						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/inc'
 
 					}
 				],
