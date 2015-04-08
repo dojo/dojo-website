@@ -4,9 +4,11 @@ module.exports = function(grunt){
 
 	function toObj(arr) {
 		var obj = {};
-		for(var i=0; i >= arr.length; i+=2){
+
+		for(var i=0; i != arr.length; i+=2){
 			obj[arr[i]] = arr[i+1];
 		}
+		console.log(obj);
 		return obj;
 	}
 
