@@ -7,19 +7,8 @@ module.exports = function (grunt) {
 	// Build config variables
 	var config = require('./config.js')(grunt);
 
-	//src folder
-	var src = config.src;
-
-	//build destination folder
-	var dest = config.dest;
-
-	var guideVer = config.guide.ver;
-
 	// Reads and parses the roadmap json
 	var roadmap = require('./tasks/roadmap.js')(grunt);
-
-	// Helper to make it possible to use variables for task 'files' that expect object literals
-	var toObj = require('./tasks/helpers.js')(grunt);
 
 
 	var ejsOptions = {
@@ -53,8 +42,8 @@ module.exports = function (grunt) {
 		// Compile the Reference Guide and API docs
 		exec: {
 			guide: {
-				cwd: src +'/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -a -c ./ -d '+guideVer+' '+guideVer+' ../../../'+config.dest+'/reference-guide/'+guideVer
+				cwd: '<%= config.src %>/documentation/reference-guide',
+				cmd: 'sphinx-build -b html -a -c ./ -d <%= config.guide.ver %> <%= config.guide.ver %> ../../../<%= config.dest %>/reference-guide/<%= config.guide.ver %>'
 			},
 			api: {
 				cwd: 'tasks/api',
@@ -75,9 +64,9 @@ module.exports = function (grunt) {
 			//Docs need to have partials compiled to HTML first
 			docs: {
 				options: ejsOptions,
-				cwd: config.src +'/_partials',
+				cwd: '<%= config.src %>/_partials',
 				src: ['header.ejs', 'footer.ejs'],
-				dest: config.src +'/_partials/tmp',
+				dest: '<%= config.src %>/_partials/tmp',
 				expand: true,
 				ext: '.html'
 			}
@@ -106,7 +95,7 @@ module.exports = function (grunt) {
 			server: {
 				options: {
 					port: 1337,
-					base: dest
+					base: config.dest
 				}
 			}
 		},
@@ -114,27 +103,27 @@ module.exports = function (grunt) {
 		sync: {
 			images: {
 				files: [{
-					cwd: src,
+					cwd: config.src,
 					src: ['images/**', 'css/images/**', 'css/fonts/**'],
-					dest: dest,
+					dest: config.dest,
 					expand: true,
 				}],
 				verbose: true
 			},
 			scripts: {
 				files: [{
-					cwd: src,
+					cwd: config.src,
 					src: ['scripts/**', '!scripts/dojo/**/*'],
-					dest: dest,
+					dest: config.dest,
 					expand: true,
 				}],
 				verbose: true
 			},
 			dojo: {
 				files: [{
-					cwd: src,
-					src: ['scripts/dojo'],
-					dest: dest,
+					cwd: config.src,
+					src: ['scripts/dojo/**/*'],
+					dest: config.dest,
 					expand: true,
 				}],
 				verbose: true
@@ -142,13 +131,13 @@ module.exports = function (grunt) {
 			blog: {
 				files: [
 					{
-						cwd: src +'/blog',
+						cwd: '<%= config.src %>/blog',
 						src: ['dtk/**/*'],
-						dest: dest + '/blog/wp-content/themes/',
+						dest: '<%= config.dest %>/blog/wp-content/themes/',
 						expand: true,
 					},
 					{
-						cwd: src +'/_partials/tmp',
+						cwd: '<%= config.src %>/_partials/tmp',
 						src: ['header.html', 'footer.html'],
 						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/inc'
 
@@ -160,29 +149,29 @@ module.exports = function (grunt) {
 
 		watch: {
 			ejs: {
-				files: [src +'/**/*.ejs', '!'+src+'/documentation/**/*'],
+				files: ['<%= config.src %>/**/*.ejs', '!<%= config.src %>/documentation/**/*'],
 				tasks: ['ejs', 'highlight']
 			},
 
 			tutorials: {
-				files: [src +'/documentation/tutorials/**/*.md', src +'/documentation/index.ejs', '!'+src+'/**/README.md'],
+				files: ['<%= config.src %>/documentation/tutorials/**/*.md', '<%= config.src %>/documentation/index.ejs', '!<%= config.src %>/**/README.md'],
 				tasks: ['tutorials']
 			},
 			blog: {
-				files: [src +'/blog/dtk/**/*', src + '/_partials/**/*.ejs'],
+				files: ['<%= config.src %>/blog/dtk/**/*', '<%= config.src %>_partials/**/*.ejs'],
 				tasks: ['sync:blog']
 			},
 			stylus: {
-				files: [src +'/**/*.styl', '!'+src+'/vendor/**'],
+				files: ['<%= config.src %>/**/*.styl', '!<%= config.src %>/vendor/**'],
 				tasks: ['stylus', 'sync:images']
 			},
 			js: {
-				files: [src +'/scripts/**/*.js', src +'/scripts/*.js', '!'+src+'/scripts/dojo/**', '!'+src+'/scripts/syntaxhighlighter/**'],
+				files: ['<%= config.src %>/scripts/**/*.js', '<%= config.src %>/scripts/*.js', '!<%= config.src %>/scripts/dojo/**', '!<%= config.src %>/scripts/syntaxhighlighter/**'],
 				tasks: ['sync:scripts']
 			}
 		},
 
-		clean: [dest]
+		clean: [config.dest]
 	});
 
 	grunt.loadNpmTasks('grunt-ejs');
