@@ -27,10 +27,11 @@ module.exports = function(grunt){
 		download: '/download/',
 		guide: '/reference-guide/' + config.dojo.ver.major,
 		license: '/license/',
+		community: '/community',
 		roadmap: '/community/roadmap/',
 		vision: '/community/roadmap/vision.html',
-		support: '/#support',
-		tutorials: '/documentation/',
+		support: '/community/#support',
+		tutorials: '/documentation/#tutorials',
 
 		//External
 		ext: {
@@ -70,6 +71,10 @@ module.exports = function(grunt){
 			{ url: '#bower', label: 'Bower' },
 			{ url: '#download', label: 'Download' },
 			{ url: '#github', label: 'Github' }
+		],
+		community: [
+			{ url: config.urls.support, label: 'Help & Support' },
+			{ url: '#contribute', label: 'Become a Contributor' },
 		],
 		roadmap: [
 			{ url: config.urls.roadmap + '#packageStatus', label: 'Package Status' },
