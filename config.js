@@ -64,5 +64,18 @@ module.exports = function(grunt){
 		}
 	};
 
+	config.urls.subnav = {
+		download: [
+			{ url: '#cdn', label: 'CDN' },
+			{ url: '#bower', label: 'Bower' },
+			{ url: '#download', label: 'Download' },
+			{ url: '#github', label: 'Github' }
+		],
+		roadmap: [
+			{ url: config.urls.roadmap + '#packageStatus', label: 'Package Status' },
+			{ url: config.urls.vision, label: 'Vision' },
+		]
+	}
+
 	return config;
 }

@@ -28,7 +28,7 @@
 </head>
 
 <body <?php body_class(); ?>>
-	<div id="page" class="hfeed site">
+	<div id="page" class="dtkBlog hfeed site">
 		<?php include('inc/header.html'); ?>
 		<div class="subnav">
 			<div class="row full search">
