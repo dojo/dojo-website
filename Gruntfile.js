@@ -3,11 +3,23 @@ var path = require('path');
 var marked = require('marked');
 
 module.exports = function (grunt) {
+
+	// Build config variables
 	var config = require('./config.js')(grunt);
-	var roadmap = require('./tasks/roadmap.js')(grunt);
-	var guideVer = config.guide.ver;
+
+	//src folder
 	var src = config.src;
+
+	//build destination folder
 	var dest = config.dest;
+
+	var guideVer = config.guide.ver;
+
+	// Reads and parses the roadmap json
+	var roadmap = require('./tasks/roadmap.js')(grunt);
+
+	// Helper to make it possible to use variables for task 'files' that expect object literals
+	var toObj = require('./tasks/helpers.js')(grunt);
 
 
 	var ejsOptions = {
@@ -16,6 +28,7 @@ module.exports = function (grunt) {
 		rev: Date.now(),
 		roadmap: roadmap
 	};
+
 
 	grunt.initConfig({
 		// This is a custom task that compiles markdown tutorials
@@ -71,21 +84,19 @@ module.exports = function (grunt) {
 		highlight: {
 		    task: {
 		      options: {},
-		      files: {
-		        'dist/download/index.html':['dist/download/index.html'],
-		      }
+		      files: toObj([dest+'/download/index.html',[dest+'/download/index.html']])
 			}
 		},
 
 		stylus: {
 			options: {'include css': true, 'compress':true},
 			index: {
-				files: {
-					'dist/css/index.css': src +'/css/index.styl',
-					'dist/css/api.css': src +'/css/views/api.styl',
-					'dist/css/guide.css': src +'/css/views/guide.styl',
-					'dist/blog/wp-content/themes/dtk/style.css' : src +'/css/views/blog.styl'
-				}
+				files: toObj([
+						dest + '/css/index.css', src +'/css/index.styl',
+						dest + '/css/api.css', src +'/css/views/api.styl',
+						dest + '/css/guide.css', src +'/css/views/guide.styl',
+						dest + '/blog/wp-content/themes/dtk/style.css', src +'/css/views/blog.styl'
+					]),
 			}
 		},
 
@@ -169,7 +180,7 @@ module.exports = function (grunt) {
 			}
 		},
 
-		clean: ['dist']
+		clean: [dest]
 	});
 
 	grunt.loadNpmTasks('grunt-ejs');
