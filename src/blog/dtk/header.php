@@ -29,26 +29,7 @@
 
 <body <?php body_class(); ?>>
 	<div id="page" class="hfeed site">
-		<div class="nav">
-			<div class="row">
-				<div class="small-3 columns">
-					<a href="/" class="navLogo"><span>Dojo</span></a>
-				</div>
-				<div class="small-9 columns text-right">
-					<div class="mobileMenuToggle" data-menu-toggle></div>
-					<div class="menu">
-						<div class="mobileHeader">Menu</div>
-						<ul class="inline-list menuItems right">
-							<li><a href="/download/">Get Dojo</a></li>
-							<li><a href="/documentation/">Docs</a></li>
-							<li><a href="/support/">Support</a></li>
-							<li><a href="/community/roadmap/">Roadmap</a></li>
-							<li><a href="/blog/">Blog</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
+		<?php include('inc/header.html'); ?>
 		<div class="subnav">
 			<div class="row full search">
 				<div class="medium-9 columns">
