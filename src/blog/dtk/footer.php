@@ -17,5 +17,6 @@
 	</div><!-- #page -->
 
 	<?php wp_footer(); ?>
+	<?php include('inc/footer.html'); ?>
 </body>
 </html>

@@ -108,19 +108,36 @@ module.exports = function (grunt) {
 			scripts: {
 				files: [{
 					cwd: 'src',
-					src: ['scripts/**'],
+					src: ['scripts/**', '!scripts/dojo/**/*'],
+					dest: 'dist',
+					expand: true,
+				}],
+				verbose: true
+			},
+			dojo: {
+				files: [{
+					cwd: 'src',
+					src: ['scripts/dojo'],
 					dest: 'dist',
 					expand: true,
 				}],
 				verbose: true
 			},
 			blog: {
-				files: [{
-					cwd: 'src/blog',
-					src: ['dtk/**/*'],
-					dest: 'dist/blog/wp-content/themes/',
-					expand: true,
-				}],
+				files: [
+					{
+						cwd: 'src/blog',
+						src: ['dtk/**/*'],
+						dest: 'dist/blog/wp-content/themes/',
+						expand: true,
+					},
+					{
+						cwd: 'src/_partials/tmp',
+						src: ['header.html', 'footer.html'],
+						dest: 'dist/blog/wp-content/themes/dtk/inc'
+
+					}
+				],
 				verbose: true
 			}
 		},
