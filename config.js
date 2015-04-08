@@ -2,8 +2,8 @@ module.exports = function(grunt){
 
 	var config = { }
 
-	config.src = '/src';
-	config.dest = '/dist';
+	config.src = 'src';
+	config.dest = 'dist';
 
 	config.dojo = {
 		ver: {

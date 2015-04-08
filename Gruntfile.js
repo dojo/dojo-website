@@ -6,6 +6,9 @@ module.exports = function (grunt) {
 	var config = require('./config.js')(grunt);
 	var roadmap = require('./tasks/roadmap.js')(grunt);
 	var guideVer = config.guide.ver;
+	var src = config.src;
+	var dest = config.dest;
+
 
 	var ejsOptions = {
 		dojo: config.dojo,
@@ -24,19 +27,19 @@ module.exports = function (grunt) {
 		tutorials: {
 			all: {
 				options: ejsOptions,
-				src: 'src/documentation/tutorials/',
-				dest: 'dist/documentation/tutorials/',
-				template: 'src/_templates/tutorial.ejs',
-				indexTemplate: 'src/documentation/index.ejs',
-				indexDest: 'dist/documentation/'
+				src: src +'/documentation/tutorials/',
+				dest: dest +'/documentation/tutorials/',
+				template: src +'/_templates/tutorial.ejs',
+				indexTemplate: src +'/documentation/index.ejs',
+				indexDest: dest +'/documentation/'
 			}
 		},
 
 		// Compile the Reference Guide and API docs
 		exec: {
 			guide: {
-				cwd: 'src/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -a -c ./ -d '+guideVer+' '+guideVer+' ../../../dist/reference-guide/'+guideVer
+				cwd: src +'/documentation/reference-guide',
+				cmd: 'sphinx-build -b html -a -c ./ -d '+guideVer+' '+guideVer+' ../../../'+dest+'/reference-guide/'+guideVer
 			},
 			api: {
 				cwd: 'tasks/api',
@@ -47,9 +50,9 @@ module.exports = function (grunt) {
 		ejs: {
 			all: {
 				options: ejsOptions,
-				cwd: 'src',
+				cwd: src,
 				src: ['**/*.ejs', '!_templates/**/*', '!_partials/**/*', '!documentation/**/*.ejs'],
-				dest: 'dist',
+				dest: dest,
 				expand: true,
 				ext: '.html'
 			},
@@ -57,9 +60,9 @@ module.exports = function (grunt) {
 			//Docs need to have partials compiled to HTML first
 			docs: {
 				options: ejsOptions,
-				cwd: 'src/_partials',
+				cwd: src +'/_partials',
 				src: ['header.ejs', 'footer.ejs'],
-				dest: 'src/_partials/tmp',
+				dest: src +'/_partials/tmp',
 				expand: true,
 				ext: '.html'
 			}
@@ -78,10 +81,10 @@ module.exports = function (grunt) {
 			options: {'include css': true, 'compress':true},
 			index: {
 				files: {
-					'dist/css/index.css': 'src/css/index.styl',
-					'dist/css/api.css': 'src/css/views/api.styl',
-					'dist/css/guide.css': 'src/css/views/guide.styl',
-					'dist/blog/wp-content/themes/dtk/style.css' : 'src/css/views/blog.styl'
+					'dist/css/index.css': src +'/css/index.styl',
+					'dist/css/api.css': src +'/css/views/api.styl',
+					'dist/css/guide.css': src +'/css/views/guide.styl',
+					'dist/blog/wp-content/themes/dtk/style.css' : src +'/css/views/blog.styl'
 				}
 			}
 		},
@@ -90,7 +93,7 @@ module.exports = function (grunt) {
 			server: {
 				options: {
 					port: 1337,
-					base: 'dist'
+					base: dest
 				}
 			}
 		},
@@ -98,27 +101,27 @@ module.exports = function (grunt) {
 		sync: {
 			images: {
 				files: [{
-					cwd: 'src',
+					cwd: src,
 					src: ['images/**', 'css/images/**', 'css/fonts/**'],
-					dest: 'dist',
+					dest: dest,
 					expand: true,
 				}],
 				verbose: true
 			},
 			scripts: {
 				files: [{
-					cwd: 'src',
+					cwd: src,
 					src: ['scripts/**', '!scripts/dojo/**/*'],
-					dest: 'dist',
+					dest: dest,
 					expand: true,
 				}],
 				verbose: true
 			},
 			dojo: {
 				files: [{
-					cwd: 'src',
+					cwd: src,
 					src: ['scripts/dojo'],
-					dest: 'dist',
+					dest: dest,
 					expand: true,
 				}],
 				verbose: true
@@ -126,15 +129,15 @@ module.exports = function (grunt) {
 			blog: {
 				files: [
 					{
-						cwd: 'src/blog',
+						cwd: src +'/blog',
 						src: ['dtk/**/*'],
-						dest: 'dist/blog/wp-content/themes/',
+						dest: dest + '/blog/wp-content/themes/',
 						expand: true,
 					},
 					{
-						cwd: 'src/_partials/tmp',
+						cwd: src +'/_partials/tmp',
 						src: ['header.html', 'footer.html'],
-						dest: 'dist/blog/wp-content/themes/dtk/inc'
+						dest: dest +'/blog/wp-content/themes/dtk/inc'
 
 					}
 				],
@@ -144,24 +147,24 @@ module.exports = function (grunt) {
 
 		watch: {
 			ejs: {
-				files: ['src/**/*.ejs', '!src/documentation/**/*'],
+				files: [src +'/**/*.ejs', '!'+src+'/documentation/**/*'],
 				tasks: ['ejs', 'highlight']
 			},
 
 			tutorials: {
-				files: ['src/documentation/tutorials/**/*.md', 'src/documentation/index.ejs', '!src/**/README.md'],
+				files: [src +'/documentation/tutorials/**/*.md', src +'/documentation/index.ejs', '!'+src+'/**/README.md'],
 				tasks: ['tutorials']
 			},
 			blog: {
-				files: ['src/blog/dtk/**/*'],
+				files: [src +'/blog/dtk/**/*', src + '/_partials/**/*.ejs'],
 				tasks: ['sync:blog']
 			},
 			stylus: {
-				files: ['src/**/*.styl', '!src/vendor/**'],
+				files: [src +'/**/*.styl', '!'+src+'/vendor/**'],
 				tasks: ['stylus', 'sync:images']
 			},
 			js: {
-				files: ['src/scripts/**/*.js', 'src/scripts/*.js', '!src/scripts/dojo/**', '!src/scripts/syntaxhighlighter/**'],
+				files: [src +'/scripts/**/*.js', src +'/scripts/*.js', '!'+src+'/scripts/dojo/**', '!'+src+'/scripts/syntaxhighlighter/**'],
 				tasks: ['sync:scripts']
 			}
 		},
