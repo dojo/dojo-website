@@ -58,7 +58,7 @@ module.exports = {
      * versions is used to make available versions loadable from app.js i.e. the list of versions in the version dropdown - these need to match the directory names
      * TODO: (maybe remove from tree.js, or if keeping, add a flag to enable this) Read and set the versions read from the available versions in the api directory
      **/
-    versions: ['1.8', '1.9', '1.10'],
+    versions: ['1.3', '1.4', '1.5', '1.6', '1.7', '1.8', '1.9', '1.10'],
     versionIgnores : /(\.git|\.md)/,
 
 
