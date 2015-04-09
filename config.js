@@ -22,7 +22,7 @@ module.exports = function(grunt){
 		//Internal
 		api: '/api/',
 		blog: '/blog/',
-		contribute: '/community/contribute.html',
+		contribute: '/community/#contribute',
 		docs: '/documentation',
 		download: '/download/',
 		guide: '/reference-guide/' + config.dojo.ver.major,
@@ -31,7 +31,9 @@ module.exports = function(grunt){
 		roadmap: '/community/roadmap/',
 		vision: '/community/roadmap/vision.html',
 		support: '/community/#support',
+		related: '/community/#related',
 		tutorials: '/documentation/#tutorials',
+
 
 		//External
 		ext: {
