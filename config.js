@@ -26,7 +26,7 @@ module.exports = function(grunt){
 		docs: '/documentation',
 		download: '/download/',
 		guide: '/reference-guide/' + config.dojo.ver.major,
-		license: '/license/',
+		license: 'https://raw.githubusercontent.com/dojo/dojo/master/LICENSE',
 		community: '/community',
 		roadmap: '/community/roadmap/',
 		vision: '/community/roadmap/vision.html',
@@ -46,7 +46,10 @@ module.exports = function(grunt){
 			mailingList: 'http://mail.dojotoolkit.org/mailman/listinfo/dojo-contributors',
 			stackoverflow: 'http://stackoverflow.com/questions/tagged/dojo',
 			twitter: 'http://twitter.com/dojo',
-			dojoFoundation: 'http://dojofoundation.org'
+			dojoFoundation: 'http://dojofoundation.org',
+			dstore: 'http://dstorejs.io',
+			dgrid: 'http://dgrid.io',
+			intern: 'http://theintern.io'
 		},
 
 		tuts: {
