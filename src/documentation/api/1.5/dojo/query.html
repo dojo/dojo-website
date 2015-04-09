@@ -1,0 +1,149 @@
+<div class="jsdoc-permalink" style="display:none;">/api/1.5/dojo/query</div><h1 class="jsdoc-title functionIcon36">dojo.query <span style="font-size:11px;color:#999;">(version 1.5)</span></h1><div class="jsdoc-prototype">Object &raquo; dojo.query</div><div class="jsdoc-require">dojo.require("dojo._base.query");</div><div class="jsdoc-full-summary"><p>dojo.query() is the swiss army knife of DOM node manipulation in
+Dojo. Much like Prototype's "$$" (bling-bling) function or JQuery's
+"$" function, dojo.query provides robust, high-performance
+CSS-based node selector support with the option of scoping searches
+to a particular sub-tree of a document.</p>
+
+<h2>Supported Selectors:</h2>
+
+<p>dojo.query() supports a rich set of CSS3 selectors, including:</p>
+
+<ul>
+<li>class selectors (e.g., <code>.foo</code>)</li>
+<li>node type selectors like <code>span</code></li>
+<li><code></code> descendant selectors</li>
+<li><code>&gt;</code> child element selectors</li>
+<li><code>#foo</code> style ID selectors</li>
+<li><code>*</code> universal selector</li>
+<li><code>~</code>, the immediately preceeded-by sibling selector</li>
+<li><code>+</code>, the preceeded-by sibling selector</li>
+<li>attribute queries:
+
+<ul>
+<li><code>[foo]</code> attribute presence selector</li>
+<li><code>[foo='bar']</code> attribute value exact match</li>
+<li><code>[foo~='bar']</code> attribute value list item match</li>
+<li><code>[foo^='bar']</code> attribute start match</li>
+<li><code>[foo$='bar']</code> attribute end match</li>
+<li><code>[foo*='bar']</code> attribute substring match</li>
+</ul></li>
+<li><code>:first-child</code>, <code>:last-child</code>, and <code>:only-child</code> positional selectors</li>
+<li><code>:empty</code> content emtpy selector</li>
+<li><code>:checked</code> pseudo selector</li>
+<li><code>:nth-child(n)</code>, <code>:nth-child(2n+1)</code> style positional calculations</li>
+<li><code>:nth-child(even)</code>, <code>:nth-child(odd)</code> positional selectors</li>
+<li><code>:not(...)</code> negation pseudo selectors
+Any legal combination of these selectors will work with
+<code>dojo.query()</code>, including compound selectors ("," delimited).
+Very complex and useful searches can be constructed with this
+palette of selectors and when combined with functions for
+manipulation presented by dojo.NodeList, many types of DOM
+manipulation operations become very straightforward.</li>
+</ul>
+
+<h2>Unsupported Selectors:</h2>
+
+<p>While dojo.query handles many CSS3 selectors, some fall outside of
+what's resaonable for a programmatic node querying engine to
+handle. Currently unsupported selectors include:</p>
+
+<ul>
+<li>namespace-differentiated selectors of any form</li>
+<li>all <code>::</code> pseduo-element selectors</li>
+<li>certain pseduo-selectors which don't get a lot of day-to-day use:
+
+<ul>
+<li><code>:root</code>, <code>:lang()</code>, <code>:target</code>, <code>:focus</code></li>
+</ul></li>
+<li><p>all visual and state selectors:</p>
+
+<ul>
+<li><code>:root</code>, <code>:active</code>, <code>:hover</code>, <code>:visisted</code>, <code>:link</code>,
+<code>:enabled</code>, <code>:disabled</code></li>
+</ul></li>
+<li><p><code>:*-of-type</code> pseudo selectors</p></li>
+</ul>
+
+<h2>dojo.query and XML Documents:</h2>
+
+<p><code>dojo.query</code> (as of dojo 1.2) supports searching XML documents
+in a case-sensitive manner. If an HTML document is served with
+a doctype that forces case-sensitivity (e.g., XHTML 1.1
+Strict), dojo.query() will detect this and "do the right
+thing". Case sensitivity is dependent upon the document being
+searched and not the query used. It is therefore possible to
+use case-sensitive queries on strict sub-documents (iframes,
+etc.) or XML documents while still assuming case-insensitivity
+for a host/root document.</p>
+
+<h2>Non-selector Queries:</h2>
+
+<p>If something other than a String is passed for the query,
+<code>dojo.query</code> will return a new <code>dojo.NodeList</code> instance
+constructed from that parameter alone and all further
+processing will stop. This means that if you have a reference
+to a node or NodeList, you can quickly construct a new NodeList
+from the original by calling <code>dojo.query(node)</code> or
+<code>dojo.query(list)</code>.</p>
+</div><div class="jsdoc-examples"><h2>Examples:</h2><div class="jsdoc-example"><h3>Example 1</h3>
+search the entire document for elements with the class "foo":
+<pre class="brush: js;" lang="javascript">
+	dojo.query(&quot;.foo&quot;);
+these elements will match:</pre>
+<pre class="brush: js;" lang="javascript">
+	&lt;span class=&quot;foo&quot;&gt;&lt;/span&gt;
+	&lt;span class=&quot;foo bar&quot;&gt;&lt;/span&gt;
+	&lt;p class=&quot;thud foo&quot;&gt;&lt;/p&gt;
+</pre></div><div class="jsdoc-example"><h3>Example 2</h3>
+search the entire document for elements with the classes "foo" *and* "bar":
+<pre class="brush: js;" lang="javascript">
+	dojo.query(&quot;.foo.bar&quot;);
+these elements will match:</pre>
+<pre class="brush: js;" lang="javascript">
+	&lt;span class=&quot;foo bar&quot;&gt;&lt;/span&gt;
+while these will not:</pre>
+<pre class="brush: js;" lang="javascript">
+	&lt;span class=&quot;foo&quot;&gt;&lt;/span&gt;
+	&lt;p class=&quot;thud foo&quot;&gt;&lt;/p&gt;
+</pre></div><div class="jsdoc-example"><h3>Example 3</h3>
+find `<span>` elements which are descendants of paragraphs and
+which have a &quot;highlighted&quot; class:
+<pre class="brush: js;" lang="javascript">
+	dojo.query(&quot;p span.highlighted&quot;);
+the innermost span in this fragment matches:</pre>
+<pre class="brush: js;" lang="javascript">
+	&lt;p class=&quot;foo&quot;&gt;
+		&lt;span&gt;...
+			&lt;span class=&quot;highlighted foo bar&quot;&gt;...&lt;/span&gt;
+		&lt;/span&gt;
+	&lt;/p&gt;
+</pre></div><div class="jsdoc-example"><h3>Example 4</h3>
+set an "odd" class on all odd table rows inside of the table
+`#tabular_data`, using the `&gt;` (direct child) selector to avoid
+affecting any nested tables:
+<pre class="brush: js;" lang="javascript">
+	dojo.query(&quot;#tabular_data &gt; tbody &gt; tr:nth-child(odd)&quot;).addClass(&quot;odd&quot;);
+</pre></div><div class="jsdoc-example"><h3>Example 5</h3>
+remove all elements with the class "error" from the document
+and store them in a list:
+<pre class="brush: js;" lang="javascript">
+	var errors = dojo.query(&quot;.error&quot;).orphan();
+</pre></div><div class="jsdoc-example"><h3>Example 6</h3>
+add an onclick handler to every submit button in the document
+which causes the form to be sent via Ajax instead:
+<pre class="brush: js;" lang="javascript">
+	dojo.query(&quot;input[type='submit']&quot;).onclick(function(e){
+		dojo.stopEvent(e); // prevent sending the form
+		var btn = e.target;
+		dojo.xhrPost({
+			form: btn.form,
+			load: function(data){
+				// replace the form with the response
+				var div = dojo.doc.createElement(&quot;div&quot;);
+				dojo.place(div, btn.form, &quot;after&quot;);
+				div.innerHTML = data;
+				dojo.style(btn.form, &quot;display&quot;, &quot;none&quot;);
+			}
+		});
+	});
+</pre></div></div><div class="jsdoc-children"><div class="jsdoc-field-list"><h2 class="jsdoc-summary-heading">Attached Objects <span class="jsdoc-summary-toggle"></span></h2><div class="jsdoc-summary-list"><div class="jsdoc-field"><div class="jsdoc-title"><span class="object"><a class="jsdoc-link" href="/api/1.5/dojo/query/pseudos">dojo.query.pseudos</a></span></div></div></div></div></div><div class="jsdoc-children"><div class="jsdoc-fields"></div></div>

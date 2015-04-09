@@ -1,0 +1,139 @@
+<div class="jsdoc-permalink" style="display:none;">/api/1.4/dijit/_editor/plugins/EnterKeyHandling</div><h1 class="jsdoc-title constructorIcon36">dijit._editor.plugins.EnterKeyHandling <span style="font-size:11px;color:#999;">(version 1.4)</span></h1><div class="jsdoc-prototype">Object &raquo; <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a> &raquo; dijit._editor.plugins.EnterKeyHandling</div><div class="jsdoc-require">dojo.require("dijit._editor.plugins.EnterKeyHandling");</div><div class="jsdoc-prototype">Defined in dijit/_editor/plugins/EnterKeyHandling.js</div><div class="jsdoc-function-information"><h3>Usage:</h3><div class="function-signature"><span class="keyword">var</span> foo = new dijit._editor.plugins.EnterKeyHandling(<span class="jsdoc-comment-type">/*  */</span> args);</div></div><div class="jsdoc-full-summary"><p>This plugin has three modes:</p>
+
+<ul>
+<li>blockModeForEnter=BR</li>
+<li>blockModeForEnter=DIV</li>
+<li>blockModeForEnter=P
+In blockModeForEnter=P, the ENTER key semantically means "start a new
+paragraph", whereas shift-ENTER means  "new line in the current paragraph".
+For example:
+first paragraph <shift-ENTER>
+second line of first paragraph <ENTER>
+second paragraph
+In the other two modes, the ENTER key means to go to a new line in the
+current paragraph, and users [visually] create a new paragraph by pressing ENTER twice.
+For example, if the user enters text into an editor like this:
+    one <ENTER>
+    two <ENTER>
+    three <ENTER>
+    <ENTER>
+    four <ENTER>
+    five <ENTER>
+    six <ENTER>
+It will appear on the screen as two paragraphs of three lines each.</li>
+</ul>
+
+<h2>blockNodeForEnter=BR</h2>
+
+<p>On IE, typing the above keystrokes in the editor will internally produce DOM of:
+        <p>one</p>
+        <p>two</p>
+        <p>three</p>
+        <p></p>
+        <p>four</p>
+        <p>five</p>
+        <p>six</p>
+However, blockNodeForEnter=BR makes the Editor on IE display like other browsers, by
+changing the CSS for the <p> node to not have top/bottom margins,
+thus eliminating the double-spaced appearance.
+Also, attr('value') when used w/blockNodeForEnter=br on IE will return:
+    <p> one <br> two <br> three </p>
+    <p> four <br> five <br> six </p>
+This output normalization implemented by a filter when the
+editor writes out it's data, to convert consecutive <p>
+nodes into a single <p> node with internal <br> separators.
+There's also a pre-filter to mirror the post-filter.
+It converts a single <p> with <br> line breaks
+into separate <p> nodes, and creates empty <p> nodes for spacing
+between paragraphs.
+On FF typing the above keystrokes will internally generate:
+        one <br> two <br> three <br> <br> four <br> five <br> six <br>
+And on Safari it will generate:
+        "one"
+        <div>two</div>
+        <div>three</div>
+        <div><br></div>
+        <div>four</div>
+        <div>five</div>
+        <div>six</div>
+Thus, Safari and FF already look correct although semantically their content is a bit strange.
+On Safari or Firefox blockNodeForEnter=BR uses the builtin editor command "insertBrOnReturn",
+but that doesn't seem to do anything.
+Thus, attr('value') on safari/FF returns the browser-specific HTML listed above,
+rather than the semantically meaningful value that IE returns: <p>one<br>two</p> <p>three<br>four</p>.
+(Note: originally based on http://bugs.dojotoolkit.org/ticket/2859)</p>
+
+<h2>blockNodeForEnter=P</h2>
+
+<p>Plugin will monitor keystrokes and update the editor's content on the fly,
+so that the ENTER key will create a new <p> on FF and Safari (it already
+works that way by default on IE).</p>
+
+<h2>blockNodeForEnter=DIV</h2>
+
+<p>Follows the same code path as blockNodeForEnter=P but inserting a <div>
+on ENTER key.  Although it produces strange internal DOM, like this:
+    <div>paragraph one</div>
+    <div>paragraph one, line 2</div>
+    <div>&nbsp;</div>
+    <div>paragraph two</div>
+it does provide a consistent look on all browsers, and the on-the-fly DOM updating
+can be useful for collaborative editing.</p>
+</div><div class="jsdoc-children"><div class="jsdoc-field-list"><h2 class="jsdoc-summary-heading">Property Summary <span class="jsdoc-summary-toggle"></span></h2><div class="jsdoc-summary-list"><ul><li class="objectIcon private inherited even"><a class="inline-link" href="#_checkListLater">_checkListLater</a></li><li class="arrayIcon private inherited odd"><a class="inline-link" href="#_connects">_connects</a></li><li class="objectIcon private inherited even"><a class="inline-link" href="#_pressedEnterInBlock">_pressedEnterInBlock</a></li><li class="stringIcon public inherited odd"><a class="inline-link" href="#blockNodeForEnter">blockNodeForEnter</a> <span>This property decides the behavior of Enter key. It can be either P,
+	DIV, BR, or empty (which means disable this feature). Anything else
+	will trigger errors.
+	See class description for more details.</span></li><li class="objectIcon public inherited even"><a class="inline-link" href="#blockNodes">blockNodes</a> <span>Regex for testing if a given tag is a block level (display:block) tag</span></li><li class="stringIcon public inherited odd"><a class="inline-link" href="#bogusHtmlContent">bogusHtmlContent</a> <span>HTML to stick into a new empty block</span></li><li class="objectIcon public inherited even"><a class="inline-link" href="#button">button</a> <span>Pointer to <code>dijit.form.Button</code> or other widget (ex: <code>dijit.form.FilteringSelect</code>)
+	that is added to the toolbar to control this plugin.
+	If not specified, will be created on initialization according to <code>buttonClass</code></span></li><li class="objectIcon public inherited odd"><a class="inline-link" href="#checked">checked</a></li><li class="stringIcon public inherited even"><a class="inline-link" href="#command">command</a> <span>String like &quot;insertUnorderedList&quot;, &quot;outdent&quot;, &quot;justifyCenter&quot;, etc. that represents an editor command.
+	Passed to editor.execCommand() if <code>useDefaultCommand</code> is true.</span></li><li class="objectIcon public inherited odd"><a class="inline-link" href="#editor">editor</a> <span>Points to the parent editor</span></li><li class="objectIcon public inherited even"><a class="inline-link" href="#enabled">enabled</a></li><li class="stringIcon public inherited odd"><a class="inline-link" href="#iconClassPrefix">iconClassPrefix</a> <span>The CSS class name for the button node is formed from <code>iconClassPrefix</code> and <code>command</code></span></li><li class="objectIcon public inherited even"><a class="inline-link" href="#params">params</a></li><li class="booleanIcon public inherited odd"><a class="inline-link" href="#useDefaultCommand">useDefaultCommand</a> <span>If true, this plugin executes by calling Editor.execCommand() with the argument specified in <code>command</code>.</span></li></ul></div><h2 class="jsdoc-summary-heading">Method Summary <span class="jsdoc-summary-toggle"></span></h2><div class="jsdoc-summary-list"><ul><li class="functionIcon private inherited even"><a class="inline-link" href="#_fixNewLineBehaviorForIE">_fixNewLineBehaviorForIE</a><span class="parameters">(d)</span> <span>Insert CSS so &lt;p&gt; nodes don't have spacing around them,
+	thus hiding the fact that ENTER key on IE is creating new
+	paragraphs</span></li><li class="functionIcon private inherited odd"><a class="inline-link" href="#_initButton">_initButton</a><span class="parameters">()</span> <span>Initialize the button or other widget that will control this plugin.
+	This code only works for plugins controlling built-in commands in the editor.</span></li><li class="functionIcon public inherited even"><a class="inline-link" href="#connect">connect</a><span class="parameters">(o, f, tf)</span> <span>Make a dojo.connect() that is automatically disconnected when this plugin is destroyed.
+	Similar to <code>dijit._Widget.connect</code>.</span></li><li class="functionIcon public  odd"><a class="inline-link" href="#constructor">constructor</a><span class="parameters">(args)</span><span class="jsdoc-returns"> returns dijit._editor.plugins.EnterKeyHandling</span> <span>A reference to the constructor function for this object.</span></li><li class="functionIcon public inherited even"><a class="inline-link" href="#destroy">destroy</a><span class="parameters">()</span> <span>Destroy this plugin</span></li><li class="functionIcon public inherited odd"><a class="inline-link" href="#getLabel">getLabel</a><span class="parameters">(key)</span><span class="jsdoc-returns"> returns String</span> <span>Returns the label to use for the button</span></li><li class="functionIcon public inherited even"><a class="inline-link" href="#handleEnterKey">handleEnterKey</a><span class="parameters">(e)</span><span class="jsdoc-returns"> returns let browser handle</span> <span>Handler for enter key events when blockModeForEnter is DIV or P.</span></li><li class="functionIcon public inherited odd"><a class="inline-link" href="#regularPsToSingleLinePs">regularPsToSingleLinePs</a><span class="parameters">(element, noWhiteSpaceInEmptyP)</span> <span>Converts a &lt;p&gt; node containing &lt;br&gt;'s into multiple &lt;p&gt; nodes.</span></li><li class="functionIcon public inherited even"><a class="inline-link" href="#removeTrailingBr">removeTrailingBr</a><span class="parameters">(container)</span> <span>If last child of container is a &lt;br&gt;, then remove it.</span></li><li class="functionIcon public  odd"><a class="inline-link" href="#setEditor">setEditor</a><span class="parameters">(editor)</span> <span>Tell the plugin which Editor it is associated with.</span></li><li class="functionIcon public inherited even"><a class="inline-link" href="#setToolbar">setToolbar</a><span class="parameters">(toolbar)</span> <span>Tell the plugin to add it's controller widget (often a button)
+	to the toolbar.  Does nothing if there is no controller widget.</span></li><li class="functionIcon public inherited odd"><a class="inline-link" href="#singleLinePsToRegularPs">singleLinePsToRegularPs</a><span class="parameters">(element)</span> <span>Called as post-filter.
+	Apparently collapses adjacent &lt;p&gt; nodes into a single &lt;p&gt;
+	nodes with &lt;br&gt; separating each line.</span></li><li class="functionIcon public inherited even"><a class="inline-link" href="#updateState">updateState</a><span class="parameters">()</span> <span>Change state of the plugin to respond to events in the editor.</span></li></ul></div><h2 class="jsdoc-summary-heading">Event Summary <span class="jsdoc-summary-toggle"></span></h2><div class="jsdoc-summary-list"><ul><li class="functionIcon public inherited odd"><a class="inline-link" href="#onKeyPressed">onKeyPressed</a><span class="parameters">(e)</span> <span>Handler for keypress events.</span></li></ul></div><h2 class="jsdoc-summary-heading">Attached Objects <span class="jsdoc-summary-toggle"></span></h2><div class="jsdoc-summary-list"><div class="jsdoc-field"><div class="jsdoc-title"><span class="object"><a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling/editor">dijit._editor.plugins.EnterKeyHandling.editor</a></span></div></div><div class="jsdoc-field"><div class="jsdoc-title"><span class="object"><a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling/editor/document">dijit._editor.plugins.EnterKeyHandling.editor.document</a></span></div></div></div></div></div><div class="jsdoc-children"><div class="jsdoc-fields"><h2>Properties</h2><div class="jsdoc-field private inherited even"><div class="jsdoc-title"><a name="_checkListLater"></a><span class="objectIcon">_checkListLater</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div></div><div class="jsdoc-field private inherited odd"><div class="jsdoc-title"><a name="_connects"></a><span class="arrayIcon">_connects</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div></div><div class="jsdoc-field private inherited even"><div class="jsdoc-title"><a name="_pressedEnterInBlock"></a><span class="objectIcon">_pressedEnterInBlock</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div></div><div class="jsdoc-field public inherited odd"><div class="jsdoc-title"><a name="blockNodeForEnter"></a><span class="stringIcon">blockNodeForEnter</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div><div class="jsdoc-summary">This property decides the behavior of Enter key. It can be either P,
+	DIV, BR, or empty (which means disable this feature). Anything else
+	will trigger errors.
+	See class description for more details.</div></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="blockNodes"></a><span class="objectIcon">blockNodes</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div><div class="jsdoc-summary">Regex for testing if a given tag is a block level (display:block) tag</div></div><div class="jsdoc-field public inherited odd"><div class="jsdoc-title"><a name="bogusHtmlContent"></a><span class="stringIcon">bogusHtmlContent</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div><div class="jsdoc-summary">HTML to stick into a new empty block</div></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="button"></a><span class="objectIcon">button</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary">Pointer to <code>dijit.form.Button</code> or other widget (ex: <code>dijit.form.FilteringSelect</code>)
+	that is added to the toolbar to control this plugin.
+	If not specified, will be created on initialization according to <code>buttonClass</code></div></div><div class="jsdoc-field public inherited odd"><div class="jsdoc-title"><a name="checked"></a><span class="objectIcon">checked</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="command"></a><span class="stringIcon">command</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary">String like &quot;insertUnorderedList&quot;, &quot;outdent&quot;, &quot;justifyCenter&quot;, etc. that represents an editor command.
+	Passed to editor.execCommand() if <code>useDefaultCommand</code> is true.</div></div><div class="jsdoc-field public inherited odd"><div class="jsdoc-title"><a name="editor"></a><span class="objectIcon">editor</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary">Points to the parent editor</div></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="enabled"></a><span class="objectIcon">enabled</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div></div><div class="jsdoc-field public inherited odd"><div class="jsdoc-title"><a name="iconClassPrefix"></a><span class="stringIcon">iconClassPrefix</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary">The CSS class name for the button node is formed from <code>iconClassPrefix</code> and <code>command</code></div></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="params"></a><span class="objectIcon">params</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div></div><div class="jsdoc-field public inherited odd"><div class="jsdoc-title"><a name="useDefaultCommand"></a><span class="booleanIcon">useDefaultCommand</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary">If true, this plugin executes by calling Editor.execCommand() with the argument specified in <code>command</code>.</div></div><h2>Methods</h2><div class="jsdoc-field private inherited even"><div class="jsdoc-title"><a name="_fixNewLineBehaviorForIE"></a><span class="functionIcon">_fixNewLineBehaviorForIE</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div><div class="jsdoc-summary">Insert CSS so &lt;p&gt; nodes don't have spacing around them,
+	thus hiding the fact that ENTER key on IE is creating new
+	paragraphs</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">d</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr></table></div><div class="jsdoc-field private inherited odd"><div class="jsdoc-title"><a name="_initButton"></a><span class="functionIcon">_initButton</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary">Initialize the button or other widget that will control this plugin.
+	This code only works for plugins controlling built-in commands in the editor.</div></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="connect"></a><span class="functionIcon">connect</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary">Make a dojo.connect() that is automatically disconnected when this plugin is destroyed.
+	Similar to <code>dijit._Widget.connect</code>.</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">o</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr><tr><td class="jsdoc-param-name">f</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr><tr><td class="jsdoc-param-name">tf</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr></table></div><div class="jsdoc-field public  odd"><div class="jsdoc-title"><a name="constructor"></a><span class="functionIcon">constructor</span></div><div class="jsdoc-inheritance">Overrides <a class="jsdoc-link" href="/api/1.4/Object">Object</a>, <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-return-type">Returns <strong>dijit._editor.plugins.EnterKeyHandling</strong></div><div class="jsdoc-summary">A reference to the constructor function for this object.</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">args</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr></table></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="destroy"></a><span class="functionIcon">destroy</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary">Destroy this plugin</div></div><div class="jsdoc-field public inherited odd"><div class="jsdoc-title"><a name="getLabel"></a><span class="functionIcon">getLabel</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-return-type">Returns <strong>String</strong></div><div class="jsdoc-summary">Returns the label to use for the button</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">key</td><td class="jsdoc-param-type">String</td><td class="jsdoc-param-description"></td></tr></table></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="handleEnterKey"></a><span class="functionIcon">handleEnterKey</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div><div class="jsdoc-return-type">Returns <strong>let browser handle</strong></div><div class="jsdoc-summary"><p>Manually handle enter key event to make the behavior consistent across
+all supported browsers. See class description for details.</p>
+</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">e</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr></table></div><div class="jsdoc-field public inherited odd"><div class="jsdoc-title"><a name="regularPsToSingleLinePs"></a><span class="functionIcon">regularPsToSingleLinePs</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div><div class="jsdoc-summary"><p>See singleLinePsToRegularPs().   This method does the
+opposite thing, and is used as a pre-filter when loading the
+editor, to mirror the effects of the post-filter at end of edit.</p>
+</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">element</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr><tr><td class="jsdoc-param-name">noWhiteSpaceInEmptyP</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr></table></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="removeTrailingBr"></a><span class="functionIcon">removeTrailingBr</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div><div class="jsdoc-summary">If last child of container is a &lt;br&gt;, then remove it.</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">container</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr></table></div><div class="jsdoc-field public  odd"><div class="jsdoc-title"><a name="setEditor"></a><span class="functionIcon">setEditor</span></div><div class="jsdoc-inheritance">Overrides <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary">Tell the plugin which Editor it is associated with.</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">editor</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr></table></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="setToolbar"></a><span class="functionIcon">setToolbar</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary">Tell the plugin to add it's controller widget (often a button)
+	to the toolbar.  Does nothing if there is no controller widget.</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">toolbar</td><td class="jsdoc-param-type">dijit.Toolbar</td><td class="jsdoc-param-description"></td></tr></table></div><div class="jsdoc-field public inherited odd"><div class="jsdoc-title"><a name="singleLinePsToRegularPs"></a><span class="functionIcon">singleLinePsToRegularPs</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div><div class="jsdoc-summary">Called as post-filter.
+	Apparently collapses adjacent &lt;p&gt; nodes into a single &lt;p&gt;
+	nodes with &lt;br&gt; separating each line.</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">element</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr></table><div class="jsdoc-examples"><div class="jsdoc-example"><div><strong>Example 1</strong></div>
+Given this input:
+<pre class="brush: js;" lang="javascript">
+	&lt;p&gt;line 1&lt;/p&gt;
+	&lt;p&gt;line 2&lt;/p&gt;
+	&lt;ol&gt;
+		&lt;li&gt;item 1
+		&lt;li&gt;item 2
+	&lt;/ol&gt;
+	&lt;p&gt;line 3&lt;/p&gt;
+	&lt;p&gt;line 4&lt;/p&gt;
+Will convert to:</pre>
+<pre class="brush: js;" lang="javascript">
+	&lt;p&gt;line 1&lt;br&gt;line 2&lt;/p&gt;
+	&lt;ol&gt;
+		&lt;li&gt;item 1
+		&lt;li&gt;item 2
+	&lt;/ol&gt;
+	&lt;p&gt;line 3&lt;br&gt;line 4&lt;/p&gt;
+Not sure why this situation would even come up after the pre-filter and</pre>
+the enter-key-handling code.</div></div></div><div class="jsdoc-field public inherited even"><div class="jsdoc-title"><a name="updateState"></a><span class="functionIcon">updateState</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/_Plugin">dijit._editor._Plugin</a></div><div class="jsdoc-summary"><p>This is called on meaningful events in the editor, such as change of selection
+or caret position (but not simple typing of alphanumeric keys).   It gives the
+plugin a chance to update the CSS of its button.
+For example, the "bold" plugin will highlight/unhighlight the bold button depending on whether the
+characters next to the caret are bold or not.
+Only makes sense when <code>useDefaultCommand</code> is true, as it calls Editor.queryCommandEnabled(<code>command</code>).</p>
+</div></div><h2>Events</h2><div class="jsdoc-field public inherited odd"><div class="jsdoc-title"><a name="onKeyPressed"></a><span class="functionIcon">onKeyPressed</span></div><div class="jsdoc-inheritance">Defined by <a class="jsdoc-link" href="/api/1.4/dijit/_editor/plugins/EnterKeyHandling">dijit._editor.plugins.EnterKeyHandling</a></div><div class="jsdoc-summary">Handler for keypress events.</div><table class="jsdoc-parameters"><tr><th>Parameter</th><th>Type</th><th>Description</th></tr><tr><td class="jsdoc-param-name">e</td><td class="jsdoc-param-type"></td><td class="jsdoc-param-description"></td></tr></table></div></div></div>
