@@ -76,7 +76,8 @@ module.exports = function(grunt){
 		],
 		community: [
 			{ url: config.urls.support, label: 'Help & Support' },
-			{ url: '#contribute', label: 'Become a Contributor' },
+			{ url: config.urls.related, label: 'Related Projects' },
+			{ url: config.urls.contribute, label: 'Become a Contributor' },
 		],
 		roadmap: [
 			{ url: config.urls.roadmap + '#packageStatus', label: 'Package Status' },
