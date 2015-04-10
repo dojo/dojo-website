@@ -3,8 +3,9 @@ var sys = require('sys'),
   targz = require('tar.gz'),
   fsExtra = require('fs-extra'),
   path = require('path'),
-  config = require('../../../config.js')();å
+  config = require('../../../config.js')();
 
+console.log('Fetching old API documentation...');
 fsExtra.remove(path.join(config.src, 'documentation/api/_tmp'), function () {
   exec('git clone https://github.com/lbod/dojo-site-api.git ' + path.join(config.src, 'documentation/api/_tmp'),
     function (error, stdout, stderr) {
@@ -12,6 +13,7 @@ fsExtra.remove(path.join(config.src, 'documentation/api/_tmp'), function () {
         path.join(config.src, 'documentation/api/_tmp/legacyhtml.tar.gz'),
         path.join(config.src, 'documentation/api'), function () {
           fsExtra.remove(path.join(config.src, 'documentation/api/_tmp'), function () {}); 
+          console.log('Fetching old API documentation...DONE.');
         });
   });
 });
