@@ -1,20 +1,21 @@
 /** @module spider */
 var fs = require('fs'),
-    jade = require('jade'),
-    mkdirp = require("mkdirp"),
-    generate = require('./generate'),
-    config = require('./config'),
-    refdoc = require('./refdoc'),
-    tree = require('./tree'),
-    fsExtra = require('fs-extra'),
-    hljs = require('highlight.js'),
-    staticFolder = '../../dist/api/';
+	jade = require('jade'),
+	mkdirp = require("mkdirp"),
+	generate = require('./generate'),
+	config = require('./config'),
+	refdoc = require('./refdoc'),
+	tree = require('./tree'),
+	fsExtra = require('fs-extra'),
+	path = require('path'),
+	hljs = require('highlight.js'),
+	staticFolder = '../../dist/api/';
 
-    fsExtra.ensureDir(staticFolder, function(err) {
-        if(err){
-            console.log(err);
-        }
-    });
+	fsExtra.ensureDir(staticFolder, function(err) {
+		if(err){
+			console.log(err);
+		}
+	});
 
 // macro calls
 // fails with static generation - todo: FOR SOME REASON I NEED TO USE A GLOBAL so it works???
@@ -57,47 +58,64 @@ var fn = jade.compile(data, {filename: modulejade, pretty: true, autoHyperlink: 
 var now = null;
 
 config.spiderVersions.forEach(function (version) {
-    var treeitems = tree.getTree(version, config);
-    var treehtml = fntree({ title : 'API Documentation', config: config, version: version, tree : treeitems});
+	var treeitems = tree.getTree(version, config);
+	var treehtml = fntree({ title : 'API Documentation', config: config, version: version, tree : treeitems});
 	var sitemapxml = fnsitemap({ title : 'API Documentation', config: config, version: version, tree : treeitems});
 
-    var detailsFile = "../../src/documentation/api/" + version + "/details.json";
-    var versionfolder = staticFolder  + version + "/";
-    mkdirp.sync(versionfolder);
-    fs.writeFileSync(versionfolder + "tree.html", treehtml);
+	var detailsFile = "../../src/documentation/api/" + version + "/details.json";
+	var versionfolder = staticFolder  + version + "/";
+	mkdirp.sync(versionfolder);
+	fs.writeFileSync(versionfolder + "tree.html", treehtml);
 	fs.writeFileSync(versionfolder + "sitemap.xml", sitemapxml, {encoding : 'utf8'});
 
-    var dataFolder = staticFolder + version;
-    mkdirp.sync(dataFolder);
-    fs.writeFileSync(dataFolder + "/tree.json", JSON.stringify(treeitems));
+	var dataFolder = staticFolder + version;
+	mkdirp.sync(dataFolder);
+	fs.writeFileSync(dataFolder + "/tree.json", JSON.stringify(treeitems));
 
 
 // load details json (iterate over each version and generate html)
-    generate.loadDetails(detailsFile,  version, function (err, details) {
-        if (err) {
-            console.log(err);
-        }
-        // generate modules
-        Object.keys(details).forEach(function (item) {
-            var itemlcl = details[item];
-            var modulefile = itemlcl.location;
-            generate.generate(detailsFile, modulefile, version, function (err, retObjectItem) {
-                // modulefile.match(/[^/]* /); // move to regex
-                var patharr = modulefile.split("/");
-                var modname =  patharr.pop();
-                if (patharr.length > 0) { // means a path - do this better
-                    if (!fs.existsSync(versionfolder + patharr.join("/"))) {
-                        mkdirp.sync(versionfolder + patharr.join("/"));
-                    }
-                }
-                var html = fn({ module : retObjectItem, config: config, autoHyperLink: autoHyperlink});
-                fs.writeFileSync(versionfolder + patharr.join("/") + "/" + modname + ".html", html);
-                console.log('Created: ' + modname + ".html");
-            });
-        });
-    });
+	generate.loadDetails(detailsFile,  version, function (err, details) {
+		if (err) {
+			console.log(err);
+		}
+		// generate modules
+		Object.keys(details).forEach(function (item) {
+			var itemlcl = details[item];
+			var modulefile = itemlcl.location;
+			generate.generate(detailsFile, modulefile, version, function (err, retObjectItem) {
+				// modulefile.match(/[^/]* /); // move to regex
+				var patharr = modulefile.split("/");
+				var modname =  patharr.pop();
+				if (patharr.length > 0) { // means a path - do this better
+					if (!fs.existsSync(versionfolder + patharr.join("/"))) {
+						mkdirp.sync(versionfolder + patharr.join("/"));
+					}
+				}
+				var html = fn({ module : retObjectItem, config: config, autoHyperLink: autoHyperlink});
+				fs.writeFileSync(versionfolder + patharr.join("/") + "/" + modname + ".html", html);
+				console.log('Created: ' + modname + ".html");
+			});
+		});
+	});
+});
+
+// Manually copy over 1.6 and earler static API pages
+[
+	'1.3',
+	'1.4',
+	'1.5',
+	'1.6',
+	'1.7'
+].forEach(function (version) {
+	fsExtra.copy(
+		path.join('../../', config.src, '/documentation/api/', version),
+		path.join('../../', config.dest, '/api/', version),
+		function (err) {
+			if (err) { return console.error(err); }
+		}
+	);
 });
 
 /*process.on('exit', function () {
-    console.log("elapsed time = " + (new Date().getTime() - starttime) + " ms");
+	console.log("elapsed time = " + (new Date().getTime() - starttime) + " ms");
 });*/
