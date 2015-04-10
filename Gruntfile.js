@@ -140,7 +140,11 @@ module.exports = function (grunt) {
 						cwd: '<%= config.src %>/_partials/tmp',
 						src: ['header.html', 'footer.html'],
 						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/inc'
-
+					},
+					{
+						cwd: '<%= config.src %>/scripts',
+						src: ['nav.js', 'dojo/dojo/**/*'],
+						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/js'
 					}
 				],
 				verbose: true
