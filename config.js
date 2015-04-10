@@ -83,8 +83,10 @@ module.exports = function(grunt){
 			{ url: config.urls.contribute, label: 'Become a Contributor' },
 		],
 		roadmap: [
-			{ url: config.urls.roadmap + '#packageStatus', label: 'Package Status' },
 			{ url: config.urls.vision, label: 'Vision' },
+			{ url: config.urls.roadmap + '#packageStatus', label: 'Package Status' },
+			{ url: config.urls.roadmap + '#getInvolved', label: 'Get Involved' },
+
 		]
 	}
 
