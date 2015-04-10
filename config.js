@@ -32,7 +32,7 @@ module.exports = function(grunt){
 		vision: '/community/roadmap/vision.html',
 		support: '/community/#support',
 		related: '/community/#related',
-		tutorials: '/documentation/#tutorials',
+		tutorials: '/documentation/',
 
 
 		//External
