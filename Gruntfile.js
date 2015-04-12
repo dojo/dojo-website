@@ -145,6 +145,11 @@ module.exports = function (grunt) {
 						cwd: '<%= config.src %>/scripts',
 						src: ['nav.js', 'dojo/dojo/**/*'],
 						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/js'
+					},
+					{
+						cwd: '<%= config.src %>/css',
+						src: ['fonts/**/*'],
+						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/css'
 					}
 				],
 				verbose: true
@@ -175,8 +180,12 @@ module.exports = function (grunt) {
 			}
 		},
 
-		clean: [config.dest]
-	});
+		clean: {
+			dist: {
+				src: ['<%=config.dest%>/*','!<%=config.dest%>/blog/**']
+			}
+		}
+});
 
 	grunt.loadNpmTasks('grunt-ejs');
 	grunt.loadNpmTasks('grunt-contrib-stylus');
@@ -189,8 +198,9 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-highlight');
 	grunt.loadTasks('tasks');
 
-	grunt.registerTask('deploy', ['clean', 'ejs', 'highlight', 'stylus', 'sync', 'tutorials', 'exec']);
-	grunt.registerTask('default', ['clean', 'ejs', 'highlight', 'stylus', 'sync', 'tutorials']);
+	grunt.registerTask('delete', ['clean:dist'])
+	grunt.registerTask('deploy', ['delete', 'stylus', 'sync', 'ejs', 'tutorials', 'highlight', 'exec']);
+	grunt.registerTask('default', ['delete', 'stylus', 'sync', 'ejs', 'tutorials', 'highlight']);
 	grunt.registerTask('docs',['ejs:docs', 'exec']);
-	grunt.registerTask('develop', ['ejs', 'highlight', 'stylus', 'sync', 'tutorials', 'connect', 'watch']);
+	grunt.registerTask('develop', ['stylus', 'ejs', 'sync', 'highlight', 'tutorials', 'connect', 'watch']);
 };
