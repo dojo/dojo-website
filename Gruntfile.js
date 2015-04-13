@@ -158,12 +158,12 @@ module.exports = function (grunt) {
 
 		watch: {
 			ejs: {
-				files: ['<%= config.src %>/**/*.ejs', '!<%= config.src %>/documentation/**/*'],
+				files: ['<%= config.src %>/**/*.ejs', '<%= config.src %>/community/roadmap/packages.json','!<%= config.src %>/documentation/**/*'],
 				tasks: ['ejs', 'highlight']
 			},
 
 			tutorials: {
-				files: ['<%= config.src %>/documentation/tutorials/**/*.md', '<%= config.src %>/documentation/index.ejs', '!<%= config.src %>/**/README.md'],
+				files: ['<%= config.src %>/documentation/tutorials/**/*.md', '<%= config.src %>/documentation/index.ejs', '<%= config.src %>/_templates/tutorial.ejs', '!<%= config.src %>/**/README.md'],
 				tasks: ['tutorials']
 			},
 			blog: {
@@ -177,6 +177,10 @@ module.exports = function (grunt) {
 			js: {
 				files: ['<%= config.src %>/scripts/**/*.js', '<%= config.src %>/scripts/*.js', '!<%= config.src %>/scripts/dojo/**', '!<%= config.src %>/scripts/syntaxhighlighter/**'],
 				tasks: ['sync:scripts']
+			},
+			partials: {
+				files: ['<%=config.src%>/_partials/**/*.ejs'],
+				tasks: ['stylus', 'ejs', 'highlight', 'sync']
 			}
 		},
 
