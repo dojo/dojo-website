@@ -11,11 +11,11 @@ module.exports = function(grunt){
 		},
 		{
 			category:'dom_basics',
-			tutorials: ['using_query','nodelist_extensions','dom_functions','events','key_events','effects','animation','arrays']
+			tutorials: ['using_query','nodelist_extensions','dom_functions','events','key_events','effects','animation']
 		},
 		{
 			category: 'fundamentals',
-			tutorials: ['ajax','jsonp','deferreds','promises','hitch','declarative','declare','augmenting_objects','hash','build','device_optimized_builds']
+			tutorials: ['arrays','ajax','jsonp','deferreds','promises','hitch','declarative','declare','augmenting_objects','hash','build','device_optimized_builds']
 		},
 		{
 			category: 'working_with_data',
