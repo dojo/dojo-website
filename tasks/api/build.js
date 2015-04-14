@@ -7,7 +7,8 @@ var fs = require('fs'),
     refdoc = require('./refdoc'),
     tree = require('./tree'),
     fsExtra = require('fs-extra'),
-    staticFolder = '../../dist/api/';
+    path = require('path'),
+    staticFolder = '../../'+config.dest;
 
 // macro calls
 // fails with static generation - todo: FOR SOME REASON I NEED TO USE A GLOBAL so it works???
@@ -20,6 +21,8 @@ console.log("REMEMBER TO SET THE CORRECT CONTEXT PATH CONFIGURATION FOR YOUR GEN
 console.log("==========================================================");
 console.log("Static API viewer generation started");
 // generate index  config.version config.staticfolder
+
+
 
 var indexjade = __dirname + "/" + config.viewsDirectory + "/index.jade";
 var data = fs.readFileSync(indexjade, "utf8");
@@ -39,7 +42,10 @@ var sitemapdata = fs.readFileSync(sitemapjade, "utf8");
 var fnsitemap = jade.compile(sitemapdata, {filename: sitemapdata, pretty: true});
 //
 
+mkdirp.sync(staticFolder);
 fs.writeFileSync(staticFolder + "index.html", indexhtml);
+
+
 var starttime = new Date().getTime();
 // var detailsFile = "./public/data/" + config.spiderVersion + "/details.json";
 
@@ -60,9 +66,9 @@ config.spiderVersions.forEach(function (version) {
     fs.writeFileSync(versionfolder + "tree.html", treehtml);
 	fs.writeFileSync(versionfolder + "sitemap.xml", sitemapxml, {encoding : 'utf8'});
 
-    var dataFolder = staticFolder + 'data/' + version;
-    mkdirp.sync(dataFolder);
-    fs.writeFileSync(dataFolder + "/tree.json", JSON.stringify(treeitems));
+    //var dataFolder = staticFolder + 'data/' + version;
+    //mkdirp.sync(dataFolder);
+    fs.writeFileSync(versionfolder + "/tree.json", JSON.stringify(treeitems));
 
 
 // load details json (iterate over each version and generate html)
@@ -90,6 +96,26 @@ config.spiderVersions.forEach(function (version) {
         });
     });
 });
+
+// Manually copy over 1.6 and earler static API pages
+[
+    '1.3',
+    '1.4',
+    '1.5',
+    '1.6',
+    '1.7'
+].forEach(function (version) {
+    fsExtra.copy(
+        path.join('../../', config.src, version),
+        path.join('../../', config.dest, version),
+        function (err) {
+            if (err) { return console.error(err); }
+        }
+    );
+});
+
+
+
 /*
 fsExtra.copy('./public/css', staticFolder + 'css', function (err) {
     if (err) {console.log(err); }

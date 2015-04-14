@@ -128,7 +128,7 @@ module.exports = {
 	 **/
 	isDebug: false,
 
-	src: gruntConfig.src,
+	src: gruntConfig.src + '/documentation/api/',
 
-	dest: gruntConfig.dest
+	dest: gruntConfig.dest + '/api/'
 };
