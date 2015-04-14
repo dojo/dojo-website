@@ -57,10 +57,21 @@ module.exports = function (grunt) {
 				cwd: '<%= config.src %>/documentation/reference-guide',
 				cmd: 'sphinx-build -b html -a -c ./ ./1.7/ ../../../<%= config.dest %>/reference-guide/1.7'
 			},
+		},
+
+		spawn: {
 			api: {
-				cwd: 'tasks/api',
-				cmd: 'node build'
-			}
+				command: "node",
+				commandArgs: ["build"],
+				directory: "tasks/api",
+				opts: {
+					cwd: __dirname + '/tasks/api'
+        		},
+				useQuotes: true,
+				quoteDelimiter: "\"",
+				groupFiles: true,
+				passThrough: true
+			},
 		},
 
 		ejs: {
@@ -212,11 +223,13 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-exec');
 	grunt.loadNpmTasks('grunt-sync');
 	grunt.loadNpmTasks('grunt-highlight');
+	grunt.loadNpmTasks('grunt-spawn');
 	grunt.loadTasks('tasks');
 
+	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn']);
 	grunt.registerTask('delete', ['clean:dist'])
-	grunt.registerTask('deploy', ['delete', 'stylus', 'sync', 'ejs', 'tutorials', 'highlight', 'exec']);
+
+	grunt.registerTask('deploy', ['delete', 'stylus', 'sync', 'ejs', 'tutorials', 'highlight', 'docs']);
 	grunt.registerTask('default', ['delete', 'stylus', 'sync', 'ejs', 'tutorials', 'highlight']);
-	grunt.registerTask('docs',['ejs:docs', 'exec']);
 	grunt.registerTask('develop', ['stylus', 'ejs', 'sync', 'highlight', 'tutorials', 'connect', 'watch']);
 };
