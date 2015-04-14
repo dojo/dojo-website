@@ -11,7 +11,7 @@ module.exports = function(grunt){
 			get major(){ return '1.10' },
 			get minor(){ return '.4'},
 			get full(){ return this.major + this.minor},
-			cnd: '1.10.3',
+			get cdn(){ return this.full },
 		}
 	};
 
@@ -59,7 +59,7 @@ module.exports = function(grunt){
 
 		//Dojo Release URLs
 		dojo: {
-			cdn: '//ajax.googleapis.com/ajax/libs/dojo/'+config.dojo.ver.cdn+'/dojo/dojo.js',
+			get cdn(){ return '//ajax.googleapis.com/ajax/libs/dojo/'+config.dojo.ver.cdn+'/dojo/dojo.js'},
 			download: 'http://download.dojotoolkit.org',
 			get release(){ return this.download+'/release-'+config.dojo.ver.full },
 			get sourceTar() { return this.release+'/dojo-release-'+config.dojo.ver.full+'-src.tar.gz'},

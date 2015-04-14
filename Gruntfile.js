@@ -227,9 +227,11 @@ module.exports = function (grunt) {
 	grunt.loadTasks('tasks');
 
 	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn']);
-	grunt.registerTask('delete', ['clean:dist'])
+	grunt.registerTask('up', ['stylus', 'sync', 'ejs', 'tutorials', 'highlight']);
 
+	grunt.registerTask('delete', ['clean:dist'])
 	grunt.registerTask('deploy', ['delete', 'stylus', 'sync', 'ejs', 'tutorials', 'highlight', 'docs']);
 	grunt.registerTask('default', ['delete', 'stylus', 'sync', 'ejs', 'tutorials', 'highlight']);
 	grunt.registerTask('develop', ['stylus', 'ejs', 'sync', 'highlight', 'tutorials', 'connect', 'watch']);
+
 };
