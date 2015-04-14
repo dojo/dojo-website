@@ -19,20 +19,22 @@ module.exports = function(grunt){
 	};
 
 	config.urls = {
+		// If deploying to a subdirectory, modify this path accordingly
+		root: '/',
 		//Internal
-		api: '/api/',
-		blog: '/blog/',
-		contribute: '/community/#contribute',
-		docs: '/documentation',
-		download: '/download/',
-		guide: '/reference-guide/' + config.dojo.ver.major,
+		api: 'api/',
+		blog: 'blog/',
+		contribute: 'community/#contribute',
+		docs: 'documentation/',
+		download: 'download/',
+		guide: 'reference-guide/' + config.dojo.ver.major,
 		license: 'https://raw.githubusercontent.com/dojo/dojo/master/LICENSE',
-		community: '/community',
-		roadmap: '/community/roadmap/',
-		vision: '/community/roadmap/vision.html',
-		support: '/community/#support',
-		related: '/community/#related',
-		tutorials: '/documentation/#tutorials',
+		community: 'community/',
+		roadmap: 'community/roadmap/',
+		vision: 'community/roadmap/vision.html',
+		support: 'community/#support',
+		related: 'community/#related',
+		tutorials: 'documentation/#tutorials',
 
 
 		//External
@@ -53,7 +55,7 @@ module.exports = function(grunt){
 		},
 
 		tuts: {
-			hello_dojo: '/documentation/tutorials/'+config.dojo.ver.major+'/hello_dojo',
+			hello_dojo: 'documentation/tutorials/'+config.dojo.ver.major+'/hello_dojo',
 		},
 
 		//Dojo Release URLs
@@ -78,15 +80,14 @@ module.exports = function(grunt){
 			{ url: '#github', label: 'Github' }
 		],
 		community: [
-			{ url: config.urls.support, label: 'Help & Support' },
-			{ url: config.urls.related, label: 'Related Projects' },
-			{ url: config.urls.contribute, label: 'Become a Contributor' },
+			{ url: config.urls.support, label: 'Help & Support', root: config.urls.root },
+			{ url: config.urls.related, label: 'Related Projects', root: config.urls.root },
+			{ url: config.urls.contribute, label: 'Become a Contributor', root: config.urls.root },
 		],
 		roadmap: [
-			{ url: config.urls.vision, label: 'Vision' },
-			{ url: config.urls.roadmap + '#packageStatus', label: 'Package Status' },
-			{ url: config.urls.roadmap + '#getInvolved', label: 'Get Involved' },
-
+			{ url: config.urls.vision, label: 'Vision', root: config.urls.root },
+			{ url: config.urls.roadmap + '#packageStatus', label: 'Package Status', root: config.urls.root },
+			{ url: config.urls.roadmap + '#getInvolved', label: 'Get Involved', root: config.urls.root },
 		]
 	}
 

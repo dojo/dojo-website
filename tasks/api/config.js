@@ -36,6 +36,8 @@ module.exports = {
 	 **/
 	contextPath: '/api/',
 
+	root: '/',
+
 	/**
 	 * Currently only used to write the <loc> url for the sitemap.xml
 	 **/
