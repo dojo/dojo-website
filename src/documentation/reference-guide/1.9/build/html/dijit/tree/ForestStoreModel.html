@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dijit/tree/ForestStoreModel &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../../dojo/index.html">Dojo</a></li>
+            <li><a href="../index.html">Dijit</a></li>
+            <li><a href="../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dijit-tree-foreststoremodel">
+<span id="id1"></span><h1>dijit/tree/ForestStoreModel<a class="headerlink" href="#dijit-tree-foreststoremodel" title="Permalink to this headline">¶</a></h1>
+<p>The ForestStoreModel connects a data store with multiple &#8220;root&#8221; items to a <a class="reference internal" href="../Tree.html#dijit-tree"><span>dijit/Tree</span></a>.</p>
+<p>An example might be a geographical database; there are multiple continents but no &#8216;&#8217;single&#8217;&#8217; top level item called &#8220;world&#8221;.</p>
+<p>Since Tree demands a single top level item, ForestStoreModel creates a fake item whose children are determined
+by a query specified to the ForestStoreModel constructor.</p>
+<p>Here&#8217;s an example of a declarative initialization for a TreeStoreModel and for the data store that it connects to:</p>
+<p>A few things to note here:</p>
+<blockquote>
+<div><ul class="simple">
+<li>The query returns multiple items</li>
+<li>There&#8217;s a single fake root item created with the label &#8220;The World&#8221;.  The Tree will display that root item unless showRoot=false is specified.  (However, even if Tree doesn&#8217;t display it, it still exists.)</li>
+</ul>
+</div></blockquote>
+<div class="section" id="monitoring-changes-to-items">
+<h2>Monitoring changes to items<a class="headerlink" href="#monitoring-changes-to-items" title="Permalink to this headline">¶</a></h2>
+<p>Note that ForestStoreModel is inherently complex because it&#8217;s difficult to tell when the children of the top level (fake) item have changed.
+For example:</p>
+<blockquote>
+<div><ul class="simple">
+<li>a new continent is added to the data store</li>
+<li>a new country is added to the data store</li>
+</ul>
+</div></blockquote>
+<p>ForestStoreModel has no way of knowing that the continent affects the top level node but the country doesn&#8217;t.
+The user needs to define the onNewItem() method, or otherwise ForestStoreModel will take the pessimistic inefficient approach.</p>
+<p>For example:</p>
+</div>
+<div class="section" id="moving-items-to-from-the-root-node">
+<h2>Moving items to/from the root node<a class="headerlink" href="#moving-items-to-from-the-root-node" title="Permalink to this headline">¶</a></h2>
+<p>It&#8217;s also complicated because users need to define what to do when an element is dropped on to the root of the tree, or dragged from the root of the tree and dropped onto a sub-node.
+You may want to, for example, change the item so that the &#8220;topLevel&#8221; attribute is set/unset.
+It depends on the structure of the data store what the appropriate action is.
+The developer should override onAddToRoot() and onLeaveRoot().</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="a-programmatic-tree">
+<h3>A programmatic tree<a class="headerlink" href="#a-programmatic-tree" title="Permalink to this headline">¶</a></h3>
+<p>Creating a programmatic tree is very simple:</p>
+<p>Note that the childrenAttrs parameter to TreeStoreModel/ForestStoreModel is an array since it can list multiple attributes in the store.</p>
+</div>
+<div class="section" id="a-markup-tree">
+<h3>A markup tree<a class="headerlink" href="#a-markup-tree" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dijit/tree/ForestStoreModel</a><ul>
+<li><a class="reference internal" href="#monitoring-changes-to-items">Monitoring changes to items</a></li>
+<li><a class="reference internal" href="#moving-items-to-from-the-root-node">Moving items to/from the root node</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#a-programmatic-tree">A programmatic tree</a></li>
+<li><a class="reference internal" href="#a-markup-tree">A markup tree</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

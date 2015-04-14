@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/has &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-has">
+<span id="id1"></span><h1><a class="toc-backref" href="#id3">dojo/has</a><a class="headerlink" href="#dojo-has" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Chris Mitchell, Pete Higgins</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">1.7</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-has" id="id3">dojo/has</a><ul>
+<li><a class="reference internal" href="#introduction" id="id4">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id5">Usage</a></li>
+<li><a class="reference internal" href="#feature-names" id="id6">Feature Names</a></li>
+<li><a class="reference internal" href="#examples" id="id7">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id8">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/has</strong> provides standardized feature detection with an extensible API.  It is based on the conventions in the <a class="reference external" href="https://github.com/phiggins42/has.js">has.js project</a>.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id4">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Browser sniffing and feature inference are flawed techniques for detecting browser support in client side JavaScript.
+The <code class="docutils literal"><span class="pre">dojo/has</span></code> API is useful for adding new feature tests the result of which can be used later when features need to
+be detected. The goal of the <code class="docutils literal"><span class="pre">dojo/has</span></code> API is to provide a standard feature testing and feature detection module for
+use in Dojo modules.  Although the signature of the <code class="docutils literal"><span class="pre">dojo/has</span></code> API conforms to the has.js implementation and feature
+names, Dojo modules implement their own version of <code class="docutils literal"><span class="pre">dojo/has</span></code> tests, as some shortcuts and inferences are already
+available in the Toolkit.</p>
+<p><code class="docutils literal"><span class="pre">dojo/has</span></code> feature detection is lazy instantiated, meaning that the code that determines if the feature is detected
+will not be executed until the feature is actually requested and the return value is then cached for future calls for
+the same feature.</p>
+<p>Dojo Core and Dijit modules make use of <code class="docutils literal"><span class="pre">dojo/has</span></code> feature detection.  There are still a number of DojoX projects
+that continue to use <code class="docutils literal"><span class="pre">dojo.isXXX</span></code> user agent sniffing.  This conversion is an ongoing process.</p>
+<p><code class="docutils literal"><span class="pre">dojo/has</span></code> can be used a loader plugin with a ternary conditional expression so that modules can be loaded
+conditionally.</p>
+<p>The basic tests defined within the <code class="docutils literal"><span class="pre">dojo/has</span></code> module can be enhanced with other modules registering additional
+features and tests.  One frequently used module that extends <code class="docutils literal"><span class="pre">dojo/has</span></code> with additional tests and features is
+<a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a>.</p>
+<p>Using <code class="docutils literal"><span class="pre">staticHasFeatures</span></code> in a build configuration, along with the closure JavaScript compiler can produce a build
+where dead code paths are removed.  See the <a class="reference internal" href="../build/index.html#build-index"><span>builder</span></a> documentation for more information.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id5">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>In order to use this module, it must be added to your module&#8217;s dependency list, for example:</p>
+<p>The feature detection convention is to return a &#8220;truthy&#8221; value, meaning that if the feature is available, a value that
+would evaluate as <code class="docutils literal"><span class="pre">true</span></code> is returned.  If the feature is not present, <code class="docutils literal"><span class="pre">dojo/has</span></code> should return a <code class="docutils literal"><span class="pre">false</span></code>.</p>
+<p>The modules can be used as a loader plugin.  To do so, the plugin argument is a ternary logic expression where the
+first argument is the feature, the second is the module to load if it is true and the optional third is module to load
+if the feature is false:</p>
+<p>Features can be registered by providing a feature name and a test function:</p>
+<p>The test function should take up to three arguments:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>global</td>
+<td>Reference to the global scope</td>
+</tr>
+<tr class="row-odd"><td>document</td>
+<td>Reference to the document object</td>
+</tr>
+<tr class="row-even"><td>anElement</td>
+<td>A generic element to be used if required</td>
+</tr>
+</tbody>
+</table>
+<p><em>Note</em> any test function should clean up after itself.  Ensure there are no leaks!</p>
+<p>You can register and run a test immediately by passing a truthy value after the test function:</p>
+<p>While it may seem logical to pass a non-wrapped function like the following, it is not advised:</p>
+<p>Without it being wrapped as a function, the execution takes place immediately instead of being lazy executed when the
+feature is actually required in a code path.</p>
+</div>
+<div class="section" id="feature-names">
+<h2><a class="toc-backref" href="#id6">Feature Names</a><a class="headerlink" href="#feature-names" title="Permalink to this headline">¶</a></h2>
+<p>The following feature tests are available in Dojo.  This table shows the module in which the feature test is added, and
+the name of the feature test.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="18%" />
+<col width="55%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Module</th>
+<th class="head">Feature</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><cite>dojo/_base/browser</cite></td>
+<td>config-selectorEngine</td>
+<td>Pre-configured selector engine to use in dojo/query, defaults to dojo/selector/acme.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_base/connect.html#dojo-base-connect"><span>dojo/_base/connect</span></a></td>
+<td>events-keypress-typed</td>
+<td>Keypresses should only occur a printable character is hit</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_base/kernel.html#dojo-base-kernel"><span>dojo/_base/kernel</span></a></td>
+<td>extend-dojo</td>
+<td>Defined Dojo modules should push their definitions into the dojo object. In 2.0, it will likely be unusual to augment another object as a result of defining a module. This has feature gives a way to force 2.0 behavior as the code is migrated.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_base/kernel.html#dojo-base-kernel"><span>dojo/_base/kernel</span></a></td>
+<td>dojo-guarantee-console</td>
+<td>Ensure that console.log, console.warn, etc. methods are defined</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_base/kernel.html#dojo-base-kernel"><span>dojo/_base/kernel</span></a></td>
+<td>dojo-debug-messages</td>
+<td>Log internal debug messages generated by Dojo, these include deprecated/experimental warnings along with parser auto-required module names.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_base/kernel.html#dojo-base-kernel"><span>dojo/_base/kernel</span></a></td>
+<td>dojo-modulePaths</td>
+<td>Consume module paths defined in config.modulePaths.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_base/kernel.html#dojo-base-kernel"><span>dojo/_base/kernel</span></a></td>
+<td>dojo-moduleUrl</td>
+<td>Expose dojo.moduleUrl method, returns a URL relative to a module. Deprecated in 2.0, should use require.toUrl()</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_base/lang.html#dojo-base-lang"><span>dojo/_base/lang</span></a></td>
+<td>bug-for-in-skips-shadowed</td>
+<td>Test for bug where the for-in iterator skips object properties that exist in Object&#8217;s prototype (IE6 - ?).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_base/loader.html#dojo-base-loader"><span>dojo/_base/loader</span></a></td>
+<td>dojo-fast-sync-require</td>
+<td>All dojoRequireCallbacks can be released when all <em>non-dojo/require!, dojo/loadInit!</em> modules are either executed, not requested, or arrived. Potential weakness of this algorithm is that dojo/require will not execute callbacks until <em>all</em> dependency trees are ready.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="_base/loader.html#dojo-base-loader"><span>dojo/_base/loader</span></a></td>
+<td>config-publishRequireResult</td>
+<td>Publish resolved module values, resulting from a require call, as JavaScript objects referenced by module identifiers in the global namespace.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="_base/window.html#dojo-base-window"><span>dojo/_base/window</span></a></td>
+<td>quirks</td>
+<td>Browser is running in <em>Quirks-Mode</em></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="dojo.html#dojo-dojo"><span>dojo/dojo</span></a></td>
+<td>host-node</td>
+<td>Environment is running on the the NodeJS platform</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="dojo.html#dojo-dojo"><span>dojo/dojo</span></a></td>
+<td>host-rhino</td>
+<td>Environment is running on the Rhino platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="dojo.html#dojo-dojo"><span>dojo/dojo</span></a></td>
+<td>dojo-xhr-factory</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="dojo.html#dojo-dojo"><span>dojo/dojo</span></a></td>
+<td>dojo-force-activex-xhr</td>
+<td>Force XHR provider to use ActiveX API (MSXMLHTTP).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="dojo.html#dojo-dojo"><span>dojo/dojo</span></a></td>
+<td>native-xhr</td>
+<td>Browser has native XHR API, XMLHttpRequest.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="dojo.html#dojo-dojo"><span>dojo/dojo</span></a></td>
+<td>dojo-gettext-api</td>
+<td>Dojo provides API for retrieving text resource contents from a URL.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="dojo.html#dojo-dojo"><span>dojo/dojo</span></a></td>
+<td>dojo-loader-eval-hint-url</td>
+<td>Module location should be used as source hint during eval rather than module identifier.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="dojo.html#dojo-dojo"><span>dojo/dojo</span></a></td>
+<td>ie-event-behavior</td>
+<td>Browser supports legacy IE event behaviour API (attachEvent versus attachEventListener).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#dojo-has"><span>dojo/has</span></a></td>
+<td>host-browser</td>
+<td>Environment is running on the browser platform</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dojo-has"><span>dojo/has</span></a></td>
+<td>dom</td>
+<td>Document Object Module API supported on the current platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#dojo-has"><span>dojo/has</span></a></td>
+<td>dojo-dom-ready-api</td>
+<td>DOMReady API supported on the current platform, allowing listeners to be notified when the DOM has loaded</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dojo-has"><span>dojo/has</span></a></td>
+<td>dojo-sniff</td>
+<td>User-agent sniffing support on the current platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#dojo-has"><span>dojo/has</span></a></td>
+<td>dom-addeventlistener</td>
+<td>Standard DOM event API (addEventListener) supported on the current platform.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dojo-has"><span>dojo/has</span></a></td>
+<td>touch</td>
+<td>Touch events are supported on the current platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#dojo-has"><span>dojo/has</span></a></td>
+<td>device-width</td>
+<td>Amount of horizontal space in pixels available on the window</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#dojo-has"><span>dojo/has</span></a></td>
+<td>dom-attributes-explicit</td>
+<td>DOM node attributes array only lists explicitly user specified attributes, (W3C standard)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#dojo-has"><span>dojo/has</span></a></td>
+<td>dom-attributes-specified-flag</td>
+<td>DOM node attribute values provide <em>specified</em> flag to skip attributes user didn&#8217;t specify, (IE8)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="hccss.html#dojo-hccss"><span>dojo/hccss</span></a></td>
+<td>highcontrast</td>
+<td>Browser is in &#8216;high-contrast&#8217; mode</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="i18n.html#dojo-i18n"><span>dojo/i18n</span></a></td>
+<td>dojo-preload-i18n-Api</td>
+<td>Define the preload localizations machinery, allow loading of special rollup modules which contain one or more flattened, localized bundles.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="i18n.html#dojo-i18n"><span>dojo/i18n</span></a></td>
+<td>dojo-v1x-i18n-Api</td>
+<td>Define legacy (v1.x) i18n functions</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="json.html#dojo-json"><span>dojo/json</span></a></td>
+<td>json-parse</td>
+<td>Platform supports parsing JSON text to JavaScript objects through native API</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="json.html#dojo-json"><span>dojo/json</span></a></td>
+<td>json-stringify</td>
+<td>Platform supports &#8216;stringify&#8217; method on native JSON API, allowing serialisation of JavaScript objects to JSON text.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="mouse.html#dojo-mouse"><span>dojo/mouse</span></a></td>
+<td>dom-quirks</td>
+<td>Browser is running in <em>Quirks-Mode</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="mouse.html#dojo-mouse"><span>dojo/mouse</span></a></td>
+<td>events-mouseenter</td>
+<td>Browser supports the <em>onmouseenter</em> DOM event</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="mouse.html#dojo-mouse"><span>dojo/mouse</span></a></td>
+<td>events-mousewheel</td>
+<td>Browser supports the <em>onmousewheel</em> DOM event</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="on.html#dojo-on"><span>dojo/on</span></a></td>
+<td>jscript</td>
+<td>JavaScript environment provided by the JScript platform, dialect of ECMAScript standard that is used in Microsoft&#8217;s Internet Explorer.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="on.html#dojo-on"><span>dojo/on</span></a></td>
+<td>event-orientationchange</td>
+<td>Browser supports the <em>orientationchange</em> DOM event, used to detect orientation changes in the target device.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="on.html#dojo-on"><span>dojo/on</span></a></td>
+<td>event-stopimmediatepropagation</td>
+<td>Browser supports the <em>stopImmediatePropagation</em> method on DOM events, used to prevent other event listeners being called.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="query.html#dojo-query"><span>dojo/query</span></a></td>
+<td>array-extensible</td>
+<td>Native array implementation supports manual extension (not supported in older versions of IE).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="ready.html#dojo-ready"><span>dojo/ready</span></a></td>
+<td>dojo-config-addOnLoad</td>
+<td>Consume <em>addOnLoad</em> configuration property.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="request/handlers.html#dojo-request-handlers"><span>dojo/request/handlers</span></a></td>
+<td>activex</td>
+<td>Browser platform has ActiveX API methods, provided by Internet Explorer</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="request/script.html#dojo-request-script"><span>dojo/request/script</span></a></td>
+<td>script-readystatechange</td>
+<td>DOM supports <em>onreadystatechange</em> event, fired when document.readyState changes</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="request/xhr.html#dojo-request-xhr"><span>dojo/request/xhr</span></a></td>
+<td>native-xhr</td>
+<td>Browser has native XHR API, XMLHttpRequest</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="request/xhr.html#dojo-request-xhr"><span>dojo/request/xhr</span></a></td>
+<td>dojo-force-activex-xhr</td>
+<td>Force XHR provider to use ActiveX API (MSXMLHTTP).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="request/xhr.html#dojo-request-xhr"><span>dojo/request/xhr</span></a></td>
+<td>native-xhr2</td>
+<td>Browser&#8217;s native XHR implementation supports XHR Level 2 API</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="request/xhr.html#dojo-request-xhr"><span>dojo/request/xhr</span></a></td>
+<td>native-formdata</td>
+<td>Browser has a native FormData implementation, letting user compile set of key/value pairs to send using XMLHttpRequest</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="selector/_loader.html#dojo-selector-loader"><span>dojo/selector/_loader</span></a></td>
+<td>dom-qsa2.1</td>
+<td>Browser supports the DOM QuerySelectorAll method available, with Level 2.1 CSS selectors</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="selector/_loader.html#dojo-selector-loader"><span>dojo/selector/_loader</span></a></td>
+<td>dom-qsa3</td>
+<td>Browser supports DOM QuerySelectorAll method, with Level 3 CSS selectors</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="selector/lite.html#dojo-selector-lite"><span>dojo/selector/lite</span></a></td>
+<td>dom-matches-selector</td>
+<td>Browser supports the <em>matchesSelector</em> method for testing selector queries directly against DOM nodes.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="selector/lite.html#dojo-selector-lite"><span>dojo/selector/lite</span></a></td>
+<td>dom-qsa</td>
+<td>Browsers supports the DOM QuerySelectorAll method.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>air</td>
+<td>Environment is running on the Adobe Air platform</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>khtml</td>
+<td>Environment is running on the Konqueror-based platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>webkit</td>
+<td>Environment is running on the WebKit rendering engine platform</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>chrome</td>
+<td>Environment is running on the Chrome browser platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>safari</td>
+<td>Environment is running on the Safari browser platform</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>mac</td>
+<td>Environment is running on the Mac OS X platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>quirks</td>
+<td>Browser is running in <em>Quirks-Mode</em></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>ios</td>
+<td>Environment is running on the iOS mobile operating system</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>android</td>
+<td>Environment is running on the Android mobile operating system</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>trident</td>
+<td>Browser is running the Trident rendering engine</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>opera</td>
+<td>Environment is running on the Opera browser platform</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>mozilla</td>
+<td>Environment is running on the Mozilla browser platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>ff</td>
+<td>Environment is running on the Firefox browser platform</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>ie</td>
+<td>Environment is running on the Microsoft Internet Explorer browser platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sniff.html#dojo-sniff"><span>dojo/sniff</span></a></td>
+<td>wii</td>
+<td>Environment is running on the Nintendo Wii browser platform</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../dijit/BackgroundIframe.html#dijit-backgroundiframe"><span>dijt/BackgroundIframe</span></a></td>
+<td>config-bgIframe</td>
+<td>Flag to create background iframe behind popups like Menus and Dialog.  A background iframe prevents problems with popups appearing behind applets/pdf viewers, and also prevents the bleed through select problem on IE6 and IE7.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../dijit/_WidgetBase.html#dijit-widgetbase"><span>dijit/_WidgetBase</span></a></td>
+<td>dijit-legacy-requires</td>
+<td>Make dijit load modules the application didn&#8217;t explicitly require, e.g. dijit/_base/manager, backwards compatibility in non-async mode.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../dijit/form/_ExpandingTextAreaMixin.html#dijit-form-expandingtextareamixin"><span>dijit/form/_ExpandingTextAreaMixin</span></a></td>
+<td>textarea-needs-help-shrinking</td>
+<td>Browser platform&#8217;s &lt;textarea&gt; element needs manual help to shrink as content changes.</td>
+</tr>
+<tr class="row-odd"><td><cite>dojox/form/uploader/Base</cite></td>
+<td>FormData</td>
+<td>Browser has a native FormData implementation, letting user compile set of key/value pairs to send using XMLHttpRequest</td>
+</tr>
+<tr class="row-even"><td><cite>dojox/form/uploader/Base</cite></td>
+<td>xhr-sendAsBinary</td>
+<td>Browser&#8217;s native XHR implementation supports the <em>sendAsBinary</em> method, for sending binary data over XHR.</td>
+</tr>
+<tr class="row-odd"><td><cite>dojox/form/uploader/Base</cite></td>
+<td>file-multiple</td>
+<td>Browser supports file input DOM element with multiple file selection attribute, allowing user to select more than one file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../dojox/mobile/Audio.html#dojox-mobile-audio"><span>dojox/mobile/Audio</span></a></td>
+<td>mobile-embed-audio-video-support</td>
+<td>Platform supports creating embed tags with audio and video elements.</td>
+</tr>
+<tr class="row-odd"><td><cite>dojox/mobile/common</cite></td>
+<td>mblAndroidWorkaround</td>
+<td>Test for Android 2.X transition animation flicker issue</td>
+</tr>
+<tr class="row-even"><td><cite>dojox/mobile/common</cite></td>
+<td>mblAndroid3Workaround</td>
+<td>Test for Android 3.X transition animation flicker issue</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../dojox/mobile/scrollable.html#dojox-mobile-scrollable"><span>dojox/mobile/scrollable</span></a></td>
+<td>translate3d</td>
+<td>Browser supports the WebKit-specific CSS transform property, translate3d.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../dojox/mobile/sniff.html#dojox-mobile-sniff"><span>dojox/mobile/sniff</span></a></td>
+<td>bb</td>
+<td>Environment is running on the RIM Blackberry mobile browser platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../dojox/mobile/sniff.html#dojox-mobile-sniff"><span>dojox/mobile/sniff</span></a></td>
+<td>android</td>
+<td>Environment is running on the Android mobile browser platform</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../dojox/mobile/sniff.html#dojox-mobile-sniff"><span>dojox/mobile/sniff</span></a></td>
+<td>iphone</td>
+<td>Environment is running on the iPhone mobile browser platform</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../dojox/mobile/sniff.html#dojox-mobile-sniff"><span>dojox/mobile/sniff</span></a></td>
+<td>touch</td>
+<td>Touch events are supported on the current platform</td>
+</tr>
+<tr class="row-even"><td><cite>dojox/mvc/_InlineTemplateMixin</cite></td>
+<td>dom-qsa</td>
+<td>Browser supports the DOM QuerySelectorAll method</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../dojox/mvc/parserExtension.html#dojox-mvc-parserextension"><span>dojox/mvc/parserExtension</span></a></td>
+<td>dom-qsa</td>
+<td>Browser supports the DOM QuerySelectorAll method</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../dojox/mvc/parserExtension.html#dojox-mvc-parserextension"><span>dojox/mvc/parserExtension</span></a></td>
+<td>dojo-parser</td>
+<td>Browser has loaded the dojo/parser module</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../dojox/mvc/parserExtension.html#dojox-mvc-parserextension"><span>dojox/mvc/parserExtension</span></a></td>
+<td>dojo-mobile-parser</td>
+<td>Browser has loaded the dojox/mobile/parser module</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../dojox/mvc/sync.html#dojox-mvc-sync"><span>dojox/mvc/sync</span></a></td>
+<td>mvc-bindings-log-api</td>
+<td>Enable debugging messages for MVC module.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id7">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id8">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/phiggins42/has.js">has.js Project</a> - You can find standard tests and feature names.</li>
+<li><cite>dojo/sniff &lt;dojo/sniff&gt;</cite> - The modules that provides browser detection by building on top of <code class="docutils literal"><span class="pre">dojo/has</span></code>.</li>
+</ul>
+<p>Some portions of this document were copied with permission from has.js Project.  Thanks to the has.js team for this
+work!</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo/has</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#feature-names">Feature Names</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

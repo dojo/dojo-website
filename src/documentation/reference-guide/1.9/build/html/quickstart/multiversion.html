@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Multiple Versions of Dojo on a Page &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="../dojo/index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="multiple-versions-of-dojo-on-a-page">
+<span id="quickstart-multiversion"></span><h1><a class="toc-backref" href="#id1">Multiple Versions of Dojo on a Page</a><a class="headerlink" href="#multiple-versions-of-dojo-on-a-page" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">James Burke</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V1.1</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#multiple-versions-of-dojo-on-a-page" id="id1">Multiple Versions of Dojo on a Page</a><ul>
+<li><a class="reference internal" href="#introduction" id="id2">Introduction</a><ul>
+<li><a class="reference internal" href="#provide-custom-namespaced-library" id="id3">Provide custom namespaced library</a></li>
+<li><a class="reference internal" href="#build-time" id="id4">Build time</a></li>
+<li><a class="reference internal" href="#xdomain-build" id="id5">XDomain Build</a></li>
+<li><a class="reference internal" href="#using-dojo-1-1-with-previous-versions-of-dojo" id="id6">Using Dojo 1.1 with previous versions of Dojo</a></li>
+<li><a class="reference internal" href="#limitations" id="id7">Limitations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>Deprecated</em>  The information contained in this document is deprecated and not up to date. Check out <a class="reference internal" href="../loader/amd.html#loader-amd-relocating-module-namespaces"><span>relocating module namespaces</span></a> for updated information.</p>
+<p>Dojo has some special configuration and build options to allow more than one version of Dojo to be used on a web page.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id2">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>As of Dojo  1.1, it is possible to run multiple versions of Dojo in a page, or to even rename the global &#8220;dojo&#8221;, &#8220;dijit&#8221; and &#8220;dojox&#8221; variables to some other variable. This capability is useful if:</p>
+<blockquote>
+<div><ul class="simple">
+<li>You want to provide your own custom, namespaced library that uses Dojo underneath. It will be possible to use your own private Dojo version without having another version of Dojo on the page interfering with your code.</li>
+<li>You want to experiment with Dojo 1.1 features with a project using Dojo 1.0 or earlier.</li>
+</ul>
+</div></blockquote>
+<p>See the Limitations section below for important restrictions on this feature.</p>
+<div class="section" id="provide-custom-namespaced-library">
+<h3><a class="toc-backref" href="#id3">Provide custom namespaced library</a><a class="headerlink" href="#provide-custom-namespaced-library" title="Permalink to this headline">¶</a></h3>
+<p>You want to create a JavaScript library that you want to distribute to others to use in their pages. The users of your library may be using Dojo on their page, and you want your version of Dojo to not interact with their version.</p>
+<p>You call your code &#8220;coolio&#8221;. As you are developing your code, you are using a normal build of Dojo 1.1+ and have your scripts laid out like so:</p>
+<div class="highlight-text"><div class="highlight"><pre>-scripts
+  -dojo
+  -dijit
+  -dojox
+  -coolio
+    -actions.js
+-tests
+  -test.html
+</pre></div>
+</div>
+<p>The interface you want to publish to others consists of just one function: coolio.actions.foo(), and it is defined inside the scripts/coolio/actions.js file:</p>
+<p>You want to use Dojo, but you do not want it to conflict with other Dojo versions on the page. In this case you can use a djConfig.scopeMap to map dojo, dijit and dojox to different names. Your test page, tests/test.html, might be set up like so:</p>
+<p>For this test page, djConfig.scopeMap has mapped &#8220;dojo&#8221; to &#8220;coolio&#8221;, &#8220;dijit&#8221; to &#8220;cooliow&#8221; and &#8220;dojox&#8221; to &#8220;cooliox&#8221;. dojo, dijit and dojox will not be visible to this HTML page, just coolio, cooliow and cooliox.</p>
+<p>It is not recommended that you map dojo, dijit and dojox all to coolio. Doing so may result in some inadvertent clobbering of variables or objects, since you are basically collapsing dojo, dijit and dojox on top of each other. For example, if dojo.bar was defined and dijit.bar was defined, then one of them would clobber the other.</p>
+<p>Also notice the modulePaths configuration for coolio.actions. If we did not do that, the coolio.require(&#8220;coolio.actions&#8221;) call would fail.</p>
+<p>You can now develop your coolio.actions library in this manner. You can even use djConfig.debugAtAllCosts to do debugging (note that using debugAtAllCosts exposes dojo, dijit and dojox as global variables, so only test with your code in the page, and not mixed with code from another Dojo version).</p>
+<p>Once you are ready to deliver your code to other people, use the Dojo build system to wrap up your code into a deliverable to give to others.</p>
+</div>
+<div class="section" id="build-time">
+<h3><a class="toc-backref" href="#id4">Build time</a><a class="headerlink" href="#build-time" title="Permalink to this headline">¶</a></h3>
+<p>The build system allows you to &#8220;burn in&#8221; the scopeMap into the built JS file, avoiding the need for others to do that work.</p>
+<p>Define a build profile like the below and save it as coolio.profile.js:</p>
+<p>Notice the layer name is &#8220;dojo.js&#8221;. This will make it so that your code is merged in with the base dojo.js, so that there is just one layer file that end users have to use. Once the build is complete, feel free to rename the file to &#8220;coolio.js&#8221; if you like.</p>
+<p>The build command to burn in the scope map will look something like this (For Windows, change build.sh to build.bat and use &#8216; instead of &#8221;):</p>
+<div class="highlight-text"><div class="highlight"><pre>./build.sh profile=coolio releaseName=coolio version=0.1.0coolio action=release scopeMap=[[\&quot;dojo\&quot;,\&quot;coolio\&quot;],[\&quot;dijit\&quot;,\&quot;cooliow\&quot;],[\&quot;dojox\&quot;,\&quot;cooliox\&quot;]]
+</pre></div>
+</div>
+<p>The build command above assumes you saved coolio.profile.js in util/buildscripts/profiles. If you have it saved somewhere else, then replace profile=coolio with profileFile=path/to/coolio.profile.js.</p>
+<p>This build command will generate a release/coolio directory. At this point you can rename release/coolio/dojo.js to release/coolio/coolio.js if you like.</p>
+<p>Deliver the contents of release/coolio to the developers using your library. You can try to deliver just release/coolio/coolio.js, but depending on which dojo/dijit/dojox modules you use, that file may not be enough. You will likely need to do testing to see exactly what files are needed. If you only used the Dojo Base functionality (what comes with the normal dojo.js file), then you are fine just delivering the release/coolio/coolio.js file.</p>
+</div>
+<div class="section" id="xdomain-build">
+<h3><a class="toc-backref" href="#id5">XDomain Build</a><a class="headerlink" href="#xdomain-build" title="Permalink to this headline">¶</a></h3>
+<p>If you plan on making an XDomain Build, there are a couple of other build arguments you need to pass:</p>
+<div class="highlight-text"><div class="highlight"><pre>./build.sh profile=coolio releaseName=coolio version=0.1.0coolio action=release loader=xdomain xdDojoScopeName=coolio xdDojoPath=http://some.domain.com/path/to/coolio scopeMap=[[\&quot;dojo\&quot;,\&quot;coolio\&quot;],[\&quot;dijit\&quot;,\&quot;cooliow\&quot;],[\&quot;dojox\&quot;,\&quot;cooliox\&quot;]]
+</pre></div>
+</div>
+<p>This command assumes you will be hosting your code at <a class="reference external" href="http://some.domain.com/path/to/coolio/">http://some.domain.com/path/to/coolio/</a>. Under that directory would be the dojo, dijit, dojox and coolio directories.</p>
+<p>For xdomain builds, you will want to rename release/coolio/dojo.xd.js to release/coolio/coolio.xd.js, and tell developers to reference <a class="reference external" href="http://some.domain.com/path/to/coolio/dojo/coolio.xd.js">http://some.domain.com/path/to/coolio/dojo/coolio.xd.js</a> in their pages.</p>
+</div>
+<div class="section" id="using-dojo-1-1-with-previous-versions-of-dojo">
+<h3><a class="toc-backref" href="#id6">Using Dojo 1.1 with previous versions of Dojo</a><a class="headerlink" href="#using-dojo-1-1-with-previous-versions-of-dojo" title="Permalink to this headline">¶</a></h3>
+<p>You may have an application running Dojo 0.4.3, but you might want to start playing with Dojo 1.1 features. It is always more efficient for the browser if you only use one version of Dojo in your page, but you may not have the time to port your whole application to Dojo 1.1 yet.</p>
+<p>Suppose you have your code laid out like so:</p>
+<div class="highlight-text"><div class="highlight"><pre>-scripts
+  -dojo110 (Dojo 1.1.0 build)
+    -dojo
+      -dojo.js
+    -dijit
+    -dojox
+  -dojo043 (Dojo 0.4.3 build)
+    -dojo.js
+    -src
+    -...
+-tests
+  -test.html
+</pre></div>
+</div>
+<p>To use both versions in a page, the tests/test.html file would look like</p>
+<p>The important points to remember:</p>
+<blockquote>
+<div><ul class="simple">
+<li>You can redefine djConfig after Dojo 1.1 is included in the page. This is because Dojo 1.1 keeps an internal copy of the djConfig structure.</li>
+<li>Only use debugAtAllCosts with Dojo 1.1 if you remove the Dojo 0.4.3 code from the page. Otherwise, bad things will happen. You probably can use debugAtAllCosts with the Dojo 0.4.3 code while Dojo 1.1 is in the page.</li>
+</ul>
+</div></blockquote>
+<p>For doing builds with multiple versions of Dojo, see the preceding section on custom namespaced libraries. Just replace coolio, cooliow and cooliox with dojo11, dijit11 and dojox11 respectively.</p>
+</div>
+<div class="section" id="limitations">
+<h3><a class="toc-backref" href="#id7">Limitations</a><a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h3>
+<p>There are some limitations to this feature:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Always use dojo.require() to load code. Do not use script tags in HTML to load the modules. The scoping is accomplished by using the dojo.require machinery. Using raw script tags will break things.</li>
+<li>djConfig.debugAtAllCosts only works with one version of Dojo in the page. You can use a scopeMap, but no other versions of Dojo can be in the page.</li>
+<li>You must use a build of Dojo to get this behavior. It does not work with running Dojo from a source distribution.</li>
+<li>The order of the djConfig.scopeMap array items is important. It always needs to be dojo, dijit then dojox. In addition to the order being important, you must define mappings for all three.</li>
+<li>dojo.back only works with one version of Dojo in the page, and it must be named &#8220;dojo&#8221;. Do not use a scopeMap.</li>
+</ol>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">Multiple Versions of Dojo on a Page</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#provide-custom-namespaced-library">Provide custom namespaced library</a></li>
+<li><a class="reference internal" href="#build-time">Build time</a></li>
+<li><a class="reference internal" href="#xdomain-build">XDomain Build</a></li>
+<li><a class="reference internal" href="#using-dojo-1-1-with-previous-versions-of-dojo">Using Dojo 1.1 with previous versions of Dojo</a></li>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/Evented &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-evented">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/Evented</a><a class="headerlink" href="#dojo-evented" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">1.7.0</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-evented" id="id2">dojo/Evented</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/Evented</strong> is a module that provides a class that can be used as a base class or mixin for JavaScript classes that
+emit their own events.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">dojo/Evented</span></code> is designed to provide a class that allows a developer to emit events and provide an easy way to allow
+those events to be connected to by downstream users. It leverages the API concepts of :ref:<code class="docutils literal"><span class="pre">dojo/on</span> <span class="pre">&lt;dojo/on&gt;</span></code>. It
+should be noted though that this is for what is commonly referred to as &#8220;synthetic&#8221; events, which are different than DOM
+events, which <code class="docutils literal"><span class="pre">dojo/on</span></code> normalises.</p>
+<p>Common convention is that events emitted are all lower case and usually a single word that has semantic meaning. For
+example <code class="docutils literal"><span class="pre">change</span></code> or <code class="docutils literal"><span class="pre">start</span></code> or <code class="docutils literal"><span class="pre">end</span></code>. The structure of the event that is passed on the emit is up to the
+developer, but it should be consistent and easy to understand.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">dojo/Evented</span></code> class provides two methods, <code class="docutils literal"><span class="pre">on(eventType,</span> <span class="pre">listener)</span></code> and <code class="docutils literal"><span class="pre">emit(eventType,</span> <span class="pre">eventObject)</span></code> which
+correspond to <code class="docutils literal"><span class="pre">dojo/on()</span></code> and <code class="docutils literal"><span class="pre">dojo/on::emit()</span></code> with the target being the instance object. For example, we could
+create a class:</p>
+<p>While <code class="docutils literal"><span class="pre">dojo/Evented</span></code> can be extended and used directly, it is better to subclass into a new class.</p>
+<p>If a <code class="docutils literal"><span class="pre">dojo/Evented</span></code> instance is passed to <code class="docutils literal"><span class="pre">dojo/on</span></code> as a target, <code class="docutils literal"><span class="pre">dojo/on</span></code> will detect this and delegate the
+setting of the event handler to <code class="docutils literal"><span class="pre">dojo/Evented</span></code>.</p>
+<div class="section" id="event-handle-properties">
+<h3>Event Handle Properties<a class="headerlink" href="#event-handle-properties" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">dojo/Evented</span></code> class supports auto-magic property/methods for events which are named after the event with an &#8220;on&#8221;
+prefix, following the DOM0 convention. For example, listening to the &#8220;foo&#8221; event will put the listeners in the <code class="docutils literal"><span class="pre">onfoo</span></code>
+method. If a class has an <code class="docutils literal"><span class="pre">onMouseDown</span></code> method, this corresponds to a &#8220;MouseDown&#8221; event that you can listen to with:</p>
+<p>While it is possible to trigger the event by directly calling the <code class="docutils literal"><span class="pre">onfoo()</span></code> or <code class="docutils literal"><span class="pre">onMouseDown()</span></code> method, it is
+recommend that you use emit(&#8220;foo&#8221;) or emit(&#8220;MouseDown&#8221;) for consistency. One can upgrade most classes with <code class="docutils literal"><span class="pre">onEvent</span></code>
+methods to be usable with dojo/on by simply adding the Evented class as a base class. Note that some event emitting
+objects, like Dijit widgets, have their own event emitting implementation, and define their own event names.</p>
+</div>
+<div class="section" id="transitioning-to-dojo-2-0">
+<h3>Transitioning to Dojo 2.0<a class="headerlink" href="#transitioning-to-dojo-2-0" title="Permalink to this headline">¶</a></h3>
+<p>There are a number of objects in Dojo (like <a class="reference internal" href="dnd.html#dojo-dnd"><span>dojo/dnd</span></a>) that inherit from <code class="docutils literal"><span class="pre">dojo/Evented</span></code>. However,
+these event emitting objects are likely to change their events (both names and emitted event objects) in 2.0, so one
+should not assume that code using <code class="docutils literal"><span class="pre">dojo/Evented</span></code> to listen to Dojo objects will work unchanged in 2.0.</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="on.html#dojo-on"><span>dojo/on</span></a> - The Dojo event normalization API</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo/Evented</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#event-handle-properties">Event Handle Properties</a></li>
+<li><a class="reference internal" href="#transitioning-to-dojo-2-0">Transitioning to Dojo 2.0</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

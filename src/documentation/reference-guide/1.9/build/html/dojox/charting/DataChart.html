@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.charting.DataChart &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../../dojo/index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojox-charting-datachart">
+<span id="id1"></span><h1>dojox.charting.DataChart<a class="headerlink" href="#dojox-charting-datachart" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Project owner:</th><td class="field-body">Mike Wilcox</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Mike Wilcox</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">1.3</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="basic-description">
+<h2>Basic Description<a class="headerlink" href="#basic-description" title="Permalink to this headline">¶</a></h2>
+<p>DataChart is an extension to Chart2D that connects to a data store in a simple manner. Animation can be achieved by connecting to the data store and modifying the store items. The change are captured and displayed in the DataChart which connects to the store&#8217;s onSet event.  Convenience methods have also been added for connecting store item labels to the chart labels.</p>
+<p>The examples on this page use dojo.ItemFileWriteStore, since it is the most commonly used, and most standard store. The store connects to the <em>dojox/charting/tests/stock.json</em> file which contains a set of imaginary stock market prices.</p>
+<p>DataChart maintains the integrity of the current charting APIs, although some things have been added or modified in order to get the store to connect and also to get the data to scroll/animate. &#8220;displayRange&#8221; in particular is used to force the x-axis to a specific size and keep the chart from stretching or squashing to fit the data. Also, the DataChart is meant to be setup quickly. More defaults have been added so only a few simple steps are required to get up and running.</p>
+<p>In its most basic, default form, DataChart requires no parameters, besides the node id. The store can be set in the parameters or as a separate method as shown. The setStore method is the same as used elsewhere in Dojo, like in the DataGrid. Unlike the Grid, the DataChart needs one additional argument — the store item property that will be charted. In this case, that property is &#8220;price&#8221;.</p>
+<p>A basic example follows:</p>
+</div>
+<div class="section" id="different-chart-types">
+<h2>Different Chart Types<a class="headerlink" href="#different-chart-types" title="Permalink to this headline">¶</a></h2>
+<p>Different chart styles is a simple matter of passing a type:</p>
+</div>
+<div class="section" id="datachart-mapping">
+<h2>DataChart Mapping<a class="headerlink" href="#datachart-mapping" title="Permalink to this headline">¶</a></h2>
+<p>This is a (trimmed down) version of the JSON file used, as it is important to the next concepts:</p>
+<p>The property used for the first chart example is historicPrice and is an array. Because the default chart is a line-type, and plots each item separately, more than one bit of data is necessary to span across the x-axis. In this case, there are seven slots in the array, which is why there is an x-axis span of seven. If the price property was charted, there would be seven points all along the y-axis, and the chart x-axis would only have a length of one.</p>
+<p>However, the need of the chart may not be a series of individual item properties, it may be single item properties compared to the others. To compare the price of each item on a line chart using the comparative property:</p>
+<p>The DataChart supports information updating, which allows it to animate. To update the information, change the item property in the store. The DataChart is connected to the onSet event in the store and reflects the change. The test in the DojoX trunk demonstrates this with spinner widgets that modify the store item property (see link at bottom of page).</p>
+<p>The scroll parameter works in conjunction with two other parameters:</p>
+<blockquote>
+<div><ul class="simple">
+<li>stretchToFit: This is how native charts work. If given five bits of data, the x-axis will be five segments long.</li>
+<li>displayRange: If set, stretchToFit is overridden and the x-axis will not stretch, it will always be that long. This is often used with scroll.</li>
+<li>scroll: If true and there is more data than fits on the x-axis, it will scroll to the left.</li>
+</ul>
+</div></blockquote>
+<p>Note that the y-axis is always fixed, having it stretch to fit or scroll is not currently supported.</p>
+<p>The combination of these parameters can be confusing, especially when it comes to different chart types. See the Property Demo link at the bottom of the page that you can use to test the different parameters and dynamically build new charts.</p>
+</div>
+<div class="section" id="chart-legends">
+<h2>Chart Legends<a class="headerlink" href="#chart-legends" title="Permalink to this headline">¶</a></h2>
+<p>DojoX Charting comes with dojox.charting.widget.Legend to make it easy to add legends to your charts. Currently however, it isn’t designed to handle &#8220;live&#8221; data — it’s expecting that the chart knows the data as it’s created. Therefore it needs to connect it when the chart has data:</p>
+</div>
+<div class="section" id="chart-labels">
+<h2>Chart Labels<a class="headerlink" href="#chart-labels" title="Permalink to this headline">¶</a></h2>
+<p>DataChart has a convenient method for applying the store item labels. The chart.xaxis object can be edited, which is exposed so that besides the property to be added here, the other standard chart axis properties can edited as well.</p>
+<p><em>labelFunc</em> is actually a method that to tap into to write custom labels. DataChart also accepts a specific string which tells it to use its seriesLabels method. Simply put, it connects the item labels to the chart labels.</p>
+</div>
+<div class="section" id="demos">
+<h2>Demos<a class="headerlink" href="#demos" title="Permalink to this headline">¶</a></h2>
+<p>DojoX Test: <a class="reference external" href="http://archive.dojotoolkit.org/nightly/dojotoolkit/dojox/charting/tests/test_DataChart.html">http://archive.dojotoolkit.org/nightly/dojotoolkit/dojox/charting/tests/test_DataChart.html</a></p>
+<p>DataChart Property Demo: <a class="reference external" href="https://user.sitepen.com/~mwilcox/Chart/DataChart.html">https://user.sitepen.com/~mwilcox/Chart/DataChart.html</a></p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojox.charting.DataChart</a><ul>
+<li><a class="reference internal" href="#basic-description">Basic Description</a></li>
+<li><a class="reference internal" href="#different-chart-types">Different Chart Types</a></li>
+<li><a class="reference internal" href="#datachart-mapping">DataChart Mapping</a></li>
+<li><a class="reference internal" href="#chart-legends">Chart Legends</a></li>
+<li><a class="reference internal" href="#chart-labels">Chart Labels</a></li>
+<li><a class="reference internal" href="#demos">Demos</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

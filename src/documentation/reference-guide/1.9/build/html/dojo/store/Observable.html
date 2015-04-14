@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/store/Observable &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-store-observable">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/store/Observable</a><a class="headerlink" href="#dojo-store-observable" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V1.6</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-store-observable" id="id2">dojo/store/Observable</a></li>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#examples" id="id4">Examples</a><ul>
+<li><a class="reference internal" href="#client-side-query-awareness" id="id5">Client Side Query Awareness</a></li>
+<li><a class="reference internal" href="#triggering-notification-events" id="id6">Triggering Notification Events</a></li>
+<li><a class="reference internal" href="#multiple-notification-suppression" id="id7">Multiple Notification Suppression</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/store/Observable</strong> is an object store wrapper that adds support for notification of data changes to query result sets. The query result sets returned from a Observable store will include a observe function that can be used to monitor for changes. This store follows the new <a class="reference internal" href="../store.html#dojo-store"><span>Dojo Object Store API</span></a>. The observe function provides indication of the previous and new index values of changed objects to properly update result arrays.</p>
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>The Observable store wrapper makes it simple for UI components to monitor changes to result sets based on data changes. Because this functionality is centered around result sets, the events specifically are designed to communicate the necessary information for UIs to update visual readouts based on how the data changes affects the currently displayed data.</p>
+<p>The result sets returned from store.query() calls from a Observable store will have a observe method. The observe method has the following signature:</p>
+<p>The listener function is called with following arguments:</p>
+<ul class="simple">
+<li>The object parameter indicates the object that was create, modified, or deleted.</li>
+<li>The removedFrom parameter indicates the index in the result array where the object used to be. If the value is -1, then the object is an addition to this result set (due to a new object being created, or changed such that it is a part of the result set).</li>
+<li>The insertedInto parameter indicates the index in the result array where the object should be now. If the value is -1, then the object is a removal from this result set (due to an object being deleted, or changed such that it is not a part of the result set). If the store does not have a queryEngine, it may not be possible to determine the index of a newly created object, and the index will default to the store&#8217;s defaultIndex property or 0 if the property is not present.</li>
+</ul>
+<p>The observe() method returns an object with a cancel() method that can be called to stop observing the given result set.</p>
+<p>The second argument (includeObjectUpdates) to observe indicates whether or not to include updates to objects that don&#8217;t affect the inclusion or order of the changed object. If this is not set to true, object updates that don&#8217;t result in addition, removal, or change in order won&#8217;t trigger the listener.</p>
+</div>
+<div class="section" id="examples">
+<h1><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="client-side-query-awareness">
+<h2><a class="toc-backref" href="#id5">Client Side Query Awareness</a><a class="headerlink" href="#client-side-query-awareness" title="Permalink to this headline">¶</a></h2>
+<p>In the example above the memory store provides a queryEngine that the Observable store leverages to determine the whether or not an object belongs in a result set, and where in the result set it belongs. If you are using a server side store like the JsonRest store, you will need to provide a queryEngine in order for the update objects to be properly included or excluded from queries. If a queryEngine is not available, observe listener will be called with an undefined index.</p>
+</div>
+<div class="section" id="triggering-notification-events">
+<h2><a class="toc-backref" href="#id6">Triggering Notification Events</a><a class="headerlink" href="#triggering-notification-events" title="Permalink to this headline">¶</a></h2>
+<p>The Observable wrapper also adds a notify() method on the store itself. The notify method can be called if an notification of a data change from an external source is needed. The signature of notify() is:</p>
+<p>If the object parameter is omitted, it indicates a deletion. If the existingId parameter is omitted, it indicates a new object. If both parameters are included, it in indicates an updated object.</p>
+</div>
+<div class="section" id="multiple-notification-suppression">
+<h2><a class="toc-backref" href="#id7">Multiple Notification Suppression</a><a class="headerlink" href="#multiple-notification-suppression" title="Permalink to this headline">¶</a></h2>
+<p>It should be noted that when a put(), add(), or remove() method call is made, there will only be a single notification event, even if these methods or the notification event handlers make further nested put(), add(), or remove() method calls. It is assumed that stores could have more complex implementations of put and add (or notification listeners) that perform various calls to each other, and there should be a single notification for the action.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo/store/Observable</a></li>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#client-side-query-awareness">Client Side Query Awareness</a></li>
+<li><a class="reference internal" href="#triggering-notification-events">Triggering Notification Events</a></li>
+<li><a class="reference internal" href="#multiple-notification-suppression">Multiple Notification Suppression</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Build Transform writeAmd &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../../dojo/index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="build-transform-writeamd">
+<span id="build-transforms-writeamd"></span><h1><a class="toc-backref" href="#id1">Build Transform writeAmd</a><a class="headerlink" href="#build-transform-writeamd" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Rawld Gill</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#build-transform-writeamd" id="id1">Build Transform writeAmd</a><ul>
+<li><a class="reference internal" href="#summary" id="id2">Summary</a></li>
+<li><a class="reference internal" href="#description" id="id3">Description</a></li>
+<li><a class="reference internal" href="#backcompat" id="id4">Backcompat</a></li>
+<li><a class="reference internal" href="#profile-knobs" id="id5">Profile Knobs</a></li>
+<li><a class="reference internal" href="#source-location" id="id6">Source Location</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="summary">
+<h2><a class="toc-backref" href="#id2">Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Writes a transformed AMD module to a destination location.</p>
+</div>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id3">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>This transform writes AMD modules to a destination location, optionally bundling dependencies and other decorations. Any
+module that has been previously processed with the depsScan transform may be submitted to the writeAmd transform:</p>
+<ul class="simple">
+<li>AMD code modules</li>
+<li>AMD NLS modules</li>
+<li>legacy code modules, since depsScan transforms the module text to a valid AMD code module</li>
+<li>legacy NLS modules, since depsScan transforms the module text to a valid AMD NLS module</li>
+</ul>
+<p>A module may be designated as a &#8220;layer&#8221; module by including the module identifier in the profile property <code class="docutils literal"><span class="pre">layers</span></code>, a
+map from module identifier to a set of include and/or exclude modules identifiers that indicate modules to explicitly
+include and/or exclude when the module is written. The idea of a layer is to bundle a bunch of modules in a single
+resource to decrease the number of transactions required to load a set of modules.  An item in the <code class="docutils literal"><span class="pre">layers</span></code> map has
+the following properties:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">include</span></code></dt>
+<dd>An array of module identifiers giving a set of modules to explicitly include when the layer is written.</dd>
+<dt><code class="docutils literal"><span class="pre">exclude</span></code></dt>
+<dd>An array of module identifiers giving a set of modules to explicitly exclude when the layer is written.</dd>
+<dt><code class="docutils literal"><span class="pre">discard</span></code></dt>
+<dd>Optional. If present, should be truthy to indicate the layer is a synthetic layer used only to compute another layer&#8217;s
+contents. Deprecated as of 1.7; use <code class="docutils literal"><span class="pre">exclude</span></code> to explicitly exclude modules from layers instead.</dd>
+<dt><code class="docutils literal"><span class="pre">boot</span></code></dt>
+<dd>Optional. If present, should be truthy to indicate the layer should be written with the dojo loader to form a kind of
+bootstrap module.</dd>
+<dt><code class="docutils literal"><span class="pre">copyright</span></code></dt>
+<dd>Optional. If present, gives a copywrite message to include when the layer is written. Either a string or a filename
+of a resource containing the copyright text can be provided.</dd>
+<dt><code class="docutils literal"><span class="pre">includeLocales</span></code></dt>
+<dd>An array of locales that will be included in the layer. This can be defined at the profile or layer level.</dd>
+<dt><code class="docutils literal"><span class="pre">noref</span></code></dt>
+<dd>Optional. If present and truthy, instructs the loader to consume the cache of layer member modules (see below)
+immediately; otherwise, the cache is not consumed until the layer module is defined or another cache of modules is
+presented to the loader.</dd>
+<dt><code class="docutils literal"><span class="pre">compat</span></code></dt>
+<dd>Optional. If set to the value of &#8220;1.6&#8221;, then all layer member modules are immediately defined.</dd>
+</dl>
+<p>The modules to include in a particular layer are computed as follows:</p>
+<ol class="arabic simple">
+<li>The layer module itself.</li>
+<li>Plus the dependency graph implied by the AMD dependencies of the layer module. This is given by the dependency vector
+found in the define application associated with the target module, the modules found in the dependency vectors of
+those modules, and so on until all modules in the graph have been found (remember, though not desirable, there may
+be cycles, so the graph is not necessarily a tree).</li>
+<li>Plus all modules given in the include array, along with all of those modules&#8217; dependency graphs.</li>
+<li>Less all modules given in the exclude array, along with all of those modules&#8217; dependency graphs.</li>
+</ol>
+<p>The layer module is termed the &#8220;layer module&#8221;, all other modules that are computed by the algorithm are termed &#8220;layer
+member modules&#8221;. Heuristically, the idea is to bundle all the modules required to load the layer module as well as all
+modules in the include array, assuming all modules in the exclude array have already been loaded.</p>
+<p>If the module is not a layer, then the transformed module text is written. Any interned strings computed by the
+depsScan transform are also written. If the owning package configuration for the module includes the property
+<code class="docutils literal"><span class="pre">copyright</span></code>, a copyright message, then the value of that property is included in the written resource.</p>
+<p>If the module is a layer and either of the layer properties <code class="docutils literal"><span class="pre">discard</span></code> or <code class="docutils literal"><span class="pre">boot</span></code> are truthy, then the transform
+computes and memorizes the contents of the module resource but does not write it. If the layer property <code class="docutils literal"><span class="pre">boot</span></code> is
+truthy, the resource should be processed by the writeDojo transform which will recall the memorized contents and write
+the layer along with the dojo loader so that the layer may serve as a boot module.</p>
+<p>Otherwise, the layer module&#8217;s transformed text is written together with the transformed text or all the layer member
+modules. Member module layer text is written by providing a hash of module values for the dojo loader <code class="docutils literal"><span class="pre">cache</span></code>
+configuration property which gives a map from absolute module identifier to a function that causes the equivalent of the
+module resource to be evaluated. For example, if the resource text for the module &#8220;x/y/z&#8221; is given as....</p>
+<p>And x/y/z is a member module of a layer, then that layer will inject a loader cache configuration value as follows:</p>
+<p>This causes the module to be available to the loader upon demand, but the contents of the module&#8217;s resource are <em>not</em>
+evaluated unless and until the module is actually demanded by the run-time execution path. At that point the function is
+evaluated which results in the same effect as if the module has been script injected.</p>
+<p>Similar to a non-layer, if the layer property <code class="docutils literal"><span class="pre">copyright</span></code> exists, then the value of that property is included in the
+written resource.</p>
+</div>
+<div class="section" id="backcompat">
+<h2><a class="toc-backref" href="#id4">Backcompat</a><a class="headerlink" href="#backcompat" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-insertabsmids-switch">
+<h3>The insertAbsMids Switch<a class="headerlink" href="#the-insertabsmids-switch" title="Permalink to this headline">¶</a></h3>
+<p>If the profile property <code class="docutils literal"><span class="pre">insertAbsMids</span></code> is truthy, then the transform will ensure that the define application
+that defines each AMD module includes a module identifier argument. This is a backcompat feature that is used to
+construct modules that can be loaded with a script tag in the context of the dojo loader operating in a legacy
+mode. Normally, this feature should be avoided.</p>
+</div>
+<div class="section" id="the-noref-switch">
+<h3>The noref Switch<a class="headerlink" href="#the-noref-switch" title="Permalink to this headline">¶</a></h3>
+<p>In a non-legacy, pure AMD-style build, a layer includes a loader cache configuration value as described above that
+includes all of the layer member modules followed by a single <code class="docutils literal"><span class="pre">define</span></code> application that defines the layer module. When the layer is evaluated in the browser, the loader delays consuming the cache until the <code class="docutils literal"><span class="pre">define</span></code> application is
+processed. This allows the loader to map the layer member modules in the same way as the layer module in cases where the layer module is mapped to a different namespace by the <code class="docutils literal"><span class="pre">packageMap</span></code> loader configuration.</p>
+<p>General namespace mapping was not available in v1.6, and this particular optimization causes the layer to be consumed in a slightly different way compared to v1.6. Since some Dojo users have leveraged v1.6- build system internals to build additional optimizations, the new behavior breaks these optimizations. The common example is server-side machinery that predicts dependencies and bundles several layers into a single script injects.</p>
+<p>In order to accommodate these kinds of optimizations, a cache value may include the pseudo-module <code class="docutils literal"><span class="pre">&quot;*noref&quot;</span></code>, which
+instructs the loader to consume the cache immediately, thereby making all layer member modules available without an
+additional server transaction. Of course it is impossible to use both the package mapping and noref feature.</p>
+<p>Individual layers may be designated as noref layers by setting the layer property <code class="docutils literal"><span class="pre">noref</span></code> to a truthy value in a
+particular layer config. All layers may be designated as noref by setting the property <code class="docutils literal"><span class="pre">noref</span></code> to a truthy value in
+the profile. If the config variable is set in both places, the layer setting overrides the global profile setting for any particular layer.</p>
+</div>
+<div class="section" id="the-compat-switch">
+<h3>The compat Switch<a class="headerlink" href="#the-compat-switch" title="Permalink to this headline">¶</a></h3>
+<p>In v1.6-, a built layer immediately defined all member modules and contained other behaviors that caused built versions to follow slightly different code paths than unbuilt versions. In contrast, the v1.7+ builder/loader attempts to execute the exact same code path for built and unbuilt versions of a particular application. In particular, layer member modules are not defined until demanded consequent to requiring some other module. As described above, some Dojo users have constructed optimizations that depend on the old behavior.</p>
+<p>In order to accommodate these kinds of optimizations, the switch <code class="docutils literal"><span class="pre">&quot;compat&quot;</span></code> may be set to <code class="docutils literal"><span class="pre">&quot;1.6&quot;</span></code>, in which case all layer member modules will be immediately <code class="docutils literal"><span class="pre">require``d.</span> <span class="pre">Naturally,</span> <span class="pre">the</span> <span class="pre">``noref</span></code> switch should be set truthy if the <code class="docutils literal"><span class="pre">compat</span></code> switch is set to <code class="docutils literal"><span class="pre">&quot;1.6&quot;</span></code> (this is not automatic in 1.7.2, but will be in 1.8).</p>
+</div>
+<div class="section" id="nls-bundles">
+<h3>NLS Bundles<a class="headerlink" href="#nls-bundles" title="Permalink to this headline">¶</a></h3>
+<p>Recall that NLS bundles work differently in AMD compared to the legacy algorithms. The legacy algorithms loaded a root
+bundle and then attempted to load progressively specialized bundles according to the runtime locale until a 404 error
+occurred. The AMD algorithm specifies which localized bundles are available in the root bundle, so it can load exactly
+the available/appropriate bundles given a runtime locale value.</p>
+<p>Notice that the AMD algorithm requires two transaction slices in order to fully load localized bundles:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Load the root bundle.</li>
+<li>Load all of the available/appropriate localized bundles.</li>
+</ol>
+</div></blockquote>
+<p>Although Step 2 may result in multiple (almost-never more than two) script injections, those server transactions are
+typically concurrent. Therefore, layers that have NLS dependencies include the root bundle and the normal loader
+machinery loads available localizations as required during runtime. In the typical case, this is just as fast as the old bundle flattening algorithms that were available in v1.6-.</p>
+<p>In order to accommodate some legacy usages, the v1.7 build program outputs flattened NLS bundles for any locale specified by the <code class="docutils literal"><span class="pre">localeList</span></code> profile knob.</p>
+<p>NLS bundle loading can be avoided for specific locales by including locales in a layer, using the includeLocales setting. For example, if you set includeLocales: [&#8216;en-us&#8217;], the layer will not need to make a separate request for the NLS bundle for en-us users.</p>
+</div>
+</div>
+<div class="section" id="profile-knobs">
+<h2><a class="toc-backref" href="#id5">Profile Knobs</a><a class="headerlink" href="#profile-knobs" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">layers</span></code> (default = <code class="docutils literal"><span class="pre">undefined</span></code>)</dt>
+<dd><ul class="first simple">
+<li>[<em>map from module identifier to layer item</em>] Indicates the given module should be written as a layer.</li>
+</ul>
+<p class="last">If multiple layer objects are given by multiple profile resources, they are mixed on a per-layer basis, as profile
+items are processed left to right on the command line. For example, if two profile resources define the &#8220;x/y/z&#8221; layer,
+the layer item that exists in the last profile processed will overwrite the first layer item completely.</p>
+</dd>
+<dt><code class="docutils literal"><span class="pre">insertAbsMids</span></code> (default = <code class="docutils literal"><span class="pre">undefined</span></code>)</dt>
+<dd><ul class="first last simple">
+<li>[<em>truthy</em>] Causes the transform to ensure that every AMD define application includes a module identifier argument.</li>
+<li>[<em>falsy</em>] The transform does nothing to the module identifier argument in define applications. In particular, a
+falsy value doe <em>not</em> cause the transform to remove a module identifier argument that exists in the source code.</li>
+</ul>
+</dd>
+<dt><code class="docutils literal"><span class="pre">noref</span></code> (default = <code class="docutils literal"><span class="pre">undefined</span></code>)</dt>
+<dd>Optional. If present and truthy, instructs the loader to consume the cache of layer member modules immediately;
+otherwise, the cache is not consumed until the layer module is defined or another cache of modules is presented to the
+loader. When set on the profile level, applies to all layers that do not specifically override.</dd>
+<dt><code class="docutils literal"><span class="pre">compat</span></code> (default = <code class="docutils literal"><span class="pre">undefined</span></code>)</dt>
+<dd>Optional. If set to the value of &#8220;1.6&#8221;, then all layer member modules are immediately <code class="docutils literal"><span class="pre">require``d.</span> <span class="pre">For</span> <span class="pre">example,</span> <span class="pre">if</span>
+<span class="pre">the</span> <span class="pre">cache</span> <span class="pre">presented</span> <span class="pre">with</span> <span class="pre">a</span> <span class="pre">layer</span> <span class="pre">includes</span> <span class="pre">the</span> <span class="pre">modules</span> <span class="pre">&quot;my/a&quot;,</span> <span class="pre">&quot;my/b&quot;,</span> <span class="pre">and</span> <span class="pre">&quot;my/c&quot;,</span> <span class="pre">then</span> <span class="pre">setting</span> <span class="pre">``compat</span></code> to &#8220;1.6&#8221;
+results in the statement <code class="docutils literal"><span class="pre">require([&quot;my/a&quot;,</span> <span class="pre">&quot;my/b&quot;,</span> <span class="pre">&quot;my/c&quot;])</span></code> to be inserted in the layer resource immediately
+following the cache. When set on the profile level, applies to all layers that do not specifically override.</dd>
+</dl>
+<p><code class="docutils literal"><span class="pre">localeList</span></code> (default = <code class="docutils literal"><span class="pre">undefined</span></code>)</p>
+<blockquote>
+<div>Optional. A comma-separated list of locale identifiers (a string) that specifies the list of locales to output as
+flattened bundles for each layer that includes NLS bundle dependencies.</div></blockquote>
+<p>Layer items are JavaScript objects with the following properties</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">include</span></code> (default = <code class="docutils literal"><span class="pre">[]</span></code>)</dt>
+<dd>The set of module identifiers that, together with their dependency graphs, should be included in the layer, exclusive
+of the exclude module graph (see next).</dd>
+<dt><code class="docutils literal"><span class="pre">exclude</span></code> (default = <code class="docutils literal"><span class="pre">[]</span></code>)</dt>
+<dd>The set of module identifiers that, together with their dependency graphs, should be excluded from the layer after all
+include dependencies are computed.</dd>
+<dt><code class="docutils literal"><span class="pre">discard</span></code> (default = <code class="docutils literal"><span class="pre">undefined</span></code>)</dt>
+<dd>If truthy, then the layer is computed and memorized but not written. This feature is used to construct a layer that is
+used in the <code class="docutils literal"><span class="pre">include</span></code> or <code class="docutils literal"><span class="pre">exclude</span></code> arrays of other layers.</dd>
+<dt><code class="docutils literal"><span class="pre">boot</span></code> (default = <code class="docutils literal"><span class="pre">undefined</span></code>)</dt>
+<dd>If truthy, then the layer is computed and memorized but not written. The computed layer is used by the writeDojo
+transform to write the layer along with the dojo loader to form a boot layer.</dd>
+<dt><code class="docutils literal"><span class="pre">copyright</span></code> (default = &#8220;&#8221;)</dt>
+<dd>If a string that gives an existing filename, the contents of the named file is used as copyright text for the
+module. Relative filenames are computed with respect to the path that holds the profile resource that contains the
+layer item. If a string that does not give an existing filename, the string it interpreted as an explicit copyright
+message. If no string value is given, then no copyright text is output.</dd>
+<dt><code class="docutils literal"><span class="pre">includeLocales</span></code></dt>
+<dd>An array of locales that will be included in the layer. The NLS bundle for each listed locale will be included in the layer, so that these locales will not need a separate request(s) to access their NLS bundle. Note, that using included locales adds extra bytes to the layer, and users that don&#8217;t match the included locales will be loading unnecessary bundles. Using this option is best when the majority of users will match a particular locale (or small set of locales).</dd>
+<dt><code class="docutils literal"><span class="pre">noref</span></code> (default = <code class="docutils literal"><span class="pre">undefined</span></code>)</dt>
+<dd>Optional. If present and truthy, instructs the loader to consume the cache of layer member modules immediately;
+otherwise, the cache is not consumed until the layer module is defined or another cache of modules is presented to the
+loader.</dd>
+<dt><code class="docutils literal"><span class="pre">compat</span></code> (default = <code class="docutils literal"><span class="pre">undefined</span></code>)</dt>
+<dd>Optional. If set to the value of &#8220;1.6&#8221;, then all layer member modules are immediately <code class="docutils literal"><span class="pre">require``d.</span> <span class="pre">For</span> <span class="pre">example,</span> <span class="pre">if</span>
+<span class="pre">the</span> <span class="pre">cache</span> <span class="pre">presented</span> <span class="pre">with</span> <span class="pre">a</span> <span class="pre">layer</span> <span class="pre">includes</span> <span class="pre">the</span> <span class="pre">modules</span> <span class="pre">&quot;my/a&quot;,</span> <span class="pre">&quot;my/b&quot;,</span> <span class="pre">and</span> <span class="pre">&quot;my/c&quot;,</span> <span class="pre">then</span> <span class="pre">setting</span> <span class="pre">``compat</span></code> to &#8220;1.6&#8221;
+results in the statement <code class="docutils literal"><span class="pre">require([&quot;my/a&quot;,</span> <span class="pre">&quot;my/b&quot;,</span> <span class="pre">&quot;my/c&quot;])</span></code> to be inserted in the layer resource immediately
+following the cache.</dd>
+</dl>
+</div>
+<div class="section" id="source-location">
+<h2><a class="toc-backref" href="#id6">Source Location</a><a class="headerlink" href="#source-location" title="Permalink to this headline">¶</a></h2>
+<p>util/build/transforms/writeAmd.js</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">Build Transform writeAmd</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#backcompat">Backcompat</a><ul>
+<li><a class="reference internal" href="#the-insertabsmids-switch">The insertAbsMids Switch</a></li>
+<li><a class="reference internal" href="#the-noref-switch">The noref Switch</a></li>
+<li><a class="reference internal" href="#the-compat-switch">The compat Switch</a></li>
+<li><a class="reference internal" href="#nls-bundles">NLS Bundles</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#profile-knobs">Profile Knobs</a></li>
+<li><a class="reference internal" href="#source-location">Source Location</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

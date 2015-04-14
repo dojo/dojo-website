@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/fx/easing &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-fx-easing">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/fx/easing</a><a class="headerlink" href="#dojo-fx-easing" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Peter Higgins, Nikolai Onken, Marcus Reimann, Jared Jurkiewicz</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Developers:</th><td class="field-body">Bryan Forbes, Peter Higgins, Eugene Lazutkin, Bill Keese, Adam Peller, Alex Russell, Dylan Schiemann,
+sjmiles</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V1.2</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-fx-easing" id="id2">dojo/fx/easing</a><ul>
+<li><a class="reference internal" href="#usage" id="id3">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id4">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id5">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Have you ever wanted a fade-out, fade-in, wipe-in, etc. effect to play in a a non-linear way? For example, wouldn&#8217;t it
+be cool to have a fade in accelerate the rate at which the node appears the further along in the animation duration it
+is? This is handled through the <code class="docutils literal"><span class="pre">easing</span></code> property of the arguments passed to the animation creation functions.</p>
+<p>Instead of having to write the easing function yourself, Dojo provides a collection of easing functions to use as this
+parameter to get a variety of effects.</p>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id3">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The module returns an objection that contains the various easing functions, that then can be used in an animation:</p>
+<div class="section" id="easing-functions">
+<h3>Easing Functions<a class="headerlink" href="#easing-functions" title="Permalink to this headline">¶</a></h3>
+<p>All functions follow a simple naming convention of &#8220;ease type&#8221; plus &#8220;when&#8221;. If the name of the function ends in Out, the
+easing described appears towards the end of the animation. &#8220;In&#8221; means during the beginning, and InOut means both ranges
+of the Animation will applied, both beginning and end.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Function</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>linear</td>
+<td>The most basic easing function (and the default for animations), apply the effect linearly over time.</td>
+</tr>
+<tr class="row-odd"><td>quadIn</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 2 over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>quadOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 2 over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>quadInOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 2 over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>cubicIn</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 3 over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>cubicOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 3 over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>cubicInOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 3 over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>quartIn</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 4 over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>quartOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 4 over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>quartInOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 4 over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>quintIn</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 5 over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>quintOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 5 over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>quintInOut</td>
+<td><p class="first">A function to apply the rate of the effect by a power of 5 over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>sineIn</td>
+<td><p class="first">A function to apply the rate of the effect by the sine function over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>sineOut</td>
+<td><p class="first">A function to apply the rate of the effect by the sine function over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>sineInOut</td>
+<td><p class="first">A function to apply the rate of the effect by the sine function over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>expoIn</td>
+<td><p class="first">A function to apply the rate of the effect exponentially over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>expoOut</td>
+<td><p class="first">A function to apply the rate of the effect exponentially over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>expoInOut</td>
+<td><p class="first">A function to apply the rate of the effect exponentially over time at the beginning and end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>circIn</td>
+<td><p class="first">A function to apply the rate of the effect circularly over time at the beginning.</p>
+<p class="last"><em>Starts slow and gets faster.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>circOut</td>
+<td><p class="first">A function to apply the rate of the effect circularly over time at the end.</p>
+<p class="last"><em>Starts fast and gets slower.</em></p>
+</td>
+</tr>
+<tr class="row-odd"><td>circInOut</td>
+<td><p class="first">A function to apply the rate of the effect circularly over time at the beginning and the end.</p>
+<p class="last"><em>Starts slow, gets faster and then slows again.</em></p>
+</td>
+</tr>
+<tr class="row-even"><td>backIn</td>
+<td>A function where the rate of change starts away from the target, but quickly accelerates towards it.</td>
+</tr>
+<tr class="row-odd"><td>backOut</td>
+<td>A function where the end value actually goes past the end, then pops back to the end value.</td>
+</tr>
+<tr class="row-even"><td>backInOut</td>
+<td>A function that applies both backIn and backOut to the animation behavior.</td>
+</tr>
+<tr class="row-odd"><td>elasticIn</td>
+<td>A function where the rate of change snaps elastically from the start value.</td>
+</tr>
+<tr class="row-even"><td>elasticOut</td>
+<td>A function where the rate of change snaps elastically around the end value.</td>
+</tr>
+<tr class="row-odd"><td>elasticInOut</td>
+<td>A function that elastically snaps around the value, near the beginning and end of the Animation.</td>
+</tr>
+<tr class="row-even"><td>bounceIn</td>
+<td>A function where the rate of change &#8220;bounces&#8221; near the beginning value</td>
+</tr>
+<tr class="row-odd"><td>bounceOut</td>
+<td>A function where the rate of change &#8220;bounces&#8221; near the ending value</td>
+</tr>
+<tr class="row-even"><td>bounceInOut</td>
+<td>A function that &#8220;bounces&#8221; near the beginning and end of the animation</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="example-playing-with-easing">
+<h3>Example: Playing with Easing<a class="headerlink" href="#example-playing-with-easing" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id5">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../_base/fx.html#dojo-base-fx-fadein"><span>dojo/_base/fx::fadeIn()</span></a> - Examples show using the <code class="docutils literal"><span class="pre">expoOut</span></code> easing.</li>
+<li><a class="reference internal" href="../_base/fx.html#dojo-base-fx-fadeout"><span>dojo/_base/fx::fadeOut()</span></a> - Examples show using the <code class="docutils literal"><span class="pre">expoOut</span></code> easing.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo/fx/easing</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#easing-functions">Easing Functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#example-playing-with-easing">Example: Playing with Easing</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

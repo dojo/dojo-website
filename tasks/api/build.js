@@ -17,6 +17,7 @@ var fs = require('fs'),
 		}
 	});
 
+
 // macro calls
 // fails with static generation - todo: FOR SOME REASON I NEED TO USE A GLOBAL so it works???
 convertType = generate.convertType;

@@ -1,0 +1,567 @@
+.. _releasenotes/1.7:
+
+======================
+Dojo 1.7 Release Notes
+======================
+
+.. contents ::
+   :depth: 3
+
+Documentation
+=============
+
+Considerable effort has been put into making Dojo 1.7's documentation better than ever.
+
+  `Reference Guide (1.7) <http://livedocs.dojotoolkit.org/>`_
+
+  `API Docs (1.7 Draft) <http://staging.dojotoolkit.org/api/>`_
+
+Browser support
+===============
+
+The following browsers have been tested and are supported in this release. If a browser version is not listed as supported, it still may work, especially on browsers with rapid release cycles (Chrome, Firefox). Future minor releases of dojo might include fixes to support future releases of these browsers, but we cannot guarantee it.
+
+Desktop
+
+ * Firefox 3.6-8
+ * Safari 5.0-5.1
+ * Chrome 13-15
+ * IE 6-9
+ * Opera 10.50-11.50
+
+Mobile (dojox/mobile)
+
+ * iOS 4.x, 5.0 (Mobile Safari) (including all Dijit widgets except Editor, Dialog)
+ * Android 2.2, 2.3, 3.1
+ * Blackberry 6
+ * Mobile compatibility on desktop browsers: IE 8-9, Firefox 3.6-7, Safari 5.0-5.1, Chrome 13-15
+
+  TODO: Link to page with specific vendor device models tested on
+
+Dojo Base
+=========
+
+AMD
+---
+Dojo now fully supports asynchronous loading of AMD modules. Asynchronous loading mode can be entered by setting the dojo config of "async" to true:
+
+   .. html ::
+
+      <script data-dojo-config="async: true" src="dojo.js"></script>
+
+Note that in async mode many modules which were implicitly loaded before now need to be explicitly loaded.   Be sure to list all the modules you are directly using in the require() list (including ``dojo/parser`` when using ``parseOnLoad``).   For example:
+
+  .. html ::
+
+           <script src="/dojo/dojo.js"
+              data-dojo-config="parseOnLoad: true, async: true"></script>
+    
+          <script>
+             require([
+                 "dojo/dom",   // needed for dojo.byId
+                 "dijit/registry",  // needed for dijit.byId
+                 "dojo/parser",     // needed for parseOnLoad to run
+                 ...
+             ], function(dom, registry, parser){
+                  // callback when above modules finish loading
+                 function update(){
+                     var viewNode = dom.byId("view1");
+                     var view1 = registry.byId("view1");
+                     view1.domNode.innerHTML = "...";
+                 }
+             });
+    
+           </script>
+
+Note that many core and dijit modules have been converted to use minimal dependencies in 1.7, to support lighter footprint when used in conjunction with async loading, and AMD module format and async loading is now a fully supported feature in 1.7; however, as part of this effort, exported objects returned from dojo core modules should be treated as subject to change.  Work on tightening exported module return values/APIs will continue through 1.8.
+
+Limitations
+```````````
+
+Some existing Dojo <1.7 modules were designed such that they only work in sync loading mode.  These modules continue to be supported in synchronous mode using the compatibility support but are not supported in asynchronous loading mode.  The community is looking at potential replacements in the 2.0 time frame:
+
+**DTL (dojox.dtl - Django Templating):** While the dojox.dtl engine implementation is written with the assumption of a synchronous loader, the module has been updated so that it is compatible with the amd loader async mode, provided all tags and filters libraries are explicitly required. This restriction applies to both user-defined libraries and the dojox.dtl default ones defined (in dojox/dtl/tag and dojox/dtl/filter).
+
+  The following table lists the default tag libraries and their corresponding tags:
+
+  +----------------------+---------------------------------------------------------------------------+
+  | Tag Library          | Tags                                                                      |
+  +======================+===========================================================================+
+  | dojox/dtl/tag/date   | now                                                                       |
+  +----------------------+---------------------------------------------------------------------------+
+  | dojox/dtl/tag/logic  | if, for, ifequal, ifnotequal                                              |
+  +----------------------+---------------------------------------------------------------------------+
+  | dojox/dtl/tag/loader | extends, block, include, load, ssi                                        |
+  +----------------------+---------------------------------------------------------------------------+
+  | dojox/dtl/tag/misc   | comment, debug, filter, firstof, spaceless, templatetag, widthratio, with |
+  +----------------------+---------------------------------------------------------------------------+
+  | dojox/dtl/tag/loop   | cycle, ifchanged, regroup                                                 |
+  +----------------------+---------------------------------------------------------------------------+
+
+  For example, if a template uses the "{% for" tag, a 'require("dojox/dtl/tag/logic")' must be done by the application so that the logic.js tag library (where 'for' is defined) is included.
+
+  The following table lists the default filter libraries and their corresponding filters
+
+  +------------------------------+---------------------------------------------------------------------------------------------------+
+  | Filter Library               | Filters                                                                                           |
+  +==============================+===================================================================================================+
+  | dojox/dtl/filter/dates       | date, time, timesince, timeuntil                                                                  |
+  +------------------------------+---------------------------------------------------------------------------------------------------+
+  | dojox/dtl/filter/htmlstrings | linebreaks, linebreaksbr, removetags, striptags                                                   |
+  +------------------------------+---------------------------------------------------------------------------------------------------+
+  | dojox/dtl/filter/integers    | add, get_digit                                                                                    |
+  +------------------------------+---------------------------------------------------------------------------------------------------+
+  | dojox/dtl/filter/lists       | dictsort, dictsortreversed, first, join, length, length_is, random, slice, unordered_list         |
+  +------------------------------+---------------------------------------------------------------------------------------------------+
+  | dojox/dtl/filter/logic       | default, default_if_none, divisibleby, yesno                                                      |
+  +------------------------------+---------------------------------------------------------------------------------------------------+
+  | dojox/dtl/filter/misc        | filesizeformat, pluralize, phone2numeric, pprint                                                  |
+  +------------------------------+---------------------------------------------------------------------------------------------------+
+  | dojox/dtl/filter/strings     | addslashes, capfirst, center, cut, fix_ampersands, floatformat, iriencode, linenumbers,           |
+  |                              | ljust, lower, make_list, rjust, slugify, stringformat, title, truncatewords, truncatewords_html,  |
+  |                              | upper, urlencode, urlize, urlizetrunc, wordcount, wordwrap                                        |
+  +------------------------------+---------------------------------------------------------------------------------------------------+
+
+**Note** Also because of the way the dependencies are done for Dijit, if you do a build of code that includes a legacy layer that includes Dijits, you must explressly include ``dijit._base``.  For example, your layer should look something like this:
+
+.. js ::
+
+  layers: [
+    {
+      name: "../somelayer/layer.js",
+      dependencies: [
+        "simpletest.layer",
+        "dijit._base"
+      ]
+    }
+  ],
+
+has.js
+------
+Dojo 1.7 introduces support for the :ref:`has() feature detection api <dojo/has>`.  Most Dojo core and dijit modules have been converted to use feature detection.  This work will continue for 1.8.
+
+dojo.connect
+------------
+This has been refactored to use the new dojo/on module for event handling. See `dojo/on`_ below for more information.
+
+Dojo Core
+=========
+
+dojo/on
+-------
+
+This new module provides a new event handling system with support for a number of new features including:
+
+ - event delegation - Event types can include selectors to specify targets like on(list, "li:click", onListItemClickHandler);
+ - extension events - Custom event types can be used (and created). New dojox.gesture.* implement extension events.
+ - pausable events - Event handling can be paused with the on.pausable function.
+ - execute-once events - Listeners can be set to fire only once with on.once.
+ - emitting events - Native style events can be dispatched with on.emit(target, "click", event);
+ - self-contained handles - Objects returned on() calls contain remove() method to directly stop listening to an event.
+ - touch event normalization - Touch events are normalized across Android, iOS, etc.
+ - has()-based feature detection - This makes possible to create browser specific builds that exclude unneeded features (like IE normalization)
+
+This also sheds some of the legacy keypress event handling code (best practice is to use keydown instead), and reduces code size.
+
+This API is planned to replace the existing dojo.connect API in Dojo 2.0. The arguments passed to event handlers for non-DOM events and the event names used for non-DOM events are expected to change in Dojo 2.0, so Dojo 1.x applications that connect to non-DOM events should not necessarily migrate existing code to dojo/on if it is being done in an attempt to be future-proof.
+
+dojo/query
+----------
+This new module provides access to the DOM querying functionality (like dojo.query). This module can also be loaded with alternate selector engines like Sizzle, Slick, or the new Dojo lite query selector engine or with minimum CSS compliance levels for auto selector engine selection. In asynchronous mode (see new Dojo config settings), when ``dojo/main`` is not loaded, ``dojo/query`` will load the lite engine to use native browser querySelectAll, and only load the full acme selector engine if needed. dojo/query works with the new has() branching functionality to make it easy to create browser specific builds with the minimal selector engine needed for the browser.
+
+dojo/data/ObjectStore
+---------------------
+This module has been updated to broadcast notifications originating from the underlying object store if that store is "Observable". If the underlying object store provides an observe() method on results (usually be wrapping with dojo.store.Observable), than the dojo/data/ObjectStore wrapper can listen to changes in the object store and send out dojo.data notification events.
+
+
+Parser
+------
+The parser has been enhanced so you can specify browser native attributes just like native tags, but specify other attributes in data-dojo-props, for example:
+
+   .. html ::
+
+       <input data-dojo-type="dijit.form.TextBox" name="dept"
+            data-dojo-props="scrollOnFocus: true"/>
+
+The parser also supports the ability to specify dojo.on and object.watch declaratively by adding the support for script ``type="dojo/on"`` and ``type="dojo/watch"``.
+
+An example of ``type="dojo/on"``:
+
+   .. html ::
+
+       <button data-dojo-type="dijit.form.Button">Click Me!
+         <script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
+           console.log("I was clicked!");
+         </script>
+       </button>
+
+An example of ``type="dojo/watch"`` (building on ``dojo/on``):
+
+   .. html ::
+
+       <button data-dojo-type="dijit.form.Button">Click Me!
+         <script type="dojo/on" data-dojo-event="click" data-dojo-args="e">
+           dijit.byId("textBox1").set("value", "New Value!");
+         </script>
+       </button>
+       <div data-dojo-type="dijit.form.TextBox" id="textBox1"
+            data-dojo-props="value: 'Old Value'">
+         <script type="dojo/watch" data-dojo-prop="value" data-dojo-args="prop,oldValue,newValue">
+           console.log("Prop '"+prop+"' was '"+oldValue+"' and is now '"+newValue+"'");
+         </script>
+       </div>
+
+**Note** there is no support for deprecated attribute ``prop`` as an attribute of the ``type="dojo/watch"`` script tag.  The parser only recognizes the attribute ``data-dojo-prop``.
+
+**Reminder:** when operating in asynchronous mode, you need to explicitly load ``dojo/parser`` in order for ``parseOnLoad: true`` to operate.  (In non-async mode, it will be required automatically with a deprecation warning.)  Technically, ``dojo/parser`` was never automatically loaded, but prior to 1.7, it would be transitively loaded in many cases, due to it being loaded by ``dijit/_Templated``, which was relied upon by many widgets.
+
+dojo/touch
+----------
+
+This module provides an unified set of touch events - "press | move | release | cancel", which can run well across a wide range of devices(including desktops).
+
+The rationale is very simple - "press | move | release | cancel" are mapped to:
+
+ - "touchstart | touchmove | touchend | touchcancel" on touch devices(`W3C Touch Events Specification <http://www.w3.org/TR/touch-events/>`_)
+
+ - "mousedown | mousemove | mouseup | mouseleave" on desktops.
+
+So by using dojo/touch, we don't need to worry about appropriate native events when switching running platforms
+
+dojo/touch is based on :ref:`dojo/on <dojo/on>` and the following sample usage can work well across desktop and touch devices(Android 2.3/2.3 and iOS3+ for 1.7):
+
+   .. js ::
+      
+      // listen to 'touchstart' on touch devices and 'mousedown' on desktops
+      dojo.touch.press(node, function(e){});
+
+Please refer to :ref:`dojo/touch doc <dojo/touch>` for more details.
+
+Dijit
+=====
+
+Dijit widgets should now "just work" on supported mobile devices, with the exception of the Editor widget.  This is intended to allow web apps built for desktop browsers to continue to be functional when browsed on mobile devices.
+
+For Dialog your app must set draggable=false in order for the [x] close icon (in the Dialog's upper right hand corner) to work.   This limitation will be removed in a future release.
+
+_WidgetBase
+-----------
+getParent() method added to _WidgetBase.   It will find the parent of any widget, regardless of whether or not the parent has the isContainer flag set.   The isContainer flag is no longer being used.
+
+_TemplatedMixin, _WidgetsInTemplateMixin
+----------------------------------------
+A new mixin called _TemplatedMixin has been added.  It's lighter weight than _Templated and supports templated widgets which *don't* have widgets in templates.  New widgets should be built using _TemplatedMixin.   Additionally, widgets that need the widgetsInTemplate functionality should also mixin _WidgetsInTemplateMixin.
+
+_Templated's functionality and API haven't changed.
+
+_setXXXAttr
+-----------
+Previously _setXXXAttr was a function to set a widget attribute.   It can still be a function, but now it can also be an object like one of the values from attributeMap.
+
+For example, this will copy the widget's tabIndex attribute to this.focusNode.tabIndex
+
+   .. js ::
+
+       _setTabIndexAttr: "focusNode"
+
+And with the code below, myWidget.set("title", "hello world") will set this.titleNode.innerHTML to "hello world":
+
+   .. js ::
+
+       __setTitleAttr: { node: "titleNode", type: "innerHTML" }
+
+
+This replaces attributeMap, which is deprecated and will be removed in 2.0.
+
+
+dijit/focus, dijit/place, and dijit/popup
+-----------------------------------------
+The focus, place, and popup modules in dijit/_base have been promoted to dijit/, so they can be included explicitly by applications that don't want to include all of dijit/_base.
+
+There are a few API changes in the top level modules compared to the ones in dijit/_base (although for backwards compatibility the modules in dijit/_base maintain their old API):
+
+  - Popup.around() (analogous to dijit.popup.placeAroundElement()) takes a position parameter like ["before", "after"] rather than a set of tuples like {BL: "TL", ...}.   In other words, popup.around() replaces dijit.popup.placeAroundElement() but instead of dijit.getPopupAroundAlignment(xyz), just pass in xzy directly.
+  - dijit/focus doesn't include the selection related code, just focus related code
+  - dijit/focus provides watch() and on() methods to monitor the focused node and active widgets, rather than publishing topics focusNode, widgetBlur, and widgetFocus
+  - some methods in dijit/_base/popup used to take DOMNodes or widgets as a parameter; now they just take a widget
+
+Also note that the new dijit/popup module is only available through the new AMD API, ex:
+
+   .. js ::
+
+      require(["dijit/popup"], function(popup){ popup.open(...); });
+
+ 
+CalendarLite
+------------
+dijit.CalendarLite is a new widget aimed towards mobile use.   It's like Calendar but doesn't have keyboard support or a drop down to select the month.
+
+ComboBox, FilteringSelect
+-------------------------
+These classes have been enhanced to accept a :ref:`dojo.store <dojo/store>` (the new store API) for the store parameter.
+The old :ref:`dojo.data API <dojo/data/api/Read>` is still supported.
+
+DojoX
+=====
+
+Charting
+--------
+  - New zoom, pan, data indicator interactions have been committed in the action2d package. They allow users to interact with the chart using either mouse or touch gestures.
+  - Various improvement to improve performances on particular on mobile devices (new enableCache parameter on most plot type to allow caching and reuse of gfx shapes)
+  - use of AMD module format
+  - Bidi text support has been added through two BidiSupport classes (one for dojox.charting, one for dojox.charting.widget). This classes need  to be required by your application in order for Bidi text support to be enabled.
+
+Gauges
+-------
+  - The gauges that were previously located in the dojox.widget namespace have been moved to dojox.gauges.
+  - Several new indicators have been added to create your custom gauges, for example a text indicator to draw the value of the gauge as a text.
+  - The circular gauge can now be created clockwise or counter-clockwise.
+  - The layout of labels in the circular scale are improved.
+  - Gauges now support touch interaction on mobile devices.
+  - dojox.gauges now uses the AMD module format
+  - Three new pre-built gauges with a glossy look are now available : The GlossyHorizontalGauge, the GlossyCircularGauge and the GlossySemiCircularGauge.
+
+GeoCharting Maps
+----------------
+  - Various improvements of the dojox.geo.charting module like tooltip management, color change animation when changing data series.
+  - New dataStore structure, new data binding between the map element and the dataStore element.
+  - Allow interactive zoom/pan of the map using either mouse or touch gestures, through the installation of dedicated interactor classes.
+  - New Map Dijit component wrapping the non-dijit dojox.geo.charting Map component, for easier integration.
+  - Use of AMD module format.
+
+Gfx
+---
+  - Shapes are now identified via an associated unique id (Shape.getUID()). Coupled to this, the new dojox.gfx.shape.byId() function returns the shape associated with a given id.
+  - Add input events support to canvas renderer. It is enabled by default and can be disabled by setting the dojoConfig 'canvasEvents' flag to 'false'.
+  - The gfx shape targeted by a mouse event can be retrieved from the event itself by means of the 'gfxTarget' event property:
+
+   .. js ::
+
+      group.connect("onmousedown", function(evt){ var s = evt.gfxTarget; ... });
+
+
+Gesture
+------------
+
+Based on :ref:`dojo/touch <dojo/touch>` and :ref:`dojo/on <dojo/on>`, this new module provides a mechanism to write gestures that can run well on difference devices including desktop (for single gestures) and various touch devices.
+
+dojox/gesture/Base
+
+An abstract parental class for various gesture implementations, it's mainly responsible for:
+
+ - Binding on() listener handlers for supported gesture events, e.g. tap, taphold, doubletap
+ - Monitoring underneath events and process different phases - 'press'|'move'|'release'|'cancel'
+ - Firing and bubbling gesture events with on() API
+
+A gesture implementation only needs to extend this and overwrite appropriate phase handlers - press() | move() | release() | cancel() for recognizing and firing gestures
+ 
+dojox/gesture/tap(single touch only)
+
+ - Provide common tap gestures including tap, tap.hold and tap.doubletap
+ - Customizable settings e.g. threshold for tap.hold, effective radius for a valid tap.doubletap
+ 
+dojox/gesture/swipe(single touch only)
+
+ - Provide common swipe gestures including swipe, swipe.end
+
+Also the `touch & gesture demo <http://demos.dojotoolkit.org/demos/touch/demo.html>`_ shows how dijit/form/HorizontalSlider and dojo/dnd are now running well on iOS4+ with the new dojo/touch and dojox/gesture. Besides a tap gesture, the demo also shows how easy it is to write a new rotate gesture with multiple touch support.
+ 
+Please refer to :ref:`dojox/gesture doc <dojox/gesture>` for more details.
+
+
+Grid
+----
+DataGrid/EnhancedGrid/TreeGrid/LazyTreeGrid
+
+- Numerous issues have been fixed for 1.7, please refer to the `defect list <http://trac.dojotoolkit.org/query?status=closed&component=DojoX+Grid&order=priority&milestone=1.7&col=id&col=summary&col=type&col=priority>`_ for more details.
+ 
+ 
+Next generation of Grid
+
+- Incubation projects `dgrid <https://github.com/SitePen/dgrid>`_  and `gridx <https://github.com/evanhw/gridx>`_ are also in progress and working closely for the next generation of Grid.
+
+
+Mobile
+------
+
+Dojo Mobile is now considered a first class Mobile library, fully supporting lightweight (baseless) AMD loading and the new Dojo Build System. A new reference guide has been written for the Dojo Mobile project, and full API docs are now available.
+
+  :ref:`Dojo Mobile Reference Guide <dojox/mobile>`
+
+ - BlackBerry OS6 theme has been added.  For the full list of supported mobile devices & OS' see above.
+ - dojox.mobile.deviceTheme is a device theme loader, which detects the mobile device being used and automatically loads an appropriate theme
+ - New SpinWheel widget allows you to select values from spin wheels. Two variations, SpinWheelDatePicker and SpinWheelTimePicker, are also available.
+ - New Carousel widget shows a list of images from which you can select an item.
+ - New RoundRectDataList and EdgeToEdgeDataList widgets are data-driven versions of the RoundRectList and EdgeToEdgeList.
+ - New PageIndicator widget shows the current page of swap views with small dots. It can be used with SwapView or Carousel.
+ - Several new transition animations have been added: Dissolve, Flip2, Cover, Reveal, Slide Vertical, Cover Vertical, Reveal Vertical, Swirl, Zoom In/Out, and Scale In/Out.
+ - The FlippableView widget has been renamed to SwapView.
+ - dojox.mobile now uses the AMD module format
+ - TextBox widget moved from mobile/app/ to mobile/.
+ - New Tooltip widget to popup a container for either simple text or another widget.
+ - New Overlay widget to slide up form the bottom another input widget, and then slides down when done.
+ - New Opener widget adds runtime screen-size detection and uses Tooltip for the larger mobile devices, and Overlay on small-screen devices.
+ - New ComboBox widget (still experimental) that combines searchable text input similar to dijit.form.ComboBox.
+ - New ExpandingTextarea widget grows and shrinks vertically as needed to accommodate the end-user text.
+ - New Slider widget to enable users to easily adjust a value with touch/dragging gestures.
+ - New HTML form input widget wrappers (Textarea, CheckBox, RadioButton) to allow simple form constructs to be used with various dijit container/dialog widgets.
+
+ Limitations:
+
+ - The transition animations use the capability of the CSS 3 transition or the CSS 3 animation, and their behavior highly depends on device and browser. Thus some transition animations do not work smoothly on Android and BlackBerry devices.
+ - ScrollableView often freezes on HTC Android devices, such as HTC Evo, HTC Desire, etc. The problem occurs especially when you perform another scroll operation while the screen is still scrolling. This is not a dojo-specific issue because other JavaScript toolkits have the same problem. There are no workarounds available at present.
+ - Sometimes touching an html form control, such as an input field or a button, placed in ScrollableView on Android devices cannot set focus to it. Sometimes it is successful if you try a couple of times.
+
+MVC
+---
+  dojox.mvc is a new experimental dojox project about separation of MVC concerns on the client, thereby easing the development of data-rich applications using Dojo (enterprise apps, IT apps, CRUD scenarios, patterns like master-detail and others). This first release contains:
+
+  - A first-class data model which can talk to data stores
+  - Data binding mixin that allows widgets or arbitrary view components to bind to locations in above data model
+  - MVC containers like group (for hierarchical data) and repeat (for repeating data i.e. arrays)
+  - MVC widgets such as data-bound output and data-driven simple UI generator
+  - Samples for number of data-rich patterns that can be built using the above
+
+OpenLayers Maps
+---------------
+  - New dojox.geo.openlayers mapping package based on the OpenLayers library (See http://www.openlayers.org/ ).
+  - Allow user to add georeferenced Gfx shapes on a background map.
+  - Allow user to place georeferenced widgets on the map.
+  - Use of AMD module format.
+
+Util
+====
+
+Build Tool Updates
+------------------
+
+The Build Tools have been completely reimplemented in Dojo 1.7, to take full advantage of AMD and has() and optionally Node.js and Closure Compiler, while still being fully backward compatible with the old build tools.  A complete reference guide has being prepared here with all the information:
+
+  :ref:`Build Tool Reference Guide (1.7 Draft) <build/buildSystem>`
+
+As part of this reimplementation, two important changes have been made:
+
+1. Due to increased flexibility in the new loader, the "clean" action is now a no-op in order to avoid any
+   unintentional file deletion. Cleaning the destination directory before a build must now be done manually.
+2. The ``discard`` option has been replaced with an ``exclude`` option. Instead of creating a layer with the
+   ``discard`` flag, use ``exclude`` on your existing layers to explicitly exclude modules from them. See
+   :ref:`the writeAmd documentation <build/transforms/writeAmd>` for details on these options.
+
+Migration
+=========
+
+Loader/Builder related
+----------------------
+
+<script>
+````````
+Previously you may have been loading modules or layers via script tags, for example:
+
+   .. html ::
+
+      <script src="/mysite/app/MyWidget.js">
+
+Although this idiom will still work with the standard, built distribution, it is deprecated. Further, it no longer
+works with unbuilt versions of the toolkit (e.g. the source distribution), and will result in the program failing to
+load and give "multipleDefine" errors in the console. Instead you must load it through ``dojo.require()``:
+
+   .. js ::
+
+      dojo.require("app.MyWidget");
+
+Or the new AMD require() API.
+
+
+Global variables
+````````````````
+Prior to v1.7, it was possible to define global functions within a module by writing something like this:
+
+   .. html ::
+
+      dojo.provide("my.module");
+      function myOnClick(){ ... }
+
+On some browsers, in some cases, ``myOnClick()`` would be defined in the global space.
+
+Starting with v1.7, *all* modules are evaluated within a closing function which results in the definition above residing within
+the closure--not the global space. If you really want to add a function in the global space from within a module, then use ``dojo.global``:
+
+   .. html ::
+
+      dojo.provide("my.module");
+      dojo.global.myOnClick = function(){ ... }
+
+Considerations for Custom Builds
+````````````````````````````````
+
+selectorEngine
+''''''''''''''
+
+Note that the acme query engine is no longer automatically built into ``dojo.js`` by default, which will typically
+result in an extra network request for ``dojo/selector/acme.js`` when ``dojo/query`` or Dojo base is loaded.
+To include acme in ``dojo.js``, specify ``selectorEngine: "acme"`` in the build profile or ``selectorEngine=acme``
+on the command line.  You can see an example of this in ``standard.profile.js`` in Dojo 1.7.1.
+
+For more information on selector engines, see the :ref:`dojo/query documentation <dojo/query>`.
+
+dijit/_base
+'''''''''''
+
+Previously, ``dijit/_base`` was automatically pulled in as a dependency of ``dijit/_Widget``.  As of 1.7, it is now
+conditionally pulled in only if the legacy loader is in use, for backwards-compatibility.  However, due to this
+change, the builder no longer sees ``dijit/_base`` as a dependency of ``dijit/_Widget``, and does not pull it in as
+a result.
+
+This may lead to additional network requests observed in applications with custom layers affected by this change.
+To resolve this, add ``"dijit._base"`` as an explicit dependency of the layer.
+
+Cross-domain Usage with Local Legacy Modules
+````````````````````````````````````````````
+
+Dojo 1.7 currently has a limitation where it is unable to properly load local modules which use the legacy
+``dojo.require`` syntax alongside ``dojo.js`` from another domain.  Currently the only workarounds are to update
+the local modules to use AMD syntax, or download the Dojo Toolkit and run all modules from the same host.
+See `defect #14459 <http://bugs.dojotoolkit.org/ticket/14459>`_.
+
+debugAtAllCosts
+```````````````
+The debugAtAllCosts djConfig flag is no longer supported, and will be ignored.
+
+Possible workarounds for a particular app are:
+
+ * Convert the app to AMD and load with async:true, thereby using a standard AMD loader which script-injects everything.
+ * Do a build, which converts all legacy modules to AMD modules.
+
+Note: to do a true conversion that takes advantage of all of the features of AMD and removes things like dojo.getObject requires more work than the build app can do mechanically.
+
+Dojo Core
+---------
+
+HTML
+````
+- dojo._getBorderBox() has been removed, use dojo.position() instead
+- dojo._setOpacity() has been removed, use dojo.style(node, "opacity", ...) instead
+- dojo.hasClass crashes if passed a DomNode which is a Text node; application code should make sure it doesn't pass in text nodes.   (They don't have class settings anyway.)
+- The private dojo._setMarginBox() and dojo._setContentSize() have been removed, and replaced with public dojo.setMarginBox() and dojo.setContentSize() functions.   The new API's take a hash (like dojo.marginBox() and dojo.contentBox()), ex:   dojo.setMarginBox(node, {h: 50, w: 30}), rather than a list of arguments like the previous private functions, ex: dojo._setMarginBox(node, NaN, NaN, 50, 30).
+
+dojo.moduleUrl()
+````````````````
+dojo.moduleUrl() returns a string instead of an object.   It won't affect most apps, unless you are accessing the internal members, ex: dojo.moduleUrl(...).uri.
+
+Dijit
+-----
+- Many widgets which used to extend _Templated now extend _TemplatedMixin.   If you have custom widgets that extend standard widgets, and use widgetsInTemplate: true, you may need to also mixin dijit._WidgetsInTemplate
+
+- The dijit.Calendar template has been modified to have ${!dayCellsHtml} and ${!dateRowsHtml} variables for the M-F (days of week) row, and the 1-31 days-of-the-month cells.  Custom calendar templates should be updated to contain these variables rather than markup for those sections.  If custom versions of Calendar need to modify the structure of days-of-week or days-of-month cells, they can override the new Calendar attributes: dowTemplateString, dateTemplateString, and weekTemplateString.
+
+- For ComboBox/FilteringSelect, if you need to set the store after creation, be sure to use the set("store", myStore) API rather than just setting it directly (myCombo.store = myStore).    The latter will fail when myStore is an old dojo.data store rather than the new dojo.store API.
+
+- If you have specified a custom labelFunc() for a dijit.form.ComboBox/FilteringSelect, it will be passed an item and store of the new :ref:`dojo.store <dojo/store>` API.   This generally won't be a problem unless you are depending on internals of the item (ex: depending on item being a DOMNode rather than a javascript hash), or accessing the store as a global variable rather than as the second parameter to the labelFunc() callback.
+
+- If you want to allow for rich text saving with back/forward actions, you must add a text area to your page with the id==dijit._scopeName + "._editor.RichText.value" (typically "dijit._editor.RichText.value). For example:
+
+    .. js ::
+
+        <textarea id="dijit._editor.RichText.value" style="display:none;position:absolute;top:-100px;left:-100px;height:3px;width:3px;overflow:hidden;"></textarea>
+
+Previously this was done automatically in general (although it was always necessary for XD builds).

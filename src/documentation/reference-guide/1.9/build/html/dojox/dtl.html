@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.dtl &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="../dojo/index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojox-dtl">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.dtl</a><a class="headerlink" href="#dojox-dtl" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Neil Roberts</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">?&#8211;</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V?</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-dtl" id="id2">dojox.dtl</a><ul>
+<li><a class="reference internal" href="#overview" id="id3">Overview</a></li>
+<li><a class="reference internal" href="#markup-syntax" id="id4">Markup Syntax</a></li>
+<li><a class="reference internal" href="#template-constructors" id="id5">Template Constructors</a></li>
+<li><a class="reference internal" href="#using-the-template-constructor" id="id6">Using the Template Constructor</a></li>
+<li><a class="reference internal" href="#writing-a-widget" id="id7">Writing a Widget</a></li>
+<li><a class="reference internal" href="#differences-with-the-extends-tag" id="id8">Differences with the <code class="docutils literal"><span class="pre">extends</span></code> tag</a></li>
+<li><a class="reference internal" href="#differences-with-the-context-object" id="id9">Differences with the <code class="docutils literal"><span class="pre">Context</span></code> Object</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The Django Template Language (DTL) uses a system of templates that can be compiled
+once and rendered indefinitely afterward. Templates consist of simple tags
+and filters.</p>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id3">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Dojo&#8217;s implementation of DTL matches Django 0.9. Features from more recent releases of Django are currently
+being added. Along with the standard tags and filters, some new ones have been added
+that leverage the additional capabilities of the browser.</p>
+<p>Within Django, DTL is intended to only handle text.
+Dojo&#8217;s implementation is able to handle HTML which gets parsed to DOM instructions
+in addition to text. Actually, the text and DOM portions of dojox.dtl are two separate layers.
+The DOM layer sits on top of the text layer (base). It&#8217;s been implemented in such a way
+that you have little to fear when moving your code from Django to dojox.dtl.
+Your existing templates should work, and will benefit from the massive
+performance gain of being able to manipulate the DOM, rather than having to do
+clunky innerHTML swaps you would have to do with a text-only system. It also
+allows for new DOM-centric capabilities.</p>
+</div>
+<div class="section" id="markup-syntax">
+<h2><a class="toc-backref" href="#id4">Markup Syntax</a><a class="headerlink" href="#markup-syntax" title="Permalink to this headline">¶</a></h2>
+<p>Since Dojo implements markup just as it is in Django&#8217;s implementation, the best place to visit would be <a class="reference external" href="http://www.djangobook.com/en/2.0/chapter04/">The Django Book</a> or the <a class="reference external" href="http://docs.djangoproject.com/en/1.2/topics/templates/">Django Template Language Documentation</a>.</p>
+<p>But in case you are just itching to know what it looks like, it&#8217;s made up of some simple parts: <code class="docutils literal"><span class="pre">{%</span> <span class="pre">tags</span> <span class="pre">%}</span></code>, <code class="docutils literal"><span class="pre">{{</span> <span class="pre">variables</span> <span class="pre">}}</span></code>, <code class="docutils literal"><span class="pre">{{</span> <span class="pre">variables|filtered</span> <span class="pre">}}</span></code> and <code class="docutils literal"><span class="pre">{{</span> <span class="pre">variables|more:&quot;advanced&quot;|filtering</span> <span class="pre">}}</span></code>. Sometimes tags have groupings of tags, sometimes they work alone.</p>
+</div>
+<div class="section" id="template-constructors">
+<h2><a class="toc-backref" href="#id5">Template Constructors</a><a class="headerlink" href="#template-constructors" title="Permalink to this headline">¶</a></h2>
+<p>We have 2 base constructors when using DTL outside of a widget: <code class="docutils literal"><span class="pre">dojox.dtl.Template</span></code> and <code class="docutils literal"><span class="pre">dojox.dtl.DomTemplate</span></code>.</p>
+<p><code class="docutils literal"><span class="pre">Template</span></code> works only with text. What this means is that you can&#8217;t use it to do DOM manipulation, you can only use it to generate text that you might use to set a node&#8217;s innerHTML.</p>
+<p><code class="docutils literal"><span class="pre">DomTemplate</span></code> is an extension to <code class="docutils literal"><span class="pre">Template</span></code>, which means in terms of size that it&#8217;s the full size of <code class="docutils literal"><span class="pre">Template</span></code> plus some more code. But using <code class="docutils literal"><span class="pre">DomTemplate</span></code>, you can do direct DOM manipulation. This means that if a node is inside of an <code class="docutils literal"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">%}</span></code> block, it will be removed from DOM if the logic is false, and will be added to DOM if the logic is true.</p>
+<p>Both of these constructors can take either plain text or a URL.</p>
+</div>
+<div class="section" id="using-the-template-constructor">
+<h2><a class="toc-backref" href="#id6">Using the Template Constructor</a><a class="headerlink" href="#using-the-template-constructor" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="creating-a-new-instance">
+<h3>Creating a New Instance<a class="headerlink" href="#creating-a-new-instance" title="Permalink to this headline">¶</a></h3>
+<p>You can create a new instance of <code class="docutils literal"><span class="pre">dojox.dtl.Template</span></code> using either a URL or a string.</p>
+<p>Once you&#8217;ve created an instance of the object (which now contains a compiled version of your template that you can render as many times as you want), you have a few options:</p>
+</div>
+<div class="section" id="the-update-function">
+<h3>The <code class="docutils literal"><span class="pre">update</span></code> Function<a class="headerlink" href="#the-update-function" title="Permalink to this headline">¶</a></h3>
+<p>Every <code class="docutils literal"><span class="pre">dojox.dtl.Template</span></code> instance will have an update function. This function will change the innerHTML of a node, or a list of nodes. This function accepts a node, a node ID, or a dojo.query result as its first parameter, and an object or URL as its second parameter, to be used as a context.</p>
+</div>
+<div class="section" id="the-render-function">
+<h3>The <code class="docutils literal"><span class="pre">render</span></code> function<a class="headerlink" href="#the-render-function" title="Permalink to this headline">¶</a></h3>
+<p>This works exactly the same as rendering a template in Django.</p>
+</div>
+<div class="section" id="use-dojo-query">
+<h3>Use <code class="docutils literal"><span class="pre">dojo.query</span></code><a class="headerlink" href="#use-dojo-query" title="Permalink to this headline">¶</a></h3>
+<p>With the <code class="docutils literal"><span class="pre">dojo.query</span></code> extension, you don&#8217;t even need to create a template instance. What this means is that repeatedly rendering a template will be slightly slower, but your code will be more compact.</p>
+<p>To use, make sure you require the <code class="docutils literal"><span class="pre">dojox.dtl.ext-dojo.NodeList</span></code> module, which adds the dtl function. It accepts a string or URL as its first parameter, and an object or URL as its second parameter. Like the update function above, it will change the innerHTML values of all nodes in the dojo.query result, using the first parameter as its template and the second parameter as its context.</p>
+</div>
+</div>
+<div class="section" id="writing-a-widget">
+<h2><a class="toc-backref" href="#id7">Writing a Widget</a><a class="headerlink" href="#writing-a-widget" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ll bypass how to use the raw <code class="docutils literal"><span class="pre">DomTemplate</span></code> object (we&#8217;ll get into that later) and explain how to write a widget using Dojo&#8217;s implementation of the Django Template Language.</p>
+<p>Both of the solutions covered here work almost exactly like <code class="docutils literal"><span class="pre">dijit._Templated</span></code>, which is covered elsewhere in the book. To use the text version, mix in <code class="docutils literal"><span class="pre">dojox.dtl._Templated</span></code> and to use the HTML version, mix in <code class="docutils literal"><span class="pre">dojox.dtl._DomTemplated</span></code>.</p>
+<p>These objects will use <code class="docutils literal"><span class="pre">templatePath</span></code>, <code class="docutils literal"><span class="pre">templateString</span></code>, and use the <code class="docutils literal"><span class="pre">data-dojo-attach-point</span></code> and <code class="docutils literal"><span class="pre">data-dojo-attach-event</span></code> node attributes.</p>
+<p>It adds a single function: <code class="docutils literal"><span class="pre">render</span></code>. This function is to be used in the event of re-rendering. One of the main reasons for re-render would be if not all data was available during instantiation. The template will be rendered during creation even if you don&#8217;t call the <code class="docutils literal"><span class="pre">render</span></code> function.</p>
+<p>The template will be rendered using the widget object as its context. If you don&#8217;t want this behavior, you can pass your own context object to the render function.</p>
+</div>
+<div class="section" id="differences-with-the-extends-tag">
+<h2><a class="toc-backref" href="#id8">Differences with the <code class="docutils literal"><span class="pre">extends</span></code> tag</a><a class="headerlink" href="#differences-with-the-extends-tag" title="Permalink to this headline">¶</a></h2>
+<p>In Django, the extends tag looks through the installed applications until it finds the named template. In a browser environment, we don&#8217;t want to have to go searching for templates, so there has to be a way to reference a specific file, while not changing the markup style of the extends tag.</p>
+<p>The &#8220;easiest&#8221; way to do this is to put an explicit reference to the template. This means that you need to specify a URL in relation to your root page. But doing it like this creates a problem if you want to move around your directory structure, or if a page in a different directory wants to use the template.</p>
+<p>Django helps us out by allowing a variable name to be used in the extends tag. What we can do with this, then, is set a variable in the context using <code class="docutils literal"><span class="pre">dojox.moduleUrl</span></code>.</p>
+<p>If we&#8217;re using the <code class="docutils literal"><span class="pre">extends</span></code> tag in an HTML environment, there&#8217;s another factor to consider.
+Let&#8217;s say we have a blog and there are two ways of viewing the page: a list view, and a detail view.
+Both of these views use a parent node that contains the page header, a menu, and a sidebar.
+We don&#8217;t want the template system to have to redraw the DOM for their parent template, but how do we indicate that?
+There are two ways.</p>
+<p>The first is to use a string in the <code class="docutils literal"><span class="pre">extends</span></code> tag, outlined in the &#8220;easiest&#8221; way at the top. Putting &#8220;shared:&#8221; at the beginning of the string tells the extends tag to reuse the nodes between all other children that also want to share the parent.</p>
+<p>The significantly better way is partly outlined in the section above on <code class="docutils literal"><span class="pre">dojo.moduleUrl</span></code>. You can use a variable containing a <code class="docutils literal"><span class="pre">dojo.moduleUrl</span></code>, but how do you tell the extends tag that you want to share the parent? Instead of just passing a <code class="docutils literal"><span class="pre">dojo.moduleUrl</span> <span class="pre">call</span></code>, when we have an extends tag that looks like {% extends parent %}, we can use an object with <code class="docutils literal"><span class="pre">url</span></code> and <code class="docutils literal"><span class="pre">shared</span></code> that looks like this:</p>
+</div>
+<div class="section" id="differences-with-the-context-object">
+<h2><a class="toc-backref" href="#id9">Differences with the <code class="docutils literal"><span class="pre">Context</span></code> Object</a><a class="headerlink" href="#differences-with-the-context-object" title="Permalink to this headline">¶</a></h2>
+<p>Unlike the page serving model of Django, we can keep our <code class="docutils literal"><span class="pre">Context</span></code> objects around between each template render. What we want to be able to do is quickly clone an existing context, and either reduce, or add to, the data in the object. To do this, there are two new functions:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">filter</span></code>: Just put the keys you want to key in its arguments to get only those keys back in a cloned <code class="docutils literal"><span class="pre">Context</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">extend</span></code>: Just pass it an object to get a cloned <code class="docutils literal"><span class="pre">Context</span></code> containing all of the old keys, plus the new ones.</li>
+</ul>
+<p>Some new functions are added to allow tags to communicate with the rendering object.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">setThis</span></code>: Sets the object on which to perform operations. Used by the <code class="docutils literal"><span class="pre">attach</span></code>/<code class="docutils literal"><span class="pre">data-dojo-attach-point</span></code> attribute tag, for example.</li>
+<li><code class="docutils literal"><span class="pre">getThis</span></code>: Used by tags, gets the currently set <code class="docutils literal"><span class="pre">this</span></code> object.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojox.dtl</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#markup-syntax">Markup Syntax</a></li>
+<li><a class="reference internal" href="#template-constructors">Template Constructors</a></li>
+<li><a class="reference internal" href="#using-the-template-constructor">Using the Template Constructor</a><ul>
+<li><a class="reference internal" href="#creating-a-new-instance">Creating a New Instance</a></li>
+<li><a class="reference internal" href="#the-update-function">The <code class="docutils literal"><span class="pre">update</span></code> Function</a></li>
+<li><a class="reference internal" href="#the-render-function">The <code class="docutils literal"><span class="pre">render</span></code> function</a></li>
+<li><a class="reference internal" href="#use-dojo-query">Use <code class="docutils literal"><span class="pre">dojo.query</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#writing-a-widget">Writing a Widget</a></li>
+<li><a class="reference internal" href="#differences-with-the-extends-tag">Differences with the <code class="docutils literal"><span class="pre">extends</span></code> tag</a></li>
+<li><a class="reference internal" href="#differences-with-the-context-object">Differences with the <code class="docutils literal"><span class="pre">Context</span></code> Object</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

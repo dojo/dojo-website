@@ -3,6 +3,7 @@ var gruntConfig = require('../../config.js')();
 
 module.exports = {
 
+
 	/**
 	 * dojoBase //ajax.googleapis.com/ajax/libs/dojo/1.9.1   or   /scripts/dojo-release-1.9.1-src or '/dapi/staticoutput/scripts/dtk' '/api/scripts/dtk' etc
 	 * set to wherever you want the application to load dojo from (shouldn't really need changed unless you want to switch DOJO script inclusion to a different location).

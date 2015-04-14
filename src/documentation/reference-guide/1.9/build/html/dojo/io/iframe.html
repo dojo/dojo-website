@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo.io.iframe &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-io-iframe">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo.io.iframe</a><a class="headerlink" href="#dojo-io-iframe" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V0.9</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-io-iframe" id="id2">dojo.io.iframe</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>Deprecated</em> - See <a class="reference internal" href="../request/iframe.html#dojo-request-iframe"><span>dojo/request/iframe</span></a> instead.</p>
+<p>dojo.io.frame sends an AJAX I/O call using an IFrame (for instance, to upload files).</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The iframe IO functions are intended to handle complex IO operations that cannot be done through a basic dojo.xhr*()
+call. These situations are fairly common and include the following:</p>
+<ul class="simple">
+<li>Calling a service on a server other than the one that originated the calling page (cross-domain request). Note that in
+this case, the response body cannot be read. So you can send stuff, but not get any replies.</li>
+<li>Uploading files from a form (File Input controls). The normal XHR mechanism cannot access file data referenced by file
+selection tags as a security measure. An iframe, however, can, so by proxying those calls through an iframe make it
+possible to still do file uploads in an asynchronous manner.</li>
+</ul>
+<p>It also retains much of the same operating semantics as dojo.xhrGet with regards to how you get the response from the
+service. All results are response data is returned through callbacks. There is a caveat to this; it requires the server
+to send the responses back in a very specific format, please refer to the <a class="reference internal" href="#dojo-io-iframe"><span>Additional Information</span></a>
+section.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Usage is similar to <a class="reference internal" href="../xhrGet.html#dojo-xhrget"><span>dojo.xhrGet</span></a> and <a class="reference internal" href="../xhrPost.html#dojo-xhrpost"><span>dojo.xhrPost</span></a>. Please see below for
+information on specific properties that are accepted by the dojo.io.iframe functions and what they control.</p>
+<div class="section" id="dojo-io-iframe-supported-object-properties">
+<h3>dojo.io.iframe supported object properties<a class="headerlink" href="#dojo-io-iframe-supported-object-properties" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>url</strong></td>
+<td>The URL to make the iframe request to.  This URL can refer to servers other than the one that originated the calling page.</td>
+</tr>
+<tr class="row-even"><td><strong>handleAs</strong></td>
+<td><p class="first">This parameter specifies how to handle the data returned from the server.  It usually takes values of &#8216;text&#8217;, &#8216;xml&#8217;, or
+&#8216;json&#8217;.  What those values do is instruct it to try and hand the data to the asynchronous callback functions in that format.
+Naturally if you specify a format that doesn&#8217;t match what the server sends you will likely get an error.</p>
+<p>The currently supported options are:</p>
+<ul class="simple">
+<li>text (default)</li>
+<li>json</li>
+<li>xml</li>
+<li>html</li>
+<li>javascript</li>
+</ul>
+<p class="last"><strong>This parameter is optional</strong></p>
+</td>
+</tr>
+<tr class="row-odd"><td><strong>method</strong></td>
+<td><p class="first">The HTTP method to use when sending the iframe IO request.  It can be either <strong>GET</strong> or <strong>POST</strong> with the value of POST as
+the default.</p>
+<p class="last"><strong>This parameter is optional</strong></p>
+</td>
+</tr>
+<tr class="row-even"><td><strong>form</strong></td>
+<td><p class="first">For posting FORM data, you can provide a either the DOM node of your form or the ID of the form.  The dojo.io.iframe call
+will convert this into proper POST format (query params or form content) and send it via the iframe</p>
+<p class="last"><strong>This parameter is optional</strong></p>
+</td>
+</tr>
+<tr class="row-odd"><td><strong>content</strong></td>
+<td><p class="first">A JavaScript object of name/string value pairs.  These items are normally converted to query parameters and passed on as
+part of the url.  The caveat to this is if you also specify a &#8216;form&#8217; argument.  If a form  argument was also provided, then
+then the parameters of &#8216;content&#8217; are merged into the values from the form and the whole thing is send as a multi-part form
+post.</p>
+<p class="last"><strong>This parameter is optional</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="additional-information">
+<h3>Additional Information<a class="headerlink" href="#additional-information" title="Permalink to this headline">¶</a></h3>
+<p>dojo.io.iframe calls cannot be made synchronous; therefore trying to set the &#8216;sync&#8217; parameter (as shown in
+dojo.xhrGet()) will do nothing.</p>
+<p><strong>IMPORTANT:</strong> For all values EXCEPT html and xml, The server response should be an HTML file with a textarea element.
+The response data should be inside the textarea element. Using an HTML document is the only reliable, cross-browser way
+this transport can know when the response has loaded. For the text/html (Or XML) mimetype, just return a normal HTML/XML
+document. In other words, your services for JSON and Text formats should return the data wrapped as the following:</p>
+<p>Other than the reason noted above about reliability (getting proper events indicating data retrieved), the choice of
+using textarea was because a textarea provides a fixed container that dojo can locate in the iframe DOM and extract the
+contents from. And since it is a text area, it can contain JSON, XML, Text, etc. Once the data is obtained, the usual
+data handlers from dojo process it and pass it back through the callbacks specified by the user.</p>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="gather-all-parameters-from-a-form">
+<h3>Gather all parameters from a form<a class="headerlink" href="#gather-all-parameters-from-a-form" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="gather-all-parameters-from-a-form-over-riding-some">
+<h3>Gather all parameters from a form, over-riding some<a class="headerlink" href="#gather-all-parameters-from-a-form-over-riding-some" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="pass-in-parameters-manually">
+<h3>Pass in parameters manually<a class="headerlink" href="#pass-in-parameters-manually" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<p>A common use of dojo.io.iframe is for uploading files in an Ajax-like manner. There are prefabricated widgets to do this
+as well, some using iframe transports, some using flash 9+</p>
+<ul class="simple">
+<li><a class="reference internal" href="../../dojox/form/FileUploader.html#dojox-form-fileuploader"><span>File Uploader</span></a></li>
+<li><a class="reference internal" href="../../dojox/form/FileInput.html#dojox-form-fileinput"><span>File Input</span></a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo.io.iframe</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#dojo-io-iframe-supported-object-properties">dojo.io.iframe supported object properties</a></li>
+<li><a class="reference internal" href="#additional-information">Additional Information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#gather-all-parameters-from-a-form">Gather all parameters from a form</a></li>
+<li><a class="reference internal" href="#gather-all-parameters-from-a-form-over-riding-some">Gather all parameters from a form, over-riding some</a></li>
+<li><a class="reference internal" href="#pass-in-parameters-manually">Pass in parameters manually</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

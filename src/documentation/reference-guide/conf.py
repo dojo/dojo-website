@@ -178,10 +178,10 @@ html_translator_class = "dojowiki.DojoHTMLTranslator"
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
-latex_documents = [
-  ('contents', 'DojoToolkit.tex', ur'Dojo Toolkit Documentation',
-   ur'Dojo Foundation', 'manual'),
-]
+#latex_documents = [
+#  ('contents', 'DojoToolkit.tex', ur'Dojo Toolkit Documentation',
+#   ur'Dojo Foundation', 'manual'),
+#]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.

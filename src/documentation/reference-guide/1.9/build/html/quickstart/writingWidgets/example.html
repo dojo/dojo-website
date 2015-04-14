@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Building a widget from scratch &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../../dojo/index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="building-a-widget-from-scratch">
+<span id="quickstart-writingwidgets-example"></span><h1>Building a widget from scratch<a class="headerlink" href="#building-a-widget-from-scratch" title="Permalink to this headline">¶</a></h1>
+<p>So now, we&#8217;ll build a widget to solve a practical problem. Your site is all neatly designed and feng-shui&#8217;ed ... except this one &lt;input type=&#8221;file&#8221;&gt; tag. The user clicks on the button, and all of a sudden gets an operating system-styled box that doesn&#8217;t look right, and is completely out of your control. Ugggh.</p>
+<p>This is a perennial thorn-in-the-side for web developers. A Google search finds the ever-useful web site quirksmode, and they have a pretty simple solution: hide the file input, put a real input directly beneath where it would be, and make your own button off to the side. Logical enough. How hard would that be to make a widget?</p>
+<p>Not hard at all, it turns out. Here&#8217;s the plan:</p>
+<ul class="simple">
+<li>Hide the input boxes and draw our own</li>
+<li>Use Dojo to handle all my connections and fancy stuff</li>
+<li>Wrap it all up using dijit.form._FormWidget and diijt._Templated to take care of everything else</li>
+</ul>
+<div class="section" id="hiding-the-built-in-file-upload-box">
+<h2>Hiding the Built-In File Upload Box<a class="headerlink" href="#hiding-the-built-in-file-upload-box" title="Permalink to this headline">¶</a></h2>
+<p>We&#8217;ll use the programmatic method here. First we&#8217;ll need a location on-disk for our widget. Since others have expressed interest in this widget, and we hope to contribute it to dojox, we&#8217;ll place the widget in dojox/widget/FileInput.js. This means we&#8217;ll be able to require() and provide() the module &#8220;dojox.widget.FileInput&#8221; as per the package system conventions. To get additional behavior we&#8217;ll need to require() mixin classes, in case we don&#8217;t already have them. So here&#8217;s a stub for the class:</p>
+<p>Next we&#8217;ll need a template, a label for our submit button, a label for our cancel button, and the name of the input:</p>
+<p>Also note that whenever we use template variables , it&#8217;s good practice to supply a default, e.g. &#8220;Browse ...&#8221; for the label. Otherwise, if your widget user omits the label attribute, the parser will complain.</p>
+<p>As we said earlier, it&#8217;s preferable to separate the template out into a different file. Ours will look like the following, placed in dojox/widget/FileInput/FileInput.html:</p>
+<p>Note how we assign classes to each major part, so we can apply design as CSS styles. We&#8217;re also using data-dojo-attach-point=&#8221;aString&#8221; so the parser makes these nodes available to us in code at the location this.fileInput.</p>
+<p>There&#8217;s one more thing: the base class _Widget automatically copies certain attributes like <cite>id</cite> and <cite>name</cite> to the widget&#8217;s top level node.
+Since we don&#8217;t want that functionality in this case, we should override it, by adding the following code to the widget&#8217;s
+JavaScript:</p>
+<p>OK, let&#8217;s make sure our widget starts up, and looks right. Let&#8217;s make some simple css rules using the class names we set in our template:</p>
+<p>Looks good!</p>
+</div>
+<div class="section" id="connecting-the-elements-with-events">
+<h2>Connecting the Elements with Events<a class="headerlink" href="#connecting-the-elements-with-events" title="Permalink to this headline">¶</a></h2>
+<p>data-dojo-attach-event=&#8221;onclick: _onClick&#8221; connects the onclick event of this.cancelNode to this._onClick, the method we are about to define (otherwise dojo.hitch will throw an error mentioning something about _onClick not having properties). We&#8217;ll get to the onClick handler for the cancel button, and the reasons for having to do it later.</p>
+<p>We also need to implement a simple onchange listener, like the article hints, so that when our onchange is detected in on our real file input (this.fileInput), we will call this._matchValue() to steal the value from it, and populate our visible input:</p>
+<p>You&#8217;ve probably also noticed we added an onkeyup connection, running the same code. This way, if we type in the input, our changes will be reflected after each key press. Fortunately for this example, we&#8217;ll ignore little nitpicks like &#8220;holding backspace doesn&#8217;t fire onkeyup&#8221;.</p>
+<p>The _matchValue() function simply steals the file input value, sets it to the visible input value and fades in the cancel button (which we set earlier to visibility:hidden in FileInput.css).</p>
+<p>So next, we need a reset button. Unfortunately because we&#8217;re faking HTML out a bit, a plain old Reset button won&#8217;t work. Since we aren&#8217;t allowed write access to the file input, we can&#8217;t just null the data. So our _onClick method actually destroys the &lt;input type=&#8221;file&#8221;&gt; and reads it.</p>
+</div>
+<div class="section" id="wiring-it-all-together">
+<h2>Wiring It All Together<a class="headerlink" href="#wiring-it-all-together" title="Permalink to this headline">¶</a></h2>
+<p>So now we have our widget and our basic styles. We include this widget in our page declaratively by:</p>
+<p>The real file input tag in the DOM goes away our templated input gets put in it&#8217;s place. But if JavaScript is not present, it stays a regular HTML input tag, so it degrades nicely. Here is a sample test page to work with:</p>
+<p>In theory, it will work inside of a tag just as the original element did.</p>
+<p>Because we&#8217;re big fans of re-using code, we can steal some CSS stuff from tundra.css and soria.css to provide theme-specific styles, so our input nodes look like they would in with all the other dijit.form Widgets (like ComboBox, FilteringSelect, ValidationTextBox, etc):</p>
+</div>
+<div class="section" id="future-plans">
+<h2>Future Plans<a class="headerlink" href="#future-plans" title="Permalink to this headline">¶</a></h2>
+<p>If you&#8217;ve been paying attention all this way, you probably noticed a class up there that we didn&#8217;t define. .dijitProgressOverlay ... it doesn&#8217;t exist anywhere in the dojox.widget.FileInput template or code.</p>
+<p>The Dojo folks are building an extension to this widget called dojox.widget.FileInputAuto. It works like FileInput except it submits itself after a delay following a blur() on the element. For details (as yet undocumented), get the latest nightly build of Dojo and look for it in dojox.widget.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">Building a widget from scratch</a><ul>
+<li><a class="reference internal" href="#hiding-the-built-in-file-upload-box">Hiding the Built-In File Upload Box</a></li>
+<li><a class="reference internal" href="#connecting-the-elements-with-events">Connecting the Elements with Events</a></li>
+<li><a class="reference internal" href="#wiring-it-all-together">Wiring It All Together</a></li>
+<li><a class="reference internal" href="#future-plans">Future Plans</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/domReady! &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-domready">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/domReady!</a><a class="headerlink" href="#dojo-domready" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">v1.7</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-domready" id="id2">dojo/domReady!</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#notes" id="id5">Notes</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/domReady!</strong> is an AMD loaded plugin that will wait until the DOM has finished loading before returning.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Sooner or later, every JavaScript programmer tries something like this:</p>
+<p>It doesn&#8217;t work because the &#8220;other&#8221; control is not defined yet. You can move the code to the bottom of the page, but
+that removes the linear nature of HTML. If you&#8217;re reading the code, you want to zero in on a control, and see the code
+that influences it close by.</p>
+<p><code class="docutils literal"><span class="pre">dojo/domReady!</span></code> solves this problem:</p>
+<p><code class="docutils literal"><span class="pre">dojo/domReady!</span></code> is similar to old usage prior to 1.7 of <a class="reference internal" href="ready.html#dojo-ready"><span>dojo.ready()</span></a> or
+<a class="reference internal" href="addOnLoad.html#dojo-addonload"><span>dojo.addOnLoad()</span></a>, but more specific, because <code class="docutils literal"><span class="pre">dojo/domReady!</span></code> merely waits for the DOM to
+finish loading, without waiting for other <code class="docutils literal"><span class="pre">require()</span></code> or <code class="docutils literal"><span class="pre">dojo.require()</span></code> calls to complete.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Common convention is not to assign a return variable to the callback function, since its return is meaningless.
+Also, it is common convention to put it at the end of any array of requirements:</p>
+</div>
+<div class="section" id="notes">
+<h2><a class="toc-backref" href="#id5">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dijit-widgets">
+<h3>Dijit/Widgets<a class="headerlink" href="#dijit-widgets" title="Permalink to this headline">¶</a></h3>
+<p>Note that waiting for <code class="docutils literal"><span class="pre">dojo/domReady!</span></code> to fire is often not sufficient when working with widgets. Many widgets
+shouldn&#8217;t be initialized or accessed until the following modules load and execute:</p>
+<ul class="simple">
+<li><a class="reference internal" href="uacss.html#dojo-uacss"><span>dojo/uacss</span></a></li>
+<li><a class="reference internal" href="../dijit/hccss.html#dijit-hccss"><span>dijit/hccss</span></a></li>
+<li><a class="reference internal" href="parser.html#dojo-parser"><span>dojo/parser</span></a></li>
+</ul>
+<p>Thus when working with widgets you should generally put your code inside of a <a class="reference internal" href="ready.html#dojo-ready"><span>dojo/ready()</span></a>
+callback:</p>
+</div>
+<div class="section" id="sync-loader">
+<h3>Sync Loader<a class="headerlink" href="#sync-loader" title="Permalink to this headline">¶</a></h3>
+<p>You should not use <code class="docutils literal"><span class="pre">dojo/domReady!</span></code> with modules that may be loaded with the legacy synchronous loader.</p>
+<p>In other words, if your application does <em>not</em> specify <code class="docutils literal"><span class="pre">async:</span> <span class="pre">true</span></code> in the Dojo configuration, or if it loads
+modules via <code class="docutils literal"><span class="pre">dojo.require()</span></code> instead of the AMD <code class="docutils literal"><span class="pre">require()</span></code> API, then using <code class="docutils literal"><span class="pre">dojo/domReady!</span></code> may cause
+<code class="docutils literal"><span class="pre">dojo.ready()</span></code> to call its callback before all the modules have loaded.</p>
+<p>For reference, the cause of this intermittent failure is that when you write:</p>
+<p>and run in sync mode, the loader <em>ensures</em> the evaluation of <code class="docutils literal"><span class="pre">m1..mn</span></code> <em>in order</em>. It does than by just traversing
+each dependency tree as it comes to it. And it expects each dependency tree to be fully &#8220;traversable&#8221; and the module
+completely resolved at the end of the traversal.</p>
+<p>Now comes along <code class="docutils literal"><span class="pre">dojo/domReady!</span></code>. The loader loads all the dependencies for <code class="docutils literal"><span class="pre">dojo/domReady!</span></code> and then demands the
+plugin resource be resolved. But <code class="docutils literal"><span class="pre">dojo/domReady!</span></code> may not be able to resolve the demanded plugin resource (an empty
+module ID which is intended to signal the DOM is ready) because the DOM may not be ready. The loader notices this an
+sees that the module was not capable of being loaded synchronously, gives up and continues.</p>
+<p>This is an intentional limitation in the loader, since handling it would have required more complicated code.
+It will cease to be an issue for Dojo 2.0, when the synchronous loader is desupported.</p>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="ready.html#dojo-ready"><span>dojo/ready</span></a> - The module for more complex callback management.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo/domReady!</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#notes">Notes</a><ul>
+<li><a class="reference internal" href="#dijit-widgets">Dijit/Widgets</a></li>
+<li><a class="reference internal" href="#sync-loader">Sync Loader</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

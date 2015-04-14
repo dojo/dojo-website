@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Debugging Tutorial &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="../dojo/index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="debugging-tutorial">
+<span id="quickstart-debugging"></span><h1><a class="toc-backref" href="#id1">Debugging Tutorial</a><a class="headerlink" href="#debugging-tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#debugging-tutorial" id="id1">Debugging Tutorial</a><ul>
+<li><a class="reference internal" href="#use-firebug-or-firebug-lite" id="id2">Use Firebug or Firebug Lite</a></li>
+<li><a class="reference internal" href="#faulty-dojo-require-s-and-the-firebug-console" id="id3">Faulty dojo.require&#8217;s and the Firebug Console</a></li>
+<li><a class="reference internal" href="#errors-in-dojo-method-and-dojo-event-code" id="id4">Errors In Dojo/Method and Dojo/Event Code</a></li>
+<li><a class="reference internal" href="#method-1-logging" id="id5">Method 1: Logging</a></li>
+<li><a class="reference internal" href="#method-2-the-debugger-statement" id="id6">Method 2: The &#8220;debugger&#8221; Statement</a></li>
+<li><a class="reference internal" href="#to-follow-the-dojo-require-trail-use-dojo-locally" id="id7">To Follow The dojo.require Trail, Use Dojo Locally</a></li>
+<li><a class="reference internal" href="#that-doesn-t-look-right-dom-inspection" id="id8">That Doesn&#8217;t Look Right ... DOM Inspection</a></li>
+<li><a class="reference internal" href="#debugging-external-classes-with-debugatallcosts" id="id9">Debugging External Classes With debugAtAllCosts</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>Deprecated</em>, this document is deprecated.</p>
+<p>Dojo is very lean and speedy, and uses some very clever tricks to save memory and time. The downside: Dojo does not contain much error trapping, which would bloat and slow down the code. If your code is not behaving, some of the resulting errors can look mighty puzzling at first.</p>
+<p>No worries! Here are a few tips to make you a confident, successful bug finder. Knowing these ahead of time will make your Dojo learning curve less steep.</p>
+<div class="section" id="use-firebug-or-firebug-lite">
+<h2><a class="toc-backref" href="#id2">Use Firebug or Firebug Lite</a><a class="headerlink" href="#use-firebug-or-firebug-lite" title="Permalink to this headline">¶</a></h2>
+<p>We can&#8217;t stress this enough. Firebug, an open source debugging extension for Firefox, is &#8216;&#8217;essential&#8217;&#8217; for JavaScript, HTML and CSS debugging. You can download it from the <a class="reference external" href="http://getfirebug.com">Firebug web site</a>.</p>
+<p>If you use Internet Explorer or Safari, you can use the Firebug Lite library, bundled with Dojo. This gives you some of the logging and command line features of Firebug. It&#8217;s not a full emulation, but it&#8217;s a fairly good alternative and is fully API-compatible.</p>
+<p>To use Firebug Lite, you must include the isDebug config parameter like so:</p>
+<p>This parameter has no effect on Firefox browsers with Firebug already present. So including this parameter makes your debugging code usable in IE, Safari, and Firefox with no changes.</p>
+<p>Note that while it is possible to debug to some extent against prebuilt releases
+such as those on CDN, serious debugging will be far easier against an
+uncompressed version of Dojo&#8217;s source.  You can download the source via
+one of the &#8220;-src&#8221; packages at <a class="reference external" href="http://download.dojotoolkit.org/">download.dojotoolkit.org</a>.</p>
+</div>
+<div class="section" id="faulty-dojo-require-s-and-the-firebug-console">
+<h2><a class="toc-backref" href="#id3">Faulty dojo.require&#8217;s and the Firebug Console</a><a class="headerlink" href="#faulty-dojo-require-s-and-the-firebug-console" title="Permalink to this headline">¶</a></h2>
+<p>The following code has a subtle bug:</p>
+<p>Without Firebug, this code may pop up an unhelpful dialog box (IE) or display nothing (Firefox). In either case the textbox doesn&#8217;t look right. You check this by entering a lowercase name and tabbing out of the box ... the propercase attribute should capitalize the first letter. It doesn&#8217;t.</p>
+<p>With Firebug the error is easier to spot. First, there&#8217;s an indicator at the bottom right hand corner.</p>
+<img alt="Debugging with Firebug" src="../_images/debugging1a.png" />
+<p>You click on the &#8220;1 Error&#8221; message and the Firebug console pops up:</p>
+<img alt="Firebug console" src="../_images/debugging2.png" />
+<p>Looking back at your code, you notice the capitalization on &#8220;Textbox&#8221; in the dojo.require is wrong. That&#8217;s a common mistake, but easily fixed. It&#8217;s also common to forget the dojo.require, or to misspell the class in the data-dojo-type attribute. In each case, Firebug will set you straight.</p>
+<p>Firebug Lite will give you a similar console, but it will appear naturally at the bottom of your browser window. To turn it off, you must set the isDebug flag to false and run the page again.</p>
+</div>
+<div class="section" id="errors-in-dojo-method-and-dojo-event-code">
+<h2><a class="toc-backref" href="#id4">Errors In Dojo/Method and Dojo/Event Code</a><a class="headerlink" href="#errors-in-dojo-method-and-dojo-event-code" title="Permalink to this headline">¶</a></h2>
+<p>The following code has an error:</p>
+<p>But when you look at the console, there&#8217;s no apparent error. If you were programming in other languages, you might use a debugger and set a breakpoint on the &#8220;this.domNode&#8221; line. Firebug&#8217;s debugger lets you do that, but not on this particular code. Scripts of type &#8220;dojo/event&#8221; and &#8220;dojo/method&#8221; are compiled and interpreted differently than &#8220;text/javascript&#8221; ones. But there are a couple of alternate debugging methods.</p>
+</div>
+<div class="section" id="method-1-logging">
+<h2><a class="toc-backref" href="#id5">Method 1: Logging</a><a class="headerlink" href="#method-1-logging" title="Permalink to this headline">¶</a></h2>
+<p>The first method is &#8216;&#8217;logging&#8217;&#8216;, and if you&#8217;ve used modern logging tools like log4j you&#8217;ll find it familiar. The idea is to write trace messages to a log which you can then use to find variable values or the last executed bit of code.</p>
+<p>Why not just use alert() ? The trusty JavaScript alert() is a favorite debugging tool, but it suffers from the following problems:</p>
+<blockquote>
+<div><ul class="simple">
+<li>If you have many alerts, it&#8217;s annoying to keep clicking [OK]</li>
+<li>Too much text can make the dialog box overflow the screen</li>
+<li>You must remember to remove every alert() before release</li>
+<li>alert() in a tight loop might make it impossible to stop without killing the browser process</li>
+<li>You cannot easily print object contents or arrays</li>
+</ul>
+</div></blockquote>
+<p>Clearly alert is just not powerful enough. In Dojo logging, you can associate messages with severity, just like in log4j. The following code illustrates the five severity levels:</p>
+<p>In the Firebug console, the messages will appear like this:</p>
+<img alt="Firebug logging" src="../_images/firebug_logging.png" />
+<p>In IE, they will appear like this:</p>
+<img alt="Firebug logging" src="../_images/firebug_ie_capture.png" />
+<p>Another useful method, console.dir() dumps variable contents to the screen. While console.log works fine for strings and integers, console.dir prints more complex variables - objects, arrays, arrays of objects, or whatever. For example:</p>
+<p>produces:</p>
+<img alt="Firebug logging" src="../_images/firebug_logging2.png" />
+<p>So in our example above, we write:</p>
+<p>Running this, we quickly find that dojo.newWidth is undefined. Maybe we spelled it wrong? To quickly find out, we change the debugging statement to:</p>
+<p>Nope, there&#8217;s no property in dojo that looks like newWidth. Finally, we spot our error and change the right hand side to &#8220;newWidth.&#8221; Case closed.</p>
+</div>
+<div class="section" id="method-2-the-debugger-statement">
+<h2><a class="toc-backref" href="#id6">Method 2: The &#8220;debugger&#8221; Statement</a><a class="headerlink" href="#method-2-the-debugger-statement" title="Permalink to this headline">¶</a></h2>
+<p>Alternatively you can set a &#8220;poor man&#8217;s breakpoint&#8221; in the code. Just insert the debugger; statement, which is a legal JavaScript reserved word.</p>
+<p>This statement stops the code and brings you to a Firebug command prompt. It appears the code has stopped at ... huh?</p>
+<p>That&#8217;s a side effect of running dojo/event code. The breakpoints don&#8217;t seem correct at all.</p>
+<p>But just click the Console tab and now you can examine variables or execute just about any JavaScript you want. In this case, we look at the dojo.newWidth property, which has nothing in it. But &#8220;dojo&#8221; does and we examine it by console.dir(dojo). Basically all the logging features of method 1 are available to type here.</p>
+<img alt="Firebug console" src="../_images/debugging3.png" />
+</div>
+<div class="section" id="to-follow-the-dojo-require-trail-use-dojo-locally">
+<h2><a class="toc-backref" href="#id7">To Follow The dojo.require Trail, Use Dojo Locally</a><a class="headerlink" href="#to-follow-the-dojo-require-trail-use-dojo-locally" title="Permalink to this headline">¶</a></h2>
+<p>Since that code is now running, we try a minor variant which sets the button to blue:</p>
+<p>You check the console ... no errors there. But that dojo.Color.named.aliceblue is a little questionable. You know that dojo.colors needs to be included, but you thought dijit.form.Button already did that.</p>
+<p>You can find out for sure by using a local copy of Dojo. CDN Dojo is very quiet about the modules it loads. Local Dojo is very noisy. So, assuming our local copy of Dojo is installed on the web server underneath /dojoroot, the following change:</p>
+<p>Yields the following on the console</p>
+<img alt="Firebug http requests" src="../_images/debugging4.png" />
+<p>You see every Dojo Core and Dijit Component loaded. Sure enough, dojo.colors is not in the list, so we add a dojo.require statement</p>
+</div>
+<div class="section" id="that-doesn-t-look-right-dom-inspection">
+<h2><a class="toc-backref" href="#id8">That Doesn&#8217;t Look Right ... DOM Inspection</a><a class="headerlink" href="#that-doesn-t-look-right-dom-inspection" title="Permalink to this headline">¶</a></h2>
+<p>Unfortunately, that doesn&#8217;t fix the problem either. When styling errors occur, it&#8217;s a good time to use Firebug&#8217;s DOM Inspector. You can think of it as View Source on steroids.</p>
+<blockquote>
+<div><ul class="simple">
+<li>It displays the &#8216;&#8217;current&#8217;&#8217; DOM tree, not the one initially loaded (which is what View Source shows)</li>
+<li>You can examine the DOM properties of nodes by inspecting them - that is, pressing Inspect and pointing</li>
+</ul>
+</div></blockquote>
+<p>So we click Inspect and point at the screen button</p>
+<img alt="Firebug DOM inspection" src="../_images/debugging5.png" />
+<p>The right-hand side of the console tells what styles and style rules are applied to this class. Crossed-off lines are styles that have been overridden. Very nice!</p>
+</div>
+<div class="section" id="debugging-external-classes-with-debugatallcosts">
+<h2><a class="toc-backref" href="#id9">Debugging External Classes With debugAtAllCosts</a><a class="headerlink" href="#debugging-external-classes-with-debugatallcosts" title="Permalink to this headline">¶</a></h2>
+<p><strong>Note:</strong> <code class="docutils literal"><span class="pre">debugAtAllCosts</span></code> does not work with Dojo version 1.6
+(<a class="reference external" href="http://bugs.dojotoolkit.org/ticket/12608">http://bugs.dojotoolkit.org/ticket/12608</a>).
+As of Dojo 1.7, <code class="docutils literal"><span class="pre">debugAtAllCosts</span></code> is no longer supported;
+see the <a class="reference internal" href="../releasenotes/1.7.html#releasenotes-1-7"><span>release notes</span></a> for details.</p>
+<p>dojo/method and dojo/event scripts are good for short, non-reusable snippets of code. But when you start building reusable components, you&#8217;ll be storing your code into Dojo-declared classes instead. The good news is the more you make this switch, the easier your debugging task will be.</p>
+<p>So here&#8217;s a piece of HTML code and a reusable Dojo-based widget:</p>
+<p>Running this code, you will see an error appear, but it&#8217;s nowhere near the right location:</p>
+<img alt="Debugging without debugAtAllCosts" src="../_images/debugging6.png" />
+<p>But by simply setting the debugAtAllCosts flag to true:</p>
+<p>the displayed error location will now be correct:</p>
+<img alt="Debugging with debugAtAllCosts" src="../_images/debugging7.png" />
+<p>&#8216;&#8217;&#8216;Important!&#8217;&#8216;&#8217; you should always remove debugAtAllCosts from production code. It slows down the client unnecessarily. Rather than manually inserting and removing them, I like to delegate that job to a server side language like PHP:</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">Debugging Tutorial</a><ul>
+<li><a class="reference internal" href="#use-firebug-or-firebug-lite">Use Firebug or Firebug Lite</a></li>
+<li><a class="reference internal" href="#faulty-dojo-require-s-and-the-firebug-console">Faulty dojo.require&#8217;s and the Firebug Console</a></li>
+<li><a class="reference internal" href="#errors-in-dojo-method-and-dojo-event-code">Errors In Dojo/Method and Dojo/Event Code</a></li>
+<li><a class="reference internal" href="#method-1-logging">Method 1: Logging</a></li>
+<li><a class="reference internal" href="#method-2-the-debugger-statement">Method 2: The &#8220;debugger&#8221; Statement</a></li>
+<li><a class="reference internal" href="#to-follow-the-dojo-require-trail-use-dojo-locally">To Follow The dojo.require Trail, Use Dojo Locally</a></li>
+<li><a class="reference internal" href="#that-doesn-t-look-right-dom-inspection">That Doesn&#8217;t Look Right ... DOM Inspection</a></li>
+<li><a class="reference internal" href="#debugging-external-classes-with-debugatallcosts">Debugging External Classes With debugAtAllCosts</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

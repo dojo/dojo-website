@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Editing Dojo’s Reference Guide &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="../dojo/index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="editing-dojo-s-reference-guide">
+<span id="developer-metadoc"></span><h1><a class="toc-backref" href="#id1">Editing Dojo&#8217;s Reference Guide</a><a class="headerlink" href="#editing-dojo-s-reference-guide" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#editing-dojo-s-reference-guide" id="id1">Editing Dojo&#8217;s Reference Guide</a><ul>
+<li><a class="reference internal" href="#general-style-notes" id="id2">General Style Notes</a></li>
+<li><a class="reference internal" href="#documentation-formatting" id="id3">Documentation Formatting</a></li>
+<li><a class="reference internal" href="#editing-documentation-online" id="id4">Editing documentation online</a></li>
+<li><a class="reference internal" href="#editing-documentation-locally" id="id5">Editing documentation locally</a></li>
+<li><a class="reference internal" href="#previewing-local-changes-before-commit" id="id6">Previewing local changes before commit</a></li>
+<li><a class="reference internal" href="#exporting-the-doc" id="id7">Exporting the doc</a></li>
+<li><a class="reference internal" href="#backporting-trunk-doc-changes-to-a-doc-branch" id="id8">Backporting trunk doc changes to a doc branch</a></li>
+<li><a class="reference internal" href="#creating-reference-guide-for-web-site" id="id9">Creating reference guide for Web site</a></li>
+<li><a class="reference internal" href="#creating-new-version-of-reference-guide-for-web-site" id="id10">Creating new version of reference guide for Web site</a></li>
+<li><a class="reference internal" href="#updating-rstwiki-on-livedocs" id="id11">Updating rstWiki on livedocs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The dojo reference documentation is stored at <a class="reference external" href="https://github.com/dojo/docs">https://github.com/dojo/docs</a>.  The documentation is all flat text files,
+in reStructuredText (reST) format.</p>
+<div class="section" id="general-style-notes">
+<h2><a class="toc-backref" href="#id2">General Style Notes</a><a class="headerlink" href="#general-style-notes" title="Permalink to this headline">¶</a></h2>
+<p>The Reference Guide is a reference guide.  This means that it isn&#8217;t a tutorial, it isn&#8217;t the API documentation.  It is
+designed to provide a lookup reference describing packages and modules, their usage and examples.  Some general
+considerations you should make when editing the documentation:</p>
+<ul class="simple">
+<li>Be concise and brief.</li>
+<li>Cross-reference a lot.</li>
+<li>Avoid writing in the singular first person (e.g. <em>My example...</em> or <em>I would recommend...</em>).  This is technical
+documentation not written by a single author.  It would be better to utilize <em>An example...</em> or <em>It is
+recommended...</em>.</li>
+<li>Historically, there was a lot of &#8220;new in Dojo 1.4&#8221; notes.  These have quickly become dated.</li>
+<li>The foundation packages are Dojo, Dijit and DojoX.  Please note the capitalization.  The entire toolkit is referred
+to as the Dojo Toolkit or DTK.  You can refer to Dojo Core and Dojo Base, although this is having less meaning and
+may not be appropriate for Dojo 2.0.</li>
+<li>The preference is for US English spelling of English words (e.g. <em>color</em> not <em>colour</em>).</li>
+<li>When referring to a module, package, property, etc. utilize the double back ticks (``) to mark the words as inline
+code (e.g. <code class="docutils literal"><span class="pre">dojo/_base/kernel</span></code>, <code class="docutils literal"><span class="pre">dijit/layout/ContentPane</span></code> or <code class="docutils literal"><span class="pre">data-dojo-type</span></code>).</li>
+<li>Use a spellchecker!</li>
+</ul>
+</div>
+<div class="section" id="documentation-formatting">
+<h2><a class="toc-backref" href="#id3">Documentation Formatting</a><a class="headerlink" href="#documentation-formatting" title="Permalink to this headline">¶</a></h2>
+<p>A handy reference guide of reST syntax is available at <a class="reference external" href="http://docutils.sourceforge.net/docs/user/rst/quickref.html">http://docutils.sourceforge.net/docs/user/rst/quickref.html</a>.</p>
+<p>Here are some basics though, plus information on dojo&#8217;s conventions, and our reST extensions like .. code-example.</p>
+<div class="section" id="pages">
+<h3>Pages<a class="headerlink" href="#pages" title="Permalink to this headline">¶</a></h3>
+<p>Each page must contain some basic information. When creating a page via the wiki interface, some skeletal reST is
+injected for you. The first and most important is the first line, a location to your document:</p>
+<div class="highlight-python"><div class="highlight"><pre>.. _foo/bar/baz:
+</pre></div>
+</div>
+<p>The above would point to a file at foo/bar/baz.rst</p>
+<p>Next, include a top-level page heading. It can be anything, and serves as the document title. When documenting a
+package or module, the title should be the package or module (in <em>path</em> notation versus <em>dot</em>):</p>
+<div class="highlight-python"><div class="highlight"><pre>===========
+foo/bar/baz
+===========
+</pre></div>
+</div>
+<p>The number of <code class="docutils literal"><span class="pre">=</span></code> characters must be equal or greater than the length of the title.  Common convention is to make
+them equal.</p>
+<p>Next, provide a <code class="docutils literal"><span class="pre">contents</span></code> directive, to auto generate links to the various subsections:</p>
+<div class="highlight-python"><div class="highlight"><pre>.. contents ::
+  :depth: 2
+</pre></div>
+</div>
+<p>Then continue on adding subsections, separated by headings. Using a top/bottom bar for your first heading, you could
+use the following syntax for sub-headings:</p>
+<div class="highlight-python"><div class="highlight"><pre>=====
+Title
+=====
+
+Section 1
+=========
+
+Section 1.1
+-----------
+
+Section 1.1.1
+~~~~~~~~~~~~~
+
+Section 1.2
+-----------
+
+Text under section 1.2
+
+Section 2
+=========
+
+Text under section 2
+</pre></div>
+</div>
+<p>The reStructuredText parser will create each unique section separator character as a new level.  The preferred
+separators per level are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Level</th>
+<th class="head">Character</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Title</td>
+<td><code class="docutils literal"><span class="pre">=</span></code> top and bottom</td>
+</tr>
+<tr class="row-odd"><td>Level 1</td>
+<td><code class="docutils literal"><span class="pre">=</span></code> bottom only</td>
+</tr>
+<tr class="row-even"><td>Level 2</td>
+<td><code class="docutils literal"><span class="pre">-</span></code> bottom only</td>
+</tr>
+<tr class="row-odd"><td>Level 3</td>
+<td><code class="docutils literal"><span class="pre">~</span></code> bottom only</td>
+</tr>
+<tr class="row-even"><td>Level 4</td>
+<td><code class="docutils literal"><span class="pre">'</span></code> bottom only</td>
+</tr>
+<tr class="row-odd"><td>Level 5</td>
+<td><code class="docutils literal"><span class="pre">,</span></code> bottom only and but please rethink
+the structure of the document</td>
+</tr>
+</tbody>
+</table>
+<p>The depth of the sections is relevant, and can be previewed in the Table of Contents (which uses embedded
+unordered-lists as output).</p>
+</div>
+<div class="section" id="paragraphs">
+<h3>Paragraphs<a class="headerlink" href="#paragraphs" title="Permalink to this headline">¶</a></h3>
+<p>The following text:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>Paragraphs are lines of text separated by a blank link.
+This will not become a new paragraph.
+
+But this will.
+</pre></div>
+</div>
+</div></blockquote>
+<p>will format as:</p>
+<blockquote>
+<div><p>Paragraphs are lines of text separated by a blank link.
+This will not become a new paragraph.</p>
+<p>But this will.</p>
+</div></blockquote>
+</div>
+<div class="section" id="inline-text">
+<h3>Inline Text<a class="headerlink" href="#inline-text" title="Permalink to this headline">¶</a></h3>
+<p>The following text:</p>
+<div class="highlight-python"><div class="highlight"><pre>**bold** ... *less bold* ... ``code`` ... `emphasis` ...
+</pre></div>
+</div>
+<p>Will render as:</p>
+<blockquote>
+<div><strong>bold</strong> ... <em>less bold</em> ... <code class="docutils literal"><span class="pre">code</span></code> ... <cite>emphasis</cite> ...</div></blockquote>
+</div>
+<div class="section" id="links">
+<h3>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h3>
+<p>You can link to external pages, internal pages, and sections within the same page.</p>
+<p>External links look like:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>`Text of Link &lt;http://example.com/link.url.html&gt;`_
+</pre></div>
+</div>
+</div></blockquote>
+<p>This would become:</p>
+<blockquote>
+<div><a class="reference external" href="http://example.com/link.url.html">Text of Link</a></div></blockquote>
+<p>Linking to other internal pages uses <code class="docutils literal"><span class="pre">:ref:</span></code>:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>:ref:`Jump to Dijit! &lt;dijit/index&gt;`
+</pre></div>
+</div>
+</div></blockquote>
+<p>This would become:</p>
+<blockquote>
+<div><a class="reference internal" href="../dijit/index.html#dijit-index"><span>Jump to Dijit!</span></a></div></blockquote>
+<p>You should try to use the package/module name when linking to a package or module:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>:ref:`dojo/parser &lt;dojo/parser&gt;`
+</pre></div>
+</div>
+</div></blockquote>
+<p>If you want to link to a arbitrary section of another document, you need to add another label.  But if you also want it to work with rstWiki (a.k.a. livedocs), then you need to create a label that maps to a hash target.  So lets say you wanted to link to <code class="docutils literal"><span class="pre">forEach()</span></code> in <code class="docutils literal"><span class="pre">dojo/_base/array</span></code>.  You would need to have a created a header:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>forEach()
+=========
+</pre></div>
+</div>
+</div></blockquote>
+<p>Which will create a hash target of <code class="docutils literal"><span class="pre">#foreach</span></code> on the page, which you would then create reference of:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>:ref:`dojo/_base/array::forEach() &lt;dojo/_base/array#foreach&gt;`
+</pre></div>
+</div>
+</div></blockquote>
+<p>And then before the header in the target document you would need to add the label:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>.. _dojo/_base/array#foreach:
+
+forEach()
+=========
+</pre></div>
+</div>
+</div></blockquote>
+<p>It is possible to cross-reference sections internally. If the section heading is a single word, you can simply
+add a trailing underscore to the word:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>Jump to Links_
+</pre></div>
+</div>
+</div></blockquote>
+<p>This would create a link back to a major section:</p>
+<blockquote>
+<div>Jump to <a class="reference internal" href="#links">Links</a></div></blockquote>
+<p>To reference a multi-word section header, surround the words with a single back-tick (<code class="docutils literal"><span class="pre">`</span></code>) and add a following
+underscore:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>Jump to `Inline Text`_
+</pre></div>
+</div>
+</div></blockquote>
+<p>Would result in:</p>
+<blockquote>
+<div>Jump to <a class="reference internal" href="#inline-text">Inline Text</a></div></blockquote>
+<p>Note that links are case insensitive. It is not possible to have two headings with the same wording, even if under
+different subheadings.</p>
+</div>
+<div class="section" id="images">
+<h3>Images<a class="headerlink" href="#images" title="Permalink to this headline">¶</a></h3>
+<p>Images can be referenced by an <code class="docutils literal"><span class="pre">image</span></code> directive:</p>
+<div class="highlight-python"><div class="highlight"><pre>.. image :: pathtoimage.png
+</pre></div>
+</div>
+<p>The location is relative:</p>
+<div class="highlight-python"><div class="highlight"><pre>.. image :: /logo.png
+.. image :: logo.png
+</pre></div>
+</div>
+<p>The former will look for an image in the root of the document tree, whereas the latter will look for an image in the
+current directory.</p>
+<p><em>Note:</em> When the guide is rendered for the official website, the documentation area is only 630 pixels wide, so while
+your image may fit appropriately on rstWiki/livedocs, it will overrun on the official website.</p>
+</div>
+<div class="section" id="directives">
+<h3>Directives<a class="headerlink" href="#directives" title="Permalink to this headline">¶</a></h3>
+<p>rstWiki ships with a <code class="docutils literal"><span class="pre">dojo.py</span></code> collection of custom directives in addition to the standard formatting directives
+above. There 3 styles of code formatting names, shorthanded to <code class="docutils literal"><span class="pre">js</span></code>, <code class="docutils literal"><span class="pre">html</span></code>, and <code class="docutils literal"><span class="pre">css</span></code></p>
+<p>To define a block of any of those type code snippets, include the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>.. js ::
+
+  alert(&#39;this is code&#39;)
+</pre></div>
+</div>
+<p>This will produce output like:</p>
+<p>Similarly for <code class="docutils literal"><span class="pre">css</span></code> and <code class="docutils literal"><span class="pre">html</span></code></p>
+<p>These three block types can be embedded in a <code class="docutils literal"><span class="pre">code-example</span></code> directive, which will produce a live/runnable example:</p>
+<div class="highlight-python"><div class="highlight"><pre>.. code-example ::
+
+    The Text between the blocks just renders inline.
+
+    .. js ::
+
+        require([&quot;dojo/main&quot;, &quot;dojo/ready&quot;], function(dojo, ready){
+            ready(function(){
+                alert(&quot;WE RAN&quot;);
+                dojo.byId(&quot;bar&quot;).innerHTML = &quot;#winning&quot;;
+            })
+
+        });
+
+    You don&#39;t have to put words about the subsections, but you can
+
+    .. html ::
+
+        &lt;p id=&quot;bar&quot;&gt;Test?&lt;/p&gt;
+
+    .. css ::
+
+        #bar { color:green; }
+</pre></div>
+</div>
+<p>The above example will produce</p>
+</div>
+<div class="section" id="indentation">
+<h3>Indentation<a class="headerlink" href="#indentation" title="Permalink to this headline">¶</a></h3>
+<p>reST is whitespace sensitive, like most python things. All <a class="reference internal" href="#directives">directives</a> need consistent indention.</p>
+<p>The following text:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>.. js ::
+
+    alert(&quot;I am 4 spaces indented from the first . in the previous directive&quot;);
+
+I align with the previous directive, and am not included in it.
+
+* list item 1
+    * list item 1.1
+    * list item 1.2
+* list item 2
+    * list item 2.1
+        * list item 2.1.1
+* list item 3
+</pre></div>
+</div>
+</div></blockquote>
+<p>produces:</p>
+<blockquote>
+<div><p>I align with the previous directive, and am not included in it.</p>
+<ul>
+<li><dl class="first docutils">
+<dt>list item 1</dt>
+<dd><ul class="first last simple">
+<li>list item 1.1</li>
+<li>list item 1.2</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>list item 2</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>list item 2.1</dt>
+<dd><ul class="first last simple">
+<li>list item 2.1.1</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">list item 3</p>
+</li>
+</ul>
+</div></blockquote>
+<p>Unlike Dojo Toolkit, the docs use 4 spaces for indention, so please do not mix spaces/tabs.</p>
+</div>
+<div class="section" id="index-files">
+<h3>Index Files<a class="headerlink" href="#index-files" title="Permalink to this headline">¶</a></h3>
+<p>Most files can map directly to a/b/c.rst == a.b.c pages. Some, however, would have conflicting filenames if placed on a case-sensitive filesystem. Consider the following 3 files:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dijit</span><span class="o">/</span><span class="n">Tree</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">dijit</span><span class="o">/</span><span class="n">tree</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">dijit</span><span class="o">/</span><span class="n">tree</span><span class="o">/</span><span class="n">subpage</span><span class="o">.</span><span class="n">rst</span>
+</pre></div>
+</div>
+<p>In JavaScript it is perfectly legal to have both a <code class="docutils literal"><span class="pre">dijit.Tree</span></code> and <code class="docutils literal"><span class="pre">dijit.tree</span></code> object, though when extracted into a case sensitive filesystem, only one of <code class="docutils literal"><span class="pre">Tree.rst</span></code> and <code class="docutils literal"><span class="pre">tree.rst</span></code> survive.</p>
+<p>The solution in this case is the use an <code class="docutils literal"><span class="pre">index</span></code> file. Classes win, namespaces get the <code class="docutils literal"><span class="pre">index</span></code>. The above example should be moved/fixed to become:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">dijit</span><span class="o">/</span><span class="n">Tree</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">dijit</span><span class="o">/</span><span class="n">tree</span><span class="o">/</span><span class="n">index</span><span class="o">.</span><span class="n">rst</span>
+<span class="n">dijit</span><span class="o">/</span><span class="n">tree</span><span class="o">/</span><span class="n">subpage</span><span class="o">.</span><span class="n">rst</span>
+</pre></div>
+</div>
+<p>Documents linking to the Class would do so with a normal link:</p>
+<div class="highlight-python"><div class="highlight"><pre>:ref:`Checkout the Tree Class &lt;dijit/Tree&gt;`
+</pre></div>
+</div>
+<p>But documents linking to additional <code class="docutils literal"><span class="pre">dijit.tree</span></code> namespace information would link to the index:</p>
+<div class="highlight-python"><div class="highlight"><pre>:ref:`More about dijit.tree &lt;dijit/tree/index&gt;`
+</pre></div>
+</div>
+<p><strong>note:</strong> some existing files may not follow this pattern consistently, though all current namespace/file conflicts
+have been resolved. New files added should follow this pattern.</p>
+<p><strong>note:</strong> the wiki attempts to discover <code class="docutils literal"><span class="pre">index.rst</span></code> files automatically and does not include them in the breadcrumb
+[currently] unless explicitly linked to. This could cause pages to link properly in the wiki but not in export.
+FIXME/confusing</p>
+</div>
+</div>
+<div class="section" id="editing-documentation-online">
+<h2><a class="toc-backref" href="#id4">Editing documentation online</a><a class="headerlink" href="#editing-documentation-online" title="Permalink to this headline">¶</a></h2>
+<p>You can edit the documentation online, through <a class="reference external" href="http://livedocs.dojotoolkit.org">http://livedocs.dojotoolkit.org</a> (previously docs.dojocampus.org).
+Changes will be pushed upstream to the master git repository.</p>
+<p>Alternately, you can edit online through the github interface:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Go to <a class="reference external" href="https://github.com/dojo/docs">https://github.com/dojo/docs</a></li>
+<li>Select a file</li>
+<li>Click &#8220;Edit this file&#8221; or &#8220;Fork and edit this file&#8221;</li>
+</ol>
+</div></blockquote>
+<p>If you don&#8217;t have write permission into the dojo/docs github repository, this will create a fork of the dojo/docs
+github repository.   After you have edited files in your fork, you can submit a push request to have your patch
+integrated into the github repository.</p>
+</div>
+<div class="section" id="editing-documentation-locally">
+<h2><a class="toc-backref" href="#id5">Editing documentation locally</a><a class="headerlink" href="#editing-documentation-locally" title="Permalink to this headline">¶</a></h2>
+<p>As an alternative to editing documentation online, you can clone the documentation repository from github, and edit it
+locally, pushing the changes back to github when you are finished.  If you don&#8217;t have write permission on the github
+dojo/docs repository you can submit a pull request.</p>
+<p>This strategy is ideal for large changes,
+since you can use your favorite text editor / IDE to manage the files, and preview the content before committing it
+(see next section for info on previewing).</p>
+<div class="section" id="updating-the-documentation-through-pull-requests">
+<h3>Updating the documentation through pull requests<a class="headerlink" href="#updating-the-documentation-through-pull-requests" title="Permalink to this headline">¶</a></h3>
+<p>If you don&#8217;t have write permission on the github dojo/docs repository then follow these steps.</p>
+<blockquote>
+<div><ul class="simple">
+<li>create a github fork of the dojo/docs github repo by pressing fork button on <a class="reference external" href="https://github.com/dojo/docs">https://github.com/dojo/docs</a></li>
+<li>create local fork of your github fork: git clone <a class="reference external" href="mailto:git&#37;&#52;&#48;github&#46;com">git<span>&#64;</span>github<span>&#46;</span>com</a>:yourusername/docs.git</li>
+<li>if working on a branch:  git checkout -b 1.7</li>
+<li>edit and fix some files</li>
+<li>git commit -a -m &#8220;typo in dijit/Button&#8221;</li>
+<li>git push (sends changes to your github account)</li>
+<li>open pull request on your github account to send your changes to
+upstream&#8217;s master</li>
+</ul>
+</div></blockquote>
+<p>If the upstream dojo/docs have changed then you will have to do some
+merging and rebasing in your repository (after you&#8217;ve commited your changes):</p>
+<blockquote>
+<div><ul class="simple">
+<li>git pull &#8211;rebase</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="updating-the-documentation-directly">
+<h3>Updating the documentation directly<a class="headerlink" href="#updating-the-documentation-directly" title="Permalink to this headline">¶</a></h3>
+<p>If you do have write permission on the github dojo/docs repository then follow these steps:</p>
+<blockquote>
+<div><ul class="simple">
+<li>create local fork of dojo/docs: git clone <a class="reference external" href="mailto:git&#37;&#52;&#48;github&#46;com">git<span>&#64;</span>github<span>&#46;</span>com</a>:dojo/docs.git</li>
+<li>if working on a branch:  git checkout -b 1.7</li>
+<li>edit and fix some files</li>
+<li>git commit -a -m &#8220;typo in dijit/Button&#8221;</li>
+<li>git push</li>
+</ul>
+</div></blockquote>
+<p>If the upstream dojo/docs have changed then you will have to do some
+merging and rebasing in your repository (after you&#8217;ve commited your changes):</p>
+<blockquote>
+<div><ul class="simple">
+<li>git pull &#8211;rebase</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="previewing-local-changes-before-commit">
+<h2><a class="toc-backref" href="#id6">Previewing local changes before commit</a><a class="headerlink" href="#previewing-local-changes-before-commit" title="Permalink to this headline">¶</a></h2>
+<p>In order to test your documentation changes, you should run rstwiki, the tool at <a class="reference external" href="http://livedocs.dojotoolkit.org">http://livedocs.dojotoolkit.org</a>,
+locally, against your clone of the documentation repository.
+In this case you will disable automatic commit and push to github.</p>
+<p>Running rstwiki locally will allow you to make sure that code examples work and
+to confirm the reST formatting of your files.</p>
+<p>Alternately, you can do an export of the doc, as explained in the &#8220;Exporting the doc&#8221; section below.
+However, that is not recommended since it takes a long time to build all the documentation.</p>
+<div class="section" id="setup-rstwiki-on-mac">
+<h3>Setup rstwiki on Mac<a class="headerlink" href="#setup-rstwiki-on-mac" title="Permalink to this headline">¶</a></h3>
+<p>Follow these instructions to setup on mac or another UNIX box:</p>
+<ol class="arabic">
+<li><p class="first">Clone <cite>rstwiki</cite> somewhere</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>$ cd ~/
+$ git clone git@github.com:phiggins42/rstwiki.git
+</pre></div>
+</div>
+<p>If you&#8217;d like to participate in the development of rstwiki itself (UI, backend, etc), ask for write permission on
+that repo.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Install required python things (tested w/ Python 2.6 &amp; 2.7)</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>$ easy_install cheetah cherrypy docutils pygments gitdb==0.5.2 gitpython
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Update submodules / dojo</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>$ cd rstwiki
+$ git submodule init &amp;&amp; git submodule update
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Create wiki.conf</p>
+<blockquote>
+<div><p>Copy local.sample.conf to wiki.conf.   Edit and adjust paths.
+For this example, we&#8217;ll set wiki.root to point to a dojodocs git clone, eg:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">wiki</span><span class="p">]</span>
+<span class="n">root</span> <span class="o">=</span> <span class="s">&quot;/home/me/rstwiki/dojodocs&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Clone the &#8220;Dojo Docs&#8221; repository into that path</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>$ cd ~/rstwiki
+$ git clone git@github.com:dojo/docs.git dojodocs
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Run rstwiki</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre>$ export LC_CTYPE=&quot;&quot;
+$ mkdir /tmp/rstwiki_sessions
+$ ./wiki.py
+</pre></div>
+</div>
+<p>A server should be listening on local port &#8220;4200&#8221;. Point your web browser there. rstwiki will be a live preview of
+files on disk, following a simple wiki format of a/b/c -&gt; a/b/c.rst, with the exception of a/b/ -&gt; a/b/index.rst
+and a/b -&gt; a/b.rst ...</p>
+</div></blockquote>
+</li>
+</ol>
+</div>
+<div class="section" id="setup-rstwiki-on-windows">
+<h3>Setup rstwiki on Windows<a class="headerlink" href="#setup-rstwiki-on-windows" title="Permalink to this headline">¶</a></h3>
+<p>Follow the general instructions above, but with these changes/notes:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">If you have not installed ez_setup.py you will need to find it, download it and run it.</p>
+</li>
+<li><p class="first">The %TMP% directory is not used for rstwiki_sessions. It seems to be hardcoded to c:\tmp so you need to create
+c:\tmp\rstwiki_sessions</p>
+</li>
+<li><p class="first">I had to modify wiki.py to change</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&quot;_templates&quot;</span><span class="p">,</span> <span class="s">&quot;templates&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>to</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&quot;templates&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="updating-dojo-toolkit-in-rstwiki">
+<h3>Updating Dojo Toolkit in rstwiki<a class="headerlink" href="#updating-dojo-toolkit-in-rstwiki" title="Permalink to this headline">¶</a></h3>
+<p>rstwiki has a checkout of the dojotoolkit from our github repo, managed as submodules. You can occasionally update this
+by calling:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd ~/rstwiki
+$ git submodule foreach git pull origin master
+$ git commit -a -m &quot;update dojo to latest trunk&quot;
+$ git push
+</pre></div>
+</div>
+<p>Or you can replace the dijit/ dojox/ dojo/ and util/ folders with [links to] an svn checkout,
+which would reflect a more recent &#8220;trunk&#8221;.
+(In that case, put them back to the originals before trying the commands above)</p>
+<p>There is a <cite>docs</cite> namespace in rstwiki/_static/, and a build profile. This is used for both the wiki and the eventual
+reference-guide export.</p>
+</div>
+</div>
+<div class="section" id="exporting-the-doc">
+<h2><a class="toc-backref" href="#id7">Exporting the doc</a><a class="headerlink" href="#exporting-the-doc" title="Permalink to this headline">¶</a></h2>
+<p>To create the HTML version of the documentation from the RST files, do</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd rstwiki/export
+$ export LC_CTYPE=&quot;&quot;
+$ mkdir build
+</pre></div>
+</div>
+<p>If your documentation is in a non-standard place, first edit the makefile.   Search for &#8220;dojodocs&#8221; and replace it with
+the proper path.   Then:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ make data html
+</pre></div>
+</div>
+<p>Look in build/warnings.txt for error/warning messages, such as misformatted tables or broken links.</p>
+<p>Exporting the doc is necessary to put it on the dojotoolkit.org website, and it also generates a report about
+errors/warnings in the documentation, which is useful for fixing problems.</p>
+</div>
+<div class="section" id="backporting-trunk-doc-changes-to-a-doc-branch">
+<h2><a class="toc-backref" href="#id8">Backporting trunk doc changes to a doc branch</a><a class="headerlink" href="#backporting-trunk-doc-changes-to-a-doc-branch" title="Permalink to this headline">¶</a></h2>
+<p>Normally in git you merge from the version branch (ex: 1.7) into the master (aka trunk).   However, with our
+documentation, at least for 1.7, we&#8217;ve been making all changes initially on   master, and then backporting the relevant
+ones to the 1.7 branch.    This is partly because the web interface (livedocs.dojotoolkit.org) checks into the trunk.</p>
+<p>So these are instructions about how to copy relevant changes from the master (aka trunk) into a version branch.   They
+assume a local clone of the github docs repository, created by:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git clone git@github.com:dojo/docs
+</pre></div>
+</div>
+<p>First, get the latest doc on the trunk:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd [path to documentation]
+$ git pull
+</pre></div>
+</div>
+<p>Then, follow one of the two paths below.</p>
+<div class="section" id="if-the-branch-doesn-t-contain-any-branch-specific-commits">
+<h3>If the branch doesn&#8217;t contain any branch-specific commits...<a class="headerlink" href="#if-the-branch-doesn-t-contain-any-branch-specific-commits" title="Permalink to this headline">¶</a></h3>
+<p>Assuming that no changes have been made on the 1.7/ branch ever, other than copying commits from the trunk, the easiest
+way to &#8220;merge&#8221; trunk changes to the branch (according to
+<a class="reference external" href="http://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch">http://stackoverflow.com/questions/1994463/how-to-cherry-pick-a-range-of-commits-and-merge-into-another-branch</a>) is to
+do an interactive rebase:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git checkout 1.7
+$ git rebase -i
+</pre></div>
+</div>
+<p>This will bring up an editor with a list of commits, listing from oldest to newest.</p>
+<p>Now, delete the lines for the commits that don&#8217;t apply to the branch (i.e. new information about the 1.8 release).
+You can look up each commit on <a class="reference external" href="https://github.com/dojo/docs/commits/master">https://github.com/dojo/docs/commits/master</a> to see the diff.  Then save the file and
+close the editor.</p>
+<p>You can call</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git log
+</pre></div>
+</div>
+<p>to check that the right changes were merged, plus check the files themselves.</p>
+<p>Finally, push the branch changes on your local repository back to the master repository on github, and switch your
+local repository back to the trunk:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git push
+$ git checkout master
+</pre></div>
+</div>
+</div>
+<div class="section" id="if-branch-specific-changes-have-already-been-made-or-most-trunk-changes-don-t-apply">
+<h3>If branch specific changes have already been made, or most trunk changes don&#8217;t apply...<a class="headerlink" href="#if-branch-specific-changes-have-already-been-made-or-most-trunk-changes-don-t-apply" title="Permalink to this headline">¶</a></h3>
+<p>If someone has directly changed the 1.7 branch, or at some point when most of the changes to trunk don&#8217;t need to be
+back ported, then should switch to using the cherry-pick command to merge, which is something like</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git checkout 1.7
+$ git cherry-pick -x commit1
+$ git cherry-pick -x commit2
+$ git cherry-pick -x commit3
+</pre></div>
+</div>
+<p>commit1 should be the oldest, and commit3 should be the newest.</p>
+<p>The -x flag is important to link the new commit with the old commit, for reference.   It adds a message to the new
+commit like &#8220;cherry picked from commit ...&#8221;.</p>
+<p>Starting with git 1.7.7.3 you can specify a range of commits to the cherry-pick command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ git cherry-pick -x commit0..commit2
+</pre></div>
+</div>
+<p>This syntax will <em>not</em> merge commit0, it starts at the commit <em>after</em> commit0.</p>
+<p>Caution: once we run cherry-pick on the branch we can&#8217;t go back to using rebase for merging changes.</p>
+</div>
+</div>
+<div class="section" id="creating-reference-guide-for-web-site">
+<h2><a class="toc-backref" href="#id9">Creating reference guide for Web site</a><a class="headerlink" href="#creating-reference-guide-for-web-site" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">--recursive</span> <span class="pre">git&#64;github.com:phiggins42/rstwiki.git</span></code> (recursive is important, build will not work if
+submodules are not checked out)</li>
+<li>Inside there, <code class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:dojo/docs.git</span> <span class="pre">dojodocs</span></code> (edit the Makefile in <code class="docutils literal"><span class="pre">export</span></code> if you want these
+docs to come from somewhere else)</li>
+<li>Go into <code class="docutils literal"><span class="pre">dojodocs</span></code> and <code class="docutils literal"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">1.7</span></code> (or whatever the latest RELEASE branch is; this repo tracks trunk by
+default!)</li>
+<li>Go into each of <code class="docutils literal"><span class="pre">_static/{dojo,dijit,dojox,util}</span></code> and <code class="docutils literal"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">1.7.1</span></code> (or whatever the latest RELEASE
+version of DTK is; rstwiki tracks some version of trunk by default!)  Also it maybe more appropriate to copy in
+an SVN copy of DTK, as <code class="docutils literal"><span class="pre">svn:external</span></code> links are not mirrored on GitHub.  In particular, you will not have certain
+parts of DojoX available in version 1.8 and later if you just use the GitHub mirror.</li>
+<li><code class="docutils literal"><span class="pre">cd</span> <span class="pre">export</span></code></li>
+<li>Edit <code class="docutils literal"><span class="pre">Makefile</span></code> to contain the correct Dojo version</li>
+<li><code class="docutils literal"><span class="pre">mkdir</span> <span class="pre">build</span></code></li>
+<li><code class="docutils literal"><span class="pre">export</span> <span class="pre">LC_CTYPE=&quot;&quot;</span></code> (this is necessary because if LC_CTYPE=&#8221;UTF8&#8221;, the build fails immediately)</li>
+<li><code class="docutils literal"><span class="pre">make</span> <span class="pre">clean</span> <span class="pre">dojo</span> <span class="pre">data</span> <span class="pre">html</span></code></li>
+<li>In the DTK repo, <code class="docutils literal"><span class="pre">svn</span> <span class="pre">rm</span> <span class="pre">reference-guide/1.7</span> <span class="pre">&amp;&amp;</span> <span class="pre">svn</span> <span class="pre">ci</span> <span class="pre">-m</span> <span class="pre">&quot;Replacing</span> <span class="pre">old</span> <span class="pre">reference</span> <span class="pre">guide&quot;</span></code> (noting that you
+change it to the version of the documentation you actually built).</li>
+<li>Move the <code class="docutils literal"><span class="pre">export/build/html</span></code> directory to <code class="docutils literal"><span class="pre">reference-guide/1.7</span></code> in the DTK repo</li>
+<li><code class="docutils literal"><span class="pre">svn</span> <span class="pre">add</span> <span class="pre">reference-guide</span> <span class="pre">&amp;&amp;</span> <span class="pre">svn</span> <span class="pre">ci</span> <span class="pre">-m</span> <span class="pre">&quot;Adding</span> <span class="pre">new</span> <span class="pre">reference</span> <span class="pre">guide&quot;</span></code></li>
+<li>Done, finally!  But see next section...</li>
+</ol>
+</div>
+<div class="section" id="creating-new-version-of-reference-guide-for-web-site">
+<h2><a class="toc-backref" href="#id10">Creating new version of reference guide for Web site</a><a class="headerlink" href="#creating-new-version-of-reference-guide-for-web-site" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>In rstwiki, update _static/package.json and export/source/_templates/layout.html to contain the new version number</li>
+</ol>
+<p>2. Repeat instructions above for every version, starting with 1.7 and ending with the newest version.
+This is necessary so the drop downs on each page (ex: <a class="reference external" href="https://dojotoolkit.org/reference-guide/1.7/">https://dojotoolkit.org/reference-guide/1.7/</a>)
+contain the new version.</p>
+</div>
+<div class="section" id="updating-rstwiki-on-livedocs">
+<h2><a class="toc-backref" href="#id11">Updating rstWiki on livedocs</a><a class="headerlink" href="#updating-rstwiki-on-livedocs" title="Permalink to this headline">¶</a></h2>
+<p>Note: this is in <code class="docutils literal"><span class="pre">tmpdocs.dojotoolkit.org</span></code> on the fileserver at the moment. When it moves, init.d and apache2 conf
+need to be updated.</p>
+<ol class="arabic simple">
+<li>Make whatever changes you need to the repo at <a class="reference external" href="https://github.com/phiggins42/rstwiki">https://github.com/phiggins42/rstwiki</a></li>
+<li><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">website</span> <span class="pre">git</span> <span class="pre">pull</span> <span class="pre">&amp;&amp;</span> <span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">website</span> <span class="pre">git</span> <span class="pre">submodule</span> <span class="pre">update</span></code> on the server to retrieve the update</li>
+<li><code class="docutils literal"><span class="pre">cd</span> <span class="pre">_static</span> <span class="pre">&amp;&amp;</span> <span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">website</span> <span class="pre">./build.sh</span></code> if any CSS or JS changes were made</li>
+<li><code class="docutils literal"><span class="pre">sudo</span> <span class="pre">/etc/init.d/rstwiki</span> <span class="pre">restart</span></code> to pick up any Python changes</li>
+</ol>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">Editing Dojo&#8217;s Reference Guide</a><ul>
+<li><a class="reference internal" href="#general-style-notes">General Style Notes</a></li>
+<li><a class="reference internal" href="#documentation-formatting">Documentation Formatting</a><ul>
+<li><a class="reference internal" href="#pages">Pages</a></li>
+<li><a class="reference internal" href="#paragraphs">Paragraphs</a></li>
+<li><a class="reference internal" href="#inline-text">Inline Text</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+<li><a class="reference internal" href="#images">Images</a></li>
+<li><a class="reference internal" href="#directives">Directives</a></li>
+<li><a class="reference internal" href="#indentation">Indentation</a></li>
+<li><a class="reference internal" href="#index-files">Index Files</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#editing-documentation-online">Editing documentation online</a></li>
+<li><a class="reference internal" href="#editing-documentation-locally">Editing documentation locally</a><ul>
+<li><a class="reference internal" href="#updating-the-documentation-through-pull-requests">Updating the documentation through pull requests</a></li>
+<li><a class="reference internal" href="#updating-the-documentation-directly">Updating the documentation directly</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#previewing-local-changes-before-commit">Previewing local changes before commit</a><ul>
+<li><a class="reference internal" href="#setup-rstwiki-on-mac">Setup rstwiki on Mac</a></li>
+<li><a class="reference internal" href="#setup-rstwiki-on-windows">Setup rstwiki on Windows</a></li>
+<li><a class="reference internal" href="#updating-dojo-toolkit-in-rstwiki">Updating Dojo Toolkit in rstwiki</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exporting-the-doc">Exporting the doc</a></li>
+<li><a class="reference internal" href="#backporting-trunk-doc-changes-to-a-doc-branch">Backporting trunk doc changes to a doc branch</a><ul>
+<li><a class="reference internal" href="#if-the-branch-doesn-t-contain-any-branch-specific-commits">If the branch doesn&#8217;t contain any branch-specific commits...</a></li>
+<li><a class="reference internal" href="#if-branch-specific-changes-have-already-been-made-or-most-trunk-changes-don-t-apply">If branch specific changes have already been made, or most trunk changes don&#8217;t apply...</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-reference-guide-for-web-site">Creating reference guide for Web site</a></li>
+<li><a class="reference internal" href="#creating-new-version-of-reference-guide-for-web-site">Creating new version of reference guide for Web site</a></li>
+<li><a class="reference internal" href="#updating-rstwiki-on-livedocs">Updating rstWiki on livedocs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

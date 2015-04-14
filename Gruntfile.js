@@ -43,7 +43,19 @@ module.exports = function (grunt) {
 		exec: {
 			guide: {
 				cwd: '<%= config.src %>/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -a -c ./ -d <%= config.guide.ver %> <%= config.guide.ver %> ../../../<%= config.dest %>/reference-guide/<%= config.guide.ver %>'
+				cmd: 'sphinx-build -b html -a -c ./ ./1.10 ../../../<%= config.dest %>/reference-guide/1.10'
+			},
+			guide19: {
+				cwd: '<%= config.src %>/documentation/reference-guide',
+				cmd: 'sphinx-build -b html -a -c ./ ./1.9/ ../../../<%= config.dest %>/reference-guide/1.9'
+			},
+			guide18: {
+				cwd: '<%= config.src %>/documentation/reference-guide',
+				cmd: 'sphinx-build -b html -a -c ./ ./1.8/ ../../../<%= config.dest %>/reference-guide/1.8'
+			},
+			guide17: {
+				cwd: '<%= config.src %>/documentation/reference-guide',
+				cmd: 'sphinx-build -b html -a -c ./ ./1.7/ ../../../<%= config.dest %>/reference-guide/1.7'
 			},
 			api: {
 				cwd: 'tasks/api',

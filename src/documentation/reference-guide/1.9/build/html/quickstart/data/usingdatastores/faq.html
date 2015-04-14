@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo.data FAQ &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../../index.html">Startpage</a></li>
+            <li><a href="../../../dojo/index.html">Dojo</a></li>
+            <li><a href="../../../dijit/index.html">Dijit</a></li>
+            <li><a href="../../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-data-faq">
+<span id="quickstart-data-usingdatastores-faq"></span><h1><a class="toc-backref" href="#id1">dojo.data FAQ</a><a class="headerlink" href="#dojo-data-faq" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-data-faq" id="id1">dojo.data FAQ</a><ul>
+<li><a class="reference internal" href="#question-1-i-called-fetch-on-a-datastore-and-the-return-value-from-the-fetch-function-doesn-t-have-my-data-why" id="id2">Question 1:  I called fetch() on a datastore and the return value from the fetch function doesn&#8217;t have my data! Why?</a></li>
+<li><a class="reference internal" href="#question-2-i-introspected-items-from-itemfilereadstore-using-javascript-associative-map-walking-and-it-has-all-these-variables-why" id="id3">Question 2:  I introspected items from ItemFileReadStore using JavaScript associative map walking and it has all these &#8216;_&#8217; variables! Why?</a></li>
+<li><a class="reference internal" href="#question-3-okay-you-say-dojo-data-items-are-opaque-but-i-would-like-to-convert-them-to-a-json-object-how-do-i-do-that" id="id4">Question 3:  Okay, you say dojo.data items are opaque ... but I would like to convert them to a JSON object. How do I do that?</a></li>
+<li><a class="reference internal" href="#question-4-okay-i-want-to-copy-items-from-one-store-to-another-but-if-i-directly-pass-items-i-get-errors-what-do-i-do" id="id5">Question 4:  Okay, I want to copy items from one store to another, but if I directly pass items I get errors. What do I do?</a></li>
+<li><a class="reference internal" href="#question-5-with-itemfilereadstore-and-itemfilewritestore-how-do-i-reload-the-store-contents" id="id6">Question 5:  With ItemFileReadStore and ItemFileWriteStore, how do I reload the store contents?</a></li>
+<li><a class="reference internal" href="#question-6-how-do-i-get-a-count-of-all-items-in-a-datastore" id="id7">Question 6:  How do I get a count of all items in a datastore?</a></li>
+<li><a class="reference internal" href="#question-7-do-all-datastores-have-to-use-the-format-of-data-used-by-itemfilereadstore" id="id8">Question 7:  Do all datastores have to use the format of data used by ItemFileReadStore?</a></li>
+<li><a class="reference internal" href="#question-8-i-want-to-save-my-data-with-itemfilewritestore-but-it-doesn-t-send-the-data-to-the-server-why" id="id9">Question 8:  I want to save my data with ItemFileWriteStore, but it doesn&#8217;t send the data to the server. Why?</a></li>
+<li><a class="reference internal" href="#question-9-in-one-of-my-items-in-itemfilereadstore-i-defined-an-attribute-value-as-a-javascript-object-when-i-access-it-through-store-getvalue-it-has-been-modified-why" id="id10">Question 9:  In one of my items in ItemFileReadStore I defined an attribute value as a JavaScript object. When I access it through store.getValue(), it has been modified. Why?</a></li>
+<li><a class="reference internal" href="#question-10-in-one-of-my-items-in-itemfilereadstore-i-defined-an-attribute-value-as-a-javascript-object-but-i-didn-t-set-an-identifier-the-store-blows-up-with-an-error-about-no-identifier-when-fetching-why-does-it-care" id="id11">Question 10:  In one of my items in ItemFileReadStore I defined an attribute value as a JavaScript object, but I didn&#8217;t set an identifier. The store blows up with an error about no identifier when fetching. Why does it care?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This section is intended as a point to put answers to the common questions posed by users of dojo.data.</p>
+<div class="section" id="question-1-i-called-fetch-on-a-datastore-and-the-return-value-from-the-fetch-function-doesn-t-have-my-data-why">
+<h2><a class="toc-backref" href="#id2">Question 1:  I called fetch() on a datastore and the return value from the fetch function doesn&#8217;t have my data! Why?</a><a class="headerlink" href="#question-1-i-called-fetch-on-a-datastore-and-the-return-value-from-the-fetch-function-doesn-t-have-my-data-why" title="Permalink to this headline">¶</a></h2>
+<p>Because the dojo.data API is asynchronous by definition. The return value from fetch will generally not have any data on it. It&#8217;s intended as a point for stores to store an abort() function for a request and a place for stores to put internal cache details and the like. It is not intended to hand back data items. Data items are always returned through the callbacks to fetch().</p>
+</div>
+<div class="section" id="question-2-i-introspected-items-from-itemfilereadstore-using-javascript-associative-map-walking-and-it-has-all-these-variables-why">
+<h2><a class="toc-backref" href="#id3">Question 2:  I introspected items from ItemFileReadStore using JavaScript associative map walking and it has all these &#8216;_&#8217; variables! Why?</a><a class="headerlink" href="#question-2-i-introspected-items-from-itemfilereadstore-using-javascript-associative-map-walking-and-it-has-all-these-variables-why" title="Permalink to this headline">¶</a></h2>
+<p>Items from a datastore are supposed to be treated as opaque handles. This is by definition of the API, which can be read in the <a class="reference internal" href="../../../dojo/data/api.html#dojo-data-api"><span>API section</span></a>. dojo.data.ItemFileReadStore and dojo.data.ItemFileWriteStore store several bits of important internal information on each item, such as what store instance it came form, what its internal index is (for O(1) lookup performance), and internal maps of who has references to the item. This is all critical information needed by the store to make item processing efficient. It is also information that should never be relied on directly, it should only be used by the store itself.</p>
+<p>All store access should go through the <a class="reference internal" href="../../../dojo/data/api/Read.html#dojo-data-api-read"><span>dojo.data.api.Read</span></a> functions. Below is a list of the common functions and what you use them for:</p>
+<ul class="simple">
+<li><strong>store.getAttributes(item):</strong>  Returns an array list of all public attributes of an item. Only attributes returned in this list should ever be used as data.</li>
+<li><strong>store.getValue(item, attribute):</strong> The function you use to get a single value from an attribute of a data item. For multi-valued attributes, you should use store.getValues(item, attribute);</li>
+</ul>
+</div>
+<div class="section" id="question-3-okay-you-say-dojo-data-items-are-opaque-but-i-would-like-to-convert-them-to-a-json-object-how-do-i-do-that">
+<h2><a class="toc-backref" href="#id4">Question 3:  Okay, you say dojo.data items are opaque ... but I would like to convert them to a JSON object. How do I do that?</a><a class="headerlink" href="#question-3-okay-you-say-dojo-data-items-are-opaque-but-i-would-like-to-convert-them-to-a-json-object-how-do-i-do-that" title="Permalink to this headline">¶</a></h2>
+<p>This is actually not difficult to do. This is done through usage of the dojo.data.api.Read specification. The code you would use to create a JSON structure from a dojo.data item is the following:</p>
+</div>
+<div class="section" id="question-4-okay-i-want-to-copy-items-from-one-store-to-another-but-if-i-directly-pass-items-i-get-errors-what-do-i-do">
+<h2><a class="toc-backref" href="#id5">Question 4:  Okay, I want to copy items from one store to another, but if I directly pass items I get errors. What do I do?</a><a class="headerlink" href="#question-4-okay-i-want-to-copy-items-from-one-store-to-another-but-if-i-directly-pass-items-i-get-errors-what-do-i-do" title="Permalink to this headline">¶</a></h2>
+<p>By definition, items are unique to their store instance, so you cannot generally pass an item from store A to store B without getting errors. What you must do is copy the data from one store to another. The technique for this is actually very similar to the technique described in question 3. You must iterate over the items attributes, build a JavaScript Object of them, then on the target store, call &#8216;newItem&#8217; to create the copy of the item. Psuedocode for this would be like:</p>
+</div>
+<div class="section" id="question-5-with-itemfilereadstore-and-itemfilewritestore-how-do-i-reload-the-store-contents">
+<h2><a class="toc-backref" href="#id6">Question 5:  With ItemFileReadStore and ItemFileWriteStore, how do I reload the store contents?</a><a class="headerlink" href="#question-5-with-itemfilereadstore-and-itemfilewritestore-how-do-i-reload-the-store-contents" title="Permalink to this headline">¶</a></h2>
+<p>Use the two constructor options added in 1.2, <em>clearOnClose</em> and <em>urlPreventCache</em>. Then when you want to reload, call close(). It will flush the internal store structures and reload everything from the server or whatnot.</p>
+</div>
+<div class="section" id="question-6-how-do-i-get-a-count-of-all-items-in-a-datastore">
+<h2><a class="toc-backref" href="#id7">Question 6:  How do I get a count of all items in a datastore?</a><a class="headerlink" href="#question-6-how-do-i-get-a-count-of-all-items-in-a-datastore" title="Permalink to this headline">¶</a></h2>
+<p>You do a fetch that queries for all items, then use the onBegin callback function. In the dojo.data.api.Read spec, the onBegin callback function&#8217;s first parameter is the total size of the match, regardless of what start and count were configured to. This is so you have a way of knowing the total match outside of the returned page so that you can configure your client side display appropriately. The simplest way to get a size back, but no items would be to do something like:</p>
+<p>That should return no items but give you the size of the match.</p>
+<p>The reason for this is that not all stores keep every item in memory in the browser. This would be fundamentally impossible if there was an item set of well over one million entries, which is where server backed datastores come in. For server backed datastores, you have no possible way of knowing the size of the data set (which could be changing as operations occur from other clients in a multi-user web app) at any particular moment without a query to the server ... which naturally gets into invoking a fetch.</p>
+<p>The data API was designed to hide whether or not all items are in memory, or are stored on some remote service.</p>
+</div>
+<div class="section" id="question-7-do-all-datastores-have-to-use-the-format-of-data-used-by-itemfilereadstore">
+<h2><a class="toc-backref" href="#id8">Question 7:  Do all datastores have to use the format of data used by ItemFileReadStore?</a><a class="headerlink" href="#question-7-do-all-datastores-have-to-use-the-format-of-data-used-by-itemfilereadstore" title="Permalink to this headline">¶</a></h2>
+<p>No. A store&#8217;s internal data format can be whatever is most efficient for that store to work with. For example, dojox.data.XmlStore&#8217;s input data format is XML, not JSON. The API is intended to adapt over new as well as existing, data services on the web and expose data items on a common fashion, regardless of the actual backing transport format.</p>
+</div>
+<div class="section" id="question-8-i-want-to-save-my-data-with-itemfilewritestore-but-it-doesn-t-send-the-data-to-the-server-why">
+<h2><a class="toc-backref" href="#id9">Question 8:  I want to save my data with ItemFileWriteStore, but it doesn&#8217;t send the data to the server. Why?</a><a class="headerlink" href="#question-8-i-want-to-save-my-data-with-itemfilewritestore-but-it-doesn-t-send-the-data-to-the-server-why" title="Permalink to this headline">¶</a></h2>
+<p>Because it doesn&#8217;t know how to send it to your specific server/service implementation. dojo.data.ItemFileWriteStore&#8217;s default save behavior is to commit data into internal memory structures only. It provides an overridable hook functions that users must provide in order to send data to an external service. See the <a class="reference internal" href="../../../dojo/data/ItemFileWriteStore.html#dojo-data-itemfilewritestore"><span>Write Section</span></a> of the ItemFileWriteStore docs.</p>
+</div>
+<div class="section" id="question-9-in-one-of-my-items-in-itemfilereadstore-i-defined-an-attribute-value-as-a-javascript-object-when-i-access-it-through-store-getvalue-it-has-been-modified-why">
+<h2><a class="toc-backref" href="#id10">Question 9:  In one of my items in ItemFileReadStore I defined an attribute value as a JavaScript object. When I access it through store.getValue(), it has been modified. Why?</a><a class="headerlink" href="#question-9-in-one-of-my-items-in-itemfilereadstore-i-defined-an-attribute-value-as-a-javascript-object-when-i-access-it-through-store-getvalue-it-has-been-modified-why" title="Permalink to this headline">¶</a></h2>
+<p>This is because child objects (non-atomic values such as int, string, etc), are automatically treated as data store items by dojo.data.ItemFileReadStore. So, when it processes that attribute, it updates it into ItemFileReadStore internal format and therefore
+attributes on it should also be accessed through store functions, such as getValue(). This is easily detectable by using the ItemFileReadStore&#8217;s isItem() function.</p>
+<p>If you want to prevent ItemFileReadStore from converting Object types into data store items, you will need to use a custom type map, and define your object as a specific type that can be serialized to and from JSON using the custom type formatters. See the <a class="reference internal" href="../../../dojo/data/ItemFileReadStore.html#dojo-data-itemfilereadstore"><span>custom types</span></a> documentation for more details.</p>
+</div>
+<div class="section" id="question-10-in-one-of-my-items-in-itemfilereadstore-i-defined-an-attribute-value-as-a-javascript-object-but-i-didn-t-set-an-identifier-the-store-blows-up-with-an-error-about-no-identifier-when-fetching-why-does-it-care">
+<h2><a class="toc-backref" href="#id11">Question 10:  In one of my items in ItemFileReadStore I defined an attribute value as a JavaScript object, but I didn&#8217;t set an identifier. The store blows up with an error about no identifier when fetching. Why does it care?</a><a class="headerlink" href="#question-10-in-one-of-my-items-in-itemfilereadstore-i-defined-an-attribute-value-as-a-javascript-object-but-i-didn-t-set-an-identifier-the-store-blows-up-with-an-error-about-no-identifier-when-fetching-why-does-it-care" title="Permalink to this headline">¶</a></h2>
+<p>This question is easier to understand with a bit of sample ItemFile*Store input. Consider the following:</p>
+<p>Note above that the child object nested off someValue doesn&#8217;t have a <em>myid</em> attribute. Why does this cause ItemFile*Store an issue. This is effectively answered by question 9 on this page. This is because child objects (non-atomic values such as int, string, etc), are automatically treated as data store items by dojo.data.ItemFileReadStore.</p>
+<p>Because it is treated as a datastore item, it must have an identifier to comply with the needs of the <a class="reference internal" href="../../../dojo/data/api/Identity.html#dojo-data-api-identity"><span>dojo.data.api.Identity</span></a> specification. Identity requires that all items be able to be uniquely looked up by an identifier. It does not state in a hierarchy of items only root items can be looked up by an identifier. Therefore, for ItemFile*Store, if you define the <em>identifier</em> option of the data set, you must make sure that all child items have unique identifiers as well so the Identity API implementation can be satisfied.</p>
+<p>This is also necessary for support for widgets like dijit.Tree, when write support is required. It needs the capability of looking up an item from a store by its identifier, regardless of its position (root item or child of another item). Effectively, if an object in a datastore is identifiable as a datastore item (store.isItem(possibleItem)), and that store implements the Identity API, then that item must return a value for store.getIdentity(possibleItem). In other words, Hierarchy is irrelevant to whether or not an item has an identifier. All data store items in an Identity implementing store must return a value that can then be used to look the item back up later.</p>
+<p>You have options with ItemFile*Store in how it handles nested/child objects. They are as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Apply identifier attribute that is unique to ALL JavaScript objects in the data you are passing as data store items.</li>
+</ul>
+</div></blockquote>
+<p>OR:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Don&#8217;t assign an attribute the role of identifier and let the store auto-assign unique ones.</li>
+</ul>
+</div></blockquote>
+<p>OR:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Use a custom type map to make the ItemFile*Store treat the complex object field value as a straight value and not a data store item.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo.data FAQ</a><ul>
+<li><a class="reference internal" href="#question-1-i-called-fetch-on-a-datastore-and-the-return-value-from-the-fetch-function-doesn-t-have-my-data-why">Question 1:  I called fetch() on a datastore and the return value from the fetch function doesn&#8217;t have my data! Why?</a></li>
+<li><a class="reference internal" href="#question-2-i-introspected-items-from-itemfilereadstore-using-javascript-associative-map-walking-and-it-has-all-these-variables-why">Question 2:  I introspected items from ItemFileReadStore using JavaScript associative map walking and it has all these &#8216;_&#8217; variables! Why?</a></li>
+<li><a class="reference internal" href="#question-3-okay-you-say-dojo-data-items-are-opaque-but-i-would-like-to-convert-them-to-a-json-object-how-do-i-do-that">Question 3:  Okay, you say dojo.data items are opaque ... but I would like to convert them to a JSON object. How do I do that?</a></li>
+<li><a class="reference internal" href="#question-4-okay-i-want-to-copy-items-from-one-store-to-another-but-if-i-directly-pass-items-i-get-errors-what-do-i-do">Question 4:  Okay, I want to copy items from one store to another, but if I directly pass items I get errors. What do I do?</a></li>
+<li><a class="reference internal" href="#question-5-with-itemfilereadstore-and-itemfilewritestore-how-do-i-reload-the-store-contents">Question 5:  With ItemFileReadStore and ItemFileWriteStore, how do I reload the store contents?</a></li>
+<li><a class="reference internal" href="#question-6-how-do-i-get-a-count-of-all-items-in-a-datastore">Question 6:  How do I get a count of all items in a datastore?</a></li>
+<li><a class="reference internal" href="#question-7-do-all-datastores-have-to-use-the-format-of-data-used-by-itemfilereadstore">Question 7:  Do all datastores have to use the format of data used by ItemFileReadStore?</a></li>
+<li><a class="reference internal" href="#question-8-i-want-to-save-my-data-with-itemfilewritestore-but-it-doesn-t-send-the-data-to-the-server-why">Question 8:  I want to save my data with ItemFileWriteStore, but it doesn&#8217;t send the data to the server. Why?</a></li>
+<li><a class="reference internal" href="#question-9-in-one-of-my-items-in-itemfilereadstore-i-defined-an-attribute-value-as-a-javascript-object-when-i-access-it-through-store-getvalue-it-has-been-modified-why">Question 9:  In one of my items in ItemFileReadStore I defined an attribute value as a JavaScript object. When I access it through store.getValue(), it has been modified. Why?</a></li>
+<li><a class="reference internal" href="#question-10-in-one-of-my-items-in-itemfilereadstore-i-defined-an-attribute-value-as-a-javascript-object-but-i-didn-t-set-an-identifier-the-store-blows-up-with-an-error-about-no-identifier-when-fetching-why-does-it-care">Question 10:  In one of my items in ItemFileReadStore I defined an attribute value as a JavaScript object, but I didn&#8217;t set an identifier. The store blows up with an error about no identifier when fetching. Why does it care?</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

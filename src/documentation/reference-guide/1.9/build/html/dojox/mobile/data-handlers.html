@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Data Handlers &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../../dojo/index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="data-handlers">
+<span id="dojox-mobile-data-handlers"></span><h1><a class="toc-backref" href="#id1">Data Handlers</a><a class="headerlink" href="#data-handlers" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Yoshiroh Kamiyama</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#data-handlers" id="id1">Data Handlers</a><ul>
+<li><a class="reference internal" href="#the-datahandler-class" id="id2">The DataHandler Class</a></li>
+<li><a class="reference internal" href="#the-filetypemap-interface" id="id3">The FileTypeMap Interface</a></li>
+<li><a class="reference internal" href="#the-datasource-interface" id="id4">The DataSource Interface</a></li>
+<li><a class="reference internal" href="#the-contenttypemap-class" id="id5">The ContentTypeMap Class</a></li>
+<li><a class="reference internal" href="#the-contenthandler-interface" id="id6">The ContentHandler Interface</a></li>
+<li><a class="reference internal" href="#the-overall-control-flow" id="id7">The Overall Control-Flow</a></li>
+<li><a class="reference internal" href="#how-to-replace-datahandler" id="id8">How to replace DataHandler</a></li>
+<li><a class="reference internal" href="#how-to-replace-filetypemap" id="id9">How to replace FileTypeMap</a></li>
+<li><a class="reference internal" href="#how-to-replace-datasource" id="id10">How to replace DataSource</a></li>
+<li><a class="reference internal" href="#how-to-replace-contenttypemap" id="id11">How to replace ContentTypeMap</a></li>
+<li><a class="reference internal" href="#how-to-override-contenttype" id="id12">How to override ContentType</a></li>
+<li><a class="reference internal" href="#how-to-register-contenttype" id="id13">How to register ContentType</a></li>
+<li><a class="reference internal" href="#how-to-register-contenthandler" id="id14">How to register ContentHandler</a></li>
+<li><a class="reference internal" href="#lazy-loading-of-widget-code" id="id15">Lazy-loading of widget code</a></li>
+<li><a class="reference internal" href="#script-execution" id="id16">Script execution</a></li>
+<li><a class="reference internal" href="#how-to-open-an-external-view-programmatically" id="id17">How to open an external view programmatically</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Dojo Mobile has the ability to load external view content and create a new target
+view dynamically. The _ItemBase class, a base class of ListItem, IconItem, etc., has the &#8216;url&#8217;
+property, which allows you to specify a URL of external data that will be a new view content
+after performing a view transition. Two data formats, HTML and JSON, are supported, and their
+content handlers are implemented in <a class="reference internal" href="ViewController.html#dojox-mobile-viewcontroller"><span>dojox/mobile/ViewController</span></a>.
+(See also <a class="reference external" href="dynamic-content-loading">Dynamic Content Loading</a> for details.)</p>
+<p>The module dojox/mobile/ViewController modularizes the handlers to allow
+the user to customize them. The data handlers are structured as follows:</p>
+<img alt="../../_images/data-handlers-class.png" src="../../_images/data-handlers-class.png" />
+<p>The data handlers consist of the following components:</p>
+<ol class="arabic simple">
+<li>DataHandler</li>
+<li>FileTypeMap</li>
+<li>DataSource</li>
+<li>ContentTypeMap</li>
+<li>ContentHandler</li>
+</ol>
+<p>All of the above components are loaded dynamically at run-time. You do not need to explicitly
+require them in your application. If your application does not use the &#8220;url&#8221; property of
+_ItemBase, they will not be loaded.</p>
+<div class="section" id="the-datahandler-class">
+<h2><a class="toc-backref" href="#id2">The DataHandler Class</a><a class="headerlink" href="#the-datahandler-class" title="Permalink to this headline">¶</a></h2>
+<p>The DataHandler component provides an interface between content data and a ContentHandler.
+It fetches content data through DataSource and calls ContentHandler to parse the content
+data and create a new view. The DataHandler is called from ViewController.</p>
+</div>
+<div class="section" id="the-filetypemap-interface">
+<h2><a class="toc-backref" href="#id3">The FileTypeMap Interface</a><a class="headerlink" href="#the-filetypemap-interface" title="Permalink to this headline">¶</a></h2>
+<p>FileTypeMap provides a map for determining content-type from the URL of the content data.
+Two actual modules are available: SuffixFileTypeMap and PatternFileTypeMap.
+SuffixFileTypeMap, which is the default module, determines content-type from a suffix</p>
+<blockquote>
+<div>of the given URL. PatternFileTypeMap determines content-type by pattern-matching
+against the given URL.</div></blockquote>
+</div>
+<div class="section" id="the-datasource-interface">
+<h2><a class="toc-backref" href="#id4">The DataSource Interface</a><a class="headerlink" href="#the-datasource-interface" title="Permalink to this headline">¶</a></h2>
+<p>DataSource encapsulates access to data. Two actual modules are available: UrlDataSource
+and StringDataSource. UrlDataSource, which is the default module, accesses the given URL
+and fetches the data as text. StringDataSource simply returns the given text.</p>
+</div>
+<div class="section" id="the-contenttypemap-class">
+<h2><a class="toc-backref" href="#id5">The ContentTypeMap Class</a><a class="headerlink" href="#the-contenttypemap-class" title="Permalink to this headline">¶</a></h2>
+<p>ContentTypeMap provides a map for determining the content-handler class from a content-type.
+The dojox/mobile/dh/ContentTypeMap class is a singleton class.</p>
+</div>
+<div class="section" id="the-contenthandler-interface">
+<h2><a class="toc-backref" href="#id6">The ContentHandler Interface</a><a class="headerlink" href="#the-contenthandler-interface" title="Permalink to this headline">¶</a></h2>
+<p>ContentHandler is responsible for parsing the given data and creating a new view at the specified position.
+Three actual modules are available: HtmlContentHandler, HtmlScriptContentHandler, and JsonContentHandler.
+HtmlContentHandler handles HTML fragment content. In the HTML fragment, the top level must be a View
+widget or one of its subclasses. HtmlScriptContentHandler also handles HTML fragments and has
+the ability to execute inline script code.</p>
+</div>
+<div class="section" id="the-overall-control-flow">
+<h2><a class="toc-backref" href="#id7">The Overall Control-Flow</a><a class="headerlink" href="#the-overall-control-flow" title="Permalink to this headline">¶</a></h2>
+<img alt="../../_images/data-handlers-flow.png" src="../../_images/data-handlers-flow.png" />
+<ol class="arabic simple">
+<li>ViewController accesses FileTypeMap to get a content type (e.g. &#8220;html&#8221; or &#8220;json&#8221;) from the file name suffix.</li>
+<li>ViewController creates a DataSource with the url property.</li>
+<li>ViewController creates a DataHandler for the created DataSource.</li>
+<li>ViewController calls DataHandler.processData() with the content type.</li>
+<li>DataHandler accesses ContentTypeMap to get a ContentHandler class name for the given content type.</li>
+<li>DataHandler calls DataSource.getData().</li>
+<li>DataSource gets the external content.</li>
+<li>DataHandler creates the ContentHandler class.</li>
+<li>DataHandler calls ContentHandler.parse() to parse the content.</li>
+<li>ContentHandler.parse() parses the content.</li>
+<li>ContentHandler.parse() creates a new view.</li>
+<li>DataHandler calls a callback that is defined in ViewController.</li>
+<li>The callback performs a view transition to the new view.</li>
+</ol>
+</div>
+<div class="section" id="how-to-replace-datahandler">
+<h2><a class="toc-backref" href="#id8">How to replace DataHandler</a><a class="headerlink" href="#how-to-replace-datahandler" title="Permalink to this headline">¶</a></h2>
+<p>The default DataHandler class name is &#8220;dojox/mobile/dh/DataHandler&#8221;, which is defined as a
+dataHandlerClass property in ViewController. It can be overridden by adding the dataHandlerClass
+property to the transitionOptions. Below is an example of specifying your own DataHandler in ListItem.</p>
+</div>
+<div class="section" id="how-to-replace-filetypemap">
+<h2><a class="toc-backref" href="#id9">How to replace FileTypeMap</a><a class="headerlink" href="#how-to-replace-filetypemap" title="Permalink to this headline">¶</a></h2>
+<p>The default FileTypeMap class name is &#8220;dojox/mobile/dh/SuffixFileTypeMap&#8221;, which is defined
+as a fileTypeMapClass property in ViewController. It can be overridden by adding the
+fileTypeMapClass property to the transitionOptions. Below is an example of specifying your
+own FileTypeMap in ListItem.</p>
+</div>
+<div class="section" id="how-to-replace-datasource">
+<h2><a class="toc-backref" href="#id10">How to replace DataSource</a><a class="headerlink" href="#how-to-replace-datasource" title="Permalink to this headline">¶</a></h2>
+<p>The default DataSource class name is &#8220;dojox/mobile/dh/UrlDataSource&#8221;, which is defined
+as a dataSourceClass property in ViewController. It can be overridden by adding the
+dataSourceClass property to the transitionOptions. Below is an example of specifying
+your own DataSource in ListItem.</p>
+</div>
+<div class="section" id="how-to-replace-contenttypemap">
+<h2><a class="toc-backref" href="#id11">How to replace ContentTypeMap</a><a class="headerlink" href="#how-to-replace-contenttypemap" title="Permalink to this headline">¶</a></h2>
+<p>Usually, ContentTypeMap does not need to be replaced. If you have your own DataHandler,
+however, you can have your own ContentTypeMap as well, since DataHandler depends on ContentTypeMap.</p>
+</div>
+<div class="section" id="how-to-override-contenttype">
+<h2><a class="toc-backref" href="#id12">How to override ContentType</a><a class="headerlink" href="#how-to-override-contenttype" title="Permalink to this headline">¶</a></h2>
+<p>Usually, content type is determined by looking up the matching entry in a ContentTypeMap.
+If you want to skip the look-up, and explicitly specify a particular content type, you
+can provide the contentType property to the transitionOptions. Below is an example of
+specifying a content type in ListItem.</p>
+</div>
+<div class="section" id="how-to-register-contenttype">
+<h2><a class="toc-backref" href="#id13">How to register ContentType</a><a class="headerlink" href="#how-to-register-contenttype" title="Permalink to this headline">¶</a></h2>
+<p>Content type is determined by a FileTypeMap. For example, SuffixFileTypeMap uses
+the file name suffix to determine content type. For SuffixFileTypeMap, you can
+register &#8220;suffix to content type&#8221; entries into the map. SuffixFileTypeMap is a
+singleton module. You can simply get its module return value and use the add()
+method to register your entries.</p>
+<p>If a given suffix does not match any of the entries in the map, ViewController
+uses &#8220;html&#8221; as the default content type.</p>
+</div>
+<div class="section" id="how-to-register-contenthandler">
+<h2><a class="toc-backref" href="#id14">How to register ContentHandler</a><a class="headerlink" href="#how-to-register-contenthandler" title="Permalink to this headline">¶</a></h2>
+<p>Which ContentHandler to use is decided by ContentTypeMap. In your application,
+you can register &#8220;content type to content handler class&#8221; entries into the map.
+ContentTypeMap is a singleton module. You can simply get its module return value
+and use the add() method to register your entries.</p>
+</div>
+<div class="section" id="lazy-loading-of-widget-code">
+<h2><a class="toc-backref" href="#id15">Lazy-loading of widget code</a><a class="headerlink" href="#lazy-loading-of-widget-code" title="Permalink to this headline">¶</a></h2>
+<p>The widget code used in external content does not need to be loaded
+and made available before creating the external view. Both HtmlContentHandler and
+JsonContentHandler support the dynamic loading of the necessary widget code. You
+do not have to explicitly require widget code that will be used in external views.</p>
+</div>
+<div class="section" id="script-execution">
+<h2><a class="toc-backref" href="#id16">Script execution</a><a class="headerlink" href="#script-execution" title="Permalink to this headline">¶</a></h2>
+<p>The HtmlScriptContentHandler handler allows you to have &lt;script&gt; tags in an external content.
+If you use relative path, such as src=&#8221;hello.js&#8221;, the path is relative from your
+application&#8217;s main html page. You can place &lt;script&gt; tags anywhere you like, since all
+the &lt;script&gt; blocks are removed from html text before creating DOM elements.</p>
+<p>You can change the default content handler for html to HtmlScriptContentHandler
+as shown in the example below.</p>
+</div>
+<div class="section" id="how-to-open-an-external-view-programmatically">
+<h2><a class="toc-backref" href="#id17">How to open an external view programmatically</a><a class="headerlink" href="#how-to-open-an-external-view-programmatically" title="Permalink to this headline">¶</a></h2>
+<p>You can programmatically open an external view without relying on the _ItemBase
+class by using the openExternalView() method of the ViewController.
+See examples of <a class="reference internal" href="ViewController.html#dojox-mobile-viewcontroller"><span>dojox/mobile/ViewController</span></a> for details.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">Data Handlers</a><ul>
+<li><a class="reference internal" href="#the-datahandler-class">The DataHandler Class</a></li>
+<li><a class="reference internal" href="#the-filetypemap-interface">The FileTypeMap Interface</a></li>
+<li><a class="reference internal" href="#the-datasource-interface">The DataSource Interface</a></li>
+<li><a class="reference internal" href="#the-contenttypemap-class">The ContentTypeMap Class</a></li>
+<li><a class="reference internal" href="#the-contenthandler-interface">The ContentHandler Interface</a></li>
+<li><a class="reference internal" href="#the-overall-control-flow">The Overall Control-Flow</a></li>
+<li><a class="reference internal" href="#how-to-replace-datahandler">How to replace DataHandler</a></li>
+<li><a class="reference internal" href="#how-to-replace-filetypemap">How to replace FileTypeMap</a></li>
+<li><a class="reference internal" href="#how-to-replace-datasource">How to replace DataSource</a></li>
+<li><a class="reference internal" href="#how-to-replace-contenttypemap">How to replace ContentTypeMap</a></li>
+<li><a class="reference internal" href="#how-to-override-contenttype">How to override ContentType</a></li>
+<li><a class="reference internal" href="#how-to-register-contenttype">How to register ContentType</a></li>
+<li><a class="reference internal" href="#how-to-register-contenthandler">How to register ContentHandler</a></li>
+<li><a class="reference internal" href="#lazy-loading-of-widget-code">Lazy-loading of widget code</a></li>
+<li><a class="reference internal" href="#script-execution">Script execution</a></li>
+<li><a class="reference internal" href="#how-to-open-an-external-view-programmatically">How to open an external view programmatically</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.gesture &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="../dojo/index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojox-gesture">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.gesture</a><a class="headerlink" href="#dojox-gesture" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Project owner:</th><td class="field-body">Evan Huang</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V.1.7</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-gesture" id="id2">dojox.gesture</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#rationale" id="id4">Rationale</a></li>
+<li><a class="reference internal" href="#usages" id="id5">Usages</a></li>
+<li><a class="reference internal" href="#dojox-gesture-base" id="id6">dojox/gesture/Base</a></li>
+<li><a class="reference internal" href="#dojox-gesture-tap" id="id7">dojox/gesture/tap</a></li>
+<li><a class="reference internal" href="#dojox-gesture-swipe" id="id8">dojox/gesture/swipe</a></li>
+<li><a class="reference internal" href="#bubble-the-gesture-event" id="id9">Bubble the gesture event</a></li>
+<li><a class="reference internal" href="#write-a-new-gesture" id="id10">Write a new gesture</a></li>
+<li><a class="reference internal" href="#demo" id="id11">Demo</a></li>
+<li><a class="reference internal" href="#supported-devices-in-1-7" id="id12">Supported devices in 1.7</a></li>
+<li><a class="reference internal" href="#future-plan" id="id13">Future plan</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a machinery for writing unified gesture events which can run well across a wide range of devices(most single touch gesture events can also work well on desktops).</p>
+</div>
+<div class="section" id="rationale">
+<h2><a class="toc-backref" href="#id4">Rationale</a><a class="headerlink" href="#rationale" title="Permalink to this headline">¶</a></h2>
+<p>dojox/gesture has been designed with the following rationales:</p>
+<ul class="simple">
+<li>Device neutral - The target is to be compatible with most popular devices(single touch gestures should also work well on desktops).</li>
+<li>Compatibility and reusability - Applicable and can be used with dijit widgets, dojo core(dnd), dojox/mobile or dojox/charting etc.</li>
+<li>Scalability - A modularized event processing mechanism makes it very easy to extend with more customized gestures.</li>
+</ul>
+<p>The most key thing dojox/gesture does is standardizing touch and gesture events across devices. These unified gesture events are fist divided into several internal phase events with smaller granularity - &#8220;press |  move | release | cancel&#8221; which will then be mapped to appropriate native events e.g. &#8220;touchxxx&#8221; on touch devices and &#8220;mousexxx&#8221; on desktops. The native events are then monitored on the target node, and gesture events will be fired once matched during these phase events. The following picture shows more details.</p>
+<img alt="../_images/gesture2.jpg" src="../_images/gesture2.jpg" />
+</div>
+<div class="section" id="usages">
+<h2><a class="toc-backref" href="#id5">Usages</a><a class="headerlink" href="#usages" title="Permalink to this headline">¶</a></h2>
+<p>Based on dojo/on and dojo/touch, all the gestures are provided as object events(taking dojox/gesture/tap for example):</p>
+<ol class="arabic simple">
+<li>Used with dojo/on</li>
+</ol>
+<ol class="arabic simple" start="2">
+<li>Used with dojox/gesture/tap directly</li>
+</ol>
+<ol class="arabic simple" start="3">
+<li>Or used with the traditional dojo/connect</li>
+</ol>
+</div>
+<div class="section" id="dojox-gesture-base">
+<h2><a class="toc-backref" href="#id6">dojox/gesture/Base</a><a class="headerlink" href="#dojox-gesture-base" title="Permalink to this headline">¶</a></h2>
+<p>The common parental class for all gesture implementations. It takes most routine works including:</p>
+<ol class="arabic simple">
+<li>Bind corresponding listeners for gesture events.</li>
+<li>Monitor underneath events and process different phases - &#8216;press&#8217;|&#8217;move&#8217;|&#8217;release&#8217;|&#8217;cancel&#8217;</li>
+<li>Fire and bubble gesture events.</li>
+</ol>
+</div>
+<div class="section" id="dojox-gesture-tap">
+<h2><a class="toc-backref" href="#id7">dojox/gesture/tap</a><a class="headerlink" href="#dojox-gesture-tap" title="Permalink to this headline">¶</a></h2>
+<p>Provide common tap related gesture events including &#8220;tap&#8221;, &#8220;tap.hold&#8221; and &#8220;tap.doubletap&#8221;. It can be used in following ways:</p>
+<ol class="arabic simple">
+<li>Used with dojo/on</li>
+</ol>
+<ol class="arabic simple" start="2">
+<li>Used with dojox/gesture/tap directly</li>
+</ol>
+<ol class="arabic simple" start="3">
+<li>Or used with the traditional dojo/connect</li>
+</ol>
+<p>There are also several configurable parameters in dojox/gesture/tap</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="84%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>tapRadius</td>
+<td>Default is 10, used in &#8220;tap.doubletap&#8221; to validate whether the second tap is in the valid radius</td>
+</tr>
+<tr class="row-odd"><td>holdThreshold</td>
+<td>Default is 500, the minimal time(in milliseconds) to trigger a &#8220;tap.hold&#8221;</td>
+</tr>
+<tr class="row-even"><td>doubleTapTimeout</td>
+<td>Default is 250, the timeout threshold(in milliseconds) for &#8220;tap.doubletap&#8221;</td>
+</tr>
+</tbody>
+</table>
+<p>The above parameters are supposed to be only changed seldomly with the following way:</p>
+</div>
+<div class="section" id="dojox-gesture-swipe">
+<h2><a class="toc-backref" href="#id8">dojox/gesture/swipe</a><a class="headerlink" href="#dojox-gesture-swipe" title="Permalink to this headline">¶</a></h2>
+<p>Provide swipe related gesture events including:</p>
+<ol class="arabic simple">
+<li>&#8220;swipe&#8221;</li>
+</ol>
+<p>A series of &#8216;swipe&#8217; will be fired during touchmove, this will mostly be used to keep sliding the target dom based on the swiped distance(dx, dy).</p>
+<ol class="arabic simple" start="2">
+<li>&#8220;swipe.end&#8221;</li>
+</ol>
+<p>Fired when a swipe is ended so that an bounce animation could be applied to the target dom and slide to the final position.</p>
+<p>It can be used in following ways:</p>
+<ol class="arabic simple">
+<li>Used with dojo/on</li>
+</ol>
+<ol class="arabic simple" start="2">
+<li>Used with dojox/gesture/swipe directly</li>
+</ol>
+<ol class="arabic simple" start="3">
+<li>Or used with the traditional dojo/connect</li>
+</ol>
+<p>Some swipe related information will also be provided in the fired &#8220;swipe&#8221; or &#8220;swipe.end&#8221; event:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="84%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Event property</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>type</td>
+<td>&#8220;swipe&#8221; or &#8220;swipe.end&#8221;</td>
+</tr>
+<tr class="row-odd"><td>time</td>
+<td>An integer indicating the delta time(in milliseconds)</td>
+</tr>
+<tr class="row-even"><td>dx</td>
+<td>Delta distance on X axis, dx &lt; 0 means is moving left, dx &gt; 0 means is moving right</td>
+</tr>
+<tr class="row-odd"><td>dy</td>
+<td>Delta distance on Y axis, dy &lt; 0 means is moving up, dy &gt; 0 means is moving down</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="bubble-the-gesture-event">
+<h2><a class="toc-backref" href="#id9">Bubble the gesture event</a><a class="headerlink" href="#bubble-the-gesture-event" title="Permalink to this headline">¶</a></h2>
+<p>A gesture event behaves all the same as a native Event. Besides getting useful information from the fired gesture event, we can also stop bubbling it.</p>
+<p>The following sample shows how we can easily stop a gesture event from bubbling to parent node:</p>
+</div>
+<div class="section" id="write-a-new-gesture">
+<h2><a class="toc-backref" href="#id10">Write a new gesture</a><a class="headerlink" href="#write-a-new-gesture" title="Permalink to this headline">¶</a></h2>
+<p>It&#8217;s very easy to customize a new gesture with following steps:</p>
+<ul class="simple">
+<li>Extend dojox/gesture/Base</li>
+<li>Overwrite phase handlers on demand - &#8220;press() | move() | release() | cancel()&#8221;</li>
+<li>Recognize and fire gesture events during different phases</li>
+</ul>
+<p>Suppose we have a dojox/gesture/rotate which provides 3 gesture events:&#8221;rotate&#8221;, &#8220;rotate.end&#8221; which can be used as:</p>
+<p>Then we can define the rotate gesture like:</p>
+</div>
+<div class="section" id="demo">
+<h2><a class="toc-backref" href="#id11">Demo</a><a class="headerlink" href="#demo" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference external" href="http://demos.dojotoolkit.org/demos/touch/demo.html">Touch &amp; Gesture demo</a> shows how dijit/form/HorizontalSlider and dojo/dnd are now running well on iOS4+ with the new dojo/touch and dojox/gesture.</p>
+<p>Besides a tap gesture, the demo also shows how easy it is to write a new rotate gesture with multiple touch support.</p>
+</div>
+<div class="section" id="supported-devices-in-1-7">
+<h2><a class="toc-backref" href="#id12">Supported devices in 1.7</a><a class="headerlink" href="#supported-devices-in-1-7" title="Permalink to this headline">¶</a></h2>
+<p>dojox/gesture is working well with:</p>
+<p>1. Desktops
+- IE8+, FF 3.6+, Chrome v10+, Safari 5+</p>
+<p>2. Touch devices
+- Android 2.2/2.3
+- iOS 3/4</p>
+</div>
+<div class="section" id="future-plan">
+<h2><a class="toc-backref" href="#id13">Future plan</a><a class="headerlink" href="#future-plan" title="Permalink to this headline">¶</a></h2>
+<p>A rich set of enhancements is being planned for the further versions:</p>
+<ul class="simple">
+<li>Enhance dojox.gesture core to support Multi-touch better</li>
+<li>Enrich more popular gestures e.g. rotate, flicker, pinch/spread, drag, scroll etc.</li>
+<li>More device support - iOS 5, Android 3, BlackBerry and devices(e.g. BB tablet) that support both touch and mouse events</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojox.gesture</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#rationale">Rationale</a></li>
+<li><a class="reference internal" href="#usages">Usages</a></li>
+<li><a class="reference internal" href="#dojox-gesture-base">dojox/gesture/Base</a></li>
+<li><a class="reference internal" href="#dojox-gesture-tap">dojox/gesture/tap</a></li>
+<li><a class="reference internal" href="#dojox-gesture-swipe">dojox/gesture/swipe</a></li>
+<li><a class="reference internal" href="#bubble-the-gesture-event">Bubble the gesture event</a></li>
+<li><a class="reference internal" href="#write-a-new-gesture">Write a new gesture</a></li>
+<li><a class="reference internal" href="#demo">Demo</a></li>
+<li><a class="reference internal" href="#supported-devices-in-1-7">Supported devices in 1.7</a></li>
+<li><a class="reference internal" href="#future-plan">Future plan</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

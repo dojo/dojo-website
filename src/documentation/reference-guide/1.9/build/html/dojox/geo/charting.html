@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.geo.charting &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../../dojo/index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojox-geo-charting">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.geo.charting</a><a class="headerlink" href="#dojox-geo-charting" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Project owner:</th><td class="field-body">Dean Williams</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Author:</th><td class="field-body">Qi Ruan, Erwan Aullas</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V.1.5</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-geo-charting" id="id2">dojox.geo.charting</a><ul>
+<li><a class="reference internal" href="#overview" id="id3">Overview</a></li>
+<li><a class="reference internal" href="#instantiate-map-component" id="id4">Instantiate Map component</a></li>
+<li><a class="reference internal" href="#data-binding" id="id5">Data binding</a></li>
+<li><a class="reference internal" href="#interacting-with-the-map" id="id6">Interacting with the Map</a></li>
+<li><a class="reference internal" href="#using-dijits" id="id7">Using Dijits</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2><a class="toc-backref" href="#id3">Overview</a><a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The dojox.geo.charting module contains classes to display geographical map together with charting data.
+Map elements are colorized according to their value (fetched from a dojo DataStore) and a color scheme
+(the &#8216;series&#8217;) that defines colors for value ranges.</p>
+<p>The map data to supply to the component must be either a Json object containing data in shapefile format, or a file containing a Json dump of such object.</p>
+<p>The charting data to supply must be available as a dataStore object implementing dojo.data.api.Read and dojo.data.api.Identity APIs</p>
+<p>The data series (i.e. the color scheme for different value ranges)  is also a Json object of Json file described below.</p>
+<p>Two Dijits components are provided, one acting as a widget wrapper for the Map component, the other as a legend explaining map colors.</p>
+<p>Several interactor classes can be installed on the Map component, to allow navigation - mainly zoom, pan and select - on different hardware configurations :</p>
+<blockquote>
+<div><ul class="simple">
+<li>mouse interactor for usual desktop use</li>
+<li>keyboard interactor for accessibility purposes</li>
+<li>touch interactor (for touch devices)</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="instantiate-map-component">
+<h2><a class="toc-backref" href="#id4">Instantiate Map component</a><a class="headerlink" href="#instantiate-map-component" title="Permalink to this headline">¶</a></h2>
+<p>First, instantiate the Map component, and associate it with the DOM Node container &#8216;USStates&#8217; declared further in the HTML markup.</p>
+<p>The setMarkerData function is used to supply a Json file containing tooltips for map elements. For instance :
+{&#8220;AK&#8221;:&#8221;Alaska&#8221;,&#8221;AZ&#8221;:&#8221;Arizona&#8221;,&#8221;AR&#8221;:&#8221;Arkansas&#8221;}
+Each map element is referenced in the marker json object by its unique id (defined in the json map data, and also used in the dataStore that contains charting values).</p>
+<p>Declare the markup container node for the Map component :</p>
+</div>
+<div class="section" id="data-binding">
+<h2><a class="toc-backref" href="#id5">Data binding</a><a class="headerlink" href="#data-binding" title="Permalink to this headline">¶</a></h2>
+<p>The purpose of this Map component is to represent figures on a map. Hence the need for connecting the component with a dataStore object.</p>
+<p>Here, we extend the previous code sample to illustrate how to connect to data :</p>
+<p>The above call to setDataStore on the map implicitly calls setDataBindingAttribute with &#8220;product A&#8221; value (passed in parameter). This tells the Map component
+what property value of dataStore items should be used to set the value on map elements (aka Feature instances).</p>
+<p>Here we look for the &#8220;product A&#8221; property of dataStore items (one item per US State in this example) to fetch the sales figures for product A, and colorize the map according to those values.</p>
+<p>The coloring is done via the addSeries call, that reads a color scheme from a Json file or object.</p>
+<p>Here is an example of a series object :</p>
+</div>
+<div class="section" id="interacting-with-the-map">
+<h2><a class="toc-backref" href="#id6">Interacting with the Map</a><a class="headerlink" href="#interacting-with-the-map" title="Permalink to this headline">¶</a></h2>
+<p>Here, we instantiate the appropriate interactors and connect them to the Map component. For example (extending previous code samples)  :</p>
+<p>The interactors can be configured via the object passed as second parameter. Please refer to API documentation for further details.</p>
+</div>
+<div class="section" id="using-dijits">
+<h2><a class="toc-backref" href="#id7">Using Dijits</a><a class="headerlink" href="#using-dijits" title="Permalink to this headline">¶</a></h2>
+<p>Two Dijits are provided in this module : dojox.geo.charting.widget.Map and dojox.geo.charting.widget.Legend</p>
+<p>the Map widget wraps an above Map component to ease its integration along other Dijits.
+It can be fully configured in the markup declaration</p>
+<p>Legend, as its name supposes, displays a legend describing map color scheme.</p>
+<p>The map attribute connects this Legend Dijit to the above Map Dijit inner map.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojox.geo.charting</a><ul>
+<li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#instantiate-map-component">Instantiate Map component</a></li>
+<li><a class="reference internal" href="#data-binding">Data binding</a></li>
+<li><a class="reference internal" href="#interacting-with-the-map">Interacting with the Map</a></li>
+<li><a class="reference internal" href="#using-dijits">Using Dijits</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

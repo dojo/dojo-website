@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>JavaScript events and Dojo &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="../dojo/index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="javascript-events-and-dojo">
+<span id="quickstart-events"></span><h1><a class="toc-backref" href="#id2">JavaScript events and Dojo</a><a class="headerlink" href="#javascript-events-and-dojo" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Matt Bowen, Peter Higgins, Bill Keese, Nikolai Onken</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V0.9</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#javascript-events-and-dojo" id="id2">JavaScript events and Dojo</a><ul>
+<li><a class="reference internal" href="#dom-events" id="id3">DOM Events</a></li>
+<li><a class="reference internal" href="#connecting-functions-to-one-another" id="id4">Connecting Functions to One Another</a></li>
+<li><a class="reference internal" href="#publish-and-subscribe" id="id5">Publish and Subscribe</a></li>
+<li><a class="reference internal" href="#events-with-dijit" id="id6">Events with Dijit</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Dojo&#8217;s event system offers a refreshing alternative to the normal JavaScript events. With Dojo, you connect functions to one another, creating a link that calls one function when another fires.</p>
+<p>This means that you can connect a function of your own to:</p>
+<ul class="simple">
+<li>a DOM event, such as when a link is clicked</li>
+<li>an event of an object, such as an animation starting or stopping</li>
+<li>a function call of your own, such as bar()</li>
+<li>a topic, which acts as a queue that other objects can publish objects to.</li>
+</ul>
+<p>Your connected function is called when the event occurs. With simple events, when it calls your function, dojo passes your function a normalized event object, so that it can respond correctly, responding to keystrokes or stopping default behavior. With topics, Dojo passes any subscribed functions the object that was published. Dojo happily abstracts away all of the difficulty of cross-browser event systems, offering programmers a coherent event system that acts consistently across browsers.</p>
+<p>Dojo&#8217;s event system is flexible and gives you a few options for connecting your functions. In the core package, you have both simple events (which use a signal and slot system, similar to Qt&#8217;s) and topics. In this section, you&#8217;ll learn the following:</p>
+<ul class="simple">
+<li>how to connect functions to one another with <a class="reference internal" href="../dojo/on.html#dojo-on"><span>dojo/on</span></a> and <a class="reference internal" href="../dojo/aspect.html#dojo-aspect"><span>dojo/aspect</span></a></li>
+<li>what comes with an event object</li>
+<li>how to connect functions with topics and even publish your own objects to the topic</li>
+<li>how to enjoy event-based programming</li>
+</ul>
+<div class="section" id="dom-events">
+<h2><a class="toc-backref" href="#id3">DOM Events</a><a class="headerlink" href="#dom-events" title="Permalink to this headline">¶</a></h2>
+<p>Dojo provides two modules to handle many of your event-handling needs.</p>
+<p>With <a class="reference internal" href="../dojo/on.html#dojo-on"><span>dojo.on</span></a>, you can link functions to fire when a DOM event occurs.</p>
+<div class="section" id="how-does-it-work">
+<h3>How does it work?<a class="headerlink" href="#how-does-it-work" title="Permalink to this headline">¶</a></h3>
+<p>Imagine that you&#8217;re hungry and have decided to cook a pizza in your oven. The pizza will take 17 minutes, so you set a timer. You have better things to do than sit around your kitchen hanging out by the timer though, so you get your brother and tell him, &#8220;When you hear the oven timer, take the pizza out of the oven and bring me a slice.&#8221; Your brother can only keep track of one thing at a time, and you don&#8217;t want your house to burn down, so you tell your sister, &#8220;When you hear the over timer, turn off the oven.&#8221; Because you&#8217;re a little worried that your dirty oven might start to smoke, you tell them both, &#8220;If you hear the smoke alarm, come get me and then go outside.&#8221; After you get your pizza, you tell your brother and sister that they don&#8217;t have to worry about the oven alarm now and that they can go play until you call for them again. You then set the oven alarm to wake you up from a nap.</p>
+<p>In this example, your siblings are functions. Your telling them to respond to certain events, such as &#8220;onPizzaDone&#8221; and &#8220;onHouseOnFire&#8221; performs the same function as <a class="reference internal" href="../dojo/on.html#dojo-on"><span>dojo/on</span></a> (for DOMNodes) or <a class="reference internal" href="../dojo/aspect.html#dojo-aspect"><span>dojo/aspect</span></a> for plain objects - it sets up your siblings (functions) to listen for an event and perform their tasks when they receive notice. The various alarms are similar to event objects; they inform your siblings of important details about the situation (such as what is beeping). Telling your siblings that they don&#8217;t need to worry about the oven alarm anymore is similar to handle.remove(); the next time the oven alarm goes off, it means that you need to wake up, and you don&#8217;t want your brother hunting for a pizza needlessly, so you&#8217;ve told him to stop listening to that event.</p>
+</div>
+<div class="section" id="connecting-to-a-dom-event">
+<h3>Connecting to a DOM Event<a class="headerlink" href="#connecting-to-a-dom-event" title="Permalink to this headline">¶</a></h3>
+<p>To connect a function to a DOM event with Dojo, you first need to get the node that you want to connect to. Here, I&#8217;ll use the venerable
+<a class="reference internal" href="../dojo/dom.html#dojo-dom-byid"><span>dojo/dom byId</span></a>.</p>
+<p>Now, to fire foo when a user clicks <code class="docutils literal"><span class="pre">#firstLink</span></code>, and I have the node, so I just need to use dojo/on for the heavy lifting:</p>
+<p>In this example, I passed <code class="docutils literal"><span class="pre">on</span></code> the DOMNode I want my function to listen to,
+the name of the event that should trigger my function&#8217;s call,
+and my function.
+Note that I keep a reference to the connection (called a handle) by setting firstLinkConnections[0] to the return value
+of <code class="docutils literal"><span class="pre">on</span></code>.
+This will allow me to disconnect the listener later, if I desire.
+Now, when a user clicks &#8220;Dojo&#8221;, a message appears in the log.</p>
+<p>Now, if I also want to connect someObject.bar() to #firstLink, we can do that too:</p>
+<p>In this case I am using lang.hitch() (from <a class="reference internal" href="../dojo/_base/lang.html#dojo-base-lang-hitch"><span>dojo/_base/lang</span></a>) to call someObject.bar.</p>
+<p>To stop listening to all the registered event handlers stored in <code class="docutils literal"><span class="pre">firstLinkConnections</span></code>, call handle.remove() for each handle:</p>
+</div>
+<div class="section" id="events-available-for-connection">
+<h3>Events available for Connection<a class="headerlink" href="#events-available-for-connection" title="Permalink to this headline">¶</a></h3>
+<p>As a convenience, here is a quick list of normalized Dom Events:</p>
+<ul class="simple">
+<li>&#8220;click&#8221; - the user clicked a node</li>
+<li>&#8220;focus&#8221; - a node received focus</li>
+<li>&#8220;blur&#8221; - a node was &#8216;blurred&#8217;, or otherwise lost focus</li>
+<li>&#8220;change&#8221; - an input value was changed</li>
+<li>&#8220;keypress&#8221; - fired when the user presses a key that displays</li>
+<li>&#8220;keydown&#8221; - fired for non-printable keys</li>
+<li>&#8220;keyup&#8221; - fired when the user releases a key</li>
+<li>&#8220;mouseover&#8221; - a node was hovered (<em>warning:</em> may fire more than you&#8217;d like because of bubbling)</li>
+<li>&#8220;mouseout&#8221; - a node was un-hovered</li>
+<li><a class="reference internal" href="../dojo/mouse.html#dojo-mouse-enter"><span>dojo/mouse#enter</span></a> - a normalized version of onmouseover that <em>wont</em> fire more than you&#8217;d like (only on first enter)</li>
+<li><a class="reference internal" href="../dojo/mouse.html#dojo-mouse-leave"><span>dojo/mouse#leave</span></a> - a normalized version of onmouseout that <em>wont</em> fire more than you&#8217;d like (only once when leaving)</li>
+<li>submit - a form has been submitted</li>
+</ul>
+<p>All of these events are also mapped into <a class="reference internal" href="../dojo/NodeList.html#dojo-nodelist"><span>dojo.NodeList</span></a> as direct methods. To register an click event for many nodes at once:</p>
+<p><em>A note about the event names:</em> Event names now are lower case, except in special cases (e.g., some Mozilla DOM events). Your event name should not have &#8220;on&#8221;. This differs from <strong>Widget Events</strong> in the sense Dijit uses mixedCase event names, to avoid potential conflicts.   However, widget&#8217;s on() method functions similarly to <cite>dojo/on</cite>:</p>
+<p><strong>A note about return values:</strong> Any value returned by a function called by <code class="docutils literal"><span class="pre">on()</span></code> will be lost.</p>
+</div>
+<div class="section" id="connecting-to-mousewheel-events">
+<h3>Connecting to MouseWheel events<a class="headerlink" href="#connecting-to-mousewheel-events" title="Permalink to this headline">¶</a></h3>
+<p>One event not mentioned above, though entirely useful: mousewheel (okay, it&#8217;s two events, which is the reason for pointing this out ... )
+All Mozilla based browsers use <code class="docutils literal"><span class="pre">DOMMouseScroll</span></code>, and the rest <code class="docutils literal"><span class="pre">mousewheel</span></code> ... You can quickly connect to whichever is needed using Dojo&#8217;s <a class="reference internal" href="../dojo/sniff.html#dojo-sniff"><span>dojo/sniff</span></a> module:</p>
+<p>Here we&#8217;ve fixed the event based on the Event Object provided, and are returning a number greater than 1 for scrolling up, and a negative value for scrolling down.</p>
+</div>
+<div class="section" id="keyboard-events">
+<h3>Keyboard Events<a class="headerlink" href="#keyboard-events" title="Permalink to this headline">¶</a></h3>
+<p>Although different browsers report keyboard events differently, you can write portable keyboard event handling code using dojo, by following these rules:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Setup a keypress (not keydown) handler to monitor printable keys</li>
+<li>Setup a keydown (not keypress) handler to monitor non-printable keys</li>
+<li>For non-printable keys (arrows, function keys, etc) compare evt.keyCode against the <a class="reference internal" href="../dojo/keys.html#dojo-keys"><span>Key code constants</span></a>, rather than hardcoding a number.  For example, if the user presses the left arrow then event.keyCode == dojo.keys.LEFT_ARROW</li>
+<li>Ignore keypress events where keyCode == keys.CTRL, keys.SHIFT, etc. as these may occur as part of a user pressing (for example) Ctrl-C.</li>
+<li>call event.stop(e) (<a class="reference internal" href="../dojo/_base/event.html#dojo-base-event-stop"><span>dojo/_base/event</span></a>) for CTRL combinations (like Ctrl-B) or function keys (like F5) that have special meaning to the browser (like refreshing the page).</li>
+</ul>
+</div></blockquote>
+<p>As mentioned above, non-printable character events define a keyCode.  Printable character events define a keyChar.  For example, if the user presses the &#8216;a&#8217; key than evt.keyChar == &#8216;a&#8217;.  If the user presses SHIFT-A then evt.keyChar == &#8216;A&#8217;.</p>
+</div>
+<div class="section" id="disconnecting">
+<h3>Disconnecting<a class="headerlink" href="#disconnecting" title="Permalink to this headline">¶</a></h3>
+<p>To disconnect listeners from events, you simply call handle.remove():</p>
+<p>Or, by using <a class="reference internal" href="../dojo/_base/array.html#dojo-base-array-foreach"><span>array.forEach</span></a>:</p>
+</div>
+<div class="section" id="the-event-object">
+<h3>The Event Object<a class="headerlink" href="#the-event-object" title="Permalink to this headline">¶</a></h3>
+<p>When you connect a function to a DOM event with <a class="reference internal" href="../dojo/on.html#dojo-on"><span>dojo/on</span></a>, Dojo passes your function a <strong>normalized</strong> event object. This means that, regardless of the client&#8217;s browser, you can count on a set of standard attributes about the event and a set of methods to manipulate the event.</p>
+<p>Assume that your function has been called by dojo/on and takes an argument named <code class="docutils literal"><span class="pre">event</span></code>, like:</p>
+<p>Dojo provides the following attributes with an event object:</p>
+<ul class="simple">
+<li>event.target - the element that generated the event</li>
+<li>event.currentTarget - the current target</li>
+<li>event.layerX - the x coordinate, relative to the <code class="docutils literal"><span class="pre">event.currentTarget</span></code></li>
+<li>event.layerY - the y coordinate, relative to the <code class="docutils literal"><span class="pre">event.currentTarget</span></code></li>
+<li>event.pageX - the x coordinate, relative to the view port</li>
+<li>event.pageY - the y coordinate, relative to the view port</li>
+<li>event.relatedTarget - For <code class="docutils literal"><span class="pre">mouseover</span></code> and <code class="docutils literal"><span class="pre">mouseout</span></code>, the object that the mouse pointer is moving to or out of</li>
+<li>event.charCode - For keypress events, the character code of the key pressed</li>
+<li>event.keyCode - for keypress events, handles special keys like ENTER and spacebar.</li>
+</ul>
+<p>Dojo normalizes the following methods with an event object:</p>
+<ul class="simple">
+<li>event.preventDefault - prevent an event&#8217;s default behavior (e.g., a link from loading a new page)</li>
+<li>event.stopPropagation - prevent an event from triggering a parent node&#8217;s event</li>
+<li>event.stopImmediatePropagation - prevent an event from triggering a parent node&#8217;s event and from firing any more event handlers on this node</li>
+</ul>
+<p>Additionally, <a class="reference internal" href="../dojo/_base/event.html#dojo-base-event-stop"><span>event.stop(event)</span></a> will prevent both default behavior any any propagation (bubbling) of an event.</p>
+</div>
+<div class="section" id="page-load-and-unload">
+<h3>Page Load and Unload<a class="headerlink" href="#page-load-and-unload" title="Permalink to this headline">¶</a></h3>
+<p>Dojo has three functions recommended for registering code to run on page load and unload:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../dojo/ready.html#dojo-ready"><span>ready(func)</span></a> - Runs the specified function after the page has finished loading, require() calls have completed, and the parser (if enabled) has instantiated widgets.</li>
+<li><a class="reference internal" href="../dojo/_base/unload.html#dojo-base-unload-addonwindowunload"><span>dojo/_base/unload#addOnWindowUnload(func)</span></a> - Runs on page unload.   Useful for tear-down releasing resources (destroying widgets, etc.), but some browsers limit what operations can be done at this stage, especially DOM access / manipulation.</li>
+<li><a class="reference internal" href="../dojo/_base/unload.html#dojo-base-unload-addonunload"><span>dojo/_base/unload#addOnUnload(func)</span></a> - This also runs on page unload, but earlier than <a class="reference internal" href="../dojo/_base/unload.html#dojo-base-unload-addonwindowunload"><span>dojo/_base/unload#addOnWindowUnload(func)</span></a>, avoiding the restrictions mentioned above.   However, the function specified to <cite>addOnUnload(func)</cite> may be called even when the page isn&#8217;t unloading, just because a user (for example) clicked a hyperlink to download a file.    Useful for idempotent operations like saving state.</li>
+</ul>
+<p>Like on(), these methods are useful because multiple pieces of code calling <cite>ready()</cite> etc. won&#8217;t overwrite each other.</p>
+</div>
+</div>
+<div class="section" id="connecting-functions-to-one-another">
+<h2><a class="toc-backref" href="#id4">Connecting Functions to One Another</a><a class="headerlink" href="#connecting-functions-to-one-another" title="Permalink to this headline">¶</a></h2>
+<p>With <a class="reference internal" href="../dojo/aspect.html#dojo-aspect"><span>dojo.aspect</span></a>, you can link one function to fire when another does.
+This is for setting up advice on a regular (non DOMNode) object.</p>
+<p>Connecting functions to one another is even simpler than connecting them to DOM events; because you already have a reference to the function, you don&#8217;t need to do any byId or query work. To have anotherObject.afterBaz fire after someObject.baz fires, use the following:</p>
+<p>In the above code, the first argument is the context of &#8220;baz&#8221;, the second argument is the event (in this case, when baz fires),anotherObject is the context of your listener function, and &#8220;afterBaz&#8221; is the name of the listener function itself. Connecting two global functions is even easier:</p>
+<div class="section" id="gotchas-with-direct-references-to-functions">
+<h3>Gotchas with direct references to functions<a class="headerlink" href="#gotchas-with-direct-references-to-functions" title="Permalink to this headline">¶</a></h3>
+<p>Note that the first connection to a function actually modifies the function, by wrapping it another function.   So that</p>
+<p>is like saying:</p>
+<p>This means that you need to be careful with code that directly references (the original) function foo(), including other aspect.after() calls.</p>
+</div>
+</div>
+<div class="section" id="publish-and-subscribe">
+<h2><a class="toc-backref" href="#id5">Publish and Subscribe</a><a class="headerlink" href="#publish-and-subscribe" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the simple event system created by <a class="reference internal" href="../dojo/aspect.html#dojo-aspect"><span>dojo/aspect</span></a>, dojo offers support for anonymous publication and subscription of objects, via <a class="reference internal" href="../dojo/topic.html#dojo-topic-publish"><span>dojo/topic#publish</span></a> and <a class="reference internal" href="../dojo/topic.html#dojo-topic-subscribe"><span>dojo/topic#subscribe</span></a>. These methods allow a function to broadcast objects to any other function that has subscribed. This is dojo&#8217;s topic system, and it makes it very easy to allow separate components to communicate without explicit knowledge of one another&#8217;s internals.  <a class="reference internal" href="../dojo/topic.html#dojo-topic-publish"><span>dojo/topic#publish</span></a> calls any functions that are connected to the topic via <a class="reference internal" href="../dojo/topic.html#dojo-topic-subscribe"><span>dojo/topic#subscribe</span></a>, passing to those subscribed functions arguments that are published (see syntax for details). As one might expect, <cite>handle.remove()</cite> will cause a previously subscribed function to no longer be called when <a class="reference internal" href="../dojo/topic.html#dojo-topic-publish"><span>dojo/topic#publish</span></a> is called in the future</p>
+<div class="section" id="id1">
+<h3>How does it work?<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Imagine that you run a running a conference, and there will be updates throughout the day. You could collect contact information for everyone at the beginning of the day, along with each person&#8217;s interests. However, this would be a lot of logistical work. Instead, you decide to use your facility&#8217;s Public Address System. When there is an update to the schedule, you announce &#8220;This is an update to the schedule: the Dojo training is full and we have added yet a third time slot for it tomorrow.&#8221; When there is meal information, you announce &#8220;This is an update about food: we will be serving free ice cream in the main hall in five minutes.&#8221; This way, anyone interested in your information can pay attention to any updates that could change their behavior. You don&#8217;t need to know who is subscribing, and they don&#8217;t need to fill out a bunch of paper work - it&#8217;s a win-win.</p>
+</div>
+<div class="section" id="example-code-for-reference">
+<h3>Example Code for Reference<a class="headerlink" href="#example-code-for-reference" title="Permalink to this headline">¶</a></h3>
+<p>To connect globalGuy to the topic &#8220;globalEvents&#8221; and someObject.bar to &#8220;fullNames&#8221;, you simply use <code class="docutils literal"><span class="pre">topic.subscribe</span></code>, as follows:</p>
+<p>To publish information to both of these topics, you pass <code class="docutils literal"><span class="pre">topic.publish</span></code> the topic names and arguments that you want to pass to subscribed functions, as follows</p>
+<p>To disconnect someObject.bar from its topic, you use the handle&#8217;s <code class="docutils literal"><span class="pre">remove()</span></code> method:</p>
+</div>
+</div>
+<div class="section" id="events-with-dijit">
+<h2><a class="toc-backref" href="#id6">Events with Dijit</a><a class="headerlink" href="#events-with-dijit" title="Permalink to this headline">¶</a></h2>
+<p>The Dijit widgets have many &#8220;events&#8221;, similar to events on DOM nodes.
+For example, the dijit.form.Button widget has an click
+event synonymous with a &lt;button&gt; node&#8217;s click event.</p>
+<p>You can connect to widget events similarly to connecting to DOM events, using the <code class="docutils literal"><span class="pre">on()</span></code> method of the widget:</p>
+<p>or in markup as:</p>
+<div class="section" id="dijit-events-similar-to-dom-events">
+<h3>Dijit events similar to DOM events<a class="headerlink" href="#dijit-events-similar-to-dom-events" title="Permalink to this headline">¶</a></h3>
+<p>As stated above, the widgets tend to support all events similar to DOM events, like:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8220;click&#8221;: especially useful for button widgets</li>
+<li>&#8220;change&#8221;: note that the first argument to onChange is the new value, not the event object itself</li>
+<li>&#8220;dblclick&#8221;</li>
+<li>&#8220;keydown&#8221;</li>
+<li>&#8220;keypress&#8221;</li>
+<li>&#8220;keyup&#8221;</li>
+<li>&#8220;mousemove&#8221;</li>
+<li>&#8220;mousedown&#8221;</li>
+<li>&#8220;mouseout&#8221;: probably not useful since it will report mouse out events within the widget&#8217;s internal DOM nodes; consider using &#8220;mouseleave&#8221; instead</li>
+<li>&#8220;mouseover&#8221;: probably not useful since it will report mouse in events within the widget&#8217;s internal DOM nodes; consider using &#8220;mouseenter&#8221; instead</li>
+<li>&#8220;mouseleave&#8221;: when the mouse is moved away from the widget&#8217;s outermost DOM node</li>
+<li>&#8220;mouseenter&#8221;: when the mouse is moved over the widget&#8217;s outermost DOM node</li>
+<li>&#8220;mouseup&#8221;</li>
+</ul>
+</div></blockquote>
+<p>See the documentation for each widget for details.
+Note that the events in widget documentation may be listed in camel case and starting with &#8220;on&#8221;,
+reflecting the internal functions in the widgets corresponding to those events.</p>
+<p>Notable differences between the widget&#8217;s event and the similar event on a DOM node:</p>
+<blockquote>
+<div><ul class="simple">
+<li>event&#8217;s corresponding function name is camel case (ex: onClick) for widgets</li>
+<li>in the handler for a widget&#8217;s event, &#8220;this&#8221; points to the widget</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="overriding-vs-connecting">
+<h3>Overriding vs. Connecting<a class="headerlink" href="#overriding-vs-connecting" title="Permalink to this headline">¶</a></h3>
+<p>Rather than connecting (as above), you can specify a handler as a parameter to the widget on initialization:</p>
+<p>or in markup:</p>
+<p>There&#8217;s a subtle difference between the third and fourth example (using onClick=&#8221;myFunc&#8221;) and
+the others:
+the third and fourth examples are <em>overriding</em> (i.e., replacing) the widget&#8217;s onClick method
+whereas the other examples are connecting to the widget&#8217;s click event, which internally means they
+are setting up advice on the existing onClick method.
+Note that you can also override by using &lt;script type=&#8221;dojo/method&#8221;&gt; instead of type=&#8221;dojo/connect&#8221;.</p>
+<p>Also note that when overriding, you specify the function name rather than the event name,
+so it is prepended with &#8220;on&#8221; and in camel case: &#8220;onClick&#8221;.</p>
+<p>In practice the distinction between connecting and overriding is irrelevant
+because the widgets default onClick method is an empty function.
+However, occasionally you will need to override the default function to return a value.</p>
+</div>
+<div class="section" id="watch">
+<h3>watch()<a class="headerlink" href="#watch" title="Permalink to this headline">¶</a></h3>
+<p>You can also watch attribute value changes on widgets.   For example:</p>
+</div>
+<div class="section" id="focused">
+<h3>focused<a class="headerlink" href="#focused" title="Permalink to this headline">¶</a></h3>
+<p>There&#8217;s a &#8220;focused&#8221; attribute on all widgets.</p>
+<p>Despite the names of this readonly attribute, it don&#8217;t correspond exactly to the DOM focus and blur events.
+One might say that it indicates when a widget is &#8220;active&#8221;, although &#8220;active&#8221; is also an overloaded word,
+having a separate meaning in CSS.</p>
+<p>By way of example, consider a Spinner widget inside of a ContentPane inside of a TabContainer:</p>
+<p>Clicking the spinner widget predictably causes it&#8217;s focused attribute to become true (as the widget is actually getting keyboard focus).
+However, clicking the arrows of the spinner also causes it&#8217;s focused attribute to become true, even though technically that removes
+keyboard focus (at least on some browsers).</p>
+<p>In addition, clicking or tabbing to the spinner widget also cause the focused attribute on the ContentPane and TabContainer to become true, since they
+are ancestors of the Spinner widget.
+At any point in time there&#8217;s a stack of active widgets, and dijit keeps track of that stack and sets each widget&#8217;s focused attribute to true or false as each widget joins or leaves the stack.</p>
+</div>
+<div class="section" id="high-level-events">
+<h3>High level events<a class="headerlink" href="#high-level-events" title="Permalink to this headline">¶</a></h3>
+<p>Widgets also support some events that don&#8217;t correspond to DOM events.
+Typically these are &#8220;higher level&#8221; conceptual events on the widget.
+For example, InlineEditBox has an &#8220;onCancel&#8221; event that occurs when the user cancels the edit.</p>
+<p>See the documentation for each widget to find out the exact list of events it supports.
+Most of the events start with &#8220;on&#8221; in their name.</p>
+<p>Finally, note that you can connect to/override any method in a widget, not just the ones that are considered
+&#8220;events&#8221;.   However, note the caveats listed above about connecting vs. overriding.</p>
+</div>
+<div class="section" id="widget-events-published-to-the-dom">
+<span id="quickstart-events-widget-events-published-to-the-dom"></span><h3>Widget events published to the DOM<a class="headerlink" href="#widget-events-published-to-the-dom" title="Permalink to this headline">¶</a></h3>
+<p>Starting in version 1.8, widget events are published to the DOM tree and can be monitored by setting up listeners
+on the DOM tree.
+This allows event delegation: setting up an event handler on a high level DOMNode to handle events on multiple widgets.</p>
+<dl class="docutils">
+<dt>There are two main types of events that widgets publish:</dt>
+<dd><ul class="first last simple">
+<li>native events, ex: &#8220;click&#8221;</li>
+<li>attribute changes, ex: attrmodified-open</li>
+</ul>
+</dd>
+</dl>
+<p>Here&#8217;s a simple example of monitoring click events coming from any widget.
+Note that since dijit widgets leverage <a class="reference internal" href="../dijit/_OnDijitClickMixin.html#dijit-ondijitclickmixin"><span>dijit/_OnDijitClickMixin</span></a>,
+keyboard &#8220;click&#8221; events (i.e using the space or enter key) are also emitted as DOMNode click events.</p>
+<p>Here&#8217;s an example using the attrmodified-* events to detect when TitlePanes are opened or closed.
+Note that there&#8217;s a separate event type for each attribute; in this example a change to the open
+attribute generates an event of type &#8220;attrmodified-open&#8221;.</p>
+<p>You can also use on.selector() to limit the notifications to certain widgets (technically, limiting the events
+to the root DOMNodes of certain widgets).  For example:</p>
+<p>Note that as shown above, when on.selector() is used, the app must also require() dojo/query.</p>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">JavaScript events and Dojo</a><ul>
+<li><a class="reference internal" href="#dom-events">DOM Events</a><ul>
+<li><a class="reference internal" href="#how-does-it-work">How does it work?</a></li>
+<li><a class="reference internal" href="#connecting-to-a-dom-event">Connecting to a DOM Event</a></li>
+<li><a class="reference internal" href="#events-available-for-connection">Events available for Connection</a></li>
+<li><a class="reference internal" href="#connecting-to-mousewheel-events">Connecting to MouseWheel events</a></li>
+<li><a class="reference internal" href="#keyboard-events">Keyboard Events</a></li>
+<li><a class="reference internal" href="#disconnecting">Disconnecting</a></li>
+<li><a class="reference internal" href="#the-event-object">The Event Object</a></li>
+<li><a class="reference internal" href="#page-load-and-unload">Page Load and Unload</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connecting-functions-to-one-another">Connecting Functions to One Another</a><ul>
+<li><a class="reference internal" href="#gotchas-with-direct-references-to-functions">Gotchas with direct references to functions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#publish-and-subscribe">Publish and Subscribe</a><ul>
+<li><a class="reference internal" href="#id1">How does it work?</a></li>
+<li><a class="reference internal" href="#example-code-for-reference">Example Code for Reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#events-with-dijit">Events with Dijit</a><ul>
+<li><a class="reference internal" href="#dijit-events-similar-to-dom-events">Dijit events similar to DOM events</a></li>
+<li><a class="reference internal" href="#overriding-vs-connecting">Overriding vs. Connecting</a></li>
+<li><a class="reference internal" href="#watch">watch()</a></li>
+<li><a class="reference internal" href="#focused">focused</a></li>
+<li><a class="reference internal" href="#high-level-events">High level events</a></li>
+<li><a class="reference internal" href="#widget-events-published-to-the-dom">Widget events published to the DOM</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

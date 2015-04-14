@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dojo 1.x to 2.0 migration guide &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="../dojo/index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-1-x-to-2-0-migration-guide">
+<span id="releasenotes-migration-2-0"></span><h1><a class="toc-backref" href="#id5">Dojo 1.x to 2.0 migration guide</a><a class="headerlink" href="#dojo-1-x-to-2-0-migration-guide" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-1-x-to-2-0-migration-guide" id="id5">Dojo 1.x to 2.0 migration guide</a><ul>
+<li><a class="reference internal" href="#amd" id="id6">AMD</a><ul>
+<li><a class="reference internal" href="#loading-dojo-js" id="id7">Loading dojo.js</a></li>
+<li><a class="reference internal" href="#loading-modules" id="id8">Loading Modules</a></li>
+<li><a class="reference internal" href="#accessing-modules" id="id9">Accessing Modules</a></li>
+<li><a class="reference internal" href="#defining-modules" id="id10">Defining Modules</a></li>
+<li><a class="reference internal" href="#i18n" id="id11">I18N</a></li>
+<li><a class="reference internal" href="#loading-text-resources-and-widget-templates" id="id12">Loading Text Resources and Widget Templates</a></li>
+<li><a class="reference internal" href="#urls" id="id13">URLs</a></li>
+<li><a class="reference internal" href="#quick-reference" id="id14">Quick Reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojo-core" id="id15">Dojo Core</a><ul>
+<li><a class="reference internal" href="#basic-functions" id="id16">Basic functions</a></li>
+<li><a class="reference internal" href="#events" id="id17">Events</a></li>
+<li><a class="reference internal" href="#advice" id="id18">Advice</a></li>
+<li><a class="reference internal" href="#publish-and-subscribe" id="id19">Publish and subscribe</a></li>
+<li><a class="reference internal" href="#dom-manipulation" id="id20">DOM Manipulation</a></li>
+<li><a class="reference internal" href="#json" id="id21">JSON</a></li>
+<li><a class="reference internal" href="#parser" id="id22">Parser</a></li>
+<li><a class="reference internal" href="#jsid" id="id23">jsId</a></li>
+<li><a class="reference internal" href="#query" id="id24">Query</a></li>
+<li><a class="reference internal" href="#stores" id="id25">Stores</a></li>
+<li><a class="reference internal" href="#declaring-classes" id="id26">Declaring Classes</a></li>
+<li><a class="reference internal" href="#fx" id="id27">FX</a></li>
+<li><a class="reference internal" href="#promises-and-deferreds" id="id28">Promises and Deferreds</a></li>
+<li><a class="reference internal" href="#xhr-and-io-requests" id="id29">XHR and IO Requests</a></li>
+<li><a class="reference internal" href="#miscellaneous" id="id30">Miscellaneous</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dijit" id="id31">Dijit</a><ul>
+<li><a class="reference internal" href="#mapping-table-for-dijit" id="id32">Mapping table for dijit</a></li>
+<li><a class="reference internal" href="#set-get" id="id33">set(), get()</a></li>
+<li><a class="reference internal" href="#watch-on" id="id34">watch(), on()</a></li>
+<li><a class="reference internal" href="#templated-widgets" id="id35">Templated Widgets</a></li>
+<li><a class="reference internal" href="#custom-setters" id="id36">custom setters</a></li>
+<li><a class="reference internal" href="#attributemap" id="id37">attributeMap</a></li>
+<li><a class="reference internal" href="#this-connect-this-subscribe-this-supportingwidgets" id="id38">this.connect(), this.subscribe(), this._supportingWidgets</a></li>
+<li><a class="reference internal" href="#base-functionality" id="id39">Base Functionality</a></li>
+<li><a class="reference internal" href="#editor" id="id40">Editor</a></li>
+<li><a class="reference internal" href="#splitcontainer-layoutcontainer" id="id41">SplitContainer, LayoutContainer</a></li>
+<li><a class="reference internal" href="#miscellaneous-changes" id="id42">Miscellaneous changes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojox" id="id43">DojoX</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Currently, many parts of Dojo 2.0 are under development.  As with any major software that is under-development, it is
+hard to predict that the final solution will look like.  These notes provide guidance though on how to try to &#8220;future
+proof&#8221; your application to make it easier to transition to Dojo 2.0 when it release.</p>
+<p>Since Dojo 1.X is backwards compatible with previous Dojo 1.x releases, none of these changes are necessary until Dojo
+2.0, but refactoring your code earlier will not only make future porting easier, but also can deliver performance and
+code maintenance benefits early.</p>
+<div class="section" id="amd">
+<h2><a class="toc-backref" href="#id6">AMD</a><a class="headerlink" href="#amd" title="Permalink to this headline">¶</a></h2>
+<p>Dojo has been upgraded to use the Asynchronous Module Definition (AMD) standard for all of its modules.  This changes
+the way you load, access, and define modules.</p>
+<div class="section" id="loading-dojo-js">
+<h3><a class="toc-backref" href="#id7">Loading dojo.js</a><a class="headerlink" href="#loading-dojo-js" title="Permalink to this headline">¶</a></h3>
+<p>Dojo is loaded basically in the same way as before, except that in the <code class="docutils literal"><span class="pre">&lt;script&gt;</span></code> tag the <code class="docutils literal"><span class="pre">djConfig</span></code> attribute has
+been renamed to <code class="docutils literal"><span class="pre">data-dojo-config</span></code>.</p>
+<p>To get the 2.0-like behavior in 1.7, you should set <code class="docutils literal"><span class="pre">async:</span> <span class="pre">true</span></code>.</p>
+<p>If configuration options are specified outside of the <code class="docutils literal"><span class="pre">&lt;script&gt;</span></code> tag (rather than as a <code class="docutils literal"><span class="pre">data-dojo-config</span></code>
+attribute), instead of <code class="docutils literal"><span class="pre">djConfig</span></code> you should set <code class="docutils literal"><span class="pre">dojoConfig</span></code>:</p>
+</div>
+<div class="section" id="loading-modules">
+<h3><a class="toc-backref" href="#id8">Loading Modules</a><a class="headerlink" href="#loading-modules" title="Permalink to this headline">¶</a></h3>
+<p>The syntax for loading modules has been changed from a series of <code class="docutils literal"><span class="pre">dojo.require()</span></code> calls like:</p>
+<p>into a single require statement:</p>
+<p>Notice how the dots (e.g. <code class="docutils literal"><span class="pre">dijit.form.Button</span></code>) have been changed to slashes (e.g. <code class="docutils literal"><span class="pre">dijit/form/Button</span></code>).  This is
+dot notation represented a global scope object where as the slash notation represent a Module ID (MID).  While these
+are similar in naming, there are actually wholly different concepts.</p>
+<p>Also, be careful to never load a module using a <code class="docutils literal"><span class="pre">&lt;script&gt;</span></code> tag.  This will not work; it causes &#8220;multiply defined&#8221;
+errors from the loader.</p>
+</div>
+<div class="section" id="accessing-modules">
+<h3><a class="toc-backref" href="#id9">Accessing Modules</a><a class="headerlink" href="#accessing-modules" title="Permalink to this headline">¶</a></h3>
+<p>Each module you load is mapped to a function parameter:</p>
+<p>That function parameter is the way that you access methods or the class defined in that module. You should no longer
+access any functionality through global variables like <code class="docutils literal"><span class="pre">dojo</span></code>, <code class="docutils literal"><span class="pre">dijit</span></code>, or <code class="docutils literal"><span class="pre">dojox</span></code>.</p>
+<p>One implication of this change is that every module you are (directly) using must be put into your dependency list.
+That includes any functionality previously loaded by <code class="docutils literal"><span class="pre">dojo.js</span></code>.  The modules that formerly composed <code class="docutils literal"><span class="pre">dojo.js</span></code>
+(modules in <code class="docutils literal"><span class="pre">dojo/_base</span></code>) have been replaced with smaller, more specific modules in the top level <code class="docutils literal"><span class="pre">dojo</span></code> directory.
+<em>Note:</em> as of 1.8, some modules in <code class="docutils literal"><span class="pre">dojo/_base</span></code> are still being used.</p>
+<p>Also, note that some method names have been shortened to avoid redundancy. For example, the previous
+<code class="docutils literal"><span class="pre">dojo.colorFromRgb()</span></code> is now accessed as <code class="docutils literal"><span class="pre">Color.fromRgb()</span></code>, rather than <code class="docutils literal"><span class="pre">Color.colorFromRgb()</span></code>.</p>
+</div>
+<div class="section" id="defining-modules">
+<h3><a class="toc-backref" href="#id10">Defining Modules</a><a class="headerlink" href="#defining-modules" title="Permalink to this headline">¶</a></h3>
+<p>The syntax for defining a module is similar to <code class="docutils literal"><span class="pre">require()</span></code>.   In other words, it has been changed from:</p>
+<p>into:</p>
+<p>Notice that the module (a.k.a. file) itself is <em>returning</em> a value.   That is the way other modules access your
+module, as explained in the section above.</p>
+<p>Also, notice how the module name previously listed in the <code class="docutils literal"><span class="pre">dojo.provide()</span></code> call (<code class="docutils literal"><span class="pre">acme.Dialog</span></code> in the example
+above) is not listed anymore.   The file name itself suffices.</p>
+</div>
+<div class="section" id="i18n">
+<h3><a class="toc-backref" href="#id11">I18N</a><a class="headerlink" href="#i18n" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo.requireLocalization()</span></code> has been replaced by the <a class="reference internal" href="../dojo/i18n.html#dojo-i18n"><span>dojo/i18n!</span></a> loader plugin:</p>
+<p>Old syntax:</p>
+<p>New syntax:</p>
+</div>
+<div class="section" id="loading-text-resources-and-widget-templates">
+<h3><a class="toc-backref" href="#id12">Loading Text Resources and Widget Templates</a><a class="headerlink" href="#loading-text-resources-and-widget-templates" title="Permalink to this headline">¶</a></h3>
+<p>Use the <a class="reference internal" href="../dojo/text.html#dojo-text"><span>dojo/text!</span></a> plugin instead.</p>
+<p>Old syntax:</p>
+<p>New syntax:</p>
+</div>
+<div class="section" id="urls">
+<h3><a class="toc-backref" href="#id13">URLs</a><a class="headerlink" href="#urls" title="Permalink to this headline">¶</a></h3>
+<p>Most of the time you use the <code class="docutils literal"><span class="pre">dojo/text!</span></code> plugin to load text from a specific URL, but if you need an actual URL in
+your classes you should use <code class="docutils literal"><span class="pre">require.toUrl()</span></code>.</p>
+<p>See <a class="reference internal" href="../loader/amd.html#loader-amd-utility-functions"><span>require.toUrl()</span></a> for details.</p>
+</div>
+<div class="section" id="quick-reference">
+<h3><a class="toc-backref" href="#id14">Quick Reference</a><a class="headerlink" href="#quick-reference" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="15%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.provide(&#8220;foo/bar&#8221;); dojo.require(&#8220;a/b&#8221;); ...</td>
+<td>&nbsp;</td>
+<td>define([&#8220;a/b&#8221;], function(b){ ... });</td>
+</tr>
+<tr class="row-odd"><td>dojo.require(a.b); a.b.foo();</td>
+<td>&nbsp;</td>
+<td>require([&#8220;a/b&#8221;], function(b){ b.foo(); }</td>
+</tr>
+<tr class="row-even"><td>djConfig</td>
+<td>&nbsp;</td>
+<td>data-dojo-config</td>
+</tr>
+<tr class="row-odd"><td>dojo._Url</td>
+<td>&nbsp;</td>
+<td>require.toUrl()</td>
+</tr>
+<tr class="row-even"><td>dojo.moduleUrl(&#8220;dijit&#8221;, &#8220;foo.template.html&#8221;)</td>
+<td>require</td>
+<td>require.toUrl(&#8220;dijit/foo/template.html&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dojo.requireLocalization()</td>
+<td>dojo/i18n!</td>
+<td>see I18N section above</td>
+</tr>
+<tr class="row-even"><td>dojo.getLocalization()</td>
+<td>dojo/i18n!</td>
+<td>see I18N section above</td>
+</tr>
+<tr class="row-odd"><td>dojo.cache(&#8220;my.module&#8221;, &#8220;template.html&#8221;)</td>
+<td>dojo/text!</td>
+<td>require(&#8220;dojo/text!my/module/template.html&#8221;, function(text){ ...</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="dojo-core">
+<h2><a class="toc-backref" href="#id15">Dojo Core</a><a class="headerlink" href="#dojo-core" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="basic-functions">
+<h3><a class="toc-backref" href="#id16">Basic functions</a><a class="headerlink" href="#basic-functions" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="testing-object-types">
+<span id="releasenotes-migration-2-0-testing-object-types"></span><h4>Testing object types<a class="headerlink" href="#testing-object-types" title="Permalink to this headline">¶</a></h4>
+<p>2.0 will remove the <code class="docutils literal"><span class="pre">isXXX()</span></code> functions defined in <code class="docutils literal"><span class="pre">dojo/_base/lang</span></code>.  In most cases they can be easily replaced
+with simple native tests:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="62%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x</th>
+<th class="head">2.0</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">dojo.isString(v)</span></code></td>
+<td><code class="docutils literal"><span class="pre">typeof</span> <span class="pre">v</span> <span class="pre">==</span> <span class="pre">&quot;string&quot;</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">dojo.isArray(v)</span></code></td>
+<td><code class="docutils literal"><span class="pre">v</span> <span class="pre">instanceof</span> <span class="pre">Array</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">dojo.isFunction(v)</span></code></td>
+<td><code class="docutils literal"><span class="pre">typeof</span> <span class="pre">v</span> <span class="pre">==</span> <span class="pre">&quot;function&quot;</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">dojo.isArrayLike(v)</span></code></td>
+<td><code class="docutils literal"><span class="pre">&quot;length&quot;</span> <span class="pre">in</span> <span class="pre">v</span></code>, etc. (but see note below)</td>
+</tr>
+</tbody>
+</table>
+<p>Notes:</p>
+<ul class="simple">
+<li>On some browsers <code class="docutils literal"><span class="pre">&quot;length&quot;</span> <span class="pre">in</span> <span class="pre">v</span></code> will return true for strings and functions, so if you are trying to differentiate
+between strings and arrays of strings, use the <code class="docutils literal"><span class="pre">typeof</span> <span class="pre">v</span> <span class="pre">==</span> <span class="pre">&quot;string&quot;</span></code> test instead, and if you are trying to
+differentiate between functions and arrays of functions, use the <code class="docutils literal"><span class="pre">typeof</span> <span class="pre">v</span> <span class="pre">==</span> <span class="pre">&quot;function&quot;</span></code> test instead. It will
+also return <code class="docutils literal"><span class="pre">true</span></code> for built-in constructors (<code class="docutils literal"><span class="pre">Number</span></code>, <code class="docutils literal"><span class="pre">String</span></code>, etc.) which have <code class="docutils literal"><span class="pre">length</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">typeof</span> <span class="pre">value</span> <span class="pre">==</span> <span class="pre">&quot;function&quot;</span></code> won&#8217;t match IE&#8217;s hosted functions (like <code class="docutils literal"><span class="pre">alert</span></code>).</li>
+<li><code class="docutils literal"><span class="pre">v</span> <span class="pre">instanceof</span> <span class="pre">Array</span></code> won&#8217;t work if <code class="docutils literal"><span class="pre">v</span></code> was created in a different frame.</li>
+</ul>
+</div>
+<div class="section" id="dojo-base-lang">
+<h4>dojo/_base/lang<a class="headerlink" href="#dojo-base-lang" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.extend</td>
+<td>dojo/_base/lang</td>
+<td>lang.extend</td>
+</tr>
+<tr class="row-odd"><td>dojo._hitchArgs</td>
+<td>dojo/_base/lang</td>
+<td>lang._hitchArgs</td>
+</tr>
+<tr class="row-even"><td>dojo.hitch</td>
+<td>dojo/_base/lang</td>
+<td>lang.hitch</td>
+</tr>
+<tr class="row-odd"><td>dojo.delegate</td>
+<td>dojo/_base/lang</td>
+<td>lang.delegate</td>
+</tr>
+<tr class="row-even"><td>dojo._toArray</td>
+<td>dojo/_base/lang</td>
+<td>lang._toArray</td>
+</tr>
+<tr class="row-odd"><td>dojo.partial</td>
+<td>dojo/_base/lang</td>
+<td>lang.partial</td>
+</tr>
+<tr class="row-even"><td>dojo.clone</td>
+<td>dojo/_base/lang</td>
+<td>lang.clone</td>
+</tr>
+<tr class="row-odd"><td>dojo.trim</td>
+<td>dojo/_base/lang</td>
+<td>lang.trim</td>
+</tr>
+<tr class="row-even"><td>dojo.replace</td>
+<td>dojo/_base/lang</td>
+<td>lang.replace</td>
+</tr>
+<tr class="row-odd"><td>dojo.mixin</td>
+<td>dojo/_base/lang</td>
+<td>lang.mixin</td>
+</tr>
+<tr class="row-even"><td>dojo._mixin</td>
+<td>dojo/_base/lang</td>
+<td>lang._mixin</td>
+</tr>
+<tr class="row-odd"><td>dojo.exists</td>
+<td>dojo/_base/lang</td>
+<td>lang.exists</td>
+</tr>
+<tr class="row-even"><td>dojo.getObject</td>
+<td>dojo/_base/lang</td>
+<td>lang.getObject</td>
+</tr>
+<tr class="row-odd"><td>dojo.setObject</td>
+<td>dojo/_base/lang</td>
+<td>lang.setObject</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dojo-base-kernel">
+<h4>dojo/_base/kernel<a class="headerlink" href="#dojo-base-kernel" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="24%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.deprecated</td>
+<td>dojo/_base/kernel</td>
+<td>kernel.deprecated</td>
+</tr>
+<tr class="row-odd"><td>dojo.experimental</td>
+<td>dojo/_base/kernel</td>
+<td>kernel.experimental</td>
+</tr>
+<tr class="row-even"><td>dojo.version</td>
+<td>dojo/_base/kernel</td>
+<td>kernel.version</td>
+</tr>
+<tr class="row-odd"><td>dojo.eval</td>
+<td>dojo/json</td>
+<td>native eval() or json.parse() for json</td>
+</tr>
+<tr class="row-even"><td>dojo.global</td>
+<td>dojo/_base/kernel</td>
+<td>kernel.global</td>
+</tr>
+</tbody>
+</table>
+<p><code class="docutils literal"><span class="pre">global</span></code> is an alias for the global scope that was designed to work both in a browser environment
+(where it points to <code class="docutils literal"><span class="pre">window</span></code>), and a server environment.</p>
+<p>With modern AMD code, hopefully globals are completely unnecessary.
+If you do need to create/read a global, then the following pattern is preferred:</p>
+<p>For strict modules, there&#8217;s a slightly more complicated syntax:</p>
+</div>
+<div class="section" id="dojo-base-array">
+<h4>dojo/_base/array<a class="headerlink" href="#dojo-base-array" title="Permalink to this headline">¶</a></h4>
+<p><em>To be determined</em> - Dojo 2.0 may have <code class="docutils literal"><span class="pre">dojo/array</span></code>, or <code class="docutils literal"><span class="pre">dojo/each</span></code>, or just shim <code class="docutils literal"><span class="pre">Array</span></code> prototype on IE to
+match behavior of modern browsers.</p>
+<p>In 1.7 and later, use &#8220;dojo/_base/array&#8221; module to get <code class="docutils literal"><span class="pre">forEach()</span></code>, <code class="docutils literal"><span class="pre">map()</span></code>, etc:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.forEach</td>
+<td>dojo/_base/array</td>
+<td>array.forEach</td>
+</tr>
+<tr class="row-odd"><td>dojo.map</td>
+<td>dojo/_base/array</td>
+<td>array.map</td>
+</tr>
+<tr class="row-even"><td>dojo.filter</td>
+<td>dojo/_base/array</td>
+<td>array.filter</td>
+</tr>
+<tr class="row-odd"><td>dojo.every</td>
+<td>dojo/_base/array</td>
+<td>array.every</td>
+</tr>
+<tr class="row-even"><td>dojo.some</td>
+<td>dojo/_base/array</td>
+<td>array.some</td>
+</tr>
+<tr class="row-odd"><td>dojo.indexOf</td>
+<td>dojo/_base/array</td>
+<td>array.indexOf</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="browser-device-sniffing">
+<h4>Browser/Device Sniffing<a class="headerlink" href="#browser-device-sniffing" title="Permalink to this headline">¶</a></h4>
+<p>If your code uses browser sniffing, you should load <a class="reference internal" href="../dojo/sniff.html#dojo-sniff"><span>dojo/sniff</span></a> or
+<a class="reference internal" href="../dojox/mobile/sniff.html#dojox-mobile-sniff"><span>dojox/mobile/sniff</span></a>.  Both these modules leverage the <a class="reference internal" href="../dojo/has.html#dojo-has"><span>dojo/has</span></a> API for
+feature detection.</p>
+<p>For example, old code like:</p>
+<p>should be changed to:</p>
+<p>Overview of where functionality has moved:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.isOpera</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;opera&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dojo.isAIR</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;air&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dojo.isKhtml</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;khtml&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dojo.isWebKit</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;webkit&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dojo.isChrome</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;chrome&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dojo.isMac</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;mac&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dojo.isSafari</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;safari&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dojo.isMozilla</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;mozilla&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dojo.isMoz</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;mozilla&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dojo.isIE</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;ie&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dojo.isFF</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;ff&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dojo.isAndroid</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;android&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dojo.isBB</td>
+<td>dojox/mobile/sniff</td>
+<td>has(&#8220;bb&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dojo.isIpad</td>
+<td>dojox/mobile/sniff</td>
+<td>has(&#8220;ipad&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dojo.isIphone</td>
+<td>dojox/mobile/sniff</td>
+<td>has(&#8220;iphone&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dojo.isIpod</td>
+<td>dojox/mobile/sniff</td>
+<td>has(&#8220;ipod&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dojo.isQuirks</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;quirks&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dojo.isIos</td>
+<td>dojo/sniff</td>
+<td>has(&#8220;ios&#8221;)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="load-and-unload-handlers">
+<h4>Load and Unload Handlers<a class="headerlink" href="#load-and-unload-handlers" title="Permalink to this headline">¶</a></h4>
+<p>Loading and unloading have been moved to <code class="docutils literal"><span class="pre">dojo/ready</span></code> and <code class="docutils literal"><span class="pre">dojo/_base/unload</span></code>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.addOnLoad(f)</td>
+<td>dojo/ready</td>
+<td>ready(f)</td>
+</tr>
+<tr class="row-odd"><td>dojo.ready(f)</td>
+<td>dojo/ready</td>
+<td>ready(f)</td>
+</tr>
+<tr class="row-even"><td>dojo.addOnUnload</td>
+<td>dojo/_base/unload</td>
+<td>unload.addOnUnload</td>
+</tr>
+<tr class="row-odd"><td>dojo.addOnWindowUnload</td>
+<td>dojo/_base/unload</td>
+<td>unload.addOnWindowUnload</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="events">
+<h3><a class="toc-backref" href="#id17">Events</a><a class="headerlink" href="#events" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo.connect()</span></code> / <code class="docutils literal"><span class="pre">dojo.disconnect()</span></code> for monitoring DOMNode events have been replaced by the <code class="docutils literal"><span class="pre">on()</span></code> method
+returned from the <a class="reference internal" href="../dojo/on.html#dojo-on"><span>dojo/on</span></a> module.  (For <code class="docutils literal"><span class="pre">dojo.connect()</span></code> usage as advice on plain JavaScript
+functions/methods, see the <a class="reference internal" href="#advice">Advice</a> section below)</p>
+<p>Old code like:</p>
+<p>should be converted to:</p>
+<p>Note that:</p>
+<ul class="simple">
+<li>the <code class="docutils literal"><span class="pre">on</span></code> prefix was dropped, and <code class="docutils literal"><span class="pre">onclick</span></code> became <code class="docutils literal"><span class="pre">click</span></code></li>
+<li>the &#8220;handle&#8221; has a remove() method, rather than there being a function like dojo.disconnect()</li>
+</ul>
+<p>The NodeList objects returned from <code class="docutils literal"><span class="pre">dojo/query</span></code> also works with an <code class="docutils literal"><span class="pre">.on()</span></code> method rather than a <code class="docutils literal"><span class="pre">.connect()</span></code>
+method.</p>
+<p>Old code like:</p>
+<p>should be converted to:</p>
+<div class="section" id="mouseenter-mouseleave">
+<h4>mouseenter/mouseleave<a class="headerlink" href="#mouseenter-mouseleave" title="Permalink to this headline">¶</a></h4>
+<p>Dojo supports <code class="docutils literal"><span class="pre">onmouseenter</span></code>/<code class="docutils literal"><span class="pre">onmouseleave</span></code> synthetically for browsers that do not support those events natively.
+In 1.x these events were specified as strings, just like native events:</p>
+<p>Now they are specified by event objects defined in <code class="docutils literal"><span class="pre">dojo/mouse</span></code>, which must be explicitly loaded, and used like this:</p>
+<p>Similarly, <code class="docutils literal"><span class="pre">&quot;onmouseleave&quot;</span></code> has become <code class="docutils literal"><span class="pre">mouse.leave</span></code>.</p>
+</div>
+<div class="section" id="mouse-buttons">
+<h4>Mouse Buttons<a class="headerlink" href="#mouse-buttons" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">dojo.mouseButtons</span></code> has been replaced by the <code class="docutils literal"><span class="pre">dojo/mouse</span></code> module, which must be explicitly loaded.</p>
+<p>Code like:</p>
+<p>should be converted to:</p>
+</div>
+<div class="section" id="keys">
+<h4>Keys<a class="headerlink" href="#keys" title="Permalink to this headline">¶</a></h4>
+<p>The symbolic names for keys have been put into the <a class="reference internal" href="../dojo/keys.html#dojo-keys"><span>dojo/keys</span></a> module, which must be explicitly
+loaded and can be accessed like this:</p>
+</div>
+<div class="section" id="onkeypress">
+<h4>onkeypress<a class="headerlink" href="#onkeypress" title="Permalink to this headline">¶</a></h4>
+<p>The Dojo <code class="docutils literal"><span class="pre">onkeypress</span></code> normalization to Firefox behavior has been desupported.  For portable applications, you must
+use <code class="docutils literal"><span class="pre">keypress</span></code> for monitoring printable characters (e.g. A-Z, 1-9):</p>
+<p>and keydown for non-printable characters (e.g. arrow keys):</p>
+<p>Note that the normalization of <code class="docutils literal"><span class="pre">evt.charOrCode</span></code> is also gone, so use <code class="docutils literal"><span class="pre">evt.charCode</span></code> for keypress events, or
+<code class="docutils literal"><span class="pre">evt.keyCode</span></code> for keydown events.</p>
+</div>
+<div class="section" id="event-delegation">
+<h4>Event Delegation<a class="headerlink" href="#event-delegation" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal"><span class="pre">dojo.behavior</span></code> and <code class="docutils literal"><span class="pre">dojox.NodeList.delegate</span></code> modules have been replaced by functionality built-in to
+<code class="docutils literal"><span class="pre">dojo/on</span></code>.</p>
+<p>Old code:</p>
+<p>New code:</p>
+</div>
+<div class="section" id="connectpublisher">
+<h4>connectPublisher()<a class="headerlink" href="#connectpublisher" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">dojo.connectPublisher()</span></code> was an automation of this common form:</p>
+<p>Which became:</p>
+<p>But in 2.0 users should use the following for connecting to DOM events:</p>
+<p>Or this for after-advice on arbitrary methods of arbitrary objects:</p>
+</div>
+<div class="section" id="id1">
+<h4>Quick Reference<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="16%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.connect(node,&#8221;onclick&#8221;,cb)</td>
+<td>dojo/on</td>
+<td>on(node,&#8221;click&#8221;,cb)   (note that &#8220;on&#8221; prefix removed)</td>
+</tr>
+<tr class="row-odd"><td>dojo.connect(node,&#8221;onmouseenter&#8221;,cb)</td>
+<td>dojo/on,dojo/mouse</td>
+<td>on(node,mouse.enter,cb)</td>
+</tr>
+<tr class="row-even"><td>dojo.connect(node,&#8221;onmouseleave&#8221;,cb)</td>
+<td>dojo/on,dojo/mouse</td>
+<td>on(node,mouse.leave,cb)</td>
+</tr>
+<tr class="row-odd"><td>dojo.connect(node,&#8221;onkeypress&#8221;,cb)</td>
+<td>dojo/on</td>
+<td>on(node,&#8221;keypress&#8221;,cb) for printable or on(node,&#8221;keydown&#8221;,cb) for arrows etc.</td>
+</tr>
+<tr class="row-even"><td>dojo.disconnect(handle)</td>
+<td>&nbsp;</td>
+<td>handle.remove()</td>
+</tr>
+<tr class="row-odd"><td>dojo.connectPublisher</td>
+<td>&nbsp;</td>
+<td>see above</td>
+</tr>
+<tr class="row-even"><td>dojo.fixEvent</td>
+<td>dojo/_base/event</td>
+<td>event.fix</td>
+</tr>
+<tr class="row-odd"><td>dojo.stopEvent</td>
+<td>dojo/_base/event</td>
+<td>event.stop</td>
+</tr>
+<tr class="row-even"><td>dojo.mouseButtons.is***()</td>
+<td>dojo/mouse</td>
+<td>mouse.is***()</td>
+</tr>
+<tr class="row-odd"><td>dojo.isCopyKey</td>
+<td>?</td>
+<td>?</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="advice">
+<h3><a class="toc-backref" href="#id18">Advice</a><a class="headerlink" href="#advice" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo.connect()</span></code> could be used to perform after advice (based on the concepts of Aspect Oriented Programming) on a
+method.  In 2.0 that has been replaced by the <code class="docutils literal"><span class="pre">dojo/aspect</span></code> package.</p>
+<p>Old code:</p>
+<p>is changed to:</p>
+<p>Note that <code class="docutils literal"><span class="pre">callback()</span></code> should not return a value, because if it did the returned value would be reported as the
+value that <code class="docutils literal"><span class="pre">myInstance.execute()</span></code> appeared to return, which is not what <code class="docutils literal"><span class="pre">dojo.connect()</span></code> did.</p>
+<div class="section" id="id2">
+<h4>Quick Reference<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.connect(obj,method,cb)</td>
+<td>dojo/aspect</td>
+<td>aspect.after(obj,method,cb,true)</td>
+</tr>
+<tr class="row-odd"><td>dojo.disconnect(handle)</td>
+<td>&nbsp;</td>
+<td>handle.remove();</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="publish-and-subscribe">
+<h3><a class="toc-backref" href="#id19">Publish and subscribe</a><a class="headerlink" href="#publish-and-subscribe" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo.publish()</span></code>/<code class="docutils literal"><span class="pre">dojo.subscribe()</span></code>/<code class="docutils literal"><span class="pre">dojo.unsubscribe()</span></code> have been replaced by the <code class="docutils literal"><span class="pre">dojo/topic</span></code> module.</p>
+<p>Old code:</p>
+<p>is changed to:</p>
+<p>And publishing code is changed from:</p>
+<p>to:</p>
+<p>Note that no array brackets are used anymore.</p>
+<div class="section" id="id3">
+<h4>Quick Reference<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.publish(&#8220;/foo&#8221;, [1,2,3])</td>
+<td>dojo/topic</td>
+<td>topic.publish(&#8220;/foo&#8221;, 1, 2, 3)</td>
+</tr>
+<tr class="row-odd"><td>dojo.subscribe(&#8220;/foo&#8221;, callback)</td>
+<td>dojo/topic</td>
+<td>topic.subscribe(&#8220;/foo&#8221;, callback)</td>
+</tr>
+<tr class="row-even"><td>dojo.unsubscribe(handle)</td>
+<td>&nbsp;</td>
+<td>handle.remove()</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="dom-manipulation">
+<h3><a class="toc-backref" href="#id20">DOM Manipulation</a><a class="headerlink" href="#dom-manipulation" title="Permalink to this headline">¶</a></h3>
+<p>The Dojo DOM related functions previously available as part of <code class="docutils literal"><span class="pre">dojo/dojo.js</span></code> are now in a number of modules which
+must each be explicitly loaded.  These modules are:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../dojo/dom.html#dojo-dom"><span>dojo/dom</span></a>: general functions</li>
+<li><a class="reference internal" href="../dojo/dom-attr.html#dojo-dom-attr"><span>dojo/dom-attr</span></a>: setting node attributes</li>
+<li><a class="reference internal" href="../dojo/dom-class.html#dojo-dom-class"><span>dojo/dom-class</span></a>: adding and removing classes</li>
+<li><a class="reference internal" href="../dojo/dom-construct.html#dojo-dom-construct"><span>dojo/dom-construct</span></a>: creating and destroying nodes</li>
+<li><a class="reference internal" href="../dojo/dom-form.html#dojo-dom-form"><span>dojo/dom-form</span></a>: form related</li>
+<li><a class="reference internal" href="../dojo/io-query.html#dojo-io-query"><span>dojo/io-query</span></a>: query conversion functions</li>
+<li><a class="reference internal" href="../dojo/dom-geometry.html#dojo-dom-geometry"><span>dojo/dom-geometry</span></a>: node sizing</li>
+<li><a class="reference internal" href="../dojo/dom-prop.html#dojo-dom-prop"><span>dojo/dom-prop</span></a>: setting node properties</li>
+<li><a class="reference internal" href="../dojo/dom-style.html#dojo-dom-style"><span>dojo/dom-style</span></a>: setting/getting style for a node</li>
+</ul>
+<p>Note in particular that node attribute setting and property setting has been split up. <code class="docutils literal"><span class="pre">dojo/dom-attr</span></code> will
+eventually be deprecated in lieu of <code class="docutils literal"><span class="pre">dojo/dom-prop</span></code>.</p>
+<p>Note also that combination accessor functions like <code class="docutils literal"><span class="pre">dojo.marginBox()</span></code>, <code class="docutils literal"><span class="pre">dojo.contentBox()</span></code>, and <code class="docutils literal"><span class="pre">dojo.style()</span></code>
+have been split into separate setter and getter methods.</p>
+<div class="section" id="id4">
+<h4>Quick Reference<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.byId</td>
+<td>dojo/dom</td>
+<td>dom.byId</td>
+</tr>
+<tr class="row-odd"><td>dojo.isDescendant</td>
+<td>dojo/dom</td>
+<td>dom.isDescendant</td>
+</tr>
+<tr class="row-even"><td>dojo.setSelectable</td>
+<td>dojo/dom</td>
+<td>dom.setSelectable</td>
+</tr>
+<tr class="row-odd"><td>dojo.attr(node, attr)</td>
+<td>dojo/dom-attr</td>
+<td>attr.get(node, attr)</td>
+</tr>
+<tr class="row-even"><td>dojo.attr(node, attr, val)</td>
+<td>dojo/dom-attr</td>
+<td>attr.set(node, attr, val)</td>
+</tr>
+<tr class="row-odd"><td>dojo.hasAttr</td>
+<td>dojo/dom-attr</td>
+<td>attr.has</td>
+</tr>
+<tr class="row-even"><td>dojo.removeAttr</td>
+<td>dojo/dom-attr</td>
+<td>attr.remove</td>
+</tr>
+<tr class="row-odd"><td>dojo.addClass</td>
+<td>dojo/dom-class</td>
+<td>domClass.add</td>
+</tr>
+<tr class="row-even"><td>dojo.hasClass</td>
+<td>dojo/dom-class</td>
+<td>domClass.contains</td>
+</tr>
+<tr class="row-odd"><td>dojo.removeClass</td>
+<td>dojo/dom-class</td>
+<td>domClass.remove</td>
+</tr>
+<tr class="row-even"><td>dojo.replaceClass</td>
+<td>dojo/dom-class</td>
+<td>domClass.replace</td>
+</tr>
+<tr class="row-odd"><td>dojo.toggleClass</td>
+<td>dojo/dom-class</td>
+<td>domClass.toggle</td>
+</tr>
+<tr class="row-even"><td>dojo.toDom</td>
+<td>dojo/dom-construct</td>
+<td>construct.toDom</td>
+</tr>
+<tr class="row-odd"><td>dojo.place</td>
+<td>dojo/dom-construct</td>
+<td>construct.place</td>
+</tr>
+<tr class="row-even"><td>dojo.create</td>
+<td>dojo/dom-construct</td>
+<td>construct.create</td>
+</tr>
+<tr class="row-odd"><td>dojo.empty</td>
+<td>dojo/dom-construct</td>
+<td>construct.empty</td>
+</tr>
+<tr class="row-even"><td>dojo.destroy</td>
+<td>dojo/dom-construct</td>
+<td>construct.destroy</td>
+</tr>
+<tr class="row-odd"><td>dojo.fieldToObject</td>
+<td>dojo/dom-form</td>
+<td>form.fieldToObject</td>
+</tr>
+<tr class="row-even"><td>dojo.formToObject</td>
+<td>dojo/dom-form</td>
+<td>form.toObject</td>
+</tr>
+<tr class="row-odd"><td>dojo.formToQuery</td>
+<td>dojo/dom-form</td>
+<td>form.toQuery</td>
+</tr>
+<tr class="row-even"><td>dojo.formToJson</td>
+<td>dojo/dom-form</td>
+<td>form.toJson</td>
+</tr>
+<tr class="row-odd"><td>dojo._getPadExtents</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.getPadExtents</td>
+</tr>
+<tr class="row-even"><td>dojo._getBorderExtents</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.getBorderExtents</td>
+</tr>
+<tr class="row-odd"><td>dojo._getPadBorderExtents</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.getPadBorderExtents</td>
+</tr>
+<tr class="row-even"><td>dojo._getMarginExtents</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.getMarginExtents</td>
+</tr>
+<tr class="row-odd"><td>dojo._getMarginSize</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.getMarginSize</td>
+</tr>
+<tr class="row-even"><td>dojo._getMarginBox</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.getMarginBox</td>
+</tr>
+<tr class="row-odd"><td>dojo._setMarginBox</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.setMarginBox</td>
+</tr>
+<tr class="row-even"><td>dojo.marginBox(node)</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.getMarginBox(node)</td>
+</tr>
+<tr class="row-odd"><td>dojo.marginBox(node,size)</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.setMarginBox(node,size)</td>
+</tr>
+<tr class="row-even"><td>dojo._getContentBox</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.getContentBox</td>
+</tr>
+<tr class="row-odd"><td>dojo.setContentSize</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.setContentSize</td>
+</tr>
+<tr class="row-even"><td>dojo.contentBox(node)</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.getContentBox(node)</td>
+</tr>
+<tr class="row-odd"><td>dojo.contentBox(node,size)</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.setContentSize(node,size)</td>
+</tr>
+<tr class="row-even"><td>dojo.position</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.position</td>
+</tr>
+<tr class="row-odd"><td>dojo._isBodyLtr</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.isBodyLtr</td>
+</tr>
+<tr class="row-even"><td>dojo._docScroll</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.docScroll</td>
+</tr>
+<tr class="row-odd"><td>dojo._getIeDocumentElementOffset</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.getIeDocumentElementOffset</td>
+</tr>
+<tr class="row-even"><td>dojo._fixIeBiDiScrollLeft</td>
+<td>dojo/dom-geometry</td>
+<td>geometry.fixIeBiDiScrollLeft</td>
+</tr>
+<tr class="row-odd"><td>dojo.style(node, attr)</td>
+<td>dojo/dom-style</td>
+<td>style.get(node, attr)</td>
+</tr>
+<tr class="row-even"><td>dojo.style(node, attr, val)</td>
+<td>dojo/dom-style</td>
+<td>style.set(node, attr, val)</td>
+</tr>
+<tr class="row-odd"><td>dojo.style(node, hash)</td>
+<td>dojo/dom-style</td>
+<td>style.set(node, hash)</td>
+</tr>
+<tr class="row-even"><td>dojo.getComputedStyle</td>
+<td>dojo/dom-style</td>
+<td>style.getComputedStyle</td>
+</tr>
+<tr class="row-odd"><td>dojo._toPixelValue</td>
+<td>dojo/dom-style</td>
+<td>style.toPixelValue</td>
+</tr>
+<tr class="row-even"><td>dojo.queryToObject</td>
+<td>dojo/io-query</td>
+<td>ioQuery.queryToObject</td>
+</tr>
+<tr class="row-odd"><td>dojo.objectToQuery</td>
+<td>dojo/io-query</td>
+<td>ioQuery.objectToQuery</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dojo-base-window">
+<h4>dojo/_base/window<a class="headerlink" href="#dojo-base-window" title="Permalink to this headline">¶</a></h4>
+<p><strong>dojo/_base/window</strong> was originally written to serve two main purposes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Provide methods/variables to access the current document and the <code class="docutils literal"><span class="pre">&lt;body&gt;</span></code> element of the current document.</li>
+<li>Provide functions to switch the &#8220;current document&#8221;, i.e. the document accessed by the methods/variables
+mentioned above, and indirectly by DOM methods where the document isn&#8217;t implied by the arguments, for example
+<code class="docutils literal"><span class="pre">dojo.byId(&quot;xyz&quot;)</span></code>.</li>
+</ul>
+</div></blockquote>
+<p>In modern code, you can usually forgo use of this module, and instead just:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Use the <code class="docutils literal"><span class="pre">window</span></code>, <code class="docutils literal"><span class="pre">document</span></code>, and <code class="docutils literal"><span class="pre">document.body</span></code> global variables, or equivalent variables
+for the frame that you want to operate on.</li>
+<li>If you need to operate on a different frame/document, all of the modern dojo DOM related methods either take a document
+parameter or a DOMNode parameter (which implies a document).   For example:</li>
+</ul>
+</div></blockquote>
+<p>In V1.9 (and earlier) the old methods are still accessible through AMD via:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.global</td>
+<td>dojo/_base/window</td>
+<td>window.global</td>
+</tr>
+<tr class="row-odd"><td>dojo.doc</td>
+<td>dojo/_base/window</td>
+<td>window.doc</td>
+</tr>
+<tr class="row-even"><td>dojo.body</td>
+<td>dojo/_base/window</td>
+<td>window.body</td>
+</tr>
+<tr class="row-odd"><td>dojo.setContext</td>
+<td>dojo/_base/window</td>
+<td>window.setContext</td>
+</tr>
+<tr class="row-even"><td>dojo.withGlobal</td>
+<td>dojo/_base/window</td>
+<td>window.withGlobal</td>
+</tr>
+<tr class="row-odd"><td>dojo.withDoc</td>
+<td>dojo/_base/window</td>
+<td>window.withDoc</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="json">
+<h3><a class="toc-backref" href="#id21">JSON</a><a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h3>
+<p>The JSON methods are available from the <a class="reference internal" href="../dojo/json.html#dojo-json"><span>dojo/json</span></a> package, which must be loaded explicitly.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.fromJson</td>
+<td>dojo/json</td>
+<td>json.parse</td>
+</tr>
+<tr class="row-odd"><td>dojo.toJson</td>
+<td>dojo/json</td>
+<td>json.stringify</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the new methods only accept true JSON, not arbitrary JavaScript.  Even the keys in a hash must be quoted</p>
+<p>Valid:</p>
+<p>Invalid:</p>
+<p>Also, single quotes are invalid, you must use double quotes for keys and string values.</p>
+</div>
+<div class="section" id="parser">
+<h3><a class="toc-backref" href="#id22">Parser</a><a class="headerlink" href="#parser" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="running-the-parser">
+<h4>Running the Parser<a class="headerlink" href="#running-the-parser" title="Permalink to this headline">¶</a></h4>
+<p>The parser is in the <a class="reference internal" href="../dojo/parser.html#dojo-parser"><span>dojo/parser</span></a> module, invoked like:</p>
+<p>Even if you are parsing declaratively via the <code class="docutils literal"><span class="pre">parseOnLoad:</span> <span class="pre">true</span></code> <code class="docutils literal"><span class="pre">dojoConfig</span></code> setting, you need to explicitly
+require the parser.</p>
+</div>
+<div class="section" id="data-dojo-type-and-data-dojo-props">
+<h4>data-dojo-type and data-dojo-props<a class="headerlink" href="#data-dojo-type-and-data-dojo-props" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">dojoType</span></code> has been renamed to <code class="docutils literal"><span class="pre">data-dojo-type</span></code>, and a new <code class="docutils literal"><span class="pre">data-dojo-props</span></code> parameter has been created to
+specify non-native attributes in a way that doesn&#8217;t violate HTML5 validation.</p>
+<p>Old code:</p>
+<p>New code:</p>
+<p><code class="docutils literal"><span class="pre">data-dojo-props</span></code> is a hash that contains name value pairs, for example: <code class="docutils literal"><span class="pre">data-dojo-props=&quot;</span> <span class="pre">name:</span> <span class="pre">'hi',</span> <span class="pre">size:</span> <span class="pre">123&quot;</span></code>
+.</p>
+</div>
+<div class="section" id="using-mids">
+<h4>Using MIDs<a class="headerlink" href="#using-mids" title="Permalink to this headline">¶</a></h4>
+<p>Starting in 1.8, referring to classes by their module ID (MID) is the preferred way.</p>
+<p>Old code:</p>
+<p>New code:</p>
+<p>The MID should match the <code class="docutils literal"><span class="pre">require([...])</span></code> used to require it in and the <code class="docutils literal"><span class="pre">require([...])</span></code> should occur before the
+parser is invoked, but the <code class="docutils literal"><span class="pre">parse()</span></code> doesn&#8217;t have to specifically occur within the closure of the <code class="docutils literal"><span class="pre">require([...])</span></code>.
+If the module is not loaded before the invocation of the <code class="docutils literal"><span class="pre">parse()</span></code>, the <code class="docutils literal"><span class="pre">dojo/parser</span></code> will attempt to auto-load
+the module, if the value of <code class="docutils literal"><span class="pre">data-dojo-type</span></code> looks like it is a MID.</p>
+</div>
+<div class="section" id="connecting-to-widget-events">
+<h4>Connecting to Widget Events<a class="headerlink" href="#connecting-to-widget-events" title="Permalink to this headline">¶</a></h4>
+<p>Previously you could use <code class="docutils literal"><span class="pre">&lt;script</span> <span class="pre">type=&quot;dojo/connect&quot;&gt;</span></code> to monitor widget events and connect to methods:</p>
+<p>Now the following is used: <code class="docutils literal"><span class="pre">&lt;script</span> <span class="pre">type=&quot;dojo/on&quot;&gt;</span></code> for events like click, <code class="docutils literal"><span class="pre">&lt;script</span> <span class="pre">type=&quot;dojo/watch&quot;&gt;</span></code> to monitor
+changes to a widget&#8217;s attribute and <code class="docutils literal"><span class="pre">&lt;script</span> <span class="pre">type=&quot;dojo/aspect&quot;&gt;</span></code> to modify the behavior of methods:</p>
+</div>
+</div>
+<div class="section" id="jsid">
+<h3><a class="toc-backref" href="#id23">jsId</a><a class="headerlink" href="#jsid" title="Permalink to this headline">¶</a></h3>
+<p>The <cite>jsId</cite> attribute has been removed. Replace all <cite>jsId</cite> references with <cite>data-dojo-id</cite>, the behavior is identical.</p>
+</div>
+<div class="section" id="query">
+<h3><a class="toc-backref" href="#id24">Query</a><a class="headerlink" href="#query" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo/query</span></code> is a new module similar to the old <code class="docutils literal"><span class="pre">dojo.query()</span></code> function.  In general you can use it like
+<code class="docutils literal"><span class="pre">dojo.query()</span></code>, so old code like:</p>
+<p>can been replaced by:</p>
+<p>Points of caution:</p>
+<blockquote>
+<div><p>1. As before, you need to require certain NodeList extension modules to get added methods on the NodeList return
+from <code class="docutils literal"><span class="pre">query()</span></code>. The difference is that now the NodeList DOM functions also need to be explicitly loaded. So you
+need to do:</p>
+<p>2. <code class="docutils literal"><span class="pre">query()</span></code> can load various selector engines. By default it uses the <code class="docutils literal"><span class="pre">dojo/selector/light</span></code> engine. If you have
+complicated queries you need to switch it to use a more powerful engine. See <a class="reference internal" href="../dojo/query.html#dojo-query"><span>dojo/query</span></a> for
+details.</p>
+<p>There are a couple of ways to set the selector engine. First, we can define the selector engine as part of the dojo
+configuration for the whole page:</p>
+<p>You can also specify the selector engine level you are dependent on for each of your modules. This is done by
+indicating the CSS selector engine level after <code class="docutils literal"><span class="pre">!</span></code> in the <code class="docutils literal"><span class="pre">dojo/query</span></code> module id. For example, if your module
+needed to do a CSS3 level query, you could write:</p>
+</div></blockquote>
+</div>
+<div class="section" id="stores">
+<h3><a class="toc-backref" href="#id25">Stores</a><a class="headerlink" href="#stores" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="../dojo/data.html#dojo-data"><span>dojo.data</span></a> API stores have been replaced with the new <a class="reference internal" href="../dojo/store.html#dojo-store"><span>dojo/store</span></a> API.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="49%" />
+<col width="51%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">dojo.data</th>
+<th class="head">dojo/store</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>store.getValue(item, &#8220;foo&#8221;)</td>
+<td>item.foo</td>
+</tr>
+<tr class="row-odd"><td>store.getLabel(item)</td>
+<td>item.label</td>
+</tr>
+<tr class="row-even"><td>store.getItemByIdentifier(id)</td>
+<td>store.get(id) returns Deferred</td>
+</tr>
+<tr class="row-odd"><td>store.fetch(...)</td>
+<td>store.query() returns Deferred</td>
+</tr>
+</tbody>
+</table>
+<p>In order to aid transition, there are two modules that are available:</p>
+<ul class="simple">
+<li><a class="reference internal" href="../dojo/store/DataStore.html#dojo-store-datastore"><span>dojo/store/DataStore</span></a> - Can convert a legacy <code class="docutils literal"><span class="pre">dojo.data</span></code> API store and make it appear
+to be a native <code class="docutils literal"><span class="pre">dojo/store</span></code>.</li>
+<li><a class="reference internal" href="../dojo/data/ObjectStore.html#dojo-data-objectstore"><span>dojo.data.ObjectStore</span></a> - Wraps a <code class="docutils literal"><span class="pre">dojo/store</span></code> API store and makes it appear to be a
+legacy <code class="docutils literal"><span class="pre">dojo.data</span></code> store.</li>
+</ul>
+<p>Many Dijits are now directly <code class="docutils literal"><span class="pre">dojo/store</span></code> aware, including: <a class="reference internal" href="../dijit/form/ComboBox.html#dijit-form-combobox"><span>dijit/form/ComboBox</span></a>,
+<a class="reference internal" href="../dijit/form/FilteringSelect.html#dijit-form-filteringselect"><span>dijit/form/FilteringSelect</span></a>, and <a class="reference internal" href="../dijit/Tree.html#dijit-tree"><span>dijit/Tree</span></a>.</p>
+</div>
+<div class="section" id="declaring-classes">
+<h3><a class="toc-backref" href="#id26">Declaring Classes</a><a class="headerlink" href="#declaring-classes" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo.declare()</span></code> has been migrated to <a class="reference internal" href="../dojo/_base/declare.html#dojo-base-declare"><span>dojo/_base/declare</span></a>.  There may be further changes
+for Dojo 2.0, for example replacing it by ComposeJS, or may have more modest changes.  For now, for classes you don&#8217;t
+need in the global scope, you should declare them as baseless.  Something like this:</p>
+<p>Should change to something like this:</p>
+<p>Notice the omission of the first argument in the <code class="docutils literal"><span class="pre">declare()</span></code>. This means that nothing will be set in the global
+scope.  Also, the mixin array uses the return values of the define requirement array, instead of the legacy class
+names. This means that your custom class will only be available within the closure scope of a <code class="docutils literal"><span class="pre">require()</span></code> or
+<code class="docutils literal"><span class="pre">define()</span></code> that has required it in.</p>
+<p>This does mean your module can only return a single public class, which is more consistent with the concepts of AMD and
+baseless anyways, but if you need to create a private class that isn&#8217;t referenced outside the current module, you can
+simply declare it as a variable. For example:</p>
+</div>
+<div class="section" id="fx">
+<h3><a class="toc-backref" href="#id27">FX</a><a class="headerlink" href="#fx" title="Permalink to this headline">¶</a></h3>
+<p>The base FX features of <code class="docutils literal"><span class="pre">dojo/dojo.js</span></code> have been moved to <a class="reference internal" href="../dojo/_base/fx.html#dojo-base-fx"><span>dojo/_base/fx</span></a> and the additional
+features of the <code class="docutils literal"><span class="pre">dojo.fx</span></code> module are now in <a class="reference internal" href="../dojo/fx.html#dojo-fx"><span>dojo/fx</span></a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo._Line</td>
+<td>dojo/_base/fx</td>
+<td>baseFx._Line</td>
+</tr>
+<tr class="row-odd"><td>dojo.Animation</td>
+<td>dojo/_base/fx</td>
+<td>baseFx.Animation</td>
+</tr>
+<tr class="row-even"><td>dojo._fade</td>
+<td>dojo/_base/fx</td>
+<td>baseFx._fade</td>
+</tr>
+<tr class="row-odd"><td>dojo.fadeIn</td>
+<td>dojo/_base/fx</td>
+<td>baseFx.fadeIn</td>
+</tr>
+<tr class="row-even"><td>dojo.fadeOut</td>
+<td>dojo/_base/fx</td>
+<td>baseFx.fadeOut</td>
+</tr>
+<tr class="row-odd"><td>dojo._defaultEasing</td>
+<td>dojo/_base/fx</td>
+<td>baseFx._defaultEasing</td>
+</tr>
+<tr class="row-even"><td>dojo.animateProperty</td>
+<td>dojo/_base/fx</td>
+<td>baseFx.animateProperty</td>
+</tr>
+<tr class="row-odd"><td>dojo.anim</td>
+<td>dojo/_base/fx</td>
+<td>baseFx.anim</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="promises-and-deferreds">
+<h3><a class="toc-backref" href="#id28">Promises and Deferreds</a><a class="headerlink" href="#promises-and-deferreds" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo.Deferred</span></code> and <code class="docutils literal"><span class="pre">dojo.when</span></code> have been replaced with <code class="docutils literal"><span class="pre">dojo/promise</span></code>, <code class="docutils literal"><span class="pre">dojo/Deferred</span></code> and <code class="docutils literal"><span class="pre">dojo/when</span></code>.
+The functionality in <code class="docutils literal"><span class="pre">dojo.</span>
+<span class="pre">DeferredList</span></code> has been replaced by <code class="docutils literal"><span class="pre">dojo/promise/all</span></code> and <code class="docutils literal"><span class="pre">dojo/promise/first</span></code>.</p>
+<p>Old code like:</p>
+<p>Should be refactored like:</p>
+<p>The following table provides a quick reference to the changes:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="43%" />
+<col width="25%" />
+<col width="32%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.Deferred</td>
+<td>dojo/Deferred</td>
+<td>Deferred</td>
+</tr>
+<tr class="row-odd"><td>dojo.when</td>
+<td>dojo/when</td>
+<td>when</td>
+</tr>
+<tr class="row-even"><td>dojo.DeferredList([...]).then(...)</td>
+<td>dojo/promise/all</td>
+<td>all([...]).then(...)</td>
+</tr>
+<tr class="row-odd"><td>dojo.DeferredList([...], true).then(...)</td>
+<td>dojo/promise/first</td>
+<td>first([...]).then(...)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="xhr-and-io-requests">
+<h3><a class="toc-backref" href="#id29">XHR and IO Requests</a><a class="headerlink" href="#xhr-and-io-requests" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo.xhr*</span></code> and <code class="docutils literal"><span class="pre">dojo.io.*</span></code> have been replaced with <a class="reference internal" href="../dojo/request.html#dojo-request"><span>dojo/request</span></a>.</p>
+<p>Old code like:</p>
+<p>Should be refactored as:</p>
+<p><code class="docutils literal"><span class="pre">dojo.io.script</span></code> is replaced by <a class="reference internal" href="../dojo/request/script.html#dojo-request-script"><span>dojo/request/script</span></a> and <code class="docutils literal"><span class="pre">dojo.io.iframe</span></code> is
+replaced by <a class="reference internal" href="../dojo/request/iframe.html#dojo-request-iframe"><span>dojo/request/iframe</span></a> and operate in a similar fashion to the base <code class="docutils literal"><span class="pre">dojo/request</span></code> module.</p>
+<p>Note that <code class="docutils literal"><span class="pre">dojo/request</span></code> utilises the new <code class="docutils literal"><span class="pre">dojo/promise</span></code> modules.</p>
+</div>
+<div class="section" id="miscellaneous">
+<h3><a class="toc-backref" href="#id30">Miscellaneous</a><a class="headerlink" href="#miscellaneous" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="40%" />
+<col width="23%" />
+<col width="37%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dojo.window</td>
+<td>dojo/window</td>
+<td>window</td>
+</tr>
+<tr class="row-odd"><td>dojo.Color</td>
+<td>dojo/_base/Color</td>
+<td>Color</td>
+</tr>
+<tr class="row-even"><td>dojo.cookie</td>
+<td>dojo/cookie</td>
+<td>cookie</td>
+</tr>
+<tr class="row-odd"><td>dojo.date.locale</td>
+<td>dojo/date/locale</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>dojo.date.stamp</td>
+<td>dojo/date/stamp</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>dojo.date</td>
+<td>dojo/date</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>dojo.dnd.*</td>
+<td>dojo/dnd/*</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>dojo.hash</td>
+<td>dojo/hash</td>
+<td>hash</td>
+</tr>
+<tr class="row-even"><td>dojo.html</td>
+<td>dojo/html</td>
+<td>html</td>
+</tr>
+<tr class="row-odd"><td>dojo.currency</td>
+<td>dojo/currency</td>
+<td>currency</td>
+</tr>
+<tr class="row-even"><td>dojo.number</td>
+<td>dojo/number</td>
+<td>number</td>
+</tr>
+<tr class="row-odd"><td>dojo.string</td>
+<td>dojo/string</td>
+<td>string</td>
+</tr>
+<tr class="row-even"><td>dojo.Stateful</td>
+<td>dojo/Stateful</td>
+<td>Stateful</td>
+</tr>
+<tr class="row-odd"><td>dojo.window.*</td>
+<td>dojo/window</td>
+<td>window.*</td>
+</tr>
+<tr class="row-even"><td>dojo.config</td>
+<td>dojo/_base/config</td>
+<td>config</td>
+</tr>
+<tr class="row-odd"><td>dojo.back.*</td>
+<td>dojo/hash</td>
+<td>see <a class="reference internal" href="../dojo/hash.html#dojo-hash"><span>dojo/hash</span></a> reference doc</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="dijit">
+<h2><a class="toc-backref" href="#id31">Dijit</a><a class="headerlink" href="#dijit" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mapping-table-for-dijit">
+<h3><a class="toc-backref" href="#id32">Mapping table for dijit</a><a class="headerlink" href="#mapping-table-for-dijit" title="Permalink to this headline">¶</a></h3>
+<p>This is a quick lookup table for methods, attributes, etc. in 1.x mapped to their equivalent method in that module in
+2.0.   Note that many methods that were previously included automatically now need to be explicitly loaded.</p>
+<p>The sections underneath this give more detail on conversions.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="14%" />
+<col width="62%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">1.x syntax</th>
+<th class="head">2.0 module</th>
+<th class="head">2.0 syntax</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>dijit.hasDefaultTabStop</td>
+<td>dijit/a11y</td>
+<td>a11y.hasDefaultTabStop</td>
+</tr>
+<tr class="row-odd"><td>dijit.isTabNavigable</td>
+<td>dijit/a11y</td>
+<td>a11y.isTabNavigable</td>
+</tr>
+<tr class="row-even"><td>dijit._getTabNavigable</td>
+<td>dijit/a11y</td>
+<td>a11y._getTabNavigable</td>
+</tr>
+<tr class="row-odd"><td>dijit.getFirstInTabbingOrder</td>
+<td>dijit/a11y</td>
+<td>a11y.getFirstInTabbingOrder</td>
+</tr>
+<tr class="row-even"><td>dijit.getLastInTabbingOrder</td>
+<td>dijit/a11y</td>
+<td>a11y.getLastInTabbingOrder</td>
+</tr>
+<tr class="row-odd"><td>dijit.byId</td>
+<td>dijit/registry</td>
+<td>registry.byId</td>
+</tr>
+<tr class="row-even"><td>dijit.byNode</td>
+<td>dijit/registry</td>
+<td>registry.byNode</td>
+</tr>
+<tr class="row-odd"><td>dijit.registry.toArray</td>
+<td>dijit/registry</td>
+<td>registry.toArray</td>
+</tr>
+<tr class="row-even"><td>dijit.registry.forEach()</td>
+<td>dijit/registry</td>
+<td>array.forEach(registry.toArray(), ...)</td>
+</tr>
+<tr class="row-odd"><td>dijit.registry.filter()</td>
+<td>dijit/registry</td>
+<td>array.filter(registry.toArray(), ...)</td>
+</tr>
+<tr class="row-even"><td>dijit.registry.map()</td>
+<td>dijit/registry</td>
+<td>array.map(registry.toArray(), ...)</td>
+</tr>
+<tr class="row-odd"><td>dijit.registry.every()</td>
+<td>dijit/registry</td>
+<td>array.every(registry.toArray(), ...)</td>
+</tr>
+<tr class="row-even"><td>dijit.registry.some()</td>
+<td>dijit/registry</td>
+<td>array.some(registry.toArray(), ...)</td>
+</tr>
+<tr class="row-odd"><td>dijit.registry.byClass(&#8220;dijit.form.Button&#8221;)</td>
+<td>dijit/registry</td>
+<td>array.filter(registry.toArray(), function(widget){ return widget.constructor === require(&#8220;dijit/form/Button&#8221;); })</td>
+</tr>
+<tr class="row-even"><td>dijit.findWidgets</td>
+<td>dijit/registry</td>
+<td>registry.findWidgets</td>
+</tr>
+<tr class="row-odd"><td>dijit.getEnclosingWidget</td>
+<td>dijit/registry</td>
+<td>registry.getEnclosingWidget</td>
+</tr>
+<tr class="row-even"><td>dijit.focus</td>
+<td>dijit/focus</td>
+<td>focus.focus</td>
+</tr>
+<tr class="row-odd"><td>dijit.registerWin</td>
+<td>dijit/focus</td>
+<td>focus.registerIframe</td>
+</tr>
+<tr class="row-even"><td>dijit._curNode</td>
+<td>dijit/focus</td>
+<td>focus.curNode</td>
+</tr>
+<tr class="row-odd"><td>dijit.getFocus()</td>
+<td>dijit/focus</td>
+<td>focus.curNode (points to node not hash)</td>
+</tr>
+<tr class="row-even"><td>dijit._activeState</td>
+<td>dijit/focus</td>
+<td>focus.activeStack</td>
+</tr>
+<tr class="row-odd"><td>dojo.require(&#8220;dijit.sniff&#8221;)</td>
+<td>dojo/uacss</td>
+<td>require dojo/uacss instead</td>
+</tr>
+<tr class="row-even"><td>dojo.subscribe(&#8220;focusNode&#8221;,cb)</td>
+<td>dijit/focus</td>
+<td>focus.watch(&#8220;curNode&#8221;,cb)</td>
+</tr>
+<tr class="row-odd"><td>dojo.subscribe(&#8220;widgetBlur&#8221;,cb)</td>
+<td>dijit/focus</td>
+<td>focus.on(&#8220;widget-blur&#8221;,cb)</td>
+</tr>
+<tr class="row-even"><td>dojo.subscribe(&#8220;widgetFocus&#8221;,cb)</td>
+<td>dijit/focus</td>
+<td>focus.on(&#8220;widget-focus&#8221;,cb)</td>
+</tr>
+<tr class="row-odd"><td>dijit.getViewport</td>
+<td>dojo/window</td>
+<td>window.getBox</td>
+</tr>
+<tr class="row-even"><td>dijit.placeOnScreen</td>
+<td>dijit/place:place.at</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>dijit.placeOnScreenAroundElement(n,an,{BL: &#8220;TL&#8221;</td>
+<td>dijit/place</td>
+<td>place.around(n,an,[&#8220;before&#8221;,&#8221;after&#8221;])</td>
+</tr>
+<tr class="row-even"><td>dijit.typematic</td>
+<td>dijit/typematic</td>
+<td>typematic</td>
+</tr>
+<tr class="row-odd"><td>dijit.popup.open({orient:{BL: &#8220;TL&#8221;,...})</td>
+<td>dijit/popup</td>
+<td>popup.open({orient:[&#8220;before&#8221;,&#8221;after&#8221;]})</td>
+</tr>
+<tr class="row-even"><td>dijit.hasWaiRole(node, role)</td>
+<td>&nbsp;</td>
+<td>node.getAttribute(&#8220;role&#8221;)==role</td>
+</tr>
+<tr class="row-odd"><td>dijit.getWaiRole(node)</td>
+<td>&nbsp;</td>
+<td>node.getAttribute(&#8220;role&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dijit.setWaiRole(node, role)</td>
+<td>&nbsp;</td>
+<td>node.setAttribute(&#8220;role&#8221;, role)</td>
+</tr>
+<tr class="row-odd"><td>dijit.removeWaiRole</td>
+<td>&nbsp;</td>
+<td>node.setAttribute(role, &#8220;&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dijit.hasWaiState(&#8220;selected&#8221;)</td>
+<td>&nbsp;</td>
+<td>node.hasAttribute(&#8220;aria-selected&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dijit.getWaiState(&#8220;describedby&#8221;)</td>
+<td>&nbsp;</td>
+<td>node.getAttribute(&#8220;aria-describedby&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dijit.setWaiState(&#8220;describedby&#8221;, desc)</td>
+<td>&nbsp;</td>
+<td>node.getAttribute(&#8220;aria-describedby&#8221;, desc)</td>
+</tr>
+<tr class="row-odd"><td>dijit.removeWaiState(&#8220;selected&#8221;)</td>
+<td>&nbsp;</td>
+<td>node.removeAttribute(&#8220;aria-selected&#8221;)</td>
+</tr>
+<tr class="row-even"><td>dijit.layout.marginBox2contentBox</td>
+<td>dijit/layout/utils</td>
+<td>utils.marginBox2contentBox</td>
+</tr>
+<tr class="row-odd"><td>dijit.layout.layoutChildren</td>
+<td>dijit/layout/utils</td>
+<td>utils.layoutChildren</td>
+</tr>
+<tr class="row-even"><td>dojo.connect(myWidget, &#8220;onClick&#8221;, cb)</td>
+<td>&nbsp;</td>
+<td>myWidget.on(&#8220;click&#8221;, cb)</td>
+</tr>
+<tr class="row-odd"><td>dojo.connect(myWidget, &#8220;onChange&#8221;, cb)</td>
+<td>&nbsp;</td>
+<td>myWidget.watch(&#8220;value&#8221;, function(name, o, n){...})</td>
+</tr>
+<tr class="row-even"><td>myWidget.setAttribute(name,val)</td>
+<td>&nbsp;</td>
+<td>myWidget.set(name,val)</td>
+</tr>
+<tr class="row-odd"><td>myWidget.attr(name)</td>
+<td>&nbsp;</td>
+<td>myWidget.get(name)</td>
+</tr>
+<tr class="row-even"><td>myWidget.attr(name,val)</td>
+<td>&nbsp;</td>
+<td>myWidget.set(name,val)</td>
+</tr>
+<tr class="row-odd"><td>myWidget.attr(hash)</td>
+<td>&nbsp;</td>
+<td>myWidget.set(hash)</td>
+</tr>
+<tr class="row-even"><td>myWidget.getDescendants</td>
+<td>&nbsp;</td>
+<td>myWidget.getChildren</td>
+</tr>
+<tr class="row-odd"><td>myWidget.setDisabled(bool)</td>
+<td>&nbsp;</td>
+<td>myWidget.set(&#8220;disabled&#8221;, bool)</td>
+</tr>
+<tr class="row-even"><td>myWidget.setValue(val)</td>
+<td>&nbsp;</td>
+<td>myWidget.set(&#8220;value&#8221;, val)</td>
+</tr>
+<tr class="row-odd"><td>myWidget.getValue()</td>
+<td>&nbsp;</td>
+<td>myWidget.get(&#8220;value&#8221;)</td>
+</tr>
+<tr class="row-even"><td>myWidget.getDisplayedValue()</td>
+<td>&nbsp;</td>
+<td>myWidget.get(&#8220;displayedValue&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>myWidget.setDisplayedValue(val)</td>
+<td>&nbsp;</td>
+<td>myWidget.set(&#8220;displayedValue&#8221;, val)</td>
+</tr>
+<tr class="row-even"><td>myWidget.setLabel(label)</td>
+<td>&nbsp;</td>
+<td>myWidget.set(&#8220;label&#8221;, label)</td>
+</tr>
+<tr class="row-odd"><td>myWidget.setChecked(val)</td>
+<td>&nbsp;</td>
+<td>myWidget.set(&#8220;checked&#8221;, val)</td>
+</tr>
+<tr class="row-even"><td>myWidget.setHref()</td>
+<td>&nbsp;</td>
+<td>myWidget.set(&#8220;href&#8221;, ...)</td>
+</tr>
+<tr class="row-odd"><td>myWidget.setContent()</td>
+<td>&nbsp;</td>
+<td>myWidget.set(&#8220;content&#8221;, ...)</td>
+</tr>
+<tr class="row-even"><td>dojo.connect(myCalendar, &#8220;onValueSelected&#8221;, ...)</td>
+<td>&nbsp;</td>
+<td>myCalendar.watch(&#8220;value&#8221;, ...)</td>
+</tr>
+<tr class="row-odd"><td>Editor.focusOnLoad</td>
+<td>dijit/Editor</td>
+<td>perform manually</td>
+</tr>
+<tr class="row-even"><td>Editor.blur()</td>
+<td>dijit/Editor</td>
+<td>focus something else</td>
+</tr>
+<tr class="row-odd"><td>dijit._editor.escapeXml()</td>
+<td>dijit/_editor/html</td>
+<td>html.escapeXml()</td>
+</tr>
+<tr class="row-even"><td>Editor.getNodeHtml()</td>
+<td>dijit/_editor/html</td>
+<td>html._getNodeHtml()</td>
+</tr>
+<tr class="row-odd"><td>Editor.getNodeChildrenHtml()</td>
+<td>dijit/_editor/html</td>
+<td>html.getNodeChildrenHtml()</td>
+</tr>
+<tr class="row-even"><td>ProgressBar.progress</td>
+<td>dijit/ProgressBar</td>
+<td>ProgressBar.value</td>
+</tr>
+<tr class="row-odd"><td>ProgressBar._setIndeterminateAttr(true)</td>
+<td>dijit/ProgressBar</td>
+<td>ProgressBar.set(&#8220;value&#8221;, Infinity)</td>
+</tr>
+<tr class="row-even"><td>ProgressBar._setIndeterminateAttr(false)</td>
+<td>dijit/ProgressBar</td>
+<td>ProgressBar.set(&#8220;value&#8221;, 123)</td>
+</tr>
+<tr class="row-odd"><td>TitlePane.setTitle(title)</td>
+<td>dijit/TitlePane</td>
+<td>TitlePane.set(&#8220;title&#8221;, title)</td>
+</tr>
+<tr class="row-even"><td>Tooltip.addTarget()</td>
+<td>dijit/Tooltip</td>
+<td>Tooltip.set(&#8220;connectId&#8221;, ...)</td>
+</tr>
+<tr class="row-odd"><td>Tooltip.removeTarget()</td>
+<td>dijit/Tooltip</td>
+<td>Tooltip.set(&#8220;connectId&#8221;, ...)</td>
+</tr>
+<tr class="row-even"><td>Tree.store</td>
+<td>dijit/Tree</td>
+<td>specify Tree.model instead</td>
+</tr>
+<tr class="row-odd"><td>Tree.query</td>
+<td>dijit/Tree</td>
+<td>pass query to Tree.model instead</td>
+</tr>
+<tr class="row-even"><td>Tree.label</td>
+<td>dijit/Tree</td>
+<td>pass label to ForestStoreModel instead</td>
+</tr>
+<tr class="row-odd"><td>Tree.childrenAttr</td>
+<td>dijit/Tree</td>
+<td>pass to model</td>
+</tr>
+<tr class="row-even"><td>Tree.mayHaveChildren</td>
+<td>dijit/Tree</td>
+<td>specify on model</td>
+</tr>
+<tr class="row-odd"><td>Tree.getItemChildren</td>
+<td>dijit/Tree</td>
+<td>specify on model</td>
+</tr>
+<tr class="row-even"><td>_KeyNavContainer.startupKeyNavChildren</td>
+<td>dijit/_KeyNavContainer</td>
+<td>remove call to method</td>
+</tr>
+<tr class="row-odd"><td>Form.execute</td>
+<td>dijit/form/Form</td>
+<td>Form.submit</td>
+</tr>
+<tr class="row-even"><td>Form.getValues()</td>
+<td>dijit/form/Form</td>
+<td>Form.get(&#8220;value&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>Form.setValues(val)</td>
+<td>dijit/form/Form</td>
+<td>Form.set(&#8220;value&#8221;, val)</td>
+</tr>
+<tr class="row-even"><td>Form.isValid()</td>
+<td>dijit/form/Form</td>
+<td>Form.get(&#8220;state&#8221;)</td>
+</tr>
+<tr class="row-odd"><td>dijit._setSelectionRange</td>
+<td>dijit/form/_TextBoxMixin</td>
+<td>_TextBoxMixin._setSelectionRange</td>
+</tr>
+<tr class="row-even"><td>dojo.connect(myForm, &#8220;onValidStateChange&#8221;, cb)</td>
+<td>dijit/form/Form</td>
+<td>myForm.watch(&#8220;state&#8221;, function(name, o, n){...})</td>
+</tr>
+<tr class="row-odd"><td>dijit._Widget</td>
+<td>replaced widgets</td>
+<td>use dijit/_WidgetBase</td>
+</tr>
+<tr class="row-even"><td>dijit._Templated</td>
+<td>replaced widgets</td>
+<td>use dijit/_TemplatedMixin, dijit/_WidgetsInTemplate instead</td>
+</tr>
+<tr class="row-odd"><td>dijit.form.Slider</td>
+<td>replaced widgets</td>
+<td>use dijit/form/HorizontalSlider, VerticalSlider, etc.</td>
+</tr>
+<tr class="row-even"><td>dijit.layout.LayoutContainer</td>
+<td>replaced widgets</td>
+<td>use dijit/layout/BorderContainer</td>
+</tr>
+<tr class="row-odd"><td>dijit.layout.SplitContainer</td>
+<td>replaced widgets</td>
+<td>use dijit/layout/BorderContainer</td>
+</tr>
+<tr class="row-even"><td>dijit._Calendar</td>
+<td>replaced widgets</td>
+<td>use dijit/Calendar</td>
+</tr>
+<tr class="row-odd"><td>dijit.layout.AccordionPane</td>
+<td>replaced widgets</td>
+<td>use dijit/layout/ContentPane</td>
+</tr>
+<tr class="row-even"><td>layoutAlign=&#8221;top&#8221;</td>
+<td>widget parameters</td>
+<td>region=&#8221;top&#8221;</td>
+</tr>
+<tr class="row-odd"><td>dojoAttachPoint</td>
+<td>templates</td>
+<td>data-dojo-attach-point</td>
+</tr>
+<tr class="row-even"><td>dojoAttachEvent</td>
+<td>templates</td>
+<td>data-dojo-attach-event</td>
+</tr>
+<tr class="row-odd"><td>waiRole=&#8221;button&#8221;</td>
+<td>templates</td>
+<td>role=&#8221;button&#8221;</td>
+</tr>
+<tr class="row-even"><td>waiState=&#8221;selected-false,haspopup-true&#8221;</td>
+<td>templates</td>
+<td>aria-selected=&#8221;false&#8221; aria-haspopup=&#8221;true&#8221;</td>
+</tr>
+<tr class="row-odd"><td>attributeMap:{foo:a,bar:b}</td>
+<td>widget definitions</td>
+<td>_fooSetter:a, _barSetter:b (NB: in 1.8, _setFooAttr and _setBarAttr)</td>
+</tr>
+<tr class="row-even"><td>_setFooAttr:...</td>
+<td>widget definitions</td>
+<td>_fooSetter:... (NB: in 1.8, it&#8217;s still _setFooAttr)</td>
+</tr>
+<tr class="row-odd"><td>this._focused</td>
+<td>widget definitions</td>
+<td>this.focused</td>
+</tr>
+<tr class="row-even"><td>this._supportingWidgets.push(...)</td>
+<td>widget definitions</td>
+<td>this.own(...)</td>
+</tr>
+<tr class="row-odd"><td>this.connect(node, &#8220;onclick&#8221;, &#8220;myMethod&#8221;)</td>
+<td>widget definitions</td>
+<td>this.own(on(node, &#8220;click&#8221;, lang.hitch(this, &#8220;myMethod&#8221;)))</td>
+</tr>
+<tr class="row-even"><td>this.connect(obj, func, &#8220;myMethod&#8221;)</td>
+<td>widget definitions</td>
+<td>this.own(aspect.after(obj, func, lang.hitch(this, &#8220;myMethod&#8221;), true))</td>
+</tr>
+<tr class="row-odd"><td>this.subscribe(topicName, &#8220;myMethod&#8221;)</td>
+<td>widget definitions</td>
+<td>this.own(topic(topicName, lang.hitch(this, &#8220;myMethod&#8221;))) but note that arguments to myMethod are passed as varargs not array</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="set-get">
+<h3><a class="toc-backref" href="#id33">set(), get()</a><a class="headerlink" href="#set-get" title="Permalink to this headline">¶</a></h3>
+<p>Old widget methods to set and get parameter values, such as:</p>
+<p>have been replaced by the standard <code class="docutils literal"><span class="pre">set()</span></code> and <code class="docutils literal"><span class="pre">get()</span></code> methods:</p>
+</div>
+<div class="section" id="watch-on">
+<h3><a class="toc-backref" href="#id34">watch(), on()</a><a class="headerlink" href="#watch-on" title="Permalink to this headline">¶</a></h3>
+<p>Old widget methods to monitor widget events or changes in widget parameters have been consolidated to use <code class="docutils literal"><span class="pre">on()</span></code> and
+<code class="docutils literal"><span class="pre">watch()</span></code>:</p>
+<p>Old code:</p>
+<p>New code:</p>
+</div>
+<div class="section" id="templated-widgets">
+<h3><a class="toc-backref" href="#id35">Templated Widgets</a><a class="headerlink" href="#templated-widgets" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">dijit/_Templated</span></code> mixin has been split into <code class="docutils literal"><span class="pre">dijit/_TemplatedMixin</span></code> and <code class="docutils literal"><span class="pre">dijit/_WidgetsInTemplateMixin</span></code>. In
+addition, <code class="docutils literal"><span class="pre">dojoAttachPoint</span></code> and <code class="docutils literal"><span class="pre">dojoAttachEvent</span></code> have been changed to the HTML5 valid <code class="docutils literal"><span class="pre">data-dojo-attach-point</span></code>
+and <code class="docutils literal"><span class="pre">data-dojo-attach-event</span></code>.</p>
+<p>For example, old code like:</p>
+<p>will change to:</p>
+<p>If the above example had widgets in the templates, it would also mixin <code class="docutils literal"><span class="pre">dijit/_WidgetsInTemplateMixin</span></code>.</p>
+<p>To specify a template from a file, <code class="docutils literal"><span class="pre">templatePath</span></code> is no longer supported, and <code class="docutils literal"><span class="pre">dojo.cache()</span></code> shouldn&#8217;t be used
+either.</p>
+<p>Old code:</p>
+<p>New code:</p>
+<p>The other change to widgets is that the <code class="docutils literal"><span class="pre">waiRole</span></code> and <code class="docutils literal"><span class="pre">waiState</span></code> parameters are no longer supported, since it&#8217;s
+now easy to use role and state directly.</p>
+<p>For instance. Replace:</p>
+<p>With:</p>
+</div>
+<div class="section" id="custom-setters">
+<h3><a class="toc-backref" href="#id36">custom setters</a><a class="headerlink" href="#custom-setters" title="Permalink to this headline">¶</a></h3>
+<p>In 1.8 customer setters for attributes have names like _setXxxAttr().   In 2.0 the name will be changed to _xxxSetter().</p>
+</div>
+<div class="section" id="attributemap">
+<h3><a class="toc-backref" href="#id37">attributeMap</a><a class="headerlink" href="#attributemap" title="Permalink to this headline">¶</a></h3>
+<p>attributeMap in 1.x was a hash mapping widget attributes to DOM nodes.   For example:</p>
+<p>Currently, this is achieved by making separate <code class="docutils literal"><span class="pre">_xxxSetter</span></code> attribute for each attribute to map. Originally
+<code class="docutils literal"><span class="pre">_xxxSetter</span></code> was a function to set a widget attribute.   It can still be a function, but now it can also be an
+object like one of the values from <code class="docutils literal"><span class="pre">attributeMap</span></code>.    (NB: In 1.8, it&#8217;s _setXxxAttr() not _xxxSetter().   This will
+change for 2.0.)</p>
+<p>The code above would be expressed as:</p>
+</div>
+<div class="section" id="this-connect-this-subscribe-this-supportingwidgets">
+<h3><a class="toc-backref" href="#id38">this.connect(), this.subscribe(), this._supportingWidgets</a><a class="headerlink" href="#this-connect-this-subscribe-this-supportingwidgets" title="Permalink to this headline">¶</a></h3>
+<p>The ways to make a widget listen to DOMNode events, do advice on a regular function, subscribe to topics, and
+to register a supporting widget have changed.</p>
+<p>The new interface is to use the standard dojo methods dojo/on, dojo/aspect, dojo/topic, etc., and call this.own() to
+register the handle to be released when the widget is destroyed.   this.own() can be called multiple times, each with
+one or more handles specified:</p>
+</div>
+<div class="section" id="base-functionality">
+<h3><a class="toc-backref" href="#id39">Base Functionality</a><a class="headerlink" href="#base-functionality" title="Permalink to this headline">¶</a></h3>
+<p>The methods previously loaded into <code class="docutils literal"><span class="pre">dijit</span></code> by default now must be explicitly loaded from various modules.</p>
+<p>TODO: list stuff in <code class="docutils literal"><span class="pre">dijit/registry</span></code>, <code class="docutils literal"><span class="pre">dijit/a11y</span></code>.</p>
+<div class="section" id="dijit-focus-dijit-place-and-dijit-popup">
+<h4>dijit/focus, dijit/place, and dijit/popup<a class="headerlink" href="#dijit-focus-dijit-place-and-dijit-popup" title="Permalink to this headline">¶</a></h4>
+<p>The focus, place, and popup modules in <code class="docutils literal"><span class="pre">dijit/_base</span></code> have been promoted to root of <code class="docutils literal"><span class="pre">dijit</span></code>, so they need included
+explicitly by applications that don&#8217;t want to include all of <code class="docutils literal"><span class="pre">dijit/_base</span></code>.</p>
+<p>There are a few API changes in the top level modules compared to the ones in <code class="docutils literal"><span class="pre">dijit/_base</span></code> (although for backwards
+compatibility the modules in <code class="docutils literal"><span class="pre">dijit/_base</span></code> maintain their old API):</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">Popup.around()</span></code> (analogous to <code class="docutils literal"><span class="pre">dijit.popup.placeAroundElement()</span></code>) takes a position parameter like
+<code class="docutils literal"><span class="pre">[&quot;before&quot;,</span> <span class="pre">&quot;after&quot;]</span></code> rather than a set of tuples like <code class="docutils literal"><span class="pre">{BL:</span> <span class="pre">&quot;TL&quot;,</span> <span class="pre">...}</span></code>.   In other words, <code class="docutils literal"><span class="pre">Popup.around()</span></code>
+replaces <code class="docutils literal"><span class="pre">dijit.popup.placeAroundElement()</span></code> but instead of <code class="docutils literal"><span class="pre">dijit.getPopupAroundAlignment(xyz)</span></code>, just pass in
+<code class="docutils literal"><span class="pre">xzy</span></code> directly.</li>
+<li><code class="docutils literal"><span class="pre">dijit/focus</span></code> doesn&#8217;t include the selection related code, just focus related code</li>
+<li><code class="docutils literal"><span class="pre">dijit/focus</span></code> provides <code class="docutils literal"><span class="pre">.watch()</span></code> and <code class="docutils literal"><span class="pre">.on()</span></code> methods to monitor the focused node and active widgets, rather
+than publishing topics <code class="docutils literal"><span class="pre">focusNode</span></code>, <code class="docutils literal"><span class="pre">widgetBlur</span></code>, and <code class="docutils literal"><span class="pre">widgetFocus</span></code>.</li>
+<li>Some methods in <code class="docutils literal"><span class="pre">dijit/_base/popup</span></code> used to take DOMNodes or widgets as a parameter; now they just take a widget</li>
+</ul>
+<p>Also note that the new dijit/popup module is only available through the new AMD API, e.g.:</p>
+<p>Some functions from <code class="docutils literal"><span class="pre">dijit</span></code> have been moved to <code class="docutils literal"><span class="pre">dojo</span></code> core.</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">dojo/uacss</span></code> will add classes to the <code class="docutils literal"><span class="pre">&lt;html&gt;</span></code> node like <code class="docutils literal"><span class="pre">dj_ie</span></code>, representing the browser, browser version,
+box model, etc.  Formerly <code class="docutils literal"><span class="pre">dojo.require(&quot;dijit.sniff&quot;)</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">getBox()</span></code> from <code class="docutils literal"><span class="pre">dojo/window</span></code> gets the viewport size. Formerly <code class="docutils literal"><span class="pre">dijit.getViewport()</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">get()</span></code> from <code class="docutils literal"><span class="pre">dojo/window</span></code> converts a document to the corresponding window. Formerly
+<code class="docutils literal"><span class="pre">dijit.getDocumentWindow()</span></code></li>
+<li><code class="docutils literal"><span class="pre">scrollIntoView()</span></code> from <code class="docutils literal"><span class="pre">dojo/window</span></code> scrolls a node into view, similar to <code class="docutils literal"><span class="pre">node.scrollIntoView()</span></code> but working
+around browser quirks. Formerly <code class="docutils literal"><span class="pre">dijit.scrollIntoView()</span></code>.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="editor">
+<h3><a class="toc-backref" href="#id40">Editor</a><a class="headerlink" href="#editor" title="Permalink to this headline">¶</a></h3>
+<p>New way of registering plugins: TODO</p>
+</div>
+<div class="section" id="splitcontainer-layoutcontainer">
+<h3><a class="toc-backref" href="#id41">SplitContainer, LayoutContainer</a><a class="headerlink" href="#splitcontainer-layoutcontainer" title="Permalink to this headline">¶</a></h3>
+<p>Use BorderContainer instead.   (TODO: examples)</p>
+</div>
+<div class="section" id="miscellaneous-changes">
+<h3><a class="toc-backref" href="#id42">Miscellaneous changes</a><a class="headerlink" href="#miscellaneous-changes" title="Permalink to this headline">¶</a></h3>
+<p>_Widget &#8211;&gt; _WidgetBase  (TODO: will probably rename again, to Widget)</p>
+</div>
+</div>
+<div class="section" id="dojox">
+<h2><a class="toc-backref" href="#id43">DojoX</a><a class="headerlink" href="#dojox" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">dojox</span></code> namespace will be removed in Dojo 2.0.  Some of the mature sub-packages will like migrate into Dojo Core
+or into Dijit.  The remaining code will be &#8220;spun off&#8221; into separate packages that will be available via package
+management tools and a repository of packages.</p>
+<p>In order to ensure your code can be easily migrated, refactoring it to fully leverage AMD and not relay upon the
+<code class="docutils literal"><span class="pre">dojox</span></code> global variable is critically important.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">Dojo 1.x to 2.0 migration guide</a><ul>
+<li><a class="reference internal" href="#amd">AMD</a><ul>
+<li><a class="reference internal" href="#loading-dojo-js">Loading dojo.js</a></li>
+<li><a class="reference internal" href="#loading-modules">Loading Modules</a></li>
+<li><a class="reference internal" href="#accessing-modules">Accessing Modules</a></li>
+<li><a class="reference internal" href="#defining-modules">Defining Modules</a></li>
+<li><a class="reference internal" href="#i18n">I18N</a></li>
+<li><a class="reference internal" href="#loading-text-resources-and-widget-templates">Loading Text Resources and Widget Templates</a></li>
+<li><a class="reference internal" href="#urls">URLs</a></li>
+<li><a class="reference internal" href="#quick-reference">Quick Reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojo-core">Dojo Core</a><ul>
+<li><a class="reference internal" href="#basic-functions">Basic functions</a><ul>
+<li><a class="reference internal" href="#testing-object-types">Testing object types</a></li>
+<li><a class="reference internal" href="#dojo-base-lang">dojo/_base/lang</a></li>
+<li><a class="reference internal" href="#dojo-base-kernel">dojo/_base/kernel</a></li>
+<li><a class="reference internal" href="#dojo-base-array">dojo/_base/array</a></li>
+<li><a class="reference internal" href="#browser-device-sniffing">Browser/Device Sniffing</a></li>
+<li><a class="reference internal" href="#load-and-unload-handlers">Load and Unload Handlers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#events">Events</a><ul>
+<li><a class="reference internal" href="#mouseenter-mouseleave">mouseenter/mouseleave</a></li>
+<li><a class="reference internal" href="#mouse-buttons">Mouse Buttons</a></li>
+<li><a class="reference internal" href="#keys">Keys</a></li>
+<li><a class="reference internal" href="#onkeypress">onkeypress</a></li>
+<li><a class="reference internal" href="#event-delegation">Event Delegation</a></li>
+<li><a class="reference internal" href="#connectpublisher">connectPublisher()</a></li>
+<li><a class="reference internal" href="#id1">Quick Reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#advice">Advice</a><ul>
+<li><a class="reference internal" href="#id2">Quick Reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#publish-and-subscribe">Publish and subscribe</a><ul>
+<li><a class="reference internal" href="#id3">Quick Reference</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dom-manipulation">DOM Manipulation</a><ul>
+<li><a class="reference internal" href="#id4">Quick Reference</a></li>
+<li><a class="reference internal" href="#dojo-base-window">dojo/_base/window</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#json">JSON</a></li>
+<li><a class="reference internal" href="#parser">Parser</a><ul>
+<li><a class="reference internal" href="#running-the-parser">Running the Parser</a></li>
+<li><a class="reference internal" href="#data-dojo-type-and-data-dojo-props">data-dojo-type and data-dojo-props</a></li>
+<li><a class="reference internal" href="#using-mids">Using MIDs</a></li>
+<li><a class="reference internal" href="#connecting-to-widget-events">Connecting to Widget Events</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#jsid">jsId</a></li>
+<li><a class="reference internal" href="#query">Query</a></li>
+<li><a class="reference internal" href="#stores">Stores</a></li>
+<li><a class="reference internal" href="#declaring-classes">Declaring Classes</a></li>
+<li><a class="reference internal" href="#fx">FX</a></li>
+<li><a class="reference internal" href="#promises-and-deferreds">Promises and Deferreds</a></li>
+<li><a class="reference internal" href="#xhr-and-io-requests">XHR and IO Requests</a></li>
+<li><a class="reference internal" href="#miscellaneous">Miscellaneous</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dijit">Dijit</a><ul>
+<li><a class="reference internal" href="#mapping-table-for-dijit">Mapping table for dijit</a></li>
+<li><a class="reference internal" href="#set-get">set(), get()</a></li>
+<li><a class="reference internal" href="#watch-on">watch(), on()</a></li>
+<li><a class="reference internal" href="#templated-widgets">Templated Widgets</a></li>
+<li><a class="reference internal" href="#custom-setters">custom setters</a></li>
+<li><a class="reference internal" href="#attributemap">attributeMap</a></li>
+<li><a class="reference internal" href="#this-connect-this-subscribe-this-supportingwidgets">this.connect(), this.subscribe(), this._supportingWidgets</a></li>
+<li><a class="reference internal" href="#base-functionality">Base Functionality</a><ul>
+<li><a class="reference internal" href="#dijit-focus-dijit-place-and-dijit-popup">dijit/focus, dijit/place, and dijit/popup</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#editor">Editor</a></li>
+<li><a class="reference internal" href="#splitcontainer-layoutcontainer">SplitContainer, LayoutContainer</a></li>
+<li><a class="reference internal" href="#miscellaneous-changes">Miscellaneous changes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dojox">DojoX</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

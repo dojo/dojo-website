@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo.data Write API &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../../index.html">Startpage</a></li>
+            <li><a href="../../index.html">Dojo</a></li>
+            <li><a href="../../../dijit/index.html">Dijit</a></li>
+            <li><a href="../../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-data-write-api">
+<span id="dojo-data-api-write"></span><h1><a class="toc-backref" href="#id1">dojo.data Write API</a><a class="headerlink" href="#dojo-data-write-api" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-data-write-api" id="id1">dojo.data Write API</a><ul>
+<li><a class="reference internal" href="#write-api-requirements" id="id2">Write API requirements</a></li>
+<li><a class="reference internal" href="#examples" id="id3">Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><em>Deprecated</em>, <a class="reference internal" href="../../store.html#dojo-store"><span>dojo/store</span></a> will eventually replace the <code class="docutils literal"><span class="pre">dojo/data</span></code> API.</p>
+<p>Some datastores provide the ability to create new items and save those items back to a service, in addition to simply
+reading items from a service. Stores with this capability will implement the Write API, which provides standard
+functions for creating new items, modifying existing items, and deleting existing items. Review the following examples,
+guidelines, and complete API documentation for further information on the Write API.</p>
+<p>This feature defines the API for implementing:</p>
+<ul class="simple">
+<li>Creating a new item</li>
+<li>Deleting an item.</li>
+<li>Updating an item.</li>
+<li>Saving a series creates, deletes, and updates.</li>
+<li>Reverting a series of creates, deletes, and updates.</li>
+<li>Determining if an item has been modified and not yet saved.</li>
+</ul>
+<div class="section" id="write-api-requirements">
+<h2><a class="toc-backref" href="#id2">Write API requirements</a><a class="headerlink" href="#write-api-requirements" title="Permalink to this headline">¶</a></h2>
+<p>The following list provides the requirements for the Write API that implementers of a datastore must do:</p>
+<ul class="simple">
+<li>Datastores that implement the Write interface act as a two-phase intermediary between the client and the ultimate provider
+or service that handles the data. This allows for the batching of operations, such as creating a set of new items and
+then saving them all back to the persistent store with one function call.</li>
+<li>The save API is defined as asynchronous. This is because most datastores will be talking to a server and not all I/O
+methods for server communication can perform synchronous operations.</li>
+<li>Datastores track all newItem, deleteItem, and setAttribute calls on items so that the store can both save the items to the
+persistent store in one chunk and have the ability to revert out all the current changes and return to a pristine
+(unmodified) data set.</li>
+<li>Revert should only revert the store items on the client side back to the point the last save was called.</li>
+<li>Datastores, in their Save function, account for any copying of items and generation of save format required by the back
+end service before it enters into the asynchronous I/O with the server. This is to avoid any contention issues with
+modifications that are occurring while the datastore is is waiting for the server I/O to complete.</li>
+<li>The parameter to newItem is a keywordArgs object. For ease of interoperability, this parameter should be constructed as a
+JavaScript object with attribute names and values that match the conceptual structure of the attribute list the item
+would return. For example, if the source store is an XML backed store, a call to create a new XML Element in that store
+with attributes foo, bar, and bit, should look like this:</li>
+<li>Items returned from store.newItem() are valid items. In other words, store.isItem(item) returns true.</li>
+<li>Items returned from store.newItem() are dirty items until the next save. In other words, store.isDirty(item) returns true.</li>
+<li>Items deleted by store.deleteItem() are no longer valid items. In other words, store.isItem(item) returns false unless store.revert() is called and the delete is undone.</li>
+</ul>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id3">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>The following sections provide examples of the Read API in use, as described by each example heading:</p>
+<div class="section" id="simple-attribute-modification-and-save">
+<h3>Simple attribute modification and save<a class="headerlink" href="#simple-attribute-modification-and-save" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="simple-emit-of-all-modified-items">
+<h3>Simple emit of all modified items<a class="headerlink" href="#simple-emit-of-all-modified-items" title="Permalink to this headline">¶</a></h3>
+<p>This example shows how to get all modified items before a save has been called.</p>
+</div>
+<div class="section" id="further-examples">
+<h3>Further examples<a class="headerlink" href="#further-examples" title="Permalink to this headline">¶</a></h3>
+<p>Further examples of the API usage are covered in the <a class="reference internal" href="../../../quickstart/data/usingdatastores.html#quickstart-data-usingdatastores"><span>Using Datastores</span></a> section. Refer to it for examples on paging, sorting, selecting, and so forth.</p>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo.data Write API</a><ul>
+<li><a class="reference internal" href="#write-api-requirements">Write API requirements</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#simple-attribute-modification-and-save">Simple attribute modification and save</a></li>
+<li><a class="reference internal" href="#simple-emit-of-all-modified-items">Simple emit of all modified items</a></li>
+<li><a class="reference internal" href="#further-examples">Further examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

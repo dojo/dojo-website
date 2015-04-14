@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.data.JsonRestStore &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../../dojo/index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojox-data-jsonreststore">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.data.JsonRestStore</a><a class="headerlink" href="#dojox-data-jsonreststore" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Kris Zyp</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V1.2</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-data-jsonreststore" id="id2">dojox.data.JsonRestStore</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#features" id="id4">Features</a></li>
+<li><a class="reference internal" href="#usage" id="id5">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id6">Examples</a></li>
+<li><a class="reference internal" href="#jsonreststore-grid" id="id7">JsonRestStore + Grid</a></li>
+<li><a class="reference internal" href="#implementing-a-rest-server" id="id8">Implementing a REST Server</a></li>
+<li><a class="reference internal" href="#paging" id="id9">Paging</a></li>
+<li><a class="reference internal" href="#transactions" id="id10">Transactions</a></li>
+<li><a class="reference internal" href="#see-also" id="id11">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojox.data.JsonRestStore</strong> is a lightweight datastore implementation of an HTTP-based (RFC 2616) client with RESTful data interaction capabilities.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>JsonRestStore provides full read, write, and notification capabilities through standards based HTTP/REST interaction with the server using GET, PUT, POST, and DELETE commands. This data store allows you to communicate with server side database/persistent data storage using the Dojo Data API with JavaScript and efficiently handles create, read, update, and delete (CRUD) operations. This can greatly simplify client server communication, interacting can be done simply using straightforward JavaScript instead of having to build your communication for CRUD actions. In addition, Dojo data stores can plugin to many Dojo widgets (Dijits).</p>
+<p>JsonRestStore supports JSON Referencing so objects can contain cyclic, multiple, cross-message, cross-table, and even cross-site references, which can be used for <a class="reference internal" href="../../quickstart/data/usingdatastores/lazyloading.html#quickstart-data-usingdatastores-lazyloading"><span>lazy loading</span></a>. These references are automatically resolved such that properties are accessed as normal datastore attributes.</p>
+<p>JsonRestStore caches objects that have been retrieved from the server locally in memory. This allows object identity to be preserved even if an object is loaded from the server multiple times (the target object will be updated rather than a new object created). Also fetching an item by identity will attempt to look in the local cache first before requesting the item from the server.</p>
+<p>JsonRestStore also store objects in a format to ease direct property access for significant performance advantages.</p>
+</div>
+<div class="section" id="features">
+<h2><a class="toc-backref" href="#id4">Features</a><a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>The datastore implements the following dojo.data APIs:<ul>
+<li><a class="reference internal" href="../../dojo/data/api/Read.html#dojo-data-api-read"><span>dojo.data.api.Read</span></a>,</li>
+<li><a class="reference internal" href="../../dojo/data/api/Identity.html#dojo-data-api-identity"><span>dojo.data.api.Identity</span></a>,</li>
+<li><a class="reference internal" href="../../dojo/data/api/Write.html#dojo-data-api-write"><span>dojo.data.api.Write</span></a>,</li>
+<li><a class="reference internal" href="../../dojo/data/api/Notification.html#dojo-data-api-notification"><span>dojo.data.api.Notification</span></a>.</li>
+</ul>
+</li>
+<li>Client/server interaction follows the HTTP specification for RESTful interaction, using standard HTTP verbs and headers to handle updates, paging, and id assignment.</li>
+<li>Full JSON Referencing capabilities. Create circular references, multiples references, reference objects from other tables, and even references objects from other domains</li>
+<li>Flexible modular design allows for easy extension and customization. Multiple subclasses in Dojo already use JsonRestStore, including <a class="reference internal" href="CouchDBRestStore.html#dojox-data-couchdbreststore"><span>CouchDBRestStore</span></a>, <a class="reference internal" href="PersevereStore.html#dojox-data-perseverestore"><span>PersevereStore</span></a>, and <a class="reference internal" href="S3Store.html#dojox-data-s3store"><span>S3Store</span></a>. Custom queries can easily be generated.</li>
+<li>Integrates with the <a class="reference internal" href="../rpc/Service.html#dojox-rpc-service"><span>dojox.rpc.Service</span></a> system, any service can be customized to be a REST service for the system.</li>
+<li>Integrates with <a class="reference internal" href="../rpc/OfflineRest.html#dojox-rpc-offlinerest"><span>dojox.rpc.OfflineRest</span></a> for automatic offline usage. Application built JsonRestStore can almost instantaneously be made offline.</li>
+<li>Integrates with the RestChannels Comet module to support server sent notifications of data changes. The data store automatically routes these updates as data notifications to widgets.</li>
+<li>Works directly with all current data bound widgets in dijit, including <a class="reference internal" href="../../dijit/Tree.html#dijit-tree"><span>dijit.Tree</span></a>, <a class="reference internal" href="../../dijit/form/ComboButton.html#dijit-form-combobutton"><span>dijit.form.ComboButton</span></a>, and as well <a class="reference internal" href="../grid/index.html#dojox-grid-index"><span>dojox.grid</span></a>.</li>
+</ol>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id5">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>dojox.data.JsonRestStore should be instantiated with a single argument that is an object that can have any of these properties:</p>
+<dl class="docutils">
+<dt>schema</dt>
+<dd>This is a schema object for this store. This should be JSON Schema format.</dd>
+<dt>service</dt>
+<dd><p class="first">This is the service object that is used to retrieve lazy data and save results.</p>
+<p>The function should be directly callable with a single parameter of an object id to be loaded. The function should also have the following methods:</p>
+<ul>
+<li><p class="first"><strong>put(id, value)</strong></p>
+<p>puts the value at the given id</p>
+</li>
+<li><p class="first"><strong>post(id, value)</strong></p>
+<p>posts (appends) the value at the given id</p>
+</li>
+<li><p class="first"><strong>delete(id)</strong></p>
+<p>deletes the value corresponding to the given id</p>
+</li>
+</ul>
+<p class="last">Note that it is critical that the service parses responses as JSON. If you are using dojox.rpc.Service, the easiest way to make sure this happens is to make the responses have a content type of application/json. If you are creating your own service, make sure you use handleAs: &#8220;json&#8221; with your XHR requests.</p>
+</dd>
+<dt>target</dt>
+<dd>This is the target URL for this Service store. This may be used in place of a service parameter to connect directly to RESTful URL without using a dojox.rpc.Service object.</dd>
+<dt>idAttribute</dt>
+<dd>Defaults to &#8216;id&#8217;. The name of the attribute that holds an objects id. This can be a preexisting id provided by the server. If an ID isn&#8217;t already provided when an object is fetched or added to the store, the autoIdentity system will generate an id for it and add it to the index.</dd>
+<dt>syncMode</dt>
+<dd>Setting this to true will set the store to using synchronous calls by default. Sync calls return their data immediately from the calling function, so callbacks are unnecessary.</dd>
+</dl>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id6">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="jsonreststore-grid">
+<h2><a class="toc-backref" href="#id7">JsonRestStore + Grid</a><a class="headerlink" href="#jsonreststore-grid" title="Permalink to this headline">¶</a></h2>
+<p>The Dojo Grid is designed to work with the Dojo Data API, so the JsonRestStore can easily be used with it. The grid leverages the read capabilities to populate the grid, the write capabilities for editing data in place in the grid, and the notification capabilities of the JsonRestStore to handle UI updates when data is changed. To use a JsonRestStore as the data provider for the grid, simply set the grid’s store to the JsonRestStore instance. To edit data from the grid, we can define columns as being editable. Nothing needs to be done to received notifications.</p>
+<p>Now we have grid that connected to our store and when you edit data in the grid the changes are automatically sent back to the store.</p>
+</div>
+<div class="section" id="implementing-a-rest-server">
+<h2><a class="toc-backref" href="#id8">Implementing a REST Server</a><a class="headerlink" href="#implementing-a-rest-server" title="Permalink to this headline">¶</a></h2>
+<p>The JsonRestStore follows RFC 2616 (<a class="reference external" href="http://www.ietf.org/rfc/rfc2616.txt">http://www.ietf.org/rfc/rfc2616.txt</a>) whenever possible to define to interaction with server. JsonRestStore uses an HTTP GET request to retrieve data, a PUT request to change items, a DELETE request to delete items, and a POST request to create new items. It is recommended that the server follow a URL structure for resources:</p>
+<blockquote>
+<div>/{Table}/{id}</div></blockquote>
+<p>This URL will be used to retrieve items by identity and make modifications (PUT and DELETE). It is also recommended that a /{Table}/ URL is used to represent the collection of items for the store. When a query is performed, any query string is appended to the target URL to retrieve the results of the query. The JsonRestStore expects the results to be returned in an array (not in an object with an items property like some stores). The store will also POST to that URL to create new items.</p>
+<p>When creating new items, the JsonRestStore will POST to the target URL for the store. If your server wants to assign the URL/location for the newly created item, it can do so by including a Location header in the response:</p>
+<blockquote>
+<div>Location: <a class="reference external" href="http://mysite.com/Table/newid">http://mysite.com/Table/newid</a></div></blockquote>
+<p>The server can also assign or change properties of the object (such an id or default values) in the response to a POST (or any other request), by simply returning the updated JSON representation of the item in the body of the response.</p>
+<p>Note that in PHP, sometimes setting the Location will erroneously trigger a 302 status code which will cause JsonRestStore to fail. Per RFC 2616, the correct response to a POST that creates a new resource is to return a 201 status code with the Location header. In PHP, you must set the status code as well as the Location header if you want to avoid a 302 response.</p>
+</div>
+<div class="section" id="paging">
+<h2><a class="toc-backref" href="#id9">Paging</a><a class="headerlink" href="#paging" title="Permalink to this headline">¶</a></h2>
+<p>JsonRestStore uses HTTP&#8217;s Range header to perform paging. When a request is made for a range of items, JsonRestStore will include a Range header with an items range unit specifying the range:</p>
+<blockquote>
+<div>Range: items=0-24</div></blockquote>
+<p>On your server, you should look at the Range header in the request to know which items to return. The server should respond with a Content-Range header to indicate how many items are being returned and how many total items exist:</p>
+<blockquote>
+<div>Content-Range: items 0-24/66</div></blockquote>
+</div>
+<div class="section" id="transactions">
+<h2><a class="toc-backref" href="#id10">Transactions</a><a class="headerlink" href="#transactions" title="Permalink to this headline">¶</a></h2>
+<p>JsonRestStore provides transaction state information so that servers can implement transactions that correspond to the Dojo Data it saves if desired (this is not necessary for a server to implement in order to support REST). Transactions are indicated by a X-Transaction header in the modifications requests. If the X-Transaction header has a value of open, this means that further requests will be delivered that should be included in the current transaction. Once a request is received without an X-Transaction header of open, the server can commit all the changes from the current request and the previous requests that indicated an open transaction. It is recommended that you utilize deterministic request ordering and page sessions if you implement JsonRestStore directed transactions on the server.</p>
+<p>JsonRestStore also features a shared repository of transactional data between all JsonRestStore instances. Therefore, if you save a change, all the JsonRestStore data store’s unsaved data will be committed. This means that you don’t have to track which data stores have modified data, and it also means that you transactions can involve modifications across multiple data stores and corresponding server tables.</p>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id11">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>More information about techniques for lazy loading and optimal loading can be found here: <a class="reference external" href="http://www.sitepen.com/blog/2008/11/21/effective-use-of-jsonreststore-referencing-lazy-loading-and-more/">http://www.sitepen.com/blog/2008/11/21/effective-use-of-jsonreststore-referencing-lazy-loading-and-more/</a></li>
+<li>Other aspects of JsonRestStore are described in more detail here: <a class="reference external" href="http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/">http://www.sitepen.com/blog/2008/06/13/restful-json-dojo-data/</a></li>
+<li>You can read more about using JSON Referencing here: <a class="reference external" href="http://www.sitepen.com/blog/2008/06/17/json-referencing-in-dojo/">http://www.sitepen.com/blog/2008/06/17/json-referencing-in-dojo/</a></li>
+<li>In a .NET environment, <a class="reference external" href="http://msdn.microsoft.com/en-us/library/bb412170.aspx">http://msdn.microsoft.com/en-us/library/bb412170.aspx</a> has useful information about JSON serialization</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojox.data.JsonRestStore</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#jsonreststore-grid">JsonRestStore + Grid</a></li>
+<li><a class="reference internal" href="#implementing-a-rest-server">Implementing a REST Server</a></li>
+<li><a class="reference internal" href="#paging">Paging</a></li>
+<li><a class="reference internal" href="#transactions">Transactions</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

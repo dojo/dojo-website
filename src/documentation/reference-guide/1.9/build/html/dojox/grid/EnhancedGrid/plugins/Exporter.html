@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.grid.EnhancedGrid.plugins.Exporter &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../../../index.html">Startpage</a></li>
+            <li><a href="../../../../dojo/index.html">Dojo</a></li>
+            <li><a href="../../../../dijit/index.html">Dijit</a></li>
+            <li><a href="../../../index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojox-grid-enhancedgrid-plugins-exporter">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.grid.EnhancedGrid.plugins.Exporter</a><a class="headerlink" href="#dojox-grid-enhancedgrid-plugins-exporter" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Oliver Zhu</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Evan Huang</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V.1.6</td>
+</tr>
+</tbody>
+</table>
+<p>Exporter plugin provides functions to export the grid data into a given format.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-grid-enhancedgrid-plugins-exporter" id="id2">dojox.grid.EnhancedGrid.plugins.Exporter</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#configuration" id="id4">Configuration</a></li>
+<li><a class="reference internal" href="#usage" id="id5">Usage</a></li>
+<li><a class="reference internal" href="#create-export-writer-a-framework-for-grid-export" id="id6">Create Export Writer &#8211; A Framework for Grid Export</a></li>
+<li><a class="reference internal" href="#see-also" id="id7">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Exporter is a plugin for dojox.grid.EnhancedGrid. It is designed as a framework to help implement various export formats for grid, e.g. CSV, HTML table, MS Excel, odt etc. The plugin itself does not export anything, it only goes through the grid row by row calling the implementation&#8217;s interface. It&#8217;s the implementation&#8217;s responsibility to transform the grid content to some desired format.
+The following of this document first describes how to use the export functions of some existing implementations. And then introduces the API of this framework in detail.</p>
+</div>
+<div class="section" id="configuration">
+<h2><a class="toc-backref" href="#id4">Configuration</a><a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>This exporter plugin is only available for EnhancedGrid. So require the EnhancedGrid first:</p>
+<p>Unlike other grid plugins, you don&#8217;t need to <code class="docutils literal"><span class="pre">require</span></code> this plugins directly. Instead, you should <code class="docutils literal"><span class="pre">require</span></code> the specific implementations (i.e. writers). For example, if a CSV format implementation is available, then:</p>
+<p>This statement will automatically require &#8220;dojox.grid.enhanced.plugins.Exporter&#8221;.</p>
+</div>
+<div class="section" id="plugin-declaration">
+<h3>Plugin Declaration<a class="headerlink" href="#plugin-declaration" title="Permalink to this headline">¶</a></h3>
+<p>The declaration name of this plugin is <code class="docutils literal"><span class="pre">exporter</span></code> . It is declared in the <code class="docutils literal"><span class="pre">plugins</span></code> property of grid.</p>
+<p>If your grid is created declaratively:</p>
+<p>If your grid is created in JavaScript:</p>
+<p>This plugin does not have any arguments.</p>
+</div>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id5">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>When this plugin is enabled, the following 2 methods are available for a grid widget:</p>
+<dl class="docutils">
+<dt>exportGrid(type, args, onExported):</dt>
+<dd>Export required rows(args.fetchArgs) to a kind of format(type), using the corresponding writer with given arguments(args.writerArgs), then pass the exported text to a given function(onExported).</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="15%" />
+<col width="22%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Optional/Mandatory</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>type</td>
+<td>String</td>
+<td>Mandatory</td>
+<td>A registered export format name.</td>
+</tr>
+<tr class="row-odd"><td>args</td>
+<td>Object</td>
+<td>Optional(default to {})</td>
+<td>An argument to define fetchArgs and writerArgs like:
+{ fetchArgs: {...}, writerArgs: {...} }
+fetchArgs is some arguments for store.fetch.
+writerArgs is some arguments for the current writer.</td>
+</tr>
+<tr class="row-even"><td>onExported</td>
+<td>function(string)</td>
+<td>Mandatory</td>
+<td>Call back function when export result is ready.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>exportSelected(type, writerArgs):</dt>
+<dd>Export only the selected rows of a grid to the specified format. Returns the exported string.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="19%" />
+<col width="27%" />
+<col width="40%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Optional/Mandatory</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>type</td>
+<td>String</td>
+<td>Mandatory</td>
+<td>A registered export format name.</td>
+</tr>
+<tr class="row-odd"><td>writerArgs</td>
+<td>Object</td>
+<td>Optional(default to {})</td>
+<td>Some arguments for the current wirter.</td>
+</tr>
+</tbody>
+</table>
+<p>For example:</p>
+</div>
+<div class="section" id="create-export-writer-a-framework-for-grid-export">
+<h2><a class="toc-backref" href="#id6">Create Export Writer &#8211; A Framework for Grid Export</a><a class="headerlink" href="#create-export-writer-a-framework-for-grid-export" title="Permalink to this headline">¶</a></h2>
+<p>To create your own exporter, you should use this export framework by extending an abstract class: _ExportWriter.</p>
+<div class="section" id="exportwriter-the-base-class">
+<h3>_ExportWriter – The Base Class<a class="headerlink" href="#exportwriter-the-base-class" title="Permalink to this headline">¶</a></h3>
+<p>This is an abstract class for all of the writers used in the Exporter plugin. It applies the strategy pattern to break the export work into several stages, and provides interfaces for all of them. Implementations might choose to override some of the functions in this class thus providing their own functionality. The Exporter will go through the grid row by row. In every row, all the Views will be reached and the header row is only handled once. The APIs exposed by this class to implementers is shown below. You can implement them by extending &#8220;dojox.grid.enhanced.plugins.exporter._ExportWriter&#8221;.</p>
+<dl class="docutils">
+<dt>beforeHeader(grid):</dt>
+<dd>We are going to start moving through the grid. Is there anything we should do now?</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="25%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>grid</td>
+<td>dojox.grid.EnhancedGrid</td>
+<td>The grid widget.</td>
+</tr>
+<tr class="row-odd"><td>[return]</td>
+<td>Boolean</td>
+<td>true: go on handling the header row and then call afterHeader.
+false: skip the header row, won&#8217;t call afterHeader.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>afterHeader():</dt>
+<dd>The header has been handled.</dd>
+<dt>beforeContent(items):</dt>
+<dd>We are ready to go through all the contents(items).</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="25%" />
+<col width="65%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>items</td>
+<td>Array</td>
+<td>All the items fetched from the store.</td>
+</tr>
+<tr class="row-odd"><td>[return]</td>
+<td>Boolean</td>
+<td>true: go on handling the contents and then call afterContent.
+false: skip all the contents, won&#8217;t call afterContent.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>afterContent():</dt>
+<dd>We have finished the entire grid travel. Do some clean up work if you need to.</dd>
+<dt>beforeContentRow(argObj):</dt>
+<dd>Before handling a line of data (not a header).</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="23%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>argObj</td>
+<td>Object</td>
+<td>An object with at least the following context properties available:
+{ grid, isHeader, row,rowIdx, spCols }</td>
+</tr>
+<tr class="row-odd"><td>[return]</td>
+<td>Boolean</td>
+<td>true: go on handling the current data row and then call afterContentRow.
+false: skip the current data row, won&#8217;t call afterContentRow.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>afterContentRow(argObj):</dt>
+<dd>After handling a line of data (not header).</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="23%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>argObj</td>
+<td>Object</td>
+<td>An object with at least the following context properties available:
+{ grid, isHeader, row,rowIdx, spCols }</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>beforeView(argObj):</dt>
+<dd>Before handling a view.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="23%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>argObj</td>
+<td>Object</td>
+<td>An object with at least the following context properties available:
+{ grid, isHeader, row, rowIdx, spCols }</td>
+</tr>
+<tr class="row-odd"><td>[return]</td>
+<td>Boolean</td>
+<td>true: go on handling the current view and then call afterView.
+false: skip the current view, won&#8217;t call afterView.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>afterView(argObj):</dt>
+<dd>After handling a view.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="23%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>argObj</td>
+<td>Object</td>
+<td><dl class="first last docutils">
+<dt>An object with at least the following context properties available:</dt>
+<dd>{ grid, isHeader, row, rowIdx, spCols }</dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>beforeSubrow(argObj):</dt>
+<dd>Before handling a subrow (defined in the grid structure as &#8220;rows&#8221;).</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="23%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>argObj</td>
+<td>Object</td>
+<td>An object with at least the following context properties available:
+{ grid, isHeader, row, rowIdx, view, viewIdx, subrow, subrowIdx, spCols }</td>
+</tr>
+<tr class="row-odd"><td>[return]</td>
+<td>Boolean</td>
+<td>true: go on handling the current subrow and then call afterSubrow.
+false: skip the current subrow, won&#8217;t call afterSubrow.</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>afterSubrow(argObj):</dt>
+<dd>After handling a subrow (defined in the grid structure as &#8220;rows&#8221;).</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="23%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>argObj</td>
+<td>Object</td>
+<td>An object with at least the following context properties available:
+{ grid, isHeader, row, rowIdx, view, viewIdx, subrow, subrowIdx, spCols }</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>handleCell(argObj):</dt>
+<dd>Handle a header cell or data cell.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="8%" />
+<col width="23%" />
+<col width="69%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>argObj</td>
+<td>Object</td>
+<td>An object with at least the following context properties available:
+{ grid, isHeader, row, rowIdx, view, viewIdx, subrow,subrowIdx,
+cell, cellIdx, spCols, colOffset }</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>toString():</dt>
+<dd>Export to a string.</dd>
+</dl>
+<table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="40%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Arguments</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>[return]</td>
+<td>String</td>
+<td>The exported result string.</td>
+</tr>
+</tbody>
+</table>
+<p>The argument <code class="docutils literal"><span class="pre">argObj</span></code> represents the context of each function when they are called and may have the following properties:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="6%" />
+<col width="13%" />
+<col width="15%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Data Type</th>
+<th class="head">When Available</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>grid</td>
+<td>dojox.grid.EnhancedGrid</td>
+<td>Always</td>
+<td>The grid widget we are now handling.</td>
+</tr>
+<tr class="row-odd"><td>isHeader</td>
+<td>Boolean</td>
+<td>Always</td>
+<td>Indicating which context we&#8217;re handling, header or content.</td>
+</tr>
+<tr class="row-even"><td>view</td>
+<td>dojox.grid._View</td>
+<td>beforeView
+afterView
+beforeSubrow
+afterSubrow
+handleCell</td>
+<td>Reference to the current _View object.</td>
+</tr>
+<tr class="row-odd"><td>viewIdx</td>
+<td>Integer</td>
+<td>beforeView
+afterView
+beforeSubrow
+afterSubrow
+handleCell</td>
+<td>The index of the current _View object in the views array.
+If the grid does not have any rowselector view, it conforms to the index in the _ViewManager.views.</td>
+</tr>
+<tr class="row-even"><td>row</td>
+<td>data item</td>
+<td>beforeContentRow
+afterContentRow
+beforeSubrow
+afterSubrow
+handleCell</td>
+<td>The current row of data (logically), a.k.a.: current item.</td>
+</tr>
+<tr class="row-odd"><td>rowIdx</td>
+<td>Integer</td>
+<td>beforeContentRow
+afterContentRow
+beforeSubrow
+afterSubrow
+handleCell</td>
+<td>The index of the current row (item).</td>
+</tr>
+<tr class="row-even"><td>subrow</td>
+<td>dojox.grid.cells._base[]</td>
+<td>beforeSubrow
+afterSubrow
+handleCell</td>
+<td>Reference to the current subrow.
+A subrow describing the inner structure of a row in a view, it&#8217;s an array of cells</td>
+</tr>
+<tr class="row-odd"><td>subrowIdx</td>
+<td>Integer</td>
+<td>beforeSubrow
+afterSubrow
+handleCell</td>
+<td>The index of the current subrow in the subrow array: _View.structure.cells.</td>
+</tr>
+<tr class="row-even"><td>cell</td>
+<td>dojox.grid.cells._base</td>
+<td>handleCell</td>
+<td>Reference to the current cell.</td>
+</tr>
+<tr class="row-odd"><td>cellIdx</td>
+<td>Integer</td>
+<td>handleCell</td>
+<td>The index of the current cell in the current subrow.
+It&#8217;s different from cell.index, which is the index in the whole line.</td>
+</tr>
+<tr class="row-even"><td>spCols</td>
+<td>Integer[]</td>
+<td>beforeContentRow
+afterContentRow
+beforeView
+afterView
+beforeSubrow
+afterSubrow
+handleCell</td>
+<td>The header line has been handled. An array of special column indexes(flat,not regarding structure).
+Special columns are typically attached to grid as a kind of UI facility by the grid widget, instead of some real data.
+For example: indirect selectors and row indexers.
+Users can choose to export it or not.</td>
+</tr>
+<tr class="row-odd"><td>colOffset</td>
+<td>Integer</td>
+<td>handleCell</td>
+<td>If the grid has a _RowSelector view or something else, this view will NOT be passed to the user in argObj.
+So the column index (cell.index) will appear shifted (start from 1 instead of 0).
+This colOffset is provided to remove this shift.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="register-your-own-writer">
+<h3>Register Your Own Writer<a class="headerlink" href="#register-your-own-writer" title="Permalink to this headline">¶</a></h3>
+<p>Once you have implemented your own export writer, tell the framework about the name of your format. For the &#8220;CSV&#8221; case, you should write the following line in your implementation file:</p>
+</div>
+<div class="section" id="available-export-writers">
+<h3>Available Export Writers<a class="headerlink" href="#available-export-writers" title="Permalink to this headline">¶</a></h3>
+<p>The following writers are currently available in the dojox/grid/enhanced/plugins/exporter package:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="28%" />
+<col width="42%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Writer Class</th>
+<th class="head">Format Name</th>
+<th class="head">Writer Argument</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>CSVWriter</td>
+<td>&#8220;csv&#8221;</td>
+<td>&#8220;separator&#8221;</td>
+</tr>
+<tr class="row-odd"><td>TableWriter</td>
+<td>&#8220;table&#8221;</td>
+<td>HTML table attributes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>Here is the structure of the implementation file of the CSVWriter, demonstrating how to write an export writer. It only implements 3 interfaces.</p>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id7">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../../DataGrid.html#dojox-grid-datagrid"><span>dojox.grid.DataGrid</span></a> - The base grid</li>
+<li><a class="reference internal" href="../../EnhancedGrid.html#dojox-grid-enhancedgrid"><span>dojox.grid.EnhancedGrid</span></a> - The enhanced grid supporting plugins</li>
+<li><a class="reference internal" href="../plugins.html#dojox-grid-enhancedgrid-plugins"><span>dojox.grid.EnhancedGrid.plugins</span></a> - Overview of the plugins of enhanced grid</li>
+<li><a class="reference internal" href="../../TreeGrid.html#dojox-grid-treegrid"><span>dojox.grid.TreeGrid</span></a> - Grid with collapsible rows and model-based (<a class="reference internal" href="../../../../dijit/tree/ForestStoreModel.html#dijit-tree-foreststoremodel"><span>dijit.tree.ForestStoreModel</span></a>) structure</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojox.grid.EnhancedGrid.plugins.Exporter</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#plugin-declaration">Plugin Declaration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#create-export-writer-a-framework-for-grid-export">Create Export Writer &#8211; A Framework for Grid Export</a><ul>
+<li><a class="reference internal" href="#exportwriter-the-base-class">_ExportWriter – The Base Class</a></li>
+<li><a class="reference internal" href="#register-your-own-writer">Register Your Own Writer</a></li>
+<li><a class="reference internal" href="#available-export-writers">Available Export Writers</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

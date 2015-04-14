@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/_base/declare &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-base-declare">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/_base/declare</a><a class="headerlink" href="#dojo-base-declare" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Eugene Lazutkin</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">0.9</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-base-declare" id="id2">dojo/_base/declare</a><ul>
+<li><a class="reference internal" href="#dojo-declare" id="id3">dojo/declare()</a><ul>
+<li><a class="reference internal" href="#defining-a-class" id="id4">Defining a Class</a></li>
+<li><a class="reference internal" href="#using-mixin-in-a-class-constructor" id="id5">Using mixin() in a Class Constructor</a></li>
+<li><a class="reference internal" href="#arrays-and-objects-as-member-variables" id="id6">Arrays and Objects as Member Variables</a></li>
+<li><a class="reference internal" href="#inheritance" id="id7">Inheritance</a></li>
+<li><a class="reference internal" href="#calling-superclass-methods" id="id8">Calling Superclass Methods</a></li>
+<li><a class="reference internal" href="#multiple-inheritance" id="id9">Multiple Inheritance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#safemixin" id="id10">safeMixin()</a><ul>
+<li><a class="reference internal" href="#usage" id="id11">Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notes" id="id12">Notes</a><ul>
+<li><a class="reference internal" href="#common-conventions" id="id13">Common Conventions</a></li>
+<li><a class="reference internal" href="#inheritance-info" id="id14">Inheritance Info</a></li>
+<li><a class="reference internal" href="#chaining" id="id15">Chaining</a></li>
+<li><a class="reference internal" href="#constructors" id="id16">Constructors</a></li>
+<li><a class="reference internal" href="#constructor-methods" id="id17">Constructor Methods</a></li>
+<li><a class="reference internal" href="#class-methods" id="id18">Class Methods</a></li>
+<li><a class="reference internal" href="#using-raw-classes" id="id19">Using &#8220;Raw&#8221; Classes</a></li>
+<li><a class="reference internal" href="#meta-information" id="id20">Meta-Information</a></li>
+<li><a class="reference internal" href="#safemixin-information" id="id21">safeMixin() Information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also" id="id22">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/_base/declare</strong> contains functions to define Dojo classes, which support standard Object Oriented concepts
+within Dojo.</p>
+<p>JavaScript uses <a class="reference external" href="http://en.wikipedia.org/wiki/Prototype-based_programming">prototype-based inheritance</a>, not class-based inheritance (which is used by most programming
+languages). Dojo provides the ability to simulate class-based inheritance using <code class="docutils literal"><span class="pre">dojo.declare</span></code>.</p>
+<div class="section" id="dojo-declare">
+<h2><a class="toc-backref" href="#id3">dojo/declare()</a><a class="headerlink" href="#dojo-declare" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="defining-a-class">
+<h3><a class="toc-backref" href="#id4">Defining a Class</a><a class="headerlink" href="#defining-a-class" title="Permalink to this headline">¶</a></h3>
+<p>In <code class="docutils literal"><span class="pre">my/Person.js</span></code>:</p>
+<p>Using the class:</p>
+</div>
+<div class="section" id="using-mixin-in-a-class-constructor">
+<h3><a class="toc-backref" href="#id5">Using mixin() in a Class Constructor</a><a class="headerlink" href="#using-mixin-in-a-class-constructor" title="Permalink to this headline">¶</a></h3>
+<p>Define a class, &#8220;my/Person&#8221;, using an object for mixing in arguments instead of an argument list.</p>
+<p>In <code class="docutils literal"><span class="pre">my/Person.js</span></code>:</p>
+<p>Using the class:</p>
+</div>
+<div class="section" id="arrays-and-objects-as-member-variables">
+<h3><a class="toc-backref" href="#id6">Arrays and Objects as Member Variables</a><a class="headerlink" href="#arrays-and-objects-as-member-variables" title="Permalink to this headline">¶</a></h3>
+<p>If your class contains arrays or other objects, they should be declared in the <code class="docutils literal"><span class="pre">constructor()</span></code> so that each instance
+gets its own copy. Simple types (strings, numbers, booleans, <code class="docutils literal"><span class="pre">null</span></code>) are fine to declare in the class directly
+because simple types are assigned by value, whereas objects are assigned by reference (in JavaScript, arrays are also
+considered objects).</p>
+<div class="section" id="instance-objects">
+<h4>Instance Objects<a class="headerlink" href="#instance-objects" title="Permalink to this headline">¶</a></h4>
+<p>Define a class, <code class="docutils literal"><span class="pre">my/Demo.js</span></code>, with instance objects:</p>
+</div>
+<div class="section" id="static-objects">
+<h4>Static objects<a class="headerlink" href="#static-objects" title="Permalink to this headline">¶</a></h4>
+<p>Define a class, <code class="docutils literal"><span class="pre">my/Demo.js</span></code>, with &#8220;static&#8221; properties:</p>
+</div>
+</div>
+<div class="section" id="inheritance">
+<h3><a class="toc-backref" href="#id7">Inheritance</a><a class="headerlink" href="#inheritance" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">superclass</span></code> argument to the <code class="docutils literal"><span class="pre">dojo/declare()</span></code> function is used for extending classes by providing a parent
+class or classes to inherit from.</p>
+<div class="section" id="single-inheritance">
+<h4>Single Inheritance<a class="headerlink" href="#single-inheritance" title="Permalink to this headline">¶</a></h4>
+<p>Define a <code class="docutils literal"><span class="pre">my/Employee</span></code> class that extends the <code class="docutils literal"><span class="pre">my/Person</span></code> class from above.  In <code class="docutils literal"><span class="pre">my/Employee.js</span></code>:</p>
+<p>In <code class="docutils literal"><span class="pre">my/Boss.js</span></code>:</p>
+<p>To use the classes:</p>
+</div>
+</div>
+<div class="section" id="calling-superclass-methods">
+<h3><a class="toc-backref" href="#id8">Calling Superclass Methods</a><a class="headerlink" href="#calling-superclass-methods" title="Permalink to this headline">¶</a></h3>
+<p>Superclass constructors are <em>always</em> called automatically, and <em>always</em> before the subclass constructor. This
+convention reduces boilerplate in 90% of cases. If it doesn’t fit your needs see <a class="reference internal" href="#manual-constructor-chaining">Manual Constructor Chaining</a> below.
+For all other methods, use <code class="docutils literal"><span class="pre">this.inherited(arguments)</span></code> to call the superclass method of the same name.</p>
+<p>In <code class="docutils literal"><span class="pre">my/Boss.js</span></code>:</p>
+<p>To use the class:</p>
+<p>Note that the first argument to <code class="docutils literal"><span class="pre">this.inherited()</span></code> is always literally <code class="docutils literal"><span class="pre">arguments</span></code>, a special JavaScript array-
+like pseudo-variable which holds all the arguments (like argv in C). If you want to override the arguments passed to
+the superclass, pass them in an array as a second argument:</p>
+<p>See <a class="reference internal" href="#inherited">inherited()</a> for more details.</p>
+</div>
+<div class="section" id="multiple-inheritance">
+<h3><a class="toc-backref" href="#id9">Multiple Inheritance</a><a class="headerlink" href="#multiple-inheritance" title="Permalink to this headline">¶</a></h3>
+<p>Just as Dojo adds class-based inheritance to JavaScript, so it adds support for <em>multiple inheritance</em> using
+<a class="reference external" href="http://en.wikipedia.org/wiki/C3_linearization">C3 superclass linearization</a>. This algorithm is what Python and some other languages use for its implementation of
+multiple inheritance. You can learn more details in the <a class="reference external" href="http://www.python.org/download/releases/2.3/mro">Python 2.3 Method Resolution Order documentation</a>.</p>
+<p>In static languages like Java, you must use typecasts to make an object &#8220;act like&#8221; its mixed-in class (in Java, this
+is through interfaces). In Dojo, you can use the mixed-in properties directly.</p>
+<p>Define a <code class="docutils literal"><span class="pre">my/Blizzard</span></code> class using the base class <code class="docutils literal"><span class="pre">VanillaSoftServe</span></code> and mixins <code class="docutils literal"><span class="pre">OreoMixin</span></code> and
+<code class="docutils literal"><span class="pre">CookieDoughMixin</span></code>.  In <code class="docutils literal"><span class="pre">my/Blizzard.js</span></code>:</p>
+<p>To use the class:</p>
+<p>Only the first class passed for multiple inheritance is a true superclass. The rest are <em>mixins</em>, and are mixed into
+the child class to produce the inheritance chain we need. On a practical level, this means that the <code class="docutils literal"><span class="pre">instanceof</span></code>
+operator cannot be used for mixins, only for base classes. Instead, use the <a class="reference internal" href="#isinstanceof">isInstanceOf()</a> function.</p>
+</div>
+</div>
+<div class="section" id="safemixin">
+<span id="dojo-base-declare-safemixin"></span><h2><a class="toc-backref" href="#id10">safeMixin()</a><a class="headerlink" href="#safemixin" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">safeMixin()</span></code> is a function defined in <code class="docutils literal"><span class="pre">dojo/declare</span></code>. It has the same functionality as
+<a class="reference internal" href="lang.html#dojo-base-lang-mixin"><span>dojo/_base/lang::mixin()</span></a>, but additionally it annotates all copied methods compatibly
+with <code class="docutils literal"><span class="pre">dojo/declare</span></code>. This decoration can affect how <code class="docutils literal"><span class="pre">this.inherited()</span></code> works in mixed-in methods.</p>
+<div class="section" id="usage">
+<h3><a class="toc-backref" href="#id11">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<p>The function is usually used with classes and instances produced by <cite>dojo/declare</cite>. It takes two parameters (both
+objects): target and source of properties. Just like <a class="reference internal" href="lang.html#dojo-base-lang-mixin"><span>dojo/_base/lang::mixin()</span></a> it
+returns <code class="docutils literal"><span class="pre">target</span></code>.</p>
+</div>
+</div>
+<div class="section" id="notes">
+<h2><a class="toc-backref" href="#id12">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="common-conventions">
+<h3><a class="toc-backref" href="#id13">Common Conventions</a><a class="headerlink" href="#common-conventions" title="Permalink to this headline">¶</a></h3>
+<p>There are some common conventions used in Dojo Toolkit which are not strictly mandated by the class system, but
+coupled with AMD make the creation of classes more manageable and portable:</p>
+<ul class="simple">
+<li>The class name (first argument of <code class="docutils literal"><span class="pre">declare()</span></code>) is omitted in new development.  This ensures that the global
+namespace does not become polluted with classes and reduces the chances of name collisions.  Classes in Dojo Toolkit
+introduced prior to Dojo 1.7 will include the class name for backwards compatibility reasons.</li>
+<li>The AMD Module ID (MID) becomes the commonly referred to class name.  This name is implied from the path to the file.
+For example <code class="docutils literal"><span class="pre">package/Class.js</span></code> would make the MID <code class="docutils literal"><span class="pre">package/Class</span></code>.</li>
+<li>Classes that can be instantiated are named in a UpperCamelCased format.</li>
+<li>&#8220;Private&#8221; classes and mixins, that are not intended to be instantiated directly by an end-developer are prefaced
+with a underscore (<code class="docutils literal"><span class="pre">_</span></code>).  For example <code class="docutils literal"><span class="pre">_MyPrivateClass</span></code>.</li>
+<li>Classes instantied have  1 to 1 relationship with modules and should constitute the return value of the <code class="docutils literal"><span class="pre">define()</span></code>
+callback.</li>
+<li>Classes that are private and do not need to be instantiated outside of the module should be declared as variables
+within the module.  For example in a file name <code class="docutils literal"><span class="pre">package/MyCollection.js</span></code>:</li>
+</ul>
+</div>
+<div class="section" id="inheritance-info">
+<h3><a class="toc-backref" href="#id14">Inheritance Info</a><a class="headerlink" href="#inheritance-info" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo/declare()</span></code> uses <a class="reference external" href="http://en.wikipedia.org/wiki/C3_linearization">C3 superclass linearization</a> to convert multiple inheritance to a linear list of
+superclasses. While it solves most thorny problems of inheritance, some configurations are impossible:</p>
+<p>As you can see <code class="docutils literal"><span class="pre">D</span></code> requires that <code class="docutils literal"><span class="pre">B</span></code> should go before <code class="docutils literal"><span class="pre">A</span></code>, and <code class="docutils literal"><span class="pre">C</span></code> requires that <code class="docutils literal"><span class="pre">A</span></code> go before <code class="docutils literal"><span class="pre">B</span></code>. It
+makes an inheritance chain for <code class="docutils literal"><span class="pre">E</span></code> impossible because these contradictory requirements cannot be satisfied.
+Obviously any other circular dependencies cannot be satisfied either. But any <a class="reference external" href="http://en.wikipedia.org/wiki/Directed_acyclic_graph">DAG</a> inheritance will be linearized
+correctly including the famous <a class="reference external" href="http://en.wikipedia.org/wiki/Diamond_problem">Diamond problem</a>.</p>
+<p>In same rare cases it is possible to build a linear chain, which cannot reuse the base class:</p>
+<p>Let&#8217;s look at <code class="docutils literal"><span class="pre">C</span></code> and <code class="docutils literal"><span class="pre">E</span></code> inheritance chains:</p>
+<div class="highlight-python"><div class="highlight"><pre>C -&gt; B -&gt; A
+E -&gt; B -&gt; D
+</pre></div>
+</div>
+<p>As you can see in one case <code class="docutils literal"><span class="pre">B</span></code> follows after <code class="docutils literal"><span class="pre">A</span></code> and in the other case it follows <code class="docutils literal"><span class="pre">D</span></code>. How does <code class="docutils literal"><span class="pre">F</span></code> look like?</p>
+<div class="highlight-python"><div class="highlight"><pre>F -&gt; C -&gt; B -&gt; D -&gt; A
+</pre></div>
+</div>
+<p>As you can see all dependency rules are satisfied, yet the chain&#8217;s tail doesn&#8217;t match <code class="docutils literal"><span class="pre">C</span></code> as we are accustomed to
+see. Obviously <code class="docutils literal"><span class="pre">instanceof</span></code> would be useless in this case, but <a class="reference internal" href="#isinstanceof">isInstanceOf()</a> will work just fine. So when in
+doubt use <a class="reference internal" href="#isinstanceof">isInstanceOf()</a>.</p>
+</div>
+<div class="section" id="chaining">
+<h3><a class="toc-backref" href="#id15">Chaining</a><a class="headerlink" href="#chaining" title="Permalink to this headline">¶</a></h3>
+<p>By default only constructors are chained automatically. In some cases user may want to chain other methods too (e.g.
+life-cycle methods), which govern how instances are created, modified, and destroy, or methods called for various
+events. Good example is <code class="docutils literal"><span class="pre">destroy()</span></code> method, which destroys external objects and references and can be used by all
+super classes of an object.</p>
+<p>While <code class="docutils literal"><span class="pre">this.inherited()</span></code> takes care of all scenarios, chaining has following benefits:</p>
+<ul class="simple">
+<li>It is much faster than using <code class="docutils literal"><span class="pre">this.inherited()</span></code>. On some browsers the difference can be more than an order of
+magnitude for simple methods.</li>
+<li>It is automatic. User cannot forget to call a superclass method.</li>
+<li>Less code to write, less code to worry about.</li>
+</ul>
+<p>Chained methods should not return values, all returned values are going to be ignored. They all be called with the
+same arguments. A good practice is to avoid modifications to the arguments. It will ensure that your classes play nice
+with others when used as superclasses.</p>
+<p>There are two ways to chain methods: <strong>after</strong> and <strong>before</strong> (<a class="reference external" href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a> terminology is used). <strong>after</strong> means that a
+method is called after its superclass&#8217; method. <strong>before</strong> means that a method is called before calling its superclass
+method. All chains are described in a special property named <code class="docutils literal"><span class="pre">-chains-</span></code>:</p>
+<p>Chain declarations are inherited. Chaining for individual methods can be overridden in child classes, but not advised.</p>
+<p>There is a special case: chain declaration for <code class="docutils literal"><span class="pre">constructor</span></code>. This method supports two chaining directives:
+<strong>after</strong>, and <strong>manual</strong>. See more details in <a class="reference internal" href="#constructors">Constructors</a>.</p>
+</div>
+<div class="section" id="constructors">
+<h3><a class="toc-backref" href="#id16">Constructors</a><a class="headerlink" href="#constructors" title="Permalink to this headline">¶</a></h3>
+<p>Constructor invocations are governed by <a class="reference internal" href="#chaining">Chaining</a>.</p>
+<div class="section" id="default-constructor-chaining">
+<h4>Default Constructor Chaining<a class="headerlink" href="#default-constructor-chaining" title="Permalink to this headline">¶</a></h4>
+<p>By default all constructors are chained using <strong>after</strong> algorithm (using <a class="reference external" href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">AOP</a> terminology). It means that after the
+linearization for any given class its constructor is going to be called <em>after</em> its superclass constructors:</p>
+<p>The exact algorithm of an instance initialization for chained constructors:</p>
+<p>Notes:</p>
+<ul class="simple">
+<li>A good practice for constructors is to avoid modifications of its arguments. It ensures that other classes can
+access original values, and allows to play nice when the class is used as a building block for other classes.</li>
+<li>If you do need to modify arguments of superclass constructors consider <a class="reference internal" href="#manual-constructor-chaining">Manual Constructor Chaining</a> as a better
+alternative to <code class="docutils literal"><span class="pre">preamble()</span></code>.</li>
+<li>If a class doesn&#8217;t use <code class="docutils literal"><span class="pre">preamble()</span></code> it switches the initialization to the fast path making an instantiation
+substantially faster.</li>
+<li>For historical reasons <code class="docutils literal"><span class="pre">preamble()</span></code> is called for classes without a constructor and even for the last class in the
+superclass list, which doesn&#8217;t have a superclass.</li>
+</ul>
+</div>
+<div class="section" id="manual-constructor-chaining">
+<h4>Manual Constructor Chaining<a class="headerlink" href="#manual-constructor-chaining" title="Permalink to this headline">¶</a></h4>
+<p>In some cases users may want to redefine how initialization works. In this case the chaining should be turned off so
+<code class="docutils literal"><span class="pre">this.inherited()</span></code> can be used instead.</p>
+<p>The example above doesn&#8217;t call the constructor of <code class="docutils literal"><span class="pre">A</span></code> at all, and runs some code before and after calling the
+constructor of <code class="docutils literal"><span class="pre">B</span></code>.</p>
+<p>The exact algorithm of an instance initialization for manual constructors:</p>
+<p>Notes:</p>
+<ul class="simple">
+<li>Prefer manual constructors to deprecated <code class="docutils literal"><span class="pre">preamble()</span></code>.</li>
+<li>As soon as you switch to manual constructors <strong>all</strong> constructors in your hierarchy should be called manually. Make
+sure that all constructors are wired for that.</li>
+<li>Chaining works faster than simulating it with <code class="docutils literal"><span class="pre">this.inherited()</span></code>. Know when to use it.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="constructor-methods">
+<h3><a class="toc-backref" href="#id17">Constructor Methods</a><a class="headerlink" href="#constructor-methods" title="Permalink to this headline">¶</a></h3>
+<p>Every constructor created by <code class="docutils literal"><span class="pre">dojo/declare()</span></code> defines some convenience methods.</p>
+<div class="section" id="extend">
+<h4>extend()<a class="headerlink" href="#extend" title="Permalink to this headline">¶</a></h4>
+<p>This constructor method adds new properties to the constructor&#8217;s prototype the same way as
+<a class="reference internal" href="lang.html#dojo-base-lang-extend"><span>dojo/_base/lang::extend()</span></a> works. The difference is that it annotates function
+properties the same way <code class="docutils literal"><span class="pre">dojo/declare()</span></code> does. These changes will be propagated to all classes and object where this
+class constructor was a superclass.</p>
+<p>The method has one argument, an object to mix in. It returns the constructor itself, which can be used for chained
+calls. For example:</p>
+<p>Internally this method uses <a class="reference internal" href="#safemixin">safeMixin()</a>.</p>
+<p><strong>Note</strong> Do not forget that <code class="docutils literal"><span class="pre">dojo/declare()</span></code> uses mixins to build a constructor from several bases. Remember that
+only the first base is the true superclass, the rest is mixed in by copying properties. It means that if you
+<code class="docutils literal"><span class="pre">extend()</span></code> a constructor&#8217;s prototype that was already used as a mixin and its methods became top methods in the
+chain of inheritance, these top methods would not be replaced because they are already copied.  For example:</p>
+<p>You can see that copied methods were not replaced in <code class="docutils literal"><span class="pre">ABC</span></code> and <code class="docutils literal"><span class="pre">abc</span></code>.</p>
+</div>
+<div class="section" id="createsubclass">
+<h4>createSubclass()<a class="headerlink" href="#createsubclass" title="Permalink to this headline">¶</a></h4>
+<p>This constructor method creates a subclass of the constructor&#8217;s class using a list of base classes.</p>
+<p>The method has two arguments, first an array of base classes to extend from, second an object to mix in into the newly created class. It returns the constructor of the newly created subclass. For example if you declare the following A, B and C classes:</p>
+<p>The following createSubclass call:</p>
+<p>is equivalent to:</p>
+<p><strong>Note</strong> Do not forget that <code class="docutils literal"><span class="pre">dojo/declare()</span></code> uses mixins to build a constructor from several bases. Remember that
+only the first base is the true superclass, the rest is mixed in by copying properties.</p>
+</div>
+</div>
+<div class="section" id="class-methods">
+<h3><a class="toc-backref" href="#id18">Class Methods</a><a class="headerlink" href="#class-methods" title="Permalink to this headline">¶</a></h3>
+<p>Every prototype produced by <code class="docutils literal"><span class="pre">dojo/declare()</span></code> contains some convenience methods.</p>
+<div class="section" id="inherited">
+<h4>inherited()<a class="headerlink" href="#inherited" title="Permalink to this headline">¶</a></h4>
+<p>The method is used to call a superclass method. It accepts up to three arguments:</p>
+<ul class="simple">
+<li>Optional name of the method to call. Generally it should be specified when calling <code class="docutils literal"><span class="pre">this.inherited()</span></code> from an un-
+annotated method, otherwise it will be deduced from the method itself.</li>
+<li><code class="docutils literal"><span class="pre">arguments</span></code> - literally <code class="docutils literal"><span class="pre">arguments</span></code> pseudo-variable, which is used for introspection.</li>
+<li>Optional array of arguments, which will be used to call a superclass method. If it is not specified <code class="docutils literal"><span class="pre">arguments</span></code>
+are used. If this argument is a literal constant <code class="docutils literal"><span class="pre">true</span></code>, then the found super method is not executed but returned
+as a value (see <a class="reference internal" href="#getinherited">getInherited()</a>).</li>
+</ul>
+<p>It returns whatever value was returned by a superclass method that was called. If it turned out that there is no
+superclass method to call, <a class="reference internal" href="#inherited">inherited()</a> doesn&#8217;t do anything and returns <code class="docutils literal"><span class="pre">undefined</span></code>. For example:</p>
+</div>
+<div class="section" id="getinherited">
+<h4>getInherited()<a class="headerlink" href="#getinherited" title="Permalink to this headline">¶</a></h4>
+<p>This is a companion method to <a class="reference internal" href="#inherited">inherited()</a>. The difference is that it doesn&#8217;t execute the found method, but returns
+it. It is up to the user to call it with proper arguments.</p>
+<p>The method accepts up to two arguments:</p>
+<ul class="simple">
+<li>Optional name of the method to call. If it is specified it must match the name of the caller. Generally it should be
+specified when calling this method from an un-annotated method (the same rule as for <a class="reference internal" href="#inherited">inherited()</a>).</li>
+<li><code class="docutils literal"><span class="pre">arguments</span></code> - literally <code class="docutils literal"><span class="pre">arguments</span></code> pseudo-variable, which is used for introspection.</li>
+</ul>
+<p>The result is a superclass method or <code class="docutils literal"><span class="pre">undefined</span></code>, if it was not found. You can use the result as you wish. The most
+useful case is to pass it to some other function, which cannot use <a class="reference internal" href="#inherited">inherited()</a> directly for some reasons. For
+example:</p>
+<p>Internally this method is a helper, which calls <a class="reference internal" href="#inherited">inherited()</a> with <code class="docutils literal"><span class="pre">true</span></code> as the last argument.</p>
+</div>
+<div class="section" id="isinstanceof">
+<h4>isInstanceOf()<a class="headerlink" href="#isinstanceof" title="Permalink to this headline">¶</a></h4>
+<p>This method checks if an instance is derived from a given class. It is modeled on <code class="docutils literal"><span class="pre">instanceof</span></code> operator. It is most
+useful when you have classes built with the multiple inheritance somewhere in your hierarchy.</p>
+<p>The method accepts one argument: class (constructor). It returns <code class="docutils literal"><span class="pre">true</span></code>/<code class="docutils literal"><span class="pre">false</span></code>.  For example:</p>
+</div>
+</div>
+<div class="section" id="using-raw-classes">
+<h3><a class="toc-backref" href="#id19">Using &#8220;Raw&#8221; Classes</a><a class="headerlink" href="#using-raw-classes" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">dojo/declare()</span></code> allows to use &#8220;raw&#8221; classes created by other means as a superclass. Such classes are considered to
+be monolithic (because their structure cannot be introspected) and they cannot use advanced features like
+<a class="reference internal" href="#inherited">inherited()</a>. But their methods will be called by <a class="reference internal" href="#inherited">inherited()</a> and all their methods can be chained (see <a class="reference internal" href="#chaining">Chaining</a>)
+including constructors. For example:</p>
+</div>
+<div class="section" id="meta-information">
+<h3><a class="toc-backref" href="#id20">Meta-Information</a><a class="headerlink" href="#meta-information" title="Permalink to this headline">¶</a></h3>
+<p>All meta-information is a subject to change and should not be used in the course of normal coding. If you use it, be
+ready to update your code, when it changes.</p>
+<p>Every constructor produced with <code class="docutils literal"><span class="pre">dojo/declare()</span></code> carries a meta-information required for internal plumbing and for
+introspection. It is implemented as a property called <code class="docutils literal"><span class="pre">meta</span></code> on a constructor. <code class="docutils literal"><span class="pre">meta</span></code> has following properties:</p>
+<dl class="docutils">
+<dt><code class="docutils literal"><span class="pre">bases</span></code></dt>
+<dd>List of all superclasses produced by the C3 linearization algorithm (see <a class="reference internal" href="#inheritance">Inheritance</a> for more details). The very
+first item in the list is the class itself.</dd>
+<dt><code class="docutils literal"><span class="pre">hidden</span></code></dt>
+<dd>Copy of all own properties and methods of the class. It is the third argument (or the second argument, if class name
+was omitted) of <code class="docutils literal"><span class="pre">dojo/declare()</span></code>.</dd>
+<dt><code class="docutils literal"><span class="pre">chains</span></code></dt>
+<dd>List of chains (see <a class="reference internal" href="#chaining">Chaining</a> for more details) augmented by all inherited chains.</dd>
+<dt><code class="docutils literal"><span class="pre">parents</span></code></dt>
+<dd>List of immediate parents. It is the second argument (or the first argument, if class name was omitted) of
+<code class="docutils literal"><span class="pre">dojo/declare()</span></code>.</dd>
+</dl>
+<p>Additionally a prototype has a special property named <code class="docutils literal"><span class="pre">declaredClass</span></code>, if the class was named when created by
+<code class="docutils literal"><span class="pre">dojo/declare()</span></code>. If it was an anonymous class, this property can be missing, or it can be a auto-generated name in
+the form of <code class="docutils literal"><span class="pre">uniqName_NNN</span></code>, where <code class="docutils literal"><span class="pre">NNN</span></code> is some unique number. This property is used internally to distinguish
+between different classes. It is not meant for end users, but it can be useful for debugging.</p>
+<p>Every instance created by a <code class="docutils literal"><span class="pre">dojo/declare()</span></code> class has a special property called <code class="docutils literal"><span class="pre">inherited</span></code>, which is used to
+speed up <a class="reference internal" href="#inherited">inherited()</a> calls. Please don&#8217;t touch it.</p>
+<p>Every method mixed in by <code class="docutils literal"><span class="pre">dojo/declare()</span></code> or <a class="reference internal" href="#safemixin">safeMixin()</a> is annotated: a special property called <code class="docutils literal"><span class="pre">nom</span></code> is added.
+It contains a name of the method in question and used by <a class="reference internal" href="#inherited">inherited()</a> and <a class="reference internal" href="#getinherited">getInherited()</a> to deduce the name of a
+superclass method. See <a class="reference internal" href="#safemixin">safeMixin()</a> for more details.</p>
+</div>
+<div class="section" id="safemixin-information">
+<h3><a class="toc-backref" href="#id21">safeMixin() Information</a><a class="headerlink" href="#safemixin-information" title="Permalink to this headline">¶</a></h3>
+<p>While copying properties <code class="docutils literal"><span class="pre">safeMixin()</span></code> (and <a class="reference internal" href="#dojo-declare">dojo/declare()</a>) annotates methods. All other properties are copied
+unmodified. On any function it adds a single property: <code class="docutils literal"><span class="pre">nom</span></code>, which value is a name of the function property.</p>
+<p>This way <code class="docutils literal"><span class="pre">this.inherited()</span></code> and <code class="docutils literal"><span class="pre">this.getInherited()</span></code> know what superclass method to call. If this property is not
+there, you have to specify the name as the first argument in <code class="docutils literal"><span class="pre">this.inherited()</span></code> or <code class="docutils literal"><span class="pre">this.getInherited()</span></code>.</p>
+<p>JavaScript treats functions as objects (not values) and uses them by reference. It means that if you add a function to
+two (or more) objects, it will be annotated several times leading to wrong annotations in different contexts:</p>
+<p>As you can see we reused the same function as a method, and it was annotated twice. It will break <code class="docutils literal"><span class="pre">this.inherited()</span></code>
+and <code class="docutils literal"><span class="pre">this.getInherited()</span></code> in all objects but the last one.</p>
+<p>How to prevent this problem?</p>
+<ul class="simple">
+<li>Try to avoid these situations. In most cases it can be done easily because functions are frequently created from
+literals and not reused in this manner (99% of all cases).</li>
+<li>Use function wrappers. Downside: it introduces an extra function call, which may affect the performance of short
+fast methods.</li>
+<li>Use a name in calls to <code class="docutils literal"><span class="pre">this.inherited()</span></code> and <code class="docutils literal"><span class="pre">this.getInherited()</span></code>. Downside: you have to know the name, and it
+is not always possible.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id22">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://dojotoolkit.org/documentation/tutorials/1.7/declare/">Classy JavaScript with dojo/declare</a></li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo/_base/declare</a><ul>
+<li><a class="reference internal" href="#dojo-declare">dojo/declare()</a><ul>
+<li><a class="reference internal" href="#defining-a-class">Defining a Class</a></li>
+<li><a class="reference internal" href="#using-mixin-in-a-class-constructor">Using mixin() in a Class Constructor</a></li>
+<li><a class="reference internal" href="#arrays-and-objects-as-member-variables">Arrays and Objects as Member Variables</a><ul>
+<li><a class="reference internal" href="#instance-objects">Instance Objects</a></li>
+<li><a class="reference internal" href="#static-objects">Static objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inheritance">Inheritance</a><ul>
+<li><a class="reference internal" href="#single-inheritance">Single Inheritance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#calling-superclass-methods">Calling Superclass Methods</a></li>
+<li><a class="reference internal" href="#multiple-inheritance">Multiple Inheritance</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#safemixin">safeMixin()</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notes">Notes</a><ul>
+<li><a class="reference internal" href="#common-conventions">Common Conventions</a></li>
+<li><a class="reference internal" href="#inheritance-info">Inheritance Info</a></li>
+<li><a class="reference internal" href="#chaining">Chaining</a></li>
+<li><a class="reference internal" href="#constructors">Constructors</a><ul>
+<li><a class="reference internal" href="#default-constructor-chaining">Default Constructor Chaining</a></li>
+<li><a class="reference internal" href="#manual-constructor-chaining">Manual Constructor Chaining</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#constructor-methods">Constructor Methods</a><ul>
+<li><a class="reference internal" href="#extend">extend()</a></li>
+<li><a class="reference internal" href="#createsubclass">createSubclass()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#class-methods">Class Methods</a><ul>
+<li><a class="reference internal" href="#inherited">inherited()</a></li>
+<li><a class="reference internal" href="#getinherited">getInherited()</a></li>
+<li><a class="reference internal" href="#isinstanceof">isInstanceOf()</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-raw-classes">Using &#8220;Raw&#8221; Classes</a></li>
+<li><a class="reference internal" href="#meta-information">Meta-Information</a></li>
+<li><a class="reference internal" href="#safemixin-information">safeMixin() Information</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.grid.LazyTreeGrid &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../../dojo/index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojox-grid-lazytreegrid">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojox.grid.LazyTreeGrid</a><a class="headerlink" href="#dojox-grid-lazytreegrid" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Wang Qiang</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">Evan Huang</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V1.6</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-grid-lazytreegrid" id="id2">dojox.grid.LazyTreeGrid</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#public-api" id="id5">Public API</a></li>
+<li><a class="reference internal" href="#examples" id="id6">Examples</a></li>
+<li><a class="reference internal" href="#accessibility" id="id7">Accessibility</a></li>
+<li><a class="reference internal" href="#see-also" id="id8">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>This is a stub help page for the new dojox.grid.LazyTreeGrid which is still in progress. The information on this page may be out-of-date due to the fact that the API for the LazyTreeGrid is still very much in flux.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>The Lazy-loading-TreeGrid(dojox.grid.LazyTreeGrid) is an extension of dojox.grid.TreeGrid, it is specifically designed for data store with huge nested-level rows. For the reason of the original TreeGrid can only do lazy-load on the 1st-level items, it doesn&#8217;t work well with large number of nested-level items. The Lazy-loading-TreeGrid renders each data item as an independent row no matter which level it is, and reuse the virtual scrolling model of DataGrid for paging of either top/nested level rows. This Widget inherits from dojo.grid.TreeGrid, hence all methods and properties pertaining to that Widget are also applicable.</p>
+<div class="section" id="supported-data-structure">
+<h3>Supported Data Structure<a class="headerlink" href="#supported-data-structure" title="Permalink to this headline">¶</a></h3>
+<p>For the reason of lazy loading children items, the dojox.grid.LazyTreeGrid could accept the flatted data. For example:</p>
+<p>In this case, the &#8220;children&#8221; attribute would be a flag rather than an actual value. (The name of &#8220;children&#8221; attribute would be specified by the TreeModel)</p>
+<p>Also, the nested data structure is available in normally case (small data or data is stored at client side). For example:</p>
+<p>Even more, for the situations where there are many children of some items as well as there are very few children of other items, you could use the following data structure:</p>
+<p>Please note the flatted data structure (case 1&amp;3) could be used only when using a dojox.grid.LazyTreeGridStoreModel, and if you want to use a dijit.tree.ForestStoreModel in your page, please make sure the returned data is nested structure. (For more details, please see TreeModel below)</p>
+</div>
+<div class="section" id="the-mechanism-of-rendering">
+<h3>The Mechanism of Rendering<a class="headerlink" href="#the-mechanism-of-rendering" title="Permalink to this headline">¶</a></h3>
+<p>For dojox.grid.TreeGrid, the root item and all of its children/sub-children would be rendered in a single row:</p>
+<img alt="../../_images/ltg1.jpg" src="../../_images/ltg1.jpg" />
+<p>This might case performance issue when there are huge children item, because all of them will be rendered at a single time.</p>
+<p>Regarding dojox.grid.LazyTreeGrid, each item would be rendered in a single row:</p>
+<img alt="../../_images/ltg2.jpg" src="../../_images/ltg2.jpg" />
+</div>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>The dojox.grid.LazyTreeGrid can either be defined declaratively in HTML or programmatically. For the most part, the dojox.grid.LazyTreeGrid follows the same structure and formatting as dojox.grid.TreeGrid with the following exceptions:</p>
+<blockquote>
+<div><ul class="simple">
+<li>LazyTreeGrid must have a TreeModel, the TreeModel could be the dijit.tree.ForestStoreModel/dojox.grid.LazyTreeGridStoreModel, or a custom TreeModel that inherited from them.</li>
+<li>LazyTreeGrid structures does not contain “children” values for nested level rows.(See dojox.grid.TreeGrid - Structure Definition)</li>
+<li>LazyTreeGrid does not contain an aggregate row, and its formatters don’t handle negative rowIndex values.</li>
+<li>LazyTreeGrid formatters receive a level parameter. (See &#8220;Formatting&#8221; below)</li>
+<li>defaultOpen/openAtLevels/aggregate/itemAggregates do not be available any more.</li>
+<li>The getItem function only accept a row index.</li>
+</ul>
+</div></blockquote>
+<p>The following parameters are supported in the dojox.grid.LazyTreeGrid:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="17%" />
+<col width="20%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Type</th>
+<th class="head">Default Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>rowsPerPage</td>
+<td>Integer</td>
+<td>25</td>
+<td>Number of rows to render at a time</td>
+</tr>
+<tr class="row-odd"><td>autoWidth</td>
+<td>Boolean</td>
+<td>false</td>
+<td>If autoWidth is true, grid width is automatically set to fit the data</td>
+</tr>
+<tr class="row-even"><td>autoHeight</td>
+<td>Boolean/Integer</td>
+<td>&#8220;&#8221;</td>
+<td>Boolean: If autoHeight is true, grid height is automatically set to fit the data.
+Integer: The height will be set to show that many rows as specified; but if there are fewer
+rows than that specified number, the grid height will be automatically set to fit the data.</td>
+</tr>
+<tr class="row-odd"><td>defaultHeight</td>
+<td>String</td>
+<td>&#8220;15em&#8221;</td>
+<td>Default height of the grid, measured in any valid css unit.</td>
+</tr>
+<tr class="row-even"><td>height</td>
+<td>String</td>
+<td>&#8220;&#8221;</td>
+<td>Explicit height of the grid, measured in any valid css unit. This will be populated
+(and overridden) if the height: css attribute exists on the source node</td>
+</tr>
+<tr class="row-odd"><td>selectionMode</td>
+<td>String</td>
+<td>&#8220;extended&#8221;</td>
+<td>Set the selection mode of grid&#8217;s Selection (select row by click row or rowSelector). Value
+must be &#8216;single&#8217;, &#8216;multiple&#8217; or &#8216;extended&#8217;. (assume there is no indirect selection being used)</td>
+</tr>
+<tr class="row-even"><td>rowSelector</td>
+<td>String/Boolean</td>
+<td>&#8220;&#8221;</td>
+<td>If set to true, will add a row selector view to this grid. If set to a CSS width, will add a
+row selector of that width to this grid</td>
+</tr>
+<tr class="row-odd"><td>headerMenu</td>
+<td>dijit.Menu</td>
+<td>null</td>
+<td>If set to a dijit.Menu, will use this as a context menu for the grid headers</td>
+</tr>
+<tr class="row-even"><td>selectable</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Set to true if you want the user to be able to select the text within the grid</td>
+</tr>
+<tr class="row-odd"><td>structure</td>
+<td>dojox.grid.__ViewDef</td>
+<td>null</td>
+<td>Layout definition</td>
+</tr>
+<tr class="row-even"><td>query</td>
+<td>Object</td>
+<td>null</td>
+<td>The query may be optional in some data store implementations. Each different data store
+implementation may have its own notion of what a query should look like. In general for
+query objects that accept strings as attribute value matches, the store should also support
+basic filtering capability, such as * (match any character) and ? (match single character).
+An example query that is a query object would be like: { attrFoo: &#8220;value*&#8221;}. Which generally
+means match all items where they have an attribute named attrFoo, with a value that starts
+with &#8216;value&#8217;. It is more like a simple filter because that only be used to compare items&#8217;
+attribute and query object attribute are equal or not.</td>
+</tr>
+<tr class="row-odd"><td>treeModel</td>
+<td>dijit.tree.ForestStoreModel
+/dojox.grid.LazyTreeGridStoreModel</td>
+<td>null</td>
+<td>This parameter is used instead of using aggregates in dojox.grid.TreeGrid. Its mainly role
+in Lazy-loading-TreeGrid is to indicate the children attribute name of data item.</td>
+</tr>
+<tr class="row-even"><td>colSpans</td>
+<td>Object</td>
+<td>null</td>
+<td>A Json object that flexibly defines detail column spans for all levels. This is a new
+parameter in Lazy-loading-TreeGrid</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="treemodel">
+<h3>TreeModel<a class="headerlink" href="#treemodel" title="Permalink to this headline">¶</a></h3>
+<p>LazyTreeGrid must have a TreeModel, the TreeModel could be the dijit.tree.ForestStoreModel/dojox.grid.LazyTreeGridStoreModel, or a custom TreeModel that inherited from them.</p>
+<p>The dojox.grid.LazyTreeGridStoreModel is designed for lazy loading children items, it will call store.fetch() with a query object {parentId: value} and start index, count number when LazyTreeGrid ask for sub-rows and these sub-items are not be loaded. There is a attribute called &#8220;serverStore&#8221; of LazyTreeGridStoreModel, this attribute indicate whether or not the data with flatted data structure is stored in server side (the data structure SHOULD BE nested when data is stored in client side since lazy loading would not be needed in that case), default is false.</p>
+<p>When using a dijit.tree.ForestStoreModel, or using dojox.grid.LazyTreeGridStoreModel with setting parameter &#8220;serverStore&#8221; to false, the children items won&#8217;t be lazy loaded but all of the root rows and sub rows would still be lazy rendered. This is more applicable to the situation small data or data stored on client side.</p>
+<p>An example LazyTreeGridStoreModel definition would look like this:</p>
+</div>
+<div class="section" id="structure-definition">
+<h3>Structure Definition<a class="headerlink" href="#structure-definition" title="Permalink to this headline">¶</a></h3>
+<p>LazyTreeGrid does not support nested structure, as well as aggregate and itemAggregates. The following example is a LazyTreeGrid defined via HTML, just like the <a class="reference internal" href="DataGrid.html#dojox-grid-datagrid"><span>dojox.grid.DataGrid</span></a>:</p>
+</div>
+<div class="section" id="formatting">
+<h3>Formatting<a class="headerlink" href="#formatting" title="Permalink to this headline">¶</a></h3>
+<p>In order to the users can format content freely for cells in different levels, the LazyTreeGrid formatters receives a &#8220;level&#8221; parameter,which is 0-based. But LazyTreeGrid formatters won&#8217;t be able to handle a negative value for row nubmer parameter since there is no aggregation for the LazyTreeGrid. Below is a simply example of the formatter:</p>
+</div>
+<div class="section" id="cells-merging">
+<h3>Cells Merging<a class="headerlink" href="#cells-merging" title="Permalink to this headline">¶</a></h3>
+<p>In order to display better for different levels, user could do cells merge based on different level via &#8220;colSpans&#8221; attribute. The value of &#8220;colSpans&#8221; is a JSON object, an example colSpans definition would look like this:</p>
+<p>The attributes of &#8220;colSpans&#8221; object (0, 1, 2, ...) indicate what level it is. The level is 0-based. The value of these attributes would be a JSON object array, each element of these array would indicate the detail of column span, the start indicate the start column index of colspan, end is end column index of colspan, and the primary is index of column which content will be displayed (start value by default).</p>
+</div>
+</div>
+<div class="section" id="public-api">
+<h2><a class="toc-backref" href="#id5">Public API</a><a class="headerlink" href="#public-api" title="Permalink to this headline">¶</a></h2>
+<p>Available public methods of the LazyTreeGrid are listed below:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="30%" />
+<col width="17%" />
+<col width="46%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Parameters</th>
+<th class="head">Return</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>setModel</td>
+<td>treeModel</td>
+<td>N/A</td>
+<td>Change the LazyTreeGrid&#8217;s treeModel.</td>
+</tr>
+<tr class="row-odd"><td>expand</td>
+<td>itemId: string?</td>
+<td>N/A</td>
+<td>Function to handle expanding the row with item matching
+the given item id.</td>
+</tr>
+<tr class="row-even"><td>collapse</td>
+<td>itemId: string?</td>
+<td>N/A</td>
+<td>Function to handle collapsing the row which item matching
+the given item id.</td>
+</tr>
+<tr class="row-odd"><td>refresh</td>
+<td>keepState: boolean</td>
+<td>N/A</td>
+<td>Function to refresh the grid content with or
+without keeping the folding state.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id6">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>For example of the LazyTreeGrid with a ForestStoreModel and client side data source, please see the file dojox/grid/tests/test_treegrid_lazyloading.html.</p>
+</div>
+<div class="section" id="accessibility">
+<h2><a class="toc-backref" href="#id7">Accessibility</a><a class="headerlink" href="#accessibility" title="Permalink to this headline">¶</a></h2>
+<p>LazyTreeGrid provides the same a11y support level as <a class="reference internal" href="DataGrid.html#dojox-grid-datagrid"><span>DataGrid</span></a> .</p>
+<p>And summary attribute can be added in a similar way as <a class="reference external" href="http://livedocs.dojotoolkit.org/dojox/grid/DataGrid#add-summary-attribute">DataGrid</a>.</p>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id8">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first"><a class="reference internal" href="DataGrid.html#dojox-grid-datagrid"><span>dojox.grid.DataGrid</span></a></p>
+<p>The base grid</p>
+</li>
+<li><p class="first"><a class="reference internal" href="EnhancedGrid.html#dojox-grid-enhancedgrid"><span>dojox.grid.EnhancedGrid</span></a></p>
+<p>An enhanced version of the base grid, which extends it in numerous useful ways</p>
+</li>
+<li><p class="first"><a class="reference internal" href="TreeGrid.html#dojox-grid-treegrid"><span>dojox.grid.TreeGrid</span></a></p>
+<p>This grid offers support for collapsible rows and model-based (<a class="reference internal" href="../../dijit/tree/ForestStoreModel.html#dijit-tree-foreststoremodel"><span>dijit.tree.ForestStoreModel</span></a>) structure</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojox.grid.LazyTreeGrid</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li><a class="reference internal" href="#supported-data-structure">Supported Data Structure</a></li>
+<li><a class="reference internal" href="#the-mechanism-of-rendering">The Mechanism of Rendering</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li><a class="reference internal" href="#treemodel">TreeModel</a></li>
+<li><a class="reference internal" href="#structure-definition">Structure Definition</a></li>
+<li><a class="reference internal" href="#formatting">Formatting</a></li>
+<li><a class="reference internal" href="#cells-merging">Cells Merging</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#public-api">Public API</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#accessibility">Accessibility</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

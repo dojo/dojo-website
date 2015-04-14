@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dijit/Tree examples &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="../dojo/index.html">Dojo</a></li>
+            <li><a href="index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dijit-tree-examples">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dijit/Tree examples</a><a class="headerlink" href="#dijit-tree-examples" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dijit-tree-examples" id="id2">dijit/Tree examples</a><ul>
+<li><a class="reference internal" href="#detect-when-tree-has-finished-loading" id="id3">Detect when tree has finished loading</a></li>
+<li><a class="reference internal" href="#expanding-and-selecting-tree-nodes-programmatically" id="id4">Expanding and selecting tree nodes programmatically</a></li>
+<li><a class="reference internal" href="#making-nodes-expand-by-clicking-on-the-label" id="id5">Making nodes expand by clicking on the label</a></li>
+<li><a class="reference internal" href="#rich-text-labels" id="id6">Rich Text Labels</a></li>
+<li><a class="reference internal" href="#tree-menu-with-links-on-nodes" id="id7">Tree menu with links on nodes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="detect-when-tree-has-finished-loading">
+<h2><a class="toc-backref" href="#id3">Detect when tree has finished loading</a><a class="headerlink" href="#detect-when-tree-has-finished-loading" title="Permalink to this headline">¶</a></h2>
+<p>Use the onLoadDeferred to detect when the Tree has finished loading</p>
+</div>
+<div class="section" id="expanding-and-selecting-tree-nodes-programmatically">
+<h2><a class="toc-backref" href="#id4">Expanding and selecting tree nodes programmatically</a><a class="headerlink" href="#expanding-and-selecting-tree-nodes-programmatically" title="Permalink to this headline">¶</a></h2>
+<p>There are a number of flags and methods for expanding/collapsing the tree and for selecting certain nodes.</p>
+<p>If the <code class="docutils literal"><span class="pre">autoExpand</span></code> flag is passed to the constructor, the Tree is initially shown with all nodes expanded.</p>
+<p>You can then call <code class="docutils literal"><span class="pre">collapseAll()</span></code> and <code class="docutils literal"><span class="pre">expandAll()</span></code> to collapse and expand the Tree, respectively.</p>
+<p>Also, <code class="docutils literal"><span class="pre">dijit.Tree</span></code> has a <code class="docutils literal"><span class="pre">paths</span></code> attribute, which can be set with the usual
+<code class="docutils literal"><span class="pre">tree.set('paths',</span> <span class="pre">[path1,</span> <span class="pre">path2])</span></code> syntax, where each path is an array of item id&#8217;s,
+starting with the root node and going down to the leaf.
+It serves two purposes: to expand the Tree to the specified nodes, and to select those nodes.</p>
+<p>Combining those all together into an example:</p>
+<p>One complication with using &#8216;paths&#8217; is that you must know the full path to the node in your data you are trying to select.
+(And by the way, there may be more than one path to a node, if your Tree has nodes with multiple parents.)</p>
+<p>The solution to that problem will depend greatly on your data layout, and the query capabilities of your store.</p>
+</div>
+<div class="section" id="making-nodes-expand-by-clicking-on-the-label">
+<h2><a class="toc-backref" href="#id5">Making nodes expand by clicking on the label</a><a class="headerlink" href="#making-nodes-expand-by-clicking-on-the-label" title="Permalink to this headline">¶</a></h2>
+<p>Nodes always expand/collapse by clicking on the [+] icon, but to make a node expand when clicking on the label,
+simply set the <code class="docutils literal"><span class="pre">openOnClick</span></code> attribute to <code class="docutils literal"><span class="pre">true</span></code></p>
+</div>
+<div class="section" id="rich-text-labels">
+<h2><a class="toc-backref" href="#id6">Rich Text Labels</a><a class="headerlink" href="#rich-text-labels" title="Permalink to this headline">¶</a></h2>
+<p>In this example, <code class="docutils literal"><span class="pre">_createTreeNode()</span></code> is overridden to allow HTML markup in the tree.
+This is a hack, in the sense that the formatting may not be perfect for large (in pixels) elements.
+But the tree will display and work properly regardless, and for simple markup, ex: bold, it works great.</p>
+</div>
+<div class="section" id="tree-menu-with-links-on-nodes">
+<h2><a class="toc-backref" href="#id7">Tree menu with links on nodes</a><a class="headerlink" href="#tree-menu-with-links-on-nodes" title="Permalink to this headline">¶</a></h2>
+<p>This example shows you how to use a tree to build a navigation menu.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dijit/Tree examples</a><ul>
+<li><a class="reference internal" href="#detect-when-tree-has-finished-loading">Detect when tree has finished loading</a></li>
+<li><a class="reference internal" href="#expanding-and-selecting-tree-nodes-programmatically">Expanding and selecting tree nodes programmatically</a></li>
+<li><a class="reference internal" href="#making-nodes-expand-by-clicking-on-the-label">Making nodes expand by clicking on the label</a></li>
+<li><a class="reference internal" href="#rich-text-labels">Rich Text Labels</a></li>
+<li><a class="reference internal" href="#tree-menu-with-links-on-nodes">Tree menu with links on nodes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

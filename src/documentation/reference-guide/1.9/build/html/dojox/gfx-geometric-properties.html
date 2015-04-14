@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojox.gfx.matrix &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="../dojo/index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojox-gfx-matrix">
+<span id="dojox-gfx-geometric-properties"></span><h1><a class="toc-backref" href="#id1">dojox.gfx.matrix</a><a class="headerlink" href="#dojox-gfx-matrix" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Eugene Lazutkin, Kun Xi, Chris Mitchell</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">0.4</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojox-gfx-matrix" id="id1">dojox.gfx.matrix</a><ul>
+<li><a class="reference internal" href="#coordinates-and-transformations" id="id2">Coordinates and transformations</a></li>
+<li><a class="reference internal" href="#matrix2d-and-normalization" id="id3">Matrix2D and normalization</a><ul>
+<li><a class="reference internal" href="#matrix2d" id="id4">Matrix2D</a></li>
+<li><a class="reference internal" href="#normalize" id="id5">normalize</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#constants" id="id6">Constants</a><ul>
+<li><a class="reference internal" href="#identity" id="id7">identity</a></li>
+<li><a class="reference internal" href="#flipx" id="id8">flipX</a></li>
+<li><a class="reference internal" href="#flipy" id="id9">flipY</a></li>
+<li><a class="reference internal" href="#flipxy" id="id10">flipXY</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#matrix-creators" id="id11">Matrix creators</a><ul>
+<li><a class="reference internal" href="#translate" id="id12">translate</a></li>
+<li><a class="reference internal" href="#scale" id="id13">scale</a></li>
+<li><a class="reference internal" href="#rotate" id="id14">rotate</a></li>
+<li><a class="reference internal" href="#skewx" id="id15">skewX</a></li>
+<li><a class="reference internal" href="#skewy" id="id16">skewY</a></li>
+<li><a class="reference internal" href="#reflect" id="id17">reflect</a></li>
+<li><a class="reference internal" href="#project" id="id18">project</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#general-operations" id="id19">General operations</a><ul>
+<li><a class="reference internal" href="#invert" id="id20">invert</a></li>
+<li><a class="reference internal" href="#clone" id="id21">clone</a></li>
+<li><a class="reference internal" href="#multiplypoint" id="id22">multiplyPoint</a></li>
+<li><a class="reference internal" href="#multiply" id="id23">multiply</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sandwich-helpers" id="id24">&#8220;Sandwich&#8221; helpers</a><ul>
+<li><a class="reference internal" href="#scaleat" id="id25">scaleAt</a></li>
+<li><a class="reference internal" href="#rotateat" id="id26">rotateAt</a></li>
+<li><a class="reference internal" href="#skewxat" id="id27">skewXAt</a></li>
+<li><a class="reference internal" href="#skewyat" id="id28">skewYAt</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="coordinates-and-transformations">
+<h2><a class="toc-backref" href="#id2">Coordinates and transformations</a><a class="headerlink" href="#coordinates-and-transformations" title="Permalink to this headline">¶</a></h2>
+<p>In order to understand transformations you need to be familiar with fundamentals of matrices (matrix multiplication, multiplication of a vector by a matrix, order of multiplications). <a class="reference internal" href="gfx.html#dojox-gfx"><span>dojox.gfx</span></a> uses a mnemonic way to describe a matrix: <code class="docutils literal"><span class="pre">xx</span></code> scales an <code class="docutils literal"><span class="pre">X</span></code> component of a coordinate, <code class="docutils literal"><span class="pre">yy</span></code> scales a <code class="docutils literal"><span class="pre">Y</span></code> component, <code class="docutils literal"><span class="pre">xy</span></code>, and <code class="docutils literal"><span class="pre">yx</span></code> affect both components, <code class="docutils literal"><span class="pre">dx</span></code> moves an <code class="docutils literal"><span class="pre">X</span></code> component, and <code class="docutils literal"><span class="pre">dy</span></code> moves a <code class="docutils literal"><span class="pre">Y</span></code> component. If you want to refresh your memory, read our <a class="reference internal" href="gfx/matrix-tutorial.html#dojox-gfx-matrix-tutorial"><span>Matrix tutorial</span></a>.</p>
+<p>Simple examples:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">{xx:</span> <span class="pre">2}</span></code> &#8212; stretches the <code class="docutils literal"><span class="pre">X</span></code> dimension by 2.</li>
+<li><code class="docutils literal"><span class="pre">{yy:</span> <span class="pre">0.5}</span></code> &#8212; <code class="docutils literal"><span class="pre">&quot;stretches&quot;</span></code> the <code class="docutils literal"><span class="pre">Y</span></code> dimension by 0.5 (shrinks by 2).</li>
+<li><code class="docutils literal"><span class="pre">{dx:</span> <span class="pre">5,</span> <span class="pre">dy:</span> <span class="pre">10}</span></code> &#8212; shifts an <code class="docutils literal"><span class="pre">X</span></code> coordinate by 5, a <code class="docutils literal"><span class="pre">Y</span></code> coordinate by 10.</li>
+<li><code class="docutils literal"><span class="pre">{xx:</span> <span class="pre">0.866,</span> <span class="pre">xy:</span> <span class="pre">0.5,</span> <span class="pre">yx:</span> <span class="pre">−0.5,</span> <span class="pre">yy:</span> <span class="pre">0.866}</span></code> &#8212; rotates everything by approximately 30 degrees clockwise (CW) around point <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">{xx:</span> <span class="pre">0,</span> <span class="pre">xy:</span> <span class="pre">1,</span> <span class="pre">yx:</span> <span class="pre">−1,</span> <span class="pre">yy:</span> <span class="pre">0,</span> <span class="pre">dx:</span> <span class="pre">100}</span></code> &#8212; rotates everything by 90 degrees CW around <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code>, and moves things right by 100.</li>
+</ul>
+<p>Don’t worry, in most cases you don’t need to calculate all members of a transformation matrix directly. As you can see not all members of matrix should be specified &#8212; all skipped members going to be copied from the identity matrix.</p>
+<p>There is a shortcut for scaling &#8212; if a number N is used instead of a matrix, it is assumed that it represents a uniform scaling matrix <code class="docutils literal"><span class="pre">{xx:</span> <span class="pre">N,</span> <span class="pre">yy:</span> <span class="pre">N}</span></code>.</p>
+<p>There is a shortcut for multiplication (see <a class="reference internal" href="#multiply">multiply</a> for details) &#8212; is an array is used it is treated as an array of matrices, and all matrices will be multiplied to produce the final matrix.</p>
+<p><a class="reference internal" href="gfx/matrix-tutorial.html#dojox-gfx-matrix-tutorial"><span>dojox.gfx.matrix</span></a> defines <code class="docutils literal"><span class="pre">Matrix2D</span></code> class, as well as numerous helpers (<code class="docutils literal"><span class="pre">Matrix2D</span></code> is propagated to <code class="docutils literal"><span class="pre">dojox.gfx</span></code> namespace for convenience). Most important of them (all in <code class="docutils literal"><span class="pre">dojox.gfx.matrix</span></code> namespace) are listed below.</p>
+</div>
+<div class="section" id="matrix2d-and-normalization">
+<h2><a class="toc-backref" href="#id3">Matrix2D and normalization</a><a class="headerlink" href="#matrix2d-and-normalization" title="Permalink to this headline">¶</a></h2>
+<p>As you can see developers can specify matrices in a variety of ways. But for performance reasons internally it is always converted to <code class="docutils literal"><span class="pre">Matrix2D</span></code>, which has all proper attributes defined. You can achieve this normalization by instantiating <a class="reference internal" href="#matrix2d">Matrix2D</a> object or by invoking a creator function called <a class="reference internal" href="#normalize">normalize</a>.</p>
+<div class="section" id="matrix2d">
+<h3><a class="toc-backref" href="#id4">Matrix2D</a><a class="headerlink" href="#matrix2d" title="Permalink to this headline">¶</a></h3>
+<p>Matrix2D is the class for our 2 by 3 matrix. You can always use it to normalize your matrix expression to the canonical representation. It is available in both namespaces: <code class="docutils literal"><span class="pre">dojox.gfx</span></code> and <code class="docutils literal"><span class="pre">dojox.gfx.matrix</span></code>.</p>
+<p>Examples:</p>
+</div>
+<div class="section" id="normalize">
+<h3><a class="toc-backref" href="#id5">normalize</a><a class="headerlink" href="#normalize" title="Permalink to this headline">¶</a></h3>
+<p>There is one more useful function: <code class="docutils literal"><span class="pre">normalize(m)</span></code>, which returns <a class="reference internal" href="#matrix2d">Matrix2D</a>:</p>
+<p>The same normalization effect can be achieved with creating a matrix directly.</p>
+</div>
+</div>
+<div class="section" id="constants">
+<h2><a class="toc-backref" href="#id6">Constants</a><a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<p>Some operations do not require any parameters and implemented as predefined constants.</p>
+<div class="section" id="identity">
+<h3><a class="toc-backref" href="#id7">identity</a><a class="headerlink" href="#identity" title="Permalink to this headline">¶</a></h3>
+<p>The identity matrix. This matrix doesn’t change a picture at all.</p>
+</div>
+<div class="section" id="flipx">
+<h3><a class="toc-backref" href="#id8">flipX</a><a class="headerlink" href="#flipx" title="Permalink to this headline">¶</a></h3>
+<p>Changes the sign of all <code class="docutils literal"><span class="pre">X</span></code> coordinates. This matrix mirrors the picture around the <code class="docutils literal"><span class="pre">Y</span></code> axis.</p>
+</div>
+<div class="section" id="flipy">
+<h3><a class="toc-backref" href="#id9">flipY</a><a class="headerlink" href="#flipy" title="Permalink to this headline">¶</a></h3>
+<p>Changes the sign of all <code class="docutils literal"><span class="pre">Y</span></code> coordinates. This matrix mirrors the picture around the <code class="docutils literal"><span class="pre">X</span></code> axis.</p>
+</div>
+<div class="section" id="flipxy">
+<h3><a class="toc-backref" href="#id10">flipXY</a><a class="headerlink" href="#flipxy" title="Permalink to this headline">¶</a></h3>
+<p>Changes the sign of all coordinates. This matrix rotates the picture by 180 degrees around <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code> point. Another way to say it: it mirrors all points around <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code>.</p>
+</div>
+</div>
+<div class="section" id="matrix-creators">
+<h2><a class="toc-backref" href="#id11">Matrix creators</a><a class="headerlink" href="#matrix-creators" title="Permalink to this headline">¶</a></h2>
+<p>Matrices can be used to express any linear transformation of coordinates. To simplify the task of creating matrices for common operations numerous matrix creators are provided.</p>
+<p>In all signatures <code class="docutils literal"><span class="pre">a</span></code>, <code class="docutils literal"><span class="pre">b</span></code>, <code class="docutils literal"><span class="pre">c</span></code>, and <code class="docutils literal"><span class="pre">e</span></code> are numbers (coordinate components or scaling factors), <code class="docutils literal"><span class="pre">p</span></code> is a 2D coordinate, <code class="docutils literal"><span class="pre">r</span></code> is an angle in radians, <code class="docutils literal"><span class="pre">d</span></code> is an angle in degrees (positive value of an angle is CW), <code class="docutils literal"><span class="pre">m</span></code> is a matrix.</p>
+<p>If a function accepts an angle value, there are two versions of this function: with radians, and with degrees. The latter will be denoted with <code class="docutils literal"><span class="pre">g</span></code> suffix. Example: <code class="docutils literal"><span class="pre">rotate(r)</span></code> accepts radians, while <code class="docutils literal"><span class="pre">rotateg(d)</span></code> accepts degrees.</p>
+<div class="section" id="translate">
+<h3><a class="toc-backref" href="#id12">translate</a><a class="headerlink" href="#translate" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">translate(a,</span> <span class="pre">b)</span></code>, <code class="docutils literal"><span class="pre">translate(p)</span></code>. Shifts everything:</p>
+<blockquote>
+<div><ul class="simple">
+<li>by <code class="docutils literal"><span class="pre">{dx:</span> <span class="pre">a,</span> <span class="pre">dy:</span> <span class="pre">b}</span></code></li>
+<li>by <code class="docutils literal"><span class="pre">{dx:</span> <span class="pre">p.x,</span> <span class="pre">dy:</span> <span class="pre">p.y}</span></code></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="scale">
+<h3><a class="toc-backref" href="#id13">scale</a><a class="headerlink" href="#scale" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">scale(a,</span> <span class="pre">b)</span></code>, <code class="docutils literal"><span class="pre">scale(a)</span></code>, <code class="docutils literal"><span class="pre">scale(p)</span></code>. Scales a picture:</p>
+<blockquote>
+<div><ul class="simple">
+<li>by <code class="docutils literal"><span class="pre">{xx:</span> <span class="pre">a,</span> <span class="pre">yy:</span> <span class="pre">b}</span></code></li>
+<li>by <code class="docutils literal"><span class="pre">{xx:</span> <span class="pre">a,</span> <span class="pre">yy:</span> <span class="pre">a}</span></code></li>
+<li>by <code class="docutils literal"><span class="pre">{xx:</span> <span class="pre">p.x,</span> <span class="pre">yy:</span> <span class="pre">p.y}</span></code></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="rotate">
+<h3><a class="toc-backref" href="#id14">rotate</a><a class="headerlink" href="#rotate" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">rotate(r)</span></code>, <code class="docutils literal"><span class="pre">rotateg(d)</span></code>. Rotates a picture around <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>by <code class="docutils literal"><span class="pre">r</span></code> radians</li>
+<li>by <code class="docutils literal"><span class="pre">d</span></code> degrees</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="skewx">
+<h3><a class="toc-backref" href="#id15">skewX</a><a class="headerlink" href="#skewx" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">skewX(r)</span></code>, <code class="docutils literal"><span class="pre">skewXg(d)</span></code>. Skews a picture around <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code> in the <code class="docutils literal"><span class="pre">X</span></code> dimension:</p>
+<blockquote>
+<div><ul class="simple">
+<li>by <code class="docutils literal"><span class="pre">r</span></code> radians</li>
+<li>by <code class="docutils literal"><span class="pre">d</span></code> degrees</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="skewy">
+<h3><a class="toc-backref" href="#id16">skewY</a><a class="headerlink" href="#skewy" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">skewY(r)</span></code>, <code class="docutils literal"><span class="pre">skewYg(d)</span></code>. Skews a picture around <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code> in the <code class="docutils literal"><span class="pre">Y</span></code> dimension:</p>
+<blockquote>
+<div><ul class="simple">
+<li>by <code class="docutils literal"><span class="pre">r</span></code> radians</li>
+<li>by <code class="docutils literal"><span class="pre">d</span></code> degrees</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="reflect">
+<h3><a class="toc-backref" href="#id17">reflect</a><a class="headerlink" href="#reflect" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">reflect(a,</span> <span class="pre">b)</span></code>, <code class="docutils literal"><span class="pre">reflect(p)</span></code>. Reflects points around a line that goes through the origin <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>around the line <code class="docutils literal"><span class="pre">[(0,</span> <span class="pre">0),</span> <span class="pre">(a,</span> <span class="pre">b)]</span></code></li>
+<li>around the line <code class="docutils literal"><span class="pre">[(0,</span> <span class="pre">0),</span> <span class="pre">(p.x,</span> <span class="pre">p.y)]</span></code></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="project">
+<h3><a class="toc-backref" href="#id18">project</a><a class="headerlink" href="#project" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">project(a,</span> <span class="pre">b)</span></code>, <code class="docutils literal"><span class="pre">project(p)</span></code>. Projects points on a line that goes through the origin <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code>:</p>
+<blockquote>
+<div><ul class="simple">
+<li>on the line <code class="docutils literal"><span class="pre">[(0,</span> <span class="pre">0),</span> <span class="pre">(a,</span> <span class="pre">b)]</span></code></li>
+<li>on the line <code class="docutils literal"><span class="pre">[(0,</span> <span class="pre">0),</span> <span class="pre">(p.x,</span> <span class="pre">p.y)]</span></code></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="general-operations">
+<h2><a class="toc-backref" href="#id19">General operations</a><a class="headerlink" href="#general-operations" title="Permalink to this headline">¶</a></h2>
+<p>In all signatures <code class="docutils literal"><span class="pre">a</span></code>, <code class="docutils literal"><span class="pre">b</span></code>, <code class="docutils literal"><span class="pre">c</span></code>, and <code class="docutils literal"><span class="pre">e</span></code> are numbers (coordinate components or scaling factors), <code class="docutils literal"><span class="pre">p</span></code> is a 2D coordinate, <code class="docutils literal"><span class="pre">r</span></code> is an angle in radians, <code class="docutils literal"><span class="pre">d</span></code> is an angle in degrees (positive value of an angle is CW), <code class="docutils literal"><span class="pre">m</span></code> is a matrix.</p>
+<div class="section" id="invert">
+<h3><a class="toc-backref" href="#id20">invert</a><a class="headerlink" href="#invert" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">invert(m)</span></code>. Inverts a matrix. This useful function calculates a matrix, which will do the opposite transformation to the m matrix effectively undoing it. For example, <code class="docutils literal"><span class="pre">scale(2)</span></code> produces a matrix to scale uniformly a picture by 2. The opposite matrix is going to be <code class="docutils literal"><span class="pre">scale(0.5)</span></code>. We can produce the same result with <code class="docutils literal"><span class="pre">invert(scale(2))</span></code>. While it seems complicated for this simple case, frequently it is the only way to calculate an inverted matrix for complex transformation, especially when we don’t know how it was produced initially.</p>
+</div>
+<div class="section" id="clone">
+<h3><a class="toc-backref" href="#id21">clone</a><a class="headerlink" href="#clone" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">clone(m)</span></code>. Creates a copy of the <code class="docutils literal"><span class="pre">m</span></code> matrix.</p>
+</div>
+<div class="section" id="multiplypoint">
+<h3><a class="toc-backref" href="#id22">multiplyPoint</a><a class="headerlink" href="#multiplypoint" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">multiplyPoint(m,</span> <span class="pre">a,</span> <span class="pre">b)</span></code>, <code class="docutils literal"><span class="pre">multiplyPoint(m,</span> <span class="pre">p)</span></code>. Applies a transformation to a coordinate.</p>
+</div>
+<div class="section" id="multiply">
+<h3><a class="toc-backref" href="#id23">multiply</a><a class="headerlink" href="#multiply" title="Permalink to this headline">¶</a></h3>
+<p>Signatures: <code class="docutils literal"><span class="pre">multiply(m1,</span> <span class="pre">m2,</span> <span class="pre">...)</span></code>. Multiplies all its parameters to create a single matrix.</p>
+<p>This function is extremely useful and there is a shortcut for it: anywhere a matrix is expected, an array of matrices can be specified as well. Examples:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">[2,</span> <span class="pre">rotateg(45)]</span></code> &#8212; rotates everything 45 degrees CW around <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code> and scales everything by 2 after that.</li>
+<li><code class="docutils literal"><span class="pre">[{dy:</span> <span class="pre">10},</span> <span class="pre">scale(2,</span> <span class="pre">1)]</span></code> &#8212; scales all <code class="docutils literal"><span class="pre">X</span></code> coordinates by 2, and moves the result down by 10.</li>
+</ul>
+<p>More complex example: imagine you have a surface 500 by 500 pixels, and you want everything in it to be magnified around its center by 2, and rotated (around the center as well) by 30 degrees CW. It is easy: <code class="docutils literal"><span class="pre">[translate(250,</span> <span class="pre">250),</span> <span class="pre">rotateg(−30),</span> <span class="pre">scale(2),</span> <span class="pre">translate(-250,</span> <span class="pre">-250)]</span></code>. Explanations:</p>
+<ol class="arabic simple">
+<li>All scaling, rotating, and skewing operations work around <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code> point. Let’s move the center of our picture to <code class="docutils literal"><span class="pre">(0,</span> <span class="pre">0)</span></code>: <code class="docutils literal"><span class="pre">translate(−250,</span> <span class="pre">−250)</span></code>.</li>
+<li>Now we can scale it: <code class="docutils literal"><span class="pre">scale(2)</span></code>.</li>
+<li>Now we can rotate it: <code class="docutils literal"><span class="pre">rotateg(−30)</span></code>.</li>
+<li>Now let’s move our center back: <code class="docutils literal"><span class="pre">translate(250,</span> <span class="pre">250)</span></code>.</li>
+</ol>
+<p>You can see that this kind of transformations follow a <code class="docutils literal"><span class="pre">&quot;sandwich&quot;</span></code> pattern, where the first and the last transformation move an immutable point to/from the origin of coordinates before performing other origin-based operations. The first operation is usually a translation to the origin, and the last is the inverse of the same translation.</p>
+</div>
+</div>
+<div class="section" id="sandwich-helpers">
+<h2><a class="toc-backref" href="#id24">&#8220;Sandwich&#8221; helpers</a><a class="headerlink" href="#sandwich-helpers" title="Permalink to this headline">¶</a></h2>
+<p>These &#8220;around the point&#8221; operations are so important that <code class="docutils literal"><span class="pre">dojox.gfx</span></code> provides several helpers for common transformations. Usually they are named like their middle &#8220;meaty&#8221; part with the suffix <code class="docutils literal"><span class="pre">At</span></code>. Example: <code class="docutils literal"><span class="pre">scale(a)</span></code> =&gt; <code class="docutils literal"><span class="pre">scaleAt(a,</span> <span class="pre">p)</span></code>.</p>
+<p>In all signatures <code class="docutils literal"><span class="pre">a</span></code>, <code class="docutils literal"><span class="pre">b</span></code>, <code class="docutils literal"><span class="pre">c</span></code>, and <code class="docutils literal"><span class="pre">e</span></code> are numbers (coordinate components or scaling factors), <code class="docutils literal"><span class="pre">p</span></code> is a 2D coordinate, <code class="docutils literal"><span class="pre">r</span></code> is an angle in radians, <code class="docutils literal"><span class="pre">d</span></code> is an angle in degrees (positive value of an angle is CW), <code class="docutils literal"><span class="pre">m</span></code> is a matrix.</p>
+<p>If a function accepts an angle value, there are two versions of this function: with radians, and with degrees. The latter will be denoted with <code class="docutils literal"><span class="pre">g</span></code> suffix. Example: <code class="docutils literal"><span class="pre">rotate(r)</span></code> accepts radians, while <code class="docutils literal"><span class="pre">rotateg(d)</span></code> accepts degrees.</p>
+<div class="section" id="scaleat">
+<h3><a class="toc-backref" href="#id25">scaleAt</a><a class="headerlink" href="#scaleat" title="Permalink to this headline">¶</a></h3>
+<p>Applies <a class="reference internal" href="#scale">scale</a> with the center at the given point.</p>
+<p>Signatures:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">scaleAt(a,</span> <span class="pre">p)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">scale(a)</span></code> around <code class="docutils literal"><span class="pre">(p.x,</span> <span class="pre">p.y)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">scaleAt(a,</span> <span class="pre">b,</span> <span class="pre">c)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">scale(a)</span></code> around <code class="docutils literal"><span class="pre">(b,</span> <span class="pre">c)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">scaleAt(a,</span> <span class="pre">b,</span> <span class="pre">p)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">scale(a,</span> <span class="pre">b)</span></code> around <code class="docutils literal"><span class="pre">(p.x,</span> <span class="pre">p.y)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">scaleAt(a,</span> <span class="pre">b,</span> <span class="pre">c,</span> <span class="pre">e)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">scale(a,</span> <span class="pre">b)</span></code> around <code class="docutils literal"><span class="pre">(c,</span> <span class="pre">e)</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="rotateat">
+<h3><a class="toc-backref" href="#id26">rotateAt</a><a class="headerlink" href="#rotateat" title="Permalink to this headline">¶</a></h3>
+<p>Applies <a class="reference internal" href="#rotate">rotate</a> with the center at the given point.</p>
+<p>Signatures:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">rotateAt(r,</span> <span class="pre">p)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">rotate(r)</span></code> at <code class="docutils literal"><span class="pre">(p.x,</span> <span class="pre">p.y)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">rotateAt(r,</span> <span class="pre">a,</span> <span class="pre">b)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">rotate(r)</span></code> at <code class="docutils literal"><span class="pre">(a,</span> <span class="pre">b)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">rotategAt(d,</span> <span class="pre">p)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">rotateg(d)</span></code> at <code class="docutils literal"><span class="pre">(p.x,</span> <span class="pre">p.y)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">rotategAt(d,</span> <span class="pre">a,</span> <span class="pre">b)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">rotateg(d)</span></code> at <code class="docutils literal"><span class="pre">(a,</span> <span class="pre">b)</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="skewxat">
+<h3><a class="toc-backref" href="#id27">skewXAt</a><a class="headerlink" href="#skewxat" title="Permalink to this headline">¶</a></h3>
+<p>Applies <a class="reference internal" href="#skewx">skewX</a> with the center at the given point.</p>
+<p>Signatures:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">skewXAt(r,</span> <span class="pre">p)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">skewX(r)</span></code> at <code class="docutils literal"><span class="pre">(p.x,</span> <span class="pre">p.y)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">skewXAt(r,</span> <span class="pre">a,</span> <span class="pre">b)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">skewX(r)</span></code> at <code class="docutils literal"><span class="pre">(a,</span> <span class="pre">b)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">skewXgAt(d,</span> <span class="pre">p)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">skewXg(d)</span></code> at <code class="docutils literal"><span class="pre">(p.x,</span> <span class="pre">p.y)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">skewXgAt(d,</span> <span class="pre">a,</span> <span class="pre">b)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">skewXg(d)</span></code> at <code class="docutils literal"><span class="pre">(a,</span> <span class="pre">b)</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="skewyat">
+<h3><a class="toc-backref" href="#id28">skewYAt</a><a class="headerlink" href="#skewyat" title="Permalink to this headline">¶</a></h3>
+<p>Applies <a class="reference internal" href="#skewy">skewY</a> with the center at the given point.</p>
+<p>Signatures:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">skewYAt(r,</span> <span class="pre">p)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">skewY(r)</span></code> at <code class="docutils literal"><span class="pre">(p.x,</span> <span class="pre">p.y)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">skewYAt(r,</span> <span class="pre">a,</span> <span class="pre">b)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">skewY(r)</span></code> at <code class="docutils literal"><span class="pre">(a,</span> <span class="pre">b)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">skewYgAt(d,</span> <span class="pre">p)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">skewYg(d)</span></code> at <code class="docutils literal"><span class="pre">(p.x,</span> <span class="pre">p.y)</span></code></p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">skewYgAt(d,</span> <span class="pre">a,</span> <span class="pre">b)</span></code></dt>
+<dd><p class="first last"><code class="docutils literal"><span class="pre">skewYg(d)</span></code> at <code class="docutils literal"><span class="pre">(a,</span> <span class="pre">b)</span></code></p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojox.gfx.matrix</a><ul>
+<li><a class="reference internal" href="#coordinates-and-transformations">Coordinates and transformations</a></li>
+<li><a class="reference internal" href="#matrix2d-and-normalization">Matrix2D and normalization</a><ul>
+<li><a class="reference internal" href="#matrix2d">Matrix2D</a></li>
+<li><a class="reference internal" href="#normalize">normalize</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#constants">Constants</a><ul>
+<li><a class="reference internal" href="#identity">identity</a></li>
+<li><a class="reference internal" href="#flipx">flipX</a></li>
+<li><a class="reference internal" href="#flipy">flipY</a></li>
+<li><a class="reference internal" href="#flipxy">flipXY</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#matrix-creators">Matrix creators</a><ul>
+<li><a class="reference internal" href="#translate">translate</a></li>
+<li><a class="reference internal" href="#scale">scale</a></li>
+<li><a class="reference internal" href="#rotate">rotate</a></li>
+<li><a class="reference internal" href="#skewx">skewX</a></li>
+<li><a class="reference internal" href="#skewy">skewY</a></li>
+<li><a class="reference internal" href="#reflect">reflect</a></li>
+<li><a class="reference internal" href="#project">project</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#general-operations">General operations</a><ul>
+<li><a class="reference internal" href="#invert">invert</a></li>
+<li><a class="reference internal" href="#clone">clone</a></li>
+<li><a class="reference internal" href="#multiplypoint">multiplyPoint</a></li>
+<li><a class="reference internal" href="#multiply">multiply</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sandwich-helpers">&#8220;Sandwich&#8221; helpers</a><ul>
+<li><a class="reference internal" href="#scaleat">scaleAt</a></li>
+<li><a class="reference internal" href="#rotateat">rotateAt</a></li>
+<li><a class="reference internal" href="#skewxat">skewXAt</a></li>
+<li><a class="reference internal" href="#skewyat">skewYAt</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

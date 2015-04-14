@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Dijit Accessibility Resources &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../../dojo/index.html">Dojo</a></li>
+            <li><a href="../index.html">Dijit</a></li>
+            <li><a href="../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dijit-accessibility-resources">
+<span id="dijit-a11y-resources"></span><h1><a class="toc-backref" href="#id1">Dijit Accessibility Resources</a><a class="headerlink" href="#dijit-accessibility-resources" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Becky Gibson</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dijit-accessibility-resources" id="id1">Dijit Accessibility Resources</a><ul>
+<li><a class="reference internal" href="#role-apis-in-dojo-1-2" id="id2">Role APIs in Dojo 1.2</a></li>
+<li><a class="reference internal" href="#state-apis-in-dojo-1-2" id="id3">State APIs in Dojo 1.2</a></li>
+<li><a class="reference internal" href="#examples-of-setting-role-and-state" id="id4">Examples of setting role and state</a></li>
+<li><a class="reference internal" href="#setting-role-and-state-in-the-widget-template" id="id5">Setting Role and State in the Widget Template</a></li>
+<li><a class="reference internal" href="#high-contrast-mode-detection" id="id6">High Contrast Mode Detection</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Functions for dealing with accessibility are found in dijit._base.wai.js.
+The name of the file is derived from the <a class="reference external" href="http://www.w3.org/WAI/">W3C Web Accessibility Initiative</a> which is hosting the <a class="reference external" href="http://www.w3.org/WAI/PF/aria/">ARIA</a> specification.
+The dijit wai APIs are used to manipulate ARIA roles and properties.
+In addition, the onload function to detect high contrast mode is part of dijit.wai.</p>
+<p>The dijit wai module is provided to normalize setting the roles and states.
+The ARIA properties are designed to be used with XHTML via namespaces Since a content-type of application/xhtml+xml is required to fully support namespaces an alternate solution is needed for the most commonly supported content-type of text/html.
+In Firefox 2, the roles are set by prefixing the role value with &#8220;wairole&#8221;.
+In other browsers, no prefix is required.
+In Firefox 2, states can be manipulated using the DOM namespace apis: getAttributeNS, setAttributeNS, and removeAttributeNS.
+In other browsers, the generic attribute apis, getAttribute, setAttribute, removeAttribute, are used and the property name is prefixed by &#8220;aria-&#8221; such as &#8220;aria-expanded&#8221;.
+The dijit methods for manipulating roles and properties perform the browser detection and make the correct calls.
+The developer needs to provide only the role or property name and value.</p>
+<p>In addition to ARIA roles, a set of navigation roles from the <a class="reference external" href="http://www.w3.org/TR/2007/WD-xhtml-role-20071004/">XHTML Role Attribute Module</a> are also supported.
+An element may have a navigation role in addition to an ARIA role.
+The dijit methods for interacting with roles, only affect ARIA roles, any navigation roles are not modified.</p>
+<p>There are separate dijit methods for querying, getting, setting, and removing ARIA roles and states.</p>
+<div class="section" id="role-apis-in-dojo-1-2">
+<h2><a class="toc-backref" href="#id2">Role APIs in Dojo 1.2</a><a class="headerlink" href="#role-apis-in-dojo-1-2" title="Permalink to this headline">¶</a></h2>
+<p>The role apis were modified in 1.2 to affect only ARIA roles and not any navigation role that may have already been defined on the object.
+Some of the methods now take an additional parameter but are still compatible with the 1.1 behavior.</p>
+<p>The XHTML navigation roles are</p>
+<ul class="simple">
+<li>banner</li>
+<li>contentinfo</li>
+<li>definition</li>
+<li>main</li>
+<li>navigation</li>
+<li>search</li>
+<li>note</li>
+<li>secondary</li>
+<li>seealso</li>
+</ul>
+<p>These are NOT WAI roles and are thus ignored by the dijit getWaiRole and setWaiRole apis.</p>
+<p>If the role parameter is provided, returns true if elem has the specified role and false if not.
+For backwards compatibility with 1.1, if the role parameter is not provided, returns true if any role value exists on elem.</p>
+<p>Returns any role set on elem which is NOT an XHTML Navigation role or an empty string if no role attribute has been set on elem.</p>
+<p>Set the provided role on elem.
+If the current browser is Firefox and the version is prior to release 3,  replace any existing role(s) with &#8220;wairole:&#8221; prepended to the role provided.
+In other browsers, if the element already has an existing WAI role, replace it with the role provided and maintain any existing XHTML Navigation roles.</p>
+<p>Remove the specified role from elem.
+For backwards compatibility with 1.1, if no role parameter is provided, remove the entire role attribute from elem.</p>
+</div>
+<div class="section" id="state-apis-in-dojo-1-2">
+<h2><a class="toc-backref" href="#id3">State APIs in Dojo 1.2</a><a class="headerlink" href="#state-apis-in-dojo-1-2" title="Permalink to this headline">¶</a></h2>
+<p>These dijit methods set the state values onto an element.
+In Firefox versions previous to 3 the attributes are set in the &#8220;<a class="reference external" href="http://www.w3.org/2005/07/aaa">http://www.w3.org/2005/07/aaa</a>&#8221; namespace using the getAttritbuteNS() and setAttrbuteNS() apis.
+In other browsers &#8220;aria-&#8221; is added to the front of the state name and the setAttribute() and setAttribute() apis are used.
+The state parameter must be a valid ARIA state name and the value the appropriate value for the specified state.</p>
+<p>Returns true if elem has the specified state, false if not.</p>
+<p>Returns the value of state set on elem or the empty string if elem has no state set.</p>
+<p>Sets the specified state and value on elem.</p>
+<p>Remove the specified state from elem.</p>
+</div>
+<div class="section" id="examples-of-setting-role-and-state">
+<h2><a class="toc-backref" href="#id4">Examples of setting role and state</a><a class="headerlink" href="#examples-of-setting-role-and-state" title="Permalink to this headline">¶</a></h2>
+<p>The following will set a role of treeitem onto a DOM node:</p>
+<p>This example sets the state of the treeitem to expanded:</p>
+<p>This example removes the valuenow property from an indeterminate progress bar.</p>
+</div>
+<div class="section" id="setting-role-and-state-in-the-widget-template">
+<h2><a class="toc-backref" href="#id5">Setting Role and State in the Widget Template</a><a class="headerlink" href="#setting-role-and-state-in-the-widget-template" title="Permalink to this headline">¶</a></h2>
+<p>The role and state can also be set via the widget template using the role or aria-* prefix.
+Setting the role in the template is the same as setting it via scripting – the dijit.setWaiRole() method will be called during widget instantiation.
+Simply add the role=”actualrole” or aria-state=”value” parameters into the template markup for the element.
+The element will be passed as the nodeObj into the dijit.setWaiRole() and dijit.setWaiState() methods.
+The state is specified as a state name in attribute (aria-stateName) and state value.
+This mechanism is useful when templates are used to create the objects requiring a role value and when the state is known at creation time.</p>
+<p>Here is an example of setting the role in the diijt tree template.
+The domNode is given the “tree” role.</p>
+<p>The role or state can also be specified via variables.
+This example shows an excerpt from the dijit button template that sets the role and state on the button element.</p>
+</div>
+<div class="section" id="high-contrast-mode-detection">
+<h2><a class="toc-backref" href="#id6">High Contrast Mode Detection</a><a class="headerlink" href="#high-contrast-mode-detection" title="Permalink to this headline">¶</a></h2>
+<p>As discussed in the <a class="reference internal" href="strategy.html#dijit-a11y-strategy"><span>Dijit A11y Strategy</span></a> section, dijit performs a check to determine if high contrast mode or images off mode has been set in the browser.
+When this mode is detected the dijit-a11y class is set onto the body element of the page.
+Appropriate dijit-a11y classes have been defined that make appropriate text alternatives visible for any CSS background images (which are no longer visible when high contrast mode has been set) that have been used within the widgets.</p>
+<p>This is meant to be called once before the widgets have rendered to detect high contrast mode and set the dijit-a11y className onto the body element of the page.
+The detection mechanism is to create a temporary div with a background image, set top and bottom borders in one color and left and right borders in another color, and move it off screen via CSS.
+Add the div to the body element and check the computed style of the div.
+If the colors for the top and right borders are computed as the same, then high contrast mode has been set.
+Also, in Firefox, images off mode can be determined by examining the value of the background image.
+Currently images off can not be detected in IE unless high contrast mode has also been set.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">Dijit Accessibility Resources</a><ul>
+<li><a class="reference internal" href="#role-apis-in-dojo-1-2">Role APIs in Dojo 1.2</a></li>
+<li><a class="reference internal" href="#state-apis-in-dojo-1-2">State APIs in Dojo 1.2</a></li>
+<li><a class="reference internal" href="#examples-of-setting-role-and-state">Examples of setting role and state</a></li>
+<li><a class="reference internal" href="#setting-role-and-state-in-the-widget-template">Setting Role and State in the Widget Template</a></li>
+<li><a class="reference internal" href="#high-contrast-mode-detection">High Contrast Mode Detection</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

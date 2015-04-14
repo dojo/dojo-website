@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>depsDeclarative &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../../index.html">Startpage</a></li>
+            <li><a href="../../dojo/index.html">Dojo</a></li>
+            <li><a href="../../dijit/index.html">Dijit</a></li>
+            <li><a href="../../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="depsdeclarative">
+<span id="build-transforms-depsdeclarative"></span><h1><a class="toc-backref" href="#id1">depsDeclarative</a><a class="headerlink" href="#depsdeclarative" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Kitson Kelly</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#depsdeclarative" id="id1">depsDeclarative</a><ul>
+<li><a class="reference internal" href="#description" id="id2">Description</a></li>
+<li><a class="reference internal" href="#see-also" id="id3">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Scans appropriately tagged resources for any declarative module dependencies and adds them to a layer.  This is designed to specifically compliment the <a class="reference internal" href="../../dojo/parser.html#dojo-parser"><span>dojo/parser</span></a> features of auto-require and declarative require.</p>
+<div class="section" id="description">
+<h2><a class="toc-backref" href="#id2">Description</a><a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>Modules or resources tagged with <code class="docutils literal"><span class="pre">declarative</span></code> will be scanned for their declarative dependencies.  Then each layer of the build will be inspected for the module/resource and be replaced with the appropriate dependencies.</p>
+<p>Using the auto-require feature, but not building your dependencies into a layer could dramatically decrease the performance of your production application.  This provides you a mechanism to use the feature without needing to worry about explicitly requiring your modules in JavaScript.  For example if you have the following resource of <code class="docutils literal"><span class="pre">index.html</span></code> in your application:</p>
+<p>The <code class="docutils literal"><span class="pre">dojo/parser</span></code> will automatically load <code class="docutils literal"><span class="pre">dijit/layout/ContentPane</span></code> and <code class="docutils literal"><span class="pre">dijit/form/Button</span></code> if they are not
+already loaded.  If you then, in your build profile, tag the resource as declarative:</p>
+<p>And then include it in a layer (like your <code class="docutils literal"><span class="pre">dojo/dojo</span></code> one):</p>
+<p>Then you will get a built layer that includes <code class="docutils literal"><span class="pre">dijit/layout/ContentPane</span></code> and <code class="docutils literal"><span class="pre">dijit/form/Button</span></code> plus all the
+necessary dependencies.  The name of the file to be scanned for dependencies needs to be a resolvable Module ID (MID)
+by the builder, which usually means that the file is within a package and identified in your package map within the
+build profile, for example, in the above situation, you might have a <code class="docutils literal"><span class="pre">packages</span></code> property of:</p>
+<p>It is worthy to note that the builder will not &#8220;build&#8221; your resources into the layer, like if you used the
+<code class="docutils literal"><span class="pre">dojo/text</span></code> plugin, where the resource would be loaded and in-lined into the layer, it simply scans the resource for
+dependencies.</p>
+<p>The transform also supports the declarative require syntax.  Therefore if you have something like:</p>
+<p>And that resource is also tagged and included in a layer, the <code class="docutils literal"><span class="pre">dojo/on</span></code> module would be added as a dependency.</p>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id3">See Also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="../../dojo/parser.html#dojo-parser"><span>dojo/parser</span></a> - The Dojo declarative syntax parser.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">depsDeclarative</a><ul>
+<li><a class="reference internal" href="#description">Description</a></li>
+<li><a class="reference internal" href="#see-also">See Also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

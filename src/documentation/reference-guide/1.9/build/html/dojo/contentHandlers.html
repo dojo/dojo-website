@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo.contentHandlers &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-contenthandlers">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo.contentHandlers</a><a class="headerlink" href="#dojo-contenthandlers" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Project owner:</th><td class="field-body">Peter Higgins</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V1.4</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-contenthandlers" id="id2">dojo.contentHandlers</a><ul>
+<li><a class="reference internal" href="#usage" id="id3">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id4">Examples</a></li>
+<li><a class="reference internal" href="#notes" id="id5">Notes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>dojo.contentHandlers is an object containing several pre-defined &#8220;handlers&#8221; for Ajax traffic, exposed as a public API to allow your own custom handlers to be mixed in.</p>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id3">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The most common usage of contentHandlers is indirect. When making an Ajax call, the &#8220;handleAs&#8221; attribute is used to lookup in the dojo.contentHandlers dictionary. The function defined in the dictionary with a matching key is called, passing the XHR object used for the Ajax call. The <strong>return</strong> value from a contentHandler function is then passed to any &#8220;load&#8221;, &#8220;handle&#8221; or callback functions.</p>
+<div class="section" id="default-contenthandler">
+<h3>Default contentHandler<a class="headerlink" href="#default-contenthandler" title="Permalink to this headline">¶</a></h3>
+<p>The default contentHandler is text, and requires no action:</p>
+</div>
+<div class="section" id="available-handlers">
+<h3>Available Handlers<a class="headerlink" href="#available-handlers" title="Permalink to this headline">¶</a></h3>
+<p>There are several pre-defined contentHandlers available to use. The value represents the key in the handlers map.</p>
+<ul class="simple">
+<li><strong>text</strong> (default) - Simply returns the response text</li>
+<li><strong>json</strong> - Converts response text into a JSON object</li>
+<li><strong>xml</strong> - Returns a XML document</li>
+<li><strong>javascript</strong> - Evaluates the response text</li>
+<li><strong>json-comment-filtered</strong> - A (arguably unsafe) handler to preventing JavaScript hijacking</li>
+<li><strong>json-comment-optional</strong> - A handler which detects the presence of a filtered response and toggles between json or json-comment-filtered appropriately.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id4">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="using-a-pre-defined-handler">
+<h3>Using a pre-defined handler<a class="headerlink" href="#using-a-pre-defined-handler" title="Permalink to this headline">¶</a></h3>
+<p>This example shows, how to use the pre-defined json contentHandler:</p>
+</div>
+<div class="section" id="creating-a-custom-handler">
+<h3>Creating a custom handler<a class="headerlink" href="#creating-a-custom-handler" title="Permalink to this headline">¶</a></h3>
+<p>To create a custom contentHandler, simply mix a new key into the dojo.contentHandlers object defining the &#8216;handleAs&#8217; value. The XHR object is passed to this function. For example:</p>
+<p>One can create any number of content handlers, and can do about anything they choose within the provided API. For instance, the original args used to create the XHR object are stored on the object itself as <cite>ioArgs</cite> (eg: xhr.ioArgs) and can be used to mix custom attributes and instructions to the handler.</p>
+<p>For instance, we can create a handler that will populate a node with the response text automatically:</p>
+<p>This will inject foo.html content into a node with id=&#8221;someId&#8221;. A side effect of the above example would be any callbacks passed to something handled by the &#8220;loadNode&#8221; contentHandler would not also get a copy of the content. You should return a value from a contentHandler.</p>
+</div>
+<div class="section" id="using-dual-handlers">
+<h3>Using dual handlers<a class="headerlink" href="#using-dual-handlers" title="Permalink to this headline">¶</a></h3>
+<p>The other contentHandlers are all functions. If you like, you can define a new handler that acts as if it were another handler and doing something else. Simply call the other contentHandler passing the xhr reference you were passed in your custom handler:</p>
+</div>
+<div class="section" id="overwriting-a-handler">
+<h3>Overwriting a handler<a class="headerlink" href="#overwriting-a-handler" title="Permalink to this headline">¶</a></h3>
+<p>Standard AOP techniques apply. If you find yourself needing to <em>replace</em> a contentHandler but preserve the original behavior, simply duck-punch around it:</p>
+</div>
+</div>
+<div class="section" id="notes">
+<h2><a class="toc-backref" href="#id5">Notes</a><a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>This functionality is &#8220;new&#8221; in Dojo 1.4. An alias to the &#8220;private&#8221; dojo._contentHandlers will remain in place until 2.0. Version prior to 1.4 can use the &#8220;private&#8221; alias the same way as outlined in this document.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo.contentHandlers</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#default-contenthandler">Default contentHandler</a></li>
+<li><a class="reference internal" href="#available-handlers">Available Handlers</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#using-a-pre-defined-handler">Using a pre-defined handler</a></li>
+<li><a class="reference internal" href="#creating-a-custom-handler">Creating a custom handler</a></li>
+<li><a class="reference internal" href="#using-dual-handlers">Using dual handlers</a></li>
+<li><a class="reference internal" href="#overwriting-a-handler">Overwriting a handler</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

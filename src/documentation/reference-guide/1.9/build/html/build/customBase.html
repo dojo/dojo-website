@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>build customBase &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="../dojo/index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="build-custombase">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">build customBase</a><a class="headerlink" href="#build-custombase" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Scott Jenkins</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Project owner:</th><td class="field-body">?</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">since:</th><td class="field-body">V?</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#build-custombase" id="id2">build customBase</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#dojo-require-for-base-functions" id="id4">dojo.require for base functions</a></li>
+<li><a class="reference internal" href="#usage" id="id5">Usage</a></li>
+<li><a class="reference internal" href="#including-specific-resources" id="id6">Including Specific Resources</a></li>
+<li><a class="reference internal" href="#caveats" id="id7">Caveats</a></li>
+<li><a class="reference internal" href="#known-bugs" id="id8">Known Bugs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Custom base is used to make an extremely small file size version of dojo.js.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Normally, when the builder system creates <code class="docutils literal"><span class="pre">dojo.js</span></code> it includes the entire base set of Dojo APIs (almost everything that can be accessed directly in the <code class="docutils literal"><span class="pre">dojo</span></code> namespace).
+This provides robust and usable core functionality in a file that is approximately 76.7 KB uncompressed and 26.5K gzipped as of Dojo 1.2.3.</p>
+<p>However, in some cases, such as creating web applications intended for use on smart phones, you may desire to create an even smaller <code class="docutils literal"><span class="pre">dojo.js</span></code>.  Using <code class="docutils literal"><span class="pre">customBase</span></code> you can achieve minimal Dojo versions as small as approximately 6k (including the stubs described below).</p>
+<p>This is a very advanced feature, and if you think you need to use it, you should think carefully first. If after careful consideration, you still want to use this feature, be very, very careful and document it thoroughly for your own understanding.</p>
+</div>
+<div class="section" id="dojo-require-for-base-functions">
+<h2><a class="toc-backref" href="#id4">dojo.require for base functions</a><a class="headerlink" href="#dojo-require-for-base-functions" title="Permalink to this headline">¶</a></h2>
+<p>When you use the <code class="docutils literal"><span class="pre">customBase</span></code> option, some base Dojo functions are not copied into your <code class="docutils literal"><span class="pre">dojo.js</span></code> file, in order to reduce the file size.</p>
+<p>Instead, a <code class="docutils literal"><span class="pre">require</span></code> statement is generated for each base resource that the builder identifies as being used in your module.  This identification is done with regular expression matching, and is by design somewhat lax to ensure it catches all resources that are needed.</p>
+<p>This allows you to still use the entire base API, but at the cost of additional an additional round trip to the server <em>at the time a function not in base is first called</em>.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id5">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>In the profile for your build, specify the following for your dojo layer (note the <code class="docutils literal"><span class="pre">customBase</span></code> property):</p>
+<p>If, as shown in this example, you specify <code class="docutils literal"><span class="pre">customBase:</span> <span class="pre">true</span></code>, but do not specify any dependencies
+for the <code class="docutils literal"><span class="pre">dojo.js</span></code> layer, then then <em>none</em> of <code class="docutils literal"><span class="pre">dojo/_base</span></code> gets added to
+<code class="docutils literal"><span class="pre">dojo.js</span></code>.</p>
+<p>You just end up with the following from <code class="docutils literal"><span class="pre">dojo/_base/_loader</span></code>, basically, just bare utilities for browser detection:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">dojo/ready</span></code></li>
+<li><code class="docutils literal"><span class="pre">addOnUnload</span></code></li>
+<li><code class="docutils literal"><span class="pre">require</span></code></li>
+<li><code class="docutils literal"><span class="pre">define</span></code></li>
+<li><code class="docutils literal"><span class="pre">bootstrap.js</span></code></li>
+<li><code class="docutils literal"><span class="pre">hostenv_browser.js</span></code></li>
+<li><code class="docutils literal"><span class="pre">loader.js</span></code></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="including-specific-resources">
+<h2><a class="toc-backref" href="#id6">Including Specific Resources</a><a class="headerlink" href="#including-specific-resources" title="Permalink to this headline">¶</a></h2>
+<p>To include specific dojo base resources in your minimal build, use the dependencies list for the dojo.js layer.</p>
+<p>For example, if you specify <code class="docutils literal"><span class="pre">customBase:</span> <span class="pre">true</span></code>, but want a particular <code class="docutils literal"><span class="pre">dojo/_base</span></code>
+module, say just the array help functions and <code class="docutils literal"><span class="pre">dojo/Deferred</span></code>, your profile <code class="docutils literal"><span class="pre">dojo.js</span></code> layer would
+look like this:</p>
+</div>
+<div class="section" id="caveats">
+<h2><a class="toc-backref" href="#id7">Caveats</a><a class="headerlink" href="#caveats" title="Permalink to this headline">¶</a></h2>
+<p>If you use <code class="docutils literal"><span class="pre">customBase:</span> <span class="pre">true</span></code>, then the build system will use
+regular expressions to see if any of the modules in the build (dojo, dijit, dojox,
+your custom namespaces) use any <code class="docutils literal"><span class="pre">dojo/_base</span> <span class="pre">methods</span></code>, and if they detect
+a usage, it will inject <code class="docutils literal"><span class="pre">require</span></code> calls into the built modules.</p>
+<p>This helps avoid issues where you use a module that needs a <code class="docutils literal"><span class="pre">dojo/_base</span></code>
+module that you did not include in your <code class="docutils literal"><span class="pre">dojo.js</span></code>. However since it is
+using regular expressions, you may get more <code class="docutils literal"><span class="pre">require</span></code> calls for <code class="docutils literal"><span class="pre">dojo/_base</span></code>
+modules than necessary. The idea was to have the detection be very lax
+in what it matches to avoid run time errors.</p>
+<p>Example: if the build
+finds &#8220;indexOf&#8221; in the module, it will add in a
+<code class="docutils literal"><span class="pre">require[(&quot;dojo/_base/array&quot;)]</span></code>, but that <code class="docutils literal"><span class="pre">indexOf</span></code> in the module could
+have been a String method call.</p>
+</div>
+<div class="section" id="known-bugs">
+<h2><a class="toc-backref" href="#id8">Known Bugs</a><a class="headerlink" href="#known-bugs" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">customBase:</span> <span class="pre">true</span></code> should not be used with <code class="docutils literal"><span class="pre">djConfig.require</span></code>. There is a
+bug where the <code class="docutils literal"><span class="pre">djConfig.require</span></code> will not be included correctly
+depending on if you leave out <code class="docutils literal"><span class="pre">dojo/_base/browser</span></code>:
+<a class="reference external" href="http://bugs.dojotoolkit.org/ticket/7756">http://bugs.dojotoolkit.org/ticket/7756</a></p>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">build customBase</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#dojo-require-for-base-functions">dojo.require for base functions</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#including-specific-resources">Including Specific Resources</a></li>
+<li><a class="reference internal" href="#caveats">Caveats</a></li>
+<li><a class="reference internal" href="#known-bugs">Known Bugs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>

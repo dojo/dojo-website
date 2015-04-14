@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>dojo/Deferred &mdash; Dojo Reference Guide 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/guide.css?1">
+    <script type="text/javascript">
+      dojoConfig = {
+        async: true
+      };
+    </script>
+    <meta name="viewport" content="width=device-width, minimum-scale=0.75, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <script src="/scripts/dojo/dojo/dojo.js?1"></script>
+    <script src="/scripts/dojo/docs/guide.js?1"></script>
+    <link rel="stylesheet" href="/scripts/dojo/dijit/themes/claro/claro.css?1">
+    <script src="/scripts/nav.js?1"></script>
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+
+  <div class="nav">
+	<div class="row">
+		<div class="small-3 columns">
+			<a href="/" class="navLogo icon-dojo icon"></a>
+		</div>
+		<div class="small-9 columns text-right">
+			<div class="mobileMenuToggle" data-menu-toggle></div>
+			<div class="menu">
+				<div class="mobileHeader">Menu</div>
+				<ul class="inline-list menuItems right">
+					<li><a href="/download/" class="downloadLink">Get Dojo</a></li>
+					<li><a href="/documentation" class="docsLink">Docs</a></li>
+					<li><a href="/community" class="communityLink">Community</a></li>
+					<li><a href="/community/roadmap/" class="roadmapLink">Roadmap</a></li>
+					<li><a href="/blog/" class="blogLink">Blog</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+  <div class="subnav">
+      <div class="row">
+        <div class="medium-12 columns">
+         <ul>
+            <li><a href="../index.html">Startpage</a></li>
+            <li><a href="index.html">Dojo</a></li>
+            <li><a href="../dijit/index.html">Dijit</a></li>
+            <li><a href="../dojox/index.html">DojoX</a></li>
+          </ul>
+        </div>
+        <!-- <div class="medium-3 columns text-right">
+           <div id="dtkVersion">
+            <select id="refver" name="refver">
+              <option value="1.6">Dojo 1.6</option>
+              <option value="1.7">Dojo 1.7</option>
+              <option value="1.8">Dojo 1.8</option>
+              <option value="1.9">Dojo 1.9</option>
+              <option value="1.10" selected="selected">Dojo 1.10</option>
+            </select>
+          </div>
+        </div>-->
+      </div>
+    </div>
+  <main class="refguide">
+    <div class="row">
+      <div class="medium-9 columns content">
+          
+  <div class="section" id="dojo-deferred">
+<span id="id1"></span><h1><a class="toc-backref" href="#id2">dojo/Deferred</a><a class="headerlink" href="#dojo-deferred" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">authors:</th><td class="field-body">Mark Wubben</td>
+</tr>
+<tr class="field-even field"><th class="field-name">since:</th><td class="field-body">V1.8</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#dojo-deferred" id="id2">dojo/Deferred</a><ul>
+<li><a class="reference internal" href="#introduction" id="id3">Introduction</a></li>
+<li><a class="reference internal" href="#usage" id="id4">Usage</a></li>
+<li><a class="reference internal" href="#examples" id="id5">Examples</a></li>
+<li><a class="reference internal" href="#see-also" id="id6">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p><strong>dojo/Deferred</strong> manages the communication between asynchronous threads (callbacks). Previously it resided in Dojo
+Base, but in 1.8 it was rewritten based on the new Promise architecture and moved out of base. <code class="docutils literal"><span class="pre">dojo/Deferred</span></code>
+encapsulates a sequence of callbacks in response to a value that may not yet be available. All of <code class="docutils literal"><span class="pre">dojo/request</span></code>
+modules make use of this class.</p>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id3">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><strong>dojo/Deferred</strong> is a class that is used as the foundation for managing asynchronous threads in Dojo.  Packages like <code class="docutils literal"><span class="pre">dojo/request</span></code> use this class to return a <em>promise</em> that gets <em>resolved</em> when the asynchronous thread is complete.  In order trigger a callback to occur when the thread is complete, the <code class="docutils literal"><span class="pre">.then()</span></code> method is used.  As well as the thread can be informed to cancel itself by using the <code class="docutils literal"><span class="pre">.cancel()</span></code> method.  If the thread has completed, then the <code class="docutils literal"><span class="pre">.then()</span></code> callback will be executed immediately.</p>
+</div>
+<div class="section" id="usage">
+<h2><a class="toc-backref" href="#id4">Usage</a><a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Basic usage is instantiating a <code class="docutils literal"><span class="pre">dojo/Deferred</span></code> object, starting the thread and when it completes calling <code class="docutils literal"><span class="pre">.resolve()</span></code> with any results and returning the object to the consumer.  From a consumer perspective it is generally setting either a <code class="docutils literal"><span class="pre">.then()</span></code> callback with potentially an additional error callback as the second argument of then.  If the asynchronous process supports cancelling and it has been implemented, then the process can be cancelled via <code class="docutils literal"><span class="pre">.cancel()</span></code>.</p>
+<p>Because <code class="docutils literal"><span class="pre">.then()</span></code> returns a new promise that is fulfilled when the callback completes, you can chain a Deferred like this:</p>
+<p><code class="docutils literal"><span class="pre">dojo/Deferred</span></code> contains the following properties:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="28%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Property</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>promise</td>
+<td>Points to the <code class="docutils literal"><span class="pre">dojo/promise/Promise</span></code> object related to this object</td>
+</tr>
+<tr class="row-odd"><td>isResolved()</td>
+<td>Returns <code class="docutils literal"><span class="pre">true</span></code> if the Deferred is resolved</td>
+</tr>
+<tr class="row-even"><td>isRejected()</td>
+<td>Returns <code class="docutils literal"><span class="pre">true</span></code> if the Deferred is rejected</td>
+</tr>
+<tr class="row-odd"><td>isFulfilled()</td>
+<td>Returns <code class="docutils literal"><span class="pre">true</span></code> if the Deferred is fulfilled</td>
+</tr>
+<tr class="row-even"><td>isCanceled()</td>
+<td>Returns <code class="docutils literal"><span class="pre">true</span></code> if the Deferred is cancelled</td>
+</tr>
+<tr class="row-odd"><td>progress(update, strict)</td>
+<td>Called by the async process to provide progress updates.  The second argument, which
+is optional, if <code class="docutils literal"><span class="pre">true</span></code> means it will throw an error if the promise is fulfilled.
+Defaults to <code class="docutils literal"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="row-even"><td>resolve(value, strict)</td>
+<td>Called by the async process, when complete, providing any results to be passed to the
+callback.  The second argument, which is optional, if <code class="docutils literal"><span class="pre">true</span></code> means it will throw an
+error if the promise is fulfilled.  Defaults to <code class="docutils literal"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="row-odd"><td>reject(error, strict)</td>
+<td>Called by the async process to reject (error out) the deferred.  The second argument,
+which is optional, if <code class="docutils literal"><span class="pre">true</span></code> means it will throw an error if the promise is
+fulfilled.  Defaults to <code class="docutils literal"><span class="pre">false</span></code>.</td>
+</tr>
+<tr class="row-even"><td>then(callback, errback, progback)</td>
+<td>Used to set the callbacks for a Deferred.  <code class="docutils literal"><span class="pre">errback</span></code> and <code class="docutils literal"><span class="pre">progback</span></code> are optional
+arguments that will be called if there is a rejection or a progress update,
+respectively.  <code class="docutils literal"><span class="pre">.then()</span></code> returns a new promise that will be fulfilled when the
+callback completes, and anything that is returned from the callback will be passed as
+the <code class="docutils literal"><span class="pre">value</span></code> to any callbacks to that promise.  This allows for chaining of
+callbacks.</td>
+</tr>
+<tr class="row-odd"><td>cancel(reason, strict)</td>
+<td>Signal the deferred that we&#8217;re no longer interested in the result. The deferred may
+subsequently cancel its operation and reject the promise. Can affect other promises
+that originate with the same deferred. Returns the rejection reason if the deferred
+was canceled normally. The second argument, which is optional, if <code class="docutils literal"><span class="pre">true</span></code> means it
+will throw an error if the promise is fulfilled.  Defaults to <code class="docutils literal"><span class="pre">false</span></code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="examples">
+<h2><a class="toc-backref" href="#id5">Examples</a><a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="see-also">
+<h2><a class="toc-backref" href="#id6">See also</a><a class="headerlink" href="#see-also" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="promise.html#dojo-promise"><span>dojo/promise</span></a> - The module that underpins <code class="docutils literal"><span class="pre">dojo/Deferred</span></code>.</li>
+<li><a class="reference internal" href="promise/Promise.html#dojo-promise-promise"><span>dojo/promise/Promise</span></a> - The underlying object used to provide the asynchronous thread
+communication.</li>
+<li><a class="reference internal" href="when.html#dojo-when"><span>dojo/when</span></a> - The module that allows transparent management of promises and non-promise values.</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="medium-3 columns">
+        <div id="toc">
+            <h3>Table of Contents</h3>
+            <div class="tocList"><ul>
+<li><a class="reference internal" href="#">dojo/Deferred</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#see-also">See also</a></li>
+</ul>
+</li>
+</ul>
+</div>
+          </div>
+      </div>
+    </div>
+      <div class="clearer"></div>
+    </div>
+
+  <div class="row">
+    <div class="medium-12 columns feedback">
+        <a href="https://docs.google.com/spreadsheet/viewform?hl=en_US&formkey=dFlDcHEyaHMwbEd4MFBObkNrX0E1MFE6MQ&entry_0=http%3A%2F%2Fdojotoolkit.org%2Freference-guide%2F1.10%2F">Error in the documentation? Can’t find what you are looking for? Let us know!</a>
+    </div>
+  </div>
+  <div class="row full footer">
+	<div class="content">
+		<div class="medium-6 columns copyright">
+			<span>&copy; <a href="http://dojofoundation.org">The Dojo Foundation</a>, All Rights Reserved. <a href="https://raw.githubusercontent.com/dojo/dojo/master/LICENSE" class="license">License Information</a></span>
+		</div>
+		<div class="medium-6 columns info">
+			<span>Internet Application Management Provided By <a href="http://www.reliam.com/">Reliam, Inc.</a></span>
+		</div>
+	</div>
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-22088032-1', 'auto');
+		ga('send', 'pageview');
+	</script>
+</div>
+  
+  </body>
+</html>
