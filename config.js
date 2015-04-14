@@ -20,7 +20,7 @@ module.exports = function(grunt){
 
 	config.urls = {
 		// If deploying to a subdirectory, modify this path accordingly
-		root: '/dist/',
+		root: '/',
 		//Internal
 		api: 'api/',
 		blog: 'blog/',

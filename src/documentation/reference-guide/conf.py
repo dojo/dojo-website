@@ -96,7 +96,7 @@ pygments_style = 'sphinx'
 html_theme = 'refguide'
 
 html_context = {
-	'root': '/dist/'
+	'root': '/'
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
