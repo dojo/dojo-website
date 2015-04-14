@@ -98,7 +98,7 @@ module.exports = function (grunt) {
 		highlight: {
 		    task: {
 		      options: {},
-		      files: { '<%= config.dest %>/download/index.html':['<%= config.dest %>/download/index.html']}
+		      files: {'<%= config.dest %>/download/index.html':['<%= config.dest %>/download/index.html']}
 			}
 		},
 
