@@ -97,38 +97,6 @@ config.spiderVersions.forEach(function (version) {
     });
 });
 
-// Manually copy over 1.6 and earler static API pages
-[
-    '1.3',
-    '1.4',
-    '1.5',
-    '1.6',
-    '1.7'
-].forEach(function (version) {
-    fsExtra.copy(
-        path.join('../../', config.src, version),
-        path.join('../../', config.dest, version),
-        function (err) {
-            if (err) { return console.error(err); }
-        }
-    );
-});
-
-
-
-/*
-fsExtra.copy('./public/css', staticFolder + 'css', function (err) {
-    if (err) {console.log(err); }
-
-});
-fsExtra.copy('./public/images', staticFolder + 'images', function (err) {
-    if (err) {console.log(err); }
-
-});
-fsExtra.copy('./public/scripts', staticFolder + 'scripts', function (err) {
-    if (err) {console.log(err); }
-
-});*/
 
 process.on('exit', function () {
     console.log("elapsed time = " + (new Date().getTime() - starttime) + " ms");

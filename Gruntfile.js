@@ -184,6 +184,17 @@ module.exports = function (grunt) {
 				],
 				verbose: true
 			},
+			apiArchive: {
+				files: [
+					{
+						cwd: '<%=config.src%>/documentation/api',
+						src: ['1.3/**/*', '1.4/**/*', '1.5/**/*', '1.6/**/*', '1.7/**/*'],
+						dest: '<%=config.dest%>/api',
+						expand: true,
+					}
+				],
+				verbose: true
+			},
 			blog: {
 				files: [
 					{
