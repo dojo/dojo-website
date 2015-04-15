@@ -263,7 +263,7 @@ module.exports = function (grunt) {
 	grunt.loadTasks('tasks');
 
 	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn']);
-	grunt.registerTask('up', ['stylus', 'sync', 'ejs', 'tutorials', 'highlight']);
+	grunt.registerTask('up', ['css', 'sync', 'ejs', 'tutorials', 'highlight']);
 	grunt.registerTask('css', ['stylus', 'cssmin', 'sync:css']);
 
 	grunt.registerTask('delete', ['clean:dist'])
