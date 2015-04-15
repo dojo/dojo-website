@@ -88,7 +88,7 @@ module.exports = function (grunt) {
 			docs: {
 				options: ejsOptions,
 				cwd: '<%= config.src %>/_partials',
-				src: ['header.ejs', 'footer.ejs'],
+				src: ['header.ejs', 'footer.ejs', 'favicons.ejs'],
 				dest: '<%= config.src %>/_partials/tmp',
 				expand: true,
 				ext: '.html'
@@ -194,7 +194,7 @@ module.exports = function (grunt) {
 					},
 					{
 						cwd: '<%= config.src %>/_partials/tmp',
-						src: ['header.html', 'footer.html'],
+						src: ['header.html', 'footer.html', 'favicons.html'],
 						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/inc'
 					},
 					{
