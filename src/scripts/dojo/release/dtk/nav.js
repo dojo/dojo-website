@@ -1,0 +1,4 @@
+//>>built
+require(["dojo/ready","dojo/on","dojo/dom-class","dojo/query"],function(h,c,a,k){h(function(){function d(){var e=document.body.scrollTop||document.documentElement.scrollTop;b?e<f&&(b=!1,a.toggle(g,"shrink"),a.toggle(document.body,"scrolled")):e>=f&&(a.toggle(g,"shrink"),a.toggle(document.body,"scrolled"),b=!0)}var g=document.querySelector(".nav");document.querySelector(".subnav");var f=document.querySelector(".nav").offsetHeight,b=!1;c(window,"scroll",d);c(document.querySelector(".mobileMenuToggle"),
+"click",function(){a.toggle(document.body,"menuOpen")});d();document.querySelector("body.home")&&k(".iconBlock").forEach(function(a,b,d){c(a,"click",function(){window.location.href=a.dataset.href})})})});
+//# sourceMappingURL=nav.js.map

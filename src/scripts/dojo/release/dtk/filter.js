@@ -1,0 +1,3 @@
+//>>built
+require("dojo/ready dojo/on dojo/dom-class dojo/query dojo/dom-style dojo/dom-attr".split(" "),function(g,h,k,b,e,l){g(function(){function f(){window.matchMedia("(min-width: 40.063em)").matches&&b(".row",b(".cardGrid")[0]).forEach(function(a,c,d){a=b(".card .content",a);a[1]&&(a[0].style.height="auto",a[1].style.height="auto",c=e.get(a[0],"height"),d=e.get(a[1],"height"),c>d?a[1].style.height=c+"px":a[0].style.height=d+"px")})}f();h(window,"resize",function(){f()})})});
+//# sourceMappingURL=filter.js.map

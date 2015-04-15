@@ -1,0 +1,5 @@
+//>>built
+define("docs/CodeGlassViewerMini","dojo/_base/declare dojo/_base/fx dojo/_base/lang dojo/dom-construct dojo/dom-style dijit/focus".split(" "),function(f,g,h,c,d,k){return f("docs.CodeGlassViewerMini",null,{dialog:null,loadingMessage:"\x3cp\x3ePreparing Example....\x3c/p\x3e",constructor:function(b){this.dialog=b},show:function(b){this.iframe&&c.destroy(this.iframe);this.dialog.set("content",this.loadingMessage);d.set(this.dialog.containerNode,{width:b.width+"px",height:b.height+"px"});this.dialog.show();
+setTimeout(h.hitch(this,function(){function e(){k.registerIframe(a);d.set(a,{visibility:"visible",opacity:0});g.anim(a,{opacity:1})}var a=this.iframe=c.create("iframe",{src:"javascript: '"+b.renderedTemplate.replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(/\n/g,"\\n")+"'",style:{height:b.height+"px",width:b.width+"px",border:"none",visibility:"hidden"}});a.addEventListener?a.addEventListener("load",e,!1):a.attachEvent&&a.attachEvent("onload",e);this.dialog.set("content",a)}),this.dialog.duration+
+450)}})});
+//# sourceMappingURL=CodeGlassViewerMini.js.map

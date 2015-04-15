@@ -1,0 +1,4 @@
+//>>built
+define("docs/upload","dojo/_base/lang dojo/dom dojo/dom-construct dojo/dom-style dojo/fx dojo/on dojo/query dojo/ready".split(" "),function(e,b,c,f,g,d,h,k){var l=1;k(function(){d(b.byId("morefiles"),"click",function(a){a.preventDefault();a=c.place(e.replace("\x3cdiv class\x3d'bloc'\x3e\x3clabel for\x3d'uploadfile{count}'\x3eSelect File:\x3c/label\x3e\x3cinput type\x3d'file' name\x3d'uploadfile{count}' id\x3d'uploadfile{count}'\x3e\x3c/div\x3e",{count:l++}),"files","first");f.set(a,"height","1px");
+g.wipeIn({node:a}).play()});d(b.byId("rstwiki-upload"),"submit",function(a){h("input[type\x3dfile]",a.target).forEach(function(a){a.value||c.destroy(a.parentNode)})})});return{}});
+//# sourceMappingURL=upload.js.map

@@ -78,7 +78,7 @@ module.exports = function (grunt) {
 			all: {
 				options: ejsOptions,
 				cwd: config.src,
-				src: ['**/*.ejs', '!_templates/**/*', '!_partials/**/*', '!documentation/**/*.ejs'],
+				src: ['index.ejs', 'community/**/*.ejs', 'download/**/*.ejs'],
 				dest: config.dest,
 				expand: true,
 				ext: '.html'
@@ -103,15 +103,31 @@ module.exports = function (grunt) {
 		},
 
 		stylus: {
-			options: {'include css': true, 'compress':true},
-			index: {
+			compile: {
+		    	options: {
+					'include css': true,
+					compress:true,
+				},
 				files: {
 					'<%= config.dest %>/css/index.css': '<%= config.src %>/css/index.styl',
 					'<%= config.dest %>/css/api.css': '<%= config.src %>/css/views/api.styl',
 					'<%= config.dest %>/css/guide.css': '<%= config.src %>/css/views/guide.styl',
 					'<%= config.dest %>/blog/wp-content/themes/dtk/style.css' : '<%= config.src %>/css/views/blog.styl'
 				}
-			}
+			},
+		},
+
+		cssmin: {
+		  target: {
+		    files: [{
+		      expand: true,
+		      cwd: '<%= config.dest %>/css',
+		      src: ['*.css'],
+		      dest: '<%= config.dest %>/css',
+		      ext: '.css'
+		    }],
+		    verbose: true
+		  },
 		},
 
 		connect: {
@@ -144,11 +160,28 @@ module.exports = function (grunt) {
 			},
 			dojo: {
 				files: [{
-					cwd: config.src,
-					src: ['scripts/dojo/**/*'],
-					dest: config.dest,
+					cwd: '<%=config.src %>/scripts/dojo/release',
+					src: ['**/*', '!build-report.txt'],
+					dest: '<%=config.dest %>/scripts/dojo',
 					expand: true,
 				}],
+				verbose: true
+			},
+			css: {
+				files: [
+					{
+						cwd: '<%=config.src%>/css/fonts/icomoon_icons/fonts',
+						src: ['*'],
+						dest: '<%=config.dest%>/css/fonts',
+						expand: true,
+					},
+					{
+						cwd: '<%=config.src%>/css/fonts/icomoon_trusted/fonts',
+						src: ['*'],
+						dest: '<%=config.dest%>/css/fonts',
+						expand: true,
+					},
+				],
 				verbose: true
 			},
 			blog: {
@@ -165,14 +198,20 @@ module.exports = function (grunt) {
 						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/inc'
 					},
 					{
-						cwd: '<%= config.src %>/scripts',
-						src: ['nav.js', 'dojo/dojo/**/*'],
-						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/js'
+						cwd: '<%=config.src %>/scripts/dojo/release',
+						src: ['dojo/**/*','dtk/**/*', '!build-report.txt'],
+						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/js/dojo'
 					},
 					{
 						cwd: '<%= config.src %>/css',
 						src: ['fonts/**/*'],
 						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/css'
+					},
+					{
+						cwd: '<%=config.src%>/css/fonts/icomoon_icons/fonts',
+						src: ['*'],
+						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/fonts',
+						expand: true,
 					}
 				],
 				verbose: true
@@ -181,7 +220,7 @@ module.exports = function (grunt) {
 
 		watch: {
 			ejs: {
-				files: ['<%= config.src %>/**/*.ejs', '<%= config.src %>/community/roadmap/packages.json','!<%= config.src %>/documentation/**/*'],
+				files: ['<%= config.src %>/**/*.ejs', '<%= config.src %>/community/roadmap/packages.json','!<%= config.src %>/documentation/**/*', '!<%= config.src %>/scripts/**/*', '!<%= config.src %>/images/**/*'],
 				tasks: ['ejs', 'highlight']
 			},
 
@@ -195,15 +234,11 @@ module.exports = function (grunt) {
 			},
 			stylus: {
 				files: ['<%= config.src %>/**/*.styl', '!<%= config.src %>/vendor/**'],
-				tasks: ['stylus', 'sync:images']
+				tasks: ['css']
 			},
 			js: {
 				files: ['<%= config.src %>/scripts/**/*.js', '<%= config.src %>/scripts/*.js', '!<%= config.src %>/scripts/dojo/**', '!<%= config.src %>/scripts/syntaxhighlighter/**'],
 				tasks: ['sync:scripts']
-			},
-			partials: {
-				files: ['<%=config.src%>/_partials/**/*.ejs'],
-				tasks: ['stylus', 'ejs', 'highlight', 'sync']
 			}
 		},
 
@@ -224,14 +259,16 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-sync');
 	grunt.loadNpmTasks('grunt-highlight');
 	grunt.loadNpmTasks('grunt-spawn');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadTasks('tasks');
 
 	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn']);
 	grunt.registerTask('up', ['stylus', 'sync', 'ejs', 'tutorials', 'highlight']);
+	grunt.registerTask('css', ['stylus', 'cssmin', 'sync:css']);
 
 	grunt.registerTask('delete', ['clean:dist'])
-	grunt.registerTask('deploy', ['delete', 'stylus', 'sync', 'ejs', 'tutorials', 'highlight', 'docs']);
-	grunt.registerTask('default', ['delete', 'stylus', 'sync', 'ejs', 'tutorials', 'highlight']);
-	grunt.registerTask('develop', ['stylus', 'ejs', 'sync', 'highlight', 'tutorials', 'connect', 'watch']);
+	grunt.registerTask('deploy', ['delete', 'css', 'sync', 'ejs', 'tutorials', 'highlight', 'docs']);
+	grunt.registerTask('default', ['delete', 'css', 'sync', 'ejs', 'tutorials', 'highlight']);
+	grunt.registerTask('develop', ['css', 'ejs', 'sync', 'highlight', 'tutorials', 'connect', 'watch']);
 
 };
