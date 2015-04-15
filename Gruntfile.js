@@ -112,7 +112,7 @@ module.exports = function (grunt) {
 					'<%= config.dest %>/css/index.css': '<%= config.src %>/css/index.styl',
 					'<%= config.dest %>/css/api.css': '<%= config.src %>/css/views/api.styl',
 					'<%= config.dest %>/css/guide.css': '<%= config.src %>/css/views/guide.styl',
-					'<%= config.dest %>/blog/wp-content/themes/dtk/style.css' : '<%= config.src %>/css/views/blog.styl'
+					'<%= config.dest %>/css/blog.css' : '<%= config.src %>/css/views/blog.styl'
 				}
 			},
 		},
@@ -196,22 +196,6 @@ module.exports = function (grunt) {
 						cwd: '<%= config.src %>/_partials/tmp',
 						src: ['header.html', 'footer.html', 'favicons.html'],
 						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/inc'
-					},
-					{
-						cwd: '<%=config.src %>/scripts/dojo/release',
-						src: ['dojo/**/*','dtk/**/*', '!build-report.txt'],
-						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/js/dojo'
-					},
-					{
-						cwd: '<%= config.src %>/css',
-						src: ['fonts/**/*'],
-						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/css'
-					},
-					{
-						cwd: '<%=config.src%>/css/fonts/icomoon_icons/fonts',
-						src: ['*'],
-						dest: '<%= config.dest %>/blog/wp-content/themes/dtk/fonts',
-						expand: true,
 					}
 				],
 				verbose: true
