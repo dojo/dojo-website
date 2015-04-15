@@ -100,7 +100,6 @@ function twentythirteen_scripts_styles() {
 	wp_enqueue_style( 'twentythirteen-style', get_stylesheet_uri(), array(), '2013-07-18' );
 
 	wp_enqueue_script( 'dojo', get_template_directory_uri() . '/js/dojo/dojo/dojo.js', array(), '2014-06-08' );
-	wp_enqueue_script( 'nav', get_template_directory_uri() . '/js/nav.js', array(), '2014-06-08' );
 
 
 }
