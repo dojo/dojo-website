@@ -64,7 +64,8 @@ module.exports = function (grunt) {
 				url: self.data.options.url,
 				rev: self.data.options.rev,
 				dojo: self.data.options.dojo,
-				tutorials: tutorialData
+				tutorials: tutorialData,
+				ver: ver
 			};
 
 			var comp = ejs.compile(grunt.file.read(file), {filename: file})(templateData);
