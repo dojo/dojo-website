@@ -1,0 +1,38 @@
+RewriteEngine On
+RewriteBase /api
+
+# Add version if it's a permalink URL for a module but no version specified.
+# This rule should reflect whatever the latest released version is.
+RewriteRule ^(dijit|dojo|dojox|util|doh)/(.+)$ 1.10/$1/$2
+
+# URL's like /api/1.8/Dialog.html need to be rewritten for browsers into /api/index.html?qs=1.8/Dialog.
+# However, they shouldn't be rewritten for search engines, nor when the request comes via XHR
+# (from the ContentPane trying to show the doc for a given module).
+# Also note that the request may or may not end in .html, especially since apache silently appends .html for
+# (for example) 1.9/dijit/Calendar, so it matches the Calendar.html file.
+RewriteCond %{HTTP_USER_AGENT} !(googlebot|adsbot-google|bingbot|msnbot|psbot|gigabot|twitterbot|linkedinbot|yahoo-mmcrawler|pingdom\.com_bot) [NC]
+RewriteCond %{HTTP:X-Requested-With} !=XMLHttpRequest
+#RewriteCond %{REQUEST_URI} !/tree.html/
+RewriteRule ^([0-9\.]+\/.*?)(.html|)$ ?qs=$1 [R,QSA]
+
+# To load tree.json files for legacy docs
+RewriteRule ^data/(1.[3-7]/.*)$ $1
+
+## Mappings from case sensitive names to case insensitive names
+
+# Namespace objects with same name as constructors.
+# Namespace objects renamed (ex: dijit/tree --> dijit/tree_ns)
+RewriteRule ^(1.[3-7]/dijit/tree).html$ $1_ns.html [L,QSA]
+RewriteRule ^(1.[3-7]/dojox/form/)(manager|uploader).html$ $1$2_ns.html [L,QSA]
+RewriteRule ^(1.[3-7]/dojox/form/uploader)/(.*)$ $1_ns/$2 [L,QSA]
+RewriteRule ^(1.[3-7]/dojox/gfx/)(shape|path).html$ $1$2_ns.html [L,QSA]
+RewriteRule ^(1.[3-7]/dojox/gfx/)(shape|path)/(.*)$ $1$2_ns/$3 [L,QSA]
+RewriteRule ^(1.[3-7]/dojox/grid).html$ $1_ns.html [L,QSA]
+RewriteRule ^(1.[3-7]/dojox/grid/selection).html$ $1_ns.html [L,QSA]
+RewriteRule ^(1.[3-7]/dojox/grid/enhanced/plugins/)(exporter|filter|pagination).html$ $1$2_ns.html [L,QSA]
+RewriteRule ^(1.[3-7]/dojox/grid/enhanced/plugins/)(exporter|pagination)/(.*)$ $1$2_ns/$3 [L,QSA]
+RewriteRule ^(1.[3-7]/dojox/widget/rotator).html$ $1_ns.html [L,QSA]
+
+# Sprintf has uppercase and lowercase specifiers for the same letter.
+# Uppercase specifier doc renamed (ex: E --> E_uc)
+RewriteRule ^(1.[3-7]/dojox/string/sprintf/Formatter/_specifiers/[EFGX]).html$ $1_uc.html [L,QSA]

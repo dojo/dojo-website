@@ -26,7 +26,7 @@ module.exports = function(grunt){
 		contribute: config.root+'community/#contribute',
 		docs: config.root+'documentation/',
 		download: config.root+'download/',
-		guide: config.root+'reference-guide/' + config.dojo.ver.major,
+		guide: config.root+'reference-guide/',
 		license: 'https://raw.githubusercontent.com/dojo/dojo/master/LICENSE',
 		community: config.root+'community/',
 		roadmap: config.root+'community/roadmap/',

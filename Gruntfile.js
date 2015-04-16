@@ -140,35 +140,24 @@ module.exports = function (grunt) {
 		},
 
 		sync: {
-			images: {
-				files: [{
-					cwd: config.src,
-					src: ['images/**', 'css/images/**', 'css/fonts/**'],
-					dest: config.dest,
-					expand: true,
-				}],
-				verbose: true
-			},
-			scripts: {
-				files: [{
-					cwd: config.src,
-					src: ['scripts/**', '!scripts/dojo/**/*'],
-					dest: config.dest,
-					expand: true,
-				}],
-				verbose: true
-			},
-			dojo: {
-				files: [{
-					cwd: '<%=config.src %>/scripts/dojo/release',
-					src: ['**/*', '!build-report.txt'],
-					dest: '<%=config.dest %>/scripts/dojo',
-					expand: true,
-				}],
-				verbose: true
-			},
-			css: {
+			assets: {
 				files: [
+					{
+						cwd: '<%=config.src%>',
+						src: ['images/**', 'css/images/**'],
+						dest: '<%=config.dest%>',
+						expand: true,
+					},
+					{
+						cwd: '<%=config.src%>/documentation/reference-guide/',
+						src: ['.htaccess'],
+						dest: '<%=config.dest%>/reference-guide/'
+					},
+					{
+						cwd: '<%=config.src%>/documentation/api/',
+						src: ['.htaccess'],
+						dest: '<%=config.dest%>/api/'
+					},
 					{
 						cwd: '<%=config.src%>/css/fonts/icomoon_icons/fonts',
 						src: ['*'],
@@ -180,10 +169,29 @@ module.exports = function (grunt) {
 						src: ['*'],
 						dest: '<%=config.dest%>/css/fonts',
 						expand: true,
-					},
+					}
 				],
 				verbose: true
 			},
+
+			scripts: {
+				files: [
+					{
+						cwd: config.src,
+						src: ['scripts/**', '!scripts/dojo/**/*'],
+						dest: config.dest,
+						expand: true,
+					},
+					{
+						cwd: '<%=config.src %>/scripts/dojo/release',
+						src: ['**/*', '!build-report.txt'],
+						dest: '<%=config.dest %>/scripts/dojo',
+						expand: true,
+					}
+				],
+				verbose: true
+			},
+
 			apiArchive: {
 				files: [
 					{
@@ -195,6 +203,7 @@ module.exports = function (grunt) {
 				],
 				verbose: true
 			},
+
 			blog: {
 				files: [
 					{
@@ -215,14 +224,18 @@ module.exports = function (grunt) {
 
 		watch: {
 			ejs: {
-				files: ['<%= config.src %>/**/*.ejs', '<%= config.src %>/community/roadmap/packages.json','!<%= config.src %>/documentation/**/*', '!<%= config.src %>/scripts/**/*', '!<%= config.src %>/images/**/*'],
-				tasks: ['ejs', 'highlight']
+				files: ['<%= config.src %>/**/*.ejs',
+						'<%= config.src %>/community/roadmap/packages.json',
+						'!<%= config.src %>/documentation/**/*',
+						'!<%= config.src %>/scripts/**/*',
+						'!<%= config.src %>/images/**/*',
+						'<%= config.src %>/documentation/tutorials/**/*.md',
+						'<%= config.src %>/documentation/index.ejs',
+						'<%= config.src %>/_templates/tutorial.ejs',
+						'!<%= config.src %>/**/README.md'],
+				tasks: ['ejs', 'tutorials', 'highlight']
 			},
 
-			tutorials: {
-				files: ['<%= config.src %>/documentation/tutorials/**/*.md', '<%= config.src %>/documentation/index.ejs', '<%= config.src %>/_templates/tutorial.ejs', '!<%= config.src %>/**/README.md'],
-				tasks: ['tutorials']
-			},
 			blog: {
 				files: ['<%= config.src %>/blog/dtk/**/*', '<%= config.src %>_partials/**/*.ejs'],
 				tasks: ['sync:blog']
@@ -239,7 +252,7 @@ module.exports = function (grunt) {
 
 		clean: {
 			dist: {
-				src: ['<%=config.dest%>/*','!<%=config.dest%>/blog/**']
+				src: ['<%=config.dest%>/*', '<%=config.dest%>/blog/wp-content/themes/dtk/**/*','!<%=config.dest%>/blog/**']
 			}
 		}
 });
@@ -250,16 +263,17 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-contrib-connect');
+	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-exec');
 	grunt.loadNpmTasks('grunt-sync');
 	grunt.loadNpmTasks('grunt-highlight');
 	grunt.loadNpmTasks('grunt-spawn');
-	grunt.loadNpmTasks('grunt-contrib-cssmin');
+
 	grunt.loadTasks('tasks');
 
-	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn']);
+	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn', 'sync:apiArchive']);
 	grunt.registerTask('up', ['css', 'sync', 'ejs', 'tutorials', 'highlight']);
-	grunt.registerTask('css', ['stylus', 'cssmin', 'sync:css']);
+	grunt.registerTask('css', ['stylus', 'cssmin', 'sync:assets']);
 
 	grunt.registerTask('delete', ['clean:dist'])
 	grunt.registerTask('deploy', ['delete', 'css', 'sync', 'ejs', 'tutorials', 'highlight', 'docs']);
