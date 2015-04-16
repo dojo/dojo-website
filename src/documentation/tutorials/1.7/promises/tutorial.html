@@ -1,0 +1,219 @@
+
+
+<h3>Getting Started</h3>
+<p>Now that you've learned about <a href="../deferreds/"><code>Deferred</code></a> and the basic concepts related to it, we're going to introduce you to one that's a bit more abstract: promises. A promise is an object that represents the eventual value returned from the completion of an operation. A promise has the following characteristics:</p>
+<ul>
+	<li>Can be in one of three states: unfulfilled, resolved, rejected</li>
+	<li>May only change from unfulfilled to resolved or unfulfilled to rejected</li>
+	<li>Implements a <code>then</code> method for registering callbacks for notification of state change</li>
+	<li>Callbacks cannot change the value produced by the promise</li>
+	<li>A promise's <code>then</code> method returns a new promise, to provide chaining while keeping the original promise's value unchanged</li>
+</ul>
+<p>With this knowledge, let's discover how Dojo implements promises.</p>
+
+<h3>Deferred as a Promise</h3>
+<p>If a promise sounds a lot like a <code>Deferred</code>, then you've been paying attention. In fact, the <code>dojo/_base/Deferred</code> module is Dojo's main implementation of the promise API. Let's look at the chaining example from the last tutorial in the context that <code>Deferred</code> is a promise:</p>
+<pre class="brush: js;">
+require(["dojo/_base/xhr"],
+	function(xhr){
+
+		// original is a Deferred
+		var original = xhr.get({
+			url: "users-mangled.json",
+			handleAs: "json"
+		});
+
+});
+</pre>
+<p>As we said before, <code>xhr.get</code> (and all of Dojo's Ajax helpers) returns a <code>promise</code>. You could say that this <code>promise</code> represents the eventual value returned from the completion of the request from the server. Initially, it will be in an unfulfilled state and will change to either resolved or rejected depending on the result from the server.</p>
+<p>Given the resulting promise from our xhr call, we can register callbacks via the <code>then</code> method. However, we didn't thoroughly cover what <code>then</code> returns, but only that the return value has a <code>then</code> method. You might have thought that it returns the original promise, but it really returns a simple object that fulfills the promise API. The two commonly used methods on this object are <code>then</code> and <code>cancel</code> (to indicate that the result is no longer needed). Let's look:</p>
+<pre class="brush: js;">
+require(["dojo/_base/array", "dojo/dom", "dojo/dom-construct", "dojo/json"],
+	function(arrayUtil, dom, domConstruct, JSON){
+
+		// result is a new promise that produces a
+		// new value
+		var result = original.then(function(response){
+			var userlist = dom.byId("userlist1");
+
+			return arrayUtil.map(response, function(user){
+				domConstruct.create("li", {
+					innerHTML: JSON.stringify(user)
+				}, userlist);
+
+				return {
+					id: user[0],
+					username: user[1],
+					name: user[2]
+				};
+			});
+		});
+
+});
+</pre>
+<p>This call to <code>then</code> produces a promise object whose value will be set by the return value of the callback function. We can see that the value produced by this new promise is different than that of the original <code>Deferred</code> by calling the promise's <code>then</code> method:</p>
+<pre class="brush: js;">
+// chaining to the result promise rather than
+// the original deferred to get our new value
+result.then(function(objs){
+	var userlist = dom.byId("userlist2");
+
+	arrayUtil.forEach(objs, function(user){
+		domConstruct.create("li", {
+			innerHTML: JSON.stringify(user)
+		}, userlist);
+	});
+});
+</pre>
+<p class="proTip">The value of the promise returned from <code>then</code> is <strong>always</strong> the return value of the callback &mdash; if you didn't return a value, the promise's value will be <code>undefined</code>! If you're seeing a random <code>undefined</code> somewhere in your chain, check to make sure that you're providing proper return values in your callbacks. If you don't care about chaining, it's not important to worry about returning a value.</p>
+<p>We can also check that the original <code>Deferred</code>'s value is unchanged as well:</p>
+<pre class="brush: js;">
+// creating a list to show that the original
+// deferred's value was untouched
+original.then(function(response){
+	var userlist = dom.byId("userlist3");
+
+	arrayUtil.forEach(response, function(user){
+		domConstruct.create("li", {
+			innerHTML: JSON.stringify(user)
+		}, userlist);
+	});
+});
+</pre>
+<a class="demoBtn demo" href="demo/chaining.php">View Demo</a>
+<p>As we saw before, chaining is powerful; it's even more powerful when you know that each link in the chain is immutable.</p>
+<p>It should also be noted that <code>Deferred</code> instances contain another important property: <code>promise</code>. This is an object that only implements the promise API, but represents the value that the <code>Deferred</code> will produce. The <code>promise</code> property allows you to minimize side-effects from consumers of your API by preventing someone from calling <code>resolve</code> or <code>reject</code> by accident (or on purpose), but will still allow them to get the value of the original <code>Deferred</code>.</p>
+
+<h3>Deferred.when</h3>
+<p>Now that we understand what a promise is and why it's useful, let's talk about <code>Deferred.when</code>. It is a powerful function that Dojo provides that allows you to handle either promises or standard values using a consistent API.</p>
+<p>The <code>Deferred.when</code> function takes up to four arguments: a promise or value, an optional callback, an optional error handler, and an optional progress handler. It takes one of two paths:</p>
+<ul>
+	<li>If the first argument is <em>not</em> a promise and the callback is provided, the callback will be called immediately with the provided value as the first argument, and the result of the callback will be returned. If the callback is not provided, the first argument will be returned immediately.</li>
+	<li>If the first argument <em>is</em> a promise, the callback, error handler, and progress handler are passed to the promise's <code>then</code> method, and the resulting promise is returned, setting up your callback to execute when the promise is ready.</li>
+</ul>
+<p>Let's revisit our <code>getUserList</code> function from <a href="../deferreds/">the Deferred tutorial</a>:</p>
+<pre class="brush: js;">
+function getUserList(){
+	return xhr.get({
+		url: "users-mangled.json",
+		handleAs: "json"
+	}).then(function(response){
+		return arrayUtil.map(response, function(user){
+			return {
+				id: user[0],
+				username: user[1],
+				name: user[2]
+			};
+		});
+	});
+}
+</pre>
+<p>Let's say that the list of users won't change very often and can be cached on the client instead of fetching them every time this function is called. In this case, because <code>Deferred.when</code> takes either a value or a promise, <code>getUserList</code> could be changed to return either a promise or an array of users, and we can then handle the return value with <code>Deferred.when</code>:</p>
+<pre class="brush: js;">
+require(["dojo/_base/array", "dojo/_base/Deferred", "dojo/_base/xhr",
+		"dojo/dom", "dojo/dom-construct", "dojo/json"],
+	function(arrayUtil, Deferred, xhr, dom, domConstruct, JSON){
+		var getUserList = (function(){
+			var users;
+			return function(){
+				if(!users){
+					return xhr.get({
+						url: "users-mangled.json",
+						handleAs: "json"
+					}).then(function(response){
+						// Save the resulting array into the users variable
+						users = arrayUtil.map(response, function(user){
+							return {
+								id: user[0],
+								username: user[1],
+								name: user[2]
+							};
+						});
+
+						// Make sure to return users here,
+						// for valid chaining
+						return users;
+					});
+				}
+				return users;
+			};
+		})();
+
+		Deferred.when(getUserList(), function(users){
+			// This callback will be run after the request completes
+
+			var userlist = dom.byId("userlist1");
+			arrayUtil.forEach(users, function(user){
+				domConstruct.create("li", {
+					innerHTML: JSON.stringify(user)
+				}, userlist);
+			});
+
+			Deferred.when(getUserList(), function(user){
+				// This callback will run right away since it's already in cache
+
+				var userlist = dom.byId("userlist2");
+				arrayUtil.forEach(users, function(user){
+					domConstruct.create("li", {
+						innerHTML: JSON.stringify(user)
+					}, userlist);
+				});
+			});
+		});
+
+});
+</pre>
+<a class="demoBtn demo" href="demo/when.php">View Demo</a>
+<p>It also could be that you're in charge of the API for creating the user list, and want a clean API for your developers to hand you a list of users from either the server (via a Deferred) or an array. In this case, you might come up with a function similar to the following:</p>
+<pre class="brush: js;">
+function createUserList(node, users){
+	var nodeRef = dom.byId(node);
+
+	return Deferred.when(
+		users,
+		function(users){
+			arrayUtil.forEach(users, function(user){
+				domConstruct.create("li", {
+					innerHTML: JSON.stringify(user)
+				}, nodeRef);
+			});
+		},
+		function(error){
+			domConstruct.create("li", {
+				innerHTML: "Error: " + error
+			}, nodeRef);
+		}
+	);
+}
+
+var users = xhr.get({
+	url: "users-mangled.json",
+	handleAs: "json"
+}).then(function(response){
+	return arrayUtil.map(response, function(user){
+		return {
+			id: user[0],
+			username: user[1],
+			name: user[2]
+		};
+	});
+});
+
+createUserList("userlist1", users);
+createUserList("userlist2",
+	[{ id: 100, username: "username100", name: "User 100" }]);
+</pre>
+<a class="demoBtn demo" href="demo/when-create.php">View Demo</a>
+<p>As you can see, <code>Deferred.when</code> allows developers to elegantly handle both synchronous and asynchronous usecases with one API, on both the producer and consumer ends of the spectrum.</p>
+
+<h3>Conclusion</h3>
+<p>The addition of the promises API to Dojo allows developers the opportunity to create more powerful applications in two ways: side-effects are avoided because of the guarantee of immutability of promises from functions like <code>Deferred</code>, while <code>Deferred.when</code> provides an API for bridging the gap between promise-based and value-based coding.</p>
+
+
+<h3>Resources</h3>
+<ul>
+<li><a href="/reference-guide/1.7/dojo/_base/Deferred.html">dojo/_base/Deferred Reference Guide</a></li>
+<li><a href="../ajax">Ajax with dojo.request Tutorial</a></li>
+<li><a href="../deferreds">Getting Start with Deferreds Tutorial</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Futures_and_promises">Future and Promises</a> Wikipedia article</li>
+</ul>

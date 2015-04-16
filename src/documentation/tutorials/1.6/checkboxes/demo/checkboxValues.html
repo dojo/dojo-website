@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Dijit CheckBox Getter/Setters</title>
+		<link rel="stylesheet" href="../../../resources/style/demo.css">
+		<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css">
+		<link rel="stylesheet" href="demo.css">
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js" data-dojo-config="parseOnLoad:true"></script>
+		<script>
+			dojo.require("dijit.form.CheckBox");
+
+			dojo.ready(function(){
+				dojo.connect(dojo.byId("summaryBtn"), "onclick", function(evt){
+					var toppings = [];
+					if(dijit.byId("topping1").get("checked")){
+						toppings.push(dijit.byId("topping1").get("value"));
+					}
+
+					if(dijit.byId("topping2").get("value") !== false){
+						toppings.push(dijit.byId("topping2").get("value"));
+					}
+
+					alert("Toppings: " + toppings.join(", "));
+				});
+
+				dojo.connect(dijit.byId("deluxe"), "onChange", function(isChecked){
+					dijit.byId("topping2").set("value", isChecked ? "kalamata olives" : "olives");
+				});
+			});
+		</script>
+	</head>
+	<body class="claro">
+		<h2>dijit.form.CheckBox value setters</h2>
+		<div>
+			<h3>Pizza Toppings</h3>
+
+			<ul>
+				<li>
+					<input id="topping1" type="checkbox" value="anchovies" checked
+						data-dojo-type="dijit.form.CheckBox"
+						data-dojo-props="value: 'anchovies', checked: true">
+					<label for="topping1">Anchovies</label>
+				</li>
+				<li>
+					<input id="topping2" type="checkbox" value="olives"
+						data-dojo-type="dijit.form.CheckBox"
+						data-dojo-props="value: 'olives'">
+					<label for="topping2">Olives</label>
+				</li>
+			</ul>
+
+			<p>
+				<input id="deluxe" type="checkbox" value="deluxe"
+					data-dojo-type="dijit.form.CheckBox"
+					data-dojo-props="value: 'deluxe'">
+				<label for="deluxe">Go Deluxe?</label>
+			</p>
+
+			<button id="summaryBtn">Which Toppings?</button>
+		</div>
+	</body>
+</html>

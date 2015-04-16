@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: DojoX Validate and HTML Forms</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<style type="text/css">
+			label { 
+				display: inline-block;
+				width: 140px; 
+			}
+		</style>
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			//	pull in the two main validation mechanisms.
+			dojo.require("dojox.validate.web");
+			dojo.require("dojox.validate.us");
+			dojo.require("dojox.validate.check");
+
+			var profile;
+			function doCheck(form){
+				var results = dojox.validate.check(form, profile),
+					r = dojo.byId("result");
+
+				if(results.isSuccessful()){
+					//	everything passed, log it to the result div
+					r.innerHTML = "Everything passed validation!";
+				} else {
+					var s = "";
+					var missing = results.getMissing();
+					if(missing.length){
+						s += '<h4>The following fields are missing:</h4>'
+							+ '<ol>';
+						dojo.forEach(missing, function(field){
+							s += '<li>' + field + '</li>';
+						});
+						s += '</ol>';
+					}
+
+					var invalid = results.getInvalid();
+					if(invalid.length){
+						s += '<h4>The following fields are invalid:</h4>'
+							+ '<ol>';
+						dojo.forEach(invalid, function(field){
+							s += '<li>' + field + '</li>';
+						});
+						s += '</ol>';
+					}
+
+					r.innerHTML = s;
+				}
+			}
+
+			dojo.ready(function(){
+				//	wait until after our requires are actually loaded.
+				profile = {
+					trim: [ "firstName", "lastName" ],
+					required: [ "firstName", "lastName", "email", "emailConfirm", "password", "password2" ],
+					constraints: {
+						firstName: 	dojox.validate.isText,
+						lastName:  	dojox.validate.isText,
+						password:  	dojox.validate.isText,
+						password2: 	dojox.validate.isText,
+						email:		[ dojox.validate.isEmailAddress, false, true ],
+						emailConfirm: [ dojox.validate.isEmailAddress, false, true ],
+						phone:		dojox.validate.us.isPhoneNumber
+					},
+					confirm: {
+						"emailConfirm": "email",
+						"password2": "password"
+					}
+				};
+
+				//	set up the form handler.
+				var f = dojo.query("form")[0];
+				f.onsubmit = function(e){
+					dojo.stopEvent(e);
+					doCheck(f);
+				};
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: DojoX Validate and HTML Forms</h1>
+		<p>
+		What follows is a simple HTML form that is checked using dojox.validate.check, as well
+		as common dojox.validate functions.  Give it a shot!
+		</p>
+		<p style="font-size: x-small">
+			* denotes required fields.  Results will not be posted anywhere.
+		</p>
+		<form>
+			<div>
+				<label for="firstName">First Name*</label>
+				<input type="text" name="firstName" id="firstName" value="" />
+			</div>
+			<div>
+				<label for="lastName">Last Name*</label>
+				<input type="text" name="lastName" id="lastName" value="" />
+			<div>
+			</div>
+				<label for="email">Email Address*</label>
+				<input type="text" name="email" id="email" value="" />
+			</div>
+			<div>
+				<label for="emailConfirm">Confirm Email*</label>
+				<input type="text" name="emailConfirm" id="emailConfirm" value="" />
+			</div>
+			<div>
+				<label for="password">Password*</label>
+				<input type="password" name="password" id="password" value="" />
+			</div>
+			<div>
+				<label for="password2">Confirm Password*</label>
+				<input type="password" name="password2" id="password2" value="" />
+			</div>
+			<div>
+				<label for="phone">Phone</label>
+				<input type="text" name="phone" id="phone" value="" />
+			</div>
+			<input type="submit" value="Post!" />
+		</form>
+		<h3>Form validation results</h3>
+		<div id="result" style="border-top:1px solid #999;"></div>
+	</body>
+</html>

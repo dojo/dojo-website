@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Demo: Dijit Menus</title>
+	<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"
+		data-dojo-config="parseOnLoad:true"></script>
+</head>
+<body class="claro">
+	<h3>Nested Menu Demo</h3>
+	<div id="mainMenu" data-dojo-type="dijit.Menu">
+		<div id="edit"
+				data-dojo-type="dijit.MenuItem"
+				data-dojo-props="onClick: demo.onItemSelect">
+			Edit
+		</div>
+		<div id="view"
+				data-dojo-type="dijit.MenuItem"
+				data-dojo-props="onClick: demo.onItemSelect">
+			View
+		</div>
+		<div id="task" data-dojo-type="dijit.PopupMenuItem">
+			<span>Task</span>
+			<div id="taskMenu" data-dojo-type="dijit.Menu">
+				<div id="complete"
+						data-dojo-type="dijit.MenuItem"
+						data-dojo-props="onClick: demo.onItemSelect">
+					Mark as Complete
+				</div>
+				<div id="cancel"
+						data-dojo-type="dijit.MenuItem"
+						data-dojo-props="onClick: demo.onItemSelect">
+					Cancel
+				</div>
+				<div id="begin"
+						data-dojo-type="dijit.MenuItem"
+						data-dojo-props="onClick: demo.onItemSelect">
+					Begin
+				</div>
+			</div>
+		</div><!-- end of sub-menu -->
+	</div>
+	<p>Last selected: <span id="lastSelected">none</span></p>
+
+	<script>
+		dojo.require("dijit.Menu");
+		dojo.require("dijit.MenuItem");
+		dojo.require("dijit.PopupMenuItem");
+		dojo.require("dojo.parser");
+		
+		var demo = {
+			// a menu item selection handler
+			onItemSelect: function(evt){
+				// retrieve the widget representing the item clicked
+				var item = dijit.getEnclosingWidget(evt.target);
+				
+				dojo.byId("lastSelected").innerHTML = 
+					item.get("label");
+			}
+		};
+	</script>
+</body>
+</html>

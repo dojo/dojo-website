@@ -1,0 +1,58 @@
+
+
+<h3>Getting started</h3>
+<p>When writing a JavaScript-based web site or application, it is important to ensure that standard browser controls—like back/forward buttons and bookmarks—continue to work correctly, even if the browser hasn’t navigated to an entirely new page. Using the <a href="/reference-guide/1.7/dojo/hash.html"><code>dojo/hash</code></a> module, it is possible to provide bookmarkable, history-enabled page states across all browsers.</p>
+
+<h3>Changing the hash</h3>
+
+<p>Let’s say we are creating a simple page that uses Ajax to load new content into the body of the page:</p>
+
+<!-- pre tag for JS-only snippets -->
+<pre class="brush: js; html-script: true;">
+<?php echo htmlentities(file_get_contents('html.inc'),ENT_NOQUOTES) ?>
+</pre>
+
+<p>The Ajax code is loaded and executed with the <code>&lt;script&gt;</code> tag. This code updates the content and title of the page using JavaScript. It doesn’t actually change the browser’s history or the URL at all. This means that if someone bookmarks the page, or tries to navigate using the browser’s normal controls, they will find that it simply doesn’t work—there are no pages to go back to, and the bookmarked page will always start at whatever page was first loaded. With two small modifications, we can get a URL that is updated when new content is requested:</p>
+
+<pre class="brush: js; highlight: [3,34];">
+<?php echo htmlentities(file_get_contents('demo/demo1.js'),ENT_NOQUOTES) ?>
+</pre>
+
+<a class="demoBtn demo" href="demo/index.php?demo1.js">View Demo</a>
+
+<p>By calling <code>dojo/hash</code>, the page’s URL is updated to reflect its new state, and entries are added to the browser’s history. However, when users try to use the back/forward buttons, while the URL now changes, nothing else happens. In order to make this all work, we have to add code to respond to changes to the hash. Luckily, this is just as easy.</p>
+
+<h3>Responding to hash changes</h3>
+
+<p>In order to listen for hash changes, all we need to do is subscribe to the <code>/dojo/hashchange</code> topic:</p>
+
+<pre class="brush: js;">topic.subscribe("/dojo/hashchange", function(hash){
+	loadContent(hash);
+});</pre>
+
+<p>Now, whenever the hash of the page changes, our code will receive a notification containing the new hash value. This message is only ever published when the hash actually changes, so we don’t have to worry about getting stuck in a loop or doing a bunch of unnecessary work if the hash gets set to an identical value later. (That said, in our example, due to the circular logic between the <code>/dojo/hashchange</code> subscriber and the <code>loadContent</code> function, we store the last page requested in order to avoid making a second redundant request to the server when the hash is updated by <code>loadContent</code>.)</p>
+
+<p>The one last thing that we need to do in order to complete state management is to ensure that we are paying attention to what the initial value of the hash is when the page loads. There are a couple of ways this can be done, but the simplest is just to call <code>dojo/hash</code> with the hash of the page when it first loads, if one exists:</p>
+
+<pre class="brush: js;">hash(location.hash || lastPage, true);</pre>
+
+<p>With this code in place, the page will load, then immediately fetch the correct content for the given hash. Note that we’ve passed <code>true</code> as a second parameter to <code>dojo/hash</code>; this simply means that the new page will be <em>replacing</em> the current page in the browser’s history, rather than being added as a new page. This can also be useful in cases where a URL is invalidated in response to an action and needs to be removed from the user’s browser history (for instance, in a content management system, when someone deletes a record).</p>
+
+<a class="demoBtn demo" href="demo/index.php?demo2.js">View Demo</a>
+
+<h3>Caveats</h3>
+
+<p>In the future, it’s likely that <code>dojo/hash</code> will be extended or replaced with a mechanism that supports emerging HTML features like <a href="http://www.w3.org/TR/html5/author/history.html">HTML5 session history and navigation</a>. For now, though, it operates entirely on the hash part of the URL, which means some caveats apply (though they are less severe than no state management at all).</p>
+
+<p>The first and most important problem with using the hash for state management is that it creates URLs that are not indexable by search engines. If you want your content to be indexed, you must either ensure your site gracefully degrades (as our example does), or that you follow the instructions published by Google at <a href="https://code.google.com/web/ajaxcrawling/docs/getting-started.html">Making AJAX Applications Crawlable</a>.</p>
+
+<p>The second, less important problem with using the hash is that it was originally intended for linking to content <em>within</em> a page, based on the ID of an element. If you have an element in your page with an ID matching the hash that you are using, the browser <em>will</em> scroll to it. In this case, prefixing your hashes to ensure they do not match any element IDs is an easy way to work around the issue. In the above example, this could be done by changing four lines:</p>
+
+<pre class="brush: js; highlight: [5,29,54,58];">
+<?php echo htmlentities(file_get_contents('demo/demo3.js'),ENT_NOQUOTES) ?>
+</pre>
+
+<a class="demoBtn demo" href="demo/index.php?demo3.js">View Demo</a>
+
+<h3>Conclusion</h3>
+<p>Using <code>dojo/hash</code>, it is easy to create applications that are highly responsive while still allowing users to interact with all of the normal browser features. A few lines of code is all it takes to add complete state management to a JavaScript-enhanced Web site or application.</p>

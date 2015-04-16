@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Fetch JSON Data</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			// Function that refreshes a node's content
+			function getJSON() {
+				// Using dojo.xhrGet, as no information is being sent -- only requesting
+				dojo.xhrGet({
+					// The URL of the request
+					url: "countries.json",
+					// Handle as JSON Data
+					handleAs: "json",
+					// The success callback with result from server
+					load: function(newContent) {
+						// Update with content
+						var contentNode = dojo.byId("contentNode");
+						dojo.style(contentNode,"display","");
+						contentNode.innerHTML = "<strong>JSON loaded from server:</strong><br /><br />" +
+							dojo.toJson(newContent) +
+							"<br /><br /><strong>Look at the JSON data in the console as well!</strong>";
+						// Log to console
+						console.info("JSON loaded from server:  ",newContent);
+					},
+					// The error handler
+					error: function() {
+						// Do nothing -- keep old content there
+					}
+				});
+			}
+
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Fetch JSON Data</h1>
+
+		<button id="getJson" onClick="getJSON();">Get JSON</button>
+		<br /><br />
+
+		<pre id="contentNode" style="display:none;"></pre>
+
+	</body>
+</html>

@@ -1,0 +1,477 @@
+
+
+<h3>Getting Started</h3>
+<p>
+Creating a web application for a specific target market is usually a daunting task, but libraries such as the Dojo Toolkit
+ease that task by providing tools to <a href="../dijit_layout/" title="Layout with Dijit">quickly</a>
+<a href="../themes_buttons_textboxes/" title="Themes, Buttons, and Textboxes">assemble</a> <a href="../dialogs_tooltips/" title="Dialogs &amp; Tooltips">user</a>
+<a href="../understanding_widgetbase/" title="Understanding _WidgetBase">interfaces</a> (i.e. Dijit), supporting code to ease
+<a href="../dom_functions/" title="DOM Functions">the pain</a> <a href="../arrays/" title="Arrays Made Easy">of cross-browser</a>
+<a href="../ajax/" title="Ajax">compatibility</a>, and <a href="../datagrid/" title="DataGrid">various add-ons/plug-ins</a>
+for specific functionality such as the <a href="../charting/" title="Charting">DojoX Charting package</a>.
+</p>
+<p>
+No such toolkit would be complete without the ability to <em>localize</em> an application&mdash;in other words, the ability for
+an application to be presented using language based on the location of the application's user.  The Dojo Toolkit provides this
+ability for application developers through the use of <strong><a href="/reference-guide/1.7/dojo/i18n.html">dojo/i18n</a></strong>.
+</p>
+<h4>A Short History</h4>
+<p>
+In software development, two terms are used when discussing the ability to display application elements based on a user's locale:
+<em>internationalization</em> (or <strong>i18n</strong>) and <em>localization</em> (or <strong>L10n</strong>).  While many use
+these terms interchangeably, there is a subtle difference between the two:
+</p>
+<ul>
+<li>An application is considered <em>localized</em> when language elements are <em>hard-coded</em> or built directly into the executable;</li>
+<li>An application is considered <em>internationalized</em> when the <em>preparation</em> of language elements are built into the executable;
+in this case, it means that specific language elements <em>are not substituted until run-time</em>.</li>
+</ul>
+<p class="proTip">
+If you are wondering where "i18n" and "l10n" come from, it is an old computer science tradition that lists the number
+of letters in the term that are abbreviated, and is wrapped with the first and last letters of the term.  The capital "L" for localization is normally
+used to distinguish the term from <em>i18n</em>. A good explanation of the concept and differences can be
+<a href="http://en.wikipedia.org/wiki/I18n">found at Wikipedia</a>.
+</p>
+<p>
+Because applications built using the Dojo Toolkit are dynamic in nature (i.e. compiled and executed at run-time), they are considered
+to be <em>internationalized</em> and not localized.
+</p>
+<p>
+Internationalization with the Dojo Toolkit takes two forms: the ability to define <em>resource bundles</em> that can be loaded
+based on a user's locale, and special built-in i18n facilities based on the <a href="http://cldr.unicode.org">Unicode CLDR</a>
+for dates, numbers and currencies.
+</p>
+<h3>Locales with the Dojo Toolkit</h3>
+<p>
+In order for an application to know what resources it may need to use for i18n, a <em>locale</em> must first be defined.
+</p>
+<h4>What are locales?</h4>
+<p>
+<strong>Locales</strong> are a short string, based on <a href="http://en.wikipedia.org/wiki/ISO_639">a language</a> code and
+<a href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">a country</a> code, separated by a dash.  For example, the locale
+for a typical user in the United States is <em>en-us</em>.
+</p>
+<p class="proTip">
+Normally, the locale is determined for a browser during the browser's installation, and cannot be easily configured.
+</p>
+<p>
+When loading a Dojo Toolkit-based application, the user's locale is detected automatically and can be found programmatically
+through the <code>dojo/locale</code> property.  This is the normal usage scenario; however, there may be times (particularly
+when testing your application with resource bundles) where you would like to specify a locale.
+</p>
+<h4>Specifying a locale</h4>
+<p>
+If you need to specify a locale, you may do so by setting a <code>locale</code> property on the <a href="/reference-guide/1.7/dojo/_base/config.html#dojo-config">Dojo configuration object</a>, like
+so:
+</p>
+<pre class="brush: js; html-script: true">
+//	before dojo.js is loaded
+var dojoConfig = {
+	locale: "pt-pt"
+};
+
+//	or in the script tag:
+&lt;script src="path/to/dojo.js" data-dojo-config="locale:'pt-pt'">&lt;/script>
+</pre>
+
+<p>
+You should always include the full locale (i.e. language + country) when specifying a locale, even though many resource
+bundles are defined by language only (as you'll see later on).
+</p>
+<p class="proTip">
+Once a Dojo Toolkit-based application is loaded, it is not possible to change the locale.
+</p>
+<p class="proTip">
+	When using the <code>dojo/parser</code>, the <code>lang=</code> setting on an ancestor DOMNode overrides the <code>dojoConfig.locale</code> setting. This behavior will change in Dojo 2.0. You can also specify the <code>lang </code>for individual widgets, overriding the <code>dojoConfig.locale</code> setting for only that widget.
+</p>
+<h4>Including extra locales</h4>
+<p>
+There may be times when you want to include more than one locale-specific resource&mdash;for instance, if you need
+to display date resources in more than one language.  While this is not the normal use-case, the Dojo Toolkit allows
+you to include more locale-based resources through the use of the <code>extraLocale</code> property of the Dojo
+configuration object, like so:
+</p>
+<pre class="brush: js; html-script: true">
+//	before dojo.js is loaded
+var dojoConfig = {
+	locale: "pt-pt",
+	extraLocale: ["zh-cn","zh-tw"]
+};
+
+//	or in the script tag:
+&lt;script src="path/to/dojo.js" data-dojo-config="locale:'pt-pt',extraLocale:['zh-cn','zh-tw']">&lt;/script>
+</pre>
+<p>
+These extra locales can be passed into methods such as <code>dojo/date/format</code>, or optionally used with specific
+Dijits by setting the <code>lang</code> attribute/property when instantiating them.
+</p>
+<h3>Resource Bundles</h3>
+<p>
+A <strong>resource bundle</strong> is a file containing a JavaScript object literal (or dictionary) of terms used by your
+application code for a specific locale.  When a user's locale is detected (and <code>dojo/i18n</code> is required), you can
+use the i18n facilities within the Dojo Toolkit to load the resource bundle for a specific locale.  For example, here is the
+Japanese resource bundle for Dijit's <code>ValidationTextBox</code> widget:
+</p>
+<pre class="brush: js;">
+define({
+	invalidMessage: "入力した値は無効です。",
+	missingMessage: "この値は必須です。",
+	rangeMessage: "この値は範囲外です。"
+});
+</pre>
+<p>
+There are a few things to note here about the structure of this resource bundle:
+</p>
+<ul>
+<li>The <em>fields</em> of the bundle correspond to fields that are referenced within <code>dijit/form/ValidationTextBox</code>
+(for instance, <code>myValidationWidget.invalidMessage</code>);</li>
+<li><strong>Not</strong> all fields need to be defined in a specific resource bundle;</li>
+<li>Not all language/country combinations need to be defined.</li>
+</ul>
+<p>
+Let's take a look at how to create a resource bundle, as part of a larger set of resource bundles.
+</p>
+<h4>Creating resource bundles</h4>
+<p>
+The first step in creating resource bundles is to create a subdirectory called <strong>nls</strong> where your code lives,
+like so:
+</p>
+<p><img src="images/nls.png" width="207" height="421" border="0" alt="The directory structure for Dijit" /></p>
+<p class="proTip">
+Note that the directory <strong>must</strong> be named "nls", and must be a subdirectory of the code that will be using it.
+In our example above, we have i18n directories for both the root of Dijit (i.e. for any widget that lives directly under
+the <code>dijit</code> namespace) and for <code>dijit.form</code>.
+</p>
+<p>
+Inside the <code>nls</code> directory for your namespace, you'll add both individual files and directories based on either
+the international language code, or the full locale (such as <em>pt-pt</em>):
+</p>
+<p><img src="images/nls-form.png" width="650" height="602" border="0" alt="Contents of nls for dijit.form" style="border:1px solid black;" /></p>
+<p>
+The name of each resource bundle does not matter, though by convention it should be close to the purpose of it.  For example,
+in our screen shot above, there are three main resource bundles in the root of <code>/nls</code>: <em>ComboBox.js</em>,
+<em>Textarea.js</em> and <em>validate.js</em>.  The first two resource bundles are aimed at a specific widget, while the last
+is intended for use by any validation widget.
+</p>
+<p>
+The resource bundles in the root of the <code>/nls</code> folder are intended to be <em>master</em> bundles; what this means
+is that <em>any and all properties to be consumed must be defined within these files</em>.  The reason for this is because the
+"master" bundle is the <strong>fallback</strong> for when a particular property does not exist in a specific language-based
+resource bundle.  For example, if your master resource bundle defines a property called <code>message</code> but the locale
+resource <code>fr</code> does not define it, the value of <code>message</code> in the master resource bundle will be used
+in its place&mdash;in other words, when a locale is detected and a resource bundle is loaded, the locale-specific bundle will
+be <em>mixed into</em> the master bundle.
+</p>
+<p class="proTip">
+You do <strong>not</strong> have to create locale-specific bundles for all possible languages/locales; in the case that a
+locale is detected but no locale-specific resource exists, the master bundle will be used in full.
+</p>
+<p>
+In your language or locale directory, create identically named resource bundles as the master bundles; in each locale-specific
+bundle, define whatever properties you will be using in your code.
+</p>
+<p>
+Finally, in your master bundle (the main one in the root of the <code>/nls</code> folder), add properties matching each locale
+you've defined and set the value of each to <strong>true</strong>.  As an example, here is the master bundle for the <code>validate.js</code>
+resource, followed by our localized Japanese version:
+</p>
+<pre class="brush: js;">
+//	the master bundle, from dijit/form/nls/validate.js:
+define({
+	root: {
+		invalidMessage: "The value entered is not valid.",
+		missingMessage: "This value is required.",
+		rangeMessage: "This value is out of range."
+	},
+	"zh": true,
+	"zh-tw": true,
+	"tr": true,
+	"th": true,
+	"sv": true,
+	"sl": true,
+	"sk": true,
+	"ru": true,
+	"ro": true,
+	"pt": true,
+	"pt-pt": true,
+	"pl": true,
+	"nl": true,
+	"nb": true,
+	"ko": true,
+	"kk": true,
+	"ja": true,
+	"it": true,
+	"hu": true,
+	"he": true,
+	"fr": true,
+	"fi": true,
+	"es": true,
+	"el": true,
+	"de": true,
+	"da": true,
+	"cs": true,
+	"ca": true,
+	"ar": true
+});
+
+//	our localized Japanese resource, from
+//	dijit/form/nls/ja/validate.js:
+define({
+	invalidMessage: "入力した値は無効です。",
+	missingMessage: "この値は必須です。",
+	rangeMessage: "この値は範囲外です。"
+});
+</pre>
+<p>
+Notice that in the "master" bundle, the properties to be referenced in application code are declared on the
+<strong>root</strong> property, while the localized Japanese version defines the properties at the top level of the object.
+You <strong>must</strong> follow this form for i18n to work correctly.
+</p>
+<h4>Consuming resource bundles</h4>
+<p>
+To consume resource bundles in your application code, you'll rely on the <code>dojo/i18n</code> module along
+with two basic constructs: the <code>dojo/i18n!</code> plug-in and <code>i18n.getLocalization</code> (from <code>dojo/i18n</code>).
+These two methods work hand-in-hand; <code>dojo/i18n!</code> fetches and assembles the locale-specific
+bundle, and <code>getLocalization</code> returns the JavaScript object literal fully assembled.
+</p>
+<p>
+Both <code>dojo/i18n!</code> and <code>i18n.getLocalization</code> have the same method signature:
+the main namespace under which the resource bundles live, and the name (without the <code>.js</code> extension)
+of the bundle to load.  In addition, <code>i18n.getLocalization</code> can take one more argument: the locale
+of the resource bundle to load.  Here's how the resources are loaded within <code>dijit/form/ValidationTextBox</code>:
+</p>
+<pre class="brush: js;">
+//	at the top of ValidationTextBox.js:
+"dojo/i18n", // to require i18n.getLocalization
+"dojo/i18n!./nls/validate" // to require form validation internationalization
+
+//	later on, in the declaration of the widget:
+postMixInProperties: function(){
+	this.inherited(arguments);
+	this.messages = i18n.getLocalization("dijit.form", "validate", this.lang);
+	this._setConstraintsAttr(this.constraints);
+</pre>
+<a class="demoBtn demo" href="demo/demo.php">View Demo</a>
+<p>
+You'll see that <code>i18n.getLocalization</code> returns a JavaScript object, which we assign to the property
+<code>messages</code>; we then read that object to populate the properties of the widget that require
+localization.
+</p>
+<div class="proTip">
+<p>
+You'll note that these localized properties are set in the <code>postMixInProperties</code> method
+of <code>dijit/form/ValidationTextBox</code>; this is the proper place to set up your i18n within any
+custom widget code.  See <a href="../understanding_widgetbase/">Understanding _WidgetBase</a> for more information.
+</p>
+</div>
+<h4>Working with resource bundles in alternative file locations</h4>
+<p>For resources located outside the default location specified by Dojo, we may define packages which enable Dojo to find the resources.
+</p>
+<p>The <code>registerModulePath</code> can be used to indicate where to load the resources. For Dojo 1.7+, the packages configuration may also be applied.
+Here is the example of how to define a package:
+</p>
+<pre class="brush: js;">
+var dojoConfig = {
+	async: false,
+	parseOnLoad: true,
+	packages: [
+		{
+			name: "resource",
+			location: "../bundles/messages"
+		}
+	]
+};
+</pre>
+<p></p>The example above uses a relative path. However, you may choose to use absolute path as well. After the path
+is assigned to "resource", we can load the resources using
+<pre class="brush: js;">
+require(["dojo/i18n", "resource"], function(i18n, resource){
+    var bundle = i18n.load(resource, "sample");
+});
+</pre>
+<p>Note that <code>dojoConfig</code> has to be set before loading dojo.js. Visit the <a href="../dojo_config/">Configuring Dojo
+with dojoConfig</a> tutorial for more details.</p>
+<h4>Creating builds with resource bundles</h4>
+<p>
+A typical step in deploying a Dojo Toolkit-based application is to <a href="../build/">create
+a build</a> of your application; a build minifies your JavaScript, inlines HTML and CSS, and generally makes your
+application run much more efficiently.  The <a href="../build/">Dojo Build Tool</a> also
+provides ways of flattening your resource bundles through the command line parameter <code>localeList</code>.
+</p>
+<p>
+Normally you won't need to include this command line parameter to create your build; by default, the following list
+of locales is included:
+</p>
+<pre class="brush: js;">
+"en-gb,en-us,de-de,es-es,fr-fr,it-it,pt-br,ko-kr,zh-tw,zh-cn,ja-jp"
+</pre>
+<p>
+However, if your application needs more than these locales defined, you can write your own comma-delimited list
+as the value of the <code>localeList</code> parameter.
+</p>
+<p class="proTip">
+A common "gotcha" when creating internationally-aware applications is to forget to copy over any <code>/nls</code>
+directories to your Dojo Toolkit release.  If you create a build and run into errors loading the application the
+first time, it is likely that some <code>/nls</code> directories were not copied during the course of the build process;
+to fix simply copy the missing directories into your release, in the appropriate spots.
+</p>
+<h3>Dates, Numbers and Currencies in the Dojo Toolkit</h3>
+<p>
+Internationalization in a toolkit would not be complete without the ability to parse and format dates, numbers and currency
+in locale-specific formats. The Dojo Toolkit provides this functionality with <code>dojo/date/locale</code>,
+<code>dojo/number</code> and <code>dojo/currency</code>.
+</p>
+<p class="proTip">You can learn more about working localization and dates specifically in the <a href="../dojo_date/">Dojo Date tutorial</a>.</p>
+
+<h4>Locale-aware dates with the Dojo Toolkit</h4>
+<p>
+As with our resource bundles, <code>dojo/date/locale</code> provides locale-specific formatting and parsing of dates,
+like so:
+</p>
+<pre class="brush: js;">
+//	with our config object:
+var dojoConfig = {
+	extraLocale: [ "zh-cn", "ja-jp" ]
+};
+
+//	after dojo.js has been loaded:
+require(["dojo/date/locale"], function(locale){
+	var d = new Date(2006,9,29,12,30);
+	// to format a date, simply pass the date to the format function
+	locale.format(d);
+	// => "10/29/06 12:30 PM"
+
+	// the second argument may contain a list of options in Object syntax,
+	// such as overriding the default locale
+	locale.format(d, {locale:'zh-cn'});
+	// => "06-10-29 下午12:30"
+});
+</pre>
+<p>
+For more information about working with Date objects with the Dojo Toolkit, see the
+<a href="../dojo_date/">Dojo Date tutorial</a>.
+</p>
+<p class="proTip">
+Note that if you plan on formatting and parsing dates, numbers and currencies in a number of different locales, you <strong>must</strong>
+set the <code>extraLocale</code> property on the Dojo configuration object before loading <code>dojo.js</code>.
+</p>
+
+<h4>Locale-aware number formatting</h4>
+<p>
+Like <code>dojo/date/locale</code>, <code>dojo/number</code> uses the Dojo CLDR (see below) to correctly format numbers
+based on a locale.  For example, an American user might expect to see the number "1000000" (one million) formatted like
+so:
+</p>
+<pre class="brush: js;">
+// => 1,000,000
+</pre>
+<p>
+...but German, French and Indian users would expect the following formats:
+</p>
+<pre class="brush: js;">
+// => 1.000.000,00  German
+// => 1 000 000,00  French
+// => 10,00,000.00  Indian
+</pre>
+<p>
+Like with <code>dojo/date/locale</code>, you can pass an optional arguments object that specifies the locale to
+format or parse a number with (otherwise it will use the current locale as detected by the browser):
+</p>
+<pre class="brush: js;">
+require(["dojo/number"], function(number){
+	console.log(number.format(100000, { locale: "hi-in" }));
+	// => 10,00,000.00
+
+	console.log(number.parse("10,00,000.00", { locale: "hi-in" }));
+	// => 1000000
+});
+</pre>
+<h4>Locale-aware currencies</h4>
+<p>
+Finally, <code>dojo/currency</code> will display numbers formatted to the correct currency&mdash;or optionally
+based on the three-letter ISO code for that currency&mdash;using the same basic function signature as <code>dojo/number</code>:
+</p>
+<pre class="brush: js;">
+require(["dojo/currency"], function(currency){
+	// in the United States
+	currency.format(1234.567, {currency: "USD"});
+	// => "$1,234.57"
+
+	//	basic Euro formatting
+	currency.format(1234.567, {currency: "EUR"});
+	// => "€1,234.57"
+
+	// a French-speaking Swiss user would see
+	currency.format(-1234.567, {currency: "EUR"});
+	// => "-1 234,57 €"
+
+	// while a German-speaking Swiss user would see
+	currency.format(-1234.567, {currency: "EUR"});
+	// => "-€ 1,234.57"
+});
+</pre>
+<p>
+Note that <code>dojo/currency</code> <em>combines</em> locale information with currency information, so that the formatting
+for a particular user is always correct.  <a href="/api/1.7/dojo/currency">See the Dojo Toolkit API</a> for more details.
+</p>
+<h3>Other internationalization resources</h3>
+<p>
+In addition to the basic i18n facilities, the Dojo Toolkit also implements a version of the
+<a href="http://cldr.unicode.org">Unicode CLDR</a> and supports bi-directional text.
+</p>
+<h4>The Dojo CLDR</h4>
+<p>
+The <a href="/api/1.7/dojo/cldr"><code>dojo/cldr</code></a> (or Common Locale Data Repository) contains tables with
+culturally sensitive information for hundreds of languages and country variants for locale-specific information,
+such as days of week, currency symbols and formats, and more.  In addition to being used by date, number and
+currency-specific functions in the Dojo Toolkit (see the above section), it also contains some methods that allow
+you to find locale-based things.  For example, if you want to find out how to format a currency (by learning how
+many places and rounding should be), you'd pass an ISO code to <code>monetary.getData from dojo/cldr/monetary</code>, like so:
+</p>
+<pre class="brush: js;">
+require(["dojo/cldr/monetary"], function(monetary){
+	//	get the formatting data for a euro
+	console.dir(monetary.getData("EUR"));
+
+	//	should display the following:
+	{
+		places: 2,
+		round: 0
+	}
+});
+</pre>
+<p>
+For more information on using the <code>dojo/cldr</code> directly, check out
+<a href="/reference-guide/1.7/dojo/cldr.html">The Dojo Reference Guide</a>.
+</p>
+<h4>Bi-directional Language Support</h4>
+<p>
+Some languages (particularly Middle Eastern in origin, such as Hebrew and Arabic) read right-to-left as opposed to
+the usual left-to-right.  The Dojo Toolkit supports bi-directional text, but there are some caveats:
+</p>
+<ul>
+<li>The DIR attribute on either the <code>html</code> or <code>body</code> element <strong>must</strong> be set to <em>rtl</em>;</li>
+<li>Dojo functions, including those in Dijit, only support one text direction at a time;</li>
+<li>Special considerations (such as CSS specific to right-to-left text) must be taken into account.</li>
+</ul>
+<p>
+Full information on how bi-directional text is supported throughout the Dojo Toolkit
+<a href="/reference-guide/1.7/quickstart/internationalization/bi-directional-text.html">can be found in the Dojo Toolkit Reference Guide</a>,
+but the definition of resource bundles for right-to-left text remains the same as with any other locale.
+</p>
+
+<!-- button for example links -->
+<!--
+<a class="demoBtn demo" href="demo/demo.php">View Demo</a>
+-->
+<h3>Conclusion</h3>
+<p>
+The Dojo Toolkit provides full-featured internationalization tools to aid you in creating localized applications.
+User interface elements benefit from the Dojo Toolkit's i18n resource bundle system, and also gives you
+built-in formatting and parsing capabilities for dates, numbers and currencies.  In addition, the Dojo Build system
+is capable of "compiling" resource bundles et al to help make your application download and run more efficiently.
+</p>
+<p>
+We hope that the information contained in this article aids you in creating full-featured applications that can
+be used by users all around the world!
+</p>

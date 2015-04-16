@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Simple Horizontal and Vertical Sliders</title>
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and theme; provide config via data attribute -->
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"
+			data-dojo-config="parseOnLoad: true"></script>
+	</head>
+	<body class="claro">
+		<h1>Demo: Simple Horizontal and Vertical Sliders</h1>
+		
+		<h3>Horizontal Slider</h3>
+		<p>This horizontal slider ranges in value from 0-10, incrementing by 1.</p>
+		<div style="width: 400px;">
+			<!-- declaratively create a slider with buttons, values from 0-10 -->
+			<input id="hslider" type="range"
+				data-dojo-type="dijit.form.HorizontalSlider"
+				data-dojo-props="
+					minimum: 0,
+					maximum: 10,
+					value: 3,
+					discreteValues: 11">
+			<!-- Create an element showing the value -->
+			<div style="padding-top: 10px; text-align: center;">Value: <strong id="decValue"></strong></div>
+			<!-- Controls to play with slider -->
+			<div style="padding-top: 10px;">
+				<!-- button to enable and disable slider -->
+				<button id="disableButton" data-dojo-type="dijit.form.Button"
+					data-dojo-props="onClick: updateHorizontalState">Disable Slider</button>
+			</div>
+		</div>
+		<p>&nbsp;</p>
+		<h3>Vertical Slider</h3>
+		<p>This vertical slider ranges in value from 0-100 with no discrete values,
+			so the widget is freely draggable.</p>
+		<div id="vertSlider"></div>
+		<!-- Create an element showing the value -->
+		<div style="padding-top: 10px;">Value: <strong id="vertValue"></strong></div>
+		
+		<script>
+			// Require parser since we are performing declarative instantiation
+			dojo.require("dojo.parser");
+			// Require the slider classes
+			dojo.require("dijit.form.HorizontalSlider");
+			dojo.require("dijit.form.VerticalSlider");
+			// Utilities for this demo...
+			dojo.require("dijit.form.Button");
+			
+			// When the DOM and resources are ready...
+			dojo.ready(function(){
+				// Get access to nodes/widgets we need to get/set values
+				var hSlider = dijit.byId("hslider"), label = dojo.byId("decValue");
+				// Create function that updates label when changed
+				function updateHorizontalLabel() {
+					// Update label
+					label.innerHTML = hSlider.get("value");
+				}
+				dojo.connect(hSlider,"onChange",updateHorizontalLabel);
+				// Update label right away
+				updateHorizontalLabel();
+				
+				// Create the vertical slider programmatically
+				var vertSlider = new dijit.form.VerticalSlider({
+					minimum: 0,
+					maximum: 100,
+					pageIncrement: 20,
+					value: 20,
+					intermediateChanges: true,
+					style: "height: 200px;"
+				}, "vertSlider");
+				var vertLabel = dojo.byId("vertValue");
+				function updateVerticalLabel() {
+					// Update label
+					vertLabel.innerHTML = vertSlider.get("value");
+				}
+				dojo.connect(vertSlider,"onChange",updateVerticalLabel);
+				// Update label right away
+				updateVerticalLabel();
+				
+				// Start up the widget
+				vertSlider.startup();
+			});
+			// Function for updating the enabled/disabled state of the slider
+			function updateHorizontalState() {
+				// Get the slider's current state
+				var currentState = dijit.byId("hslider").get("disabled");
+				// Update its state
+				dijit.byId("hslider").set("disabled",!currentState);
+				// Update the button text
+				dijit.byId("disableButton").set("label",(currentState ? "Disable" : "Enable") + " Slider");
+			}
+		</script>
+	</body>
+</html>

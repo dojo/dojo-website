@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: dojox.grid.DataGrid Simple Structure</title>
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/resources/dojo.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/Grid.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/claroGrid.css">
+
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			dojo.require("dojox.grid.DataGrid");
+			dojo.require("dojo.data.ItemFileWriteStore");
+
+			var grid, store;
+			dojo.ready(function(){
+				store = new dojo.data.ItemFileWriteStore({
+					url: "hof-batting.json"
+				});
+
+				store.fetch({
+					query: { id: "*" },
+					onComplete: function(items){
+						grid = new dojox.grid.DataGrid({
+							store: store,
+							items: items,
+							structure: [
+								{ name: "First Name", field: "first", width: "25%" },
+								{ name: "Last Name", field: "last", width: "25%" },
+								{ name: "G", field: "totalG", width: "10%" },
+								{ name: "AB", field: "totalAB", width: "10%" },
+								{ name: "R", field: "totalR", width: "10%" },
+								{ name: "H", field: "totalH", width: "10%" },
+								{ name: "RBI", field: "totalRBI", width: "10%" }
+							]
+						}, "grid");
+
+						grid.startup();
+					}
+				});
+			});
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: dojox.grid.DataGrid Simple Structure</h1>
+
+		<br/>
+		<div id="grid"></div>
+	</body>
+</html>

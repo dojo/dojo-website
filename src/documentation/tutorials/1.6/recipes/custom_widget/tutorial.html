@@ -1,0 +1,301 @@
+<?php require("../../../resources/tutHead.inc"); ?>
+
+<!-- Standard Outline -->
+<h3>Introduction</h3>
+
+<p>The Dojo Toolkit ships with the Dijit framework, which is a rather powerful and comprehensive set of widgets, and using these widgets, we can put together some really rich interfaces. From advanced form elements to layout and display Dijits, there's really a plethora of options and choices when putting together your application.</p>
+<p>However, there are those times where there's not a Dijit that suits your needs &mdash; you really need something custom. Perhaps you have a complex piece of information that you wish to display. You could take the time to build out DOM by hand while iterating over this data, but if your data is even slightly complex, that's not the most efficient way. Fortunately, Dijit's core building blocks are available to us, which makes it simple to get started with our own custom widgets.</p>
+
+<h3>Setup</h3>
+
+<p>For our scenario, let's say that we have a data source somewhere, in JSON format, listing a series of authors, such as those who've penned a tutorial for Dojo. We happen to have that, and it looks something like this:</p>
+
+<pre class="brush:js;">
+[
+	{
+		"name": "Brian Arnold",
+		"avatar": "/includes/authors/brian_arnold/avatar.jpg",
+		"bio": "Brian Arnold is a software engineer at SitePen, Inc., ..."
+	},
+	/* More authors here... */
+]
+</pre>
+
+<p>We also know that we want our end result to live in a page, somewhere like this:</p>
+
+<pre class="brush: html;">
+&lt;body&gt;
+	&lt;!-- Headers and whatnot --&gt;
+	&lt;h2&gt;Authors&lt;/h2&gt;
+	&lt;div id="authorContainer"&gt;
+		&lt;!-- Authors go here! --&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+</pre>
+
+<p>We'll also say that we want it to be a little fancy&mdash;perhaps we get a background color to fade in as we mouse over it. Eventually, we want it to look something like this:</p>
+
+<img src="resources/widget_final.png">
+
+<h3>Solution</h3>
+
+<p>We can create our own widget by following a simple series of steps.</p>
+
+<ol>
+	<li>Create some file structure for our custom widget</li>
+	<li>Create markup that will represent an individual author</li>
+	<li>Augment our author markup to make it a Dijit template</li>
+	<li>Create our widget class using <code>dojo.declare</code></li>
+	<li>Style as appropriate</li>
+</ol>
+
+<h4>Step 1: Create a file structure for our custom widget</h4>
+
+<p>While this step is arguably optional, it's generally considered a good practice to have a proper file structure for your custom Dijit work (or custom code in general). In this case, I'm going to create a folder named 'custom', which will represent my namespace. This name is completely up to you, and I would suggest using something meaningful, like the name of your organization, or the application that this widget will be a part of. I'm going to call it AuthorWidget (as I'm so original), so I'm going to create a folder in my space with that same name, to store things like any relevant CSS or HTML templates. My eventual structure looks something like this:</p>
+
+<img src="resources/filestructure.png">
+
+<p>We haven't actually created any files yet in our custom space - just some hierarchy.</p>
+
+<h4>Step 2: Create markup that will represent an individual author</h4>
+
+<p>Now that we have some structure to store our pieces, let's create some simple markup that represents an individual author. For your first widget, it's likely going to be simplest to just set up a basic page where you directly put in some sample values.</p>
+
+<p>When you're working out a template, you should always create one parent wrapping element that contains all of the other elements. This element can be whatever you want, but it's important to have just one root element. For our data, we'll use a <code>div</code> as our wrapping element. We'll put in our author's name using an <code>H3</code> element, the image using an <code>img</code> element, and then our bio inside of a <code>p</code> element.</p>
+
+<pre class="brush: html;">
+&lt;div&gt;
+	&lt;h3&gt;Brian Arnold&lt;/h3&gt;
+	&lt;img src="/includes/authors/brian_arnold/avatar.jpg"&gt;
+	&lt;p&gt;Brian Arnold is a software engineer at SitePen, Inc., ...&lt;/p&gt;
+&lt;/div&gt;
+</pre>
+
+<h4>Step 3: Augment our author markup to make it a Dijit template</h4>
+
+<p>When using <code>dijit._Templated</code>, you can adjust your markup in a variety of ways:</p>
+<ul>
+	<li>You can have values from your widget automatically inserted</li>
+	<li>You can designate elements in your template as Attach Points, giving you a programmatic reference to that node in the widget</li>
+	<li>You can set up methods to be called on DOM events related to specific nodes</li>
+</ul>
+
+<p>For our purposes, we're not worried about events right now &mdash; but we definitely want to take advantage of some of the automatic insertion. We're going to create a file in our hierarchy, under <code>custom/AuthorWidget/templates/</code> named <code>AuthorWidget.html</code>. It's basically the markup defined above, but with some simple additions.</p>
+
+<pre class="brush: html;">
+&lt;div&gt;
+	&lt;h3 data-dojo-attach-point="nameNode"&gt;${name}&lt;/h3&gt;
+	&lt;img class="${baseClass}Avatar" src="" data-dojo-attach-point="avatarNode"&gt;
+	&lt;p data-dojo-attach-point="bioNode"&gt;${!bio}&lt;/p&gt;
+&lt;/div&gt;
+</pre>
+
+<p>There are a few things to note as to what's going on here:</p>
+
+<ul>
+	<li>We can use a <code>${attribute}</code> syntax to directly insert some values, like our name.</li>
+	<li>We can use a <code>${!attribute}</code> syntax to directly insert some values from our widget as well, like we're doing with bio. The major distinction between <code>${attribute}</code> and <code>${!attribute}</code> in this case is that our bio contains HTML, and I want to avoid having <code>dijit._Templated</code> perform automatic escaping on the inserted content.</li>
+	<li>All <code>dijit._Widget</code>-based widgets have a <code>baseClass</code> property by default, and by leaning on that, we can provide a custom class to our avatar.</li>
+	<li>I've given all nodes an attach point, meaning that in my widget code, I can use that name to reference that node directly. Think of it kind of like doing some <code>dojo.byId</code> type work without needing IDs, where I set up references in advance &mdash; so with an instance of my AuthorWidget, I could use <code>myAuthor.nameNode</code> to directly reference the H3 DOM node for that widget.</li>
+</ul>
+
+<p>You might have noticed that I haven't set the avatar's source directly. What happens if we have an author that doesn't have an avatar specified? I don't want to show a broken image. We'll handle the default value for that when we create our widget, which we'll do now!</p>
+
+<h4>Step 4: Create our widget class using <code>dojo.declare</code></h4>
+
+<p>At this point, in our file structure above, we're going to create a file named <code>AuthorWidget.js</code> directly in the <code>custom</code> folder. We'll also add a default avatar image. Our file structure is starting to fill out a little! After this step, it'll be much more filled out. We'll be doing the bulk of our work at this point.</p>
+
+<img src="resources/filestructure2.png">
+
+<p>Now, we can simply build our widget! The following code would go in your <code>AuthorWidget.js</code> file.</p>
+
+<pre class="brush: js;">
+// custom.AuthorWidget
+dojo.provide("custom.AuthorWidget");
+
+// Bring in what we need
+dojo.require("dijit._Widget");
+dojo.require("dijit._Templated");
+
+// Create our widget!
+dojo.declare("custom.AuthorWidget", [dijit._Widget, dijit._Templated], {
+	/* Our properties will be filled out here in this object */
+}); // and that's it!
+</pre>
+
+<p>The key things to note here:</p>
+<ul>
+	<li>We use <code>dojo.provide</code> to indicate that we are going to be providing the resource as identified by 'custom.AuthorWidget'. Dojo 1.6 does support the use of AMD modules now, but for simplicity's sake, we're using this approach for now, which works well for prior versions of Dojo 1.x as well.</li>
+	<li>We <code>dojo.require</code> in the modules that we need as a base for our widget.</li>
+	<li>We then use <code>dojo.declare</code> to set up our custom AuthorWidget, using dijit._Widget and dijit._Templated as a base.</li>
+</ul>
+<p class="proTip">Note that we didn't have to use dojo.ready in here - when working in modules, Dojo will intelligently handle this situation, ensuring that all required modules are ready for you before moving on.</p>
+
+<p>Now, if we stopped here, this wouldn't work. We do need to set some properties up, so that the widget is aware of what sorts of properties it'll receive. Here's the setup for our <code>dojo.declare</code> call, now with properties.</p>
+
+<pre class="brush: js;">
+dojo.declare("custom.AuthorWidget", [dijit._Widget, dijit._Templated], {
+	// Some default values for our author
+	// These typically map to whatever you're handing into the constructor
+	name: "No Name",
+	// Using dojo.moduleUrl, we can get a path to our AuthorWidget's space
+	// and we want to have a default avatar, just in case
+	avatar: dojo.moduleUrl("custom.AuthorWidget", "images/defaultAvatar.png"),
+	bio: "",
+
+	// Our template - important!
+	templateString:
+		dojo.cache("custom.AuthorWidget", "templates/AuthorWidget.html"),
+
+	// A class to be applied to the root node in our template
+	baseClass: "authorWidget",
+
+	// A reference to our background animation
+	mouseAnim: null,
+
+	// Colors for our background animation
+	baseBackgroundColor: "#fff",
+	mouseBackgroundColor: "#def"
+});
+</pre>
+
+<p>We have several things going on here, so let's break it down.</p>
+
+<ul>
+	<li>We start off with some properties relevant to our author - <code>name</code>, <code>bio</code>, <code>avatar</code> - setting default values. By using <code>dojo.moduleUrl</code>, we can get a path to where our AuthorWidget is located, and tap into the images folder under there.</li>
+	<li>Using the <code>templateString</code> property and <code>dojo.cache</code>, we specify our template's contents.</li>
+	<li>We set our <code>baseClass</code>. This will be applied to our root node, which in our case is the <code>div</code> in our template.</li>
+	<li>We set up a reference for our animation, to be worked with in a moment, as well as a couple of colors for the animation.</li>
+</ul>
+
+<p>This is all well and good, and if we stopped here, it'd actually work as a very basic widget that displayed information. However, we can add in a couple of methods to make things a bit safer. We're going to be adding a <code>postCreate</code>, a custom property setter for the <code>avatar</code> property, and a utility function to make it easy to change background color. Let's visit each one of those.</p>
+
+<p>The <code>postCreate</code> method is where we want to put the bulk of our work. It's called once our widget's DOM structure is ready, but before it's been inserted into the page. It's typically the best place to put any sort of initialization code.</p>
+
+<pre class="brush: js;">
+postCreate: function(){
+	// Get a DOM node reference for the root of our widget
+	var domNode = this.domNode;
+
+	// Run any parent postCreate processes - can be done at any point
+	this.inherited(arguments);
+
+	// Set our DOM node's background color to white -
+	// smoothes out the mouseenter/leave event animations
+	dojo.style(domNode, "backgroundColor", this.baseBackgroundColor);
+	// Set up our mouseenter/leave events - using dijit._Widget's connect
+	// means that our callback will execute with `this` set to our widget
+	this.connect(domNode, "onmouseenter", function(e) {
+		this._changeBackground(this.mouseBackgroundColor);
+	});
+	this.connect(domNode, "onmouseleave", function(e) {
+		this._changeBackground(this.baseBackgroundColor);
+	});
+}
+</pre>
+
+<p>Here, we're setting some style based on our <code>baseBackgroundColor</code> property, and then setting up some onmouseenter/onmouseleave events, so that as people mouse over the DOM node, our custom <code>_changeBackground</code> function is called. Let's take a look at that:</p>
+
+<pre class="brush: js;">
+_changeBackground: function(toCol) {
+	// If we have an animation, stop it
+	if (this.mouseAnim) { this.mouseAnim.stop(); }
+
+	// Set up the new animation
+	this.mouseAnim = dojo.animateProperty({
+		node: this.domNode,
+		properties: {
+			backgroundColor: toCol
+		},
+		onEnd: dojo.hitch(this, function() {
+			// Clean up our mouseAnim property
+			this.mouseAnim = null;
+		})
+	}).play();
+}
+</pre>
+
+<div class="proTip">
+<p>
+Why is this method called <code>_changeBackground</code> and not just <code>changeBackground</code>? I've named it with a leading underscore to indicate that users of this widget should treat the method as though it were private, and not something to be used directly.
+</p>
+<p>It's a common Dojo pattern to prefix methods or objects with an underscore in order to indicate that they shouldn't be used directly. It doesn't actively stop users from using those methods, but is a useful implicit indication of sorts that "Hey, this isn't meant for general use".
+</p>
+</div>
+
+<p>We're checking our <code>mouseAnim</code> property to see if there's an animation there, and if we have something there, we're calling <code>stop</code> to stop it, as a means of being safe. Then, we simply set up the new animation and save it back into <code>mouseAnim</code>, then start it playing. This example is very similar to an effect as demonstrated in the <a href="../../animation/">Animation tutorial</a>, though with some different colors.</p>
+
+<p>Finally, remember how we had concerns earlier that a user might not have an avatar, and we set up a default one? We can set up a custom setter function for attributes, which will automatically be called any time that value is set, either when the widget is being created or if someone calls <code>myWidget.set("avatar", somePath)</code>. The name of the method is special, and maps to the name of the property&mdash;in this case, for <code>avatar</code>, our name will be <code>_setAvatarAttr</code>.</p>
+
+<pre class="brush: js;">
+_setAvatarAttr: function(av) {
+	// We only want to set it if it's a non-empty string
+	if (av != "") {
+		// Save it on our widget instance - note that
+		// we're using _set, to support anyone using
+		// our widget's Watch functionality, to watch values change
+		this._set("avatar", av);
+
+		// Using our avatarNode attach point, set its src value
+		this.avatarNode.src = av;
+	}
+}
+</pre>
+
+<p>Starting with Dojo 1.6, all <code>dijit._Widget</code> widgets base off of <code>dojo.Stateful</code> in their inheritance chain, which means that users can actively watch for value changes. We use <code>_set</code> within our setter to ensure that all <code>watch</code> calls are properly fired, and then we use our <code>avatarNode</code> attach point to set the image's <code>src</code> attribute to the value being set. By wrapping it in a check for the string not being empty, we're trying to avoid cases where the avatar property may be there, but with nothing but an empty string. This way, we get our default image if we have no value, with a bit of a safety check.</p>
+
+<p>With all of these items in place, we have a working widget! However, as you can see, it's not exactly pretty yet.</p>
+
+<img src="resources/widget_unstyled.png"><br><br>
+
+<a class="demoBtn demo" href="demo/unstyled.html">View Demo</a>
+
+<h4>Step 5: Style as appropriate</h4>
+
+<p>One of the benefits of using <code>dijit._Widget</code>, as mentioned above, is that it gives us a <code>baseClass</code> that we can work off of for styling purposes. Using that, we can create some fairly simple styling. We have a folder under our AuthorWidget space just for css, so let's create an <code>AuthorWidget.css</code> file in there.</p>
+
+<pre class="brush: css;">
+/* AuthorWidget.css */
+.authorWidget {
+	border: 1px solid black;
+	width: 400px;
+	padding: 10px;
+	overflow: hidden; /* I hear this helps clear floats inside */
+}
+
+.authorWidget h3 {
+	font-size: 1.5em;
+	font-style: italic;
+	text-align: center;
+	margin: 0px;
+}
+
+.authorWidgetAvatar {
+	float: left;
+	margin: 4px 12px 6px 0px;
+	max-width: 75px;
+	max-height: 75px;
+}
+</pre>
+
+<p>Since I know our <code>baseClass</code> is <code>authorWidget</code>, we can work off of that. Also, if you recall, in the template, we set a class on the avatar of <code>${baseClass}Avatar</code>, so we can use <code>authorWidgetAvatar</code> in our styling. This is just some basic styles: I'm an engineer, not a designer!</p>
+
+<p>Now, with that in place, we just need to add the CSS to our <code>head</code> on our page, and we have (arguably) a nicer looking author list!</p>
+
+<img src="resources/widget_final.png"><br><br>
+
+<a class="demoBtn demo" href="demo/index.html">View Demo</a>
+
+<h3>Summary</h3>
+
+<p>As you can see, using <code>dijit._Widget</code> and <code>dijit._Templated</code> makes it fairly easy to pull together a custom widget. We were able to quickly set up a template, and with a little bit of work, we were able to create our AuthorWidget class based off of <code>dijit._Widget</code> and <code>dijit._Templated</code>.</p>
+<p>It's worth noting that most widgets in Dijit itself are built using these same tools, and we've only scratched the surface of what they can do. Be sure to follow through some of the links before for more information!</p>
+
+<h3>Colophon</h3>
+
+<ul>
+	<li><a href="/reference-guide/1.6/dijit/_Widget.html">dijit._Widget on the Dojo Reference Guide</a></li>
+	<li><a href="/reference-guide/1.6/dijit/_Templated.html">dijit._Templated on the Dojo Reference Guide</a></li>
+	<li><a href="../../declare/">Tutorial on dojo.declare</a></li>
+	<li><a href="/reference-guide/1.6/quickstart/writingWidgets.html">Dojo Reference Guide: Writing Your Own Widget</a></li>
+</ul><br>

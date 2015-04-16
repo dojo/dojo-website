@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>
+			Demo: dojo.mixin
+		</title>
+		<link rel="stylesheet" href="style.css" media="screen" type="text/css">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen" type="text/css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" type="text/css">
+		<script src="/js/dojo/1.6/dojo/dojo.js" data-dojo-config="isDebug: true,parseOnLoad: true" type="text/javascript"></script>
+
+		<script>
+			dojo.require("dojo.fx");
+			dojo.require("dijit.form.NumberTextBox");
+			dojo.require("dijit.form.ValidationTextBox");
+			dojo.provide("demo");
+
+			dojo.mixin(demo, {
+				dropProperties : {
+					node: null,
+					properties: {
+						top: { start: 100, end: 150 },
+						left: 0,
+						opacity: { start: 1, end: 0 }
+					},
+					duration: 800
+				},
+				ariseSirProperties : {
+					node: null,
+					properties: { node:null, top: 100, left: 300, opacity: 1 },
+					duration: 800
+				}
+			});
+
+			// Once our modules have loaded and the DOM is ready...
+			dojo.ready(function(){
+				var dropButton = dojo.byId("dropButton"),
+					ariseSirButton = dojo.byId("ariseSirButton"),
+					anim8target = dojo.byId("anim8target"),
+					durationButton = dijit.byId("durationButton");
+
+				var newProperties = {
+					"node":anim8target
+				};
+				dojo.mixin(demo.dropProperties, newProperties);
+				dojo.mixin(demo.ariseSirProperties, newProperties);
+
+				dojo.connect(durationButton, "onChange", function(duration){
+					var newProperties = {
+						"duration":duration
+					};
+
+					dojo.mixin(demo.dropProperties, newProperties);
+					dojo.mixin(demo.ariseSirProperties, newProperties);
+
+				});
+
+				// Set up a couple of click handlers to run our animations
+				dojo.connect(dropButton, "onclick", function(evt){
+					dojo.animateProperty(demo.dropProperties).play();
+				});
+
+				dojo.connect(ariseSirButton, "onclick", function(evt){
+					dojo.animateProperty(demo.ariseSirProperties).play();
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h3>
+			Demo: using dojo.mixin to update an objects properties
+		</h3>
+		<div>
+			<label for="duration">Duration:</label> <input id="durationButton" data-dojo-type="dijit.form.NumberTextBox" data-dojo-props='name:"duration", tabIndex:"1", promptMessage:"Enter a duration between 0 and 5000", maxLength:"4", value:"800", "class":"small", constraints:{places:0,min:0,max:5000}, tooltipPosition:["above", "below"]'>
+		</div>
+		<p>
+			<button id="dropButton">Drop out block</button> <button id="ariseSirButton">Return block</button>
+		</p>
+		<div id="anim8target" class="box" style="top: 100px; left: 300px; background-color: #fc9">
+			<div class="innerBox">
+				A box
+			</div>
+		</div>
+	</body>
+</html>

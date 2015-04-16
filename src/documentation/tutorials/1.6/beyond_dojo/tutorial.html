@@ -1,0 +1,189 @@
+
+	<h3>
+		Getting Started
+	</h3>
+	<p>
+		Throughout this series of tutorials we've been working with the "core" Dojo library &mdash; the functionality provided by dojo.js &mdash; and pulling in other modules as needed. Most have been under the "dojo" namespace: that is, code located in the <code>dojo/</code> directory, and accessed as properties and methods from the '<code>dojo</code>' global object. Lets crack open the box a bit further. If you've got a download or checkout of dojo, you'll see a directory structure like this.
+	</p>
+	<p class="tutorial_image">
+		<img src="images/dojoRelease.png" alt="The Contents of the Dojo Toolkit release">
+	</p>
+	<p>
+		It's unlikely that you've gotten this far into this series of tutorials without even being a little bit curious about the rest of Dojo, but just in case, let's back up and give them all a proper introduction.
+	</p>
+	<h3>
+		Namespaces
+	</h3>
+	<p>
+		First though, an aside about namespaces. In this tutorial, and in Dojo's documentation and the many other resources, we'll talk about JavaScript namespaces. Depending on your background, for you this could mean something very specific, or not much at all. JavaScript doesn't provide native namespaces in the XML sense, as everything has to co-exist in a shared global space. That being said, it has long been the convention for libraries and frameworks to restrict the number of global variables created, to minimize accidental name collisions. So it is with Dojo. Dojo creates a 'dojo' variable - an object with properties that correspond to modules and core methods. You can expect code hung off of the '<code>dojo</code>' object to live in the <code>dojo/</code> directory. This is what we mean by namespaces.
+	</p>
+	<h3>
+		Base vs. Core
+	</h3>
+	<p>
+		The subset of code from the <code>dojo</code> namespace that gets bundled up into dojo.js is often referred to as Dojo Base. The superset is known as Dojo Core. All code in Dojo Core is production-ready and stable. Code from Dojo's other namespaces frequently builds on - and is dependent on - Dojo Core. We've already seen some Dojo Core modules put to use - dojo.fx in the <a href="../animation/">animation tutorial</a> for example.
+	</p>
+	<p>
+		Other goodies in Core include helpers for working with numbers, strings, dates, cookies, strings, and drag-and-drop.
+	</p>
+
+	<h4>Dojo Base Example</h4>
+	<p>This example makes use of the Dojo base functions <code>query</code>, <code>forEach</code>, and <code>place</code>.</p>
+
+<pre class="brush: js;">
+var headings = dojo.query('h2,h3');
+
+dojo.forEach(headings, function(elm){
+	var topLink = dojo.create("a", {
+		href: "#top", innerHTML: "^top",
+	});
+	dojo.place(topLink, elm, "before");
+});
+</pre>
+	<p>The snippet queries the DOM using a CSS selector to indicate that we want both H2 and H3 elements, and use the each as the reference node to insert a newly created &lt;a&gt; element.
+	There are dedicated tutorials for working with <a href="../dom_functions/">DOM functions</a> and <a href="../arrays/">array helpers</a> in this series to find out more.</p>
+	<h4>Dojo Core Example</h4>
+	<p>To use functionality from Dojo Core, we first have to ensure the module is loaded, using <code>dojo.require</code>.
+		In this example we use <code>dojo.date</code> to compare two dates and get the result back in day units.</p>
+
+	<pre class="brush: js;">
+dojo.require("dojo.date");
+
+function daysSince(fromDate){
+	if(!(fromDate instanceof Date)) {
+		fromDate = new Date(fromDate);
+	}
+
+	var now = new Date();
+	var days  = dojo.date.difference(fromDate, now, "day")
+
+	return days;
+}</pre>
+
+	<p><a class="demoBtn demo" href="demo/basecore.html">View Demo</a></p>
+
+	<p>There's a wealth of functionality in Dojo Core for common web and general-purpose programming tasks.
+	This series of tutorials aims to introduce you to some of it, but it should not replace the broader familiarity you'll get from browsing the <a href="/reference-guide/1.6/dojo/">documentation</a> and <a href="/api/1.6/dojo">API</a>.</p>
+
+	<h3>
+		Dijit: Forms, Layout and UI Goodness
+	</h3>
+	<p>
+		The <code>dijit</code> directory and namespace is a sibling to Dojo Core. It is managed and run as a sub-project of the Dojo Toolkit, with its own owner, policies and guidelines.
+		The Dijit "guarantee" is that all code and UI widgets are consistent, stable, accessible and internationalized - including right-to-left support where appropriate.
+		Dijit is both a framework for defining user interface widgets, and a collection of ready-to-use controls and related functionality.
+		It enhances native controls like form fields, provides widgets for dynamic layouts and advanced widgets like trees and calendars.
+	</p>
+
+	<p class="tutorial_image">
+		<a href="demo/dijitForm.html"><img src="images/dijitFormValidation.png" alt="Dijit Form Example"></a>
+		Dijit provides a series of controls which enhances basic HTML form controls with usability improvements, formatting and validation, as well as data-binding using the dojo.data API
+	</p>
+	<a class="demoBtn demo" href="demo/dijitForm.html">View Demo</a>
+
+	<p>Dijit also has powerful tools for creating dynamic user interfaces that adapt to viewport size, and respond to resize and user interaction.
+	It includes widgets for creating desktop-like application layouts and standard items like Tab and Accordion controls for making the best use of the space available.</p>
+
+	<p class="tutorial_image"><a href="demo/dijitLayout.html"><img src="images/dijitLayout.png" alt="Dijit Layout Example"></a></p>
+	<a class="demoBtn demo" href="demo/dijitLayout.html">View Demo</a>
+
+	<p>You don't have to use Dijit when you are building interactivity, but the controls and patterns it comprises have grown out of a combined and cumulative experience of many years of building web applications, making it a great base to build on and with.</p>
+
+	<h3>
+		DojoX: Dojo E<em>x</em>tensions
+	</h3>
+	<p>
+		The <code>dojox</code> namespace is a collection of sub-projects that extend the toolkit into common and less common areas.
+		Each sub-project is a directory under <code>dojox/</code>, and provides its own <code>README</code> file which outlines the functionality and status of the project.
+		Some code is stable and production-ready, while others are not - check the individual project.
+		Here are some highlights in DojoX:
+	</p>
+
+	<h4>DojoX: Data Grid</h4>
+	<p class="tutorial_image">
+		<a href="demo/dojoxGrid.html"><img src="images/dojoxGrid.png" alt="DojoX DataGrid Example"></a>
+		A highly flexible and feature-rich Dijit-based data grid control
+	</p>
+	<a class="demoBtn demo" href="demo/dojoxGrid.html">View Demo</a>
+
+	<h4>DojoX: GFX</h4>
+	<p class="tutorial_image">
+		<img src="images/dojoxGfx.png" alt="DojoX GFX">
+		A cross-platform vector graphics API
+	</p>
+
+	<h4>DojoX: Charting</h4>
+	<p class="tutorial_image">
+		<img src="images/dojoxCharts.png" alt="DojoX Charting Types">
+		Native charting built on dojox.gfx, with a broad selection of chart types, themes and features for visualizing data.
+	</p>
+
+	<p>And the less photogenic, but no less useful:</p>
+	<dl>
+		<dt>dojox.lang.functional</dt>
+		<dd>A library of functional programming utilities which complement the array methods in Dojo Base to make your code expressive, compacct and side-effect free.</dd>
+
+		<dt>dojox.widget / dojox.layout / dojox.form</dt>
+		<dd>Further controls to augment the selection provided by Dijit, including the stand-out <a href="/reference-guide/1.6/dojox/form/Manager.html">dojox.form.Manager</a></dd>
+
+		<dt>dojox.data</dt>
+		<dd>A eclectic range of stores which implement the dojo.data API, including the popular <a href="/reference-guide/1.6/dojox/data/ServiceStore.html">dojox.data.ServiceStore</a> and <a href="/reference-guide/1.6/dojox/data/JsonRestStore.html">dojox.data.JsonRestStore</a></dd>
+	</dl>
+	<p>DojoX is a treasure trove of solutions for a wide range of problems, and many a rainy afternoon can be spent poking through its projects.
+	You are encouraged to do just that - to spare yourself the forehead-slapping we've all experienced upon discovering in DojoX the very thing we've just spent a week working on.</p>
+
+	<h3>Util</h3>
+	<p>The <code>util/</code> directory contains scripts and resources for packaging, testing and documenting your project. Util is not a Dojo namespace,
+	and the contents are typically used outside the browser and your page.
+	There is no "right" way to create and deploy web applications, but Dojo tries to provide tooling to facilitate some of the important best practices that have emerged over the years.</p>
+	<p>Each of the utils is <a href="/reference-guide/1.6/util/">documented in its own right</a>, but we'll give them a brief introduction here:</p>
+
+	<h4>Dojo Build System</h4>
+	<p>Dojo's package system allows the code in the toolkit to be modular, with the filesystem layout following the module structure.
+	This means that for even a simple application, your browser would be issuing dozens of HTTP requests for the individual modules.
+	This is an acceptable trade-off for developer convenience, but for production, you should <em>always</em> use the build tools to combine these individual module files down to one or more "layers".
+	</p>
+	<p>The build system is a JavaScript application, which runs on Mozilla's Rhino. Read more about it the <a href="/reference-guide/1.6/build/index.html">build system itself</a>, and how to use it <a href="/reference-guide/1.6/quickstart/custom-builds.html">on your own code</a>.</p>
+
+	<h4>DOH</h4>
+	<p><a href="/reference-guide/1.6/util/doh.html">DOH</a> is the test harness used by Dojo for its own unit tests. It includes an in-browser test runner and a non-browser, Rhino-driven test runner. DOH supports a simple set of assertions, and strong support for asynchronous tests, including a specialized implementation of Deferreds, meaning it can be used to test non-Dojo JavaScript as well.</p>
+	<p>For UI testing there is the <a href="/reference-guide/1.6/util/dohrobot.html">DOH Robot</a>, which is a Java applet-based web driver that can record and replay interactions with your pages. You can then take the recorded script and insert assertions as appropriate, making for a more complete test.</p>
+
+	<h4>docscripts</h4>
+
+	<p>The <a href="/reference-guide/1.6/util/doctools.html">Dojo API Doc System</a> uses a custom inline comment syntax, which can be parsed out using the PHP-based tools in <code>docscripts</code>. This set of tools powers the official API Docs, and can be used against your own code to produce similar output.</p>
+	<p>The parts of the docs system are fully documented, including how to markup your code, how to operate the parser/docs-extractor and how to setup the API viewer to make the output browsable.
+	</p>
+
+	<h3>
+		Extended Family
+	</h3>
+	<p>
+		There is an extensive ecosystem of developers and resources working with and on the Dojo Toolkit.
+		Some of the projects outside the official releases and individuals releasing open-source code associated with Dojo bear special mention:
+	</p>
+	<ul>
+		<li>
+			<a href="http://dojofoundation.org/projects/persevere">Persevere</a> is an open-source JSON application and storage server, which dovetails nicely with many of the concepts and standards embraced by Dojo, most notably the dojo.data paradigm.
+		</li>
+		<li>
+			<a href="http://dojofoundation.org/projects/embedjs">embedjs</a> is a JavaScript framework for the mobile web, based on Dojo.
+		</li>
+		<li>
+			<a href="https://github.com/phiggins42/plugd">plugd</a> is an extension to Dojo by its current project lead, Pete Higgins.
+		 	It fills some perceived gaps in the Dojo API, and has been a proving ground for some of the ideas landing in the toolkit itself in recent releases.
+		</li>
+		<li>
+			<a href="https://github.com/dmachi/virtual-datalist">VirtualDataList</a> is a flexible, Dijit-based List control by another long-time Dojo committer. It uses the virtual scrolling approach to paging that the DojoX DataGrid uses, in order to handle arbitrarily large datasets.
+		</li>
+		<li>
+			<a href="http://www.calitha.com/collections.html">Calitha - Collections</a> is a Dojo extension for supporting collection-based objects, based on the Java Collections framework.
+			It is an alternative to the collections provided by <code>dojox.collections</code>.
+		</li>
+	</ul>
+
+	<h3>
+		Conclusion
+	</h3>
+	<p>The Dojo Toolkit is much more than a DOM and Ajax library. While it has feature and API overlaps with other libraries in this space, it is broader in its scope, and digs deeper in many areas to provide useful abstractions, widgets, and tools to help tackle the large and small, simple and complex, common and uncommon.</p>
+	<p>You won't learn it all at once - or perhaps ever - but as your requirements grow, Dojo grows with you.  </p>

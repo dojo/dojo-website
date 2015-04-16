@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Demo: Dijit Menus</title>
+	<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"
+		data-dojo-config="parseOnLoad:true"></script>
+</head>
+<body class="claro">
+	<p>This page demonstrates declarative and programmatic usage of
+		<code>dijit.Menu</code> inside <code>dijit.form.ComboButton</code> and
+		<code>dijit.form.DropDownButton</code>.
+	</p>
+	<h3>Declarative Demo</h3>
+	
+	<div id="comboButton" data-dojo-type="dijit.form.ComboButton">
+		<span>Do Something</span>
+		<div data-dojo-type="dijit.Menu">
+			<div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick: demo.onItemSelect">
+				Edit
+			</div>
+			<div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick: demo.onItemSelect">
+				View
+			</div>
+			<div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick: demo.onItemSelect">
+				Task
+			</div>
+		</div>
+	</div>
+	<div id="dropDownButton" data-dojo-type="dijit.form.DropDownButton">
+		<span>Select Action</span>
+		<div data-dojo-type="dijit.Menu">
+			<div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick: demo.onItemSelect">
+				Edit
+			</div>
+			<div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick: demo.onItemSelect">
+				View
+			</div>
+			<div data-dojo-type="dijit.MenuItem" data-dojo-props="onClick: demo.onItemSelect">
+				Task
+			</div>
+		</div>
+	</div>
+
+	<h3>Programmatic Demo</h3>
+	<div id="comboBtn"></div>
+	<div id="dropDownBtn"></div>
+	<p>Last selected: <span id="lastSelected">none</span></p>
+
+	<script>
+		dojo.require("dijit.Menu");
+		dojo.require("dijit.MenuItem");
+		dojo.require("dijit.form.ComboButton");
+		dojo.require("dijit.form.DropDownButton");
+		dojo.require("dojo.parser");
+		
+		var demo = {
+			// a menu item selection handler
+			onItemSelect: function(evt){
+				// retrieve the widget representing the item clicked
+				var item = dijit.getEnclosingWidget(evt.target);
+
+				dojo.byId("lastSelected").innerHTML = 
+					item.get("label");
+			}
+		};
+		
+		dojo.ready(function(){
+			var menu = new dijit.Menu({ id: "mainMenu" });
+			
+			// create child item widgets for each
+			// of 'edit','view','task'
+			menu.addChild( new dijit.MenuItem({
+				label: "Edit",
+				// provide an implementation for the onClick method
+				onClick: demo.onItemSelect 
+			}) );
+			
+			menu.addChild( new dijit.MenuItem({
+				label: "View",
+				onClick: demo.onItemSelect 
+			}) );
+			
+			menu.addChild( new dijit.MenuItem({
+				label: "Task",
+				onClick: demo.onItemSelect 
+			}) );
+			
+			// create a ComboButton and DropDownButton and add the Menu to each
+			var comboBtn = new dijit.form.ComboButton({
+				label: "Do Something", 
+				dropDown: menu
+			}, "comboBtn");
+			
+			var dropDownBtn = new dijit.form.DropDownButton({
+				label: "Select Action",
+				dropDown: menu
+			}, "dropDownBtn");
+			
+			menu.startup();
+			comboBtn.startup();
+			dropDownBtn.startup();
+		});
+	</script>
+</body>
+</html>

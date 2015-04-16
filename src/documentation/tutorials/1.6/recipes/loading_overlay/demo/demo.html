@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Demo: Loading Overlay</title>
+	<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+	<link rel="stylesheet" href="style.css" media="screen">
+	<link rel="stylesheet" href="/js/dojo/1.6/dijit/themes/claro/claro.css" media="screen">
+
+	<!-- load dojo and provide config via data attribute -->
+	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"
+			data-dojo-config="isDebug: true, parseOnLoad: true">
+	</script>
+	<script>
+		dojo.require("dojo.io.script");
+		dojo.require("dojo.string");
+		
+		var loadingOverlay = (function(){
+			// the overlay object with its methods are the return value 
+			// of this anonymous function
+
+			var overlayNode= null;
+
+			return {
+				overlayId: "loadingOverlay",
+				init: function(containerNode){
+					var overlayId = this.overlayId;
+
+					// create the container element for the overlay
+					// if it doesn't already exist. 
+					// We store the reference in the overlayNode closure variable
+					overlayNode = dojo.byId(overlayId) || dojo.create('div', {
+						id: overlayId
+					}, containerNode || dojo.body());
+
+					// set the overlay's CSS class and content
+					dojo.addClass(overlayNode, "loadingOverlay pageOverlay");
+					overlayNode.innerHTML = '<div class="loadingMessage">Loading...</div>';
+
+					// return the loadingOverlay object to allow simple chaining
+					return this;
+				},
+				show: function(){
+					// show the overlay
+					dojo.style( overlayNode, {
+						display: 'block',
+						opacity: 1
+					});
+				},
+				hide: function(){
+					// hide the overlay
+					dojo.fadeOut({
+						node: overlayNode,
+						onAnimate: function(){
+							this.x="foo";
+						},
+						onEnd: function(){
+							dojo.style(overlayNode, "display", "none");
+						}
+					}).play();
+				}
+			};
+		})();		
+		
+		var demo = {
+			renderItems: function(items){
+				// render each result as a list item
+				dojo.forEach(items, function(item){
+					dojo.create("li", {
+						title: name,
+						style: {
+							backgroundImage: 'url('+item.profile_image_url+')'
+						},
+						innerHTML: '<span class="name">'+item.from_user+'</span>'
+					}, dojo.byId('demoList'));
+				});
+			},
+			requestData: function(query) {
+				// return the deferred object we get from all ajax-like requests
+				return dojo.io.script.get({ 
+					url: 'http://search.twitter.com/search.json', 
+					callbackParamName: 'callback', 
+					content: { 
+						q: query
+					}, 
+					error: dojo.hitch(console, "warn") 
+				}).then(function(resp){
+					// pass results to render function
+					demo.renderItems(resp.results);
+					
+					// remove the loading overlay when complete
+					loadingOverlay.hide();
+				});
+			}
+		};
+		
+		dojo.ready(function(){
+			// load the initial query results
+			demo.requestData('dojotoolkit').then(function(){
+				// remove the loading overlay when complete
+				loadingOverlay.hide();
+			});
+			
+			dojo.query("#queries button").onclick(function(evt){
+				// put up the overlay at the start of a new query
+				loadingOverlay.show();
+				// clear out the old content
+				dojo.empty("demoList");
+				
+				// request the new content
+				demo.requestData( evt.target.innerHTML ).then(function(){
+					// remove the loading overlay when complete
+					loadingOverlay.hide();
+				});
+			});
+		});
+	</script>
+</head>
+<body class="claro">
+	<h1>Loading Overlay Demo: Twitter Mentions</h1>
+	<div id="queries">
+		<button>dijit</button>
+		<button>dojotoolkit</button>
+		<button>javascript</button>
+	</div>
+	<div id="main" class="container">
+		<ul id="demoList" class="peopleList">
+		</ul>
+	</div>
+	<script>
+		// put up the loading overlay while the page initializes
+		loadingOverlay.init( dojo.byId("main") ).show();
+	</script>
+</body>
+</html>

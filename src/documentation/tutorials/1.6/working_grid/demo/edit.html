@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Editing in a Grid</title>
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/Grid.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/claroGrid.css">
+		<link rel="stylesheet" href="style.css" media="screen">
+		<!-- load dojo -->
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js">
+		</script>
+		<script>
+			dojo.require("dojox.grid.DataGrid");
+			dojo.require("dojox.grid.cells.dijit");
+			dojo.require("dojo.data.ItemFileWriteStore");
+
+			var test_store, gridLayout, grid;
+			dojo.ready(function(){
+				function formatCurrency(inDatum){
+					return isNaN(inDatum) ? '...' : dojo.currency.format(inDatum, this.constraint);
+				}
+				function formatDate(inDatum){
+					return dojo.date.locale.format(new Date(inDatum), this.constraint);
+				}
+
+				gridLayout = [{
+					defaultCell: { width: 8, editable: true, type: dojox.grid.cells._Widget, styles: 'text-align: right;'  },
+					cells: [
+						{ name: 'Id', field: 'id', editable: false /* Can't edit ID's of dojo.data items */ },
+						{ name: 'Date', field: 'col8', width: 10,
+							type: dojox.grid.cells.DateTextBox,
+							formatter: formatDate, 
+							constraint: {formatLength: 'long', selector: "date"}},
+						{ name: 'Priority', styles: 'text-align: center;', field: 'col1', 
+							type: dojox.grid.cells.ComboBox, 
+							options: ["normal", "note", "important"], width: 10},
+						{ name: 'Mark', field: 'col2', width: 3, styles: 'text-align: center;', 
+							type: dojox.grid.cells.CheckBox},
+						{
+							field: 'col3', name: 'Status', 
+							styles: 'text-align: center;', 
+							type: dojox.grid.cells.Select, 
+							options: [ "new", "read", "replied" ]
+						},
+						{ name: 'Message', field: 'col4', styles: '', width: 10, 
+							type: dojox.grid.cells.Editor, editorToolbar: true },
+						{ name: 'Amount', field: 'col5', formatter: formatCurrency, constraint: {currency: 'EUR'}, 
+							widgetClass: dijit.form.CurrencyTextBox },
+						{ name: 'Amount', field: 'col5', formatter: formatCurrency, constraint: {currency: 'EUR'}, 
+							widgetClass: dijit.form.HorizontalSlider, width: 10}
+					]
+				}];
+
+				var data = {
+					identifier: 'id',
+					label: 'id',
+					items: []
+				};
+				var s = (new Date()).getTime();
+				var data_list = [
+					{ col1: "normal", col2: false, col3: "new", col4: 'But are not followed by two hexadecimal', col5: 29.91, col6: 10, col7: false, col8: new Date() },
+					{ col1: "important", col2: false, col3: "new", col4: 'Because a % sign always indicates', col5: 9.33, col6: -5, col7: false, col8: new Date() },
+					{ col1: "important", col2: false, col3: "read", col4: 'Signs can be selectively', col5: 19.34, col6: 0, col7: true, col8: new Date() },
+					{ col1: "note", col2: false, col3: "read", col4: 'However the reserved characters', col5: 15.63, col6: 0, col7: true, col8: new Date() },
+					{ col1: "normal", col2: false, col3: "replied", col4: 'It is therefore necessary', col5: 24.22, col6: 5.50, col7: true, col8: new Date() },
+					{ col1: "important", col2: false, col3: "replied", col4: 'To problems of corruption by', col5: 9.12, col6: -3, col7: true, col8: new Date() },
+					{ col1: "note", col2: false, col3: "replied", col4: 'Which would simply be awkward in', col5: 12.15, col6: -4, col7: false, col8: new Date() }
+				];
+				var rows = 25;
+				for(var i=0, l=data_list.length; i<rows; i++){
+					data.items.push(dojo.mixin({ id: i }, data_list[i%l]));
+				}
+
+				// global var "test_data"
+				test_store = new dojo.data.ItemFileWriteStore({data: data});
+
+				//	create the grid.
+				grid = new dojox.grid.DataGrid({
+					store: test_store,
+					structure: gridLayout,
+					escapeHTMLInData: false,
+					"class": "grid"
+				}, "grid");
+				grid.startup();
+			});
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: Editing in a Grid</h1>
+		<p>The following grid shows the multiple editing capabilities built into dojox.grid.DataGrid.</p>
+		<div id="grid"></div>
+	</body>
+</html>

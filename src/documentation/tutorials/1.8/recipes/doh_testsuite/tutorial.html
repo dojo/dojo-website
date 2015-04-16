@@ -1,0 +1,167 @@
+<?php require("../../../resources/tutHead.inc"); ?>
+
+<h3>Introduction</h3>
+
+<p>Having a suite of tests that <em>prove</em> each unit of your application works is a good way to ensure you’re not building a house of cards.
+Writing code is not fun if every change and addition you make can quietly break something.
+Unit tests run quickly and painlessly against your code to build confidence and peace of mind.
+Your unit tests make explicit how you expect something to work;
+likewise, the absence of tests for some expected or assumed behavior indicates that this behavior is tentative and a potential source of errors.
+Even a thin suite of tests maps out your knowns and your known-unknowns.</p>
+
+<h3>The Problem</h3>
+
+<p>We need an overall, at-a-glance “health check” for a codebase—one that combines individual DOH tests into a test suite that can be run easily both inside and outside a browser.</p>
+
+<h3>The Solution</h3>
+
+<p>Create test modules that allow individual tests to be run en-masse in the <a href="/reference-guide/1.8/util/doh.html">DOH test runner</a>.</p>
+
+<p class="tutorial_image">
+	<a href="demo/tests/runTests.php"><img src="images/testSuite.png" alt="Test Suite Screenshot"></a>
+	A suite of tests in the DOH browser test runner
+</p>
+
+<a class="demoBtn demo" href="demo/tests/runTests.php">View Testsuite Demo</a>
+
+<h3>Discussion</h3>
+
+<p>DOH is the Dojo Toolkit’s testing utility, and the test runners it includes provide a neat way to run collections of tests and give you aggregated results.</p>
+
+<p>To see how this works, we’ve created a fairly simple piece of functionality—a module that injects an <code>authorBar</code> into the page. It fetches JSON data, picks out the info for the configured author, and renders it to the DOM.
+There’s plenty of opportunity for error there, so let’s first see it in action before we look at how to test it.</p>
+
+<a class="demoBtn demo" href="demo/authorBar.php">View authorBar Demo</a>
+
+<h3>Defining Tests</h3>
+
+<p>The <code>authorBar</code> has a simple API. Each of the steps in its setup is represented by a method. The normal order of operation looks like this:</p>
+
+<p><img src="images/overview.jpg" /></p>
+
+<p>Notice that the only part of this sequence which really needs a DOM is the <code>render</code> method.
+Also, note that while <code>loadData</code> will normally make an XHR request, <code>onDataLoad</code> just needs data—it doesn’t care where it came from.
+We can use these kind of distinctions to limit the variables at play in any given test, and to focus in on just the narrow set of conditions we care about.</p>
+
+<p>For this example, tests are broken down into 3 separate files:</p>
+<ul>
+	<li><strong><code>api.js</code></strong> tests the <code>authorBar</code> at an API level. It checks if the methods get called in the correct sequence, and if they return the expected results when provided known data.</li>
+	<li><strong><code>data.js</code></strong> tests the data handling and makes sure that both good <em>and</em> bad data follow the expected codepaths.</li>
+	<li><strong><code>test_authorBar.php</code></strong> is an HTML page that loads Dojo, the <code>authorBar</code> module (the test module), and the <code>doh.runner</code> module (the test harness).</li>
+</ul>
+
+<p>We can test all of these aspects of the subject module by running each test in isolation first, then confirming the result by running them in aggregate.</p>
+
+<h3>Helpers</h3>
+
+<p>DOH is a pretty simple test harness, and as you write tests you’ll see your own patterns and opportunities for code reuse. In this solution, all our test files also require a <code>demo/tests/util</code> module, which defines a couple of handy things for us:</p>
+<ul>
+	<li><strong><code>util.mockMethod</code></strong> A simple API to temporarily replace a method’s implementation with a mock function to be used in the context of a test. Like <code>dojo/on</code>, it returns a handle object which can be passed into its partner <code>util.unMockMethod</code> to restore the original behavior.</li>
+	<li><strong><code>util.Fixture</code></strong> A helper class for defining individual test fixtures. Instances have the same <code>setUp</code>, <code>runTest</code> and <code>tearDown</code> methods DOH expects, but this extension allows tests to stay DRY by including some repeated steps in a shared setUp/tearDown on the prototype.</li>
+</ul>
+
+<p>The <code>data</code> test module gives an example of using a fixture class to ensure the <code>config.authorName</code> is reset in between tests to avoid any unintended bleed of effects from one test to another:</p>
+
+<pre class="brush: js;">
+// paraphrased for brevity...
+var author = { name: "Someone" };
+
+// define a subclass of the Fixture class
+var TF = declare(util.Fixture, {
+	setUp: function() {
+		// make sure the configured authorName is a
+		// known value at the start of every test
+		config.authorName = author.name;
+	}
+});
+
+// usage:
+doh.register("group name", [
+	new TF("test name", function() {
+		// runTest - the test function
+		doh.is(
+			author.name,
+			config.authorName,
+			"Item name matches the config authorName"
+		);
+	})
+	// more tests using the same fixture class
+]);
+</pre>
+
+<h3>Mocking methods</h3>
+
+<p>It is often a good idea to test which path is being taken during execution.
+	Does bad data produce a call to the error handling method? Does an XHR request produce a call to the load handler method?
+	The simple mechanism we use to do this is defined in the <code>util</code> module:</p>
+
+<pre class="brush: js;">mockMethod: function(obj, methName, fn) {
+	var orig = obj[methName];
+	var handle = [obj, methName, orig];
+	obj[methName] = fn;
+	return handle;
+},
+unMockMethod: function(handle) {
+	handle[0][handle[1]] = handle[2];
+}</pre>
+
+<pre class="brush:js">// putting mocking to use
+    // test to ensure update calls loadData
+    new TF(&quot;update calls loadData&quot;, function() {
+        var hdl = mockMethod(authorBar, &quot;loadData&quot;, function() { return &quot;pass&quot;; });
+        doh.is(&quot;pass&quot;, authorBar.update(), &quot;call to update() should result in call to loadData&quot;);
+        unMockMethod(hdl);
+    }),
+</pre>
+
+<p>Here, we temporarily replace the authorBar’s <code>render</code> method with our own function which just updates the <code>success</code> variable. We can then assert that <code>success</code> must be <code>true</code> for the test to pass. Finally, the handle returned by <code>mockMethod</code> is fed back into <code>unMockMethod</code> to restore the original behavior, regardless of whether or not the test was successful.</p>
+
+<h3>Running Tests in the DOH Test Harness</h3>
+
+<p>Let’s briefly review how to run DOH through the browser.
+The browser runner is at <code>util/doh/runner.html</code>. Code in that page looks for a <code>testModule</code> parameter in the query string which specifies which test module should be loaded and executed. For example:</p>
+
+<pre style="overflow-x:auto">
+/js/dojo/1.8/util/doh/runner.html?testModule=demo/tests/data&amp;registerModulePath=demo,/documentation/tutorials/1.8/recipes/doh_testsuite/demo
+</pre>
+
+<p>This URL will cause the runner to load and run the <code>data</code> module. <code>registerModulePath</code> is used in the URL to map a namespace to a particular path. This lets us fashion URLs to run individual test modules via the harness.</p>
+
+<p>We’ve now successfully loaded a single set of unit tests through the DOH Runner. But what if we want to run them all?</p>
+
+<h3>Test Roll-up Modules</h3>
+
+<p>As with normal Dojo modules, when creating tests, we can define a module that is simply a list of other modules. Then, when specifying a <code>modulePath</code> for the test runner, we point to this “roll-up module”:</p>
+
+<pre class="brush:js">
+// there are three test sets to run: api, data and page
+require([&quot;doh/runner&quot;, &quot;require&quot;, &quot;demo/tests/api&quot;, &quot;demo/tests/data&quot;],
+  function(doh, require){
+    try {
+      // register the test page, which initiates the doh
+      doh.registerUrl(&quot;in-page authorBar&quot;, require.toUrl(&quot;demo/tests/test_authorBar.php&quot;), 5000); // timeout test after 5 seconds
+    } catch(e) {
+      doh.debug(e);
+  }
+});
+</pre>
+
+<p>You can define as many different roll-ups as you need: one per directory, one per major component, or in any other fashion that makes sense for your codebase.
+It is conventional to create a <code>module.js</code> file which requires and runs <em>all</em> the tests for that collection or directory of tests.</p>
+
+<!-- pro-tip blocks -->
+<p class="proTip">A bad test can be worse than no test. Beware false negatives, and always confirm a test fails as expected in the appropriate conditions before finishing your test code.</p>
+
+<p>To see it all together, let's look at the original demo:</p>
+
+<a class="demoBtn demo" href="demo/tests/runTests.php">View Testsuite Demo</a>
+
+<h3>Summary</h3>
+
+<p>DOH makes aggregation of tests and bulk test runs very simple. Because the browser runner is configured by its query string, it is also easy to use. A line of green lights can lure you into a false sense of security if test coverage and test implementation generate false negatives, but with review and iteration, a test suite can be an invaluable tool during development and maintenance of a project.</p>
+
+<h3>Colophon</h3>
+
+<ul>
+	<li><a href="/reference-guide/1.8/util/doh.html">DOH Documentation</a></li>
+</ul>

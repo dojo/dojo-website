@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Refresh a Node's Content</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+
+			// Function that refreshes the SPAN node
+			function refreshContent() {
+				// Using dojo.xhrGet, as very little information is being sent
+				dojo.xhrGet({
+					// The URL of the request
+					url: "get-content.php",
+					// The success callback with result from server
+					load: function(newContent) {
+						dojo.byId("contentNode").innerHTML = newContent;
+					},
+					// The error handler
+					error: function() {
+						// Do nothing -- keep old content there
+					},
+					// generate an extra GET variable to prevent browsers from caching
+					preventCache: true
+				});
+			}
+
+			// When the DOM is ready....
+			dojo.ready(function(){
+				// Populate content initially
+				refreshContent();
+				// Connect button
+				dojo.connect(dojo.byId("refreshButton"),"onclick",refreshContent);
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Refresh a Node's Content</h1>
+
+		<p>Click the button below to refresh the content.</p>
+
+		<button id="refreshButton">Refresh Content</button>
+		<br /><br />
+
+		<p id="contentNode"></p>
+
+
+	</body>
+</html>

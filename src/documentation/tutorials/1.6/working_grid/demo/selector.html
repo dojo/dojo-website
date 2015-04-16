@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Selections in a Grid</title>
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/Grid.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/claroGrid.css">
+		<link rel="stylesheet" href="style.css" media="screen">
+		<!-- load dojo -->
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js">
+		</script>
+		<script>
+			dojo.require("dojox.grid.DataGrid");
+			dojo.require("dojox.grid._CheckBoxSelector");
+			dojo.require("dojox.grid._RadioSelector");
+			dojo.require("dojo.data.ItemFileWriteStore");
+
+			var test_store, gridLayout, grid, grid2;
+			dojo.ready(function(){
+				var gridCells = [
+					[
+						new dojox.grid.cells.RowIndex({ width: '10%' }),
+						{ name: 'Column 1', field: 'col1', width: '30%' },
+						{ name: 'Column 2', field: 'col2', width: '30%' },
+						{ name: 'Column 3', field: 'col3', width: '30%' }
+					],[
+						{ name: 'Column 4', field: 'col4', colSpan: 4 }
+					]
+				];
+				
+				gridLayout = [
+					// First, our view using the _CheckBoxSelector custom type
+					{
+						type: "dojox.grid._CheckBoxSelector"
+					},
+					// Now include our cells in a view occupying the rest of the grid
+					gridCells
+				];
+				
+				var data = {
+					identifier: 'id',
+					label: 'id',
+					items: []
+				};
+				var data_list = [
+					{ col1: "normal", col2: false, col3: "new", col4: 'But are not followed by two hexadecimal'},
+					{ col1: "important", col2: false, col3: "new", col4: 'Because a % sign always indicates'},
+					{ col1: "important", col2: false, col3: "read", col4: 'Signs can be selectively'},
+					{ col1: "note", col2: false, col3: "read", col4: 'However the reserved characters'},
+					{ col1: "normal", col2: false, col3: "replied", col4: 'It is therefore necessary'},
+					{ col1: "important", col2: false, col3: "replied", col4: 'To problems of corruption by'},
+					{ col1: "note", col2: false, col3: "replied", col4: 'Which would simply be awkward in'}
+				];
+				var rows = 25;
+				for(var i=0, l=data_list.length; i<rows; i++){
+					data.items.push(dojo.mixin({ id: i }, data_list[i%l]));
+				}
+
+				// global var "test_store"
+				test_store = new dojo.data.ItemFileWriteStore({data: data});
+
+				//	create the grids.
+				grid = new dojox.grid.DataGrid({
+					store: test_store,
+					structure: gridCells, // just the cells from the above layout
+					rowSelector: true,
+					"class": "grid"
+				}, "grid");
+				grid.startup();
+
+				grid2 = new dojox.grid.DataGrid({
+					store: test_store,
+					structure: gridLayout,
+					"class": "grid"
+				}, "grid2");
+				grid2.startup();
+
+				function reportSelection(node){
+					var items = this.selection.getSelected(),
+						msg = "You have selected rows ";
+					var tmp = dojo.map(items, function(item){
+						return this.store.getValue(item, "id");
+					}, this);
+					node.innerHTML = msg + tmp.join(", ");
+				}
+				
+				dojo.connect(grid, "onSelectionChanged",
+					dojo.hitch(grid, reportSelection, dojo.byId("results")));
+				dojo.connect(grid2, "onSelectionChanged",
+					dojo.hitch(grid2, reportSelection, dojo.byId("results2")));
+			});
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: Selections in a Grid</h1>
+		<p>The following grids demonstrate how selections work in a dojox.grid.DataGrid.</p>
+		<h2>Grid with <code>rowSelector</code></h2>
+		<p>
+			In the following Grid, no special selector view is used, but
+			<code>rowSelector</code> is specified in the arguments to the constructor.
+		</p>
+		<p>
+			The row selector behaves according to the rules of the grid's
+			<code>selectionMode</code>.
+		</p>
+		<div id="grid"></div>
+		<div id="results" class="results"></div>
+		<h2>Grid with <code>dojox.grid._CheckBoxSelector</code></h2>
+		<p>
+			In the following Grid, the leftmost column is actually a separate view of type
+			<code>dojox.grid._CheckBoxSelector</code>.
+		</p>
+		<p>
+			Notice how using the checkbox selectors follows its own behavior&mdash;in
+			this case, although the Grid is in <code>extended</code> selection mode,
+			which is still in effect when selecting rows via other data cells,
+			clicking on the checkboxes does not follow that behavior.
+			(In fact, it's closer to the behavior of the <code>multiple</code>
+			selection mode.)
+		</p>
+		<div id="grid2"></div>
+		<div id="results2" class="results"></div>
+	</body>
+</html>

@@ -1,0 +1,454 @@
+
+
+<h3>Introduction</h3>
+<p>
+Previously in <a href="../selects">Getting
+Selective with Dijit</a>, you learned how Dijit enables you to quickly transform
+a plain HTML select element into one of several feature-rich, skinnable widgets,
+presenting a look and feel that is consistent with other Dijit widgets
+across browsers.
+</p>
+<p>
+However, that tutorial focused on creating these widgets declaratively
+via markup reminiscent of standard HTML select elements.  While that may
+satisfy a wide range of use cases, there are plenty of others&mdash;such as
+single-page rich internet applications pursuing a modular
+design&mdash;which highly prefer programmatic widget instantiation.
+</p>
+<p>
+It is clear from
+<a href="../sliders/" title="Slippin' Sliders with Dijit">other</a>
+<a href="../themes_buttons_textboxes" title="Dijit Themes, Buttons, and Textboxes">tutorials</a>
+that widgets can be created either declaratively or programmatically,
+and indeed Dijit's select widgets are no exception.  However, when creating
+widgets programmatically, one does not ordinarily rely on pre-existing markup
+in the page (perhaps a placeholder element, at most)&mdash;in which
+case, from where shall we derive our drop-down list items?
+</p>
+
+<h3>Select Widgets and dojo/store</h3>
+<p>
+You should already be familiar with the concepts behind
+<a href="/reference-guide/1.8/dojo/store.html" title="Using Dojo Stores"><code>dojo/store</code></a>;
+perhaps you have also already observed how some widgets interact with
+stores.
+Dijit's select widgets are also capable of working with <code>dojo/store</code>.
+</p>
+<p>
+Select widgets have an optional <strong><code>store</code></strong> property;
+passing a <code>dojo/store</code> instance to the
+select widget via this property will instruct the widget to populate its
+drop-down list with the items from the specified store.  This works for all
+three select widgets we've previously discussed: <code>dijit/form/Select</code>,
+<code>dijit/form/FilteringSelect</code>, and <code>dijit/form/ComboBox</code>.
+</p>
+<p class="proTip">
+Fun fact: even when you create a <code>dijit/form/FilteringSelect</code> or
+<code>dijit/form/ComboBox</code> from markup, the widget internally
+converts it to a store!
+</p>
+<p>
+To demonstrate select widgets and data stores working together, we will recreate
+our select widgets for US states programmatically.  To keep things simple,
+we will use an instance of <code>dojo/store/Memory</code>
+[ <a href="/api/1.8/dojo/store/Memory" title="dojo/store/Memory API">api</a>
+| <a href="/reference-guide/1.8/dojo/store/Memory.html" title="dojo/store/Memory Reference">ref</a> ],
+fetching its data from a JSON resource whose contents look something like this:
+</p>
+<pre class="brush: js;">
+[
+	{ "abbreviation": "AL", "name": "Alabama" },
+
+	... other 48 states here ...
+
+	{ "abbreviation": "WY", "name": "Wyoming" }
+]
+</pre>
+
+<p>
+Notice that in addition to the name, there is an abbreviation.
+It will become the "internal value" of each item.
+</p>
+<p class="proTip">
+When populating from a store, the <code>value</code> of a
+<code>dijit/form/Select</code> or <code>dijit/form/FilteringSelect</code>
+reports the <em>identity</em> of the selected item.
+(This means that select widgets expect a store which implements getIdentity().)
+</p>
+
+<p>
+Let's say that we have a web page set up with the Claro theme as seen in
+<a href="../sliders/" title="Slippin' Sliders with Dijit">previous</a>
+<a href="../themes_buttons_textboxes/" title="Dijit Themes, Buttons, and Textboxes">tutorials</a>,
+and that the above JSON resource is available as
+<code>states.json</code> within the same folder as the page.
+We can instantiate an Memory to consume the resource, then
+create a select widget referencing the store, like so:
+</p>
+
+<div data-dojo-type="dijit/layout/TabContainer"
+	data-dojo-props="doLayout:false, 'class':'code-tabs'">
+<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Select'">
+<pre class="brush: js; html-script: true">
+&lt;body class="claro"&gt;
+	&lt;div id="stateSelect"&gt;&lt;/div&gt;
+
+	&lt;script&gt;
+		require(["dijit/form/Select", "dojo/store/Memory",
+				"dojo/json", "dojo/text!./states.json", "dojo/ready"],
+			function(Select, Memory, json, states, ready) {
+
+				ready(function(){
+					// create store instance referencing data from states.json
+					var stateStore = new Memory({
+						idProperty: "abbreviation",
+						data: json.parse(states)
+					});
+
+					// create Select widget, populating its options from the store
+					var select = new Select({
+						name: "stateSelect",
+						store: stateStore,
+						style: "width: 200px;",
+						labelAttr: "name",
+						maxHeight: -1, // tells _HasDropDown to fit menu within viewport
+						onChange: function(value){
+							document.getElementById("value").innerHTML = value;
+							document.getElementById("displayedValue").innerHTML = this.get("displayedValue");
+						}
+					}, "stateSelect");
+					select.startup();
+				});
+		});
+	&lt;/script&gt;
+&lt;/body&gt;
+</pre>
+</div>
+<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'FilteringSelect'">
+<pre class="brush: js; html-script: true">
+&lt;body class="claro"&gt;
+	&lt;div id="stateSelect"&gt;&lt;/div&gt;
+
+	&lt;script&gt;
+		require(["dijit/form/FilteringSelect", "dojo/store/Memory",
+				"dojo/json", "dojo/text!./states.json", "dojo/ready"],
+			function(FilteringSelect, Memory, json, states, ready) {
+
+				ready(function(){
+					// create store instance referencing data from states.json
+					var stateStore = new Memory({
+						idProperty: "abbreviation",
+						data: json.parse(states)
+					});
+
+					// create FilteringSelect widget, populating its options from the store
+					var select = new FilteringSelect({
+						name: "stateSelect",
+						placeHolder: "Select a State",
+						store: stateStore,
+						onChange: function(val){
+							document.getElementById("value").innerHTML = val;
+							document.getElementById("displayedValue").innerHTML = this.get("displayedValue");
+						}
+					}, "stateSelect");
+					select.startup();
+				});
+		});
+	&lt;/script&gt;
+&lt;/body&gt;
+</pre>
+</div>
+<div data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'ComboBox'">
+<pre class="brush: js; html-script: true">
+&lt;body class="claro"&gt;
+	&lt;div id="stateSelect"&gt;&lt;/div&gt;
+
+	&lt;script&gt;
+		require(["dijit/form/ComboBox", "dojo/store/Memory",
+				"dojo/json", "dojo/text!./states.json", "dojo/ready"],
+			function(ComboBox, Memory, json, states, ready) {
+
+				ready(function(){
+					// create store instance referencing data from states.json
+					var stateStore = new Memory({
+						idProperty: "abbreviation",
+						data: json.parse(states)
+					});
+
+					// create ComboBox widget, populating its options from the store
+					var select = new ComboBox({
+						name: "stateSelect",
+						placeHolder: "Select a State",
+						store: stateStore,
+						onChange: function(value){
+							document.getElementById("value").innerHTML = value;
+						}
+					}, "stateSelect");
+					select.startup();
+				});
+		});
+	&lt;/script&gt;
+&lt;/body&gt;
+</pre>
+</div>
+</div>
+<a class="demoBtn demo" href="demo/ProgSelect.php">View Select Demo</a>
+<a class="demoBtn demo" href="demo/ProgFilteringSelect.php">View FilteringSelect Demo</a>
+<a class="demoBtn demo" href="demo/ProgComboBox.php">View ComboBox Demo</a>
+<p class="proTip">
+When creating widgets programmatically, don't forget to call <code>startup</code>
+on your widget instances once they have been placed in the document.
+(The parser takes care of this for you in the case of declarative instantiation.)
+Forgetting to call <code>startup</code> is a very common mistake, and while its
+effects may vary from widget to widget, you can generally expect odd behavior to
+ensue.  For example, if we were to forget to call <code>startup</code> in the
+<code>dijit/form/Select</code> example above, you would find that the drop-down
+list would be empty.
+</p>
+
+<p>
+Notice how similar these examples are&mdash;the primary difference being which
+widget is <code>require</code>d and instantiated.  Aside from that, there
+are only a few differences:
+</p>
+<ul>
+	<li>We add <code>maxHeight: -1</code> for Select, to prevent the drop-down
+		menu from causing the entire page to grow in size; FilteringSelect and
+		ComboBox already do this by default.</li>
+	<li>We add <code>placeHolder</code> text for FilteringSelect and
+		ComboBox&mdash;Select does not support this.</li>
+	<li>labelAttr, the attribute used for the label, is specified for the Select&mdash;
+		for ComboBox and FilteringSelect labelAttr defaults to searchAttr,
+		and searchAttr defaults to "name", so we didn't bother specifying it.</li>
+	<li>Select needs an explicit width setting.</li>
+</ul>
+
+<p class="proTip">
+You may have noticed that our <code>dijit/form/Select</code> example does not
+have an empty-valued "Select a state" item this time around.
+The smoothest way to resolve this would be to also include this item in the store.
+For the purposes of this example, however, we have omitted it in favor of a
+more natural presentation of the other two widgets, while still being able to
+use the same store and JSON resource for all three.
+</p>
+
+<p>
+We have now observed how all three Dijit select widgets can be created
+programmatically, populating their lists from a data store via the
+<code>store</code> property.  Next we will take a closer look at some behaviors
+and capabilities that set these widgets apart from one another.
+</p>
+<p class="proTip">
+Note: it is technically possible to declaratively create Dijit select
+widgets using stores as well; however, doing so is not recommended, since
+it requires exposing the store as a global object in the web page or
+application.  Declarative instantiation of select widgets is best reserved for
+instances which take advantage of their ability to be created with
+markup very similar to that of a standard HTML select element.
+It is far more common and appropriate to use stores in conjunction with
+programmatically-created select widgets.
+</p>
+
+<h3>Using Stores with FilteringSelect and ComboBox</h3>
+<p>
+It makes sense to look at <code>dijit/form/FilteringSelect</code> and
+<code>dijit/form/ComboBox</code> together, as both inherit the same codebase
+and thus share the same behavior in terms of how they interact with a data store.
+</p>
+<p class="proTip">
+While FilteringSelect and ComboBox behave identically within the confines of this
+discussion, please remember that these two widgets report <code>value</code>
+differently&mdash;see the
+<a href="../selects" title="Getting Selective with Dijit">previous tutorial on select widgets</a>
+for details.
+</p>
+<p>
+In the previous tutorial, we only looked at the most important widget properties
+to get up and running.  There are a few additional properties of interest
+particularly when working with stores:
+</p>
+<ul>
+	<li><strong><code>searchAttr</code>:</strong>
+		Name of the attribute to match text field input against when filtering
+		the list; defaults to <code>"name"</code>.</li>
+	<li><strong><code>pageSize</code>:</strong>
+		Limits how many list options will be displayed at a time&mdash;if the
+		number of results exceeds this limit, a special item will be added to the list
+		at each end, for moving to the next or previous "page".
+		The default is <code>Infinity</code> (no limit).</li>
+</ul>
+<p class="proTip">
+Note that <code>pageSize</code> can also be used when creating widgets from
+markup&mdash;we did not introduce it in the previous tutorial simply because
+it is not a feature normally encountered in a standard HTML select element.
+</p>
+<p>
+Noting the properties above gives us some insight as to the behavior of these
+two widgets&mdash;they do not rely upon the store's label attribute(s).
+Rather, they expect you to specify which item attribute
+to use for searching and displaying items in the drop-down list.
+</p>
+<p>
+In our states drop-down example above, notice that we did not specify
+<code>searchAttr</code>; this is because our data items already have a
+<code>name</code> attribute, which contains what we want to search against and
+display in the list&mdash;therefore, the example "just works".
+</p>
+
+<h3>Using Stores with dijit/form/Select</h3>
+<p>
+We noted earlier that when using stores, <code>dijit/form/Select</code> and
+<code>dijit/form/FilteringSelect</code> associate their <code>value</code> with
+the identity of the currently-selected item.  However,
+<code>dijit/form/Select</code> possesses an important limitation: it is
+implemented in such a way that it does not handle non-string item identities well.
+Particularly, setting the current value of the widget programmatically via
+<code>select.set("value", id)</code> will not work with non-string
+(e.g. numeric) identities.
+</p>
+<p class="proTip">
+For best results, only use <code>dijit/form/Select</code> with a store whose
+items' identities are strings.
+</p>
+
+<p class="proTip">
+Another important detail: when changing the store referenced by a
+<code>dijit/form/Select</code> widget after initialization, you might be
+inclined to call <code>widget.set("store", newStore)</code> as with other
+select widgets, but this will not work with
+<code>dijit/form/Select</code>&mdash;instead, call
+<code>widget.setStore(newStore)</code>.
+</p>
+
+<h3>Programmatically Creating dijit/form/Select without a Store</h3>
+<p>
+Thus far, this tutorial has been dedicated to the use of stores with Dijit's
+select widgets, but its underlying purpose has been to demonstrate programmatic
+instantiation of these widgets.  Along those lines, <code>dijit/form/Select</code>
+provides an alternative approach that does not require the use of a store: the
+<strong><code>options</code></strong> property.
+</p>
+<p>
+The <code>options</code> property accepts an array of objects,
+each of which may include the following properties:
+</p>
+<ul>
+	<li><strong><code>label</code>:</strong>
+		The text to appear in this list item; analogous to the
+		<code>innerHTML</code> of an <code>option</code> element.  This is reflected in
+		the widget's <code>displayedValue</code> when the item is selected.</li>
+	<li><strong><code>value</code>:</strong>
+		The "internal" value represented by this list item; analogous to the
+		<code>value</code> attribute of an <code>option</code> element.  This is
+		reflected in the widget's <code>value</code> when the item is selected.</li>
+	<li><strong><code>selected</code>:</strong>
+		<em>(optional)</em> If <code>true</code>, indicates that this item should be
+		initially selected in the widget; analogous to the <code>selected</code>
+		attribute of an <code>option</code> element.</li>
+	<li><strong><code>disabled</code>:</strong>
+		<em>(optional)</em> If <code>true</code>, indicates that this item should not be
+		selectable in the drop-down list; analogous to the <code>disabled</code>
+		attribute of an <code>option</code> element.</li>
+</ul>
+<p>
+Let's take a look at an example of the <code>options</code> array in action,
+with an alternate (and abridged) version of our states drop-down:
+</p>
+<pre class="brush: js; html-script: true">
+&lt;body class="claro"&gt;
+	&lt;div id="stateSelect"&gt;&lt;/div&gt;
+
+	&lt;script&gt;
+		require(["dijit/form/Select", "dojo/store/Memory", "dojo/ready"],
+			function(Select, Memory, ready) {
+
+			ready(function(){
+				var select = new Select({
+					name: "stateSelect",
+					options: [
+						{
+							value: "",
+							label: "Select a state",
+							selected: true
+						},
+						{
+							value: "AL",
+							label: "Alabama"
+						},
+						{
+							value: "AK",
+							label: "Alaska"
+						},
+						{
+							value: "AZ",
+							label: "Arizona"
+						},
+						{
+							value: "AR",
+							label: "Arkansas"
+						},
+						// ... more states would go here ...
+						{
+							value: "DC",
+							label: "Washington, D.C.",
+							disabled: true // can't pick this; it's not a state!
+						},
+						{
+							value: "WY",
+							label: "Wyoming"
+						}
+					],
+					onChange: function(value){
+						document.getElementById("value").innerHTML = value;
+						document.getElementById("displayedValue").innerHTML = this.get("displayedValue");
+					}
+				}, "stateSelect");
+				select.startup();
+			});
+		});
+	&lt;/script&gt;
+&lt;/body&gt;
+</pre>
+<a class="demoBtn demo" href="demo/ProgSelectOptions.php">View Demo</a>
+
+<p>
+As you can see, this achieves a result comparable to the previous
+<code>dijit/form/Select</code> example, without using a store.
+This can be useful in instances where you wish to create the widget
+programmatically, with a list of options that is either short and static,
+or simple to generate procedurally.
+</p>
+
+<p class="proTip">
+It is also possible to later add and remove individual options using the
+<code>addOption</code> and <code>removeOption</code> methods, each of which can
+be passed either a single object or an array of objects.  Additionally, you
+can replace the list entirely by calling
+<code>set("options", arrayOfObjects)</code>.  However, due to a limitation
+of the implementation, you will need to call <code>startup</code> again
+for this to take effect (which is otherwise not a standard practice).
+</p>
+
+<h3>Conclusion</h3>
+<p>
+Dijit offers a number of widgets for enriching the user experience normally
+found in HTML select elements.  These widgets can be created via markup with
+minimal changes to ordinary HTML code, but can also be instantiated
+programmatically&mdash;primarily through cooperation with <code>dojo/store</code>
+stores.  At the most basic level, you can easily swap between these widgets
+with minimal code changes, but as we have seen, each one has its own
+particular behaviors and strengths.
+</p>
+<p>
+After reading a number of these tutorials, you should feel more comfortable with
+the basic building blocks Dijit provides for creating rich, functional
+user interfaces.  We hope this encourages you to start exploring and building
+awesome applications with Dojo!
+</p>
+
+<?php require('../../../../includes/dojo.inc'); ?>
+<script>
+	require(["dojo/parser", "dijit/layout/TabContainer", "dijit/layout/ContentPane"], function (parser) {
+		parser.parse();
+	});
+</script>

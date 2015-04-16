@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Demo: Loading Overlay (Step 2)</title>
+	<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+	<link rel="stylesheet" href="style.css" media="screen">
+	<link rel="stylesheet" href="/js/dojo/1.6/dijit/themes/claro/claro.css" media="screen">
+
+	<!-- load dojo and provide config via data attribute -->
+	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"
+			data-dojo-config="isDebug: true, parseOnLoad: true">
+	</script>
+	<script>
+		var loadingOverlay = (function(){
+			// the overlay object with its methods are the return value 
+			// of this anonymous function
+			
+			var overlayNode;
+			return {
+				init: function(){
+					// create the container element for the overlay
+					// We store the reference in the overlayNode closure variable
+					overlayNode = dojo.create('div', {
+						id: 'loadingOverlay',
+						'class': 'loadingOverlay pageOverlay',
+						innerHTML: '<div class="loadingMessage">Loading...</div>'
+					}, dojo.body());
+					
+					return this;
+				},
+				show: function(){
+					// show the overlay
+					dojo.style( overlayNode, {
+						display: 'block'
+					});
+				},
+				hide: function(){
+					// hide the overlay
+					dojo.style( overlayNode, {
+						display: 'none'
+					});
+				}
+			};
+		})();
+	</script>
+</head>
+<body class="claro">
+	<script>
+		// put up the loading overlay while the page initializes
+		loadingOverlay.init().show();
+	</script>
+	<h1>Loading Overlay Demo (Step 2)</h1>
+	<div id="main">
+		<p>Page content.</p>
+	</div>
+</body>
+</html>

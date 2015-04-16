@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Combining and Chaining Animations</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+		dojo.require("dojo.fx");
+		// To use the alternate easing methods, we need to require the dojo.fx.easing module
+		dojo.require("dojo.fx.easing");
+
+		// define a function to return the animation which
+		// swaps the positions of 2 nodes
+		function swapAnim(node1, node2) {
+			var posn1 = parseInt(dojo.style(node1, "left")),
+				posn2 = parseInt(dojo.style(node2, "left"));
+
+			return moveNodes = dojo.fx.combine([
+				dojo.fx.slideTo({
+					duration: 1200,
+					node: node2,
+					left: posn1
+				}),
+				dojo.fx.slideTo({
+					duration: 1200,
+					node: node1,
+					left: posn2
+				})
+			]);
+		}
+
+		// Once our modules have loaded and the DOM is ready...
+		dojo.ready(function(){
+			var originalOrder = true; // track which order our content nodes are in
+
+			var swapButton = dojo.byId("swapButton"),
+				c1 = originalOrder ? dojo.byId("content1") : dojo.byId("content2"),
+				c2 = originalOrder ? dojo.byId("content2") : dojo.byId("content1"),
+				container = dojo.byId("container");
+
+			// Set up a click handlers to run our animations
+			dojo.connect(swapButton, "onclick", function(evt){
+
+				// chain the swap nodes animation
+				// with another to fade out a background color in our container
+				var anim = dojo.fx.chain([
+					swapAnim(c1, c2),
+					dojo.animateProperty({
+						node: container,
+						properties: {
+							backgroundColor: "#fff"
+						}
+					})
+				]);
+				// before the animation begins, set initial container background
+				dojo.connect(anim, "beforeBegin", function(){
+					dojo.style(container, "backgroundColor", "#eee");
+				});
+
+				// when the animation ends, toggle the originalOrder
+				dojo.connect(anim, "onEnd", function(n1, n2){
+					originalOrder = !originalOrder;
+				});
+
+				anim.play();
+			});
+		});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Combining and Chaining Animations</h1>
+
+		<button id="swapButton">Swap</button>
+
+		<div class="container" id="container">
+			<div id="content1" class="contentBox" style="top: 0; left: 0">
+				<div class="innerBox">1: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</div>
+			</div>
+			<div id="content2" class="contentBox" style="top: 0; left: 250px">
+				<div class="innerBox">2: Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</div>
+			</div>
+		</div>
+	</body>
+</html>

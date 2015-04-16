@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-touch-fullscreen" content="yes" />
+		<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<!-- prevent cache -->
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="pragma" content="no-cache">
+
+		<title>TweetView</title>
+		<link href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet" />
+		<link href="../../app/js/tweetview/resources/TweetView.css" rel="stylesheet" />
+		<script>
+			djConfig = {
+				isDebug: true,
+				baseUrl: './',
+				modulePaths: {
+					tweetview: '/documentation/tutorials/1.6/mobile/tweetview/app/js/tweetview'
+				},
+				parseOnLoad: true
+			};
+		</script>
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js.uncompressed.js"></script>
+		<script>
+			// Use the lightweight parser
+			dojo.require("dojox.mobile.parser");
+			// Require Dojo mobile
+			dojo.require("dojox.mobile");
+			// Get additional, non-standard dojox.mobile widgets
+			dojo.require("dojox.mobile.TabBar");
+			// Require the compat if the client isn't Webkit-based
+			dojo.requireIf(!dojo.isWebKit,"dojox.mobile.compat");
+			// Require TweetViewUI
+			dojo.require("tweetview.TweetView");
+			dojo.require("tweetview.SettingsView");
+			// Set accounts for tweetview directly on the namespace
+			tweetview.ACCOUNTS = {
+				dojo: { enabled: true },
+				sitepen: { enabled: true }
+			};
+
+			// Hack For This Demo!
+			dojo.ready(function() {
+				dijit.byId("tweets").refresh();
+				dijit.byId("mentions").refresh();
+			});
+
+
+		</script>
+	</head>
+	<body>
+
+		<!-- tweets view -->
+		<div id="tweets" dojoType="tweetview.TweetView" selected="true">
+			<h1 dojoType="dojox.mobile.Heading" fixed="top">
+				<!-- the refresh button -->
+				<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButton tweetviewRefresh" icon="../../app/js/tweetview/resources/images/refresh.png"></div>
+				Tweets
+			</h1>
+			<ul dojoType="dojox.mobile.RoundRectList" class="tweetviewList"></ul>
+		</div>
+
+		<!-- mentions view -->
+		<div id="mentions" dojoType="tweetview.TweetView" serviceUrl="http://search.twitter.com/search.json?q=@${account}&amp;since_id=${since_id}">
+			<h1 dojoType="dojox.mobile.Heading" fixed="top">
+				<!-- the refresh button -->
+				<div dojoType="dojox.mobile.ToolBarButton" class="mblDomButton tweetviewRefresh" icon="../../app/js/tweetview/resources/images/refresh.png"></div>
+				Mentions
+			</h1>
+			<ul dojoType="dojox.mobile.RoundRectList" class="tweetviewList"></ul>
+		</div>
+
+		<!-- settings view -->
+		<div id="settings" dojoType="dojox.mobile.ScrollableView">
+			<h1 dojoType="dojox.mobile.Heading" fixed="top">Settings</h1>
+			<h2 dojoType="dojox.mobile.RoundRectCategory">Show</h2>
+			<ul dojoType="dojox.mobile.RoundRectList" class="tweetviewList"></ul>
+		</div>
+
+		<!-- the bottom tabbar -->
+		<ul dojoType="dojox.mobile.TabBar" id="tabBar" class="tweetviewTabBar" iconBase="../../app/js/tweetview/resources/images/iconStrip.png">
+			<!-- top left width height -->
+			<li dojoType="dojox.mobile.TabBarButton" iconPos1="0,0,29,30" iconPos2="29,0,29,30" selected="true" moveTo="tweets">Tweets</li>
+			<li dojoType="dojox.mobile.TabBarButton" iconPos1="0,29,29,30" iconPos2="29,29,29,30" moveTo="mentions">Mentions</li>
+			<li dojoType="dojox.mobile.TabBarButton" iconPos1="0,58,29,30" iconPos2="29,58,29,30" moveTo="settings">Settings</li>
+		</ul>
+
+	</body>
+</html>

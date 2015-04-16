@@ -1,0 +1,446 @@
+<?php require("../../../../resources/tutHead.inc"); ?>
+
+<h3>What is FlickrView?</h3>
+<p>
+	FlickrView is the name of the application we're going to create using Dojo Mobile
+	and a few custom Dojo resources of our own. FlickrView won’t simply be a small
+	exercise in using Dojo Mobile; FlickrView will be a useful, fully-functioning
+	mobile web application. Our goals for FlickrView are as follows:
+</p>
+<ul>
+	<li>Utilize Dojo Mobile's  widgets to create a cross-device compatible mobile application</li>
+	<li>Add our own custom elements, controls, and functionality to the web application</li>
+	<li>Connect to <a href="http://www.flickr.com/services/feeds/docs/photos_public/"
+						target="_blank">Flickr open API</a> using
+		<a href="http://dojotoolkit.org/reference-guide/dojo/request/script.html#dojo-request-script"
+		   target="_blank">JSONP</a> to retrieve public photos that match  search criteria.</li>
+</ul>
+<p class="proTip">
+	Investing time in brainstorming about the design and architecture of the application
+	before jumping into coding is even more critical when creating mobile applications
+	due to the restrictions on bandwidth.
+</p>
+
+<h3 id="appDesign">Application Design and requirements</h3>
+<p>
+	We’ll be creating FlickrView from the following sketches:
+</p>
+<img src="resources/SettingsView.png" height="300px" width="220px">
+<img src="resources/FeedView.png" height="300px" width="220px">
+<img src="resources/DetailsView.png" height="300px" width="180px">
+<p>
+	The first view to show up (the default view) is the <strong>Feed view</strong>
+	which displays a list of photos according to search criteria. The header contains
+	a button on the left to display the <strong>Settings view</strong>. Another button
+	on the right allows to refresh the content of the view. The selection of a list
+	item triggers a transition to the <strong>Details view</strong> with the full
+	description of the photo.
+</p>
+<p>
+	Settings view options will be derived from
+	<a href="http://www.flickr.com/services/feeds/docs/photos_public/"
+	   target="_blank">Flickr public feed JSON query parameters:</a>
+</p>
+<ul>
+	<li><strong>tags</strong> defines the <em>tags</em> query parameter</li>
+	<li><strong>selection</strong> defines the <em>tagmode</em> query parameter</li>
+	<li><strong>feed language</strong> defines the <em>lang</em> query parameter. The list of languages conforms to
+		<a href="http://www.flickr.com/services/feeds/" target="_blank">Flickr accepted languages values.</a>
+	</li>
+</ul>
+<p>
+	Published date, author, and photo description will result from
+	the JSON request. Will go through this in detail later on.
+</p>
+
+<h3>Mobile Development Guidelines</h3>
+<p>
+	Hold up! Before we jet off into coding FlickrView, there are a few things we need
+	to remember about Dojo Mobile and mobile web development in general:
+</p>
+<ul>
+	<li><strong>Size Matter</strong></li>
+	Every byte counts when it comes to creating mobile applications, so taking shortcuts
+	you wouldn't otherwise take in a standard web app is acceptable. Remember that every
+	dependency (in the form of Dojo classes, base or otherwise) you add increases
+	download time to your users.
+	<li><strong>Best Practices: Mobile != Web</strong></li>
+	Best practices for JavaScript and any JavaScript toolkit dictate certain best
+	practices. A few examples include not extending natives, not using global variables,
+	and creating very flexible/generic classes. These best practices can cost you lots
+	of extra code, so you may have to loosen your rules to create an efficient mobile app.
+	<li><strong>Keep It Simple</strong></li>
+	Creating an overly complex mobile application with a million custom styles and
+	widgets and layouts will get you in trouble quickly. Creating a simple layout, then
+	adding to it, is the optimal way to code mobile web applications.
+</ul>
+<p>
+	We <strong>will not</strong> be throwing all best practices out the door with
+	FlickrView. We will, however, find a solid balance of size savings vs. strict
+	Dojo best practices.
+</p>
+
+<h3>Organizing your project</h3>
+<img src="resources/folders.png" style="float:right;display:block;margin-left:20px;">
+<p>
+	The application HTML will be at the root level and JavaScript, images and
+	stylesheets living in dedicated directories.
+</p>
+<p>
+	We choose to name our application HTML file <code>flickrview.html</code> and
+	put its CSS resources in <code>css/flickrview.css</code>. We will add images
+	and javascript resources later.
+</p>
+<div class="clear"></div>
+
+<h3>Mobile Devices and Caching</h3>
+<p>
+	Most mobile devices rely heavily on caching to ease the burden of data transfer.
+	That's great for production apps but we're in the initial development phase so
+	caching will be nothing short of frustrating when testing the application. Let's
+	add a few cache-preventing META tags to our HTML page before developing the
+	Settings view:
+</p>
+
+<pre class="brush: html;">
+&lt;!-- prevent cache --&gt;
+&lt;meta http-equiv="cache-control" content="no-cache"&gt;
+&lt;meta http-equiv="pragma" content="no-cache"&gt;
+</pre>
+
+<p>
+	These META tags will be hugely helpful during development. They will need to be
+	removed once TweetView goes into production.
+</p>
+
+<h3>FlickrView HTML structure</h3>
+<p>
+	The first part, <a href="../part1" target="_blank">Getting Started with Dojo Mobile</a>,
+	provided a solid Dojo Mobile application
+	template with the required theme stylesheet and SCRIPT tags from which to start
+	from.
+<p>
+	Here is now how should look our HTML before we define the
+	three Views (SettingsView, FeedView and DetailsView):
+</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;meta http-equiv="Content-type" content="text/html; charset=utf-8"/&gt;
+	&lt;meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/&gt;
+	&lt;meta name="apple-mobile-web-app-capable" content="yes"/&gt;
+	&lt;!-- prevent cache --&gt;
+	&lt;meta http-equiv="cache-control" content="no-cache"&gt;
+	&lt;meta http-equiv="pragma" content="no-cache"&gt;
+	&lt;title&gt;Dojo Mobile tutorial | Flickrview | Part II | HTML Structure&lt;/title&gt;
+	&lt;!-- application stylesheet --&gt;
+	&lt;link rel="stylesheet" type="text/css" href="css/flickrview.css"&gt;
+	&lt;!-- dynamically apply native visual theme according to the browser user agent --&gt;
+	&lt;script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/dojo/1.9.6/dojox/mobile/deviceTheme.js"&gt;&lt;/script&gt;
+	&lt;!-- dojo configuration options --&gt;
+	&lt;script type="text/javascript"&gt;
+		dojoConfig = {
+			async: true,
+			baseUrl: './',
+			parseOnLoad: false,
+			mblHideAddressBar: true,
+			packages: [{
+				name: "flickrview",
+				location: "js"
+			}]
+		};
+	&lt;/script&gt;
+	&lt;!-- dojo bootstrap --&gt;
+	&lt;script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/dojo/1.9.6/dojo/dojo.js"&gt;&lt;/script&gt;
+	&lt;!-- dojo application code --&gt;
+	&lt;script&gt;
+		// Load the widget parser and mobile base
+		require([
+			"dojox/mobile/parser",
+			"dojox/mobile/compat",
+			"dojo/domReady!"
+		], function (parser) {
+			// Parse the page for widgets
+			parser.parse();
+		});
+	&lt;/script&gt;
+&lt;/head&gt;
+&lt;body style="visibility:hidden;"&gt;
+	 application will go here
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p>
+	With this template in place, let's focus on putting together all our views:
+	FeedView, SettingsView and DetailsView:
+</p>
+<img src="resources/captureFeedView.png" height="250" width="210">
+<img src="resources/captureSettingsView.png" height="250" width="210">
+<img src="resources/captureDetailsView.png" height="250" width="210">
+<h4>Feed View</h4>
+
+<pre class="brush: html;">
+&lt;!-- Feed view --&gt;
+&lt;div id="feed" data-dojo-type="dojox/mobile/ScrollableView" data-dojo-props="selected: true"&gt;
+&lt;div id="feedHeading"
+	 data-dojo-type="dojox/mobile/Heading"
+	 data-dojo-props="fixed: 'top', label: 'Feeds'"&gt;
+			&lt;span data-dojo-type="dojox/mobile/ToolBarButton"
+				  data-dojo-props="icon: 'images/settings.png', moveTo:'settings', transitionDir:'-1', transition:'none'"
+				  style="float:left;"&gt;&lt;/span&gt;
+			&lt;span id="refreshButton" data-dojo-type="dojox/mobile/ToolBarButton"
+				  data-dojo-props="icon: 'images/refresh.png'"
+				  style="float:right;"&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div id="feedList" data-dojo-type="dojox/mobile/EdgeToEdgeList"&gt;
+	&lt;div data-dojo-type="dojox/mobile/ListItem"
+		 data-dojo-props="moveTo:'details', transition:'slide'" class="photoListItem"&gt;
+		&lt;img src="images/mockup/photo1.png" width="80px" height="80px" alt="Title" style="float:left;"/&gt;
+		&lt;div class="photoSummary"&gt;
+			&lt;div class="photoTitle"&gt;Photo title here&lt;/div&gt;
+			&lt;div class="publishedTime" data-dojo-time="2013-12-13"&gt;published date here&lt;/div&gt;
+			&lt;div class="author"&gt;author here&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div class="summaryClear"&gt;&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div data-dojo-type="dojox/mobile/ListItem"
+		 data-dojo-props="moveTo:'details', transition:'slide'" class="photoListItem"&gt;
+		&lt;img src="images/mockup/photo2.png" width="80px" height="80px" alt="Title" style="float:left;"/&gt;
+		&lt;div class="photoSummary"&gt;
+			&lt;div class="photoTitle"&gt;Another photo title here&lt;/div&gt;
+			&lt;div class="publishedTime" data-dojo-time="2013-12-13"&gt;published date here&lt;/div&gt;
+			&lt;div class="author"&gt;author here&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div class="summaryClear"&gt;&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<h4>Settings View</h4>
+
+<pre class="brush: html;">
+&lt;!-- Settings view --&gt;
+&lt;div id="settings" data-dojo-type="dojox/mobile/ScrollableView"&gt;
+&lt;div data-dojo-type="dojox/mobile/Heading"
+	 data-dojo-props="fixed: 'top', label: 'Settings'"&gt;
+	  &lt;span id="doneButton" data-dojo-type="dojox/mobile/ToolBarButton"
+			data-dojo-props="label:'Done', moveTo:'feed', transition:'none'" style="float:right;"&gt;&lt;/span&gt;
+&lt;/div&gt;
+&lt;div data-dojo-type="dojox/mobile/RoundRect"&gt;
+	&lt;div data-dojo-type="dojox/mobile/FormLayout"
+		 data-dojo-props="columns:'two'"&gt;
+		&lt;div&gt;
+			&lt;label for="tags"&gt;Tags&lt;/label&gt;
+			&lt;fieldset&gt;
+				&lt;input type="text" id="tags" data-dojo-type="dojox/mobile/TextBox"
+					   data-dojo-props="value:''"&gt;
+			&lt;/fieldset&gt;
+		&lt;/div&gt;
+		&lt;div&gt;
+			&lt;label for="select"&gt;Selection&lt;/label&gt;
+			&lt;fieldset&gt;
+				&lt;input type="checkbox" id="select" data-dojo-type="dojox/mobile/Switch"
+					   value="on" leftLabel="All" rightLabel="Any"&gt;
+			&lt;/fieldset&gt;
+		&lt;/div&gt;
+		&lt;div&gt;
+			&lt;label&gt;Feed language&lt;/label&gt;
+			&lt;fieldset&gt;
+				&lt;input id="en-us" data-dojo-type="dojox/mobile/RadioButton" checked
+					   type="radio" name="feedLanguage" value="en-us"&gt;&lt;label for="en-us"&gt;English&lt;/label&gt;&lt;br /&gt;
+				&lt;input id="fr-fr" data-dojo-type="dojox/mobile/RadioButton"
+					   type="radio" name="feedLanguage" value="fr-fr"&gt;&lt;label for="fr-fr"&gt;French&lt;/label&gt;&lt;br /&gt;
+				&lt;input id="de-de" data-dojo-type="dojox/mobile/RadioButton"
+					   type="radio" name="feedLanguage" value="de-de"&gt;&lt;label for="de-de"&gt;German&lt;/label&gt;&lt;br /&gt;
+				&lt;input id="it-it" data-dojo-type="dojox/mobile/RadioButton"
+					   type="radio" name="feedLanguage" value="it-it"&gt;&lt;label for="it-it"&gt;Italian&lt;/label&gt;&lt;br /&gt;
+				&lt;input id="ko-kr" data-dojo-type="dojox/mobile/RadioButton"
+					   type="radio" name="feedLanguage" value="ko-kr"&gt;&lt;label for="ko-kr"&gt;Korean&lt;/label&gt;&lt;br /&gt;
+				&lt;input id="pt-br" data-dojo-type="dojox/mobile/RadioButton"
+					   type="radio" name="feedLanguage" value="pt-br"&gt;&lt;label for="pt-br"&gt;Portuguese (Br)&lt;/label&gt;&lt;br /&gt;
+				&lt;input id="es-us" data-dojo-type="dojox/mobile/RadioButton"
+					   type="radio" name="feedLanguage" value="es-us"&gt;&lt;label for="es-us"&gt;Spanish&lt;/label&gt;&lt;br /&gt;
+				&lt;input id="zh-hk" data-dojo-type="dojox/mobile/RadioButton"
+					   type="radio" name="feedLanguage" value="zh-hk"&gt;&lt;label for="zh-hk"&gt;Traditional Chinese (HK)&lt;/label&gt;&lt;br /&gt;
+			&lt;/fieldset&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<h4>Details View</h4>
+
+<pre class="brush: html;">
+&lt;!-- Details view --&gt;
+&lt;div id="details" data-dojo-type="dojox/mobile/ScrollableView"&gt;
+&lt;div id="detailsHeading" data-dojo-type="dojox/mobile/Heading"
+	 data-dojo-props="fixed: 'top', label: 'Details', back:'Back', moveTo:'feed', transition:'slide', transitionDir:'-1'"&gt;
+&lt;/div&gt;
+&lt;div id="detailsContainer" data-dojo-type="dojox/mobile/RoundRect"&gt;
+	Photo description from Flicker here
+&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<p class="proTip">
+	Note that content is static. Getting content from Flickr is covered in the next
+	part of this series:
+	<a href="../part3" target="_blank">FlickrView: Implementing FeedView</a>.
+</p>
+<ul>
+	<li>Instead of using the widget <strong>dojox/mobile/View</strong>, we have choose
+		to use <strong>dojox/mobile/ScrollableView</strong>. ScrollableView allows the
+		header to be fixed to the top of the view while the content will scroll. It is
+		particularly well adapted for small screen devices or when the view contains
+		an undetermined number of items.
+	</li>
+	<li>The header is rendered by the widget <strong>dojox/mobile/Heading</strong>.
+		We also added <strong>dojox/mobile/ToolBarButton</strong> widgets:
+	</li>
+	<ul>
+		<li><img src="resources/refreshBtn.png"> will refresh the content of the
+			<em>Feed</em> view</li>
+		<li><img src="resources/settingsBtn.png"> transitions to the <em>Settings</em>
+			view</li>
+		<li><img src="resources/doneBtn.png"> transition to the <em>Feed</em> view</li>
+		<li><img src="resources/backBtn.png"> transition back to the <em>Feed</em> view</li>
+	</ul>
+	<li>Note the attribute <strong>data-dojo-props</strong> of
+		<strong>ToolBarButton</strong>: refresh and settings buttons are rendered using
+		images we put in our images directory, and declared in the
+		<em>icon</em> property.</li>
+	<li>Also, note how transitions are declared in <strong>data-dojo-props</strong>.
+		<code>moveTo</code> defines the target, <code>transition</code> defines the type of
+		transition and <code>transitionDir</code> defines the direction of the transition.
+		See <a href="http://dojotoolkit.org/reference-guide/dojox/mobile/Heading.html"
+			   target="_blank">dojox/mobile/heading</a> for more details.</li>
+	<li>On the <em>Feed</em> view we declared 2 <strong>dojox/mobile/ListItem</strong>
+		widgets for the sake of the mockup. Eventually we will programmatically
+		generate ListItems from the result of a JSONP request.</li>
+	<li>Custom CSS are used only to format the ListItem. All other formatting styles
+		are already provided by Dojo Mobile theme.</li>
+</ul>
+<p>As usual, do not forget to require the widgets you declared in your HTML:</p>
+
+<pre class="brush: js;">
+require([
+	//...
+	"dojox/mobile/ScrollableView",
+	"dojox/mobile/ListItem",
+	"dojox/mobile/FormLayout",
+	"dojox/mobile/TextBox",
+	"dojox/mobile/RadioButton",
+	"dojox/mobile/Heading",
+	"dojox/mobile/EdgeToEdgeList",
+	"dojox/mobile/RoundRect",
+	"dojox/mobile/Switch"
+], function (parser) {
+	//...
+});
+</pre>
+
+<p>Our application layout is now complete!</p>
+<p>
+	<a class="demoBtn demo" href="demo/mockup2.html"  target="_blank">View Demo</a>
+</p>
+
+<h3>FlickrView Has Taken Shape!</h3>
+<p>
+	Creating the basic layout of FlickrView was simple: add ScrollingView and ToolBar
+	widgets. I'd like to point out that every pieces of our application is currently
+	included within dojox/mobile: Headings, Toolbars, TextBox… they're all there to be
+	quickly implemented!
+</p>
+<p>
+	Now we want to extend ScrollableView to specialize our views:
+</p>
+<ul>
+	<li>Settings view to display the current settings and update flickrview.QUERY according to user inputs</li>
+	<li>Feed view to be in charge of getting data from Flickr and display the result.</li>
+</ul>
+
+<h4>Extending ScrollableView</h4>
+<p>
+	First we define our classes by creating skeletons files <code>js/FeedView.js</code>
+	and <code>js/SettingsView.js</code>:
+</p>
+
+<pre class="brush: js;">
+define([
+	"dojo/_base/declare",
+	"dojox/mobile/ScrollableView"
+	], function(declare, ScrollableView){
+		return declare([ScrollableView], {
+	});
+});
+</pre>
+
+<p>
+	Now we can update the HTML attributes <strong>data-dojo-type</strong> to use
+	the new classes:
+</p>
+
+<pre class="brush: html;">
+&lt;!-- Feed view --&gt;
+&lt;div id="feed" data-dojo-type="flickrview/FeedView"
+
+&lt;!-- Settings view --&gt;
+&lt;div id="settings" data-dojo-type="flickrview/SettingsView"&gt;
+</pre>
+
+<p>
+	In the meantime we must require our classes name to ensure the parser loads them:
+</p>
+
+<pre class="brush: js;">
+require([
+	//...
+	"flickrview/FeedView",
+	"flickrview/SettingsView"
+	], function (parser) {
+		//...
+});
+</pre>
+
+<p>
+	<strong>Congratulation!</strong> Our mock application now uses dedicated classes
+	for the feed and settings view.
+</p>
+<p>
+	In this part we introduced the mobile application
+	we are building with Dojo Mobile: FlickrView. Starting from the application design
+	and requirements, we built the general layout template and came up with a mockup
+	of the application. We also talked about best practices and we extended
+	ScrollableView so we are now ready to implement FlickrView to make it
+	work as expected!
+</p>
+<p>Looking forward to the next part in our FlickrView
+	series, where we will implement FeedView to dynamically:
+</p>
+<ul>
+	<li>get feeds from Flickr with <strong>dojo/request/script</strong>,</li>
+	<li>build a list of customized <strong>dojox/mobile/ListItem</strong>.</li>
+</ul>
+
+<h3>Download The Source</h3>
+<div class="downlaodSource">
+	Download <a href="resources/DojoMobilePart2.zip">Part 2 - Developing a Dojo Mobile Application: FlickrView</a>.
+</div>
+
+<h3>Resources & references</h3>
+<ul>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojox/mobile.html"
+		   target="_blank">Dojo Mobile Reference Guide</a></li>
+	<li><a href="http://dojotoolkit.org/api"
+		   target="_blank">The Dojo Toolkit API</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojo/request/script.html#dojo-request-script"
+		   target="_blank">Dojo Request Script/JSONP</a> (Reference Guide)</li>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojox/mobile/Heading.html"
+		   target="_blank">dojox/mobile Heading </a> (Reference Guide)</li>
+</ul>
+
+<?php include("../series.inc"); ?>

@@ -1,0 +1,145 @@
+
+
+
+<!-- tutorials start with a "Getting Started" block -->
+<h3>Introduction to Dojo Data</h3>
+<p>
+The <a href="/reference-guide/1.8/dojo/data.html">Dojo Data API</a> is designed to separate the concerns of data modeling from the user interface concerns of rendering views and controlling the data. The philosophy of this separation of concern is preserved in Dojo Data's successor, the object store interface, and the <a href="../intro_dojo_store/">object store tutorial</a> explains the basics of this design and the <a href="/documentation/tutorials/1.8/data_modeling/">data modeling</a> tutorial goes further into the guiding principles data model separation from viewer and controller (AKA MVC).
+We recommend the use of object store interface over the Dojo Data API when possible, for the <a href="http://www.sitepen.com/blog/2011/02/15/dojo-object-stores/">numerous improvements it provides</a>, but since there are existing widgets and implementations of Dojo Data providers, there are certainly situations where Dojo Data can play an important role.
+</p>
+
+<h3>Dojo Data Basics</h3>
+<p>
+The Dojo Data API is composed of four sub-APIs for different aspects of data interaction. Different stores can implement different sub-APIs depending on the capabilities of the store, and different widgets can rely on different sub-APIs. These APIs are:</p>
+<ul>
+<li><strong>Read</strong> - This defines the basic methods for querying and retrieving items, and getting attribute values from these items. The defined methods include <code>fetch</code> (for querying), <code>getValue</code>, <code>getValues</code>, <code>getAttributes</code>, <code>hasAttribute</code>, <code>containsValue</code>, <code>isItem</code>, <code>isItemLoaded</code>, <code>loadItem</code>, <code>getLabel</code>, and <code>getLabelAttributes</code>. This API is fundamental and needed by just about any store.
+</li>
+<li><strong>Write</strong> - This API defines the methods for modifying data in a store. This includes methods <code>newItem</code>, <code>deleteItem</code>, <code>setValue</code>, <code>setValues</code>, <code>unsetAttribute</code>, <code>save</code>, <code>revert</code>, and <code>isDirty</code>.
+</li>
+<li><strong>Identity</strong> - This API defines the methods getting item's identity and retrieving items by their identity. This defines methods <code>getIdentity</code>, <code>getIdentityAttributes</code>, and <code>fetchItemByIdentity</code>. This API is important for efficient access to individual items.
+</li>
+<li><strong>Notification</strong> - This API defines three events that a store can fire when data is changed. The three events are <code>onSet</code>, <code>onNew</code>, and <code>onDelete</code>. This API allows widgets to respond in real-time to data changes.
+</ul>
+
+<p>One of the key aspects of Dojo Data usage is that all interactions with individual items must go through the store. To retrieve an attribute of an item, you must call <code>store.getValue(item, attributeName)</code> and to modify an attribute you must call <code>store.setValue(item, attributeName, newValue)</code>.
+</p>
+
+<h3>Dojo Data Stores in Dojo</h3>
+<p>
+There are a healthy collection of Dojo Data stores in Dojo and DojoX. Here are some of the popular ones:
+</p>
+<ul>
+<li><a href="/reference-guide/1.8/dojo/data/ItemFileReadStore.html#dojo-data-itemfilereadstore">dojo/data/ItemFileReadStore</a> - This is a basic in-memory store that can be constructed from a simple JavaScript array of object, or by giving it a URL to load data from JSON. This implements the Read and Identity APIs.</li>
+<li><a href="/reference-guide/1.8/dojo/data/ItemFileReadStore.html#dojo-data-itemfilewritestore">dojo/data/ItemFileWriteStore</a> - This extends ItemFileReadStore to implement the Write and Notification APIs.</li>
+<li><a href="/reference-guide/1.8/dojox/data/QueryReadStore.html#dojox-data-queryreadstore">dojox/data/QueryReadStore</a> - This is a store designed to communicate with a server using basic HTTP. This implements the Read and Identity APIs.
+<li><a href="/reference-guide/1.8/dojox/data/ServiceStore.html#dojox-data-servicestore">dojox/data/ServiceStore</a> - This store is also built for server side communication, but is based on the pluggable RPC services in dojox/rpc. This implements the Read and Identity APIs.
+<li><a href="/reference-guide/1.8/dojox/data/JsonRestStore.html#dojox-data-jsonreststore">dojox/data/JsonRestStore</a> - This store extends ServiceStore to do full HTTP/REST communication with a server based on the HTTP standards using the full range of GET, PUT, POST, and DELETE methods. This implements all the APIs.</li>
+<li><a href="/reference-guide/1.8/dojox/data/CsvStore.html#dojox-data-csvstore">dojox/data/CsvStore</a> - This stores provides access to CSV formatted data.</li>
+<li><a href="/reference-guide/1.8/dojox/data/WikipediaStore.html#dojox-data-wikipediastore">dojox/data/WikipediaStore</a> - This store provides access to Wikipedia data through their web API.</li>
+<li><a href="/reference-guide/1.8/dojox/data/FlickrStore.html#dojox-data-flickrstore">dojox/data/FlickrStore</a> - This store provides access to Flickr data through their web API.</li>
+</ul>
+<p>
+This just provides a brief intro to some of the data stores. There are a number of other stores that are <a href="http://archive.dojotoolkit.org/nightly/dojotoolkit/dojox/data/">available in dojox/data as well</a>.
+</p>
+<p>
+These data stores can be used directly in widgets that consume the Dojo Data API. The DataGrid is one such widget, and we will take a look how to use this with a Dojo Data store. In this example, we will use the CSV store to demonstrate a unique Dojo Data store. First we create the store, and then we plug the store into the DataGrid:
+</p>
+<pre class="brush:js;">
+require([
+	"dojox/data/CsvStore",
+	"dojox/grid/DataGrid",
+	"dojo/domReady!"
+], function(CsvStore, DataGrid){
+	var store = new CsvStore({
+		url:"data/movies.csv"
+	});
+	var grid = new DataGrid({
+		store: store,
+		structure: [
+			{name:"Title", field:"Title", width: "150px"},
+			{name:"Year", field:"Year"},
+			{name:"Producer", field:"Producer"}
+		]
+	}, "grid");
+	grid.startup();
+});
+</pre>
+<a class="demoBtn demo" href="demo/demo.php">View Demo</a>
+
+<h3>Widgets that use Dojo Data</h3>
+<p>
+There are several widgets that use Dojo Data. These include:
+</p>
+<ul>
+<li>dojox/grid/DataGrid - The DataGrid is a component for tabular display of data, very frequently used widget. There are also subclasses of the DataGrid including the EnhancedGrid and TreeGrid.
+</li>
+<li>dijit/Tree - The Tree is a component for hierarchical display of data, complete with full keyboard navigation, accessibility (as are all of the Dijit components) lazy loading, and more.
+</li>
+<li>dijit/form/FilteringSelect - This is an autocomplete dropdown input, that uses a Dojo Data store to drive the selectable options.
+</li>
+<li>dojox/widget/RollingList - This is widget that displays a list of items and rolls forward to nested lists as you select items for hierarchical drill down.
+</li>
+</ul>
+<p>
+Naturally, we can plugin the Dojo data stores into these widgets. However, if you want to use the newer, simplified, object store interface, use one of Dojo's object stores or your own object store. You can still do that by using Dojo's dojo/data/ObjectStore adapter. You can simply construct an object store and the ObjectStore class will provide a Dojo Data compliant store that can be used with any of these widgets. For example, let's create a Memory store, to use with the DataGrid
+</p>
+<pre class="brush:js;">
+require([
+	"dojo/store/Memory",
+	"dojo/data/ObjectStore",
+	"dojox/grid/DataGrid",
+	"dojo/domReady!"
+], function(Memory, ObjectStore, DataGrid){
+	data = [
+		{ abbr:'ec', name:'Ecuador', capital:'Quito' },
+		/* array of data */
+	];
+	var objectStore = new Memory({
+		data: data
+	});
+	grid = new DataGrid({
+		store: ObjectStore({objectStore: objectStore}),
+		structure: [
+			{name:"Country", field:"name", width: "150px"},
+			{name:"Abbreviation", field:"abbr"},
+			{name:"Capital", field:"capital"}
+		]
+	}, "grid");
+	grid.startup();
+});
+</pre>
+<p>
+<a class="demoBtn demo" href="demo/store-adapter.php">View Demo</a>
+</p>
+<p>
+We will be upgrading our components to directly utilize the object store API in the future, to eliminate the need for the adapter, but for now it is still very easy to use the object stores with these components via the adapter.
+</p>
+<h3>Legacy Data Stores with Object Store Based Widget</h3>
+<p>
+Dojo also includes an adapter for going the other direction, giving widgets that were built to consume newer simplified object stores, such as the <a href="http://dgrid.io/">dgrid</a>, the ability to use legacy Dojo Data stores. If you build a new widget that is designed to work with object stores, and we wanted to use the CsvStore, we could do so with the <code>dojo/store/DataStore</code> adapter:
+</p>
+<pre class="brush:js;">
+require([
+	"dojo/store/DataStore",
+	"dojo/data/CsvStore",
+	"my/Widget"
+], function(DataStore, CsvStore, Widget){
+	// create a data store
+	var dataStore = new CsvStore({
+		url:"data/movies.csv"
+	});
+	// adapt it to the object store interface
+	var objectStore = DataStore({
+		store: dataStore
+	});
+	new my.Widget({
+		store: objectStore
+		// ...
+	});
+});
+</pre>
+
+<h3>Conclusion</h3>
+<p>
+The new object store interface provides numerous significant advancements and simplifications over the legacy Dojo Data store interface, there are still important data stores and widgets based on the old API, and it is important to understand when and how to use Dojo Data API for these components. The adapters that are included with new object store implementations are also an important part of the bridging the gap between the old and new interface and transitioning into the future of data-centric Dojo applications. To learn more about Dojo Data, check out the <a href="/reference-guide/1.8/dojo/data.html">reference documentation</a> or the <a href="/reference-guide/1.8/quickstart/data/usingdatastores.html">quick start guide to Dojo Data</a>.
+</p>

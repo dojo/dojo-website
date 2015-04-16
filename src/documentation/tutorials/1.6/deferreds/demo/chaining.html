@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Chaining Deferreds</title>
+
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			dojo.ready(function(){
+				var original = dojo.xhrGet({
+					url: "users-mangled.json",
+					handleAs: "json"
+				});
+
+				var result = original.then(function(res){
+					var userlist = dojo.byId("userlist1");
+
+					return dojo.map(res, function(user){
+						dojo.create("li", {
+							innerHTML: dojo.toJson(user)
+						}, userlist);
+
+						return {
+							id: user[0],
+							username: user[1],
+							name: user[2]
+						};
+					});
+				});
+
+				result.then(function(objs){
+					var userlist = dojo.byId("userlist2");
+
+					dojo.forEach(objs, function(user){
+						dojo.create("li", {
+							innerHTML: dojo.toJson(user)
+						}, userlist);
+					});
+				});
+
+				original.then(function(res){
+					var userlist = dojo.byId("userlist3");
+
+					dojo.forEach(res, function(user){
+						dojo.create("li", {
+							innerHTML: dojo.toJson(user)
+						}, userlist);
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Chaining Deferreds</h1>
+
+		<h2>Result from chaining from original deferred</h2>
+		<ul id="userlist1"></ul>
+
+		<h2>Result from chaining from original.then()</h2>
+		<ul id="userlist2"></ul>
+
+		<h2>Result from chaining from original deferred after previous calls</h2>
+		<ul id="userlist3"></ul>
+	</body>
+</html>

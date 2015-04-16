@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Tutorial: In Style with Dojo</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			dojo.require("dojo.behavior");
+			
+			// Wait for the DOM to be ready before working with it
+			dojo.ready(function(){
+				// we are defining these functions in dojo.ready so they are not in the global scope
+
+				var writeToPageConsole = function(line){
+					var pageConsole = dojo.byId("console");
+					var currentConsoleValue = pageConsole.innerHTML;
+					pageConsole.innerHTML = currentConsoleValue + "<br>" + line;
+					console.log(line);
+				};
+
+				var toastBread = function(evt){
+					dojo.style(dojo.byId("breadOne"),"background-color", "#A0522D");
+					dojo.style(dojo.byId("breadTwo"),"background-color", "#A0522D");
+				};
+
+				var butterBread = function(evt){
+					dojo.style(dojo.byId("breadOne"),"background-color", "yellow");
+					dojo.style(dojo.byId("breadTwo"),"background-color", "yellow");
+				};
+				
+				var getBreadColor = function(evt){
+					writeToPageConsole("Bread One: " + dojo.style(dojo.byId("breadOne"),"background-color"));
+					writeToPageConsole("Bread Two: " + dojo.style(dojo.byId("breadTwo"),"background-color"));
+				};
+
+				var getComputedStyle = function(evt){
+					var computedStyle = dojo.getComputedStyle(dojo.byId("breadOne"),"background-color");
+					
+					writeToPageConsole(computedStyle["background-color"]);
+				};
+
+				var getAllComputedStyles = function(evt){
+					var computedStyle = dojo.getComputedStyle(dojo.byId("breadOne"));
+					
+					dojo.forEach(computedStyle, function(value) {
+						writeToPageConsole(value + " : " + computedStyle[value]);
+					});
+				};
+			
+				var buttonBehaviors = {
+					"#toastBread" : {
+						"onclick" : toastBread
+					},
+					"#butterBread" : {
+						"onclick" : butterBread
+					},
+					"#getBreadColor" : {
+						"onclick" : getBreadColor
+					},
+					"#getComputedStyle" : {
+						"onclick" : getComputedStyle
+					},
+					"#getAllComputedStyles" : {
+						"onclick" : getAllComputedStyles
+					}				
+				};
+				
+				dojo.behavior.add(buttonBehaviors);
+				dojo.behavior.apply();
+
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Tutorial: In Style with Dojo</h1>
+		
+		<h3>Bread</h3>
+		<div id="breadOne" class="bread"></div>
+		<div id="breadTwo" class="bread"></div>
+
+		<h3>dojo.style</h3>
+		
+		<button id="toastBread">Toast Bread</button>
+
+		<button id="butterBread">Butter Bread</button>
+		
+		<button id="getBreadColor">Log bread color</button>
+
+		<button id="getComputedStyle">Get Computed Style</button>
+
+		<button id="getAllComputedStyles">Get All Computed Styles</button>
+		
+		<h3>Console</h3>
+		<div id="console" class="console"></div>
+		
+	</body>
+</html>

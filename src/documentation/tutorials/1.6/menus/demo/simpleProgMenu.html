@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Demo: Dijit Menus</title>
+	<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"></script>
+</head>
+<body class="claro">
+	<h3>Menu Demo</h3>
+	<div id="mainMenu"></div>
+	<p>Last selected: <span id="lastSelected">none</span></p>
+
+	<script>
+		dojo.require("dijit.Menu");
+		dojo.require("dijit.MenuItem");
+		
+		var demo = {
+			// a generic menu item selection handler
+			onItemSelect: function(evt){
+				// retrieve the widget representing the item clicked
+				var item = dijit.getEnclosingWidget(evt.target);
+				
+				dojo.byId("lastSelected").innerHTML = 
+					item.get("label");
+			}
+		};
+		
+		dojo.ready(function(){
+			// create the Menu container
+			var menu = new dijit.Menu({
+			}, "mainMenu");
+			
+			// create and add child item widgets
+			// for each of "edit", "view", "task"
+			
+			menu.addChild( new dijit.MenuItem({
+				id: "edit",
+				label: "Edit",
+				// provide an implementation for the onClick method
+				onClick: demo.onItemSelect 
+			}) );
+			
+			menu.addChild( new dijit.MenuItem({
+				id: "view",
+				label: "View",
+				onClick: demo.onItemSelect 
+			}) );
+			
+			menu.addChild( new dijit.MenuItem({
+				id: "task",
+				label: "Task",
+				onClick: demo.onItemSelect 
+			}) );
+			
+			menu.startup();
+		});
+	</script>
+</body>
+</html>

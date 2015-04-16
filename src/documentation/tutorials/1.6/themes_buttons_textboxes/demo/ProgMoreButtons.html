@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: More Dijit Buttons</title>
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and theme -->
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css">
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"
+			data-dojo-config="isDebug:true">
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: More dijit.form.Button(s)!</h1>
+		<p>
+			In this demo, we see three other types of buttons included in the
+			<code>dijit.form</code> namespace.
+		</p>
+		<div>
+			<button id="toggle"></button>
+			<button id="combo"></button>
+			<button id="dropDown"></button>
+		</div>
+		<script>
+			dojo.require("dijit.form.ToggleButton");
+			dojo.require("dijit.form.ComboButton");
+			dojo.require("dijit.Menu");
+			dojo.require("dijit.MenuItem");
+			dojo.require("dijit.form.DropDownButton");
+			dojo.require("dijit.TooltipDialog");
+
+			dojo.ready(function(){
+				var toggleButton = new dijit.form.ToggleButton({
+					iconClass: "dijitCheckBoxIcon",
+					label: "Toggle",
+					checked: true
+				}, "toggle");
+				toggleButton.startup();
+
+				var menu = new dijit.Menu({
+					id: "saveMenu"
+				});
+				var menuItem1 = new dijit.MenuItem({
+					label: "Save",
+					iconClass: "dijitEditorIcon dijitEditorIconSave",
+					onClick: function() { console.log("Save"); }
+				});
+				var menuItem2 = new dijit.MenuItem({
+					label: "Save As",
+					onClick: function() { console.log("Save As"); }
+				});
+				menu.addChild(menuItem1);
+				menu.addChild(menuItem2);
+				var comboButton = new dijit.form.ComboButton({
+					optionsTitle: "Save Options",
+					iconClass: "dijitIconFile",
+					label: "Combo",
+					dropDown: menu,
+					onClick:function(){ console.log("Clicked ComboButton"); }
+				}, "combo");
+				comboButton.startup();
+				menu.startup(); // this also starts up its child MenuItems
+
+				var tooltip = new dijit.TooltipDialog({
+					content: "This is a TooltipDialog. You could even put a form in here!"
+				});
+				var dropDownButton = new dijit.form.DropDownButton({
+					iconClass: "dijitIconApplication",
+					label: "DropDown",
+					dropDown: tooltip
+				}, "dropDown");
+				dropDownButton.startup();
+				tooltip.startup();
+			});
+		</script>
+	</body>
+</html>

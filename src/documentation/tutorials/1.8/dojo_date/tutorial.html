@@ -1,0 +1,251 @@
+
+
+<h3>Getting Started</h3>
+<p>
+Dates can be some of the most complex objects to deal with in any software development environment; there are so many subtle and not-so-subtle issues
+with dates (which can introduce ambiguity and error) that even humans frequently get mixed up. The Dojo Core includes utilities in the <code>dojo/date</code>
+modules to fill in many of the holes with date handling in JavaScript.  If you have to work with dates, the <code>dojo/date</code>,
+<code>dojo/date/locale</code> and <code>dojo/date/stamp</code> modules deserve your attention.
+<p>
+We can't cover every method and every option here, so we'll taste a sample from each module to get a flavor of what they offer&mdash;and the kinds of
+tasks they can help you with.
+</p>
+
+<h3>Common Date Operations with <code>dojo/date</code></h3>
+<p>
+The functions in the <code>dojo/date</code> module make common date-based tasks super easy.  Do you remember the leap year rules?
+Is this year a leap year? Was 2000?  Do you use the
+<a href="http://lifehacker.com/232828/macgyver-tip-use-your-knuckles-to-remember-each-months-days">knuckle-count</a> trick to
+remember which months have 30/31 days?  Instead, try this:
+</p>
+<pre class="brush:js">
+require(["dojo/date"], function(date){
+
+// ...then:
+var date1 = new Date("Feb 01, 2000"),
+	date2 = new Date("Jul 21, 1969");
+
+this.showResult("Leap Years",
+[
+	"Feb 01, 2000: "
+		+ date.getDaysInMonth(date1)
+		+ " days in the month. Leap year? "
+		+ date.isLeapYear(date1),
+	"Jul 21, 1969: "
+		+ date.getDaysInMonth(date2)
+		+ " days in the month. Leap year? "
+		+ date.isLeapYear(date2)
+].join("\n&lt;br>"))
+});
+</pre>
+<a class="demoBtn demo" href="demo/inspectingDates.php">View Demo</a>
+<p>
+As you can see, <code>dojo/date</code> gives you simple APIs for plumbing information out of a JavaScript Date object.  But what if you need to
+perform basic math based on dates?
+</p>
+
+<h3>Date Calculations</h3>
+<p>
+Doing date arithmetic such as calculating "yesterday", or "this time next year" or "three weeks ago"
+can all be accomplished simply with <code>dojo/date.add</code>:
+</p>
+<pre class="brush:js">
+// start with an arbitrary date:
+var testDate = new Date("Wed May 11 2011 03:40:18 GMT+0100 (BST)");
+
+// The first param is the reference date - a JavaScript date object
+// ...and the 2nd param to indicate units
+var lastYear = date.add(testDate, "year", -1);
+var nextWeek = date.add(testDate, "week", 1),
+</pre>
+<a class="demoBtn demo" href="demo/addDates.php">View Demo</a>
+
+<h3>Date Comparisons</h3>
+<p>
+The <a href="/api/1.8/dojo/date#dojo/date/compare">dojo/date.compare</a> method returns a 1, 0 or -1 when given two dates.
+This makes it suitable for sort functions&mdash;as well as checking if two dates represent the same date, time, or both:
+</p>
+
+<pre class="brush:js;">
+// clone our array of dates
+var sortEntries = [].concat(entries);
+
+// now sort them
+sortEntries.sort(function(a, b){
+	return date.compare(a.jsDate, b.jsDate, "time");
+});
+return sortEntries;
+</pre>
+<a class="demoBtn demo" href="demo/compareDates.php">View Demo</a>
+
+<p>
+As you can see in our example, a lot of <a href="http://twitter.com/astro_nicole">@astro_nicole</a>'s tweets are photos taken from the International
+Space Station (at the time we captured them), so we thought it might be nice to sort them by the time of day each tweet was created. At the heart of this
+demo is the call to <code>dojo/date.compare</code>, in which we reference and compare the '<code>jsDate</code>' property of each tweet/entry.
+</p>
+
+<h3>...And More</h3>
+<p>
+The <code>dojo/date</code> module also has <code>getTimezoneName</code> and <code>difference</code> methods. Find out more in the
+<a href="/api/1.8/dojo/date">dojo/date API docs</a> and
+<a href="/reference-guide/1.8/dojo/date.html"><code>dojo/date</code> reference docs</a>.
+</p>
+
+<h3>Dates &amp; Localization</h3>
+<p>
+You can't even begin talking about formatting or parsing dates without bumping right into the different conventions used to represent dates
+in different forms across the world. The <a href="../i18n/">internationalization (i18n) and localization (l10n) system</a> Dojo uses is documented in its own right
+and is beyond the scope of this tutorial. To get further into the goodies <code>dojo/date</code> offers, though, we have to know just a little about it.
+</p>
+<p>
+Your browser stores a locale setting which corresponds to the language and regional variant of that language which you have set (or have
+defaulted to).  If you are in the U.S, this is <code>en-us</code>; for me, it is <code>en-gb</code>. There are many other locales representing
+different regions and languages, each with its own date &amp; time conventions.
+</p>
+<p>
+<code>dojo.js</code> needs to know which locales you'll be working with before it is loaded.  You can include extra locales (in addition to the locale
+picked up from <code>navigator.language</code>) so that when you load a module that has locale-specific dependencies, it can load the i18n bundle (data
+and message strings) associated with that module for each of the locales.  You can explore these bundles in your dojo directory at
+<code>./dojo/cldr/nls/{locale}/gregorian.js</code> (as an example).
+</p>
+
+<pre class="brush:js;">
+dojoConfig = {
+	extraLocale: ['en-us', 'en-gb', 'fr', 'es']
+}
+</pre>
+or
+<pre class="brush:js;">
+&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.8.9/dojo/dojo.js"&quot;
+	data-dojo-config=&quot;extraLocale:[&#x27;en-us&#x27;, &#x27;en-gb&#x27;, &#x27;fr&#x27;, &#x27;es&#x27;]&quot;&gt;&lt;/script&gt;
+</pre>
+
+<h3>Localized Date Parsing</h3>
+<p>
+We don't have to look far for a use case&mdash;between the UK and the US there's enough of a discrepancy to create a minefield of error and confusion.
+Let's see how <code>dojo/date/locale</code> helps us disambiguate when we parse a date:
+</p>
+
+<pre class="brush:js;">
+require(["dojo/date", "dojo/date/locale"],
+		function(date, locale){
+
+demo = {
+	parseL10NDates: function() {
+		var gbDateStr = "1/5/2011",
+			usDateStr = "1/5/2011",
+			gbDate = locale.parse(gbDateStr, {
+				formatLength:'short', selector:'date', locale:'en-gb'
+			}),
+			usDate = locale.parse(usDateStr, {
+				formatLength:'short', selector:'date', locale:'en-us'
+			});
+
+		this.showResult("UK and US parsing of 1/5/2011",
+		[
+			"en-gb: " + gbDateStr  + ": " + gbDate,
+			"en-us: " + usDateStr + ": " + usDate,
+		].join("\n<br>"))
+	},
+</pre>
+<a class="demoBtn demo" href="demo/l10nDateParsing.php">View Demo</a>
+
+<p>
+In the UK (and Australia), 1/5/2011 reads as day/month/year, i.e. 1st May, 2011. In the U.S. the convention is month/day/year, so we get a
+completely different date: January 5th, 2011.  The <code>dojo/date/locale</code> module supports a number of date formats for
+each supported locale.
+</p>
+
+<p class="proTip">
+Bear in mind that although you may control the date formats you use to store and send your data, you do not control the locale
+settings of your users.  Include the reference locale in your <code>dojoConfig</code> and/or build profile, and when known, indicate the
+locale you want to use whenever parsing date strings to avoid surprises.
+</p>
+
+<h3>Formatting Dates</h3>
+<p>
+Creating string representations of dates is done with <code>dojo/date/locale.format</code>. This is (of course) subject to the same localization
+concerns as date parsing.  Its use is also similar:
+</p>
+<pre class="brush:js;">
+formatL10NDates: function() {
+	var mayDay = new Date("May 01, 2011");
+
+	this.showResult("Localized Dates (May Date: 1st May, 2011)", [
+		"locale\tshort\t\t\tlong",	// column headers
+		"en-gb\t"	// UK localized short and long date formats
+			+ locale.format(mayDay, { locale: "en-gb", formatLength: "short" })
+			+ "\t\t\t"
+			+ locale.format(mayDay, { locale: "en-gb", formatLength: "full" })
+			,
+		"en-us\t"	// US localized short and long date formats
+			+ locale.format(mayDay, { locale: "en-us", formatLength: "short" })
+			+ "\t\t"
+			+ locale.format(mayDay, { locale: "en-us", formatLength: "full" })
+			,
+		"es\t"	// Spanish localized short and long date formats
+			+ locale.format(mayDay, { locale: "es", formatLength: "short" })
+			+ "\t\t"
+			+ locale.format(mayDay, { locale: "es", formatLength: "full" })
+	].join("\n"))
+},
+</pre>
+<a class="demoBtn demo" href="demo/l10nDateFormatting.php">View Demo</a>
+
+<p>
+Each bundle enables various formats. Here, we've specified "short" and "full" length. You can also try "long" or "medium" (the default). Finally, you can
+pluck out and format just the date part you need by setting the <code>selector</code> property to <code>year</code>,
+<code>date</code>, or <code>time</code>.
+</p>
+
+<h3>ISO Dates</h3>
+<p>
+For portable, human-meaningful date representation, Dojo implements a subset of the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> standard.  The <code>dojo/date.stamp</code> module
+provides <code>fromISOString</code> and <code>toISOString</code> methods which let you round-trip dates with all the year/date/time and time-zone
+data intact.  The toISOString method supports the same <code>selector</code> property to output just the date without time (or vice-versa).
+</p>
+<pre class="brush:js;">
+require(["dojo/date/stamp"],
+		function(stamp){
+var parseResults = {
+	"2011-05-13 (ISO Date)": stamp.fromISOString("2011-05-13"),
+	"Combined date and time in UTC": stamp.fromISOString("2011-05-13T08:05:00"),
+	"Time": stamp.fromISOString("T08:05:00")
+};
+</pre>
+<p>
+The <code>dojo/date/stamp.fromISOString</code> method can parse many (but not all) ISO 8601 date representations.
+See the <a href="/reference-guide/1.8/dojo/date/stamp.html"><code>dojo/date/stamp</code> reference docs</a> for more details.
+</p>
+
+<pre class="brush:js;">
+formatResults["April 12, 1961 (first man in space)"]
+ 	= stamp.toISOString(firstManInSpace);
+
+formatResults[firstTweet.toUTCString()+" (tweet date)"]
+	= stamp.toISOString(firstTweet);
+
+formatResults[now.toUTCString()+ " (now) - date only"]
+	= stamp.toISOString(now, { selector: "date" });
+</pre>
+<a class="demoBtn demo" href="demo/isoDates.php">View Demo</a>
+
+<h3>Conclusion</h3>
+<p>
+The <code>dojo/date</code> modules bring a lot of convenience and utility to date/time handling.  Internationalizing your code requires
+awareness of locale-specific date representation conventions.  Having an i18n-ready date module gives you a serious leg up and puts Dojo
+in a vanishingly small club of JavaScript libraries that have done this work for you. We'll talk more about i18n and l10n, as well as the
+wealth of similar helpers Dojo has, in future tutorials.
+</p>
+
+<h3>Colophon</h3>
+<ul>
+	<li><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date">Javascript Date documentation</a></li>
+	<li><a href="/reference-guide/1.8/dojo/date.html">dojo/date reference guide</a></li>
+	<li><a href="/api/1.8/dojo/date">dojo/date API docs</a></li>
+	<li><a href="/reference-guide/1.8/dojo/date/locale.html">dojo/date/locale reference guide</a></li>
+	<li><a href="/api/1.8/dojo/date/locale">dojo/date/locale API docs</a></li>
+	<li><a href="/reference-guide/1.8/dojo/date/stamp.html">dojo/date/stamp reference guide</a></li>
+	<li><a href="/api/1.8/dojo/date/stamp">dojo/date/stamp API docs</a></li>
+	<li><a href="/reference-guide/1.8/dojo/i18n.html">dojo/i18n - internationalization reference guide</a></li>
+</ul>

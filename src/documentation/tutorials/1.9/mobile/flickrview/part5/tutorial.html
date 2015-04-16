@@ -1,0 +1,290 @@
+<?php require("../../../../resources/tutHead.inc"); ?>
+
+<h3>Dojo Mobile and Builds</h3>
+<p>
+	Creating a build for Dojo Mobile applications is extremely important because we
+	want our mobile applications to be a small as possible. Let's walk through the
+	steps to create a compact build of our Dojo Mobile application: FlickrView.
+</p>
+
+<h3>Dojo's Build System</h3>
+<img src="resources/folders.png" style="float:right;display:block;margin-left:20px;">
+<p>
+	Typical build scripts are found within the Dojo Toolkit's <code>util/buildscripts</code>
+	directory, so, for the rest of the tutorial, you will need a local copy of a Dojo
+	source distribution. If you don't have that already, visit
+	<a href="http://dojotoolkit.org/download"
+	   target="_blank">dojotoolkit.org/download</a>.
+</p>
+<p>
+	Make sure you get a <strong>source</strong> distribution, that includes the
+	<code>util</code> directory. Once you have that, copy the
+	<code>dojo, dijit, dojox</code> and <code>util</code> directories
+	into the <code>js</code> directory of your sample application. Your file structure
+	should now be as follows.
+</p>
+<div class="clear"></div>
+
+<h3>Build Profile</h3>
+<p>
+	Let's create a build profile for FlickrView. The build profile is a configuration
+	file that says what the build will include, and what options are used. The Dojo
+	build system is fully documented on the
+	<a href="http://dojotoolkit.org/documentation/tutorials/1.9/build/"
+	   target="_blank">Creating Builds tutorial</a>, we will just explain briefly what
+	it contains here.
+</p>
+<p>
+	The profile starts with some <strong>options</strong>:
+</p>
+<ul>
+	<li><code>"basePath"</code> defines the origin for all the relative paths in
+		this profile;</li>
+	<li><code>"action": "release"</code> is the standard action for a build</li>
+	<li><code>"releaseDir"</code> specifies the directory where the
+		build results will be output</li>
+	<li><code>"cssOptimize"</code> option is useful for a mobile build
+		since it makes sure all the CSS files that make up each theme are concatenated
+		into one single CSS file</li>
+</ul>
+
+<pre class="brush: js;">
+var profile = {
+	"basePath": "./",
+	"action": "release",
+	"releaseDir": "../release/js",
+
+	"selectorEngine": "acme",
+	"stripConsole": "normal",
+	"copyTests": false,
+	"cssOptimize": "comments.keepLines",
+	"mini": true,
+	"optimize": "closure",
+	"layerOptimize": "closure",
+
+	"localeList": "en-us",
+</pre>
+
+<p>
+	Next are the <strong>layers</strong> definition:
+</p>
+<p>
+	In this tutorial, we define only one layer that contains all the modules needed by
+	the application. A layer will result in one <code>.js</code> file being generated,
+	and in our case, we define it as the dojo/dojo layer. It will include only the
+	Dojo code that we actually use in our application, and the custom code that is
+	specific to our application.
+</p>
+<p class="proTip">
+	Note that we could have split our applications into multiple layers, for example one
+	layer for the dojo code and one layer for the application code. But in the context
+	of a mobile application deployed on networks with high latencies, having multiple
+	requests could have a significant impact on the overall application launch time. For
+	the same reason, we specify the builder to include the localized bundle into the
+	layer (by means of the <code>includeLocales</code> property).
+</p>
+
+<pre class="brush: js;">
+	layers: {
+		"dojo/dojo": {
+			customBase: true,
+			includeLocales: ["en-us"],
+			include: [
+				"dojox/mobile/parser",
+				"dijit/registry",
+				"dojox/mobile/compat",
+				"dojox/mobile/ScrollableView",
+				"dojox/mobile/ListItem",
+				"dojox/mobile/FormLayout",
+				"dojox/mobile/TextBox",
+				"dojox/mobile/RadioButton",
+				"dojox/mobile/Heading",
+				"dojox/mobile/EdgeToEdgeList",
+				"dojox/mobile/RoundRect",
+				"dojox/mobile/Switch",
+				"dojo/cldr/nls/de/gregorian",
+				"dojo/cldr/nls/fr/gregorian",
+				"dojo/cldr/nls/it/gregorian",
+				"dojo/cldr/nls/ko/gregorian",
+				"dojo/cldr/nls/pt/gregorian",
+				"dojo/cldr/nls/es/gregorian",
+				"dojo/cldr/nls/zh/gregorian",
+				"dojo/cldr/nls/zh-hk/gregorian",
+				"flickrview/FeedView",
+				"flickrview/SettingsView"
+			]
+		}
+	},
+</pre>
+
+<p>
+	Then we define a set of has <strong>features</strong>:
+</p>
+<p>
+	Features are a way to isolate pieces of code that can be conditionally included or
+	excluded (see dojo/has).
+</p>
+<p>
+	For example, we set the <code>"ie"</code> feature to
+	<code>undefined</code>: by this, we state that we don't want the application to run
+	on old Internet Explorer (only on mobile browsers), so we accept that any
+	IE-specific code is excluded from the build.
+</p>
+
+<pre class="brush: js;">
+	staticHasFeatures: {
+		"dom-addeventlistener": true,
+		"dom-qsa": true,
+		"json-stringify": true,
+		"json-parse": true,
+		"bug-for-in-skips-shadowed": false,
+		"dom-matches-selector": true,
+		"native-xhr": true,
+		"array-extensible": true,
+		"ie": undefined,
+		"quirks": false,
+		"dojo-sync-loader": false,
+		"ie-event-behavior": 0
+	},
+
+	packages: [
+		{ name: "dojo", location: "dojo" },
+		{ name: "dijit", location: "dijit" },
+		{ name: "dojox", location: "dojox" },
+		{ name: "flickrview", location: "flickrview" }
+	]
+};
+</pre>
+
+<p class="proTip">
+	This build profile is included as <code>flickrview/js/flickrview-app.profile.js</code>
+	in the downloadable archive available at the end of this article.
+</p>
+
+<h3>Running the Build</h3>
+<p>
+	Let's switch to the command line and build our layers based on the build
+	profile above:
+</p>
+<p><strong>Unix</strong></p>
+
+<pre class="brush: js;">
+cd js/util/buildscripts
+./build.sh profile=../../flickrview-app.profile.js
+</pre>
+								<p><strong>Windows</strong></p>
+<pre class="brush: js;">
+cd js\util\buildscripts
+.\build.bat profile=..\..\flickrview-app.profile.js
+</pre>
+
+<p>
+	The build process is a mix of JavaScript and Java (for code
+	minification/optimization) tasks. By default, the unix <code>build.sh</code> script
+	uses <strong>node.js</strong> as the default runtime if available, or falls back
+	to <strong>Rhino</strong> otherwise (this choice is motivated by the fact that
+	<strong>node.js</strong> usually much more faster than <strong>Rhino</strong>).
+</p>
+<p>
+	The Windows <code>build.bat</code> script, on the other hand, only leverages
+	<strong>Rhino</strong>. But that does not mean you can’t build with
+	<strong>node.js</strong> on windows! Here is the command line to do it manually:
+</p>
+
+<pre class="brush: js;">
+.\node ..\..\dojo\dojo.js load=build --profile ../../flickrview-app.profile.js
+</pre>
+
+<p>
+	After the build is completed, navigate to the <code>release/js/flickrview/</code>
+	directory to view the result.
+</p>
+<h3>Implementing the Build</h3>
+<p>
+	To implement our newly created build files, update <code>flickrview.html</code>
+</p>
+<p>
+	First, update the path to Dojo, so that we now use the <code>dojo.js</code> file
+	that was created by the build instead of the original <code>dojo.js</code>.
+	This corresponds to the <code>dojo/dojo</code> layer in our profile, and the
+	resulting file is in <code>release/js/dojo/dojo.js</code>, so we update the path
+	of the Dojo script tag accordingly. We don't need to do other modifications since
+	the layer contains all the modules the application needs.
+</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;script type="text/javascript" src="./release/js/dojo/dojo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+	require([...], function(...){ // existing require calls
+		// ... existing code
+	});
+	// ...
+&lt;/script&gt;
+</pre>
+
+<p>
+	Finally, we can also simplify the <code>dojoConfig</code> section like this :
+</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;script type="text/javascript"&gt;
+		dojoConfig = {
+			async: true,
+			parseOnLoad: false,
+			mblHideAddressBar: true,
+			extraLocale: ["en-us", "fr-fr", "de-de", "it-it", "ko-kr", "pt-br", "es-us", "zh-hk"]
+		};
+&lt;/script&gt;
+</pre>
+
+<p class="proTip">
+	A build version of the HTML file, <code>flickrview-build.html</code>, is included in
+	the downloadable archive. You can launch this file once you have run the build.
+</p>
+
+<h3>Review</h3>
+<p>
+	FlickrView is complete! Our simple mobile application has been templated (HTML),
+	styled (CSS), coded (JavaScript), and built for production!
+</p>
+<p>
+	Let's review what we learned in the process of create FlickrView:
+</p>
+<ul>
+	<li>The basic widgets included within Dojo Mobile</li>
+	<li>The format which to declaratively code dojox/mobile widgets with HTML
+		and programmatically create widgets with JavaScript
+	</li>
+	<li>How to use dojo/request/script to retrieve JSON-formatted data from Flickr</li>
+	<li>How to extend dojox/mobile base widgets
+	</li>
+	<li>Strategies behind following good JavaScript practices but also keeping code compact and minimized in dependencies
+	</li>
+	<li>The special build process needed for dojox/mobile applications</li>
+</ul>
+<p>
+	In this tutorial, we saw that Dojo Mobile is an outstanding mobile application
+	framework complete with themes and widgets to match mobile device controls.
+	Dojo Mobile is also easy to learn, extend, and dynamically populate with content.
+	FlickrView, a basic three-view application, was very easy to create,
+	thanks to Dojo Mobile!
+</p>
+
+<h3>Download The Source</h3>
+<div class="downlaodSource">
+	Download <a href="resources/DojoMobilePart5.zip">Part 5 - Build FlickrView for production</a>.
+</div>
+
+<h3>Resources & references</h3>
+<ul>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojox/mobile.html"
+		   target="_blank">Dojo Mobile Reference Guide</a></li>
+	<li><a href="http://dojotoolkit.org/api"
+		   target="_blank">The Dojo Toolkit API</a></li>
+	<li><a href="http://dojotoolkit.org/documentation/tutorials/1.9/build/"
+		   target="_blank">Creating Builds</a> (Tutorial)</li>
+	<li><a href="http://dojotoolkit.org/download"
+		   target="_blank">Get Dojo!</a> (Downloads)</li>
+</ul>
+
+<?php include("../series.inc"); ?>

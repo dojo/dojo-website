@@ -1,0 +1,156 @@
+
+
+<h3>dgrid</h3>
+<p class="proTip">This tutorial covers the <code>dojox/grid/DataGrid</code> in depth. Beginning with Dojo 1.7, you should use the <a href="http://dgrid.io/">dgrid</a>, a next-generation grid component that takes full advantage of modern browsers and object stores. Visit the dgrid site for a collection of <a href="http://dgrid.io#tutorials">dgrid tutorials</a>.</p>
+
+<h3>Getting Started</h3>
+<p>Although displaying your data in the right order and in a manner that makes sense to the user is important, it might not always be enough. Sometimes the data you get won't be formatted for optimum display, and will need to be tailored to make it more readable. <code>dojox/grid/DataGrid</code> can help with this...but first, let's take a look at a point we glossed over in the first tutorial: how to get data into your grid.</p>
+
+<h3>Retrieving Data From a Store</h3>
+<p>The first thing we'll be doing is creating a store. We'll be using <code>dojo/store/Memory</code>, and wrapping it with <code>dojo/data/ObjectStore</code> to provide the Dojo data API to the grid, but really, any store conforming to Dojo's data API will work. Since the <a href="../dojo_data">data API</a> and the <a href="../intro_dojo_store/">store API</a> were discussed in earlier tutorials we won't be covering them here, except to say that the hall of fame batting statistics we used from our last tutorial are fetched from our JSON file using <code>dojo/request</code> and loaded into our <code>Memory</code> store.</p>
+<p class="proTip">Dojo 1.6 introduced the new data store API called Dojo Object Store. This API is based on the <a href="http://www.w3.org/TR/IndexedDB/#object-store-sync">HTML5 IndexedDB object store API</a> and is designed to greatly simplify and ease the interaction with and construction of Dojo stores.  While <code>dojo/data/ItemFileReadStore</code>, <code>dojo/data/ItemFileWriteStore</code>, and other dojo/data APIs can still be used with the Dojo Grid, it is highly recommended that you use the dojo/store APIs, both for a more performant store, and for coding best practices.</p>
+<p>At this point, there are two ways to access the data in the store; the first is letting the DataGrid query the store for you. To do this, we can pass three parameters to the <code>DataGrid</code> constructor:</p>
+<ul>
+	<li><code>store</code>: The data store.</li>
+	<li><code>query</code>: The query to pass to the store. The syntax will depend on the store being used.</li>
+	<li><code>queryOptions</code>: Options to pass to the store during querying. The options will depend on the store being used, and is not required.</li>
+</ul>
+<p>Since we want every record, we'll pass <code>{ id: "*" }</code>:</p>
+<pre class="brush:js;">
+		require([
+			"dojox/grid/DataGrid",
+			"dojo/store/Memory",
+			"dojo/data/ObjectStore",
+			"dojo/request",
+			"dojo/domReady!"
+		], function(DataGrid, Memory, ObjectStore, request){
+			var grid,  dataStore;
+			request.get("hof-batting.json",{
+				handleAs: "json"
+			}).then(function(data){
+				dataStore = new ObjectStore({ objectStore:new Memory({ data: data.items }) });
+
+				grid = new DataGrid({
+					store: dataStore,
+					query: { id: "*" },
+					queryOptions: {},
+					structure: [
+						{ name: "First Name", field: "first", width: "25%" },
+						{ name: "Last Name", field: "last", width: "25%" },
+						{ name: "G", field: "totalG", width: "10%" },
+						{ name: "AB", field: "totalAB", width: "10%" },
+						{ name: "R", field: "totalR", width: "10%" },
+						{ name: "H", field: "totalH", width: "10%" },
+						{ name: "RBI", field: "totalRBI", width: "10%" }
+					]
+				}, "grid");
+				grid.startup();
+			});
+		});
+
+</pre>
+<a class="demoBtn demo" href="demo/datagrid.php">View Demo</a>
+<p>Another way to populate your grid is to manually fetch the data you want from the store. Instead of giving the <code>DataGrid</code> a <code>query</code> parameter, you would pass it the array of items from the store as an <code>items</code> parameter:</p>
+<pre class="brush: js;">
+		require([
+			"dojox/grid/DataGrid",
+			"dojo/store/Memory",
+			"dojo/data/ObjectStore",
+			"dojo/request",
+			"dojo/domReady!"
+		], function(DataGrid, Memory, ObjectStore, request){
+			var grid, dataStore;
+			request.get("hof-batting.json", {
+				handleAs: "json"
+			}).then(function(data){
+				dataStore = new ObjectStore({ objectStore:new Memory({ data: data.items }) });
+
+				grid = new DataGrid({
+					store: dataStore,
+					items:data.items,
+					structure: [
+						{ name: "First Name", field: "first", width: "25%" },
+						{ name: "Last Name", field: "last", width: "25%" },
+						{ name: "G", field: "totalG", width: "10%" },
+						{ name: "AB", field: "totalAB", width: "10%" },
+						{ name: "R", field: "totalR", width: "10%" },
+						{ name: "H", field: "totalH", width: "10%" },
+						{ name: "RBI", field: "totalRBI", width: "10%" }
+					]
+				}, "grid");
+				grid.startup();
+			});
+		});
+</pre>
+<a class="demoBtn demo" href="demo/datagrid-items.php">View Demo</a>
+<p class="proTip">Each population method has its advantages: using a <code>query</code> will allow the grid to use the store's sorting, but using <code>items</code> will provide faster rendering since the store isn't queried for each page of data. It's up to you to decide which method fits your application the best.</p>
+
+<h3>Formatting Data</h3>
+<p>Now that we have data in our grid, we need to format some of it. Besides the class and style properties talked about in the last tutorial, there are two more properties for formatting data: <code>formatter</code> and <code>get</code>. <code>formatter</code> takes a function that will be called with 3 arguments: the data from the field specified for this cell, the row index, and the reference to the cell definition object. The return value of this function will be used as the data for the cell:</p>
+<pre class="brush: js;">
+{
+	name: "G", field: "totalG", width: "10%",
+	formatter: function(games){
+		return games + " <em>games</em>";
+	}
+},
+</pre>
+<p>Another way to format your data is using the <code>fields</code> property of a cell definition to pass data from multiple fields as an array to your formatter function. This can be used, for instance, to concatenate a player's first and last names:</p>
+<pre class="brush: js;">
+{
+	name: "Name", fields: ["first", "last"], width: "30%",
+	formatter: function(fields){
+		var first = fields[0],
+			last = fields[1];
+
+		return last + ", " + first;
+	}
+},
+</pre>
+<p>If you need access to multiple values of a record, another option is to pass the string <code>"_item"</code> to the cell definition's <code>field</code> property. This will tell the <code>DataGrid</code> to pass the data object associated with the record for the row as the first argument of your formatter function:</p>
+<pre class="brush: js;">
+{
+	name: "Batting Average", field: "_item", width: "10%",
+	formatter: function(item, rowIndex, cell){
+		var store = cell.grid.store,
+			ba = store.getValue(item, "totalH") / store.getValue(item, "totalAB");
+
+		// round to three digits
+		return mathRound(ba, 3);
+	}
+},
+</pre>
+<p>One last approach to formatting data is to separate the calculation from the formatting. By passing a function to the <code>get</code> property of the cell definition, the <code>DataGrid</code> will call this function in order to fetch the data out of the item. The <code>DataGrid</code> will pass the <code>get</code> function 2 arguments: the row index of the record and the data item associated with the record. For large calculations, this is the preferred option:</p>
+<pre class="brush: js;">
+{
+	name: "Slugging %", width: "10%",
+	get: function(rowIndex, item){
+		if(!item){
+			return;
+		}
+		// |this| is the cell object
+		var store = this.grid.store,
+			hits = store.getValue(item, "totalH"),
+			doubles = store.getValue(item, "total2B"),
+			triples = store.getValue(item, "total3B"),
+			homeruns = store.getValue(item, "totalHR"),
+			total_bases = hits + doubles + (triples * 2) + (homeruns * 3),
+			at_bats = store.getValue(item, "totalAB");
+
+		return total_bases / at_bats;
+	},
+	formatter: function(slugging){
+		// round to three digits
+		return mathRound(slugging, 3);
+	}
+}
+</pre>
+<a class="demoBtn demo" href="demo/datagrid-formatting.php">View Demo</a>
+
+<p class="proTip">By using <code>get</code>, <code>fields</code>, or <code>field</code> set to <code>"_item"</code>, the <code>DataGrid</code> will not be able to sort your data. If you need sorting and advanced calculations client-side, you will need to transform the data before it gets to your store.</code>
+
+<h3>DataGrid as a View</h3>
+<p>One very important point should be made before concluding this tutorial: the <code>DataGrid</code> is simply a <em>view</em> of a <code>dojo/data</code> store. This means the <code>DataGrid</code> will react to changes in the store (row addition or deletion, and record field updates) if the store supports the notification API of <code>dojo/data</code>, and it will sort the data according to the rules of the store you're using. However, it is not designed to do sorting apart from the store. This means that if formatting your data will change the sort order, the <code>DataGrid</code> won't notice the formatted changes.</p>
+
+<h3>Conclusion</h3>
+<p>Formatting data is a big key to the puzzle of displaying tabular data so a user can easily use your grid. By providing formatting functions to your cell definitions, you will have even more control over how your data will appear in your grid. In the next tutorial, we will look at how the <code>DataGrid</code> exposes methods and events for controlling how users can interact with your grid.</p>

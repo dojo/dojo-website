@@ -1,0 +1,304 @@
+
+
+<h3>Getting Started</h3>
+
+<p>In the earlier <a href="../using_query/">tutorial</a> on <a href="/reference-guide/1.7/dojo/query.html"><code>dojo/query</code></a>, we saw how to get a collection of
+	nodes matching a query or selector, and how to use the methods on <a href="/reference-guide/1.7/dojo/NodeList.html"><code>dojo/NodeList</code></a> to work with those nodes.
+	Let's quickly recap. Here's the markup we’ll be using for most of the demos (we're going with a fruity theme for
+	this tutorial):</p>
+
+<p class="proTip">The <code>dojo/NodeList</code> object is different from the DOM
+<a href="https://developer.mozilla.org/en-US/docs/DOM/NodeList"><code>NodeList</code></a> object.
+Dojo's <code>NodeList</code> is an actual instance of an array decorated with extra methods.
+ES5 iteration methods are guaranteed to be available even in a non-ES5 environment, and as you
+will see in this tutorial there are various modules that can extend <code>dojo/NodeList</code>
+with additional useful methods.</p>
+
+<pre class="brush: html;">
+&lt;button type="button" id="btn">Pick out fresh fruits&lt;/button&gt;
+
+&lt;h3&gt;Fresh Fruits&lt;/h3&gt;
+&lt;ul id="freshList"&gt;&lt;/ul&gt;
+
+&lt;h3&gt;Fruits&lt;/h3&gt;
+&lt;ul&gt;
+	&lt;li class="fresh"&gt;Apples&lt;/li&gt;
+	&lt;li class="fresh"&gt;Persimmons&lt;/li&gt;
+	&lt;li class="fresh"&gt;Grapes&lt;/li&gt;
+	&lt;li class="fresh"&gt;Fresh Figs&lt;/li&gt;
+	&lt;li class="dried"&gt;Dates&lt;/li&gt;
+	&lt;li class="dried"&gt;Raisins&lt;/li&gt;
+	&lt;li class="dried"&gt;Prunes&lt;/li&gt;
+	&lt;li class="fresh dried"&gt;Apricots&lt;/li&gt;
+	&lt;li class="fresh"&gt;Peaches&lt;/li&gt;
+	&lt;li class="fresh"&gt;Bananas&lt;/li&gt;
+	&lt;li class="fresh"&gt;Cherries&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+
+<p>To demonstrate <code>dojo/query</code>, a click handler is created for the button:</p>
+
+<pre class="brush: js;">
+require(["dojo/query", "dojo/domReady!"], function(query){
+	query("#btn").on("click", function(){
+		var nodes = query("li.fresh");
+		nodes.on("click", function(){
+			alert("I love fresh " + this.innerHTML);
+		});
+	});
+});
+</pre>
+
+<p>The <code>query("li.fresh")</code> call returns a <code>NodeList</code>, which is a standard JavaScript array
+	decorated with additional methods that let us work more easily with a collection of DOM nodes. Because each
+	<code>query</code> call returns a <code>NodeList</code>, we can make this even simpler by chaining method calls (
+	instead of typing <code>var nodes</code> over and over again):</p>
+
+<pre class="brush: js;">
+require(["dojo/query", "dojo/domReady!"], function(query){
+	query("#btn").on("click", function(){
+		query("li.fresh").on("click", function(event){
+			alert("I love fresh " + event.target.innerHTML);
+		});
+	});
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/nodelist_extensions-queryRecap.php">View Demo</a>
+
+<p class="proTip">Troubleshooting chains of method calls can be difficult, as there is nowhere to add logging
+	statements or breakpoints in the debugger. Break apart the chain into discrete steps to inspect what each method
+	returns.</p>
+
+<h3>Doing More with <code>NodeList</code></h3>
+
+<p>This pattern of <em>getting some nodes and doing something with them</em> is pervasive enough that many potential
+	features of <code>NodeList</code> end up conflicting with the modular nature of Dojo and a focus on providing
+	"composable" functionality. As a result, in Dojo and DojoX, there are a variety of NodeList extension modules that
+	can be loaded to add new functionality to <code>NodeList</code> as necessary. Let's take a look at
+	them now.</p>
+
+<h3>A Note on Documentation</h3>
+
+<p>In the API viewer, the <a href="/api/1.7/dojo/NodeList.html">NodeList</a> object is displayed with all the
+	extensions to it that are declared in all the extension modules from both Dojo and DojoX.  Although the source
+	module is identified, it is rather "complex".  In addition the individual modules which extend the object are
+	essentially "blank".  In the reference guide though, each module has its own page (e.g. the
+	<a href="/reference-guide/1.7/dojo/NodeList-data.html"><code>dojo/NodeList-data</code></a> page)
+	which makes it clearer what methods are provided by that module.</p>
+
+<h3>Working with Styles and DOM</h3>
+
+<p>Prior to Dojo 1.7, the base <code>NodeList</code> featured DOM methods such as <code>addClass</code>,
+	<code>removeClass</code>, <code>attr</code>, <code>style</code>, <code>empty</code>, and <code>place</code>.  With
+	the advent of AMD and Dojo 1.7, these methods have been moved to <a
+	href="/reference-guide/1.7/dojo/NodeList-dom.html"><code>dojo/Nodelist-dom</code></a>.  Here's an
+	example of how you use that module:</p>
+
+<pre class="brush: js;">
+require(["dojo/query", "dojo/NodeList-dom"], function(query){
+	query("li.fresh")
+		.addClass("fresher")
+		.attr("title", "freshened")
+		.style("background", "lightblue")
+		.on("click", function(){
+			alert("I love fresh " + this.innerHTML);
+		});
+});
+</pre>
+
+<p>Simply loading the <code>dojo/NodeList-dom</code> module adds these methods to <code>NodeList</code>.
+They act exactly as they do with <code>dojo/dom</code> and related modules.</p>
+
+<h3>Animating Elements</h3>
+
+<p>The <a href="/reference-guide/1.7/dojo/NodeList-fx.html"><code>dojo/NodeList-fx</code></a> module
+	augments <code>NodeList</code> with a series of methods that allow you to apply effects from Dojo's effects system
+	to a collection of nodes. These methods function identically to their non-NodeList counterparts, so take a look at
+	the <a href="../effects/">Dojo Effects</a> and <a href="../animation/">Animation</a> tutorials if you aren't
+	familiar with them.</p>
+
+<p>In this demo, we’ll use the same fruity list, and a button that executes the following code when clicked:</p>
+
+<pre class="brush: js;">
+require(["dojo/query", "dojo/NodeList-fx", "dojo/domReady!"], function(query){
+	query("#btn").on("click", function(){
+		query("li.fresh")
+			.slideTo({
+				left: 200, auto: true
+			})
+			.animateProperty({
+				properties: {
+					backgroundColor: { start: "#fff", end: "#ffc" }
+				}
+			})
+			.play();
+	});
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/nodelist_extensions-fx.php">View Demo</a>
+
+<p class="proTip">Unlike most <code>NodeList</code> methods, <strong><code>NodeList-fx</code> methods return an
+	animation object by default</strong>, which conflicts with the normal chaining behavior of <code>NodeList</code>.
+	This is because Dojo’s animation functions normally return an animation object, and it is up to you to call
+	<code>play</code> on that object to start the animation. To cause a <code>NodeList-fx</code> method to
+	automatically play the animation and return a <code>NodeList</code> instead, set <code>auto: true</code> in the
+	object passed to the function, as demonstrated above in the <code>slideTo</code> call.</p>
+
+<h3>Associating Data with Elements</h3>
+
+<p>The <a href="/reference-guide/1.7/dojo/NodeList-data.html"><code>dojo/NodeList-data</code></a>
+	module adds a mechanism for attaching arbitrary data to elements via the <code>data</code> method. Here is an
+	example that stashes a <code>Date</code> object on an element each time it is clicked:</p>
+
+<pre class="brush: js;">
+require(["dojo/query", "dojo/NodeList-data", "dojo/domReady!"], function(query, NodeList){
+	function mark(){
+		var nodeList = new NodeList(this);		// make a new NodeList from the clicked element
+		nodeList.data("updated", new Date());	// update the 'updated' key for this element via the NodeList
+	}
+
+	query("li")							// get all list items
+		.data("updated", new Date())	// set the initial data for each matching element
+		.on("click", mark);				// add the event handler
+
+	query("#btn").on("click", function(){
+		query("li").data("updated").forEach(function(date){
+			console.log(date.getTime());
+		});
+	});
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/nodelist_extensions-data.php">View Demo</a>
+
+<p>Here, we’re doing three things:</p>
+
+<ul>
+	<li>Associating an initial <code>Date</code> object with each element.</li>
+	<li>Setting up a <code>click</code> handler to call the <code>mark()</code> function</li>
+	<li>Setting up a button that allows us to view the data for each item.</li>
+</ul>
+
+<p>Inside the click handler, we still need a <code>NodeList</code> to get at the data properties for the clicked
+	element, so we create a new one from the element that was clicked. The existing <code>Date</code> object on the clicked element is then replaced with a new one.</p>
+
+<p class="proTip">With <code>NodeList-data</code>, it is <strong>extremely important</strong> that you call
+	<code>removeData</code> on the <code>NodeList</code> when removing elements from the DOM. If this is not done,
+	your application <strong>will leak memory</strong>, since the data is not actually stored on the element itself
+	and will not be garbage collected even if the node itself is.</p>
+
+<h3>Moving Around the DOM</h3>
+
+<p>The <a href="/reference-guide/1.7/dojo/NodeList-traverse.html"><code>dojo/NodeList-traverse</code>
+	</a> module adds methods to NodeList that allow you to easily move around the DOM to find parents, siblings, and
+	children of reference nodes.</p>
+
+<p>To illustrate, we’ll use a longer, categorized list of fruit. Some fruits have been marked as tasty (with the class
+	of <code>yum</code>), and we want to be able to:</p>
+
+<ol>
+	<li>Highlight them.</li>
+	<li>Indicate in the header for that list that there’s goodness inside.</li>
+</ol>
+
+<p>Using the methods provided by <code>NodeList</code>, <code>dojo/NodeList-traverse</code> and
+	<code>dojo/NodeList-dom</code>, here is one quick way to do that:</p>
+
+<pre class="brush: js;">
+require(["dojo/query", "dojo/NodeList-traverse", "dojo/NodeList-dom",
+		"dojo/domReady!"], function(query){
+	query("li.yum")				// get LI elements with the class 'yum'
+		.addClass("highlight")	// add a 'highlight' class to those LI elements
+		.closest(".fruitList")	// find the closest parent elements of those LIs with the class 'fruitList'
+		.prev()					// get the previous sibling (headings in this case) of each of those fruitList elements
+		.addClass("happy")		// add a 'happy' class to those headings
+		.style({backgroundPosition: "left", paddingLeft: "20px"}); // add some style properties to those headings
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/nodelist_extensions-traverse.php">View Demo</a>
+
+<p>The chain here starts with an initial query to find the list nodes we're interested in, then uses traversal methods
+	to move up and sideways to find the heading elements associated with the lists that contain those list nodes.</p>
+
+<p>The important thing to understand with the traversal methods is that each call returns a <em>new</em> NodeList
+	containing the results of your traversal. Methods like <code>closest()</code>, <code>prev()</code>, and
+	<code>next()</code> are essentially sub-queries, with the nodes in the current NodeList being used as a reference
+	point for the next sub-query. Most of these methods function identically to traversal methods in jQuery and should
+	feel very familiar to users of that library.</p>
+
+<h3>Manipulating Elements</h3>
+
+<p>The <a href="/reference-guide/1.7/dojo/NodeList-manipulate.html"><code>dojo/NodeList-manipulate
+	</code></a> extension module complements the traverse module by adding some methods for manipulating the nodes in
+	a <code>NodeList</code>. This module adds methods mirroring jQuery's manipulation methods.</p>
+
+<p>The following example puts some of these capabilities to use. Using the same categorized list of fruits, it builds
+	two new lists of yummy and yucky fruits:</p>
+
+<pre class="brush: js;">
+require(["dojo/query", "dojo/NodeList-manipulate", "dojo/domReady!"],
+function(query){
+	query(".yum") // get elements with the class 'yum'
+		.clone() // create a new NodeList containing cloned copies of each element
+		.prepend('<span class="emoticon happy"></span>') // inject a span inside each of the cloned elements
+		.appendTo("#likes"); // insert the clones into the element with id 'likes'
+
+	query(".yuck")
+		.clone()
+		.append('<span class="emoticon sad"></span>')
+		.appendTo("#dontLikes");
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/nodelist_extensions-manip.php">View Demo</a>
+
+<p>The key to this demo is the use of the <code>clone</code> method to create duplicates of the original elements. As
+	with the <code>NodeList-traverse</code> methods, <code>clone</code> returns a new NodeList containing all newly
+	cloned elements which are then modified and appended to the DOM. If clones were not created, the original elements
+	would have been modified and moved instead.</p>
+
+<h3>Advanced Content Injection</h3>
+
+<p>The <a href="/reference-guide/1.7/dojo/NodeList-html.html"><code>dojo/NodeList-html</code></a> module brings the
+	advanced capabilities of <a href="/reference-guide/1.7/dojo/html.html"><code>dojo/html::set()</code></a> to
+	<code>NodeList</code>. Here's a simple example of its use, in which we turn a simple list into a checkbox list
+	using <code>dijit/form/CheckBox</code> widgets:</p>
+
+<pre class="brush: js;">
+require(["dojo/query", "dojo/_base/lang", "dijit/form/CheckBox", "dojo/NodeList-html", "dojo/domReady!"],
+function(query, lang){
+	var demo = {
+		addCheckboxes: function(q) {
+			query(q).html('&lt;input name="fruit" value="" data-dojo-type="dijit.form.CheckBox"&gt;', {
+				onBegin: function(){
+					var label = lang.trim(this.node.innerHTML),
+						cont = this.content + label;
+					cont = cont.replace('value=""', 'value="'+lang.trim(this.node.innerHTML) + '"');
+
+					this.content = cont;
+					return this.inherited("onBegin", arguments);
+				},
+				parseContent: true
+			});
+		}
+	}
+
+	query("#btn").on("click", lang.hitch(demo, "addCheckboxes", "li.alkaline"));
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/nodelist_extensions-htmlSet.php">View Demo</a>
+
+<p>With the rich capabilities offered by other NodeList methods, especially those in <code>NodeList-manipulate</code>,
+	the <code>NodeList-html</code> module is probably not one you will use very often, if at all. It is mentioned here
+	nonetheless because it can still be useful as a specialized tool to solve a certain class of problems that would
+	be much more difficult to solve in other ways.</p>
+
+<h3>Conclusion</h3>
+
+<p><code>NodeList</code> modules extend the existing <code>NodeList</code> API without bloating your code with
+	features you won't use. By using some of these extensions in your code, you will be able to work with the DOM much
+	more effectively and efficiently.</p>

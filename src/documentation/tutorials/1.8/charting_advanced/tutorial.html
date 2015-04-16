@@ -1,0 +1,381 @@
+
+
+<p><em>This tutorial explores advanced dojo charting topics.  If you aren't familiar with basic dojo charting, please <a href="../charting/">read the basic charting tutorial</a> first.  This tutorial will also use <a href="../intro_dojo_store/">Dojo's data stores</a>.</em></p>
+
+<h3>Getting Started</h3>
+<p>Creating advanced, dynamic charts with <code>dojox/charting</code> is probably easier than you would believe.  Creating charts that handle changes in data, zooming, panning, and scrolling is simple, thanks to the Dojo Toolkit!</p>
+
+
+<h3>Dojo Stores and Charting</h3>
+<p>Dojo provides an outstanding, flexible Store API which allows developers to manage (add, edit, delete, query, etc.) data in an efficient manner.  Due to the prevalence of Store usage within Dojo applications, <code>dojox/charting/StoreSeries</code> has incorporated solutions for creating data series from Store data.</p>
+
+<h4>StoreSeries</h4>
+<p><code>dojox/charting/StoreSeries</code> was specifically created to incorporate data stores within charts. The first step in using store data within a chart is creating the store:</p>
+<pre class="brush: js;">
+
+require(["dojo/store/Observable", "dojo/store/Memory"], function(ObservableStore, MemoryStore) {
+	// Initial data
+	var data = [
+		// This information, presumably, would come from a database or web service
+		// Note that the values for site are either 1 or 2
+		{ id: 1, value: 20, site: 1 },
+		{ id: 2, value: 16, site: 1 },
+		{ id: 3, value: 11, site: 1 },
+		{ id: 4, value: 18, site: 1 },
+		{ id: 5, value: 26, site: 1 },
+		{ id: 6, value: 19, site: 2 },
+		{ id: 7, value: 20, site: 2 },
+		{ id: 8, value: 28, site: 2 },
+		{ id: 9, value: 12, site: 2 },
+		{ id: 10, value: 4, site: 2 }
+	];
+
+	// Create the data store
+	// Store information in a data store on the client side
+	var store = new ObservableStore(new MemoryStore({
+		data: {
+			identifier: "id",
+			label: "Users Online",
+			items: data
+		}
+	}));
+});
+
+</pre>
+
+<p><em>Wrapping the store in Observable is important, as it allows notifications to be sent to the store, which in turn notifies the StoreSeries instance we will create.</em></p>
+
+<p>With the store in place, the chart, plot, and axes should be added just as they were in the <a href="../charting/">basic tutorial</a>.  With the chart, plot, and axes created,  it's time to implement StoreSeries:</p>
+
+<pre class="brush:js">
+// Adds a StoreSeries to the y axis, queries for all site 1 items
+chart.addSeries("y", new StoreSeries(store, { query: { site: 1 } }, "value"));
+</pre>
+<p>With the StoreSeries in place, each time the data store is notified of a change, the series is re-rendered on the chart.</p>
+<a href="demo/store-series.php" class="demoBtn demo">View Demo</a>
+
+
+<h3>Charting Animation:  Zooming, Scrolling, and Panning</h3>
+<p>Dojo's charting solution is flexible enough to allow a change in data at any time, so it's only natural that charts would also need to be flexible enough to accommodate those changes in data.  Zooming, scrolling, and panning in charts allows just that.</p>
+
+<p>The role that each animation plays is straight-forward:</p>
+
+<ul>
+	<li><strong>Zooming</strong> - Allows developers to enlarge elements within the chart without enlarging the chart itself</li>
+	<li><strong>Scrolling</strong> - Allows the user to click and drag their way around the chart</li>
+	<li><strong>Panning</strong> - Allows the user to elegantly pan to a different view of the chart</li>
+</ul>
+
+<p>These effects can be accomplished with two chart methods:  <code>setAxisWindow</code> and <code>setWindow</code>.</p>
+
+<h4>setAxisWindow(name,scale,offset)</h4>
+<p><code>setAxisWindow</code> defines a window on the named axis with a scale factor, which starts at the set offset in data coordinates.  The <code>setAxisWindow</code> method accepts three arguments:</p>
+<ul>
+	<li><strong>name</strong> - The name of the axis</li>
+	<li><strong>scale</strong> - Scale which the chart should change to</li>
+	<li><strong>offset</strong> - The chart's destination offset</li>
+</ul>
+<p>Usage of <code>setAxisWindow</code> would look like:</p>
+<pre class="brush:js;">
+	// Changes the x axis to twice the scale, offset by 100
+	chart.setAxisWindow("x",2,100).render();
+</pre>
+
+<h4>setWindow(sx,sy,dx,dy)</h4>
+<p><code>setWindow</code> sets scale and offsets on all plots of the chart.  The <code>setWindow</code> method accepts four arguments:</p>
+<ul>
+	<li><strong>sx</strong> - The magnification factor on horizontal axes</li>
+	<li><strong>sy</strong> - The magnification factor on vertical axes</li>
+	<li><strong>dx</strong> - The offset of horizontal axes in pixels</li>
+	<li><strong>dy</strong> - The offset of vertical axes in pixels</li>
+</ul>
+<p>Usage of <code>setWindow</code> would look like:</p>
+<pre class="brush:js;">
+	// Returns the chart to it original position
+	chart.setWindow(1, 1, 0, 0).render();
+</pre>
+
+<p>Each method requires the chart's <code>render</code> method to be called for changes to be reflected on the chart.</p>
+
+
+<h4>Example: Zooming, Scrolling, and Panning</h4>
+<p>The following example allows the user to zoom, pan, and scroll the chart using sliders.</p>
+<pre class="brush:js;html-script:true">
+&lt;script&gt;
+
+	// Require the dependencies
+	require(["dijit/form/HorizontalSlider", "dijit/form/HorizontalRule", "dijit/form/HorizontalRuleLabels", "dojox/charting/Chart", "dojox/charting/themes/Claro", "dojox/lang/functional/object", "dijit/registry", "dojo/on", "dojo/dom", "dojo/_base/event", "dojo/parser", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Areas", "dojox/charting/plot2d/Grid", "dojo/domReady!"], function(HorizontalSlider, HorizontalRule, HorizontalRuleLabels, Chart, Claro, functionalObject, registry, on, dom, baseEvent, parser) {
+
+		// Initialize chart, scales, and offsets
+		var chart, moveable, scaleX = 1, scaleY = 1, offsetX = 0, offsetY = 0;
+
+		// Updates the slider values, animates the change in scale and offsets
+		var reflect = function(){
+			functionalObject.forIn(chart.axes, function(axis){
+				var scale  = axis.getWindowScale(),
+					offset = Math.round(axis.getWindowOffset() * axis.getScaler().bounds.scale);
+				if(axis.vertical){
+					scaleY  = scale;
+					offsetY = offset;
+				}else{
+					scaleX  = scale;
+					offsetX = offset;
+				}
+			});
+			setTimeout(function(){
+				registry.byId("scaleXSlider").set("value", scaleX);
+				registry.byId("offsetXSlider").set("value", offsetX);
+				registry.byId("scaleYSlider").set("value", scaleY);
+				registry.byId("offsetYSlider").set("value", offsetY);
+			}, 25);
+		};
+
+		// Update the scale and offsets of *all* plots on the chart
+		var update = function(){
+			chart.setWindow(scaleX, scaleY, offsetX, offsetY, { duration: 1500 }).render();
+			reflect();
+		};
+
+		// The following four methods are fired when the corresponding sliders are  changed
+		var scaleXEvent = function(value){
+			scaleX = value;
+			dom.byId("scaleXValue").innerHTML = value;
+			update();
+		};
+
+		var scaleYEvent = function(value){
+			scaleY = value;
+			dom.byId("scaleYValue").innerHTML = value;
+			update();
+		};
+
+		var offsetXEvent = function(value){
+			offsetX = value;
+			dom.byId("offsetXValue").innerHTML = value;
+			update();
+		};
+
+		var offsetYEvent = function(value){
+			offsetY = value;
+			dom.byId("offsetYValue").innerHTML = value;
+			update();
+		};
+
+		// Function called when the mouse goes down
+		var _init = null;
+		var onMouseDown = function(e){
+			console.warn("mousedown");
+			_init = {x: e.clientX, y: e.clientY, ox: offsetX, oy: offsetY};
+			baseEvent.stop(e);
+		};
+
+		// Function called when the mouse is released
+		var onMouseUp = function(e){
+			if(_init){
+				// Clears the click/drag, updates the chart
+				console.warn("mouseup");
+				_init = null;
+				reflect();
+				baseEvent.stop(e);
+			}
+		};
+
+		// Create the base chart
+		chart = new Chart("chart");
+		chart.setTheme(Claro);
+		chart.addAxis("x", {fixLower: "minor", natural: true, stroke: "grey",
+			majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
+		chart.addAxis("y", {vertical: true, min: 0, max: 30, majorTickStep: 5, minorTickStep: 1, stroke: "grey",
+			majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
+		chart.addPlot("default", {type: "Areas", animate: {duration: 1800}});
+		chart.addSeries("Series A", [0, 25, 5, 20, 10, 15, 5, 20, 0, 25]);
+		chart.addAxis("x2", {fixLower: "minor", natural: true, leftBottom: false, stroke: "grey",
+			majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
+		chart.addAxis("y2", {vertical: true, min: 0, max: 20, leftBottom: false, stroke: "grey",
+			majorTick: {stroke: "black", length: 4}, minorTick: {stroke: "gray", length: 2}});
+		chart.addPlot("plot2", {type: "Areas", hAxis: "x2", vAxis: "y2", animate: {duration: 1800}});
+		chart.addSeries("Series B", [15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15], {plot: "plot2"});
+		chart.addPlot("grid", { type: "Grid", hMinorLines: true });
+		chart.render();
+
+		parser.parse();
+
+		// Add change events to the sliders to know when chart changes should be triggered
+	    registry.byId("scaleXSlider").on("Change", scaleXEvent, true);
+	    registry.byId("scaleYSlider").on("Change", scaleYEvent, true);
+	    registry.byId("offsetXSlider").on("Change", offsetXEvent, true);
+	    registry.byId("offsetYSlider").on("Change", offsetYEvent, true);
+
+		// Add mouse events to the chart to allow click and drag
+		var chartNode = dom.byId("chart");
+	    on(chartNode, "mousedown", onMouseDown);
+	    on(chartNode, "mouseup",   onMouseUp);
+	});
+&lt;/script&gt;
+
+&lt;!-- create the sliders to control chart scale and offsets --&gt;
+&lt;table&gt;
+	&lt;tr&gt;&lt;td align="center" class="pad"&gt;Scale X (&lt;span id="scaleXValue"&gt;1&lt;/span&gt;)&lt;/td&gt;&lt;/tr&gt;
+	&lt;tr&gt;&lt;td&gt;
+		&lt;div id="scaleXSlider" data-dojo-type="dijit/form/HorizontalSlider" data-dojo-props="
+				value: 1, minimum: 1, maximum: 5, discreteValues: 5, showButtons: false"
+				style="width: 600px;"&gt;
+			&lt;div data-dojo-type="dijit/form/HorizontalRule" data-dojo-props="
+				container: 'bottomDecoration', count: 5" style="height:5px;"&gt;&lt;/div&gt;
+			&lt;div data-dojo-type="dijit/form/HorizontalRuleLabels" data-dojo-props="
+				container: 'bottomDecoration', count: 5, minimum: 1, maximum: 5, constraints: {pattern: '##'}" style="height:1.2em;font-size:75%;color:gray;"&gt;&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/td&gt;&lt;/tr&gt;
+	&lt;tr&gt;&lt;td align="center" class="pad"&gt;Scale Y (&lt;span id="scaleYValue"&gt;1&lt;/span&gt;)&lt;/td&gt;&lt;/tr&gt;
+	&lt;tr&gt;&lt;td&gt;
+		&lt;div id="scaleYSlider" data-dojo-type="dijit/form/HorizontalSlider" data-dojo-props="
+				value: 1, minimum: 1, maximum: 5, discreteValues: 5, showButtons: false"
+				style="width: 600px;"&gt;
+			&lt;div data-dojo-type="dijit/form/HorizontalRule" data-dojo-props="
+				container: 'bottomDecoration', count: 5" style="height:5px;"&gt;&lt;/div&gt;
+			&lt;div data-dojo-type="dijit/form/HorizontalRuleLabels" data-dojo-props="
+				container: 'bottomDecoration', count: 5, minimum: 1, maximum: 5, constraints: {pattern: '##'}" style="height:1.2em;font-size:75%;color:gray;"&gt;&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/td&gt;&lt;/tr&gt;
+	&lt;tr&gt;&lt;td align="center" class="pad"&gt;Offset X (&lt;span id="offsetXValue"&gt;0&lt;/span&gt;)&lt;/td&gt;&lt;/tr&gt;
+	&lt;tr&gt;&lt;td&gt;
+		&lt;div id="offsetXSlider" data-dojo-type="dijit/form/HorizontalSlider" data-dojo-props="
+				value: 1, minimum: 0, maximum: 500, discreteValues: 501, showButtons: false"
+				style="width: 600px;"&gt;
+			&lt;div data-dojo-type="dijit/form/HorizontalRule" data-dojo-props="
+				container: 'bottomDecoration', count: 6" style="height:5px;"&gt;&lt;/div&gt;
+			&lt;div data-dojo-type="dijit/form/HorizontalRuleLabels" data-dojo-props="
+				container: 'bottomDecoration', count: 6, minimum: 0, maximum: 500, constraints: {pattern: '####'}" style="height:1.2em;font-size:75%;color:gray;"&gt;&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/td&gt;&lt;/tr&gt;
+	&lt;tr&gt;&lt;td align="center" class="pad"&gt;Offset Y (&lt;span id="offsetYValue"&gt;0&lt;/span&gt;)&lt;/td&gt;&lt;/tr&gt;
+	&lt;tr&gt;&lt;td&gt;
+		&lt;div id="offsetYSlider" data-dojo-type="dijit/form/HorizontalSlider" data-dojo-props="
+				value: 1, minimum: 0, maximum: 500, discreteValues: 501, showButtons: false"
+				style="width: 600px;"&gt;
+			&lt;div data-dojo-type="dijit/form/HorizontalRule" data-dojo-props="
+				container: 'bottomDecoration', count: 6" style="height:5px;"&gt;&lt;/div&gt;
+			&lt;div data-dojo-type="dijit/form/HorizontalRuleLabels" data-dojo-props="
+				container: 'bottomDecoration', count: 6, minimum: 0, maximum: 500, constraints: {pattern: '####'}" style="height:1.2em;font-size:75%;color:gray;"&gt;&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;&lt;br /&gt;&lt;br /&gt;
+
+&lt;!-- the chart node --&gt;
+&lt;div id="chart" style="width: 800px; height: 400px;"&gt;&lt;/div&gt;
+</pre>
+<a href="demo/zooming-scrolling-panning.php" class="demoBtn demo">View Demo</a>
+
+
+<h3>dojox/charting Events</h3>
+<p>Event connections within all interactive interfaces are important.  It's important that they are effectively and efficiently relayed, as well as plainly available.  With those goals in mind, an API by which developers can connect and respond to user-triggered events has been created.</p>
+<p>Event listeners are assigned to specific plots on a given chart with the <code>connectToPlot</code> method:</p>
+<pre class="brush:js;">
+// Connect an event to the "default" plot
+chart.connectToPlot("default", function(evt) {
+	// Use console to output information about the event
+	console.info("Chart event on default plot!",evt);
+	console.info("Event type is: ",evt.type);
+	console.info("The element clicked was: ",evt.element);
+});
+</pre>
+<p>The connectToPlot's <code>event</code> object is very different from a traditional DOM event.  This event object contains the following key properties:</p>
+
+<ul>
+	<li><strong>type</strong> - The type of event (<code>onclick</code>, <code>onmouseover</code>, or <code>onmouseleave</code>)</li>
+	<li><strong>element</strong> - The type of element hovered (<code>marker</code>, <code>bar</code>, <code>column</code>, <code>circle</code>, <code>slice</code>)</li>
+	<li><strong>x</strong> - The <code>x</code> value of the point</li>
+	<li><strong>y</strong> - The <code>y</code> value of the point</li>
+	<li><strong>shape</strong> - The gfx shape object that represents a data point</li>
+</ul>
+
+<p class="proTip">A full listing of event properties can be found at the <a href="/reference-guide/1.8/dojox/charting.html#chart-events">dojox/charting reference guide</a>.</p>
+
+<p>The plugins covered within the <a href="../charting/">basic charting tutorial</a> use charting event solutions to trigger movement in shapes.</p>
+
+<h4>Example: Using Chart Events</h4>
+<p>This example illustrates using charting events to change the color pie piece when hovered over, and rotate the piece 360 degrees when clicked:</p>
+<pre class="brush:js;">
+// Require the basic 2d chart resource: Chart
+// Retrieve the Tooltip class
+// Require the theme of our choosing
+require(["dojox/charting/Chart", "dojox/charting/action2d/Tooltip", "dojox/charting/themes/Claro", "dojox/charting/plot2d/Pie", "dojox/charting/axis2d/Default", "dojo/domReady!"], function(Chart, Tooltip, Claro) {
+
+	// Define the data
+	var chartData = [10000,9200,11811,12000,7662,13887,14200,12222,12000,10009,11288,12099];
+
+	// Create the chart within it's "holding" node
+	var chart = new Chart("chartNode");
+
+	// Set the theme
+	chart.setTheme(Claro);
+
+	// Add the only/default plot
+	chart.addPlot("default", {
+		type: "Pie",
+		markers: true
+	});
+
+	// Add axes
+	chart.addAxis("x");
+	chart.addAxis("y", { min: 5000, max: 30000, vertical: true, fixLower: "major", fixUpper: "major" });
+
+	// Add the series of data
+	chart.addSeries("Monthly Sales - 2010", chartData);
+
+	// Create the tooltip
+	var tip = new Tooltip(chart, "default");
+
+	// Render the chart!
+	chart.render();
+
+	// Add a mouseover event to the plot
+	chart.connectToPlot("default",function(evt) {
+		// Output some debug information to the console
+		console.warn(evt.type," on element ",evt.element," with shape ",evt.shape);
+		// Get access to the shape and type
+		var shape = evt.shape, type = evt.type;
+		// React to click event
+		if(type == "onclick") {
+			// Update its fill
+			var rotateFx = new gfxFx.animateTransform({
+				duration: 1200,
+				shape: shape,
+				transform: [
+					{ name: "rotategAt", start: [0,240,240], end: [360,240,240] }
+				]
+			}).play();
+		}
+		// If it's a mouseover event
+		else if(type == "onmouseover") {
+			// Store the original color
+			if(!shape.originalFill) {
+				shape.originalFill = shape.fillStyle;
+			}
+			// Set the fill color to pink
+			shape.setFill("pink");
+		}
+		// If it's a mouseout event
+		else if(type == "onmouseout") {
+			// Set the fill the original fill
+			shape.setFill(shape.originalFill);
+		}
+
+	});
+
+});
+</pre>
+<a href="demo/chart-events.php" class="demoBtn demo">View Demo</a>
+
+<p>It's important to realize that every element within a chart is just a GFX graphic, so elements of the chart may be treated and animated as such, allowing for us to create some unique effects.</p>
+
+<h3>Conclusion</h3>
+<p>Creating basic Dojo charts isn't always enough.  Dynamic data calls for dynamic charts, and the Dojo Toolkit's <code>dojox/charting</code> library provides all the tools to make your charts as flexible as your data.  </p>
+
+<h3>dojox/charting Resources</h3>
+<p>Looking for more detail about Dojo's charting library?  Check out these great resources:</p>
+<ul>
+	<li><a href="/reference-guide/1.8/dojox/charting.html">dojox/charting Reference Guide</a></li>
+	<li><a href="http://download.dojotoolkit.org/release-1.8.9/dojo-release-1.8.9/dojox/charting/tests/theme_preview.html">Theme Preview</a></li>
+	<li><a href="http://www.sitepen.com/labs/code/london-ajax/london-ajax.html">GFX Animation Examples</a></li>
+</ul>

@@ -1,0 +1,229 @@
+
+
+<h3>Getting Started</h3>
+<p>
+The foundation of Dijit, and the ability to create your own widgets, relies on two base class definitions: <code>dijit._WidgetBase</code> and <code>dijit._Widget</code>.
+While there are a few other key pieces that most rely on for developing web applications with the Dojo Toolkit (such as the Dojo parser and the Dijit Template system,
+detailed in different tutorials), these two class declarations are the key to creating any kind of custom widget using the Dojo Toolkit.  In this tutorial,
+you'll learn how Dijit's widget infrastructure works.
+</p>
+<p class="proTip">
+<code>dijit._Widget</code> inherits from <code>dijit._WidgetBase</code>; when defining your own custom widgets, you should <em>always</em>
+inherit from <code>dijit._Widget</code> (or one of the widgets available in Dijit), and not from <code>dijit._WidgetBase</code>.
+</p>
+<p>
+The most important thing to understand about Dijit's system is the lifecycle of a widget.  This lifecycle is primarily concerned with the inception of a widget&mdash;in other
+words, from when a widget is conceived to when it is fully useable by your application&mdash;through the destruction of a widget, and the widget's associated DOM elements.
+</p>
+<p class="proTip">
+If you are wondering why there is an "_" in front of both "Widget" and "WidgetBase", it is because neither definition is intended to be used directly; instead, they are intended
+to be built upon using the Dojo Toolkit's "declare" mechanisms.
+</p>
+<p>
+To do this, <code>dijit._WidgetBase</code> defines two concept lines: a set of methods that are called in succession during the process of creation, and a way of getting/setting fields
+with minimal data binding while the widget lives in the application.  Let us take a look at the first mechanism: Dijit's widget lifecycle.
+</p>
+<h3 id="lifecycle">The Dijit Lifecycle</h3>
+<p>
+Each widget declared with _Widget as its base will run through several methods during instantiation:
+</p>
+<pre class="brush: js;">
+([widget].constructor());
+[widget].postscript();
+[widget].create();
+[widget].postMixInProperties();
+[widget].buildRendering();
+[widget].postCreate();  // this is the most important one!
+[widget].startup();
+</pre>
+<a class="demoBtn demo" href="demo/lifecycle.html">View Demo</a>
+<p>
+These methods are there to handle a number of things: when initial values are defined, how the visual representation of those values are created, where
+those visualizations are placed, and how to deal with things (such as DOM node measurements) that are dependant on the browser itself.
+</p>
+<h4 id="postCreate">[widget].postCreate()</h4>
+<p>
+By far, the most important method to keep in mind when creating your own widgets is the .postCreate method.  This is fired after all properties of a widget are
+defined, <strong>and</strong> the document fragment representing the widget is created&mdash;but before the fragment itself is added to the main document.
+The reason why we consider this the most important method is because it is the main place where you, the developer, get a chance to do any last minute
+modifications before the widget is presented to the user, including setting any kind of custom attributes, etc.  Think of it like the place just before you draw
+a curtain on a play; it is where you can make last minute adjustments to costumes and sets before they are actually seen by your users.  When developing a custom
+widget, most (if not all) of your customization will go here.
+</p>
+<h4 id="startup">[widget].startup()</h4>
+<p>
+Probably the second-most important method in the Dijit lifecycle is the startup method.  This method is designed to handle processing <em>after</em> any DOM fragments
+have been actually added to the document; it is not fired until after any potential children widgets have been created and started as well.  This is useful for
+composite widgets as well as layout widgets.
+</p>
+<p class="proTip">
+When instantiating a widget programmatically, <strong>always</strong> call the widget's <code>startup()</code> method. It's a common error to create widgets programmatically and then forget to call <code>startup</code>, leaving you scratching your head as to why your widget isn't showing up properly.
+</p>
+<h4 id="destroy">Tear-down methods</h4>
+<p>
+In addition to the instantiation methods, <code>dijit._WidgetBase</code> also defines a number of destruction methods:
+</p>
+<pre class="brush: js;">
+[widget].destroy();
+[widget].destroyDescendants();
+[widget].destroyRecursive();
+[widget].destroyRendering();
+[widget].uninitialize();
+</pre>
+<p>
+When writing your own widget, any kind of custom tear-down behavior you need to do should be defined using <strong>[widget].uninitialize</strong>.  Dijit itself
+takes care of node and most object management for you already (using the destroy methods mentioned), so you don't have to worry about writing custom versions
+of these methods.
+</p>
+<h3 id="nodeReferences">Node references</h3>
+<p>
+A widget is generally some sort of user interface, and it would not be complete without some sort of DOM representation.  <code>_WidgetBase</code> defines
+a standard property called <code>domNode</code>, which will be a reference to the overall parent node of the widget itself.  You can always get a reference
+to this node programmatically if you need to do something (like move the entire widget around in a document), and it is available by the time the <code>postCreate</code>
+method is called.
+</p>
+<p>
+In addition to the <code>domNode</code> property, some widgets will also define a <code>containerNode</code> property.  This is a reference
+to a child node in a widget that will contain any other widgets that are defined <em>outside</em> of your widget definition.
+</p>
+<p class="proTip">
+We'll discuss the importance of the <code>containerNode</code> property in another tutorial; for now, be aware that the property exists on all widgets, regardless
+of whether it is actually used.
+</p>
+<h3 id="stateful">Getters and Setters</h3>
+<p>
+In addition to the startup and tear-down infrastructure, <code>_WidgetBase</code> also provides not only a number of pre-defined properties that all widgets need,
+but also a way of letting you define custom getters and setters that will work with the standard <code>get</code> and <code>set</code> methods, pre-defined on all
+widgets.  It does this by asking you to define custom "private" methods in your code using the following standard:
+</p>
+<pre class="brush: js;">
+// for the field "foo" in your widget:
+
+//	custom getter
+_getFooAttr: function(){ /* do something */ },
+
+// 	custom setter
+_setFooAttr: function(value){ /* do something */ }
+</pre>
+<p>
+If you define custom method pairs using that standard, <code>_WidgetBase</code>'s infrastructure will then allow you, when using an instance of a widget, to
+just use the standard <code>get()</code> and <code>set()</code>, already pre-defined.  For instance, given the above example, you could do this:
+</p>
+<pre class="brush: js;">
+//	assume that the widget instance is "myWidget":
+
+//	get the value of "foo":
+var value = myWidget.get("foo");
+
+//	set the value of "foo":
+myWidget.set("foo", someValue);
+</pre>
+<p>
+This standard allows other widgets and controlling code to interact with a widget in a consistent way, while giving you the ability to do custom things
+when a field is accessed (such as modifications to a DOM fragment, etc.), as well as allowing you to fire off any other methods (such as an event handler or
+a notification).  For example, say your widget has a custom <code>value</code>, and you want to be able to notify anyone that that value has changed (possibly
+via an <code>onChange</code> method you've defined):
+</p>
+<pre class="brush: js;">
+//	assume our field is called "value":
+
+_setValueAttr: function(value){
+	this.onChange(this.value, value);
+	this._set("value", value);
+},
+
+//	a function designed to work with dojo.connect
+onChange: function(oldValue, newValue){ }
+</pre>
+<p>
+As you can see, this gives us a convenient way to be able to customize getter and setter behavior within our own widgets.
+</p>
+<p class="proTip">
+When defining your own widgets, you should <strong>always</strong> create custom getter and setter methods; when using your own
+widgets, you should <strong>always</strong> use the <code>get()</code> and <code>set()</code> methods for field access. In addition,
+when defining your custom setter methods, you should always use the internal <code>_set</code> method, as this mechanism allows
+for the new <code>watch</code> functionality from <code>dojo.Stateful</code>, which all widgets now inherit from.
+</p>
+<h3 id="connect">Connections and Subscriptions</h3>
+<p>
+The <code>_WidgetBase</code> infrastructure provides custom implementations/wrappings for two of Dojo's most important event mechanisms:
+<code>connect()</code> and <code>subscribe()</code>.  These methods are defined partially for convenience sake, and partially to faciliate
+accurate setup and tear-down of widgets.  You don't have to define these yourself&mdash;it comes magically with your widget.
+</p>
+<p>
+Using both <code>.connect()</code> and <code>.subscribe()</code> is simple:
+</p>
+<pre class="brush: js;">
+// 	assume we have a button widget called "btn",
+// 	and we want the button to listen to foo.bar():
+
+btn.connect(foo, "bar", function(){
+	//	note that "bar" is executed in the scope of btn!
+	this.set("something", somethingFromFoo);
+});
+</pre>
+<p>
+Topic subscriptions (i.e. Dojo's pub/sub system) are done in a similar fashion.
+</p>
+<p>
+The advantage of defining versions of <code>connect</code> and <code>subscribe</code> in the widget infrastructure is that internally, the widget
+can keep track of all the connections and subscriptions it has, and make sure everything is disconnected and/or unsubscribed when the widget
+is destroyed&mdash;preventing any kind of memory leaks.
+</p>
+<h3 id="preDefined">Pre-defined Properties and Events</h3>
+<p>
+Finally, the <code>_Widget</code> infrastructure provides a set of pre-defined properties:
+</p>
+<pre class="brush: js;">
+id,			//	a unique string
+lang,		//	a rarely used string that can override the default Dojo locale
+dir,		//	bi-directional support
+class,		//	HTML class attribute for the widget's domNode
+style,		//	HTML style attribute for the widget's domNode
+title,		//	HTML title attribute for native tooltips
+tooltip,	//	optional dijit.Tooltip reference
+baseClass,	//	root CSS class of the widget
+srcNodeRef	//	the original DOM node that existed before it was "widgetfied"
+</pre>
+<p>
+...as well as a set of pre-defined events that you can connect to or override for custom functionality:
+</p>
+<pre class="brush: js;">
+//	mouse-based events
+onClick,
+onDblClick,
+onMouseMove,
+onMouseDown,
+onMouseOut,
+onMouseOver,
+onMouseLeave,
+onMouseEnter,
+onMouseUp,
+
+//	key-based events
+onKeyDown,
+onKeyPress,
+onKeyUp,
+
+//	additional events
+onFocus,
+onBlur,
+onShow,
+onHide,
+onClose
+</pre>
+<h3>Conclusion</h3>
+<p>
+As you can see, Dijit's <code>_Widget</code> infrastructure provides a solid foundation on which to create and use
+widgets; all aspects of a widget (lifecycle, DOM node references, getters and setters, pre-defined properties and
+events) are covered out of the box.  We've seen how a widget's <code>.postCreate()</code> method is the most important
+lifecycle method when developing custom widgets, and how vital calling <code>.startup()</code> is when instantiating
+widgets programmatically.  We've also covered Dijit's getter/setter infrastructure, as well as the importance of a
+widget's <code>domNode</code> property.
+</p>
+
+<h3>Colophon</h3>
+<ul>
+	<li><a href="../recipes/custom_widget/">Creating a custom widget</a></li>
+	<li><a href="/reference-guide/1.6/dijit/_Widget.html">dijit._Widget on the Dojo Reference Guide</a></li>
+</ul><br>

@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: dojo.connect</title>
+
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<style>
+			#myButton {
+				margin-bottom:1em;
+			}
+			#myDiv {
+				border: 1px solid black;
+				background-color: white;
+				width: 100px;
+				height: 100px;
+			}
+		</style>
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js">
+		</script>
+		<script>
+			dojo.ready(function(){
+				var myButton = dojo.byId("myButton"),
+					myDiv = dojo.byId("myDiv"),
+					myScopedButton1 = dojo.byId("myScopedButton1"),
+					myScopedButton2 = dojo.byId("myScopedButton2"),
+					myObject = {
+						id: "myObject",
+						onClick: function(evt){
+							alert("The scope of this handler is " + this.id);
+						}
+					};
+
+				dojo.connect(myButton, "onclick", function(evt){
+					dojo.style(myDiv, "backgroundColor", "blue");
+				});
+				dojo.connect(myDiv, "onmouseenter", function(evt){
+					dojo.style(myDiv, "backgroundColor", "red");
+				});
+				dojo.connect(myDiv, "onmouseleave", function(evt){
+					dojo.style(myDiv, "backgroundColor", "");
+				});
+
+				var handle = dojo.connect(myButton, "onclick", function(evt){
+					// Disconnect this event using the handle
+					dojo.disconnect(handle);
+
+					// Do other stuff here that you only want to happen one time
+					alert("This alert will only happen one time.");
+				});
+
+				// This will alert "myScopedButton1"
+				dojo.connect(myScopedButton1, "onclick", myObject.onClick);
+				// This will alert "myObject" rather than "myScopedButton2"
+				dojo.connect(myScopedButton2, "onclick", myObject, "onClick");
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: dojo.connect</h1>
+		<button id="myButton">Click me!</button>
+		<div id="myDiv">Hover over me!</div>
+		<br /><br />
+		<button id="myScopedButton1">Click me to see the scope of my handler ("myScopedButton1")</button>
+		<br/>
+		<button id="myScopedButton2">Click me to see the scope of my handler ("myObject")</button>
+	</body>
+</html>

@@ -1,0 +1,237 @@
+
+
+<h3>Getting Started</h3>
+<p>
+A recurring problem for any form-based application is an easy way of managing all of the elements in a form, including
+collecting values, validating values, and handling form resetting and submission.  More often than not, this is done
+manually&mdash;which can often be time consuming and brittle.  The Dojo Toolkit offers a comprehensive solution that works
+with both HTML-based forms and Dijit-based forms: <code><a href="/reference-guide/1.7/dojox/form/manager/">dojox/form/Manager</a></code>.
+</p>
+
+<h4>The Problem</h4>
+
+<p>
+Traditionally, form management has always been cumbersome.  Two approaches are generally taken: either know all of the form
+elements (including identifiers) beforehand and write any handling code based on this knowledge, or write a system that will
+try to automatically detect all of the elements in a form and create a generic handling system for it.  The first approach,
+while generally the most accurate, can become a maintenance nightmare (particularly in applications with a large number of
+forms); the second approach tends to be very brittle, and ends up becoming bloated (usually due to the slow but steady addition
+of business rules as time goes on).
+</p>
+<p>
+<code>dojox/form/Manager</code> combines the best of both worlds&mdash;it allows you to simply wrap your form so that you don't
+have to know each individual element (if you don't want to), but gives you the flexibility to create custom methods to handle
+specific business rules.
+</p>
+
+<div class="proTip">
+	<p>
+	The <a href="/reference-guide/1.7/dijit/form/Form.html">dijit/form/Form</a> module is easy to use and provides basic functionality:
+	<ul>
+		<li><code>get/set</code>: methods to retrieve or set field values</li>
+		<li><code>isValid/validate</code>: methods to validate the field values</li>
+		<li><code>submit</code>: method and event for submitting the form</li>
+		<li><code>reset</code>: method and event for resetting field values</li>
+	</ul>
+	<code>dijit/form/Form</code> only has full support for Dijit form widgets (HTML form elements will still be submitted with the
+	form, but <code>dijit/form/Form</code> will not manage or interact with them). If you are working with a form that only contains
+	Dijit form widgets you may find that <code>dijit/form/Form</code> meets your needs and is easier to work with.
+	</p>
+	<p>
+	It can take more work to set up <code>dojox/form/Manager</code>, but it has full support for both native HTML form elements as
+	well as Dijit form widgets, and adds observer methods for responding to field changes, enable/disable functionality for the whole
+	form, and show/hide methods to set the form's visibility.
+	</p>
+</div>
+
+<h3>Setting up the Manager</h3>
+
+<p>
+Setting up your form(s) to use the manager is easy: simply require the manager itself, and then set your form element
+to be of type <code>dojox/form/Manager</code>, like so:
+</p>
+<pre class="brush: js; html-script: true;">
+&lt;form data-dojo-type="dojox.form.Manager" id="myForm">
+	...your form elements here...
+&lt;/form>
+
+<!-- later on in your HTML document -->
+&lt;script type="text/javascript">
+require(["dojo/parser", "dojox/form/Manager","dojo/domReady!"],function(parser) {
+	parser.parse();
+});
+&lt;/script>
+</pre>
+<p>
+That's all for the basic setup; now you're ready to start managing your form elements.
+</p>
+<p class="proTip">
+Unlike most Dijit-based widgets, <code>dojox/form/Manager</code> is <strong>not</strong> intended to be used/created
+programmatically; it's possible to do, but the design intention was to be able to apply the Manager to existing HTML
+forms.  When using <code>dojox/form/Manager</code>, you should always use it <em>declaratively</em>, and make sure
+you call <code>parser.parse()</code>.
+</p>
+
+<h4>Adding in observer hooks to your form elements</h4>
+
+<p>
+The next step in setting up your form to be managed by <code>dojox/form/Manager</code> is to add a custom attribute to
+the form elements to be managed (both HTML-based and Dijit-based ones) called <strong>observer</strong>.  This custom attribute
+tells the Manager what to execute, in the Manager itself, when a change is made in your form element.
+</p>
+<p>
+The value in each <em>observer</em> attribute is a comma-delimited list of methods to execute when something changes on
+the form element.  For example, if we have an HTML checkbox input and we wanted to run the methods <em>showValues</em> and
+<em>logRadio</em> when someone clicks on it, we'd set it up like so:
+</p>
+<pre class="brush: js; html-script: true">
+&lt;input type="checkbox" name="foo" observer="showValues, logRadio" />
+&lt;input type="text" name="txt" observer="showValues" dojoType="dijit.form.TextBox" intermediateChanges="true">
+</pre>
+<p>
+This setup tells the Manager to execute both methods each time the state of the checkbox changes, and to call <em>showValues</em> when the
+value of the <code>dijit.form.TextBox</code> widget changes.  If you only have one method observing changes, then just list the
+single method (no comma).  The <code>intermediateChanges</code> property can be used to fire the change event on every change
+made to an input or delay the <em>observer</em> event until after the widget has lost focus.
+</p>
+<p class="proTip">
+Note that <code>dojox/form/Manager</code> is <strong>not</strong> set up to be completely HTML 5 data-attribute compliant; you'll
+be adding non-standard attributes to your form elements as we go.  This means that if HTML validation is extremely important
+to you, using <code>dojox/form/Manager</code> will cause your document to fail validation.
+</p>
+
+<h4>Setting up your observer methods</h4>
+
+<p>
+Finally, you'll need to actually implement your observer methods.  <code>dojox/form/Manager</code> handles this using the special
+<em>declarative script technique</em> available with the <code>dojo/parser</code>; inside of your main declarative object, you'll
+use script blocks to make your definitions.  The net effect of adding these script blocks is to <em>extend</em> the instance of
+the Manager with functionality specific to your form's needs.  Here's an example:
+</p>
+<pre class="brush: js; html-script: true">
+&lt;input type="checkbox" name="foo" observer="showValues, logRadio" />
+&lt;script type="dojo/method" event="showValues" args="value,name">
+	if(name){
+		console.log("name = ", name, " value = ", value);
+	}
+&lt;/script>
+</pre>
+<p>
+Let's break this down.
+</p>
+<div><strong>The MIME type of the script block</strong></div>
+<p>
+This is a way of telling the Dojo parser that the content that is contained within the block has special meaning.  The Dojo parser
+recognizes two "special" types: <em>dojo/method</em> and <em>dojo/connect</em>.  The first tells the Dojo parser that we are extending
+the underlying object with a new method definition; the second tells the Dojo parser to make a connection (via <code>dojo/on</code>,
+the main event mechanism in the Dojo Toolkit) to an existing method.
+</p>
+<p class="proTip">
+Keep in mind that when you create a script block using <em>type="dojo/method"</em>, you may be overriding any methods that already exist
+on the underlying object.  Using the <em>dojo/connect</em> type ensures that you are not clobbering anything that already exists&mdash;but
+at the same time, you are not preventing the original method from executing when called.
+</p>
+<div><strong>The "event" attribute</strong></div>
+<p>
+This is the name of the method either being defined (in the case of <em>dojo/method</em>) or being connected to (in the case of
+<em>dojo/connect</em>).
+</p>
+<p class="proTip">
+When defining methods using the declarative technique, don't forget that the <em>this</em> keyword can be used, and will be
+a reference to the object you are defining the methods against.
+</p>
+<div><strong>The "args" attribute</strong></div>
+<p>
+This is an optional attribute; but if it exists, it is the list of the parameters that will be passed to the function, in order.
+</p>
+<p class="proTip">
+When using Dojo's declarative script techniques, the script is applied to the parent object&mdash;so make sure your script blocks
+are nested in the right place.
+</p>
+<p>
+Our example from above, <em>showValues</em>, is a pretty typical observer with <code>dojox/form/Manager</code>.  Notice the signature
+of the observer: <em>value</em> and <em>name</em>.  The observer&mdash;when executed&mdash;will either be passed no arguments, a single value
+argument, or both.  Because of this, you must account for all of these possibilities when implementing your observer methods.
+</p>
+
+<h3>Helper methods of the Form Manager</h3>
+
+<p>
+Now that we have the basics of setting up your form management, we can tap into some of the helper methods of the Manager itself
+to aid you.  There are a few basic methods to be used:
+</p>
+<ul>
+<li><strong>gatherFormValues</strong>: can take an array of names, a dictionary of names, or nothing.  If an array or dictionary
+is passed only those elements that match in the form will be returned, otherwise all of the values in the form are collected and
+returned.</li>
+<li><strong>setFormValues</strong>: takes a dictionary of name/value pairs, and will match the keys in the dictionary to the
+corresponding form elements in your form, and set the value.</li>
+<li><strong>isValid</strong>: validates the form and returns true if all elements pass validation.</li>
+<li><strong>validate</strong>: like isValid, but also triggers display in the UI of validation messages.</li>
+</ul>
+<p class="proTip">
+There are quite a few other useful methods in the Manager, such as enable/disable and addClass/removeClass, that can be used
+as well.  Take a look at <a href="/api/1.7/dojox/form/Manager">the API documentation</a> for more details.
+</p>
+<h4>Inspecting the form</h4>
+<p>
+The Manager also has a set of inspection methods you can use on your form when you wish.  The main one is <em>inspect</em>; this
+takes an <em>inspector</em> function, and optional <em>state</em> and <em>defaultState</em> objects.  The optional <em>state</em>
+object can be a name/value dictionary or an array of names to inspect.  The idea is that you create the inspector function (for
+example, if you need certain elements in your form to match certain business rules) and the Manager will take care of finding
+all elements in the form for you&mdash;including any Dijit-based form elements.  Your inspector function should take three
+arguments:
+</p>
+<ol>
+<li><strong>name</strong>: the name of the element being inspected;</li>
+<li><strong>node</strong>: either a single node (or a widget's domNode), or an array of such nodes;</li>
+<li><strong>value</strong>: a supplied value.</li>
+</ol>
+<p>
+In addition, your <em>inspector</em> function should return a <strong>state</strong>; this state can be whatever you'd like it
+to be, but something should be returned regardless.
+</p>
+<p class="proTip">
+<code>dojox/form/Manager</code> can also deal with groupings of elements through special use of a <em>dojoAttachPoint</em>
+attribute.  However, functionality based on attach points are somewhat limited.  Take a look at the source of our demonstration to see
+how to define attach points in your form.
+</p>
+
+<h4>Events on your form</h4>
+
+<p>
+The Manager pre-defines two events for you to override: <em>onReset</em> and <em>onSubmit</em>.  These are self-explanatory,
+but they will allow you to do any kind of special handling when either event occurs.  For example, if you wish to prevent any form
+submission, you would add a <code>submit</code> handler to the form, like so:
+</p>
+<pre class="brush: js; html-script: false">
+form.on("submit", function(event){
+	// prevent form submission
+	event.preventDefault();
+	event.stopPropagation();
+});
+</pre>
+<p class="proTip">
+If you want your form to be "ajaxy", you can use any of Dojo's <em>xhr</em> methods in your <code>onSubmit</code> handler; just
+remember to return <code>false</code> in it to prevent the browser's normal actions.
+</p>
+
+<h3>Let's put it all together</h3>
+
+<p>
+Now that we have a good overview of <code>dojox/form/Manager</code>, let's put it all together!
+</p>
+<a class="demoBtn demo" href="demo/manager.php">View Demo</a>
+
+<h3>Conclusion</h3>
+
+<p>
+The <code>dojox/form/Manager</code> is a powerful tool for form management; it allows you to inspect your form
+easily (including validation), get and set values in your form quickly, deal with standard form events, and a lot
+more.  It allows you to mix-and-match standard HTML form elements and Dijit-based form elements quickly and easily;
+in addition, it allows you to easily implement custom methods so that you can work with your standard business
+rules in a clean, modular fashion.
+</p>
+<p>
+Happy form management!
+</p>

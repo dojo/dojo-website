@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Localized Date Parsing</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script>
+			dojoConfig = {
+				isDebug: true,
+				extraLocale: ['en-us', 'en-gb', 'fr', 'es']
+			}
+		</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js">
+		</script>
+		<script>
+			dojo.require("dojo.date");
+			dojo.require("dojo.date.locale");
+			
+			demo = {
+				parseL10NDates: function() {
+					var gbDateStr = "1/5/2011", 
+						usDateStr = "1/5/2011", 
+						gbDate = dojo.date.locale.parse(gbDateStr, {
+							formatLength:'short', selector:'date', locale:'en-gb'
+						}), 
+						usDate = dojo.date.locale.parse(usDateStr, {
+							formatLength:'short', selector:'date', locale:'en-us'
+						});
+						
+					this.showResult("UK and US parsing of 1/5/2011", 
+					[
+						"en-gb: " + gbDateStr  + ": " + gbDate,
+						"en-us: " + usDateStr + ": " + usDate,
+					].join("\n<br>"))
+				},
+				showResult: function(heading, content){
+					dojo.byId("outbox").innerHTML = content;
+				}
+			}
+
+			dojo.ready(function(){
+				demo.parseL10NDates();
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Localized Date Parsing</h1>
+		<p>Using dojo.date.locale.parse to parse locale-sensitive date strings</p>
+
+		<div class="resultPanel">
+			<pre id="outbox"></pre>
+		</div>
+	</body>
+</html>

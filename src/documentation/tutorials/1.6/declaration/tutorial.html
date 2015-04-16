@@ -1,0 +1,351 @@
+
+<style>
+h5	{ color:#900; font-size:15px; margin-bottom:0; padding-bottom:0px; font-weight:bold; }
+</style>
+
+<!-- tutorials start with a "Getting Started" block -->
+<h3>Getting Started</h3>
+<p>
+Have you ever had a need to develop a custom widget using Dijit's infrastructure?  What if you wanted to
+quickly prototype something without having to go through infrastructure setup&mdash;such as creating your own
+namespace to develop in, setting up the correct directory structure, making sure the module paths are
+all correct, etc.?
+</p>
+<p>
+What if you wanted to do all of it in a single HTML file, using declarative syntax?
+</p>
+<p>
+Dijit has a solution for you, in the form of <strong>dijit.Declaration</strong>.  This is kind of a
+<em>meta</em> widget; the sole purpose of it is to let you define <em>new</em> widgets quickly, using
+the same kind of declarative syntax you would use to put widget instances on an HTML page.
+</p>
+<h3>The Basic Concept</h3>
+<p>
+The concept behind <code>dijit.Declaration</code> is simple: in your markup, you define a widget,
+and then you can immediately create instances of that widget.  Here's a simple example:
+</p>
+<pre class="brush: js; html-script: true;">
+&lt;script type="text/javascript">
+	dojo.require("dijit.Declaration");
+&lt;/script>
+
+&lt;div data-dojo-type="dijit.Declaration"
+		data-dojo-props="widgetClass:'Employee', defaults:{ empid:0, name:'' }">
+	&lt;span>${name}&lt;/span>
+	&lt;a href="update.php?id=${empid}">update&lt;/a>
+	&lt;a href="delete.php?id=${empid}">delete&lt;/a>
+&lt;/div>
+
+&lt;div data-dojo-type="Employee"
+		data-dojo-props="empid: 100, name:'John Doe'">
+&lt;/div>
+</pre>
+
+<p class="proTip">
+We'd like to take the time here (and we'll continue to reinforce this throughout this tutorial)
+to remind you that <strong>you should never deploy something defined with <code>dijit.Declaration</code>
+in a production application</strong>.  <code>dijit.Declaration</code> was intended to be used
+<strong><em>only</em></strong> to quickly prototype new widgets&mdash;when you are satisfied
+with your custom widget, you should refactor it into a traditional <code>dojo.declare</code>'d format.  The <code>dojo.declare</code> format will make the end product more portable and will allow you to create builds that include the new widget.
+</p>
+<p>
+Let's break down the code above.
+</p>
+<h4>Defining Your Widget</h4>
+<p>
+The first HTML block in the example above is our widget definition (using <code>dijit.Declaration</code>).
+It defines at least one required property (<code>widgetClass</code>), sets up a few default properties
+with values, and contains an embedded template.  Anything defined using <code>dijit.Declaration</code>
+automatically assumes that you are inheriting from <code>dijit._Widget</code>, and mixing in
+<code>dijit._Templated</code>.
+</p>
+<h5>The <code>widgetClass</code> property</h5>
+<p>
+Every declaration must have a <code>widgetClass</code> property defined.  This is the resulting name
+of your widget class, and what you'll use when instantiating widgets based on your code.  This name
+can be anything&mdash;including namespaced definitions (just make sure your namespace has been defined
+already).
+</p>
+<h5>The <code>defaults</code> object</h5>
+<p>
+Optionally, you can pass the declaration an object of default properties, called <code>defaults</code>.
+Not only will the declaration create those properties in your new class, but will set the default
+values of those properties when creating the initial definition of your widget.
+</p>
+<h5>The template</h5>
+<p>
+Finally, inside the declaration is your HTML template that will be used whenever a new instance
+of your custom widget is instantiated.  This template follows the same rules as any widget
+created using the <a href="../templated/">dijit._Templated</a> mixin (see the Writing Templates section),
+including variable substitution, embedded widgets, attach points and events, and more.
+</p>
+<p class="proTip">
+<code>dijit.Declaration</code> assumes (unlike most widgets built on <code>dijit._Templated</code>)
+that you <em>will</em> be including widgets within your template (i.e. <code>widgetsInTemplate: true</code>).
+</p>
+<h4>Instantiating your custom widget</h4>
+<p>
+Once your custom widget is defined, you can create instances of it using the standard Dijit way&mdash;by
+using <code>data-dojo-type</code> and <code>data-dojo-props</code> attributes in your markup.  The Dojo parser
+will instantiate your custom widget and use the included/embedded template to render your code, and
+the custom widget is <em>immediately</em> available after the declaration of that widget.
+</p>
+<h3>Using Attach Points and Event Attachments</h3>
+<p>
+Just like with any other <code>_Templated</code>-based widget, both <em>attach points</em> and
+<em>event attachments</em> can be defined in your inline template.  However, since you are defining
+your widget using declarative syntax you'll need some way to define methods inline as well.  To
+handle this, the Dojo parser allows you to inline any script blocks in your code using a special
+syntax, like so:
+</p>
+<pre class="brush: js; html-script: true;">
+&lt;div data-dojo-type="dijit.Declaration"
+		data-dojo-props="widgetClass:'CustomButton'">
+	&lt;button data-dojo-attach-event="onclick: myHandler"
+			data-dojo-attach-point="containerNode">&lt;/button>
+	&lt;span data-dojo-attach-point="messageNode">&lt;/span>
+	&lt;script type="dojo/method" data-dojo-event="myHandler">
+		this.messageNode.innerHTML = "You clicked on the button!";
+	&lt;/script>
+&lt;/div>
+
+&lt;button data-dojo-type="CustomButton">Click for a message&lt;/button>
+</pre>
+<a class="demoBtn demo" href="demo/attachEvent.html">View Demo</a>
+<p>
+In our example, you'll notice the use of a script block with a special MIME type, called
+<strong>dojo/method</strong>.  This is one of two ways of declaratively attaching code in your custom
+widget; using the corresponding <code>data-dojo-event</code> attribute (and an optional
+<code>data-dojo-args</code> attribute that defines the arguments to be passed to your method
+definition), you can create method definitions right in your template.  The <code>data-dojo-event</code>
+attribute should be the name of the method you are writing.
+</p>
+<p class="proTip">
+At this point, we'd like to give you a friendly reminder that <strong>you should never deploy
+something defined with <code>dijit.Declaration</code> in a production application</strong>.
+</p>
+<h3>Building on Existing Widgets</h3>
+<p>
+One of the things you can also do is extend an existing widget using <code>dijit.Declaration</code>.  You
+do this through the optional argument in your declaration called <em>mixins</em>, like so:
+</p>
+<pre class="brush: js; html-script: true;">
+&lt;div data-dojo-type="dijit.Declaration"
+		data-dojo-props="widgetClass:'CustomButton'">
+	&lt;button data-dojo-attach-event="onclick: myHandler"
+			data-dojo-attach-point="containerNode">&lt;/button>
+	&lt;span data-dojo-attach-point="messageNode">&lt;/span>
+	&lt;script type="dojo/method" data-dojo-event="myHandler">
+		this.messageNode.innerHTML = "You clicked on the button!";
+	&lt;/script>
+&lt;/div>
+
+&lt;div data-dojo-type="dijit.Declaration"
+		data-dojo-props="widgetClass: CustomButton2, mixins: ['CustomButton']">
+	&lt;button data-dojo-attach-event="onclick: myHandler"
+			data-dojo-attach-point="containerNode">&lt;/button>
+	&lt;div data-dojo-attach-point="messageNode" style="font-weight:bold;">&lt;/div>
+&lt;/div>
+
+&lt;button data-dojo-type="CustomButton2">Click me!&lt;/button>
+</pre>
+<a class="demoBtn demo" href="demo/extending.html">View Demo</a>
+<p>
+Here you'll note that all we wanted to do was change the template between our original <em>CustomButton</em> and
+our new <em>CustomButton2</em>, so that the message node is now a block element with a bold font.  You'll
+also notice that we did <strong>not</strong> have to redefine our <code>myHandler</code> method; since
+<em>CustomButton2</em> extends <em>CustomButton</em>, the <em>CustomButton</em>'s version of
+<code>myHandler</code> is automatically picked up and used.
+</p>
+<h3>Connecting to Existing Methods</h3>
+<p>
+We mentioned before about the ability to include script blocks right within your template for your
+custom widgets, using the special <code>dojo/method</code> MIME type.  But if you want to simply attach
+something for execution&mdash;say, against an existing method&mdash;you can use the other special
+MIME type the Dojo parser provides: <strong>dojo/connect</strong>.  Any script block using this as
+the MIME type will have the corresponding code <em>connected</em> (via <code>dojo.connect</code>) to
+the given method, as opposed to overwriting it.  This is particularly useful when you need to do
+something with one of the base methods of <code>dijit._Widget</code>, such as the <code>startup</code>
+method&mdash;where you don't want to overwrite the existing method, but simply execute something
+when that method is executed.  Here's an example:
+</p>
+<pre class="brush: js; html-script: true;">
+&lt;div data-dojo-type="dijit.Declaration" data-dojo-props="widgetClass:'foo'">
+	&lt;p data-dojo-attach-point="messageNode">&lt;/p>
+	&lt;script type="dojo/connect" data-dojo-event="startup">
+		this.messageNode.innerHTML = "Modified using our startup method.";
+	&lt;/script>
+&lt;/div>
+
+&lt;div data-dojo-type="foo">&lt;/div>
+</pre>
+<a class="demoBtn demo" href="demo/connecting.html">View Demo</a>
+<p class="proTip">
+Have we mentioned yet that <strong>you should never deploy something defined with <code>dijit.Declaration</code>
+in a production application</strong>?
+</p>
+<h3>Including Existing Widgets in Your Declaration</h3>
+<p>
+We alluded to the fact that unlike most programmatically-declared widgets, <code>dijit.Declaration</code>
+automatically assumes that you <strong>will</strong> be including other widgets in your own declarations.
+Adding in existing widgets is simple enough; simply define the widget just like you would in any other
+declarative definition, like so:
+</p>
+<pre class="brush: js; html-script: true;">
+&lt;script type="text/javascript">
+	dojo.require("dijit.Declaration");
+	dojo.require("dijit.ProgressBar");
+&lt;/script>
+
+&lt;div data-dojo-type="dijit.Declaration"
+		data-dojo-props="widgetClass:'WithWidget', defaults: { progress:100 }">
+	&lt;p data-dojo-attach-point="firstTextNode">&lt;/p>
+	&lt;div data-dojo-type="dijit.ProgressBar"
+			data-dojo-props="style:'width:400px', maximum:200, progress: ${progress}">
+	&lt;/div>
+	&lt;p data-dojo-attach-point="lastTextNode">&lt;/p>
+
+	&lt;script type="dojo/method" data-dojo-event="postCreate">
+		this.firstTextNode.innerHTML = "Text created on postCreate!";
+	&lt;/script>
+	&lt;script type="dojo/connect" data-dojo-event="startup">
+		this.lastTextNode.innerHTML = "Text created on startup!";
+	&lt;/script>
+&lt;/div>
+
+&lt;div data-dojo-type="WithWidget" data-dojo-props="progress: 150">&lt;/div>
+</pre>
+<a class="demoBtn demo" href="demo/widget.html">View Demo</a>
+<h3>Putting it All Together</h3>
+<p>
+Now that we've learned how <code>dijit.Declaration</code> works, and how to wire up custom
+code to a widget, let's put it all together.  We're going to quickly prototype a complex
+widget that should do the following:
+</p>
+<ol>
+<li>Set up a basic layout using <code>dijit.layout.BorderContainer</code></li>
+<li>Create a title for our widget</li>
+<li>Load up some data in display it in a grid</li>
+<li>Create an editor (<code>dijit.Editor</code>)</li>
+<li>When someone clicks on a row in the grid, display some data in the editor.</li>
+</ol>
+<p>
+To begin with, let's make sure all the components we need are <code>require</code>'d:
+</p>
+<pre class="brush: js;">
+dojo.require("dijit.Declaration");
+dojo.require("dojo.data.ItemFileReadStore");
+dojo.require("dijit.layout.BorderContainer");
+dojo.require("dijit.layout.ContentPane");
+dojo.require("dojox.grid.DataGrid");
+dojo.require("dijit.Editor");
+</pre>
+<p>
+Next, we'll define our custom widget, complete with template and a couple of custom methods:
+</p>
+<pre class="brush: js; html-script: true;">
+&lt;div data-dojo-type="dijit.Declaration"
+		data-dojo-props="widgetClass:'ComplexWidget', defaults:{ title:'A Complex Widget' }">
+	&lt;div data-dojo-type="dijit.layout.BorderContainer"
+				data-dojo-props="liveSplitters: false, design: 'headline'"
+				style="width:100%;height:640px;">
+		&lt;div data-dojo-attach-point="headerPane"
+					data-dojo-type="dijit.layout.ContentPane"
+					data-dojo-props="region:'top',splitter:false"
+					style="background-color:#efefef;">
+			&lt;h2 style="margin:0;">${title}&lt;/h2>
+		&lt;/div>
+		&lt;div data-dojo-attach-point="grid" data-dojo-type="dojox.grid.DataGrid"
+					data-dojo-props="region:'center'">&lt;/div>
+		&lt;div data-dojo-attach-point="editorPane"
+					data-dojo-type="dijit.layout.ContentPane"
+					data-dojo-props="region:'bottom', splitter:true">
+			&lt;div data-dojo-attach-point="editor" data-dojo-type="dijit.Editor">
+				Click on a row to edit the author's bio (does not save).
+			&lt;/div>
+		&lt;div>
+	&lt;div>
+	&lt;script type="dojo/method" data-dojo-event="postCreate">
+		//	set the structure of our grid, and set up the connection to it.
+		this.inherited(arguments);
+		this.grid.set('structure', this.layout);
+
+		//	when someone clicks on a row, set the value of the
+		//	editor to be the included bio.
+		dojo.connect(this.grid, "onRowClick", dojo.hitch(this, function(evt){
+			var idx = evt.rowIndex,
+				item = this.grid.getItem(idx),
+				value = this.store.getValue(item, "bio");
+
+			this.editor.set("value", value);
+		}));
+	&lt;/script>
+	&lt;script type="dojo/connect" data-dojo-event="startup">
+		//	we set the grid's data in our startup method, so
+		//	that it has a chance to render properly.
+		if(this.data){
+			// set up our store with the data
+			this.store = new dojo.data.ItemFileReadStore({ data: this.data });
+
+			//	feed the grid with the store
+			this.grid.setStore(this.store);
+		}
+	&lt;/script>
+&lt;/div>
+</pre>
+<p>
+Next, we'll set up a couple of variables for our widget <em>instance</em> to use (note that
+we are <strong>not</strong> hard-coding it into the widget definition):
+</p>
+<pre class="brush: js;">
+var data = {
+	identifier: "id",
+	label: "name",
+	items: [
+		//	items go here
+	]
+};
+
+var layout = {
+	defaultCell: {
+		width: 10,
+		editable: false,
+		headerStyles: 'padding: 0',
+		styles: 'text-align: center; padding: 2px;'
+	},
+	cells: [
+		{ name: "ID", field: "id" },
+		{ name: "Avatar", field: "avatar", formatter: function(value){
+			return '<img src="'+value+'" border="0" width="90" height="90" />';
+		}},
+		{ name: "Name", field: "name", styles: "text-align:left;", width: "100%"},
+		{ name: "Company", field: "company", width: 14 }
+	]
+};
+</pre>
+<p>
+Finally, let's test it by creating an instance of the widget!
+</p>
+<pre class="brush: js; html-script: true;">
+&lt;div id="test" data-dojo-type="ComplexWidget"
+	data-dojo-props="title: 'Dojo Tutorial Authors', data: data, layout: layout">
+&lt;/div>
+</pre>
+<a class="demoBtn demo" href="demo/editor.html">View Demo</a>
+<p>
+As you can see, prototyping widgets with <code>dijit.Declaration</code> can be
+quite powerful; with just a few lines of code we were able to create a pretty complex
+widget by leveraging existing widgets in the Dojo Toolkit.
+</p>
+<p class="proTip">
+A final word of warning: <strong>you should never deploy something defined with <code>dijit.Declaration</code>
+in a production application</strong>!  When you are satisfied with your custom widget, you should refactor it
+into a traditional <code>dojo.declare</code>'d format.
+</p>
+<h3>Conclusion</h3>
+<p>
+In this tutorial, we've learned how to quickly prototype custom widgets with <code>dijit.Declaration</code>,
+by leveraging existing pieces of the Dojo Toolkit&mdash;including Dijit's template system, custom blocks of
+code using Dojo's special script block approach, and including existing widgets in your definitions.  We
+hope that you can use <code>dijit.Declaration</code> to work through your own widget development needs!
+</p>

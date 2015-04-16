@@ -1,0 +1,400 @@
+<?php require("../../../resources/tutHead.inc"); ?>
+
+<!-- Standard Outline -->
+<h3>Introduction</h3>
+
+<p>As a modular toolkit, much of Dojo's documentation and demos concern those individual components in isolation.
+But when you need to assemble together components to make an application, you need some framework to hang those pieces on, and flexibility in how they are wired together.</p>
+
+<h3>The Problem</h3>
+
+<p>Best practices suggest keeping a separation of concerns, and to maintain the modularity of the pieces that comprise the application. So, how do you manage the loading and initialization of disparate components and wire them up together to get data flowing and user interactions handled in a way that is itself flexible and modular?
+</p>
+
+<h3>The Solution</h3>
+<p>A page-level controller is an object that has responsibility for the management of the page or application at a large-grain level.
+It assumes control of the lifecycle of the application and the loading of its parts. It initializes and connects together those parts in the correct sequence
+and keeps specific knowlege of this big picture out of the components themselves.</p>
+
+<p class="tutorial_image">
+	<a href="demo/demo.html"><img src="images/fruitLightbox.png" alt="Flickr Viewer with Fruit Photo"></a>
+</p>
+<a class="demoBtn demo" href="demo/demo.html">View Final Demo</a>
+
+<h3>Discussion</h3>
+<p>Dojo does not express an opinion on how you should assemble applications out of the components it provides.
+	It has all the nuts, bolts and moving parts, but no blueprints.
+As a Toolkit, this is by design. You can sprinkle a little Dojo onto an otherwise static web page, or you can build a complete GUI application framework with it, using the design patterns and implementation of your choice.
+For this tutorial, though, we'll take a sample somewhere in the middle, and build a concrete implementation that meets some key requirements:</p>
+
+<ul>
+	<li>Leverage the Dojo package system to faciliate module loading and optimization via the build scripts.</li>
+	<li>Maintain modularity &mdash; avoid coding specific knowledge of the application into the components that play a part in it.</li>
+	<li>Preserve seperation of concerns &mdash; the UI should remain ignorant of where its data comes from and vice-versa</li>
+</ul>
+
+<h3>Getting Started</h3>
+
+<p>The scenario for this recipe is that we want to build an application that allows a user to search for photos on <a href="http://www.flickr.com/">Flickr</a>, view a result listing with thumbnails, and be able click to see a large version of each image.
+It is a kind of master-detail pattern, much repeated and found in some form in most applications.
+For this tutorial we're really focussed on the orchestration &mdash; how the individual parts are brought together &mdash; so we'll just do a quick overview of the parts themselves to provide some context.</p>
+
+<dl>
+	<dt>The Store</dt>
+	<dd><p>The data layer in this application is handled by the <code>dojox.data.FlickrStore</code>. This is an out-of-the-box component, which implements the <code>dojo.data</code> Read API over the top of requests to the Flickr API service.</p>
+		<p>We use the standard <code>fetch</code> method to pass a query, which is turned into a JSONP request to the Flickr service, which responds and fires our <code>onComplete</code> callback. The other components should know as little as possible about Flickr. Any specific knowledge should be confined to the thing instantiating the store and providing its configuration &mdash; our application in other words.</p></dd>
+	<dt>The UI Layout</dt>
+	<dd><p>We use the same kind of <code>BorderContainer</code>-based layout seen in the <a href="../../dijit_layout/">Layout tutorial</a>. Each search result will be given its own tab in the <code>TabContainer</code> that occupies the central region</p></dd>
+	<dt>The Form</dt>
+	<dd><p>The user enters search keywords via an input field in the top region. They can click the search button, or just press the Enter key to submit the search. Wiring up event handlers and their actions is the domain of our application in this example.</p>
+		<p>We could have created a custom widget to provide a slightly higher-level interface to our application, but the simple requirements here didn't warrant it.</p></dd>
+	<dt>The Result Listings</dt>
+	<dd><p>Our application's <code>onResult</code> method renders the results and creates the new tab panel.</p>
+		<p>We use an event delegation technique to register a click event listener that will cause the item selected to display the corresponding larger image. Here too, we could have created a custom widget to render the items, but the flow and responsibilities aren't much changed at the application level.</p></dd>
+	<dt>The Lightbox</dt>
+	<dd><p>We put the large image in a lightbox-style popup, floating over the main UI. We use an instance of the <code>dojox.image.LightboxNano</code> widget to pop up and display the photo.</p></dd>
+	<dt>The Loading Indicator</dt>
+	<dd><p>We use a simple pair of <code>startLoading</code> and <code>endLoading</code> methods to put up loading overlay. Loading indication in this app is of page/app-level concern, so the overlay itself and the methods to show/hide it reside on the application object.</p></dd>
+</dl>
+
+<h3>Step 1: The Layout</h3>
+<p>In this application, we're using the declarative style of UI creation. The main application layout is described in the markup in the page, with the appropriate <code>data-dojo-type</code> and <code>data-dojo-props</code> attributes to configure our widgets.</p>
+<p>The keyword entry field is a plain HTML text input, and the button that submits the search is a plain HTML button. Dijit's <code>BorderContainer</code> takes care of positioning and sizing the top and center regions to make the search bar fixed, and the results area flexible in height. </p>
+<p>Scrolling will be handled by the individual tab panes &mdash; we're using <code>dijit.layout.ContentPane</code>s.</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;script&gt;
+	dojo.require(&quot;dijit.layout.BorderContainer&quot;);
+	dojo.require(&quot;dijit.layout.TabContainer&quot;);
+	dojo.require(&quot;dijit.layout.ContentPane&quot;);
+
+	dojo.ready(function(){
+		// any init
+	});
+&lt;/script&gt;
+</pre>
+<p>These are the modules we'll need for the initial layout. For now, they are <code>require</code>'d from a script block in the <code>head</code>. The markup is as follows:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;body class=&quot;claro&quot;&gt;
+	&lt;div id=&quot;appLayout&quot; class=&quot;demoLayout&quot; data-dojo-type=&quot;dijit.layout.BorderContainer&quot; data-dojo-props=&quot;design: &#x27;headline&#x27;&quot;&gt;
+		&lt;div class=&quot;centerPanel&quot; id=&quot;tabs&quot; data-dojo-type=&quot;dijit.layout.TabContainer&quot; data-dojo-props=&quot;region: &#x27;center&#x27;, tabPosition: &#x27;bottom&#x27;&quot;&gt;
+			&lt;div data-dojo-type=&quot;dijit.layout.ContentPane&quot; data-dojo-props=&quot;title: &#x27;About&#x27;&quot;&gt;
+
+				&lt;h2&gt;Flickr keyword photo search&lt;/h2&gt;
+				&lt;p&gt;Each search creates a new tab with the results as thumbnails&lt;/p&gt;
+				&lt;p&gt;Click on any thumbnail to view the larger image&lt;/p&gt;
+
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div class=&quot;edgePanel&quot; data-dojo-type=&quot;dijit.layout.ContentPane&quot; data-dojo-props=&quot;region: &#x27;top&#x27;&quot;&gt;
+			&lt;div class=&quot;searchInputColumn&quot;&gt;
+				&lt;div class=&quot;searchInputColumnInner&quot;&gt;
+					&lt;input id=&quot;searchTerms&quot; placeholder=&quot;search terms&quot;&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+			&lt;div class=&quot;searchButtonColumn&quot;&gt;
+				&lt;button id=&quot;searchBtn&quot;&gt;Search&lt;/button&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+</pre>
+<a class="demoBtn demo" href="demo/step1.html">View Step 1</a>
+
+<p>So far, so good. Everything is where it should be, but there's no functionality, and as we build up that functionality, we'll need somewhere to put it all. Enter the application object.</p>
+
+<h3>Step 2: Application Object</h3>
+<p>We'll create a new <code>demo.app</code> module for the application controller. It assigns an object literal to <code>demo.app</code>, with a few methods and properties:</p>
+
+<pre class="brush:js">
+dojo.provide("demo.app");
+
+demo.app = {
+	store: null,
+	query: dojo.config.flickrRequest || {},
+
+	init: function() {
+		// proceed directly with startup
+		this.startup();
+	},
+
+	startup: function() {
+		// create the data store
+		var flickrStore = this.store = new dojox.data.FlickrRestStore();
+		this.initUi();
+	},
+
+	initUi: function() {
+		// set up click handling for the search button
+		dojo.connect(dojo.byId("searchBtn"), "onclick", this, function(evt){
+			var terms = dojo.byId("searchTerms").value;
+			if(terms.match(/\w+/)) {
+				this.doSearch(terms);
+			}
+		});
+	},
+	doSearch: function(terms) {
+		// ...
+	},
+	onResult: function(term, items) {
+		// ...
+	}
+};
+</pre>
+<p>The <code>demo.app</code> gets the query details it will eventually pass to the store from the dojo.config object. That keeps a lot of the kind of specifics that might change in between testing, development and production out of the module itself. The <code>dojoConfig</code> object looks like this:</p>
+<pre class="brush:js">
+	dojoConfig = {
+		isDebug: true,
+		parseOnLoad: true,
+		baseUrl: '/documentation/tutorials/1.6/recipes/app_controller/',
+		modulePaths: {
+			"demo": "demo"
+		},
+		flickrRequest: {
+			apikey: "YOURAPIKEYHERE",
+			sort:[{
+				attribute: 'datetaken',
+				descending: true
+			}]
+		}
+	};
+</pre>
+<a class="demoBtn demo" href="demo/step2.html">View Step 2</a>
+<p class="proTip">While this demo does use a specific API key, in order to be properly using the Flickr API, do make sure that you properly register your own API key.</p>
+
+<p>For more on <code>dojo.config</code>, check out the <a href="http://dojotoolkit.org/reference-guide/dojo/config.html">reference guide</a>. A tutorial covering <code>dojo.config</code> in depth is coming soon!</p>
+
+<p>The <code>demo.app</code> is where we'll keep the data store reference, as well as the query information we have that will be used in each Flickr request.</p>
+<p>We've defined an <code>init</code> method as the main entry point. The visual and interaction setup will be done in our <code>initUi</code> method, where all the widget and DOM-dependant steps can take place.</p>
+<p>We've stubbed in the main interaction &mdash; sending keywords typed in the search field over to the <code>doSearch</code> method.</p>
+
+<p class="proTip">You can define a class that your controller object is an instance of using <code>dojo.declare</code> &mdash; if you have a need for variations and further componentization of the application functionality.</p>
+
+<h3>Step 3: Hooking up Search</h3>
+<p>The controller has the knowledge needed to create the store requests. It connects up the events from the search bar to invoke the <code>doSearch</code> method, where it assembles a request object and calls the store's <code>fetch</code> method with it.</p>
+<p>Note that when the search successfully completes, we're not processing it here directly, but handing the results over to our <code>onResult</code> method, helping us to preserve separation of concerns.</p>
+
+<pre class="brush:js">
+doSearch: function(terms) {
+	// summary:
+	// 		initiate a search for the given keywords
+
+	var request = {
+		query: dojo.delegate(this.query, {
+			text: terms
+		}),
+		count: 10,
+		onComplete: dojo.hitch(this, function(items, request){
+			this.onResult(terms, items);
+		}),
+		onError: dojo.hitch(console, &quot;error&quot;)
+	};
+	this.store.fetch(request);
+}</pre>
+<a class="demoBtn demo" href="demo/step3.html">View Step 3</a>
+
+<h4>Step 4: Search Results</h4>
+<p>To do something with the response we get back from the store, we need to build on the <code>onResult</code> method. Notice, the flow doesn't change, the markup doesn't change, how we fetch data is still seperate from how we render it.</p>
+<p>We'll add a few properties to the <code>demo.app</code> object to faciliate the rendering &mdash; a template for the item contents, and some object paths that we'll use to locate the urls we need in the items Flickr gives back.</p>
+
+<pre class="brush:js">
+	itemTemplate: '<img src="${thumbnail}"/>${title}',
+	itemClass: 'item',
+	_itemsById: {},
+
+	largeImageProperty: "media.l", // path to the large image url in the store item
+	thumbnailImageProperty: "media.t", // path to the thumb url in the store item
+</pre>
+
+<p>Now the <code>onResult</code> method has work to do:</p>
+<pre class="brush:js">
+onResult: function(term, items) {
+	// summary:
+	// 		Handle fetch results
+
+	var contr = dijit.byId("tabs");
+	var listNode = dojo.create("ul", {
+		'class': 'demoImageList',
+		'id': 'panel'+contr.getChildren().length
+	});
+
+	// create the new tab panel for this search
+	var panel = new dijit.layout.ContentPane({
+		title: term,
+		content: listNode,
+		closable: true
+	});
+	contr.addChild(panel);
+
+	// render the items into the &lt;ul&gt; node
+	this.renderItems(items, listNode);
+
+	// make this tab selected
+	contr.selectChild(panel);
+},
+</pre>
+<a class="demoBtn demo" href="demo/step4.html">View Step 4</a>
+
+<p>The <code>renderItems</code> method is not listed here. It simply builds up <code>&lt;li&gt;</code> nodes to insert into the list that represents our results.</p>
+
+<h3>Step 5: View Large Image</h3>
+<p>The main piece we're missing at this point is the ability to view the larger image. For that we're using the <code>dojox.image.LightboxNano</code> widget.  It is a fairly lightweight implementation of a lightbox and a good fit here.</p>
+<p> To use it we need to add the dependency to our list of <code>dojo.require</code>s. We can then create and reuse a single instance: </p>
+
+<pre class="brush:js">
+initUi: function() {
+	// summary:
+	// 		create and setup the UI with layout and widgets
+
+	// create a single Lightbox instnace which will get reused
+	this.lightbox = new dojox.image.LightboxNano({});
+</pre>
+<p>We hook up click handling on the result items to determine which list item was clicked, map that to the store item and retrieve the current url from that item for display in the lightbox:</p>
+
+<pre class="brush:js">
+	showItemById: function(id, originNode) {
+		var item = this._itemsById[id];
+		if(item) {
+			this.showImage( dojo.getObject(this.largeImageProperty, false, item), originNode);
+		}
+	},
+	showImage: function(url, originNode){
+		// summary:
+		// 		Show the full-size image indicated by the given url
+		this.lightbox.show({
+			href:url, origin: originNode
+		});
+	},
+</pre>
+<a class="demoBtn demo" href="demo/step5.html">View Step 5</a>
+
+<p class="proTip">Using event delegation to register a single click event listener on the whole list is both more efficient and flexible. Having nothing bound to the list nodes leaves you free to change or remove those at will, without needing to disconnect and reconnect events on each item.</p>
+
+<h3>Step 6: Loading Indication</h3>
+<p>Each step so far has been filling in stubs and layering functionality. That has been fairly mechanical, in part because of the structure of our application, as well as the clear sequence of events we've implemented.  At this point we are feature complete, but the user experience needs work. </p>
+<p>You've probably noticed the flash of unstyled content that appears while the Dojo modules load and before the widgets are created.
+In production, we would compress and concatenate together the dependencies so they would load faster, but we would improve things in either case by adding a "Loading..." overlay. </p>
+<p>We'll use a simple implementation consisting of a pair of <code>startLoading</code> and <code>endLoading</code> methods on the <code>demo.app</code>.  Loading indications should be side effects. We don't want to have to restructure the flow we've built up to accomodate it.</p>
+<p>We can hook into the methods to show and hide the overlay using <code>dojo.connect</code> from our <code>startup</code> method: </p>
+
+<pre class="brush:js">
+startup: function() {
+	// create the data store
+	var flickrStore = this.store = new dojox.data.FlickrRestStore();
+
+	// wait until UI is complete before taking down the loading overlay
+	dojo.connect(this, "initUi", this, "endLoading");
+
+	// build up and initialize the UI
+	this.initUi();
+
+	// put up the loading overlay when the 'fetch' method of the store is called
+	dojo.connect(
+		this.store,
+		"fetch",
+		dojo.hitch(this, "startLoading", dijit.byId("tabs").domNode)
+	);
+	// take down the loading overlay after onResult (fetch callback) is called
+	dojo.connect(this, "onResult", this, "endLoading");
+},
+</pre>
+<p>The <code>startup</code> method represents the point in the sequence when the data store is initialized, and in which we create all the widgets (via <code>.initUI</code>), so it's a good place to hook in the loading indicator.</p>
+<p>Keeping it at arm's length like this not only allows us to gather together all the loading-related connections into once place, but it also means we don't have to put code inside the functions of interest. That's of immediate value with the store's <code>fetch</code> method call, but might also serve us down the road if we want to inherit some of these application controller methods from a base class.</p>
+<a class="demoBtn demo" href="demo/step6.html">View Step 6</a>
+
+<h3>Step 7: Staggered Loading</h3>
+<p>With the loading indication in place, we can step back a bit. How is this going to work as we go into production and look to optimize how it is delivered?</p>
+<p>The sequence we've put in place allows us to experiment with what we load, when. As a first step, lets take all those <code>dojo.require</code> statements out of the HTML page and locate them in a <code>demo.module</code>. </p>
+<p>This approach buys us two things:</p>
+<ul>
+<li>It puts the dependency list in one place so we can add or change it without having to update our HTML each time. </li>
+<li>It will pay dividends when we come to create a build for this application &mdash; a topic for another tutorial.</li>
+</ul>
+
+<p>The <code>demo/module.js</code> file looks like this:</p><pre class="brush:js">
+dojo.provide("demo.module");
+
+// dependencies for the application UI and data layers
+dojo.require("dojox.data.FlickrRestStore");
+dojo.require("dojox.image.LightboxNano");
+
+dojo.require("dijit.layout.BorderContainer");
+dojo.require("dijit.layout.TabContainer");
+dojo.require("dijit.layout.ContentPane");
+</pre>
+<p>The script block in our HTML can now be simplified to this:</p>
+<pre class="brush:js; html-script: true">
+&lt;script&gt;
+	dojo.require(&quot;demo.app&quot;);
+
+	dojo.ready(function(){
+		demo.app.init();
+	});
+&lt;/script&gt;
+</pre>
+<p>The application controller now has the responsibility for loading its own dependencies. To give it full control over the page lifecyle we need to add one more thing to our <code>demo.app</code>:</p>
+<pre class="brush:js">
+demo.app = {
+	parseOnLoad: (function(config){
+		// set dojo.config.parseOnLoad to false
+		// and store the original value in our own parseOnLoad property
+		var parseOnLoad = config.parseOnLoad;
+		config.parseOnLoad = false;
+		return parseOnLoad;
+	})(dojo.config),
+}</pre>
+<p>This is a slight tricksy way of assuming control over when the parser runs. We can look at the initial <code>parseOnLoad</code> setting from our Dojo configuration via the <code>dojo.config.parseOnLoad</code> property.  By capturing the value for our own use, and then setting it to false, we can pick the right time to parse and instantiate our declarative widgets.</p>
+<p>In this case, <code>initUi</code> is where we create everything else UI-related and it makes sense to run <code>dojo.parser.parse()</code> there.</p>
+<p>Now, without changing the meaning of any of our existing methods and call sequence, we can defer loading dependencies until they are actually needed. The result is a staggered, 2-stage loading sequence:</p>
+<pre class="brush:js">
+init: function() {
+	this.startLoading();
+
+	// phase 2: load further dependencies
+	dojo.require("demo.module");
+
+	// register callback for when dependencies have loaded
+	dojo.ready(dojo.hitch(this, "startup"));
+
+},
+</pre>
+<a class="demoBtn demo" href="demo/step7.html">View Step 7</a>
+
+<h3>Step 8: Further Improvements</h3>
+<p>There's clearly a lot of questions this implementation doesn't yet answer. We're not really handling errors here, and user experience overall could be improved.
+	One quick thing we can do to improve the responsiveness of the application is to start preloading the larger images so they are already cached on disk when the user clicks to view them.
+</p>
+<p>The events needed are already defined. We can inject new code to run right after <code>renderItems</code>, which passes the array of items we'll need:</p>
+<pre class="brush:js">startup: function() {
+	//...
+	// when items are being rendered, also preload the images
+	dojo.connect(this, "renderItems", this, "preloadItems");
+}</pre>
+<p>The result is much improved with no change to the application flow: <code>renderItems</code> still renders items &mdash; adding in preloading code in there would have been awkward.
+The new <code>preloadItems</code> is definately an application or page-level concern, and not something that the renderer needs to bother with.</p>
+
+<a class="demoBtn demo" href="demo/demo.html">View Final Demo</a>
+
+<h3>Summary</h3>
+<p>We've made many decisions along the way while building this application. At any juncture the answer could have been different, given different requirements or preferences. For example:</p>
+<ul>
+<li>We could certainly have created custom widgets to more neatly encapsulate the result listing. </li>
+<li>The controller could have been derived from a class.</li>
+<li>We could have used a more generic data store, or even the newer dojo.store API.</li>
+<li>We could have represented the user interface with its own object &mdash; sometimes known as the "whole-UI widget" which the controller would populate and talk to.</li>
+</ul>
+<p>But fundamentally, it wouldn't change what we've built here. By defining an explicit sequence of steps for initialization,
+and clear roles for the application controller and its parts &mdash; the store and the UI &mdash; we've made extension in any of these directions possible. </p>
+
+<p>Hopefully, by going through the motions of taking a pile of building blocks and creating an application from them, we've removed some of the hand-waving and "your code goes here" puzzles.
+</p>
+
+<h3>Colophon</h3>
+
+<ul>
+	<li><a href="../../dijit_layout/">Dijit Layout tutorial</a></li>
+	<li><a href="/reference-guide/1.6/dojo/getObject.html">dojo.getObject docs</a></li>
+	<li><a href="/reference-guide/1.6/dojox/image/LightboxNano.html">Lightbox Nano docs</a></li>
+	<li><a href="/reference-guide/1.6/dojox/data/FlickrRestStore.html">FlickrRestStore docs</a></li>
+</ul>

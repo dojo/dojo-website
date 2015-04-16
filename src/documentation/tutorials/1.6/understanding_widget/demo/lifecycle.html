@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: The Dijit Lifecycle</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			dojo.require("dijit.form.Button");
+			dojo.ready(function(){
+				//	connect to the lifecycle methods of a dijit.form.Button
+				var methods = [ "postscript", "create", "postMixInProperties", "buildRendering", "postCreate", "startup" ];
+				dojo.forEach(methods, function(method){
+					dojo.connect(dijit.form.Button.prototype, method, function(){
+						if (console && console.log) { console.log(method, arguments); }
+						dojo.create("li", {
+							innerHTML: method
+						}, dojo.byId("lifecycle"));
+					});
+				});
+
+				//	ok, create a button programmatically
+				var button = new dijit.form.Button({ label: "A button" }, dojo.byId("buttonContainer"));
+				button.startup();
+			});
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: Showing the lifecycle of a Widget</h1>
+		<p>The list below is created dynamically during the instantiation of a simple Dijit button. For more detailed information
+		(such as the arguments passed to each method), check your Firebug or Developer console.</p>
+		<p>
+		Note that the order of execution is actually:
+		<code>postscript --> create --> postMixInProperties --> buildRendering --> postCreate</code>;
+		the logging below happens when a method is finished, and the <code>create</code> method actually calls
+		the three methods following it.
+		</p>
+		<ol id="lifecycle"></ol>
+		<div id="buttonContainer"></div>
+	</body>
+</html>

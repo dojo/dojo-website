@@ -1,0 +1,205 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Dojo Logo</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="/js/dojo/1.6.3/dijit/themes/claro/claro.css" />
+		<script>
+			dojoConfig = {
+				parseOnLoad: true, //enables declarative chart creation
+				gfxRenderer: "svg", // svg get priority,
+				isDebug: true
+			};
+		</script>
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js">
+		</script>
+		<script>
+			// Require the dojox.gfx resource
+			dojo.require("dojox.gfx");
+			dojo.require("dojox.gfx.fx");
+			dojo.require("dijit.form.Button");
+
+			var allGroup, allShapes = [], regularFill, redFill;
+
+			// Function to rotate logo
+			function rotateLogo() {
+				new dojox.gfx.fx.animateTransform({
+				    duration: 700,
+				    shape: allGroup,
+				    transform: [{
+				        name: 'rotategAt',
+				        start: [0,550,350], // Starts at 0 degree rotation
+				        end: [360,550,350]  // Ends at 360 degrees
+				    }]
+				}).play();
+			}
+
+			// Function to enlarge Logo
+			function enlargeLogo() {
+				allGroup.applyTransform(dojox.gfx.matrix.scale({ x: 2, y: 2 }));
+			}
+
+			// Function to shrink Logo
+			function shrinkLogo() {
+				allGroup.applyTransform(dojox.gfx.matrix.scale({ x: 0.5, y: 0.5 }));
+			}
+
+			// Skewing functions
+			function skewUp() {
+				allGroup.applyTransform(dojox.gfx.matrix.skewYg(-20));
+			}
+			function skewDown() {
+				allGroup.applyTransform(dojox.gfx.matrix.skewYg(20));
+			}
+
+			// Animate strokes
+			function animateStrokes() {
+				dojo.forEach(allShapes,function(item) {
+					new dojox.gfx.fx.animateStroke({
+						duration: 1200,
+						shape: item,
+						color: {end: "green"},
+						width: {end: 15},
+						join:  {values: ["miter", "bevel", "round"]},
+						onEnd: function() {
+							new dojox.gfx.fx.animateStroke({
+								duration: 1200,
+								shape: item,
+								color: { end: "#000"},
+								width: { end: 1 },
+								join:  { values: ["round", "bevel", ""] }
+							}).play();
+						}
+					}).play();
+				});
+			}
+
+			// Animate fills
+			function animateFills() {
+				dojo.forEach(allShapes,function(item) {
+					new dojox.gfx.fx.animateFill({
+						duration: 1200,
+						shape: item,
+						color: { start: "black", end: "green" },
+						onEnd: function() {
+							new dojox.gfx.fx.animateFill({
+								duration: 1200,
+								shape: item,
+								color: { end: "black" }
+							}).play();
+						}
+					}).play();
+				});
+			}
+
+			// Create decent Fill
+			function beautifyFills() {
+				dojo.forEach(allShapes,function(item) {
+					item.setFill(redFill).setStroke("#a70017");
+				});
+			}
+
+			// Wacky animations
+			function wackyMovement() {
+				dojo.forEach(allShapes,function(shape) {
+					var rand1 = Math.floor(Math.random() * 700);
+					var rand2 = Math.floor(Math.random() * 700);
+
+					new dojox.gfx.fx.animateTransform({
+					    duration: 1200,
+					    shape: shape,
+					    transform: [{
+					        name: 'rotategAt',
+					        start: [0,rand1,rand2], // Starts at 0 degree rotation
+					        end: [720,rand1,rand2]  // Ends at 360 degrees
+					    }]
+					}).play();
+				});
+			}
+
+
+
+
+			// Create a ready event
+			dojo.ready(function(){
+
+				// Create a GFX surface
+				// Arguments:  node, width, height
+				surface = dojox.gfx.createSurface("surfaceElement",1100,700);
+
+				// Regular fill
+				regularFill = {type:"linear", x1:0, y1:0, x2:0, y2:900, colors: [{ offset:0, color:"#555"},{ offset:1, color:"#000"}]};
+				redFill = {type:"linear", x1:0, y1:0, x2:0, y2:900, colors: [{ offset:0, color:"#f3001f"},{ offset:1, color:"#a40016"}]};
+
+				// D
+				var letterD = surface.createPath("M280.044,155c15,0,30,0,45,0c0,116.999,0,234.001,0,351c-15,0-30,0-45,0 c-2.25-8.083-0.395-20.272-1-30c-9.35,4.723-16.193,12.82-25,18c-40.372,23.743-98.177,25.026-140,4 c-17.399-8.748-34.847-23.02-48-40c-21.804-28.148-33.263-59.624-28-111c3.166-30.907,22.325-59.736,43-80 c39.234-38.456,115.892-55.579,174-19c-1.596,13.071-3.815,25.518-6,38c-1.168,3.757-5.462-0.665-6-1 c-5.664-3.533-11.826-8.899-19-12c-76.689-33.15-156.307,25.214-149,109c2.616,29.995,20.55,59.011,44,76 c14.415,10.443,35.836,19,61,19c37.03,0,65.046-17.534,83-40c5.888-7.367,14.314-16.497,16-25c1.776-8.961,0-21.587,0-32 c0-72.705,0-148.51,0-222C278.958,156.581,278.879,155.168,280.044,155z").setFill(regularFill).setStroke("#000");
+
+				// First o's top line
+				var letterO1Top = surface.createPath("M429.044,174c39,0.667,80.666-1.333,118,1c2.878,1.889,2.329,8.748,1,12 c-7.754,5.179-18.917,3-29,3c-29.467,0-64.488,0.816-93-1C424.023,183.108,423.359,176.401,429.044,174z").setFill(regularFill).setStroke("#000");
+
+				// First 0
+				var letterO1 = surface.createPath("M469.044,229c74.079-7.92,123.735,30.132,147,79 c7.363,15.467,12.688,31.963,14,50c3.361,46.185-13.09,79.578-35,105c-23.104,26.807-51.777,43.887-90,49 c-39.144,5.236-79.508-6.464-108-28c-32.435-24.517-61.863-69.57-54-135c2.334-19.419,10.272-33.943,16-45 c6.634-12.807,14.9-23.9,26-35C405.368,248.676,430.169,233.156,469.044,229z M385.044,337c-15.827,49.58,8.422,98.122,40,121 c14.617,10.59,36.752,19.069,61,19c64.618-0.186,113.066-53.451,107-118c-2.355-25.065-17.399-49.925-29-62 c-17.417-18.13-47.021-33.015-81-32C432.066,266.523,397.524,297.906,385.044,337z").setFill(regularFill).setStroke("#000");
+
+				// Create a group for the pieces of the first 0
+				var group1 = surface.createGroup();
+				group1.add(letterO1Top);
+				group1.add(letterO1);
+
+				// Letter J
+				var letterJ = surface.createPath("M650.044,235c11.667,0,23.333,0,35,0c0,64.304,0,135.11,0,202 c0,22.682,2.13,46.208,0,67c-1.992,19.448-12.684,36.492-22,51c-9.957,15.505-20.062,29.467-31,41 c-8.447-10.22-15.09-22.243-24-32c8.367-8.544,17.781-16.205,25-27c7.554-11.296,14.447-27.479,16-44c1.851-19.697,0-41.887,0-64 c0-62.359-1.702-129.883-1-191C648,236.29,648.787,235.41,650.044,235z").setFill(regularFill).setStroke("#000");
+
+				// Second o's top line
+				var letterO2Top = surface.createPath("M791.044,174c39,0.667,80.666-1.333,118,1c2.322,2.446,2.625,8.452,1,12 c-7.754,5.179-18.917,3-29,3c-29.468,0-64.488,0.816-93-1C785.717,183.414,785.455,176.306,791.044,174z").setFill(regularFill).setStroke("#000");
+
+				// Second O
+				var letterO2 = surface.createPath("M831.044,229c72.62-7.764,122.772,29.8,146,76c10.08,20.049,14.2,36.656,15,58 c1.791,47.816-16.136,81.699-41,107c-26.217,26.677-63.024,44-103,44c-30.165,0-59.47-10.556-80-24 c-38.305-25.085-70.112-69.565-63-139c2.604-25.412,14.825-49.341,26-65C751.134,257.848,786.233,233.791,831.044,229z M772.044,296c-15.369,15.998-30.047,41.573-30,74c0.045,31.043,13.635,57.044,31,75c17.523,18.119,42.438,31.909,74,32 c61.828,0.178,114.655-49.803,108-118c-2.558-26.206-17.938-51.272-32-65c-17.547-17.129-47.19-29.92-78-29 C811.996,265.987,788.585,278.783,772.044,296z").setFill(regularFill).setStroke("#000");
+
+				// Create a group for the pieces of the first 0
+				var group2 = surface.createGroup();
+				group2.add(letterO2Top);
+				group2.add(letterO2);
+
+				// Put all pieces together
+				allGroup = surface.createGroup();
+				[letterD,letterO1,letterO1Top,letterO2,letterO2Top,letterJ].forEach(function(item) {
+					allGroup.add(item);
+					allShapes.push(item);
+				});
+
+
+			});
+
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: Dojo Logo</h1>
+
+		<div style="padding:10px 0 20px 0;">
+
+			<button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:rotateLogo">Rotate Logo</a>
+
+			<button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:enlargeLogo">Enlarge Logo</a>
+
+			<button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:shrinkLogo">Shrink Logo</a>
+
+			<button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:skewUp">Skew Up</button>
+
+			<button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:skewDown">Skew Down</button>
+
+			<button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:animateStrokes">Animate Strokes</button>
+
+			<button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:animateFills">Animate Fill</button>
+
+			<button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:beautifyFills">Beautify Fill - Red</button>
+
+			<button data-dojo-type="dijit.form.Button" data-dojo-props="onClick:wackyMovement">Chaos!</button>
+
+		</div>
+
+		<div id="surfaceElement" style="border:1px solid #ccc;width:1100px;height:700px;"></div>
+
+	</body>
+</html>

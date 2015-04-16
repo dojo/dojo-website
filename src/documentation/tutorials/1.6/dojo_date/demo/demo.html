@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: XXXXX</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script>
+			dojoConfig = {
+				isDebug: true,
+				extraLocale: ['en-us', 'en-gb', 'fr', 'es']
+			}
+		</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js">
+		</script>
+		<script>
+			// dojo.require("dojo.io.script");
+			dojo.require("dojo.date");
+			dojo.require("dojo.date.locale");
+			dojo.require("dojo.date.stamp");
+			
+			var dataUrl = '../resources/spaceExploration.json';
+			var now = new Date();
+			demo = {
+				timeline: {},
+				normalize: function(entry, dateParam) {
+					dateParam = dateParam || "Date";
+					if(!entry.jsDate || !(entry.jsDate instanceof Date)) {
+						var datestr = entry[dateParam];
+						var date = new Date(entry[dateParam]);
+						entry.jsDate =  date;
+					}
+					return entry;
+				},
+
+				formatEntries: function(entries) {
+					return "<ol>"+dojo.map(entries, function(entry) {
+						return '<li><span class="datelabel">'+entry.jsDate.toUTCString() + '</span>' + entry.text + '</li>';
+					}).join("\n") + "</ol>";
+				},
+
+				showResult: function(heading, content){
+					dojo.byId("heading").innerHTML = heading;
+					dojo.byId("outbox").innerHTML = content;
+				},
+				
+				differenceDates: function() {
+					var entries = this.spaceTweets, 
+						date1 = entries[0].jsDate, 
+						date2 = entries[entries.length-1].jsDate, 
+						msg = [
+							"First: " + date1.toUTCString(), 
+							"Last: " + date2.toUTCString(), 
+							"Difference in minutes: " + dojo.date.difference(date2, date1, "minute"), 
+							"Difference in days: " + dojo.date.difference(date2, date1, "day"), 
+							]
+					
+					this.showResult("Time between tweets in minutes and days", msg.join("<br>\n"))
+				},
+				datesToISO: function() {
+					var formatted = dojo.map(arguments, dojo.date.stamp.toISOString);
+					return arguments.length ? formatted : formatted.shift();
+				}
+			}
+			function getTwitterData() {
+				return dojo.xhrGet({
+					url: '../resources/Astro_Nicole.json',
+					callbackParamName: 'callback',
+					handleAs: "json",
+					load: function(data) {
+						demo.spaceTweets = dojo.map(data, function(entry) {
+							return demo.normalize(entry, "created_at");
+						});
+					}, 
+					error: function(err) {
+						console.warn("tweets: ", err);
+					}
+				});
+			};
+
+			dojo.ready(function(){
+				getTwitterData().then(function(){
+					dojo.connect(dojo.byId("formatDatesBtn"), "onclick", demo, "formatDates");
+					dojo.connect(dojo.byId("differenceDatesBtn"), "onclick", demo, "differenceDates");
+					
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: XXXXX</h1>
+		
+		<dl>
+
+			<dt>Date Differences</dt>
+			<dd><button id="differenceDatesBtn">Date Differences</button></dd>
+
+			<dt>Localized Date Formatting</dt>
+			<dd><button id="localizedDateFormattingBtn">l10n Dates</button></dd>
+			
+		</dl>
+
+
+		<div id="panel" class="resultPanel">
+			<h2 id="heading">Output</h2>
+			<pre id="outbox"></pre>
+		</div>
+	</body>
+</html>

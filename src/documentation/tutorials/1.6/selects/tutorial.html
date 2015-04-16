@@ -1,0 +1,239 @@
+
+
+<h3>Introduction</h3>
+<p>
+Dijit, the Dojo Toolkit's UI framework, contains a comprehensive set of widgets to
+help you rapidly develop web applications. As we discussed previously in
+<a href="/documentation/tutorials/1.6/themes_buttons_textboxes/">Dijit Themes, Buttons, and TextBoxes</a>,
+Dijit has many form-based widgets for you to work with, including a wide range
+of buttons and textboxes.  As we will see in this tutorial, Dijit also provides
+several select-based widgets: <code>dijit.form.Select</code>,
+<code>dijit.form.FilteringSelect</code>, and <code>dijit.form.ComboBox</code>.
+</p>
+<h3>Getting Started</h3>
+<p>
+Using Dijit solves one of the more vexing problems presented to web application
+developers when using HTML select elements&mdash;custom styling.  By using Dijit
+theming (as seen in
+<a href="/documentation/tutorials/1.6/sliders/">previous</a>
+<a href="/documentation/tutorials/1.6/themes_buttons_textboxes/">tutorials</a>),
+we can create elements with a uniform look and feel across all supported browsers.
+With some simple code examples, we will show you how to replace your
+HTML select elements with these elegant, powerful, and easy to use Dijit widgets:
+<ul>
+<li><strong><code>dijit.form.Select</code>:</strong>
+	A skinnable drop-down select box
+	[<a href="/reference-guide/1.6/dijit/form/Select.html">ref</a>
+	| <a href="/api/1.6/dijit/form/Select">api</a>]</li>
+<li><strong><code>dijit.form.FilteringSelect</code>:</strong>
+	A select box with a text field to filter results; the field is marked invalid
+	if the text entered does not match a value in the drop-down list
+	[<a href="/reference-guide/1.6/dijit/form/FilteringSelect.html">ref</a>
+	| <a href="/api/1.6/dijit/form/FilteringSelect">api</a>]</li>
+<li><strong><code>dijit.form.ComboBox</code>:</strong>
+	A free-form text field that displays suggestions in a drop-down list
+	[<a href="/reference-guide/1.6/dijit/form/ComboBox.html">ref</a>
+	| <a href="/api/1.6/dijit/form/ComboBox">api</a>]</li>
+</ul>
+</p>
+
+<h3>dijit.form.Select</h3>
+<p><code>dijit.form.Select</code> is in many ways similar to HTML's select element,
+but Dijit's widget provides useful functionality that can help you customize
+the appearance and behavior of this simple drop-down.</p>
+<p>Important <code>dijit.form.Select</code> properties include:</p>
+<ul>
+	<li><strong><code>displayedValue</code>:</strong>
+		The value presently displayed in the field</li>
+	<li><strong><code>value</code>:</strong>
+		The internal value of the selected option; in the context of a form,
+		this is what would be submitted to the server</li>
+</ul>
+<p>
+In the following example, we create a <code>dijit.form.Select</code> widget
+from standard <code>select</code> markup with just a couple of additions:
+<pre class="brush: js; html-script: true">
+&lt;body class="claro"&gt;
+	&lt;select id="stateSelect" data-dojo-type="dijit.form.Select"
+		data-dojo-props="name: 'stateSelect'"&gt;
+		&lt;option value="" selected="selected"&gt;Select a state&lt;/option&gt;
+		&lt;option value="AL"&gt;Alabama&lt;/option&gt;
+		&lt;option value="AK"&gt;Alaska&lt;/option&gt;
+		&lt;option value="AZ"&gt;Arizona&lt;/option&gt;
+		&lt;option value="AR"&gt;Arkansas&lt;/option&gt;
+		&lt;option value="CA"&gt;California&lt;/option&gt;
+	&lt;/select&gt;
+
+	&lt;script&gt;
+		dojo.require("dijit.form.Select");
+		dojo.require("dojo.parser");
+	&lt;/script&gt;
+&lt;/body&gt;
+</pre>
+<a class="demoBtn demo" href="demo/Select.html">View Demo</a>
+<p>
+In this simple declarative example, you can see that the only difference between a
+standard HTML select and <code>dijit.form.Select</code> is indeed a
+<code>data-dojo-type="dijit.form.Select"</code> attribute in the <code>select</code>
+tag, and the specification of the input's <code>name</code> within <code>data-dojo-props</code>.
+All other markup is the same, including how to set the selected value.
+Using this simple addition to a normal <code>select</code> tag and applying the
+Claro theme gives you a drop-down that will look great across browsers.
+</p>
+<p class="proTip">
+Don't forget: when creating widgets declaratively, make sure you add
+<code>"parseOnLoad: true"</code> to the <code>data-dojo-config</code> attribute
+on the script tag that includes <code>dojo.js</code> on the page.
+Furthermore, although <code>dojo.parser</code> often ends up loaded
+automatically as a dependency of widgets in use on the page, it is
+recommended to explicitly <code>dojo.require("dojo.parser")</code> when you
+intend to use it.
+</p>
+<p class="proTip">
+Don't forget to include the <code>class="claro"</code> attribute in the <code>body</code>
+tag to apply the claro theme to your page.  In this case, it's important for
+it to be in the <code>body</code> tag specifically, so that the theme
+takes effect not only in the select boxes, but also their associated popup menus.
+</p>
+
+<h3>dijit.form.FilteringSelect</h3>
+<p>
+Like a normal <code>select</code>, <code>dijit.form.FilteringSelect</code>
+allows selection of an option by clicking on the arrow icon and browsing the
+list of options.  Additionally, however, it allows a user to type text into an
+input field, and will show matching options as he or she types.
+</p>
+<p>Important <code>dijit.form.FilteringSelect</code> properties include:</p>
+<ul>
+	<li><strong><code>required</code>:</strong>
+		Whether or not a value must be provided for the field to be considered valid;
+		defaults to <code>true</code></li>
+	<li><strong><code>placeHolder</code>:</strong>
+		Text to display in the field when it is blank and unfocused, to indicate
+		instruction or purpose
+		(this feature is inherited from <code>dijit.form.TextBox</code>)</li>
+	<li><strong><code>displayedValue</code>:</strong>
+		The value presently contained in the text field</li>
+	<li><strong><code>value</code>:</strong>
+		The internal value of the selected option; in the context of a form,
+		this is what would be submitted to the server</li>
+</ul>
+<p>
+Note that aside from the addition of text input,
+<code>dijit.form.FilteringSelect</code> essentially behaves like a
+<code>dijit.form.Select</code>; to this end, the type-ahead text field is
+validated in order to guarantee the integrity of the input.
+If the text entered does not ultimately match any option in the list,
+the input will be flagged as invalid, and <code>value</code> will
+report an empty string.
+</p>
+<pre class="brush: js; html-script: true">
+&lt;body class="claro"&gt;
+	&lt;select id="stateSelect" data-dojo-type="dijit.form.FilteringSelect"
+		data-dojo-props="
+			name: 'stateSelect',
+			value: '',
+			placeHolder: 'Select a State'"&gt;
+		&lt;option value="AL"&gt;Alabama&lt;/option&gt;
+		&lt;option value="AK"&gt;Alaska&lt;/option&gt;
+		&lt;option value="AZ"&gt;Arizona&lt;/option&gt;
+		&lt;option value="AR"&gt;Arkansas&lt;/option&gt;
+		&lt;option value="CA"&gt;California&lt;/option&gt;
+	&lt;/select&gt;
+
+	&lt;script&gt;
+		dojo.require("dijit.form.FilteringSelect");
+		dojo.require("dojo.parser");
+	&lt;/script&gt;
+&lt;/body&gt;
+</pre>
+<a class="demoBtn demo" href="demo/FilteringSelect.html">View Demo</a>
+<p class="proTip">
+In combination with <code>required: true</code>, you can specify
+<code>value: ""</code> and placeholder text such as
+<code>placeHolder: "Select an option"</code> to achieve a common UI
+design pattern, executed with style and ease thanks to Dijit and its themes.
+</p>
+
+<h3>dijit.form.ComboBox</h3>
+<p>
+<code>dijit.form.ComboBox</code> is a hybrid of a select element and a textbox.
+There is often confusion as to the behavior of ComboBox, because it looks like
+<code>dijit.form.FilteringSelect</code>; the main difference between
+the two is that the ComboBox will accept your input even if it does not match
+an option in the list.
+</p>
+<p>Important <code>dijit.form.ComboBox</code> properties include:</p>
+<ul>
+	<li><strong><code>required</code>:</strong>
+		Whether or not a value must be provided for the field to be considered valid;
+		defaults to <code>false</code> (note that this default differs from that of
+		<code>dijit.form.FilteringSelect</code>)</li>
+	<li><strong><code>placeHolder</code>:</strong>
+		Text to display in the field when it is blank and unfocused, to indicate
+		instruction or purpose
+		(this feature is inherited from <code>dijit.form.TextBox</code>)</li>
+	<li><strong><code>value</code>:</strong>
+		The value presently contained in the text field; in the context of a form,
+		this is what would be submitted to the server</li>
+</ul>
+<p>
+The behavior of ComboBox's <code>value</code> property is a very important
+distinction that trips up many developers as well.
+Due to its free-form nature, ComboBox only maintains its <code>value</code>
+based on what is contained in the textbox, and that value is what is sent
+upon submission.  Put another way, <code>dijit.form.ComboBox</code> has no
+<code>displayedValue</code> distinction&mdash;its <code>value</code> <em>is</em>
+its "displayed value".
+</p>
+<p>
+To reinforce this distinction, it may help to think about
+<code>dijit.form.ComboBox</code> from a different perspective.  While
+Select and FilteringSelect are primarily focused on selecting an item from a list,
+ComboBox is primarily a text input that also provides a list of suggestions to help
+users get started&mdash;much like a feature seen in popular search engines.
+</p>
+<pre class="brush: js; html-script: true">
+&lt;body class="claro"&gt;
+	&lt;select id="stateSelect" data-dojo-type="dijit.form.ComboBox"
+		data-dojo-props="
+			name: 'stateSelect',
+			value: '',
+			placeHolder: 'Select a State'"&gt;
+		&lt;option value="AL"&gt;Alabama&lt;/option&gt;
+		&lt;option value="AK"&gt;Alaska&lt;/option&gt;
+		&lt;option value="AZ"&gt;Arizona&lt;/option&gt;
+		&lt;option value="AR"&gt;Arkansas&lt;/option&gt;
+		&lt;option value="CA"&gt;California&lt;/option&gt;
+	&lt;/select&gt;
+
+	&lt;script&gt;
+		dojo.require("dijit.form.ComboBox");
+		dojo.require("dojo.parser");
+	&lt;/script&gt;
+&lt;/body&gt;
+</pre>
+<a class="demoBtn demo" href="demo/ComboBox.html">View Demo</a>
+<p class="proTip">
+Again, it is very important to remember that <code>dijit.form.ComboBox</code>
+reports/submits the value contained in its textbox, unlike the previous two
+widgets.
+</p>
+
+<h3>Conclusion</h3>
+<p>
+In this tutorial, we've demonstrated that Dijit provides several select widgets
+with a consistent look and behavior. These range from
+a simple replacement of a normal HTML select element (<code>dijit.form.Select</code>)
+to more powerful widgets such as <code>dijit.form.FilteringSelect</code> and
+<code>dijit.form.ComboBox</code>, which allow you to type in a value, but differ
+in how this value is validated and submitted.
+</p>
+<p>
+This tutorial focused exclusively on how easy it is to replace standard
+HTML select elements with Dijit select widgets using declarative markup.
+It is also possible to create these widgets programmatically, in which case
+it is common to obtain options from a data store.  We explore this
+in detail in the next tutorial:
+<a href="/documentation/tutorials/1.6/selects_using_stores/">Advanced Dijit Selects using Stores</a>.
+</p>

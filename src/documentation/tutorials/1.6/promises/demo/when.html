@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: dojo.when</title>
+
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load Dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js">
+		</script>
+		<script>
+			var getUserList = (function(){
+				var users;
+				return function(){
+					if(!users){
+						return dojo.xhrGet({
+							url: "users-mangled.json",
+							handleAs: "json"
+						}).then(function(res){
+							// Save the resulting array into the users variable
+							users = dojo.map(res, function(user){
+								return {
+									id: user[0],
+									username: user[1],
+									name: user[2]
+								};
+							});
+
+							// Make sure to return users here,
+							// for valid chaining
+							return users;
+						});
+					}
+					return users;
+				};
+			})();
+
+			dojo.ready(function(){
+				dojo.when(getUserList(), function(users){
+					// This callback will be run after the request completes
+
+					var userlist = dojo.byId("userlist1");
+					dojo.forEach(users, function(user){
+						dojo.create("li", {
+							innerHTML: dojo.toJson(user)
+						}, userlist);
+					});
+
+					dojo.when(getUserList(), function(user){
+						// This callback will be run right away since it's already in the cache
+
+						var userlist = dojo.byId("userlist2");
+						dojo.forEach(users, function(user){
+							dojo.create("li", {
+								innerHTML: dojo.toJson(user)
+							}, userlist);
+						});
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: dojo.when</h1>
+
+		<ul id="userlist1"></ul>
+		<ul id="userlist2"></ul>
+	</body>
+</html>

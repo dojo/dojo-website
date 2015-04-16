@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Animation Easing</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+		dojo.require("dojo.fx");
+		// To use the alternate easing methods, we need to require the dojo.fx.easing module
+		dojo.require("dojo.fx.easing");
+		// dojo.window provides convenient and cross-browser viewport measurements
+		dojo.require("dojo.window");
+
+		// Once our modules have loaded and the DOM is ready...
+		dojo.ready(function(){
+			var dropButton = dojo.byId("dropButton"),
+				ariseSirButton = dojo.byId("ariseSirButton"),
+				anim8target = dojo.byId("anim8target");
+
+			// Set up a couple of click handlers to run our animations
+			dojo.connect(dropButton, "onclick", function(evt){
+				// get the dimensions of our viewport
+				var viewport = dojo.window.getBox(dojo.doc);
+				dojo.animateProperty({
+					// use the bounceOut easing routine to have the box accelerate
+					// and then bounce back a little before stopping
+			        easing: dojo.fx.easing.bounceOut,
+			        duration: 500,
+					node: anim8target,
+					properties: {
+						// calculate the 'floor'
+						// and subtract the height of the node to get the distance from top we need
+						top: { start: 0, end:viewport.h - anim8target.offsetHeight }
+					}
+				}).play();
+			});
+			dojo.connect(ariseSirButton, "onclick", function(evt){
+				dojo.animateProperty({
+					node: anim8target,
+					properties: { top: 0 }
+				}).play();
+			});
+		});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Animation Easing</h1>
+
+		<button id="dropButton">Drop block</button>
+		<button id="ariseSirButton">Return block</button>
+
+		<div id="anim8target" class="box" style="top: 0; left: 50%; background-color: #fc9">
+			<div class="innerBox">A box</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,341 @@
+
+
+<h3>Getting Started</h3>
+<p>
+We've <a href="/documentation/tutorials/1.6/datagrid/">learned about the Data Grid</a> and how
+to <a href="/documentation/tutorials/1.6/populating_datagrid/">populate a Grid with data</a>.  Now
+we'll introduce three major concepts to be used when working with the <code>dojox.grid.DataGrid</code>:
+how the Grid's event system works, how the Grid's selections work, and how to set up your Grid
+so that you can edit data.
+</p>
+<h3>The Grid's Event System</h3>
+<p>
+The Grid supports quite a few events&mdash;see <a href="/api/1.6/dojox/grid/DataGrid#onApplyCellEdit">the API reference</a>
+for a full list&mdash;but for this tutorial, we are going to focus on the most common event
+used by developers: <code>onRowClick</code>.  <code>onRowClick</code> is used to
+detect clicks on rows (duh!), but the way in which it passes information about the event
+is special: instead of passing specific arguments like many of the events in the
+Dijit ecosphere, it augments standard DOM event objects with some custom information.
+</p>
+<h4>The decorated event object</h4>
+<p>
+When events are fired, the Grid <em>decorates</em> the DOM event object passed to event handlers by the browser.
+It does this by attaching the following properties to the event object:
+</p>
+<ul>
+<li><strong><code>grid</code>:</strong> A reference to the grid in which the event was fired</li>
+<li><strong><code>cell</code>:</strong> A reference to the specific cell in the grid from which the event was fired</li>
+<li><strong><code>rowIndex</code>:</strong> A reference to the <em>index</em> of the row in which the event was fired</li>
+</ul>
+<p>
+All of these custom properties are accessible from the event object that is passed to your connected
+handler.  Say, for example, we'd like to get a reference to the underlying <code>dojo.data</code> item
+that a row represents when it is clicked.  We would do something like this:
+</p>
+<pre class="brush: js;">
+// assuming our grid is stored in a variable called "myGrid":
+dojo.connect(myGrid, "onRowClick", myGrid, function(evt){
+	var idx = evt.rowIndex,
+		item = this.getItem(idx);
+
+	//	get a value out of the item
+	var value = this.store.getValue(item, "someAttr");
+
+	//	do something with the value.
+});
+</pre>
+<a class="demoBtn demo" href="demo/rowclick.html">View Demo</a>
+<p>
+We focus on rows instead of cells for events because a Grid is a representation
+(or view) of a collection of data items.  Since each row represents a single item,
+it is more logical and efficient to work with full rows instead of attempting to
+handle individual cells.
+</p>
+<p class="proTip">
+Don't forget: when working with a Grid, you should be doing any kind of data
+operations <em>in the underlying data store</em> and not with the DOM structure
+of the Grid directly.
+</p>
+<h4>Other events</h4>
+<p>
+The Grid supports a large set of basic events on both rows and cells,
+which you can use to create customizations (such as visual alterations) if needed.
+They are as follows:
+</p>
+<table style="width: 100%;margin:1em;">
+<thead>
+<tr>
+<th>Row</th>
+<th>HeaderCell</th>
+<th>Cell</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>onRowClick</td>
+<td>onHeaderCellClick</td>
+<td>onCellClick</td>
+</tr>
+<tr>
+<td>onRowContextMenu</td>
+<td>onHeaderCellContextMenu</td>
+<td>onCellContextMenu</td>
+</tr>
+<tr>
+<td>onRowDblClick</td>
+<td>onHeaderCellDblClick</td>
+<td>onCellDblClick</td>
+</tr>
+<tr>
+<td>onRowFocus</td>
+<td>onHeaderCellFocus</td>
+<td>onCellFocus</td>
+</tr>
+<tr>
+<td>onRowMouseDown</td>
+<td>onHeaderCellMouseDown</td>
+<td>onCellMouseDown</td>
+</tr>
+<tr>
+<td>onRowMouseOut</td>
+<td>onHeaderCellMouseOut</td>
+<td>onCellMouseOut</td>
+</tr>
+<tr>
+<td>onRowMouseOver</td>
+<td>onHeaderCellMouseOver</td>
+<td>onCellMouseOver</td>
+</tr>
+</tbody>
+</table>
+<p>
+Each of these events are passed the same decorated DOM event object as we saw in
+our <code>onRowClick</code> example.
+</p>
+<p class="proTip">
+The Grid also supports a number of other events, including notifications when a
+cell is being edited, and when rows/items are selected.  See
+<a href="/api/1.6/dojox/grid/DataGrid#onApplyCellEdit">the API reference</a>
+for more details.
+</p>
+<h3>Row selections with the Grid</h3>
+<p>
+The Grid supports the notion of row-based selections, providing several
+options for selection behavior.  The desired behavior can be specified when
+creating the Grid using the <code>selectionMode</code> property:
+</p>
+<pre class="brush: js; highlight: [4];">
+var myGrid = new dojox.grid.DataGrid({
+	store: myStore,
+	structure: myStructure,
+	selectionMode: "single"
+}, "someNode");
+myGrid.startup();
+</pre>
+<p>
+The possible values for <code>selectionMode</code> are:
+</p>
+<ul>
+	<li><strong><code>none</code>:</strong> No selections are allowed</li>
+	<li><strong><code>single</code>:</strong> Only one row may be selected at a
+		time; clicking a second row will remove the selection from the first</li>
+	<li><strong><code>multiple</code>:</strong> Each click toggles the selection of
+		the row in question</li>
+	<li><strong><code>extended</code>:</strong> The default mode; normal clicks
+		operate like <code>single</code>, but multiple rows / ranges of rows may be
+		selected by holding modifier keys (e.g. Ctrl and Shift on Windows) while clicking</li>
+</ul>
+<h4>Row selectors</h4>
+<p>
+In addition to selecting rows by clicking directly on data cells, the Grid also
+provides a few options allowing selection via a dedicated area of each row.
+</p>
+<p>
+The most basic of these is exposed via the Grid's <code>rowSelector</code> property.
+This can be set to a CSS-compatible width measurement (e.g. <code>"20px"</code>),
+or simply to <code>true</code> which will use a default width.
+</p>
+<p>
+The Grid also provides options for selection via checkboxes, or&mdash;in the
+case of the <code>single</code> row selection mode&mdash;radio buttons.
+These capabilities are exposed via the semi-private custom view types
+<code>dojox.grid._CheckBoxSelector</code> and <code>dojox.grid._RadioSelector</code>.
+You would include one of these views in your grid structure as follows:
+</p>
+<pre class="brush: js; highlight: [4,5,6];">
+var myStructure = [
+	// First, a view using the _CheckBoxSelector custom type.
+	// Don't forget to dojo.require("dojox.grid._CheckBoxSelector")
+	{
+		type: "dojox.grid._CheckBoxSelector"
+	},
+	// Now include the data cells in a view occupying the rest of the grid.
+	[
+		[
+			new dojox.grid.cells.RowIndex({ width: "10%" }),
+			{ name: "Column 1", field: "col1", width: "30%" },
+			{ name: "Column 2", field: "col2", width: "30%" },
+			{ name: "Column 3", field: "col3", width: "30%" }
+		],[
+			{ name: "Column 4", field: "col4", colSpan: 4 }
+		]
+	]
+];
+</pre>
+<p class="proTip">
+You may have noticed we snuck an interesting cell type into this structure:
+<code>dojox.grid.cells.RowIndex</code>.  This cell simply displays the
+index of each row in the grid.  It is not at all required in order
+to take advantage of the Grid's selection capabilities, but it may be useful
+particularly during the process of prototyping a grid structure.
+</p>
+<p>
+To see these selector features in action, check out the selector demo below.
+</p>
+<h4>Getting selections from the Grid</h4>
+<p>
+The ability to select data is pointless unless you have some way of retrieving the
+current selection.  The Grid handles this through the <code>selection</code> property,
+and three event handlers&mdash;<code>onSelected</code>, <code>onDeselected</code>,
+and <code>onSelectionChanged</code>.
+</p>
+<p>
+When connecting to <code>onSelected</code> or <code>onDeselected</code>, you
+will receive the index of the row that has been selected or deselected, respectively.
+Additionally, you can use the Grid's <code>selection</code> property to
+retrieve the items represented by the selected rows and operate on them, like so:
+</p>
+<pre class="brush: js;">
+// assuming our grid is stored in a variable called "myGrid":
+dojo.connect(myGrid, "onSelectionChanged", myGrid, function(){
+	//	this will be an array of dojo.data items
+	var items = this.selection.getSelected();
+
+	//	do something with the selected items
+	dojo.forEach(items, function(item){
+		var v = this.store.getValue(item, "attr");
+		//	do something with v
+	}, this);
+});
+</pre>
+<a class="demoBtn demo" href="demo/selector.html">View Demo</a>
+<p class="proTip">
+The return from <code>selection.getSelected()</code> is <strong>always</strong> an array, regardless
+of the selection mode used; i.e. if you set up your Grid to only allow one selection at a time,
+<code>getSelected</code> will still return an array, with a single item in it.
+</p>
+<p>
+For more information about the Grid's <code>selection</code> object, take a look at
+<a href="/api/1.6/dojox/grid/Selection">the Selection object</a> in the API reference, where you'll
+find that you have full programmatic access to grid selection operations.
+</p>
+<p>
+Now that we have learned how selections work with a Grid, let's take a look at a major piece of
+functionality: editing data with a Grid.
+</p>
+<h3>Editing data with the Grid</h3>
+<p>
+Like a typical relational database GUI (Graphical User Interface) or a spreadsheet program, the
+Grid can also allow you to edit data at the field level.  To do this, you have to designate
+whether a field is <em>editable</em> in your structure definition, and specify what type of
+editing you want to enable through the use of the <code>type</code> property in each
+column definition, like so:
+</p>
+<pre class="brush: js;">
+var myStructure = [{
+	defaultCell: { width: 8, editable: true, type: dojox.grid.cells._Widget, styles: 'text-align: right;'  },
+	rows: [
+		{ name: 'Id', field: 'id', editable: false /* Can't edit ID's of dojo.data items */ },
+		{ name: 'Date', field: 'col8', width: 10,
+			type: dojox.grid.cells.DateTextBox,
+			formatter: formatDate,
+			constraint: {formatLength: 'long', selector: "date"}},
+		{ name: 'Priority', styles: 'text-align: center;', field: 'col1',
+			type: dojox.grid.cells.ComboBox,
+			options: ["normal", "note", "important"], width: 10},
+		{ name: 'Mark', field: 'col2', width: 3, styles: 'text-align: center;',
+			type: dojox.grid.cells.CheckBox},
+		{ field: 'col3', name: 'Status',
+			styles: 'text-align: center;',
+			type: dojox.grid.cells.Select,
+			options: [ "new", "read", "replied" ]
+		},
+		{ name: 'Message', field: 'col4', styles: '', width: 10,
+			type: dojox.grid.cells.Editor, editorToolbar: true },
+		{ name: 'Amount', field: 'col5', formatter: formatCurrency, constraint: {currency: 'EUR'},
+			widgetClass: dijit.form.CurrencyTextBox },
+		{ name: 'Amount', field: 'col5', formatter: formatCurrency, constraint: {currency: 'EUR'},
+			widgetClass: dijit.form.HorizontalSlider, width: 10}
+	]
+}];
+</pre>
+<a class="demoBtn demo" href="demo/edit.html">View Demo</a>
+<p class="proTip">
+Note that when defining a Grid's structure declaratively, cell editor type is specified
+in the <code>th</code> via the <code>cellType</code> attribute, <em>not</em> <code>type</code>.
+</p>
+<p class="proTip">
+A friendly reminder: to do <strong>any</strong> kind of editing with a Grid,
+you <strong>must</strong> use a data store that implements the
+<code>dojo.data.api.Write</code> API, such as the
+<code>dojo.data.ItemFileWriteStore</code>.
+</p>
+<p>
+By default, if you specify a column to be editable but don't specify a widget
+constructor, you will get a plain text box.  This is often adequate;
+however, you might find that you'll need to limit the options of entry, deal with
+dates, or have some other special needs&mdash;like in the example above.
+</p>
+<p>
+We set up our example structure with a <code>defaultCell</code> definition,
+which sets a baseline of properties to be applied to all cells in our structure,
+unless explicitly overridden on a per-cell basis.  In this case, we specify that
+we want cells to be editable unless otherwise noted, and set the type to a basic
+custom editor widget called <code>dojox.grid.cells._Widget</code>, from which
+all the custom grid-based editing widgets derive.  We then customize each
+column definition to specify which kind of editing widget we'd really like to
+use in each case.
+</p>
+<p>
+As you can see, the Grid itself provides a number of "special" widgets for you.
+In our example, we can see <code>dojox.grid.cells.DateTextBox</code>,
+<code>dojox.grid.cells.ComboBox</code>, <code>dojox.grid.cells.Select</code>,
+<code>dojox.grid.cells.Editor</code>, and <code>dojox.grid.cells.CheckBox</code>;
+we can also see the use of actual Dijits, such as
+<code>dijit.form.CurrencyTextBox</code> and <code>dijit.form.HorizontalSlider</code>.
+Using each of these widgets may also require additional properties to be defined;
+for example, the ComboBox and Select widgets require an additional property
+called <code>options</code>.
+</p>
+<p class="proTip">
+These widgets for editing on a cell-level (all defined within the
+<code>dojox.grid.cells</code> namespace) have been defined because of the special
+HTML needs of the Grid.  When in doubt about what kind of widget to use for
+editing, look first to see if the widget in question has been implemented under
+<code>dojox.grid.cells</code> before trying to use the Dijit equivalent.
+This is particularly true of any kind of Dijit that defines/uses a popup of some sort.
+</p>
+<p>
+Because of the data binding that occurs between Dijit-based form widgets and
+<code>dojo.data</code> stores via the Grid, this should be all you need to enable
+editing for a data set.
+</p>
+<p class="proTip">
+Another friendly reminder: you will need to use a <em>write-enabled</em> data store
+in order to do any kind of editing within a Grid.  Depending on the store, you
+may also have to do a periodic <em>save()</em> in order to capture any edits
+within a Grid; this is entirely dependent on the store of choice.
+</p>
+<h3>Conclusion</h3>
+<p>
+In this tutorial, we've built upon previous topics by introducing additional
+features of the Grid.  The Grid exposes many events to which custom logic can be
+applied.  Several row selection modes are available; the Grid provides APIs
+for determining selected rows and being notified when a selection occurs.
+Using the Grid's powerful editing capabilities, it is possible to
+modify the data set from within the Grid itself.
+</p>
+<p>Armed with this knowledge, you should be well on your way towards creating
+an application capable of displaying and manipulating information in complex
+data sets.
+</p>

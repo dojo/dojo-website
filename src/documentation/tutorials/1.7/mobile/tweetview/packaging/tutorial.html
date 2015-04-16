@@ -1,0 +1,223 @@
+<?php require("../../../../resources/tutHead.inc"); ?>
+
+<h3>Implementing the Android Theme</h3>
+<p>Throughout the course of creating the CSS that powers our application, we've assumed the iPhone theme, even though we're using <code>deviceTheme</code> within our page.  That allowed us to speed up development and worry about Android theming once the application was fully functional.  The time for catering our application to Android is now!</p>
+
+<p>The only remaining task in catering our application for Android is implementing a small snippet of code that will detect the device type and modify a few custom image paths (our refresh icon and TabBar icons) so that the Android images display:</p>
+
+<pre class="brush: js;">
+require(["dojox/mobile/parser", "dojox/mobile/TabBar", "tweetview/TweetView", "tweetview/SettingsView",
+             "dojox/mobile/deviceTheme", "dojo/dom-attr", "dojo/_base/array", "dojox/mobile", "dojo/domReady!"],
+	function(mobileParser, TabBar, TweetView, SettingsView, dm, domAttr, arrayUtil) {
+
+		// If Android....
+		if(dm.currentTheme == "android") {
+			var imagePath = "js/tweetview/resources/images/";
+			// Add a new "iconLoading" attribute to the TweetView instances
+			TweetView.prototype.iconLoading = imagePath + "androidLoading.gif";
+			// Update image path on bottom tabbar
+			domAttr.set(document.getElementById("tabBar"), "iconBase", imagePath + "iconStripAndroid.png");
+		}
+		// Parse the page!
+		mobileParser.parse();
+});
+</pre>
+
+<p class="proTip">
+	A similar <code>if</code> statement would be used to implement images for any alternate theme.
+</p>
+
+<p>Now your application will load the Android imagery if the device is a mobile Android-based device!</p>
+
+<p><img src="images/android.png" alt="DojoX Mobile Android" style="margin:0 auto;display:block;" /></p>
+
+<p>Great!  Our simple application handles images for both Android and iOS devices.</p>
+
+<h3>Remove Cache-Preventing Meta Tags</h3>
+<p>Remember the META tags we added to prevent caching during development of the widget?</p>
+
+<pre class="brush: html;">
+&lt;!-- prevent cache --&gt;
+&lt;meta http-equiv="cache-control" content="no-cache"&gt;
+&lt;meta http-equiv="pragma" content="no-cache"&gt;
+</pre>
+
+<p>Remove those to allow the application to be cached on the device.</p>
+
+
+<h3>dojox/mobile and Builds</h3>
+<p>Creating a build for dojox/mobile applications is extremely important because we want our mobile applications to be a small as possible.  Let's walk through the steps to create a compact build of our dojox/mobile application: TweetView.</p>
+
+<h4>Dojo's Build System</h4>
+<p>Typical build scripts are found within the Dojo Toolkit's <code>util/buildscripts</code> directory, so, for the rest of the tutorial, you will need a local copy of a Dojo source distribution. If you don't have that already, visit the <a href="http://dojotoolkit.org/download/">Download</a> page on dojotoolkit.org. Make sure you get a "Source" distribution, that includes the util directory. Once you have that, copy the <code>dojo</code>, <code>dijit</code>, <code>dojox</code> and <code>util</code> directories into the <code>js</code> directory of your sample application. Your file structure should now be as follows:
+</p>
+
+<p>
+	<img src="../app/images/BuildFileStructure.png" alt="TweetView build file structure" /><br />
+	<em>The file structure needed to run the build, including the <code>dojo</code>, <code>dijit</code>, <code>dojox</code> and <code>util</code> directories.</em>
+</p>
+
+<h4>TweetView Build Profile</h4>
+
+<p>Let's create a build profile for TweetView. The profile is a configuration file that says what the build will include, and what options are used. The Dojo build system is fully documented on the <a href="/documentation/tutorials/1.7/build/">Creating Build</a> page of the documentation, we will just explain briefly what it contains here. </p>
+
+<p>Here is our build profile (it is included in the downloadable archive, in <code>tweetview/app/js/tweetview.profile.js</code>):</p>
+<pre class="brush: js;">
+var profile = {
+	
+	"action" : "release",
+	
+	"releaseDir" : "tweetview-release/dojo",
+	
+	"selectorEngine" : "acme",
+	"stripConsole" : "normal",
+	"copyTests" : false,
+	"cssOptimize" : "comments.keepLines",
+	"mini" : true,
+	"webkitMobile" : true,
+	
+	localeList: "en-us",
+	
+	layers: {
+		"dojo/dojo": {
+			customBase: true,
+			include: [
+				"dojo/_base/declare",
+				"dojo/_base/lang",
+				"dojo/_base/array",
+				"dojo/_base/window",
+				"dojo/_base/event",
+				"dojo/_base/connect",
+				"dojo/_base/html",
+				"dojo/io/script",
+				"dojo/Deferred",
+				"dojo/DeferredList",
+				"dojo/i18n",
+				"dojo/date",
+				"dijit/_WidgetBase",
+				"dijit/_base/manager",
+				"dojox/mobile",
+				"dojox/mobile/parser",
+				"dojox/mobile/deviceTheme",
+				"dojox/mobile/ScrollableView",
+				"dojox/mobile/TabBar",
+				"dojox/mobile/TabBarButton",
+				"dojox/mobile/ToolBarButton"
+			]
+		},
+		"tweetview/tweetview-app": {
+			include: [
+				"tweetview/TweetView",
+				"tweetview/SettingsView"
+			]
+		}
+	},
+
+	staticHasFeatures: {
+		"dom-addeventlistener": true,
+		"dom-qsa": true,
+		"json-stringify": true,
+		"json-parse": true,
+		"bug-for-in-skips-shadowed": false,
+		"dom-matches-selector": true,
+		"native-xhr": true,
+		"array-extensible": true,
+		"ie": undefined,
+		"quirks": false,
+		"webkit": true
+	},
+
+	packages: [
+		{ name:"dojo", location:"dojo" },
+		{ name:"dijit", location:"dijit" },
+		{ name:"dojox", location:"dojox" },
+		{ name:"tweetview", location:"tweetview" }
+	]
+};
+</pre>
+
+<p>The profile starts with some options: <code>"action" : "release"</code> is the standard action for a build, <code>"releaseDir"</code> specifies the directory where the build results will be output. The <code>"cssOptimize"</code> option is useful for a mobile build since it makes sure all the CSS files that make up each theme are concatenated into one single CSS file.</p>
+
+<p>Next are the layer definitions. Each layer will result in one <code>.js</code> file being generated. We define two layers: a <code>dojo/dojo</code> layer that will include only the standard Dojo code that we actually use in our application, and a <code>tweetview/tweetview-app</code> that will contain the custom code that is specific to our application. For each layer, we specify the set of modules that the layer will include.</p>
+
+<p>Then we define a set of <code>has</code> features. Features are a way to isolate pieces of code that can be conditionally included or excluded (see <a href="/reference-guide/1.7/dojo/has.html#dojo-has">dojo/has</a>).
+For example, we set the <code>"ie"</code> feature to <code>undefined</code>: by this, we state that we don't want the application to run on Internet Explorer (only on mobile browsers), so we accept that any IE-specific code is excluded from the build. Similarly we set <code>"webkit"</code> to true, so our build will run only on webkit-based browsers. You could choose different settings if you want to support more browsers.</p>
+
+<p class="proTip">Remember how we used a custom method, <code>_ViewMixin.getElements</code>, instead of <code>dojo/query</code>?  There's no need to add <code>dojo/query</code> as a dependency if all we need is <code>getElementByClassName</code> element collection.  This will save our application in build size.</p>
+
+<h4>Running the Build</h4>
+<p>Let's switch to the command line and build our layers based on the build profile above:</p>
+
+Unix:
+<pre class="brush: js;">
+cd js/util/buildscripts
+./build.sh profile=../../tweetview.profile.js
+</pre>
+
+Windows:
+<pre class="brush: js;">
+cd js\util\buildscripts
+.\build.bat profile=..\..\tweetview.profile.js
+</pre>
+
+<p>After the build is completed, navigate to the <code>js/tweetview-release/dojo/tweetview/</code> directory to view the result:</p>
+
+<p>
+	<img src="../app/images/build.png" alt="TweetView build profile" /><br />
+	<em>The resulting release folder and its contents pertaining to TweetView.</em>
+</p>
+
+<h4>Implementing the Build</h4>
+<p>To implement our newly created build files, open app.html.</p>
+<p>First, update the path to Dojo, so that we now use the dojo.js file that was created by the build
+instead of the original dojo.js. This corresponds to the <code>dojo/dojo</code> layer in our profile, and the resulting file is in <code>js/tweetview-release/dojo/dojo/dojo.js</code>, so we update the path of the Dojo script tag accordingly.
+</p>
+<p>
+We also need to load the application-specific code corresponding to our second layer, <code>tweetview/tweetview-app</code>.
+When using the AMD loader, additional layers must be loaded using <code>require</code> calls, like other modules.
+So, we add a new <code>require</code> call "around" our existing code, which means that all the code that we had previously (including the existing require calls) is now contained in the factory function of the new require call:</p>
+<pre class="brush: js;">
+&lt;script src="js/tweetview-release/dojo/dojo/dojo.js"&gt;&lt;/script&gt;
+&lt;script
+	require(["tweetview/tweetview-app"], function(){
+		require([...], function(...){ // existing require calls
+			.. // existing code
+		});
+	});
+</pre>
+<p class="proTip">The nested require calls are necessary to make sure that the layer code is loaded before the other modules are actually required.</p>
+
+<p>Finally you must also update the <code>location</code> of the <code>tweetview</code> package in the <code>dojoConfig</code> section so that it points to <code>js/tweetview-release/dojo/release</code>: this is necessary to find the nls files generated during the build.</p>
+
+<p class="proTip">A "build" version of the HTML file, <code>index-build.html</code>, is included in the downloadable archive. You can launch this file once you have run the build.</p>
+
+<h3>TweetView Review</h3>
+<p>TweetView is complete!  Our simple mobile application has been templated (HTML), styled (CSS), coded (JavaScript), and built for production!  Let's review what we learned in the process of create TweetView:</p>
+<ul>
+	<li>The basic widgets included within <code>dojox/mobile</code></li>
+	<li>How to theme a <code>dojox/mobile</code> application to look like iOS and Android devices</li>
+	<li>The format which to declaratively code <code>dojox/mobile</code> widgets with HTML and programmatically create widgets with JavaScript</li>
+	<li>How to use <code>dojo/io/script</code> and <code>dojo/DeferredList</code> to retrieve JSON-formatted data from Twitter</li>
+	<li>How to extend <code>dojox/mobile</code> base widgets</li>
+	<li>Strategies behind following good JavaScript practices but also keeping code compact and minimized in dependencies</li>
+	<li>The special build process needed for <code>dojox/mobile</code> applications</li>
+</ul>
+
+<p>I'm hoping you ended this project with the same feelings about <code>dojox/mobile</code> that I have:  <code>dojox/mobile</code> is an outstanding mobile application framework complete with themes and widgets to match mobile device controls.  dojox/mobile is also easy to learn, extend, and dynamically populate with content.  TweetView, a basic three-view application, was very easy to create, thanks to <code>dojox/mobile</code>!</p>
+
+
+<h3>dojox/mobile Will Only Get Better!</h3>
+<p>
+	<code>dojox/mobile</code> is growing at a considerable rate due to the push by the Dojo team to provide the best mobile solutions.  Look forward to more widgets, more code-efficient and processing-efficient widget controls, and more device-specific functionality.  I encourage you to take the time to experiment with <code>dojox/mobile</code> and share your experiences with the rest of the Dojo community!
+</p>
+
+<p><a href="../app/">Click here</a> to see the completed application in action!</p>
+
+
+<h3>Download The Source</h3>
+<div class="downlaodSource">
+	Download <a href="../app.zip">TweetView</a>.  The archive will work as soon as you unzip the file!
+</div>
+
+
+<?php include("../series.inc"); ?>

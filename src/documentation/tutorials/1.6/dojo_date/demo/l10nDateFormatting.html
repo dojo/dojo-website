@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Localized Date Formatting</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script>
+			dojoConfig = {
+				isDebug: true,
+				extraLocale: ['en-us', 'en-gb', 'fr', 'es']
+			}
+		</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js">
+		</script>
+		<script>
+			dojo.require("dojo.date");
+			dojo.require("dojo.date.locale");
+			
+			demo = {
+				formatL10NDates: function() {
+					var mayDay = new Date("May 01, 2011"); 
+					
+					this.showResult("Localized Dates (May Date: 1st May, 2011)", [
+						"locale\tshort\t\t\tlong",
+						"en-gb\t" 
+							+ dojo.date.locale.format(mayDay, { locale: "en-gb", formatLength: "short" })
+							+ "\t"
+							+ dojo.date.locale.format(mayDay, { locale: "en-gb", formatLength: "full" })
+							,
+						"en-us\t" 
+							+ dojo.date.locale.format(mayDay, { locale: "en-us", formatLength: "short" })
+							+ "\t\t"
+							+ dojo.date.locale.format(mayDay, { locale: "en-us", formatLength: "full" })
+							,
+						"es\t" 
+							+ dojo.date.locale.format(mayDay, { locale: "es", formatLength: "short" })
+							+ "\t\t"
+							+ dojo.date.locale.format(mayDay, { locale: "es", formatLength: "full" })
+					].join("\n"))
+				},
+				showResult: function(heading, content){
+					// IE8 strips whitespace when assigning to innerHTML, so use outerHTML
+					dojo.byId("outbox").outerHTML = '<pre id="outbox">' + content + '</pre>';
+				}
+			}
+
+			dojo.ready(function(){
+				demo.formatL10NDates();
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Localized Date Formatting</h1>
+		<p>Using dojo.date.locale.parse to format a date to locale-appropriate date strings</p>
+
+		<div class="resultPanel">
+			<pre id="outbox"></pre>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Demo: Dijit Menus</title>
+	<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+	<style>
+		.tasks {
+			width: 23em;
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+		}
+		
+		.task {
+			margin: 2px;
+			padding: 6px;
+			border: 1px solid #ccc;
+		}
+		
+		.tasks .selected {
+			border-color: #000;
+		}
+		
+		.task:hover {
+			border-color: #99f;
+		}
+		
+		.begin {
+			background-color: #cfc;
+		}
+		.complete {
+			background-color: #393;
+			color: #fff;
+		}
+		.cancel {
+			background-color: #fcc;
+		}
+	</style>
+	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"></script>
+</head>
+<body class="claro">
+	<h3>Menu Demo</h3>
+	<h4>Tasks</h4>
+	<ul id="taskList" class="tasks">
+		<li id="task_0" class="task">Code review</li>
+		<li id="task_1" class="task">Build tests</li>
+		<li id="task_2" class="task">Prototype UI</li>
+	</ul>
+
+	<script>
+		dojo.require("dijit.Menu");
+		dojo.require("dijit.MenuItem");
+		dojo.require("dijit.PopupMenuItem");
+		
+		var demo = {
+			taskNodes: null, // used to store task DOM nodes for reuse later
+			
+			hoveredTaskNode: null, // last task node hovered (for onTaskItemClick)
+			
+			currentTaskNode: null, // currently "selected" task
+			
+			classStates: ["begin", "cancel", "complete"], // state classes for tasks
+			
+			// handler for clicks on task context menu items
+			onTaskItemClick: function(evt){
+				// retrieve the widget representing the item clicked
+				var item = dijit.getEnclosingWidget(evt.target);
+				// pass the info we have along to update state
+				this.setTaskState(item.id);
+			},
+			
+			setTaskState: function(state) {
+				// remove any previous state classes and apply new one
+				dojo.removeClass(this.hoveredTaskNode, this.classStates);
+				dojo.addClass(this.hoveredTaskNode, state);
+			},
+			
+			// called when one of the task nodes is clicked
+			updateCurrentTask: function(node){
+				if (this.currentTaskNode) {
+					// remove selected class from previously-selected task node
+					dojo.removeClass(this.currentTaskNode, "selected");
+				}
+				// add selected class to newly-selected task node
+				dojo.addClass(node, "selected");
+				// now that a task is selected, we can enable our task sub-menu
+				dijit.byId("task").set("disabled", false);
+				// update currentTaskNode for future use
+				this.currentTaskNode = node;
+			},
+			
+			// called when one of the task nodes is hovered over
+			updateHoveredTask: function(node){
+				this.hoveredTaskNode = node;
+			}
+		}
+		
+		dojo.ready(function(){
+			// query task nodes, saving NodeList for future use
+			demo.taskNodes = dojo.query(".task");
+			
+			demo.taskNodes.onclick(function(){
+				demo.updateCurrentTask(this);
+			});
+			
+			demo.taskNodes.onmouseenter(function(){
+				demo.updateHoveredTask(this);
+			});
+			
+			// create main menu as general context menu for entire document
+			var mainMenu = new dijit.Menu({
+				id: "mainMenu",
+				contextMenuForWindow: true
+			});
+			
+			// create task menu as context menu for task nodes.
+			var taskMenu = new dijit.Menu({
+				id: "taskMenu",
+				// since NodeLists are also arrays of DOM nodes, we can pass that here
+				targetNodeIds: demo.taskNodes
+			});
+			
+			// define the task menu items
+			taskMenu.addChild( new dijit.MenuItem({
+				id: "begin",
+				label: "Begin",
+				onClick: dojo.hitch(demo, "onTaskItemClick")
+			}) );
+			
+			taskMenu.addChild( new dijit.MenuItem({
+				id: "complete",
+				label: "Mark as Complete",
+				onClick: dojo.hitch(demo, "onTaskItemClick")
+			}) );
+			
+			taskMenu.addChild( new dijit.MenuItem({
+				id: "cancel",
+				label: "Cancel",
+				onClick: dojo.hitch(demo, "onTaskItemClick")
+			}) );
+			
+			// create main menu items
+			mainMenu.addChild( new dijit.MenuItem({
+				id: "about",
+				label: "About"
+			}) );
+			
+			// To demonstrate dynamically disabling/enabling an item,
+			// this item is initially disabled until we select a task.
+			mainMenu.addChild( new dijit.PopupMenuItem({
+				id: "task",
+				label: "Task",
+				disabled: true,
+				// notice we reuse the same Menu as the task context menu
+				popup: taskMenu
+			}) );
+			
+			mainMenu.startup();
+			taskMenu.startup();
+		});
+	</script>
+</body>
+</html>

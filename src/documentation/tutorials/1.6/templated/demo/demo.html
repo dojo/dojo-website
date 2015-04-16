@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Using _Templated</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+		<script>
+			dojoConfig = {
+				isDebug: true,
+				parseOnLoad: false,
+				baseUrl: './',
+				modulePaths: {
+					demo: '.'
+				}
+			}
+		</script>
+		<!-- Load Dojo -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"></script>
+		<script>
+			dojo.require("dijit._Widget");
+			dojo.require("dijit._Templated");
+			dojo.require("dijit.form.Button");
+
+			// To keep the example simple, we're declaring our widget inline and then manually parsing.
+			// Future tutorials will explain how to properly separate this out into its own file.
+			dojo.ready(function(){
+				// Declare our widget
+				dojo.declare("demo.SomeWidget", [ dijit._Widget, dijit._Templated ], {
+					//	get our template
+					templateString: dojo.cache("demo", "templates/SomeWidget.html"),
+
+					//	some properties
+					baseClass: "someWidgetBase",
+					title: "",	//	we'll set this from the widget def
+
+					//	hidden counter
+					_counter: 1,
+					_firstClicked: false,
+
+					//	define an onClick handler
+					onClick: function(){
+						if(this._firstClicked){
+							this.titleNode.innerHTML = this.title + " was clicked " + (++this._counter) + " times.";
+						} else {
+							this.titleNode.innerHTML = this.title + " was clicked!";
+							this._firstClicked = true;
+						}
+					},
+
+					postCreate: function(){
+						this.titleNode.innerHTML = this.title;
+					}
+				});
+
+				// Now we can parse
+				dojo.parser.parse();
+			}); // end dojo.ready
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: Using _Templated</h1>
+		<div data-dojo-type="demo.SomeWidget" data-dojo-props="title:'Our Some Widget'">
+			<div>Don't forget to click on the title!</div>
+			<p>This is arbitrary content!</p>
+			<button data-dojo-type="dijit.form.Button">My Button</button>
+			<p>More arbitrary content!</p>
+		</div>
+	</body>
+</html>

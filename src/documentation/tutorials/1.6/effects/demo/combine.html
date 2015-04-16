@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Tutorial: dojo.fx.combine</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			// In order to use dojo.fx.chain, we need to require the dojo.fx module
+			dojo.require("dojo.fx");
+
+			// Once our modules have loaded and the DOM is ready...
+			dojo.ready(function(){
+				var slideAwayButton = dojo.byId("slideAwayButton"),
+					slideBackButton = dojo.byId("slideBackButton"),
+					slideTarget = dojo.byId("slideTarget");
+
+				// Set up a couple of click handlers to run our combined animations
+				dojo.connect(slideAwayButton, "onclick", function(evt){
+					dojo.fx.combine([
+						dojo.fadeIn({ node: slideTarget }),
+						dojo.fx.slideTo({ node: slideTarget, left: "200", top: "200" })
+					]).play();
+				});
+				dojo.connect(slideBackButton, "onclick", function(evt){
+					dojo.fx.combine([
+						dojo.fx.slideTo({ node: slideTarget, left: "0", top: "100" }),
+						dojo.fadeOut({ node: slideTarget })
+					]).play();
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Tutorial: dojo.fx.combine</h1>
+		<button id="slideAwayButton">Slide block away</button>
+		<button id="slideBackButton">Slide block back</button>
+
+		<div id="slideTarget" class="red-block slide chain">
+			A red block
+		</div>
+	</body>
+</html>

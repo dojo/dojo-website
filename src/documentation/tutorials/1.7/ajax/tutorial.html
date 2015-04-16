@@ -1,0 +1,277 @@
+
+
+<h3>Getting Started</h3>
+<p>Since Ajax is used throughout the numerous classes and widgets found in
+Dojo, Dijit, and DojoX, the Dojo Toolkit's Ajax methods are baked right into Dojo base.
+However, when operating in baseless mode (by specifying <code>async: true</code> in
+<code>data-dojo-config</code>), all dependencies must be requested
+explicitly.  The AJAX helpers are located in the <code>dojo/_base/xhr</code> module.
+Here's an example demonstrating baseless usage of the <code>xhr</code> resource:</p>
+<pre class="brush: js;">
+// Require the xhr module
+require(["dojo/_base/xhr"],
+	function(xhr) {
+
+		// Execute a HTTP GET request
+		xhr.get({
+			// The URL to request
+			url: "get-message.php",
+			// The method that handles the request's successful result
+			// Handle the response any way you'd like!
+			load: function(result) {
+				alert("The message is: " + result);
+			}
+		});
+
+});
+</pre>
+
+<p>The code above executes an Ajax request to get-message.php, which returns a plain text message and alerts it to the user via the <code>load</code> function we specified.  What if there's an error though?  Or the response is XML or JSON?  What if there's form data we want to send to the server?  No problem &mdash; <code>xhr</code> allows for complete request customization and management.</p>
+
+
+<h3>Customizing an Ajax Request</h3>
+<p>Web developers need flexibility in Ajax requests to accomplish different tasks.  Reasons for using Ajax calls include, but are not limited to:</p>
+<ul>
+	<li>Loading static data from the server</li>
+	<li>Accessing XML or JSON data from a web service</li>
+	<li>Sending form data to the server</li>
+	<li>Refreshing content on a page</li>
+</ul>
+<p>Obviously, one type of request cannot accommodate all Ajax goals.  Through customization of the request, <code>xhr</code> can handle each of the situations presented above.  Customization of the request takes place in <code>xhr.get</code>'s and <code>xhr.post</code>'s primary argument: an object containing request properties and desired values.  Let's review the most-used request options available:</p>
+<ul>
+	<li><strong>url</strong> - The URL to make the request to. </li>
+	<li><strong>handleAs</strong> - A string representing the form of data we expect returned.  Possible formats include: "text" (the default), "json", "javascript" (fragments to load and execute), and "xml".</li>
+	<li><strong>timeout</strong> - Time in milliseconds before considering the request a failure.  The error handler is triggered.</li>
+	<li><strong>content</strong> - A key-value object containing data to provide to the server. Depending on use of <code>xhr</code>, this data will either be translated to the query string or set as the post body.</li>
+	<li><strong>form</strong> - A utility option which populates the content option from keys and values in a form. If you don't specify a URL, and are using this option, it will try to use the URL as specified in the form's "action" property. Also, if you specify any content, it will override anything in the form, so typically you'll use either content or form, but not both.</li>
+</ul>
+<p>The options above manage how the request is sent, but what about the response?  The answer to that lies in three handler functions, often referred to as callback functions or just callbacks, which are also provided to the request object:</p>
+<ul>
+	<li><strong>load(response, ioArgs)</strong> - The callback that fires when the request successfully completes.  The first argument of load is the result of the request in the format designated by the handleAs option.</li>
+	<li><strong>error(errorMessage)</strong> - The callback that fires when the request fails.  The first argument is the error message, if available.</li>
+	<li><strong>handle(response, ioArgs)</strong> - The callback that fires regardless of request success or failure.</li>
+</ul>
+<p>Callbacks are important in handling data returned from requests and knowing their success or failure.  The load or error method is called first, depending on the result, and the handle callback fires next.</p>
+
+
+<h3>Examples: xhr.get and xhr.post</h3>
+<p>The following are some very common uses of <code>xhr.get</code> and <code>xhr.post</code>.</p>
+
+<h4>Refresh a Node's Content</h4>
+<pre class="brush: js;">
+require(["dojo/_base/xhr", "dojo/dom", "dojo/domReady!"],
+	function(xhr, dom) {
+
+		// Using xhr.get, as very little information is being sent
+		xhr.get({
+			// The URL of the request
+			url: "get-content.php",
+			// The success callback with result from server
+			load: function(newContent) {
+				dom.byId("contentNode").innerHTML = newContent;
+			},
+			// The error handler
+			error: function() {
+				// Do nothing -- keep old content there
+			}
+		});
+
+});
+</pre>
+<a class="demoBtn demo" href="demo/xhrget-refresh.php">View Demo</a>
+
+
+<h4>Check Username Availability</h4>
+<pre class="brush: js;">
+// Local var representing the node to be updated
+var availabilityNode = dom.byId("availabilityNode");
+
+// Using xhr, as very little information is being sent
+xhr.get({
+	// The URL of the request
+	url: "check-username.php",
+	// Allow only 2 seconds for username check
+	timeout: 2000,
+	// Send the username to check base on an INPUT node's value
+	content: {
+		username: dom.byId("usernameInput").value.toLowerCase()
+	},
+	// The success callback with result from server
+	load: function(result) {
+		if(result == "available") {
+			availabilityNode.innerHTML = "Username available!";
+		}
+		else {
+			availabilityNode.innerHTML = "Username taken!  Please try another.";
+		}
+	}
+});
+</pre>
+<a class="demoBtn demo" href="demo/xhrget-username.php">View Demo</a>
+
+<h4>Send a Contact Form Submission</h4>
+<pre class="brush: js;">
+// Local var representing if the form has been sent at all
+var hasBeenSent = false;
+
+// Local var representing node to be updated
+var messageNode = dom.byId("messageNode");
+
+// Using xhr.post, as the amount of data sent could be large
+xhr.post({
+	// The URL of the request
+	url: "submission.php",
+	// No content property -- just send the entire form
+	form: dom.byId("contactForm"),
+	// The success handler
+	load: function(response) {
+		messageNode.innerHTML = "Thank you for contacting us!";
+	},
+	// The error handler
+	error: function() {
+		messageNode.innerHTML = "Your message could not be sent, please try again."
+	},
+	// The complete handler
+	handle: function() {
+		hasBeenSent = true;
+	}
+});
+</pre>
+<a class="demoBtn demo" href="demo/xhrpost-form.php">View Demo</a>
+
+
+<h3>What is JSON?</h3>
+<p><a href="http://www.json.org/">JSON (JavaScript Object Notation)</a> is an outstanding data format to use with Ajax requests, because it allows for complex data structures to be passed from server to client.  This includes basic strings, numbers, and booleans, as well as arrays and objects.  Better yet, Dojo's <code>xhr</code> methods parse the JSON-formatted response from the server and provide you with a JavaScript object, allowing you to access the object's properties directly with no effort.  Here's a sample <code>xhr.get</code> call to retrieve and use JSON from the server:</p>
+
+<pre class="brush: js;">
+require(["dojo/_base/xhr", "dojo/dom", "dojo/_base/array", "dojo/domReady!"],
+	function(xhr, dom, arrayUtil) {
+
+		// Keep hold of the container node
+		var containerNode = dom.byId("newsContainerNode");
+
+		// Using xhr.get, as we simply want to retrieve information
+		xhr.get({
+			// The URL of the request
+			url: "get-news.php",
+			// Handle the result as JSON data
+			handleAs: "json",
+			// The success handler
+			load: function(jsonData) {
+				// Create a local var to append content to
+				var content = "";
+				// For every news item we received...
+				arrayUtil.forEach(jsonData.newsItems, function(newsItem) {
+					// Build data from the JSON
+					content += "&lt;h2&gt;" + newsItem.title + "&lt;/h2&gt;";
+					content += "&lt;p&gt;" + newsItem.summary + "&lt;/p&gt;";
+				});
+				// Set the content of the news node
+				containerNode.innerHTML = content;
+			},
+			// The error handler
+			error: function() {
+				containerNode.innerHTML = "News is not available at this time."
+			}
+		});
+
+});
+</pre>
+<a class="demoBtn demo" href="demo/xhrget-json.php">View Demo</a><br /><br />
+
+<p>The JSON standard has been in use for several years and is used by many API creators.  Most server-side languages provide methods for JSON encoding and decoding so that server-side objects can be easily converted to objects usable by JavaScript within your page. For example, PHP uses functions called <code>json_encode</code> and <code>json_decode</code> to handle JSON data.</p>
+
+
+<h3>JSONP and dojo/io/script</h3>
+<p>One fundamental limitation of Ajax technology is that requests are restricted to the current domain.  You cannot, for example, request content from dojotoolkit.org from your own website using <code>xhr.get</code>.  There is a reliable method of retrieving JSON from another domain called JSONP.  JSONP's workflow is as follows:</p>
+<ul>
+	<li>A <code>script</code> node is created.</li>
+	<li>The <code>script</code> node's "src" attribute value is set to a URL we provide, with the content/parameters that we establish in our call, including the name of a callback function to execute upon return.</li>
+	<li>The <code>script</code> node is appended into the DOM, causing the browser to make a request for the URL built up in the prior step.</li>
+	<li>The server outputs JSON based on our request, wrapped with the callback function we specified.</li>
+	<li>The browser then executes the code sent back, handing over the server's response to our callback function.</li>
+</ul>
+<p>Dojo's approach to making a JSONP request lives within the <code>dojo/io/script</code> module.  The <code>get</code> method of <code>dojo/io/script</code> accepts the same options as <code>xhr.get</code>, along with an additional <code>callbackParamName</code> option, which represents the callback function to be fired when the server sends back the JSON data. The <code>callbackParamName</code> is not something that you make up, but that the service offering you JSON provides to you, so check with the documentation of the service you're accessing to get this value.</p>
+<p>The following snippet uses <code>dojo/io/script</code> to retrieve JSON directly from GitHub:</p>
+
+<pre class="brush: js;">
+// Require the xhr module
+require(["dojo/io/script", "dojo/on", "dojo/dom", "dojo/_base/array", "dojo/domReady!"],
+	function(script, on, dom, arrayUtil) {
+
+		// Connect the button
+		on(dom.byId("getJson"), "click", function() {
+			// Output message to DOM
+			var pullsHolder = dom.byId("pullsHolder");
+			// Use the get method
+			script.get({
+				// The URL to get JSON from GitHub
+				url: "https://api.github.com/repos/dojo/dojo/pulls",
+				// The callback paramater
+				callbackParamName: "callback", // GitHub requires "callback"
+				// The success callback
+				load: function(pullsJson) {  // GitHub sent us information!
+					// Log the result to console for inspection
+					console.info("GitHub returned: ",pullsJson);
+
+					// Output the pulls to a DOM element
+					// Or output a "no pulls" message
+					var message = "";
+
+					// If there were pulls returned...
+					if(pullsJson.data && pullsJson.data.length) {
+						// Start the list
+						message += "<ul>";
+						// For every pull returned
+						arrayUtil.forEach(pullsJson.data,function(pull) {
+							message += "<li><a href='" + pull.url + "'>" + pull.title + "</a></li>";
+						});
+						//End the list
+						message += "</ul>";
+					}
+					else { // Output "no pulls" message
+						message = "No pull requests about Dojo were available.";
+					}
+					// Output message to DOM
+					pullsHolder.innerHTML = message;
+				},
+				// Ooops!  Error!
+				error: function() {
+					pullsHolder.innerHTML = "Error!  Pull requests could not be received.";
+				}
+			});
+		});
+});
+</pre>
+<a class="demoBtn demo" href="demo/dojoioscript-jsonp.php">View Demo</a>
+<br /><br />
+
+<p>Notice that we don't have to manually build up any URLs or set up this callback function or anything. The <code>dojo/io/script</code> module makes it easy for us to use the approaches we already know for Ajax, while working in a cross-domain fashion!</p>
+<p>Keep in mind, the provider we're working with must provide a JSONP API &mdash; we can't use <code>dojo/io/script</code> to just pull arbitrary information from any server we want.</p>
+
+<h3>Best Practices for Ajax and <code>xhr</code></h3>
+<p>Like any type of technology, it's important to keep best practices in mind when creating your Ajax requests:</p>
+<ul>
+	<li>GET requests should be used for simply retrieving data from the server.  POST requests are optimal when sending form data, or large sets of data, to the server.</li>
+	<li>It's advised to always provide an error callback function.  Don't assume that your request will be successful.</li>
+	<li>Use console statements during debugging to ensure the options you're sending are correct, and that the response you receive in your callback is the correct format.</li>
+	<li>From a user experience perspective, it's helpful to provide some type of indicator during Ajax requests so that the user knows something is happening.</li>
+</ul>
+
+<h3>Conclusion</h3>
+<p>The Dojo Toolkit alleviates the cross-browser complexity of Ajax and delivers an
+easy to use API with <code>dojo/_base/xhr</code>.  Dojo also provides
+<code>dojo/io/script</code> to allow cross-domain JSONP calls.
+<code>xhr.get</code> and <code>xhr.post</code> return a <code>Deferred</code> object
+(as defined by the <code>dojo/_base/Deferred</code> module)
+which makes handling Ajax requests even more powerful!  This new concept about Ajax request handling can be found <a href="../deferreds" title="Link to Deferreds tutorial" class="todo">here</a>.</p>
+
+<h3>dojo/_base/xhr Resources</h3>
+<p>Looking for more detail about Dojo's Ajax methods?  Check out these great resources:</p>
+<ul>
+	<li><a href="http://dojotoolkit.org/api/1.7/dojo#dojo.xhrGet">xhr.get</a> and
+		<a href="http://dojotoolkit.org/api/1.7/dojo#dojo.xhrPost">xhr.post</a> API Documentation</li>
+	<li><a href="http://dojotoolkit.org/api/1.7/dojo/io/script">dojo/io/script API Documentation</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/1.7/dojo/xhrGet.html">xhr.get</a> and
+		<a href="http://dojotoolkit.org/reference-guide/1.7/dojo/xhrPost.html">xhr.post</a> Reference Guides</li>
+</ul>

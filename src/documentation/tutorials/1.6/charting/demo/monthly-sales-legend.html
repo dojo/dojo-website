@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Monthly Sales with Legend, Tooltips, and Magnify</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js" 
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			
+			// Require the basic 2d chart resource: Chart2D
+			dojo.require("dojox.charting.Chart2D");
+			
+			// Retrieve the Legend, Tooltip, and Magnify classes
+			dojo.require("dojox.charting.widget.Legend");
+			dojo.require("dojox.charting.action2d.Tooltip");
+			dojo.require("dojox.charting.action2d.Magnify");
+
+			// Require the theme of our choosing
+			//"Claro", new in Dojo 1.6, will be used
+			dojo.require("dojox.charting.themes.Claro");
+			
+			// Define the data
+			var chartData = [10000,9200,11811,12000,7662,13887,14200,12222,12000,10009,11288,12099];
+			var chartData2 = [3000,12000,17733,9876,12783,12899,13888,13277,14299,12345,12345,15763];
+			var chartData3 = [3000,12000,17733,9876,12783,12899,13888,13277,14299,12345,12345,15763].reverse();
+			
+			// When the DOM is ready and resources are loaded...
+			dojo.ready(function() {
+				
+				// Create the chart within it's "holding" node
+				var chart = new dojox.charting.Chart2D("chartNode");
+
+				// Set the theme
+				chart.setTheme(dojox.charting.themes.Claro);
+
+				// Add the only/default plot 
+				chart.addPlot("default", {
+					type: "Lines",
+					markers: true
+				});
+				
+				// Add axes
+				chart.addAxis("x");
+				chart.addAxis("y", { min: 5000, max: 30000, vertical: true, fixLower: "major", fixUpper: "major" });
+
+				// Add the series of data
+				chart.addSeries("Monthly Sales - 2010",chartData);
+				chart.addSeries("Monthly Sales - 2009",chartData2);
+				chart.addSeries("Monthly Sales - 2008",chartData3);
+				
+				// Create the tooltip
+				var tip = new dojox.charting.action2d.Tooltip(chart,"default");
+				
+				// Create the magnifier
+				var mag = new dojox.charting.action2d.Magnify(chart,"default");
+				
+				// Render the chart!
+				chart.render();
+				
+				// Create the legend
+				var legend = new dojox.charting.widget.Legend({ chart: chart }, "legend");
+			});
+			
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: Monthly Sales with Legend, Tooltips, and Magnify</h1>
+		
+		<div id="chartNode" style="width:800px;height:400px;"></div>
+		<div id="legend"></div>
+		
+	</body>
+</html>

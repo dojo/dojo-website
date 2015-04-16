@@ -1,0 +1,196 @@
+<?php require("../../../../resources/tutHead.inc"); ?>
+<link rel="stylesheet" href="/js/dojo/1.8/dojox/image/resources/Lightbox.css" media="screen">
+<h3>What is TweetView?</h3>
+<p>TweetView is the name of the application we're going to create using <code>dojox/mobile</code> and a few custom Dojo resources of our own.  TweetView wont simply be a small exercise in using <code>dojox/mobile</code>;  TweetView will be a useful, fully-functioning web application.  Our goals for TweetView are as follows:</p>
+<ul>
+	<li>Utilize <code>dojox/mobile's</code> native widgets to create a cross-device compatible, elegant mobile application</li>
+	<li>Add our own custom elements, controls, and functionality to the web application</li>
+	<li>Connect to Twitter <a href="/reference-guide/1.8/dojo/io/script.html">using JSONP</a> to retrieve tweets from multiple accounts</li>
+	<li>Use <a href="/reference-guide/1.8/dojo/data.html#dojo-data">Dojo's data store API</a> to store tweets</li>
+	<li>Code with minimal dependencies and maximum speed in mind</li>
+</ul>
+
+<p class="proTip">Spending time planning and brainstorming before jumping into application creation is even more critical when creating mobile applications due to the restrictions on bandwidth.</p>
+
+<p>As with creating any Dojo-based web application, a more general goal is to keep our code flexible, extendable, and well-commented.</p>
+
+
+<h3>TweetView Design</h3>
+<p>We'll be creating TweetView from the following mockups.  Each mockup provides a glimpse into the features we'll be adding in subsequent posts:</p>
+
+<p>
+	<a href="../app/images/Tweets.jpg" dojoType="dojox.image.Lightbox" group="TweetViewPreview"><img src="../app/images/TweetsSmall.jpg" alt="Tweets" /></a><a href="../app/images/Mentions.jpg" dojoType="dojox.image.Lightbox" group="TweetViewPreview"><img src="../app/images/MentionsSmall.jpg" alt="Mentions" /></a><a href="../app/images/Settings.jpg" dojoType="dojox.image.Lightbox" group="TweetViewPreview"><img src="../app/images/SettingsSmall.jpg" alt="Settings" /></a>
+</p>
+
+<p class="tinyNote">Click on any of the images above to enlarge.</p>
+
+<p class="proTip">You'll note that these mockups show only the iOS theme.  Our posts will focus on implementing the iOS theme.  Android and Blackberry-themed images and element styles will be sized the same as the iOS resources and will be implemented later in this tutorial series. </p>
+
+<p>Attacking the markup for all of these mockups is out of scope for this post;  instead we'll focus on creating the overall HTML/CSS structure of the web application, most notably the top content display and the bottom control area.</p>
+
+
+<h3>TweetView HTML Structure</h3>
+<p>The <a href="/documentation/tutorials/1.8/mobile/tweetview/getting_started">first article</a> provided a solid mobile web application template and the required theme stylesheet and <code>SCRIPT</code> tags from which to start from:</p>
+
+<pre class="brush: js; html-script:true">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+	&lt;meta name="viewport"
+	         content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/&gt;
+	&lt;meta name="apple-mobile-web-app-capable" content="yes" /&gt;
+	&lt;title&gt;TweetView&lt;/title&gt;
+	&lt;script data-dojo-config="async:true"
+			src="//ajax.googleapis.com/ajax/libs/dojo/1.8.9/dojo/dojo.js"&gt;
+	&lt;/script&gt;
+	&lt;script&gt;
+		// Load the parser, base widgets, device theme, compat
+		require(["dojox/mobile/parser", "dojox/mobile", "dojox/mobile/deviceTheme", "dojox/mobile/compat"],
+		  function(parser) {
+			// Parse the page!
+			parser.parse();
+		  }
+		);
+	&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+
+	&lt;!-- application will go here --&gt;
+
+	&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>With the basic app template in place, let's focus on putting together the three views (Tweets, Mentions, and Settings) as well as the bottom navigation bar for each.  Let's start with the views:</p>
+
+<pre class="brush: js; html-script:true">
+&lt;!-- tweets view --&gt;
+&lt;div id="tweets" data-dojo-type="dojox.mobile.ScrollableView" data-dojo-props="selected: true"&gt;
+	&lt;h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props="fixed: 'top'"&gt;
+		&lt;!-- the refresh button --&gt;
+		&lt;div data-dojo-type="dojox.mobile.ToolBarButton" data-dojo-props="icon: 'images/refresh.png'"
+		            class="mblDomButton tweetviewRefresh" style="float:right;"&gt;&lt;/div&gt;
+		Tweets
+	&lt;/h1&gt;
+	&lt;ul data-dojo-type="dojox.mobile.RoundRectList"&gt;
+		&lt;li data-dojo-type="dojox.mobile.ListItem"&gt;
+			Tweet item here
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;!-- mentions view --&gt;
+&lt;div id="mentions" data-dojo-type="dojox.mobile.ScrollableView"&gt;
+	&lt;h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props="fixed: 'top'"&gt;
+		&lt;!-- the refresh button --&gt;
+		&lt;div data-dojo-type="dojox.mobile.ToolBarButton" data-dojo-props="icon: 'images/refresh.png'"
+		            class="mblDomButton tweetviewRefresh" style="float:right;"&gt;&lt;/div&gt;
+		Mentions
+	&lt;/h1&gt;
+	&lt;ul data-dojo-type="dojox.mobile.RoundRectList"&gt;
+		&lt;li data-dojo-type="dojox.mobile.ListItem"&gt;
+			Mention tweet item here
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;!-- settings view --&gt;
+&lt;div id="settings" data-dojo-type="dojox.mobile.ScrollableView"&gt;
+	&lt;h1 data-dojo-type="dojox.mobile.Heading" data-dojo-props="fixed: 'top'"&gt;Settings&lt;/h1&gt;
+	&lt;h2 data-dojo-type="dojox.mobile.RoundRectCategory"&gt;Show&lt;/h2&gt;
+	&lt;ul data-dojo-type="dojox.mobile.RoundRectList"&gt;
+		&lt;li data-dojo-type="dojox.mobile.ListItem"&gt;
+			Setting item here
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+</pre>
+
+<p class="proTip">Note that I've included a sample list for the content of each view.  Final content creation for TweetView's panes will be covered in future posts.</p>
+<p>Instead of using <code>dojox/mobile's</code> base View class, I've chose to use the <code>ScrollableView</code>.  <code>ScrollableView</code> will allow the header to be fixed to the top of the view (thanks to the <code>data-dojo-props="fixed: 'top'"</code> attribute), while the control bar can be fixed to the bottom (thanks to the <code>fixed="bottom"</code> attribute).  The content within the <code>ScrollableView</code> will scroll.  I've also used the <code>ToolBarButton</code> widget for the refresh buttons.  Note the <code>mblDomButton</code> CSS class is just one of many <a href="http://download.dojotoolkit.org/release-1.8.9/dojo-release-1.8.9/dojox/mobile/tests/test_Heading.html?theme=iPhone">button styles</a> available in <code>dojox/mobile</code>.  The refresh buttons don't serve a function at this point -- we're simply putting them into place.  Lastly, I've added a custom CSS class to the <code>ToolBarButton</code> instances called <code>tweetviewRefresh</code>.  The contents of that CSS class are:</p>
+
+<pre class="brush: css;">
+&lt;style&gt;
+/* vertically center the image */
+.tweetviewRefresh img	{
+	margin-top:6px;
+}
+&lt;/style&gt;
+</pre>
+
+<p>The refresh icon is now vertically centered within my heading button!</p>
+
+<p>With the three views in place, we can focus on creating the bottom menu bar with a <code>dojox/mobile/TabBar</code> widget, containing three <code>dojox/mobile/TabBarButton</code> widgets:</p>
+
+<pre class="brush: js; html-script:true">
+&lt;!-- the bottom tabbar --&gt;
+&lt;ul data-dojo-type="dojox.mobile.TabBar"
+         data-dojo-props="iconBase: 'images/iconStrip.png', fixed: 'bottom'"&gt;
+	&lt;!-- top left width height --&gt;
+	&lt;li data-dojo-type="dojox.mobile.TabBarButton"
+	         data-dojo-props="iconPos1: '0,0,29,30', iconPos2: '29,0,29,30', selected: true, moveTo: 'tweets'"&gt;
+	             Tweets
+	&lt;/li&gt;
+	&lt;li data-dojo-type="dojox.mobile.TabBarButton"
+	         data-dojo-props="iconPos1: '0,29,29,30', iconPos2: '29,29,29,30', moveTo: 'mentions'"&gt;
+	             Mentions
+	&lt;/li&gt;
+	&lt;li data-dojo-type="dojox.mobile.TabBarButton"
+	         data-dojo-props="iconPos1: '0,58,29,30', iconPos2: '29,58,29,30', moveTo:'settings'"&gt;
+	             Settings
+	&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+
+<p>
+	The image sprite is separated into 29x30 divisions with the normal state image on top and the active state image below it.  Tapping each control button shows its corresponding view.
+</p>
+
+<p class="proTip"><code>dojox/mobile/TabBar</code> and <code>dojox/mobile/TabBarButton</code> debuted in Dojo 1.6.  <code>dojox/mobile/TabBar</code> has two types:  <code>tabBar</code> and <code>segementControl</code>.  You can <a href="hhttp://download.dojotoolkit.org/release-1.8.9/dojo-release-1.8.9/dojox/mobile/tests/test_TabBar.html?theme=iPhone">view them side by side</a>.  Also note the <code>-49px margin-top</code> added to the <code>TabBar</code>.  That will keep the <code>TabBar</code> above the fold at all times.</p>
+
+<p>Now that both pieces are in place, let's review a few pieces of each code snippet:</p>
+<ul>
+	<li>The ID attributes of each view correspond to the <code>moveTo</code> attributes of each <code>TabBarButton</code> widget</li>
+	<li>If we weren't using sprites for the normal state control image path and selected image path, the different image paths would be placed in the <code>TabBarButton</code>'s <code>icon1</code> and <code>icon2</code> attributes.  Since we're using a sprited image, the image path is added to the <code>TabBar</code>'s <code>iconBase</code> attribute and each <code>TabBarButton</code> uses <code>iconPos1</code> and <code>iconPos2</code> attributes to provide the positions of the sprite.</li>
+	<li>The <code>iconPos1</code> and <code>iconPos2</code> format is:  top, left, width, height</li>
+	<li>The usage of <code>ScrollableView</code> anchors the header and control bar to the top and bottom, respectively, of the app</li>
+</ul>
+
+<p>It's also important to note we used three widgets that are not bundled into <code>dojox/mobile's</code> base:  <code>TabBar</code>, <code>TabBarButton</code>, and <code>ScrollableView</code>.  Adding the following require statements to the page will provide us those resources:</p>
+
+<pre class="brush: js;">
+
+// Include base mobile resources and extra widgets
+require(["dojox/mobile/parser", "dojox/mobile/deviceTheme", "dojox/mobile",
+         "dojox/mobile/ScrollableView", "dojox/mobile/TabBar", "dojox/mobile/compat"],
+	function(parser) {
+		// Parse the page for widgets!
+		parser.parse();
+	}
+);
+</pre>
+
+<p class="proTip">These two additional resources are small in size so our application will stay small.  These classes do not require additional stylesheets.</p>
+
+<p>Our application layout is now complete! See the base layout for TweetView!</p>
+<a class="demoBtn demo" href="demo/">View Demo</a>
+
+<h3 style="margin-top:20px;">TweetView Has Taken Shape!</h3>
+<p>Creating the basic layout of TweetView was simple:  add a few <code>ScrollingView</code> widgets and the <code>ToolBar</code>.  I'd like to point out that every piece of our TweetView application is currently included within <code>dojox/mobile</code>:  headings, toolbars, buttons...they're all there to be quickly implemented!</p>
+<p>Looking forward to the next post in our TweetView series, where we will create a new class which will display the Tweets and Mentions views!</p>
+
+<h3>Download The Source</h3>
+<div class="downlaodSource">
+	Download <a href="resources/Intro_Tweetview.zip">Introduction to TweetView</a>.  The archive will work as soon as you unzip the file!
+</div>
+
+
+<?php include("../series.inc"); ?>
+
+<?php require('../../../../../includes/dojo.inc'); ?>
+
+<script>
+	require(["dojo/parser", "dojox/image/Lightbox"], function (parser) {
+		parser.parse();
+	});
+</script>

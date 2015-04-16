@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: dojo.DeferredList</title>
+
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			dojo.require("dojo.DeferredList");
+
+			dojo.ready(function(){
+				var usersDef = dojo.xhrGet({
+					url: "users.json",
+					handleAs: "json"
+				}).then(function(res){
+					var users = {};
+
+					dojo.forEach(res, function(user){
+						users[user.id] = user;
+					});
+
+					return users;
+				});
+
+				var statusesDef = dojo.xhrGet({
+					url: "statuses.json",
+					handleAs: "json"
+				});
+
+				var defs = new dojo.DeferredList([usersDef, statusesDef]);
+
+				defs.then(function(results){
+					var users = results[0][1],
+						statuses = results[1][1],
+						statuslist = dojo.byId("statuslist");
+
+					if(!results[0][0] || !results[1][0]){
+						dojo.create("li", {
+							innerHTML: "An error occurred"
+						}, statuslist);
+						return;
+					}
+
+					dojo.forEach(statuses, function(status){
+						var user = users[status.userId];
+
+						dojo.create("li", {
+							id: status.id,
+							innerHTML: user.name + ' said, "' + status.status + '"'
+						}, statuslist);
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: dojo.DeferredList</h1>
+
+		<ul id="statuslist"></ul>
+	</body>
+</html>

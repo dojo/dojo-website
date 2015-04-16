@@ -1,0 +1,295 @@
+
+
+<h3>Getting Started</h3>
+
+<p>There are two main styles of coding when using Dojo.  The first is called <em>programmatic</em> and the second is called <em>declarative</em>.  Programmatic refers to using just JavaScript to instantiate your objects and all of your behavior code is expressed in JavaScript.  Declarative refers to using the <code>dojo/parser</code> to read the DOM and parse out nodes that have been decorated with special attributes as well as interpreting certain <code>&lt;script&gt;</code> tags to extend the behavior of widgets.</p>
+
+<p>Each of these styles have advantages and disadvantages and sometimes you will see developers combining the two.  This tutorial though focuses providing an understanding of all the possible features of the declarative syntax.  If you are considering using the declarative syntax in your project, some things you might consider:</p>
+
+<ul>
+	<li>The declarative syntax is very easy to use and doesn't require an in-depth knowledge of JavaScript.  It has become quite feature rich and you can almost do everything you can do in JavaScript, but there will always be limitations to what it can do.</li>
+	<li>Because of the nature of how it works, it will always be less performant than just the programmatic style.  This is because the <code>dojo/parser</code> has to parse the DOM looking for nodes that it needs to handle.</li>
+	<li>While it is great for prototyping UIs quite quickly, you may find it challenging managing everything in a production application.</li>
+</ul>
+
+<p class="proTip">This tutorial is specifically written to take full advantage of Dojo 1.8.  Many of the examples in this tutorial will only work with Dojo 1.8.</p>
+
+<h3>Instantiating Objects</h3>
+
+<p>The most common way the declarative syntax is used is to instantiate widgets.  The way this is accomplished is by adding a special attribute to your markup (<code>data-dojo-type</code>) and then having the <code>dojo/parser</code> read the document and instantiate the widgets.  For example this markup would create a Dijit button:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;button type="button" data-dojo-type="dijit/form/Button">
+	&lt;span>Click Me!&lt;/span>
+&lt;/button>
+</pre>
+
+<p>In the above snippet, we are supplying the Module ID (MID) that represents the Dojo "type", which will instruct the <code>dojo/parser</code> to instantiate a <code>dijit/form/Button</code> rooted in the location where this node appears in the DOM.</p>
+
+<p>This is great, but if we need to do something in the future with our button, we need to obtain a reference to the widget.  With Dijit based widgets, when they are instantiated, they will look at the node they are "replacing" and if they see the <code>id</code> attribute, they will register themselves in the <code>dijit/registry</code> under that ID so we can obtain a reference to them in the future.  So to make this more useful, we should change it to:</p>
+
+<pre class="brush: js; html-script: true; highlight: [1]">
+&lt;button type="button" id="myButton" data-dojo-type="dijit/form/Button">
+	&lt;span>Click Me!&lt;/span>
+&lt;/button>
+</pre>
+
+<p class="proTip">When selecting the tag as a place holder for a Dijit, you should use the native HTML tag that is closest to the widget you are using.  In this case <code>dijit/form/Button</code> is a button, so we used the <code>&lt;button&gt;</code> tag.  This way your application could degrade better and it avoids some issues in trying to replace the node in certain browsers.  Also, you should follow best practices in HTML, which in this case means you should always assign an attribute of <code>type</code> to a button.</p>
+
+<p>Now, what we need to do is invoke the <code>dojo/parser</code>.  Before the adoption of AMD in Dojo 1.7 you could safely use a Dojo configuration option of <code>parseOnLoad: true</code>.  Now though, there are a few edge cases where you could run into unexpected results if you use that, therefore it is now recommended to invoke the parser directly in your JavaScript code.  So to run the parser, you would want to do something like this:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;script type="text/javascript" src="lib/dojo/dojo.js"
+	data-dojo-config="async: true">&lt;/script>
+&lt;script type="text/javascript">
+	require(["dojo/parser", "dijit/form/Button", "dojo/domReady!"],
+	function(parser){
+		parser.parse();
+	});
+&lt;/script>
+</pre>
+
+<a class="demoBtn demo" href="demo/button.php">View Demo</a>
+
+<p class="proTip">Notice how we required in the <code>dijit/form/Button</code> but omitted it from the <code>require</code> callback.  That is because we weren't directly referring to it in our codeblock, but we wanted to make sure the module was loaded before we invoked the <code>dojo/parser</code>.  While the parser is capable of auto-requiring modules, which we will talk about later, it is best to be explicit about your requirements.</p>
+
+<h3>Configuring Objects</h3>
+
+<p>Having the <code>dojo/parser</code> instantiate objects is great, but if you can't configure the widget, it would quickly become useless.  Therefore you need a mechanism to pass in some sort of configuration information upon instantiation.</p>
+
+<p>In earlier versions of Dojo, we used to just add attribute after attribute to the tag, even if they weren't valid for the tag.  With the introduction of HTML5, the specification allows the use of custom attributes that are prefaced with <code>data-</code> and still allow the document to be strictly valid.  So we have dedicated the <code>data-dojo-props</code> attribute to contain any configuration that needs to be passed to the constructor upon instantiation.</p>
+
+<p>So let's say we want to create a TabContainer with a single tab that contains a button.  We might have done this in the programmatic style:</p>
+
+<pre class="brush: js;">
+require([
+	"dijit/form/Button",
+	"dijit/layout/TabContainer",
+	"dijit/layout/ContentPane",
+	"dojo/domReady!"
+], function(Button, TabContainer, ContentPane){
+	var tc = new TabContainer({
+			style: {
+				height: "200px",
+				width: "400px"
+			},
+			id: "tc"
+		}),
+		atab = new ContentPane({
+			title: "A Tab",
+			closable: false,
+			id: "atab"
+		}),
+		myButton = new Button({
+			label: "Click Me!",
+			id: "myButton"
+		});
+	atab.addChild(myButton);
+	tc.addChild(atab);
+	tc.startup();
+});
+</pre>
+
+<p>In declarative our markup would look something like this:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;div id="tc" data-dojo-type="dijit/layout/TabContainer"
+		data-dojo-props="style: { height: '200px', width: '400px' }">
+	&lt;div id="atab" data-dojo-type="dijit/layout/ContentPane"
+			data-dojo-props="title: 'A Tab', closable: false">
+		&lt;button type="button" id="myButton"
+				data-dojo-type="dijit/form/Button">
+			&lt;span>Click Me!&lt;/span>
+		&lt;/button>
+	&lt;/div>
+&lt;/div>
+</pre>
+
+<a class="demoBtn demo" href="demo/tab.php">View Demo</a>
+
+<p class="proTip">By convention, the value of the <code>data-dojo-props</code> attribute is a JavaScript object literal, just without the outer braces (<code>{}</code>).</code></p>
+
+<h3>Non-Widgets</h3>
+
+<p>While the <code>dojo/parser</code> is generally used to instantiate visual elements in markup (like Dijit widgets) it can also be used to instantiate other non-visual objects.  The <code>dojo/parser</code> does assume a constructor though that takes its configuration as the first argument and will always pass the node reference as the second argument.  This works perfectly fine with non-visual objects that are based on <code>dojo/_base/declare</code>.</p>
+
+<p>The one "challenge" is that regular objects don't have a registry like Dijit based widgets do, therefore in order to be able to reference them after you instantiate them, you have to create a reference to them in the global scope.  The <code>dojo/parser</code> accomplishes this by looking for the <code>data-dojo-id</code> attribute.  Whatever value is in there will be set in the global scope.  For example if I wanted to create a memory store, I would do something like this:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;div data-dojo-id="myStore" data-dojo-type="dojo/store/Memory">&lt;/div>
+</pre>
+
+<p>So for example, let's say we wanted to create a memory store to feed a drop down list.  We could do all of that in markup like this:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;div data-dojo-id="myStore" data-dojo-type="dojo/store/Memory"
+	data-dojo-props="data: [
+		{ name: 'Alabama', id: 'AL' },
+		{ name: 'Alaska', id: 'AK' },
+		{ name: 'Arizona', id: 'AZ' },
+		{ name: 'California', id: 'CA' },
+		{ name: 'Colorado', id: 'CO' },
+		{ name: 'Connecticut', id: 'CT' },
+		{ name: 'New York', id: 'NY' }
+	]">&lt;/div>
+&lt;select id="mySelect" name="state" value="CA"
+	data-dojo-type="dijit/form/FilteringSelect"
+	data-dojo-props="searchAttr: 'name', store: myStore">&lt;/select>
+</pre>
+
+<a class="demoBtn demo" href="demo/nonwidget.php">View Demo</a>
+
+<p class="proTip">One thing to be aware of, because there is no registry for these non-visual objects, and the reference is used in the global scope, garbage collection will not happen, even when the DOM node that "created" the object is no longer in memory.  This could be perceived as a memory leak in a large application.  You should ensure you remove this variables from the global scope when no longer needed.</p>
+
+<h3>Modifying Behavior</h3>
+
+<p>In order to modify the behavior of widgets we usually need to set some code to execute when an event happens.  For example to display a dialog when a button is clicked, we might do something like this in JavaScript:</p>
+
+<pre class="brush: js;">
+require(["dijit/form/Button", "dijit/Dialog"], function(Button, Dialog){
+	var myButton = new Button({
+			label: "Click Me!",
+			id: "myButton"
+		}, "myButton"),
+		someDialog = new Dialog({
+			title: "Hello World!",
+			content: "&lt;p>I am a dialog. That makes me happy.&lt;/p>"
+		}, "someDialog");
+
+	myButton.on("click", function(){
+		someDialog.show();
+	});
+
+	myButton.startup();
+	someDialog.startup();
+});
+</pre>
+
+<p>In order to do this all in markup, we will need to use something called "declarative scripting", which allows the <code>dojo/parser</code> to take snippets of inline code and attach them for us as it instantiates the object.  So our example above would look something like this:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;div id="someDialog" data-dojo-type="dijit/Dialog"
+		data-dojo-props="title: 'Hello World!'">
+	&lt;p>I am a dialog. That makes me happy.&lt;/p>
+&lt;/div>
+&lt;button type="button" id="myButton" data-dojo-type="dijit/form/Button">
+	&lt;span>Click Me!&lt;/span>
+	&lt;script type="dojo/on" data-dojo-event="click">
+		var registry = require("dijit/registry");
+		registry.byId("someDialog").show();
+	&lt;/script>
+&lt;/button>
+</pre>
+
+<a class="demoBtn demo" href="demo/scripting.php">View Demo</a>
+
+<p class="proTip">All declarative scripts run in their own scope, so they only have access to the global scope, which is why we had to do the "trick" with the <code>require("dijit/registry");</code> in order to get a reference to the module.  There is a way to declaratively add modules to the global scope which we will talk about later.</p>
+
+<p>You can see in the above example that it is quite easy to modify the behavior of widgets by using declarative scripting.  It becomes even more powerful when coupled with widgets that can dynamically load their content, like <code>dijit/layout/ContentPane</code>, because they can pass the loaded content through the <code>dojo/parser</code> and not only instantiate more widget, but also set the behavior as well.</p>
+
+<p>For example, if I had the following in a file named <code>content.html</code>:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;button type="button" id="myButton" data-dojo-type="dijit/form/Button">
+	&lt;span>Click Me!&lt;/span>
+	&lt;script type="dojo/on" data-dojo-event="click">
+		console.log("I was clicked!");
+	&lt;/script>
+&lt;/button>
+</pre>
+
+<p>And I wanted to dynamically load that into a tab, I would do something like this:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;div id="tc" data-dojo-type="dijit/layout/TabContainer"
+		data-dojo-props="style: { height: '200px', width: '400px' }">
+	&lt;div id="atab" data-dojo-type="dijit/layout/ContentPane"
+		data-dojo-props="title: 'A Tab', href: 'content.html'">&lt;/div>
+&lt;/div>
+</pre>
+
+<a class="demoBtn demo" href="demo/href.php">View Demo</a>
+
+<p>There are several <code>&lt;script type="dojo/*"&gt;</code> that are supported by the parser:</p>
+
+<dl>
+	<dt><code>dojo/on</code></dt>
+	<dd>Used for setting an event handler.  This is equivalent to calling <code>object.on()</code> where the event is supplied in the attribute <code>data-dojo-event</code> and any naming of the arguments passed is passed as comma separated list in <code>data-dojo-args</code>.  Usually this is just the variable you want to name the normlalized event (e.g. <code>data-dojo-args="e"</code>).</dd>
+	<dt><code>dojo/aspect</code></dt>
+	<dd>Used for modifying a method handlers.  This is equivalent to using <code>dojo/aspect</code> module.  The particular "advice" of the method being dealt with is supplied in the <code>data-dojo-advice</code>.  Typically this is <code>after</code> but the <code>dojo/parser</code> also supports <code>before</code> and <code>around</code>.  The method is supplied in <code>data-dojo-event</code> and any argument variables that you need named that are passed to the method are supplied as a comma delineated list in <code>data-dojo-args</code>.</dd>
+	<dt><code>dojo/watch</code></dt>
+	<dd>Used to execute a handler that executes when a property changes.  The property is specified in the <code>data-dojo-prop</code> attribute and just like the <code>watch()</code> on Dijits and objects based off of <code>dojo/Stateful</code>, the handler will be passed three arguments that represent the property name, the old value and the new value which can be named in the <code>data-dojo-args</code> attribute as a comma delineated list.</dd>
+	<dt><code>dojo/method</code></dt>
+	<dd>Used to either execute code on instantiation or to override a method.  If there is no <code>data-dojo-event</code> attribute specified, then the code block will be executed once the object has been instantiated.  If a method is specified, then any existing function will be replaced by the code block.</dd>
+	<dt><code>dojo/connect</code></dt>
+	<dd>This is now <em>deprecated</em> in lieu of either <code>dojo/on</code> or <code>dojo/aspect</code>, but it essentially performs the same function in connecting a function to another function.</dd>
+</dl>
+
+<p class="proTip">You can get more information about declarative scripting, including several working examples, by looking at the <a href="/reference-guide/1.8/dojo/parser.html#script-tags" target="_blank">Script Tags section</a> of the <code>dojo/parser</code> Reference Guide page.</p>
+
+<h3>Requiring Modules Declaratively</h3>
+
+<p>The great thing about AMD is that you can be very modular, and you only need to load modules when your code actually requires it.  Of course if you want to fully leverage the declarative syntax, you might find it difficult to get access to modules within your declarative script.  Or you might want to just generate your markup and minimize the amount of JavaScript you need to write.  This is where a feature of the <code>dojo/parser</code> called declarative require can help.</p>
+
+<p>If for example, when I clicked one button, I wanted to enable and another button and set its handler for the click event, I would have to do it this way declaratively without this feature:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;button type="button" id="button1" disabled="disabled"
+		data-dojo-type="dijit/form/Button">
+	&lt;span>I'm disabled&lt;/span>
+&lt;/button>
+&lt;button type="button" id="button2" data-dojo-type="dijit/form/Button">
+	&lt;span>Click Me!&lt;/span>
+	&lt;script type="dojo/on" data-dojo-event="click">
+		require(["dijit/registry"], function(registry){
+			var button1 = registry.byId("button1");
+			button1.on("click", function(){
+				console.log("I was clicked!");
+			});
+			button1.set("label", "I'm enabled");
+			button1.set("disabled", false);
+		});
+	&lt;/script>
+&lt;/button>
+</pre>
+
+<p>If you were sure you had previously required the <code>dijit/registry</code>, you could use have used <code>var registry = require("dijit/registry");</code> to get a reference to the module.</p>
+
+<p>Of course though, you could use declarative require.  As mentioned before, all declarative scripts execute only in the global scope, so anything required in declarative require is put into the global scope to be available to any declarative scripts.  The syntax of declarative require is essentially a JavaScript object without the outer braces (<code>{}</code>).  The property name is the name of the global variable and the value should be a string that contains the module ID (MID).  In order to require in the <code>dijit/registry</code> and map it to a global variable named "registry", we would do the following:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;script type="dojo/require">
+	registry: "dijit/registry"
+&lt;/script>
+</pre>
+
+<a class="demoBtn demo" href="demo/require.php">View Demo</a>
+
+<p class="proTip">If you are concerned about namespace clashes with scoping your modules globally, you can put your modules in their own namespace by using the dot notation for the property name: <code>"myApp.registry": "dijit/registry"</code>.  The parser will then deep create the objects needed to allow you then to access the registry as <code>myApp.registry.byId("someId")</code> in your code.</p>
+
+<h3>Auto-Require</h3>
+
+<p>Another feature that was introduced into the <code>dojo/parser</code> in Dojo 1.8 was the ability to "auto-require" modules.  This can make it very easy to throw together a page, because you don't have to worry at all about making sure you have your modules required before you invoke the <code>dojo/parser</code>.  If the parser encounters a <code>data-dojo-type</code> value that looks like a MID (e.g. it has a <code>/</code> in it) and that module is not already loaded, the parser will attempt to require that module prior to starting to instantiate the objects in the page.</p>
+
+<p>Again, while this feature can be very handy, it can have some very negative consequences on your application performance if you aren't careful.  For example, you may a built version of Dojo that you are using on your production site and are expecting the builders to have built all the modules you need into a custom layer.  Well, by default, the builder will not scan your files for any declarative dependencies, and therefore any modules that are auto-required by the <code>dojo/parser</code> will be unlikely to be in your layer.  This means for every module required, your application will have to make an individual request of the server, potentially causing a perception your code is running slow.</p>
+
+<p>In order to inform you of this, so you can make a conscious decision about using the feature or not, if you set Dojo into debug mode (<code>isDebug: true</code>) then the <code>dojo/parser</code> will log to a console when a module is auto-required.</p>
+
+<p>To see it in action, the TabContainer example from above has been re-written to auto-require in all the Dijits it needs.  It is also in debug mode as well, so check out your JavaScript console for the warnings.</p>
+
+<a class="demoBtn demo" href="demo/autorequire.php">View Demo</a>
+
+<p class="proTip">There is a way to have the builder analyze your static HTML files for dependencies and build those into a layer.  This is covered in the builder transform <a href="/reference-guide/1.8/build/transforms/depsDeclarative.html" target="_blank">depsDeclarative</a> Reference Guide page.</p>
+
+<h3>Conclusion</h3>
+
+<p>Hopefully this tutorial has given you some good information on how to take full advantage of all the features of the declarative syntax and the <code>dojo/parser</code>.  It can be very flexible and make it quite easy to code up relatively complex applications very quickly.  Personally, I think the power really comes in when you can strategically combine different aspects of the declarative syntax that meet your needs along side a programmatic style.</p>
+
+<p>Here are a few more resources that you might want to take a look at:</p>
+
+<ul>
+	<li><a href="/reference-guide/1.8/dojo/parser.html"><code>dojo/parser</code> Reference Guide</a></li>
+	<li><a href="../declaration">Prototyping with dijit/Declaration Tutorial</a></li>
+	<li><a href="/reference-guide/1.8/build/transforms/depsDeclarative.html">Builder Transform <code>depsDeclarative</code> Reference Guide</a></li>
+	<li><a href="http://demos.dojotoolkit.org/demos/parserAutoRequire/">The Auto-Require Demonstration Application<a/></li>
+</ul>

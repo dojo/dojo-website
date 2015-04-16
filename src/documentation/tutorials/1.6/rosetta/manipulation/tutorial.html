@@ -1,0 +1,71 @@
+
+<h3>$ to dojo.query</h3>
+<p>
+	Querying in Dojo is accomplished via the <code>dojo.query</code> API. There is an <a href="../../using_query/">excellent tutorial</a> on <code>dojo.query</code> which I suggest you read at some point for more background. Let's take a quick look at using <code>dojo.query</code>.
+</p>
+
+<pre class="brush: js;">
+//Lookup all "p" tags using jQuery
+$("p");
+
+//Lookup all "p" tags using dojo.query
+dojo.query("p");
+</pre>
+<p>
+	Simple, but not very useful, after all, we want to actually do something with the nodes we look up.
+</p>
+
+<h3>Let's .addClass</h3>
+<p>
+	First in the list of Manipulation APIs is <code><a href="http://api.jquery.com/addClass/">.addClass</a></code> which as you may have guessed adds a CSS class to an element.
+</p>
+
+<pre class="brush: js;">
+//.addClass using jQuery
+$("p").addClass("selected");
+
+//.addClass using Dojo
+dojo.query("p").addClass("selected");
+</pre>
+
+
+<h3>.after that?</h3>
+<p>
+	To duplicate jQuery's <code><a href="http://api.jquery.com/after/">.after</a></code> API we have to first import Dojo's NodeList-manipulate extensions. This is because .after is not built in to <code>dojo.query</code> by default. Dojo uses <code>dojo.require</code> to add in functionality without having to add in separate script tags. No need to specify a path, Dojo figures this out automatically. Once you've required the code you don't need to require it again. Let's take a look at implementing <code>.after</code>
+</p>
+
+<pre class="brush: js;">
+//.after using jQuery
+$('.inner').after('&lt;p&gt;Test&lt;/p&gt;');
+
+//.after using Dojo
+dojo.require("dojo.NodeList-manipulate");
+dojo.query(".inner").after('&lt;p&gt;Test&lt;/p&gt;');
+</pre>
+<p>
+	In both cases all nodes with the <code>.inner</code> class name are queried and a <code>p</code> tag with the text "Test" is inserted after each found <code>.inner</code> node.
+</p>
+
+<h3>.append-ing</h3>
+<p>
+	There are two major functions in jQuery for appending nodes, <code>.append</code> and <code>.appendTo</code>. There are multiple ways to do this with Dojo. Here are the API mapped <code>append</code> and <code>appendTo</code> functions.
+</p>
+
+<pre class="brush: js;">
+//.append using jQuery
+$('.inner').append('&lt;p&gt;Test&lt;/p&gt;');
+
+//.append using Dojo
+dojo.require("dojo.NodeList-manipulate");
+dojo.query(".inner").append('&lt;p&gt;Test&lt;/p&gt;');
+</pre>
+
+<h4>Select an element on the page and append it to another</h4>
+<pre class="brush: js;">
+//.appendTo using jQuery
+$("h2").appendTo($(".container"));
+
+//.appendTo using Dojo
+dojo.require("dojo.NodeList-manipulate");
+dojo.query("h2").appendTo(".container");
+</pre>

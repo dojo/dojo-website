@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Demo: Dijit Menus</title>
+	<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" />
+	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"
+		data-dojo-config="parseOnLoad:true"></script>
+</head>
+<body class="claro">
+	<h3>Declarative Menu using iconClass</h3>
+	<div id="mainMenu" data-dojo-type="dijit.Menu">
+		<div id="edit" 
+				data-dojo-type="dijit.MenuItem" 
+				data-dojo-props="iconClass: 'dijitIconEdit', onClick: demo.onItemSelect">
+			Edit
+		</div>
+		<div id="view"
+				data-dojo-type="dijit.MenuItem" 
+				data-dojo-props="iconClass: 'dijitIconApplication', onClick: demo.onItemSelect">
+			View
+		</div>
+		<div id="task" 
+				data-dojo-type="dijit.MenuItem" 
+				data-dojo-props="iconClass: 'dijitIconTask', onClick: demo.onItemSelect">
+			Task
+		</div>
+	</div>
+	<h3>Programmatic Menu using iconClass</h3>
+	<div id="progMenu"></div>
+	<p>Last selected: <span id="lastSelected">none</span></p>
+	
+	<script>
+		dojo.require("dijit.Menu");
+		dojo.require("dijit.MenuItem");
+		dojo.require("dojo.parser");
+		
+		var demo = {
+			// a menu item selection handler
+			onItemSelect: function(evt){
+				// retrieve the widget representing the item clicked
+				var item = dijit.getEnclosingWidget(evt.target);
+
+				dojo.byId("lastSelected").innerHTML = 
+					item.get("label");
+			}
+		};
+		
+		dojo.ready(function(){
+			// create equivalent programmatic example
+			var menu = new dijit.Menu({
+			}, "progMenu");
+
+			menu.addChild( new dijit.MenuItem({
+				id: "p_edit",
+				label: "Edit",
+				iconClass: "dijitIconEdit",
+				// provide an implementation for the onClick method
+				onClick: demo.onItemSelect
+			}) );
+
+			menu.addChild( new dijit.MenuItem({
+				id: "p_view",
+				label: "View",
+				iconClass: "dijitIconApplication",
+				onClick: demo.onItemSelect 
+			}) );
+
+			menu.addChild( new dijit.MenuItem({
+				id: "p_task",
+				label: "Task",
+				iconClass: "dijitIconTask",
+				onClick: demo.onItemSelect 
+			}) );
+
+			menu.startup();
+		})
+	</script>
+</body>
+</html>

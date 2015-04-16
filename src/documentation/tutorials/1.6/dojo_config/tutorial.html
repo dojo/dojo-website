@@ -1,0 +1,373 @@
+
+
+<h3>Introduction</h3>
+<p>
+The <code>dojoConfig</code> object (known as <code>djConfig</code> prior to
+Dojo 1.6) is the primary mechanism for configuring Dojo in a web page or application.
+It is referenced by the module loader, as well as Dojo components with global
+options.  It can further be used as a configuration point for custom applications, if desired.
+</p>
+<p class="proTip">
+The old object name of <code>djConfig</code> is deprecated, but any existing code using it will
+continue to work up until 2.0. At the time of writing, most documentation still
+uses <code>djConfig</code>; the two names are directly equivalent, but we'll
+adopt and encourage use of the new <code>dojoConfig</code> name from here on.
+</p>
+
+<h3>Getting Started</h3>
+<p>Let's run through some quick examples to see how <code>dojoConfig</code> works in practice.
+First, a programmatic example of setting <code>dojoConfig</code> directly:</p>
+<pre class="brush:js; html-script:true;">
+&lt;script&gt;
+	dojoConfig = {
+		isDebug: true,
+		parseOnLoad: true,
+		foo: "bar"
+	};
+&lt;/script&gt;
+&lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js&quot;&gt;&lt;/script&gt;
+</pre>
+<a class="demoBtn demo" href="demo/dojoConfig.html">View Demo</a>
+
+<p class="proTip">
+Notice that <code>dojoConfig</code> is defined in a script block
+<em>before</em> dojo(.xd).js is loaded.  This is of paramount
+importance&mdash;if reversed, the configuration properties will be ignored.
+</p>
+
+<p>In this example, we have set two flags: <code>isDebug: true</code>
+and <code>parseOnLoad: true</code>.
+Additionally, a custom property has been specified: <code>foo: "bar"</code>.
+For this demo, a <code>dijit.Dialog</code> has been placed in the page. Code that runs from <code>dojo.ready</code> converts the value of
+<code>dojo.config</code> to JSON and places it into the dialog for review.
+Among the results are our properties: <code>isDebug</code>, <code>parseOnLoad</code>, and
+<code>foo</code>.
+But there are also a few others, which are related to the fact that the demo page uses the
+cross-domain, Google-CDN-hosted version of Dojo 1.6.</p>
+
+<p class="proTip">
+It is important to note the distinction between <code>dojoConfig</code> and <code>dojo.config</code>.
+<code>dojoConfig</code> is purely for input purposes&mdash;this is how we
+communicate configuration parameters to the loader and modules.
+During the bootstrap process, <code>dojo.config</code> is populated from these
+parameters for later lookup by module code.
+</p>
+
+<p>Here's the same example written declaratively:</p>
+<pre class="brush:js; html-script:true;">
+&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;
+		data-dojo-config=&quot;isDebug: true,parseOnLoad: true,foo: &#x27;bar&#x27;&quot;&gt;
+&lt;/script&gt;
+</pre>
+<a class="demoBtn demo" href="demo/data-dojo-config.html">View Demo</a>
+
+<p>In this case, we use the same <code>data-dojo-config</code> attribute
+on the Dojo <code>script</code> element that you've seen in other tutorials and examples.
+This is entirely functionally equivalent to the previous example.
+In both cases, the config options we provide are ultimately mixed into the
+<code>dojo.config</code> object, where they can be retrieved immediately after
+the bootstrapping process that takes place as <code>dojo(.xd).js</code> loads.</p>
+<p>You can confirm this by setting some new values in <code>dojoConfig</code>,
+and checking the <code>dojo.config</code> object in the console.
+So, <code>dojoConfig</code> is a generic configuration property-bag for Dojo.
+Lets see what options there are and how we can use them.</p>
+
+<h3>Debug Configuration</h3>
+<p>You should be familiar by now with the <code>isDebug</code> config flag.
+However, one purpose of this flag might not be entirely clear if you develop
+using a browser which has its own developer console.
+When <code>false</code>, it will create a dummy
+<code>console</code> object if necessary so that any <code>console.*</code>
+logging statements in your code safely and quietly execute without throwing exceptions.
+If <code>isDebug</code> is <code>true</code>, and you have Firebug or
+another console available and open, it does nothing. But if you don't have
+a console, it will load Dojo's version of Firebug Lite, and create the
+console UI at the bottom of the page.
+This can be handy when debugging in earlier versions of IE or other browsers
+without nice developer tools.</p>
+<p>The following additional options are available to further configure this in-page console:</p>
+<ul>
+	<li><strong><code>debugContainerId</code>:</strong> specify a particular element to contain the console UI</li>
+	<li><strong><code>popup</code>:</strong> use a popup window rather than rendering the console into the current window</li>
+</ul>
+
+<p>In addition to providing this console to browsers without their own,
+<code>isDebug</code> is also responsible for emitting <code>dojo.deprecated</code>
+and <code>dojo.experimental</code> warnings; if <code>isDebug</code> is
+<code>false</code>, these warnings will be suppressed.
+
+<h3>Loading Configuration</h3>
+<p>Another important function of <code>dojoConfig</code> is passing parameters through to the loader.
+	You may have noticed that loading a cross-domain build of dojo automatically set <code>dojo.config.useXDomain</code> to true in the <a href="demo/data-dojo-config.html">previous demo</a>.
+We can also set the following parameters:</p>
+
+<ul>
+	<li><strong><code>xdWaitSeconds</code>:</strong> How long to wait before giving up on loading a module when using the cross-domain loader.</li>
+	<li><strong><code>baseUrl</code>:</strong> The URL from which module paths should be resolved. This will default to the directory from which dojo(.xd).js was loaded.</li>
+	<li><strong><code>require</code>:</strong> An optional array of modules to load.
+		Behaves the same as calling <code>dojo.require</code> after the Dojo script tag.</li>
+	<li><strong><code>modulePaths</code>:</strong> Equivalent to calling <code>dojo.registerModulePath</code> after the dojo script tag.
+		The value should be a dictionary object, mapping module namespaces to URLs.</li>
+</ul>
+
+<p>Let's see an example. The <code>baseUrl</code> and <code>modulePaths</code>
+options turn out to be especially useful when you want to load Dojo from one server
+(e.g. the Google CDN), but other namespaces from another (e.g. your own.)</p>
+
+<pre class="brush:js; html-script:true;">
+&lt;script&gt;
+	dojoConfig = {
+		isDebug: true,
+		parseOnLoad: true,
+		baseUrl: &#x27;/documentation/tutorials/1.6/dojo_config/&#x27;,
+		modulePaths: {
+			&quot;demo&quot;: &quot;demo&quot;
+		}
+	};
+&lt;/script&gt;
+&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+	dojo.require(&quot;demo.AuthoredDialog&quot;);
+
+	dojo.ready(function(){
+		var dlg = dijit.byId(&quot;dialog&quot;);
+		dlg.set(&quot;content&quot;, &#x27;&lt;pre&gt;&#x27;+dojo.toJson(dojo.config, true)+&#x27;&lt;/pre&gt;&#x27;);
+		dlg.show();
+	});
+&lt;/script&gt;
+</pre>
+<p>...In the body, the markup has been changed slightly to use the custom dialog widget:</p>
+
+<pre class="brush:js; html-script:true;">
+&lt;div id=&quot;dialog&quot; data-dojo-type=&quot;demo.AuthoredDialog&quot;
+	data-dojo-props=&quot;title: &#x27;dojo.config.baseUrl demo&#x27;, authorAvatarSrc: &#x27;/includes/authors/sam_foster/avatar.jpg&#x27;, authorName: &#x27;Sam Foster&#x27;&quot;&gt;
+&lt;/div&gt;
+</pre>
+<a class="demoBtn demo" href="demo/baseUrl.html">View Demo</a>
+
+<p>By using <code>baseUrl</code>, we've told Dojo to resolve paths from this directory,
+rather than where we loaded dojo.js from.
+Furthermore, the mapping in the <code>modulePaths</code> object dictates that modules in the
+<code>demo</code> namespace should be loaded from the "demo" directory,
+relative to the <code>baseUrl</code>.
+The result is that <code>demo.AuthoredDialog</code> resolves to a directory on
+this server rather than the CDN.
+Again, the resulting <code>dojo.config</code> object is serialized to the dialog for inspection.</p>
+
+<p class="proTip">
+For more information on using <code>baseUrl</code> and <code>modulePaths</code>
+to load local custom modules while loading Dojo from a CDN, see our tutorial on
+<a href="/documentation/tutorials/1.6/cdn/">Using Custom Modules with a CDN</a>.
+</p>
+
+<h3>Lifecycle options</h3>
+<p>Using <code>dojo.config</code> we can also get access to when Dojo's
+"ready" moment happens and can configure what happens at that time.
+You may have encountered the <code>parseOnLoad</code> option before; it is the equivalent of:</p>
+
+<pre class="brush:js; html-script:true;">
+	&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;&gt;&lt;/script&gt;
+	&lt;script&gt;
+		dojo.require(&quot;dojo.parser&quot;);
+		dojo.ready(function(){
+			dojo.parser.parse();
+		});
+	&lt;/script&gt;
+</pre>
+
+<p>...But with one important change: when you use <code>parseOnLoad</code>,
+any functions you have passed to <code>dojo.ready</code> will not get executed
+until after the parser runs and any widgets it finds have been created and initialized.</p>
+
+<p>You can also add <code>require</code> and <code>addOnLoad</code> options to
+<code>dojo.config</code>.
+In the following demo, we've set up a <code>demo.logSequenceEntry</code> method
+we can call to reveal the order in which events occur.
+</p>
+<ul>
+	<li>The page requires two modules&mdash;one from the <code>dojoConfig</code>
+		declaration, and one from a script block after the Dojo script tag</li>
+	<li>The page is set up to either set <code>dojoConfig.parseOnLoad</code> to
+		<code>true</code>, or <code>false</code>&mdash;in which case the parser is run from a
+		<code>dojo.ready</code> function</li>
+	<li>The page has <code>addOnLoad</code> functions defined in the
+		<code>dojoConfig</code> object, as well as <code>dojo.ready</code> functions</li>
+	<li>Each required module will log when it is loaded. The widget will log from its
+		<code>startup</code> function&mdash;i.e. after it has been created, placed,
+		and fully initialized</li>
+</ul>
+
+<p class="tutorial_image"><a href="demo/lifecycle.html"><img src="images/sequenceParseOnLoadFalse.png" alt="parseOnLoad = false"></a></p>
+<a class="demoBtn demo" href="demo/lifecycle.html">Demo with parseOnLoad: false</a>
+
+<p class="tutorial_image"><a href="demo/lifecycle.html?parseOnLoad"><img src="images/sequenceParseOnLoadTrue.png" alt="parseOnLoad = false"></a></p>
+<a class="demoBtn demo" href="demo/lifecycle.html?parseOnLoad">Demo with parseOnLoad: true</a>
+
+<p>Notice, first of all, that it does not change the result:
+any <code>ready</code>/<code>addOnLoad</code> functions always fire after
+all required modules have loaded.
+The main difference is the effect of <code>parseOnLoad</code>: when set to true,
+parsing and widget creation happens and then ready functions run.</p>
+
+<p class="proTip">
+	If you are injecting a built version of Dojo into a page after it has loaded,
+	set <code>dojoConfig.afterOnLoad</code> to true. This tells Dojo not to wait
+	for a DOMContentLoaded event that will never happen, and to proceed immediately
+	with any ready functions as soon as dependencies are loaded.  Keep in mind,
+	however, that this works <em>only</em> with Dojo builds, not the source distribution.
+</p>
+
+<h3>Locale and Internationalization</h3>
+<p>Dojo's i18n system is documented in its own right, and worthy of its own tutorial,
+but we'll touch on it here just to show <code>dojoConfig</code> at work again.</p>
+<p>You can configure the locale to use for any widgets or localized content
+using Dojo's i18n infrastructure from <code>dojoConfig</code>.
+The <code>locale</code> option lets you override the default provided to Dojo
+by your browser. A simple demo shows it at work:</p>
+
+<p class="tutorial_image"><a href="demo/localeConfig.html?locale=zh"><img src="images/locale.png" alt="locale = 'zh'"></a></p>
+
+<pre class="brush:js; html-script:true;">
+&lt;script&gt;
+	var dojoConfig = {
+		isDebug: true,
+		parseOnLoad: true,
+		// look for a locale=xx query string param, else default to &#x27;en-us&#x27;
+		locale: location.search.match(/locale=([\w\-]+)/) ? RegExp.$1 : &quot;en-us&quot;
+	};
+&lt;/script&gt;
+&lt;script src=&quot;ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+	dojo.require(&quot;dojo.i18n&quot;);
+	dojo.require(&quot;dojo.date.locale&quot;);
+	dojo.require(&quot;dijit.Dialog&quot;);
+
+	dojo.ready(function(){
+		var now = new Date();
+		var dlg = new dijit.Dialog({
+			id: &#x27;dialog&#x27;,
+			// set a title on the dialog of today&#x27;s date,
+			// using a localized date format
+			title: &#x27;Today: &#x27;+ dojo.date.locale.format(now, {
+					formatLength:&#x27;full&#x27;,selector:&#x27;date&#x27;
+			})
+		}).placeAt(dojo.body());
+		dlg.startup();
+
+		dlg.set(&quot;content&quot;, &#x27;&lt;pre&gt;&#x27;+dojo.toJson(dojo.config, true)+&#x27;&lt;/pre&gt;&#x27;);
+		dlg.show();
+	});
+&lt;/script&gt;
+</pre>
+<p><a class="demoBtn demo" href="demo/localeConfig.html?locale=zh">Demo with dojo.config.locale ='zh' (Chinese)</a></p>
+
+<p>In the demo, where we define the <code>locale</code> property of the
+<code>dojoConfig</code> object, we look for a <code>locale=xx</code> parameter
+from the query string.
+That's a demo artifact; typically you might hard-code the locale.
+Setting the locale ahead of any module loading ensures that the
+correct localized message bundle dependencies are loaded where necessary.
+In this case, we use the <code>dojo.data.locale</code> module to format a
+date object to a localized string for the Dialog title.</p>
+
+<p class="proTip">
+	For multi-lingual pages, you will need to load bundles for the other locales
+	as well as the one specified by your browser or the
+	<code>dojoConfig.locale</code> property. In this case, use the
+	<code>extraLocale</code> config property, with an array of string locale names.
+</p>
+
+<p class="proTip">
+	When using the <code>dojo.parser</code>, the <code>lang=</code> setting on an ancestor DOMNode overrides the <code>dojoConfig.locale</code> setting. This behavior will change in Dojo 2.0. You can also specify the <code>lang </code>for individual widgets, overriding the <code>dojoConfig.locale</code> setting for only that widget.
+</p>
+
+<h3>Custom Properties</h3>
+<p>Because <code>dojo.config</code> is always known to exist, and is the
+logical place to provide for page-scoped configuration, several other
+modules in Dojo use it for their own particular configuration properties.
+We see this in Dijit, and especially in DojoX, where module flags and behavior can be set:</p>
+<dl>
+	<dt>Dijit Editor</dt>
+	<dd>allowXdRichTextSave</dd>
+	<dt>dojox GFX</dt>
+	<dd>dojoxGfxSvgProxyFrameUrl, forceGfxRenderer, gfxRenderer</dd>
+	<dt>dojox.html metrics</dt>
+	<dd>fontSizeWatch</dd>
+	<dt>dojox.io transports and plugins</dt>
+	<dd>xipClientUrl, dojoCallbackUrl</dd>
+	<dt>dojox.image</dt>
+	<dd>preloadImages</dd>
+	<dt>dojox.analytics plugins</dt>
+	<dd>sendInterval, inTransitRetry, analyticsUrl, sendMethod, maxRequestSize, idleTime, watchMouseOver, sampleDelay, targetProps, windowConnects, urchin</dd>
+	<dt>dojox.cometd</dt>
+	<dd>cometdRoot</dd>
+	<dt>dojox.form.FileUploader</dt>
+	<dd>uploaderPath</dd>
+	<dt>dojox.mobile</dt>
+	<dd>mblApplyPageStyles, mblHideAddressBar, mblAlwaysHideAddressBar, mobileAnim, mblLoadCompatCssFiles</dd>
+</dl>
+
+<p>What works for dojox modules also works for your own applications and modules.
+<code>dojoConfig</code> is an ideal place to provide configuration for
+behavior and page- or application-wide properties. Consider the following:</p>
+
+<pre class="brush:js; html-script: true">
+&lt;script&gt;
+	dojoConfig = {
+		isDebug: true,
+		parseOnLoad: true,
+		app: {
+			userName: &quot;Anonymous&quot;
+		}
+	};
+&lt;/script&gt;
+&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+	dojo.require(&quot;dijit.Dialog&quot;);
+
+	// pull configuration from the query string
+	// and mix it into our app config
+	var queryParams = dojo.queryToObject(location.search.substring(1));
+	dojo.mixin(dojo.config.app, queryParams);
+
+	dojo.ready(function(){
+		var dlg = dijit.byId(&quot;dialog&quot;);
+		// draw on the app config to put up a personalized message
+		dlg.set(&quot;title&quot;, &#x27;Welcome back &#x27; + dojo.config.app.userName);
+		dlg.set(&quot;content&quot;, &#x27;&lt;pre&gt;&#x27;+dojo.toJson(dojo.config, true)+&#x27;&lt;/pre&gt;&#x27;);
+		dlg.show();
+	});
+&lt;/script&gt;
+</pre>
+<a class="demoBtn demo" href="demo/appConfig.html">View Application Config Demo</a>
+
+<p>In this example, we've tacked on an "<code>app</code>"
+<code>dojoConfig</code> property, which we later reference via <code>dojo.config</code>
+to put up a personalized greeting in the Dialog.
+There are many ways to approach populating <code>dojoConfig.app</code>.
+It can be pre-populated with reasonable defaults and mixed-in with specific values later.
+In production, the <code>dojoConfig</code> script block might get
+written out on the server-side. Alternatively, you could populate it from a cookie with
+JSON-formatted configuration values, or&mdash;as in our earlier example&mdash;you
+could extract configuration data straight from the query string.
+In development and test mode, you could use a template that provides dummy values,
+or load a script or module that populates it.
+</p>
+
+<h3>Conclusion</h3>
+
+<p>In this tutorial, we've covered many common ways in which
+<code>dojo.config</code> can be populated&mdash;via <code>dojoConfig</code> or
+<code>data-dojo-config</code>&mdash;and how its values influence behavior and
+supply properties to Dojo modules.</p>
+<p>The well-defined position and role <code>dojo.config</code> has in the
+Dojo bootstrap and lifecycle means that the same concept applies neatly to
+Dojo modules and even your own modules and applications.
+</p>
+
+<h3>Colophon</h3>
+
+<ul>
+	<li><a href="/reference-guide/1.6/djConfig.html">dojoConfig (djConfig) documentation</a></li>
+	<li><a href="/reference-guide/1.6/dojo/i18n.html">i18n docs</a></li>
+</ul>

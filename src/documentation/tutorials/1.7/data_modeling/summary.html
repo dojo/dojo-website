@@ -1,0 +1,1 @@
+The Model-Viewer-Controller (MVC) is a dominant paradigm for application development. Here we will look at the foundation Dojo provides for MVC-advised applications. We will learn how we can leverage Dojo object stores and Stateful objects for the foundational model, and how we can build modular viewer and controller code on top of the model.

@@ -1,0 +1,289 @@
+
+
+<style>
+h5	{ color:#900; font-size:15px; margin-bottom:0; padding-bottom:0px; font-weight:bold; }
+</style>
+
+
+<!-- tutorials start with a "Getting Started" block -->
+<h3>Getting Started</h3>
+<p>There are some key concepts to review before diving into creating classes with <code>dojo.declare</code>.  </p>
+
+<h4>dojo.provide</h4>
+<p>The <code>dojo.provide</code> statement makes the resources contained within the file available. These resources may be a series of classes, functions, or a collection of <code>dojo.require</code> statements pulling in other resources.  <code>dojo.provide</code> plays a key role in letting the other widgets and resources within page know the presence of a given class.</p>
+
+<h4>dojo.require</h4>
+<p><code>dojo.require</code>'s role in class creation is providing dependencies to new class.  A resource must be loaded for a new class to inherit from it.</p>
+
+<p>The roles of <code>dojo.provide</code> and <code>dojo.require</code> will become clearer within this tutorial.</p>
+
+
+<!-- Basic dojo.declare Creation -->
+<h3>Basic Dojo Class Creation with Dojo</h3>
+<p>The <code>dojo.declare</code> method is baked into the base Dojo object, so there are no additional dependencies to load.  <code>dojo.declare</code> accepts three arguments: <code>className</code>, <code>superClass</code>, and <code>properties</code>.</p>
+
+<h4>ClassName</h4>
+<p>The <code>className</code> argument represents the name of the class, including the namespace, to be created.  Named classes are placed within the global scope.  The <code>className</code> can also represent the inheritance chain via the namespace. </p>
+
+<h5>Named Class</h5>
+<pre class="brush:js;">
+// Create a new class named "mynamespace.myClass"
+dojo.declare("mynamespace.myClass",null,{
+
+	// Custom properties and methods here
+
+});
+</pre>
+<p>A class named <code>mynamespace.myClass</code> is now globally available within the application.</p>
+
+<h5>"Anonymous" Class</h5>
+<pre class="brush:js;">
+// Create a scoped, anonymous class
+var myClass = dojo.declare(null,{
+
+	// Custom properties and methods here
+
+});
+</pre>
+<p>The <code>myClass</code> is now only available within its given scope.  </p>
+
+<h4>SuperClass(es)</h4>
+<p>The SuperClass argument can be <code>null</code>, one existing class, or an array of existing classes.  If a new class inherits from more than one class, the first class in the list will be the base prototype, the rest will be considered "mixins".</p>
+
+<h5>Class with No Inheritance</h5>
+<pre class="brush:js;">
+// Create a new class named "mynamespace.myClass"
+dojo.declare("mynamespace.myClass",null,{
+
+	// Custom properties and methods here
+
+});
+</pre>
+<p><code>null</code> signifies that this class has no classes to inherit from.</p>
+
+<h5>Class Inheriting from Another Class</h5>
+<pre class="brush:js;">
+// Create a new class named "mynamespace.myClass"
+dojo.declare("mynamespace.myClass",mynamespace.myParentClass,{
+
+	// mynamespace.myClass now has all of mynamespace.myParentClass's properties and methods
+	// These properties and methods override parent's
+
+});
+</pre>
+<p>The new <code>mynamespace.myClass</code> will inherit <code>mynamespace.myParentClass</code>'s properties and methods.  A parent class' method or property can be overridden by adding its key with a new definition within the third argument, which will be explained shortly.</p>
+
+<h5>Class with Multiple Inheritance</h5>
+<pre class="brush:js;">
+// Create a new class named "mynamespace.myClass"
+dojo.declare("mynamespace.myClass",[
+	mynamespace.myParentClass,
+	mynamespace.myOtherClass,
+	mynamespace.myMixinClass
+],
+{
+
+	// mynamespace.myClass now has all of the properties and methods from:
+	// mynamespace.myParentClass, mynamespace.myOtherClass, and mynamespace.myMixinClass
+
+});
+</pre>
+<p>An array of classes signifies multiple inheritance.  Properties and methods are inherited from left to right.  The first class in the array serves as the base prototype, then the subsequent classes are mixins to that class.</p>
+
+
+<p class="proTip">If a property or method is specified in more than one inherited class, the property or method from the last inherited class is used.</p>
+
+
+<h4>Properties and Methods Object</h4>
+<p>The last argument of <code>dojo.declare</code> is an object containing methods and properties for the class prototype.  Properties and methods provided via this argument will override their same namesake if inherited classes have the same properties.</p>
+
+<h5>Custom properties and Methods</h5>
+<pre class="brush:js;">
+// Class with custom properties and methods
+dojo.declare("mynamespace.Class",[mynamespace.MyParentClass],{
+	// Any property
+	myProperty1: 12,
+	// Another
+	myOtherProperty: "Hello",
+	// A method
+	myMethod: function() {
+
+		// Perform any functionality here
+
+		return result;
+	}
+})
+</pre>
+
+<h4>Example:  Basic Class Creation and Inheritance</h4>
+<p>The following code creates the <code>dijit.form.CurrencyTextBox</code> widget found within Dijit:</p>
+<pre class="brush:js;">
+dojo.declare(
+	"dijit.form.CurrencyTextBox",
+	dijit.form.NumberTextBox,
+	{
+
+		currency: "",
+
+		baseClass: "dijitTextBox dijitCurrencyTextBox",
+
+		regExpGen: function(constraints){
+			// if focused, accept either currency data or NumberTextBox format
+			return '(' + (this._focused? this.inherited(arguments, [ dojo.mixin({}, constraints, this.editOptions) ]) + '|' : '')
+				+ dojo.currency.regexp(constraints) + ')';
+		},
+
+		// Override NumberTextBox._formatter to deal with currencies, ex: converts "123.45" to "$123.45"
+		_formatter: dojo.currency.format,
+
+		_parser: dojo.currency.parse,
+
+		parse: function(/*String*/ value, /*Object*/ constraints){
+			// summary:
+			// 		Parses string value as a Currency, according to the constraints object
+			// tags:
+			// 		protected extension
+			var v = this.inherited(arguments);
+			if(isNaN(v) && /\d+/.test(value)){ // currency parse failed, but it could be because they are using NumberTextBox format so try its parse
+				v = dojo.hitch(dojo.mixin({}, this, { _parser: dijit.form.NumberTextBox.prototype._parser }), "inherited")(arguments);
+			}
+			return v;
+		},
+
+		_setConstraintsAttr: function(/*Object*/ constraints){
+			if(!constraints.currency && this.currency){
+				constraints.currency = this.currency;
+			}
+			this.inherited(arguments, [ dojo.currency._mixInDefaults(dojo.mixin(constraints, { exponent: false })) ]); // get places
+		}
+	}
+);
+</pre>
+<p>From the snippet above, it's easy to conclude:</p>
+<ul>
+	<li>The class' name is <code>dijit.form.CurrencyTextBox</code></li>
+	<li>The class inherits from <code>dijit.form.NumberTextBox</code> (and thus NumberTextBox's dependencies)</li>
+	<li>The class sets many custom properties and methods</li>
+</ul>
+<p>Let's dig deeper into class creation with Dojo by learning about the <code>constructor</code> method.</p>
+
+<h3>The constructor Method</h3>
+<p>Once of the special class methods is the <code>constructor</code> method.  The constructor method is fired upon class instantiation, executed in the scope of the new object.  This means that the <code>this</code> keyword references the instance, not the original class.  The <code>constructor</code> method also accepts any number of instance-specific arguments.</p>
+
+<pre class="brush:js;">
+// Create a new class
+dojo.declare("mynamespace.Twitter",null,{
+	// The default username
+	username: "defaultUser",
+
+	// The constructor
+	constructor: function(args) {
+		dojo.safeMixin(this,args);
+	}
+});
+</pre>
+
+<p>Take the following instance creation:</p>
+<pre class="brush:js;">
+var myInstance = new mynamespace.Twitter();
+</pre>
+
+<p>The username used within this instance will be "defaultUser" since no specific settings were provided to the instance.  To leverage the <code>safeMixin</code> method, provide a username parameter:</p>
+<pre class="brush:js;">
+var myInstance = new mynamespace.Twitter({
+	username: "sitepen"
+});
+</pre>
+<p>Now the instance uses <code>sitepen</code> as the username setting!</p>
+
+<p><code>dojo.safeMixin</code> is also useful in class creation and inheritance.  As the API docs state:</p>
+
+<blockquote><p>This function is used to mix in properties like dojo._mixin does, but it skips a constructor property and decorates functions like dojo.declare does. It is meant to be used with classes and objects produced with dojo.declare. Functions mixed in with dojo.safeMixin can use this.inherited() like normal methods. This function is used to implement extend() method of a constructor produced with dojo.declare().</p></blockquote>
+
+<p><code>dojo.safeMixin</code> is the perfect ally when creating classes with numerous options.</p>
+
+
+<h3>Inheritance</h3>
+<p>As stated above, inheritance is defined within the second argument of <code>dojo.declare</code>.  Classes are mixed-in from left to right with each subsequent class' properties and methods getting priority over the previous if a property has already been defined.  Take the following:</p>
+<pre class="brush:js;">
+// Define class A
+dojo.declare("mynamespace.A",null,{
+	// A few properties...
+	propertyA: "Yes",
+	propertyB: 2
+});
+
+// Define class B
+dojo.declare("mynamespace.B",mynamespace.A,{
+	// A few properties...
+	propertyA: "Maybe",
+	propertyB: 1,
+	propertyC: true
+});
+
+// Define class C
+dojo.declare("mynamespace.C",[mynamespace.A,mynamespace.B],{
+	// A few properties...
+	propertyA: "No",
+	propertyB: 99,
+	propertyD: false
+});
+</pre>
+
+<p>The result of the inherited class properties is:</p>
+
+<pre class="brush:js;">
+// Create an instance
+var instance = new mynamespace.C();
+
+// instance.propertyA = "No" // overridden by B, then by C
+// instance.propertyB = 99 // overridden by B, then by C
+// instance.propertyC = true // kept from B
+// instance.propertyD = false // created by C
+</pre>
+
+<p>Setting and overriding simple Number, String, and boolean variables is straight-forward.  Be careful when using arrays and objects with <code>dojo.declare</code> to ensure they are properly scoped.  Arrays and objects defined in the <code>return</code> are shared by all instances of the object.  Arrays and objects defined in the <code>constructor</code> are properties of each object instantiation.  Refer to the <a href="/reference-guide/1.6/dojo/_base/declare.html#arrays-and-objects-as-member-variables">dojo.declare</a> documentation for additional information.</p>
+
+<h4>this.inherited</h4>
+<p>While completely overriding methods is certainly useful, sometimes the constructor of each class up through the inheritance chain should execute to preserve its original functionality.  This is where the <code>this.inherited(arguments)</code> statement comes in handy.  The <code>this.inherited(arguments)</code> statement calls the parent class' method of the same name.  Consider the following:</p>
+<pre class="brush:js;">
+// Define class A
+dojo.declare("mynamespace.A",null,{
+	myMethod: function() {
+		console.log("Hello!");
+	}
+});
+
+// Define class B
+dojo.declare("mynamespace.B",mynamespace.A,{
+	myMethod: function() {
+		// Call A's myMethod
+		this.inherited(arguments); // arguments provided to A's myMethod
+		console.log("World!");
+	}
+});
+
+// Create an instance of B
+var myB = new mynamespace.B();
+myB.myMethod();
+
+
+// Would output:
+//		Hello!
+//		World!
+</pre>
+<p class="proTip">The <code>this.inherited</code> method can be called at any time within the child class' code.  There will be some cases where you will want to call <code>inherited()</code> in the middle of the child function, or even at the end.  That said, you should not call it from within the constructor.</p>
+
+<!-- tutorials end with a "Conclusion" block -->
+<h3>Conclusion</h3>
+<p>The <code>dojo.declare</code> method is the key to creating modular, reusable classes with the Dojo Toolkit.  <code>dojo.declare</code> allows for complex class recreation with multiple inheritance and any number of properties and methods.  Better yet is that <code>dojo.declare</code> is simple to learn and will allow developers to avoid repeating code.</p>
+
+
+<!-- resources -->
+<h3>dojo.declare Resources</h3>
+<p>Looking for more detail about dojo.declare and class creation?  Check out these great resources:</p>
+<ul>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojo/declare.html">dojo.declare</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojo/mixin.html">dojo.mixin Reference Guide</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/quickstart/writingWidgets.html">Writing Your Own Widget</a></li>
+</ul>

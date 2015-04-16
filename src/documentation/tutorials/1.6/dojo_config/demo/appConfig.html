@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Application Config</title>
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" media="screen">
+		<style>
+			#dialog { min-width: 200px; }
+		</style>
+		<!-- load dojo and provide config via data attribute -->
+		<script>
+			dojoConfig= {
+				isDebug: true,
+				parseOnLoad: true,
+				app: {
+					userName: "Anonymous"
+				}
+			};
+		</script>
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"></script>
+		<script>
+			dojo.require("dijit.Dialog");
+			
+			// pull configuration from the query string
+			// and mix it into our app config
+			var queryParams = dojo.queryToObject(location.search.substring(1));
+			dojo.mixin(dojo.config.app, queryParams);
+			
+			dojo.ready(function(){
+				var dlg = dijit.byId("dialog");
+				// draw on the app config to put up a personalized message
+				dlg.set("title", 'Welcome back ' + dojo.config.app.userName);
+				dlg.set("content", '<pre>'+dojo.toJson(dojo.config, true)+'</pre>');
+				dlg.show();
+			});
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: Application Config</h1>
+		<div id="dialog" data-dojo-type="dijit.Dialog"></div>
+	</body>
+</html>

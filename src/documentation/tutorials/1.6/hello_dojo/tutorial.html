@@ -1,0 +1,119 @@
+
+
+<h3>Getting Started</h3>
+<p>Our starting point is a simple HTML page. We want to load Dojo into the page and add some code to signal our success.</p>
+
+<pre class="brush: js; html-script: true; highlight: [7]">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;meta charset=&quot;utf-8&quot;&gt;
+	&lt;title&gt;Tutorial: Hello Dojo!&lt;/title&gt;
+	&lt;!-- load Dojo --&gt;
+	&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;h1 id=&quot;greeting&quot;&gt;Hello&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<a class="demoBtn demo" href="demo/start.html">View Demo</a>
+
+<p>This is as vanilla as it gets. We've put the Dojo script tag into the &lt;head&gt; &mdash; it could also have gone at the end of the &lt;body&gt; &mdash; with a src attribute indicating the URL where the <code>dojo.js</code> file is located.</p>
+For this tutorial we are going to load the Dojo Toolkit via the Google CDN. If you have downloaded a Dojo release, adjust the URL to point to the location of dojo.js on your own server. Assuming the URL is correct, Dojo is now loaded quietly in the background. Next we need somewhere to put code that runs when Dojo is ready, so we can do something with it.
+
+<h3>dojo.ready</h3>
+<p><em>Readiness</em>, as it relates to an HTML page and the browser, can be a slippery moment to pin down. We need both the DOM to be ready for manipulation, and Dojo (and any indicated dependencies &mdash; more on that in a minute) to be loaded before any of our JavaScript code runs. Because <em>ready</em> has different meanings in different browsers, Dojo provides a reliable, cross-browser function for the purpose: <code>dojo.ready</code>. We pass it a function, and that function gets executed at the <em>ready</em> moment.</p>
+
+<pre class="brush: js; html-script: true;">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;meta charset=&quot;utf-8&quot;&gt;
+	&lt;title&gt;Tutorial: Hello Dojo!&lt;/title&gt;
+	&lt;!-- load Dojo --&gt;
+	&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;&gt;&lt;/script&gt;
+	&lt;script&gt;
+		dojo.ready(function(){
+			alert(&quot;Dojo version &quot; + dojo.version + &quot; is loaded&quot;);
+		});
+	&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;h1 id=&quot;greeting&quot;&gt;Hello&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<a class="demoBtn demo" href="demo/dojoReady.html">View Demo</a>
+
+<p>The function we pass to <code>dojo.ready</code> should cause an alert box to pop up when the page loads. Handily, Dojo has a version property that's useful for demos like this.
+As we get further into learning Dojo, the alert is going to get increasingly annoying, and we'll want to learn about logging to a browser <em>console</em>. But for now, we'll stay focused, and move on.</p>
+
+<p>Loading Dojo is great, however it's more likely that you want to manipulate the page you just loaded Dojo into. We'll be digging into this in much more detail in other tutorials. For now, though, we'll simply get a reference to our &lt;h1&gt; and update its content.</p>
+
+<pre class="brush: js; html-script: true; highlight: [10]">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;meta charset=&quot;utf-8&quot;&gt;
+	&lt;title&gt;Tutorial: Hello Dojo!&lt;/title&gt;
+	&lt;!-- load Dojo --&gt;
+	&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;&gt;&lt;/script&gt;
+	&lt;script&gt;
+		dojo.ready(function(){
+			dojo.byId(&quot;greeting&quot;).innerHTML += &quot;, from &quot; + dojo.version;
+		});
+	&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;h1 id=&quot;greeting&quot;&gt;Hello&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<a class="demoBtn demo" href="demo/displayGreeting.html">View Demo</a>
+
+<p>This time, in our ready function, we use <code>dojo.byId</code> to retrieve the element in the DOM with the given ID, and append Dojo's version string to its <code>innerHTML</code> property.
+
+<p>Note that you can have as many calls to dojo.ready as you like, and each function will be executed in the order they were provided.
+In practice, if you have more than a few lines of code, it's common to define a named (non-anonymous) function and pass that to <code>dojo.ready</code>:
+
+<pre class="brush: js; html-script: false;">function init() {
+	alert(&quot;Dojo ready, version:&quot; + dojo.version);
+	// More initialization here
+}
+dojo.ready(init);
+</pre>
+
+<p>Note that when we pass in the function, we're passing it by name alone, without any parentheses after it.</p>
+
+<p>If you came here for Dojo's Hello World, then we are long done. But earlier, we mentioned something about "indicated dependencies" &mdash; let's get back to that.</p>
+
+<h3>Modules</h3>
+<p>There's a bit more going on here than meets the eye. What does <code>dojo.js</code> actually get you? Dojo is a modular toolkit, with a <em>package system</em> that allows you to load only the code you need into your page and to make managing dependencies a lot easier.
+One of the perennial problems with JavaScript development has been the lack of a native package system for loading code (in the same way as you might require/import modules or classes with Java, PHP, Python etc.)
+Dojo fills that gap with an intuitive approach to code organization and a simple API (<code>dojo.require</code>) to indicate a dependency on a particular module. </p>
+<p>What that means for now is that when we load <code>dojo.js</code>, we aren't loading the entire Dojo Toolkit, only the <em>base</em> modules. Our Dojo script tag loads a set of key functionality such as the package system, events, Ajax, DOM helpers, and other very commonly needed functionality.</p>
+
+<h3>Module loading for more shine</h3>
+<p>So, if setting <code>innerHTML</code> on that &lt;h1&gt; didn't quite make your day, let's add some shine. Dojo "base" includes the animation framework for visual effects and a couple of the more common effects (<code>dojo.fadeOut</code> and <code>dojo.fadeIn</code>).
+That's well and good, but we want the greeting to slide on to the page. For that we'll use <code>dojo.fx.slideTo</code>. The <code>dojo.fx</code> module is not already included in our <code>dojo.js</code>, so we'll need to load it:</p>
+
+<pre class="brush: js; html-script: false;">// New: Require in the dojo.fx module
+dojo.require("dojo.fx");
+
+// Remember, dojo.ready waits for both the DOM and all dependencies
+dojo.ready(function(){
+	// The piece we had before - change our innerHTML
+	dojo.byId("greeting").innerHTML += ", from " + dojo.version;
+
+	// Now, slide the greeting
+	dojo.fx.slideTo({
+		top: 100,
+		left: 200,
+		node: dojo.byId("greeting")
+	}).play();
+});</pre>
+<p>The <code>slideTo</code> effect we want is a part of the <code>dojo.fx</code> module. The <code>dojo.require</code> line states the dependency, and asks the loader to load the file if it is not already available.
+There's no new script tag to fiddle with, and crucially, the rest of our initialization needn't change &mdash; we still use <code>dojo.ready</code> and our code will only run once the DOM is ready and all dependencies are loaded.</p>
+<p>The next part is to put what we loaded to use. Like all property animations in Dojo, we pass in an object with a node reference, and any other properties to configure the animation. We'll be looking closer at animations in Dojo in a future tutorial.</p>
+
+<a class="demoBtn demo" href="demo/slideInGreeting.html">View Demo</a>
+
+<h3>Conclusion</h3>
+<p>Getting started with the Dojo Toolkit is as simple as adding a script tag, but the broad scope of the toolkit is placed at your fingertips, as and when you need it. In this tutorial we've taken the first step towards putting Dojo to work in your web sites and applications.
+In future tutorials in this series we'll visit each of the major groups of functionality &mdash; from DOM helpers to Ajax, effects, events and more &mdash; exploring and explaining each step of the way.</p>

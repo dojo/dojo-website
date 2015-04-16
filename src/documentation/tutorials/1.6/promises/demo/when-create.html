@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: dojo.when for creation</title>
+
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load Dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js">
+		</script>
+		<script>
+			function createUserList(node, users){
+				node = dojo.byId(node);
+
+				return dojo.when(
+					users,
+					function(users){
+						dojo.forEach(users, function(user){
+							dojo.create("li", {
+								innerHTML: dojo.toJson(user)
+							}, node);
+						});
+					},
+					function(error){
+						dojo.create("li", {
+							innerHTML: "Error: " + error
+						}, node);
+					}
+				);
+			}
+
+			dojo.ready(function(){
+				var users = dojo.xhrGet({
+					url: "users-mangled.json",
+					handleAs: "json"
+				}).then(function(res){
+					return dojo.map(res, function(user){
+						return {
+							id: user[0],
+							username: user[1],
+							name: user[2]
+						};
+					});
+				});
+
+				createUserList("userlist1", users);
+				createUserList("userlist2",
+					[{ id: 100, username: "username100", name: "User 100" }]);
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: dojo.when for creation</h1>
+
+		<h2>List 1 (from server)</h2>
+		<ul id="userlist1"></ul>
+
+		<h2>List 2 (from static array)</h2>
+		<ul id="userlist2"></ul>
+	</body>
+</html>

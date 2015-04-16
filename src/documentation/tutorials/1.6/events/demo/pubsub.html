@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: dojo.publish and dojo.subscribe</title>
+
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js">
+		</script>
+		<script>
+			dojo.ready(function(){
+				var alertButton = dojo.byId("alertButton"),
+					createAlert = dojo.byId("createAlert");
+
+				dojo.connect(alertButton, "onclick", function(evt){
+					// When this button is clicked,
+					// publish to the "alertUser" topic
+					dojo.publish("alertUser", ["I am alerting you."]);
+				});
+				dojo.connect(createAlert, "onclick", function(evt){
+					// Create another button
+					var anotherButton = dojo.create("button", {
+						innerHTML: "Another alert button"
+					}, createAlert, "after");
+
+					// When the other button is clicked,
+					// publish to the "alertUser" topic
+					dojo.connect(anotherButton, "onclick", function(evt){
+						dojo.publish("alertUser", ["I am also alerting you."]);
+					});
+				});
+
+				// Register the alerting routine with the "alertUser"
+				// topic.
+				dojo.subscribe("alertUser", function(text){
+					alert(text);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: dojo.publish and dojo.subscribe</h1>
+		<button id="alertButton">Alert the user</button>
+		<button id="createAlert">Create another alert button</button>
+	</body>
+</html>

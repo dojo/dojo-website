@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: DojoX DataGrid</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/Grid.css" media="screen">
+		<style>
+		body {
+			font-family: Tahoma, Arial, Helvetica, sans-serif;
+			font-size: 11px;
+		}
+		.dojoxGridRowEditing td {
+			background-color: #F4FFF4;
+		}
+		.dojoxGrid input, .dojoxGrid select, .dojoxGrid textarea {
+			margin: 0;
+			padding: 0;
+			border-style: none;
+			width: 100%;
+			font-size: 100%;
+			font-family: inherit;
+		}
+		.dojoxGrid input {
+		}
+		.dojoxGrid select {
+		}
+		.dojoxGrid textarea {
+		}
+		#controls {
+			padding: 6px 0;
+		}
+		#grid {
+			width: 550px;
+			height: 220px;
+			border: 1px solid silver;
+		}
+		</style>
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: false">
+		</script>
+		<script>
+			dojo.require("dojox.grid.DataGrid");
+			dojo.require("dojo.data.ItemFileWriteStore");
+			dojo.require("dojo.parser");
+
+			// ==========================================================================
+			// Custom formatter
+			// ==========================================================================
+			formatMoney = function(inDatum) {
+				return isNaN(inDatum) ? '...' : '$' + parseFloat(inDatum).toFixed(2);
+			}
+
+			// ==========================================================================
+			// UI Action
+			// ==========================================================================
+			addRow = function(){
+				test_store.newItem({
+					id: grid.rowCount,
+					col1: 'normal',
+					col2: false,
+					col4: 'Now is the time for all good men to come to the aid of their party.',
+					col6: 9.99
+				});
+			}
+
+			dojo.ready(function(){
+				// ==========================================================================
+				// Grid structure
+				// ==========================================================================
+				gridLayout = [{
+					defaultCell: { width: 4, editable: true, styles: 'text-align: right;'  },
+					cells: [
+						{ name: 'Id', field: 'id', width: 2 },
+						{ name: 'Priority', field: 'col1', width: 5, styles: 'text-align: center;', type: dojox.grid.cells.Select, options: ["normal", "note", "important"] },
+						{ name: 'Mark', width: 3, field: 'col2', styles: 'text-align: center;', type: dojox.grid.cells.Bool },
+						{ name: 'Message', field: 'col4', styles: '', width: '100%' }
+					]
+				},{
+					defaultCell: { width: 5, editable: true, styles: 'text-align: right;' },
+					rows: [
+						{ name: 'Amount', width: 6, field: 'col6', formatter: formatMoney },
+						{ name: 'Detail', value: 'Detail'}
+					]
+				}];
+
+				// example sample data and code
+				// global var "data"
+				data = {
+					identifier: 'id',
+					label: 'id',
+					items: []
+				};
+				data_list = [
+					{ col1: "normal", col2: false, col3: "new", col4: 'But are not followed by two hexadecimal', col5: 29.91, col6: 10, col7: false },
+					{ col1: "important", col2: false, col3: "new", col4: 'Because a % sign always indicates', col5: 9.33, col6: -5, col7: false },
+					{ col1: "important", col2: false, col3: "read", col4: 'Signs can be selectively', col5: 19.34, col6: 0, col7: true },
+					{ col1: "note", col2: false, col3: "read", col4: 'However the reserved characters', col5: 15.63, col6: 0, col7: true },
+					{ col1: "normal", col2: false, col3: "replied", col4: 'It is therefore necessary', col5: 24.22, col6: 5.50, col7: true },
+					{ col1: "important", col2: false, col3: "replied", col4: 'To problems of corruption by', col5: 9.12, col6: -3, col7: true },
+					{ col1: "note", col2: false, col3: "replied", col4: 'Which would simply be awkward in', col5: 12.15, col6: -4, col7: false }
+				];
+				var rows = 100;
+				for(var i=0, l=data_list.length; i<rows; i++){
+					data.items.push(dojo.mixin({ id: i }, data_list[i%l]));
+				}
+
+				// global var "test_store"
+				test_store = new dojo.data.ItemFileWriteStore({data: data});
+
+				// instantiate declarative widgets
+				dojo.parser.parse();
+			})
+		</script>
+	</head>
+	<body>
+		<h1>Demo: DojoX DataGrid</h1>
+
+		<h2>
+			dojox.grid.DataGrid Basic Editing test
+		</h2>
+		<div id="grid" dojoType="dojox.grid.DataGrid"
+			jsId="grid"
+			rowSelector="20px"
+			store="test_store" structure="gridLayout"></div>
+		<br />
+		<div id="rowCount"></div>
+	</body>
+</html>

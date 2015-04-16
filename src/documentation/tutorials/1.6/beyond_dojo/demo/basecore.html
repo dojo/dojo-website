@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>
+			Demo: Dojo Base / Dojo Core
+		</title>
+	</title>
+	<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen" type="text/css">
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" type="text/css">
+	<link rel="stylesheet" href="style.css" media="screen" type="text/css">
+	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js" data-dojo-config="isDebug: true,parseOnLoad: true"></script>
+	<script>
+			dojo.require("dojo.date");
+			dojo.require("dijit.form.TextBox");
+			dojo.require("dijit.form.DateTextBox");
+			dojo.require("dijit.form.Form");
+
+			dojo.provide("demo");
+
+			demo = {
+				daysSince: function(fromDate, target){
+					// summary:
+					// 	dojo Core example to calculate difference in days since the given date
+
+					if(!(fromDate instanceof Date)) {
+						fromDate = new Date(fromDate);
+					}
+					console.log("from date: ", fromDate);
+					var now = new Date();
+					console.log("From Date: " + fromDate.toUTCString()); // note that even toUTCString output is implementation-dependent
+
+					console.log("Difference in days: " + dojo.date.difference(fromDate, now, "day"));
+
+					// dojo.date provides a number of handy methods for working with dates
+					// here we use the difference method, and ask for the result in 'day' units
+					var days  = dojo.date.difference(fromDate, now, "day")
+
+					dojo.byId(target).innerHTML = days;
+				},
+				topLinks: function(){
+					// summary:
+					// 	dojo Base example to add 'top' links before each heading
+
+					// dojo.query can take just about any valid CSS3 selector
+					var headings = dojo.query('h2,h3');
+
+					// dojo.forEach provides iteration over collections
+					dojo.forEach(headings, function(elm){
+						// dojo.create is a convenience for creating DOM elements
+						var topLink = dojo.create("a", {
+							href: "#top", innerHTML: "^top",
+						});
+
+						// dojo.place lets to insert (or move) an element in the DOM
+						dojo.place(topLink, elm, "before");
+					});
+				}
+			}
+		</script>
+	</head>
+	<body class=" claro">
+		<a name="top" class="topLink" style="position: absolute; top: 0"></a>
+		<h1 id="mainHeading">
+			Demo: Dojo Base vs. Dojo Core
+		</h1>
+		<h3>
+			Dojo Base
+		</h3>
+		<div>
+			<label for="dojoQuery">Find heading elements using dojo.query and add "back to top" links to each</label> <input id="dojoQuery" type="button" value="Add 'back to top' links" onclick="demo.topLinks()">
+		</div>
+		<h3>
+			Dojo Core Example: Date Comparison
+		</h3>
+		<div>
+			<p>
+				The main difference between using Dojo Base and Dojo Core is that you must dojo.require Core modules.
+			</p>
+			<p>
+				<label for="dojoDate">Days since the millenium: </label><span id="dojoDate"></span>
+				<input id="dojoQuery" type="button" value="Calculate dates" onclick="demo.daysSince('January 1, 2000 00:00:00', 'dojoDate')">
+			</p>
+
+		</div>
+	</body>
+</html>

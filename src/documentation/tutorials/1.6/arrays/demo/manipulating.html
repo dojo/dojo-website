@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Array Manipulation</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			dojo.ready(function(){
+				var original = ["one", "two", "three", "four", "five"],
+					list2 = dojo.byId("list2"),
+					list3 = dojo.byId("list3"),
+					mapped, filtered;
+
+				mapped = dojo.map(original, function(item, index){
+					return {
+						id: index * 100,
+						text: item
+					};
+				}); // [ { id: 0, text: "one" }, { id: 100, text: "two" }, ... ]
+
+				filtered = dojo.filter(mapped, function(item, index){
+					return item.id > 50 && item.id < 350;
+				}); // [ { id: 100, text: "two" }, { id: 200, text: "three" },
+					//   { id: 300, text: "four" } ]
+
+				dojo.forEach(mapped, function(item){
+					dojo.create("li", {
+						innerHTML: "<code>" + dojo.toJson(item) + "</code>"
+					}, list2);
+				});
+
+				dojo.forEach(filtered, function(item){
+					dojo.create("li", {
+						innerHTML: "<code>" + dojo.toJson(item) + "</code>"
+					}, list3);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Array Manipulation</h1>
+
+		<p>The following list is a representation of an array.</p>
+		<ul id="list1">
+			<li>one</li>
+			<li>two</li>
+			<li>three</li>
+			<li>four</li>
+			<li>five</li>
+		</ul>
+
+		<br/>
+		<p>The next list is a representation of the previous array being transformed by the following code:</p>
+		<pre class="brush:js">
+dojo.map(original, function(item, index){
+	return {
+		id: index * 100,
+		text: item
+	};
+});
+		</pre>
+		
+		<ul id="list2"></ul>
+
+		<br/>
+		<p>The final list is a representation of the mapped array being filtered by the following code:</p>
+		<pre class="brush:js">
+dojo.filter(mapped, function(item, index){
+	return item.id &gt; 50 &amp;&amp; item.id &lt; 350;
+});
+		</pre>
+		<ul id="list3"></ul>
+		
+		
+		
+		
+		<script src="/highlight/scripts/shCore.js"></script>
+		<script src="/highlight/scripts/shBrushJScript.js"></script>
+		<link type="text/css" rel="stylesheet" href="/highlight/styles/shCoreDefault.css"/>
+		<script src='/highlight/scripts/shBrushXml.js' type='text/javascript'></script>
+		<script src='/highlight/scripts/shBrushCss.js' type='text/javascript'></script>
+		<script>
+			SyntaxHighlighter.all();
+		</script>
+	</body>
+</html>

@@ -1,0 +1,887 @@
+
+
+<script src='/highlight/scripts/shBrushPhp.js' type='text/javascript'></script>
+<style type="text/css">
+table.options {
+	border-collapse:collapse;
+	margin: 20px 0;
+}
+
+table.options th {
+	text-align:center;
+	padding:3px 6px;
+	background-color: #DDDDDD;
+	background: #fdfdfd; /* Old browsers */
+	background: -moz-linear-gradient(top, #fdfdfd 0%, #f0f0f0 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fdfdfd), color-stop(100%,#f0f0f0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #fdfdfd 0%,#f0f0f0 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #fdfdfd 0%,#f0f0f0 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #fdfdfd 0%,#f0f0f0 100%); /* IE10+ */
+	background: linear-gradient(top, #fdfdfd 0%,#f0f0f0 100%); /* W3C */
+	border: 1px solid #E6E6E7;
+	color: #333333;
+	text-shadow: 0 1px 0 rgba(255,255,255,.9);
+}
+
+table.options td {
+	padding:3px;
+	vertical-align: top;
+}
+
+dl {
+	font-size: 14px;
+	line-height: 1.5em;
+}
+
+dt {
+	font-size: 18px;
+	font-weight: normal !important;
+	font-family: Helvetica, Arial, sans-serif;
+	margin-bottom: 6px;
+}
+</style>
+<h3>Getting Started</h3>
+
+<p>In a lot of ways, REST and RESTful has become the default architecture for modern web applications.  But, the first
+	thing to understand about REST and RESTful services is that REST isn't a standard, but more of a methodology. There
+	are many server side RESTful services that already behave in a fashion that is compatible with Dojo and DojoX JSON
+	REST data stores.  This tutorial though is going to explain how they work and what in case you wanted to build your
+	own server side implementation, or understand better what needs to happen when integrating to a RESTful service.</p>
+
+<p>Before you get too far in the tutorial, you will need some grounding in other key concepts within the toolkit.  If
+	you aren't familiar with these other areas, then it would be best to read these tutorials first:</p>
+
+<ul>
+	<li><a href="../ajax">Ajax with dojo/request</a></li>
+	<li><a href="../deferreds">Getting Started with Deferreds</a></li>
+	<li><a href="../promises">Dojo Deferreds and Promises</a></li>
+	<li><a href="../intro_dojo_store">Dojo Object Store</a></li>
+</ul>
+
+<p>The examples in this tutorial focus on the interface between the client and server.  In order to be practical though
+	the RESTful service would need to be able to store and persist the data, usually in some sort of database or data
+	store.  The details of interfacing with a data store is beyond the scope of this tutorial and highly conditional
+	upon what sort of data you need to serve for your application.</p>
+
+<h3>Overview of REST</h3>
+
+<p>REST stands for Representational State Transfer and was introduced and defined by Roy Fielding in 2000.  He indicated
+	that there should be six key constraints on RESTful services:</p>
+<dl>
+	<dt>Client-Server</dt>
+	<dd>A uniform interface and separation of concerns between the client and server so that code is more portable</dd>
+	<dt>Stateless</dt>
+	<dd>No client context should be stored on the server in between requests</dd>
+	<dt>Cacheable</dt>
+	<dd>The server should be explicit about if the response is cacheable or not.</dd>
+	<dt>Layered System</dt>
+	<dd>The client cannot tell if it is connected directly to the end server or some other intermediary.</dd>
+	<dt>Code on Demand (Optional)</dt>
+	<dd>The server can extend or augment the client temporarily by sending code to the client. <em>Note:</em> This is
+		not something that is designed into the existing Dojo JSON REST data stores.</dd>
+	<dt>Uniform Interface</dt>
+	<dd>A uniform interface simplifies and decouples the architecture, which is based on the the HTTP protocol
+		standards</dd>
+</dl>
+
+<p>A REST request/response has the following attributes:</p>
+
+<ul>
+	<li><strong>A URI &mdash;</strong> such as: <code>http://example.com/resources/</code>.</li>
+	<li><strong>Data &mdash;</strong> such as an encoded multi-part form data or JSON.</li>
+	<li><strong>HTTP Method &mdash;</strong> with the main four being <code>GET</code>, <code>PUT</code>,
+		<code>POST</code> and <code>DELETE</code>.</li>
+	<li><strong>Must be Hyper-Text Driven &mdash;</strong> several REST APIs put artificial constraints on how
+		resources are identified and adding artificial semantics.  Roy Fielding
+		<a href="http://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven" target="_blank">discusses
+			here</a> how this is very anti-REST.  Ultimately REST should be as "open-structured" as browsing
+			the web, but for data.
+	</li>
+</ul>
+
+<p>There are two types of URIs in RESTful services.  There are <em>Collection URIs</em> which would represent a
+	collection of objects (e.g. <code>http://example.com/books/</code> might return a set of data represent a collection
+	of books).  Then there are <em>Element URIs</em> which represent a specific element of a collection (e.g.
+	<code>http://example.com/books/1/</code> might return a book that is identified by <code>1</code>).  These are then
+	designed to be compounded, much like a structure of a website, to navigate deeper into the data (e.g.
+	<code>http://example.com/books/1/pages/</code> might return a collection of pages for a book and
+	<code>http://example.com/books/1/pages/1/</code> might return the first page).</p>
+
+<p>When the URIs are then combined with an HTTP method/verb, they provide meaning about what actions is being
+	performed:</p>
+
+<table class="options">
+	<thead>
+		<tr>
+			<th>URI Type</th>
+			<th><code>GET</code></th>
+			<th><code>PUT</code></th>
+			<th><code>POST</code></th>
+			<th><code>DELETE</code></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Collection</td>
+			<td>Return a list of resources that are part of the collection.</td>
+			<td>Replace the entire collection with the one supplied.</td>
+			<td>Create a new entry in the collection.  A new Element URI is created and usually returned in the
+				response.</td>
+			<td>Delete the entire collection.</td>
+		</tr>
+		<tr>
+			<td>Element</td>
+			<td>Return a representation of the identified element.</td>
+			<td>Replace the identified element of the collection with the supplied one, or if it doesn't exist, create
+				it.</td>
+			<td>Not generally used, but the supplied data is meant to be a collection in its own right and the data
+				should be created as a collection identified by the element.</td>
+			<td>Delete the identified element.</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Client Side Overview</h3>
+
+<p>Before we get into the details of what is required to implement a server side JSON RESTful data server, let's cover
+	off the client side quickly first.  <code>dojo/store/JsonRest</code> is a straight forward and lightweight
+	implementation of Dojo Object Store API. Using it against a server-side RESTful service is fairly simple.  Usually
+	you simply set the <code>target</code> attribute to the URI of the collection you want the store to represent.
+	For example, if I wanted to connect to a RESTful collection of books, I would do something like this:</p>
+
+<pre class="brush:js;">
+require(["dojo/store/JsonRest", "dojo/when"], function(JsonRest, when){
+	// Create a new store that connects to the "books" collection
+	var bookStore = new JsonRest({
+		target: "/books"
+	});
+
+	// Get a book from the store ID'ed by "1" and log the returned
+	// value to the console.
+	when(bookStore.get(1)).then(function(book){
+		console.log(book);
+	});
+});
+</pre>
+
+<p class="proTip">In the example above <code>dojo/when</code> is used to "wrap" the return value of the of the
+	<code>.get()</code> to ensure it is a promise.  The <code>dojo/store/JsonRest</code> always returns a promise, but
+	if you are writing code that you want to be "generic" no matter what store you are using, using
+	<code>dojo/when</code> ensures the code would work with a store that doesn't always return a promise (e.g. <code>
+	dojo/store/Memory</code>).</p>
+
+<p>As of Dojo 1.8 all of the widgets that are part of the Dijit project are Dojo Object Store API aware, which means
+	that you can use an instance of <code>dojo/store/JsonRest</code> to drive your data aware Dijits.  Some of the
+	DojoX widgets are Dojo Object Store API aware, but if they are not, you can use the
+	<code>dojo/data/ObjectStore</code> to wrap a <code>dojo/store/JsonRest</code> instance and provide the legacy Dojo
+	Data API to the widget.</p>
+
+<p class="proTip">For more information on the <code>dojo/data/ObjectStore</code> can be found in the
+	<a href="/reference-guide/1.8/dojo/data/ObjectStore.html" target="_blank">Reference Guide</a>.</p>
+
+<p class="proTip">There is also the legacy <code>dojox/data/JsonRestStore</code>.  It was built around the legacy Dojo
+	Data API and more information can be found in the <a href="/reference-guide/1.8/dojox/data/JsonRestStore.html"
+	target="_blank">Reference Guide</a>.</p>
+
+<h3>The Basics</h3>
+
+<p>In the overview of REST above, we discussed the basics of RESTful services.  To implement them, you simply need to
+	create a service service that returns the appropriate JSON data that you want to represent.  It is very difficult
+	to cover off every server side technology, but I will provide examples using <a href="http://nodejs.org/"
+	target="_blank">NodeJS</a> and <a href="http://expressjs.com/" target="_blank">Express</a> and will also provide
+	examples in PHP.  There are countless other frameworks and APIs that would implement the basics as well.</p>
+
+<p>So back to our book example above, if we wanted to serve up a collection of books in a service, we might want have a
+	collection that looked like this, represented in JSON:</p>
+
+<pre class="brush:js;">
+[
+	{ "id": 1, "title": "A Brave New World", "author": "Aldous Huxley", "price": 1.53 },
+	{ "id": 2, "title": "Fahrenheit 451", "author": "Ray Bradbury", "price": 2.17 },
+	{ "id": 3, "title": "Neuromancer", "author": "William Gibson", "price": 4.92 },
+	{ "id": 4, "title": "A Scanner Darkley", "author": "Philip K. Dick", "price": 3.33 }
+]
+</pre>
+
+<p>The first thing you should notice is that there is an ID field as part of the JSON structure.  In a collection, the
+	client store is expecting to be able to figure out how to identify and reference the individual elements of the
+	collection.  The store defaults to <code>id</code> but this can be changed by setting the <code>idProperty</code>
+	property of the store:</p>
+
+<pre class="brush:js;">
+require(["dojo/store/JsonRest"], function(JsonRest){
+	// Create a new store, that targets the books collection, but identifies
+	// each book by "someId"
+	var bookStore = new JsonRest({
+		target: "/books",
+		idProperty: "someId"
+	});
+});
+</pre>
+
+<p>Now we want to serve up our collection of books on the <code>/books/</code> URI on our server. In NodeJS with Express
+	it would look like this:</p>
+
+<pre class="brush:js;">
+// The collection of books
+var books = [
+		{ id: 1, title: "A Brave New World", author: "Aldous Huxley", price: 1.53 },
+		{ id: 2, title: "Fahrenheit 451", author: "Ray Bradbury", price: 2.17 },
+		{ id: 3, title: "Neuromancer", author: "William Gibson", price: 4.92 },
+		{ id: 4, title: "A Scanner Darkley", author: "Philip K. Dick", price: 3.33 }
+	];
+var express = require("express"), // require in the Express module
+	app = express(); // create a new Express application
+
+// When the /books URL is accessed, return the JSON representation of the book collection
+app.get("/books", function(req, res){
+	res.status(200);
+	res.json(books);
+});
+
+// Start listening on port 80 for requests
+app.listen(80);
+</pre>
+
+<p>And an example in PHP, I would have a file called <code>books.php</code> and the appropriate server configuration
+	to auto-map the <code>php</code> extension:</p>
+
+<pre class="brush:php;">
+&lt;?php
+	// The collection of books
+	$books = array(
+		array('id' => 1, 'title' => 'A Brave New World', 'author' => 'Aldous Huxley', 'price' => 1.53),
+		array('id' => 2, 'title' => 'Fahrenheit 451', 'author' => 'Ray Bradbury', 'price' => 2.17),
+		array('id' => 3, 'title' => 'Neuromancer', 'author' => 'William Gibson', 'price' => 4.92),
+		array('id' => 4, 'title' => 'A Scanner Darkley', 'author' => 'Philip K. Dick', 'price' => 3.33)
+	);
+
+	// Determine the request method of the request
+	$requestMethod = $_SERVER['REQUEST_METHOD'];
+
+	// Handle a "GET" request, return the JSON representation of the book collection
+	if ($requestMethod == 'GET') {
+		header('HTTP/1.1 200 OK');
+		header('Content-type: application/json');
+		print json_encode($books);
+	}
+?&gt;
+</pre>
+
+<p>Now let's retrieve the collection of books and log it to the console:</p>
+
+<pre class="brush:js;">
+require(["dojo/store/JsonRest", "dojo/when"], function(JsonRest, when){
+	// Create a new store pointed at our collection of books
+	var bookStore = new JsonRest({
+		target: "books/",
+	});
+
+	// Request all the books and log the results to the console
+	when(bookStore.query()).then(function(results){
+		console.log(results);
+	});
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/rest-books.php" target="_blank">View Demo</a>
+
+<p>If we wanted to retrieve an element, we would want to do something like this in Express:</p>
+
+<pre class="brush:js;">
+// The collection of books
+var books = [
+		{ id: 1, title: "A Brave New World", author: "Aldous Huxley", price: 1.53 },
+		{ id: 2, title: "Fahrenheit 451", author: "Ray Bradbury", price: 2.17 },
+		{ id: 3, title: "Neuromancer", author: "William Gibson", price: 4.92 },
+		{ id: 4, title: "A Scanner Darkley", author: "Philip K. Dick", price: 3.33 }
+	];
+var express = require("express"), // require in the Express module
+	app = express(); // create a new Express application
+
+// Using the router feature of Express allows easy mapping of URIs to code
+app.configure(function(){
+	app.use(app.router);
+});
+
+// Continue to provide the full collection of books
+app.get("/books", function(req, res){
+	res.status(200);
+	res.json(books);
+});
+
+// When a client requests "/books/id", it will provide the "id" and look for it
+app.get("/books/:id", function(req, res){
+	var book;
+	books.some(function(b){ // search for the book in the collection
+		return book = (b.id == req.params.id) ? b : false;
+	});
+	if(book){  // if we found the book return it
+		res.status(200);
+		res.json(book);
+	}else{ // oops, we didn't find the book
+		res.status(404);
+		res.json({ status: 404 });
+	}
+});
+
+// Start listening for requests on port 80
+app.listen(80);
+</pre>
+
+<p>And in PHP:</p>
+
+<pre class="brush:php;">
+&lt;?php
+	// The collection of books
+	$books = array(
+		array('id' => 1, 'title' => 'A Brave New World', 'author' => 'Aldous Huxley', 'price' => 1.53),
+		array('id' => 2, 'title' => 'Fahrenheit 451', 'author' => 'Ray Bradbury', 'price' => 2.17),
+		array('id' => 3, 'title' => 'Neuromancer', 'author' => 'William Gibson', 'price' => 4.92),
+		array('id' => 4, 'title' => 'A Scanner Darkley', 'author' => 'Philip K. Dick', 'price' => 3.33)
+	);
+
+	// Determine the request method
+	$requestMethod = $_SERVER['REQUEST_METHOD'];
+	// Parse the URI
+	$uri = explode('?',$_SERVER['REQUEST_URI']);
+	// Convert the request path into an array to to allow easier analysis of the URI
+	$requestPath = explode('/',preg_replace('/\/$/','',preg_replace('/^.*\/books\/?/','',$uri[0])));
+
+	// If the method is a GET
+	if ($requestMethod == 'GET') {
+		if ($requestPath[0]) { // There is a request for a specific book
+			$found = false;
+			foreach ($books as $book) { // Search for the book in the collection
+				if ($book['id'] == $requestPath[0]) {
+					$found = $book;
+				}
+			}
+			if ($found) { // The book was found, return it to the client
+				header('HTTP/1.1 200 OK');
+				header('Content-type: application/json');
+				print json_encode($found);
+			} else { // Ooops, we didn't find the book
+				header('HTTP/1.1 404 Not Found');
+				header('Content-type: application/json');
+				print json_encode(array("status" => 404));
+			}
+		} else { // The request is for the whole collection
+			header('HTTP/1.1 200 OK');
+			header('Content-type: application/json');
+			print json_encode($books);
+		}
+	}
+?&gt;
+</pre>
+
+<p>And then to fetch a specific book and display the results:</p>
+
+<pre class="brush:js;">
+require(["dojo/store/JsonRest", "dojo/dom", "dojo/when", "dojo/json"],
+function(JsonRest, dom, when, JSON){
+	// Create a new store that is pointed at the collection of books
+	var bookStore = new JsonRest({
+		target: "books/"
+	});
+
+	// Retrieve a book with an ID of "1"
+	when(bookStore.get(1)).then(function(results){
+		// Display the results in the node identified by "output"
+		dom.byId("output").innerHTML = JSON.stringify(results);
+	});
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/rest-book.php" target="_blank">View Demo</a>
+
+<p class="proTip">As you can tell from the examples, writing specifically to deal with a set of data loaded in memory is
+	inefficient and can get complicated very quickly.  You can build up your own framework or there are several
+	frameworks available for creating RESTful services, likely available in whatever server side language you
+	prefer.</p>
+
+<p>The rest of this tutorial is going to focus on the specific of the "Dojo way" of RESTful services, and what other
+	considerations you need to make when either implementing an existing server side storage framework or building
+	your own.</p>
+
+<h3>Querying</h3>
+
+<p>Just returning all the results in a collection, all the time, is not very practical and one of the fundamental parts
+	of the functionality of the client data stores is the ability to query a data store.  The
+	<code>dojo/store/JsonRest</code> will take whatever query you provide it and append it to the query string.  It is
+	up to both the client and server to understand what these query strings mean.</p>
+
+<p>Again, because RESTful services are a concept and not a standard, there is no specific definition of what the query
+	string should entail.  One standard is that the query string is made of up key value pairs that represent a "filter"
+	on the data set.  For example, if we only wanted books by "William Gibson" we would do the following:</p>
+
+<pre class="brush:js;">
+require(["dojo/store/JsonRest", "dojo/when"], function(JsonRest, when){
+	// A data store pointed at a collection of books
+	var bookStore = new JsonRest({
+		target: "books/"
+	});
+
+	// Querying only the books by William Gibson
+	when(bookStore.query("author=William Gibson")).then(function(results){
+		console.log(results);
+	});
+});
+</pre>
+
+<p>This will be encoded into a query string and send as part of the requested URI:</p>
+
+<pre class="brush:xml;">
+http://example.com/books/?author=William%20Gibson
+</pre>
+
+<p>It would be up to the server then to parse that query string and only return the results that match the search
+	criteria.</p>
+
+<p class="proTip">It can be very difficult to express complex queries as a query string.  Especially when you have
+	advanced queries that including sorting (like discussed below).  Because of this, another Dojo Foundation project
+	called <a href="http://persvr.org/" target="_blank">Persevere</a> has developed the
+	<a href="https://github.com/persvr/rql" target="_blank">RQL</a> language, which allows the expression of these rich
+	queries via a query string.  It can be used both client side and server side to generate and interpret these
+	queries.  Some of the concepts in the Dojo Store API are directly influenced by this language.<p>
+
+<h3>Sorting</h3>
+
+<p>One of the needs of a client side is to sort data.  Often times, sorting the data is much more efficient when done
+	on the server side, especially when the client side maybe only dealing with a subset of the data at any one time.
+	In order to do that, the client data stores support the ability to specify sorting, which in turn is passed to the
+	server.</p>
+
+<p>By default, the <code>dojo/store/JsonRest</code> generates functional query strings for the sort object that is
+	passed to it.  For example, the following query:</p>
+
+<pre class="brush:js;">
+require(["dojo/store/JsonRest", "dojo/when"], function(JsonRest, when){
+	// A data store pointed at a collection of books
+	var bookStore = new JsonRest({
+		target: "books/"
+	});
+
+	// Querying all the books in the store, but with them sorted by title
+	when(bookStore.query("", {
+		sort: [ { attribute: "title", descending: false } ]
+	})).then(function(results){
+		console.log(results);
+	});
+});
+</pre>
+
+<p>Would result in the following URI being generated:</p>
+
+<pre class="brush:xml;">
+http://example.com/books/?sort(+title)
+</pre>
+
+<p>This would indicate to the server store that it would need to sort all the records by title in ascending fashion.</p>
+
+<p>The main reason that the client store formats the query string this way is that it avoids using a key/value parameter
+	in the query which might conflict with the attribute names of the actual data structure.  For example, you might
+	have a field named <code>sort</code> in the collection.  This is often one of things though that some server side
+	frameworks have a difficulty with. The <code>dojo/store/JsonRest</code> solves this by proving a property of
+	<code>sortParam</code> to allow you to set a key that will take the value of the sort.  So for example:</p>
+
+<pre class="brush:js;">
+require(["dojo/store/JsonRest", "dojo/when"], function(JsonRest, when){
+	// Create a new store, pointed at the books collection and using "sort"
+	// as the query parameter to indicate how the results should be sorted.
+	var bookStore = new JsonRest({
+		target: "books/",
+		sortParam: "sort"
+	});
+
+	// Query the books, sorted by title and display the results
+	when(bookStore.query("", {
+		sort: [ { attribute: "title", descending: false } ]
+	})).then(function(results){
+		console.log(results);
+	});
+});
+</pre>
+
+<p>Would result in the following URI being generated:</p>
+
+<pre class="brush:xml;">
+http://example.com/books/?sort=+title
+</pre>
+
+<p class="proTip">Just remember, if you use a sort parameter that you give due consideration of how that will affect
+	the naming of any keys of your server side object storage.</p>
+
+<h3>Ranges</h3>
+
+<p>Retrieving every object out of a data store likely won't make sense in most cases.  So the Dojo Store API supports
+	the concepts of a "start" and a "count" to only retrieve a subset of the objects out of the store.  This allows
+	client side code to support the concepts of "lazy loading", "virtual paging" and "infinite scroll".</p>
+
+<p>The <code>dojo/store/JsonRest</code> will request a specific range of items if its query options contain a
+	<code>start</code> or <code>count</code> property.  When it then attempts to fetch the collection, it will pass a
+	<code>Range</code> and an <code>X-Range</code> header (because Opera blocks the passing of the <code>Range</code>
+	header).  It will set the value to a key of <code>name</code> and a value of the <code>start</code> and
+	<code>count</code>.  If <code>start</code> is omitted, <code>0</code> will be used and if <code>count</code> is
+	omitted or set to <code>Infinity</code> then the end of the range will be empty.  Everything is assumed to be zero
+	based.</p>
+
+<p>For example, if I wanted the first ten items of a collection, I would do this:</p>
+
+<pre class="brush:js;">
+when(bookStore.query("", {
+	start: 0,
+	count: 10
+})).then(function(results){
+	console.log(results);
+});
+</pre>
+
+<p>This would result in the following headers being generated and sent to the server with the request:</p>
+
+<pre class="brush:xml;">
+GET /books/ HTTP/1.1
+Host: localhost:80
+Accept: application/javascript, application/json
+Content-Type: application/x-www-form-urlencoded
+Range: items=0-9
+X-Range: items=0-9
+</pre>
+
+<p>It is then the responsibility of the server then to respond with only a subset of the collection identified and the
+	number of items in the collection for that particular query.  The server does this by return a
+	<code>Content-Range</code> header, set to the value of <code>items</code> with the range of elements out of the
+	collection and a total count of all elements that match the query.  For example with the above request that wants
+	the first 10 records of the collection, but our previous example that we only have 4 books in our collection,
+	we would want to return the following header:</p>
+
+<pre class="brush:xml;">
+Content-Range: items 0-3/4
+</pre>
+
+<p>The total is then provided in the query results from the store.  Because this can be a promise, we should interact
+	with it using <code>dojo/when</code>:</p>
+
+<pre class="brush:js;">
+require(["dojo/store/JsonRest", "dojo/when"], function(JsonRest, when){
+	// Create a new store pointed at the "books" collection
+	var bookStore = new JsonRest({
+		target: "books/"
+	});
+
+	// Query the store, starting at the first record and then up to
+	// the next 10 records
+	var results = bookStore.query("", {
+		start: 0,
+		count: 10
+	});
+
+	// When there is a total count of records, log it to the console
+	when(results.total).then(function(totalCount){
+		console.log("totalCount: ", totalCount);
+		// When the records are returned, log them to the console
+		when(results).then(function(items){
+			console.log(items);
+		});
+	});
+});
+</pre>
+
+<p class="proTip">Many widgets us <code>start</code>, <code>count</code> and <code>total</code> to provide the ability
+	to "display" large data sets.  They will use this information, for example, to set the scroll position in a scroll
+	box without having to load all the records from the server side data store.</p>
+
+<h3>Adding or Changing Data</h3>
+
+<p>Just retrieving data from a server has it limits.  Often times it is necessary for users to either change or add data
+	to the stores.  With RESTful services, adding elements to a collection is done via <code>POST</code> and modifying
+	elements is done via <code>PUT</code>.  The Dojo Store API provides to methods, where are <code>.add()</code> and
+	<code>.put()</code>.  From an API perspective, they really only differ in the sense that <code>.add()</code> does
+	not allow you to overwrite an object with the same ID.</p>
+
+<p>When implemented in the <code>dojo/store/JsonRest</code>, the determination of if it is a <code>PUT</code> or a
+	<code>POST</code> is actually determined by if the supplied object has an ID.  It is assumed that new elements will
+	not have an ID associated with them and will be assigned by the server, and that the server will handle any conflict
+	resolution.</p>
+
+<p>The data payload of the request will be a JSON encoded string of the object supplied in the request.  To access
+	this via Express, it would look something like this:<p>
+
+<pre class="brush:js;">
+// Our collection of books
+var books = [
+		{ id: 1, title: "A Brave New World", author: "Aldous Huxley", price: 1.53 },
+		{ id: 2, title: "Fahrenheit 451", author: "Ray Bradbury", price: 2.17 },
+		{ id: 3, title: "Neuromancer", author: "William Gibson", price: 4.92 },
+		{ id: 4, title: "A Scanner Darkley", author: "Philip K. Dick", price: 3.33 }
+	],
+	maxId = 4; // Out current "max ID" of our collection
+
+var express = require("express"), // Require in express
+	app = express();
+
+app.configure(function(){
+	// We need to use the bodyParser to get the information posted
+	app.use(express.bodyParser());
+	// Allows us to route the URIs in a dynamic manner
+	app.use(app.router);
+});
+
+// When we GET the collection URI, return the collection
+app.get("/books", function(req, res){
+	res.status(200);
+	res.json(books);
+});
+
+// When we GET a specific book by ID, return that book
+app.get("/books/:id", function(req, res){
+	var book;
+	books.some(function(b){
+		return book = (b.id == req.params.id) ? b : false;
+	});
+	if(book){
+		res.status(200);
+		res.json(book);
+	}else{
+		res.status(404);
+		res.json({ status: 404 });
+	}
+});
+
+// We should be trying to update a book based on ID
+app.put("/books/:id", function(req, res){
+	var data = request.body, // Read the data by
+		bookIdx;
+	data.id = request.params.id || data.id; // Allow the URI ID to override any supplied ID
+	// Find the book
+	books.some(function(b, idx){
+		if(b.id == req.params.id){
+			bookIdx = idx;
+			return true;
+		}
+	});
+	if(bookIdx){
+		// If we found the book, update the book in the collection
+		books[bookIdx] = data;
+		res.status(200);
+		res.json(data);
+	}else{
+		// Book wasn't found
+		res.status(404);
+		res.json({ status: 404 });
+	}
+});
+
+// We should be trying to add a book
+app.post("/books", function(req, res){
+	var data = request.body; // Retrieve the books data
+	data.id = maxId++; // Generate a new ID
+	books.push(data); // Add it to the collection
+	res.header("Location", "/books/" + data.id); // Return a new URI for the book
+	res.status(200);
+	res.json(data);
+});
+
+// Start listening for requests on port 80
+app.listen(80);
+</pre>
+
+<p>And in PHP:</p>
+
+<pre class="brush:php;">
+&lt;?php
+	// This allows for us to "store" data temporarily to make it appear to be a persistent data store
+	session_start();
+
+	// Checks to see if our sessions variables are available and if not, sets them to their starting values
+	if(!isset($_SESSION['books']) || !isset($_SESSION['maxId'])){
+		$books = array(
+			array('id' => 1, 'title' => 'A Brave New World', 'author' => 'Aldous Huxley', 'price' => 1.53),
+			array('id' => 2, 'title' => 'Fahrenheit 451', 'author' => 'Ray Bradbury', 'price' => 2.17),
+			array('id' => 3, 'title' => 'Neuromancer', 'author' => 'William Gibson', 'price' => 4.92),
+			array('id' => 4, 'title' => 'A Scanner Darkley', 'author' => 'Philip K. Dick', 'price' => 3.33)
+		);
+		$maxId = 4;
+		$_SESSION['books'] = $books;
+		$_SESSION['maxId'] = $maxId;
+	} else {
+		// Otherwise it will set the local variables to the value of the session variables
+		$books = $_SESSION['books'];
+		$maxId = $_SESSION['maxId'];
+	}
+
+	// Gather some informatin about the request.
+	$requestMethod = $_SERVER['REQUEST_METHOD'];
+	$uri = explode('?',$_SERVER['REQUEST_URI']);
+	// Generates an array for the requested path, to make it easier to branch based on the requested URI
+	$requestPath = explode('/',preg_replace('/\/$/','',preg_replace('/^.*\/books\/?/','',$uri[0])));
+
+	if ($requestMethod == 'GET') {  // If this is a GET request
+		if ($requestPath[0]) { // likely requesting a specific book
+			$found = false;
+			foreach ($books as $book) { // search for the book based on the ID in the URI path
+				if ($book['id'] == $requestPath[0]) {
+					$found = $book;
+				}
+			}
+			if ($found) { // If found, return the book as JSON
+				header('HTTP/1.1 200 OK');
+				header('Content-type: application/json');
+				print json_encode($found);
+			} else { // Ooops, we don't have that book
+				header('HTTP/1.1 404 Not Found');
+				header('Content-type: application/json');
+				print json_encode(array("status" => 404));
+			}
+		} else { // The didn't want a specific book, they want all of them
+			header('HTTP/1.1 200 OK');
+			header('Content-type: application/json');
+			print json_encode($books);
+		}
+	} elseif ($requestMethod == 'PUT' && $requestPath[0]) { // Trying to update a specific book
+		$data = json_decode(file_get_contents('php://input'),true); // Take the posted data and convert into an
+																	// associated array
+		$data['id'] = $requestPath[0]; // get the book ID
+		$found = -1;
+		foreach ($books as $idx=>$book) {
+			if ($book['id'] == $requestPath[0]) {
+				$found = $idx;
+			}
+		}
+		if ($found >= 0) { // If we found the book, update the record and return it to the client
+			$books[$found] = $data;
+			header('HTTP/1.1 200 OK');
+			header('Content-type: application/json');
+			print json_encode($books[$found]);
+		} else { // Oooops, trying to update a book we don't have
+			header('HTTP/1.1 404 Not Found');
+			header('Content-type: application/json');
+			print json_encode(array("status" => 404));
+		}
+	} elseif ($requestMethod == 'POST') { // Trying to add a book
+		$data = json_decode(file_get_contents('php://input'),true); // Get the data about the book
+		$data['id'] = ++$maxId; // Provide a unique ID for the book
+		array_push($books, $data); // Add it to our collection
+		header('HTTP/1.1 200 OK');
+		header('Location: /books/' + $data['id']); // Provide a location of the book
+		header('Content-type: application/json');
+		print json_encode($data);  // Return the book, with the ID
+	}
+
+	// Store our session information
+	$_SESSION['books'] = $books;
+	$_SESSION['maxId'] = $maxId;
+?&gt;
+</pre>
+
+<p>You can see in the examples above, when calling <code>POST</code> to the collection URI, it is standard practice to
+	return a <code>Location</code> header that points to the the URI of the newly created ID.</p>
+
+<p>If we wanted to interact with this store, we would then want to do something like this:</p>
+
+<pre class="brush:js;">
+require(["dojo/store/JsonRest", "dojo/when", "dojo/dom",
+	"dojo/dom-attr", "dojo/json", "dojo/on", "dojo/domReady!"],
+function(JsonRest, when, dom, attr, JSON, on){
+	// Create a new store, pointed at the "books" collection
+	var bookStore = new JsonRest({
+		target: "books/"
+	});
+
+	on(dom.byId("b1"), "click", function(e){
+		// When "b1" is clicked, retrieve Book with an ID of 1
+		when(bookStore.get(1)).then(function(book){
+			// Output the object representation to the "o1" node in the
+			// document
+			dom.byId("o1").innerHTML = JSON.stringify(book);
+			// Change the name of the author
+			book.author = "Huxley, Aldous";
+			// "put" the changed book back on the server
+			when(bookStore.put(book)).then(function(result){
+				// display the "updated" book
+				dom.byId("o2").innerHTML = JSON.stringify(result);
+				attr.remove("b2", "disabled");
+			});
+		});
+	});
+
+	on(dom.byId("b2"), "click", function(e){
+		// When "b2" is clicked, add a book to the store
+		when(bookStore.add({
+			title: "Catcher in the Rye",
+			author: "J. D. Salinger",
+			price: 0.98
+		})).then(function(){
+			// Display the returned book, once added to the server.
+			// The server added an ID to the book
+			dom.byId("o3").innerHTML = "";
+			bookStore.query().forEach(function(book){
+				dom.byId("o3").innerHTML += JSON.stringify(book) + "\n";
+			});
+		})
+	});
+
+	// The buttons were added "disabled" for demo purposes, so now that
+	// we are ready, we can enable the first one.
+	attr.remove("b1", "disabled");
+
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/rest-putadd.php" target="_blank">View Demo</a>
+
+<p class="proTip">The observant among you will realise that the PHP example is using session storage to persist the
+	data between requests and that the Express example is simply keeping the data in memory.  This isn't very practical
+	in real life (or even desirable), but it gives you an idea of what you need to do.  You would want to use some sort
+	of persistent server side data store.  The demos here are going against the PHP version, since that is what is
+	currently supported on our web servers.</p>
+
+<p class="proTip">Notice how, instead of using <code>dojo/when</code> with the <code>query()</code> a
+	<code>bookStore.query().forEach()</code> was used.  A <code>query()</code> returns a
+	<code>dojo/store/util/QueryResults</code> object, which contains a set of functions to use on the results of the
+	query (<code>forEach()</code>, <code>filter()</code> and <code>map()</code>).  The benefit is that if the
+	<code>query()</code> is returning a promise, the callbacks for the functions will not be called until all the
+	promises are resolved.</p>
+
+<h3>Caching, Performance and Race Conditions</h3>
+
+<p>On of the common challenges with interacting with a server side store is ensuring that data is cached where possible
+	to increase performance and there are mechanisms to assist in dealing with conflicts when they arise.</p>
+
+<p>The <code>dojo/store/JsonRest</code> fully utilises the power of HTTP 1.1 and browser user agent.  This means you
+	need to understand how these features can affect things on the server and whatever framework you are working with.
+	Because the store utilises the XHR system of the browser it is running on, the cache headers supplied by the
+	server will be respected, and if you want to increase the performance, ensure that your cache headers represent
+	the reality of what can actually be cached.</p>
+
+<p>To help deal with race conditions, when a <code>put()</code> is called, the store will set the
+	<code>If-Match: *</code> header if the <code>options.overwrite</code> is <code>true</code> and
+	<code>If-None-Match: *</code> if <code>options.overwrite</code> is <code>false</code>.  This helps the server be
+	able to resolve conflicts when the <code>ETag</code> of the resource conflicts with the current version on the
+	server.</p>
+
+<h3>Other Notes</h3>
+
+<p>JSON has some "challenges" when using structured data that references each other data, especially when that data
+	may not have been loaded from the server yet.  In order to deal with these issues, there is a JSON referencing
+	library that is part of the DojoX project.  <a href="/reference-guide/1.8/dojox/json/ref.html" target="_blank">
+	<code>dojox/json/ref</code></a> is a module that provides this ability to deal with JSON referencing.</p>
+
+<p>Just like referencing is a challenge, sometimes lacking a schema for JSON can be problematic, especially when
+	validating data structures.  DojoX provides another module that implements JSON Schema called
+	<a href="/reference-guide/1.8/dojox/json/schema.html" target="_blank"><code>dojox/json/schema</code></a>.</p>
+
+<h3>Conclusion</h3>
+
+<p>Hopefully this tutorial has given you a good overview of how JSON RESTful services work in Dojo and how you might
+	get started creating a server side implementation.  This might have also given you a better understanding of how
+	your server side framework might be working and any of the challenges you might encounter in integrating the client
+	side and the server side.</p>
+
+<p>If you want the source code to the final PHP example, you can download it as a <a href="demo/books.php.zip">ZIP
+	file</a>. You will need a web server that supports PHP available to run the file.  You can download the NodeJS
+	example as a <a href="demo/books.js.zip">ZIP file</a> as well.  You will need NodeJS 0.6 or later and Express 3 or
+	later installed.</p>
+
+<p>Like most new things, the best thing to do is experiment a little and see how things actually are working.
+	Good luck.</p>

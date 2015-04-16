@@ -1,0 +1,232 @@
+
+
+<h3>Getting Started</h3>
+<p>By this point, we're pretty comfortable manipulating the DOM and handling events from DOM nodes. However, as we take some of these actions, the transitions can be very abrupt: removing a node makes it disappear from the page, and that can potentially be disorienting for a user. Using some of the standard effects that Dojo provides, we can create smoother user experiences that really add an additional bit of polish and shine to our applications. Further, if we tap into the <code>dojo.fx</code> module, we can chain and combine these effects to make some really dazzling, dynamic experiences.</p>
+
+<h3>Fading</h3>
+<p>One animation you might have seen in applications you have used is a node fading in or out. This effect is so common and simple that it's included as a part of the Dojo base. We can use it to hide or show elements on a page in a way that feels really smooth and polished. Here's an example:</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="fadeOutButton"&gt;Fade block out&lt;/button&gt;
+&lt;button id="fadeInButton"&gt;Fade block in&lt;/button&gt;
+
+&lt;div id="fadeTarget" class="red-block"&gt;
+	A red block
+&lt;/div&gt;
+&lt;script&gt;
+	dojo.ready(function(){
+		var fadeOutButton = dojo.byId("fadeOutButton"),
+			fadeInButton = dojo.byId("fadeInButton"),
+			fadeTarget = dojo.byId("fadeTarget");
+
+		dojo.connect(fadeOutButton, "onclick", function(evt){
+			dojo.fadeOut({ node: fadeTarget }).play();
+		});
+		dojo.connect(fadeInButton, "onclick", function(evt){
+			dojo.fadeIn({ node: fadeTarget }).play();
+		});
+	});
+&lt;/script&gt;
+</pre>
+<p>All animation functions take one argument: an object with properties. The most important property you will use is the <code>node</code> property: a DOM node or string ID of a node to animate. Another property is <code>duration</code>, which is how long the animation should last, specified in milliseconds. The <code>duration</code> defaults to 350 milliseconds. There are other properties for other animations, but fading doesn't require them.</p>
+<p>Animation functions return a <code>dojo.Animation</code> object with several methods: play, pause, stop, status, and gotoPercent. Animations are not started when they are created and must be manually started with the play method, as shown above.</p>
+<a class="demoBtn demo" href="demo/fade.html">View Demo</a>
+
+<h3>Wiping</h3>
+<p>Another effect you might have seen is wiping: changing the height of a node while leaving the content alone. This makes it look like someone is using a windshield wiper on the node. Often, wiping could be a useful effect to create something like a pulldown on a page, where you might have some sort of infrequently accessed content or settings, or perhaps you just prefer the shrinking to fading.</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="wipeOutButton"&gt;Wipe block out&lt;/button&gt;
+&lt;button id="wipeInButton"&gt;Wipe block in&lt;/button&gt;
+
+&lt;div id="wipeTarget" class="red-block wipe"&gt;
+	A red block
+&lt;/div&gt;
+&lt;script&gt;
+	// Load the dojo.fx module
+	dojo.require("dojo.fx");
+
+	// Don't forget, when using modules, wrap your code in a dojo.ready
+	dojo.ready(function(){
+		var wipeOutButton = dojo.byId("wipeOutButton"),
+			wipeInButton = dojo.byId("wipeInButton"),
+			wipeTarget = dojo.byId("wipeTarget");
+
+		dojo.connect(wipeOutButton, "onclick", function(evt){
+			dojo.fx.wipeOut({ node: wipeTarget }).play();
+		});
+		dojo.connect(wipeInButton, "onclick", function(evt){
+			dojo.fx.wipeIn({ node: wipeTarget }).play();
+		});
+	});
+&lt;/script&gt;
+</pre>
+<p>Since the wipe effect is in the <code>dojo.fx</code> module, it must be loaded by Dojo's package system. In this example, we have added the "wipe" class to our target node. Because the wipe functions operate on the height of the contents of a node rather than a definite height, our "wipe" class sets the target node's height to "auto".</p>
+<a class="demoBtn demo" href="demo/wipe.html">View Demo</a>
+
+<h3>Sliding</h3>
+<p>So far we've covered hiding nodes, but what if we're looking to move them around a bit? A fade or a wipe doesn't change the node's location. That's where <code>dojo.fx.slideTo</code> comes into play. Shifting a node around could be useful to create an appearance of movement or progression on a page, and <code>dojo.fx.slideTo</code> creates a smooth animation of the node in the page, moving it around by specifying the coordinates of the top and left position of the node in pixels.</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="slideAwayButton"&gt;Slide block away&lt;/button&gt;
+&lt;button id="slideBackButton"&gt;Slide block back&lt;/button&gt;
+
+&lt;div id="slideTarget" class="red-block slide"&gt;
+	A red block
+&lt;/div&gt;
+&lt;script&gt;
+	dojo.require("dojo.fx");
+
+	dojo.ready(function(){
+		var slideAwayButton = dojo.byId("slideAwayButton"),
+			slideBackButton = dojo.byId("slideBackButton"),
+			slideTarget = dojo.byId("slideTarget");
+
+		dojo.connect(slideAwayButton, "onclick", function(evt){
+			dojo.fx.slideTo({ node: slideTarget, left: "200", top: "200" }).play();
+		});
+		dojo.connect(slideBackButton, "onclick", function(evt){
+			dojo.fx.slideTo({ node: slideTarget, left: "0", top: "100" }).play();
+		});
+	});
+&lt;/script&gt;
+</pre>
+<a class="demoBtn demo" href="demo/slide.html">View Demo</a>
+
+<h3>Animation Events</h3>
+<p>As discussed previously, all of these animation methods return a <code>dojo.Animation</code> object. These objects all provide not just controls to play or pause the animation, but they also provide a set of events that we can connect to, in order to perform some sorts of actions before, during, and after the animation. Two of the most important and commonly-used events are <code>beforeBegin</code> and <code>onEnd</code>:</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="slideAwayButton"&gt;Slide block away&lt;/button&gt;
+&lt;button id="slideBackButton"&gt;Slide block back&lt;/button&gt;
+
+&lt;div id="slideTarget" class="red-block slide"&gt;
+	A red block
+&lt;/div&gt;
+&lt;script&gt;
+	dojo.require("dojo.fx");
+
+	dojo.ready(function(){
+		var slideAwayButton = dojo.byId("slideAwayButton"),
+			slideBackButton = dojo.byId("slideBackButton"),
+			slideTarget = dojo.byId("slideTarget");
+
+		dojo.connect(slideAwayButton, "onclick", function(evt){
+			var anim = dojo.fx.slideTo({
+				node: slideTarget,
+				left: "200",
+				top: "200",
+				beforeBegin: function(){
+					dojo.style(slideTarget, {
+						left: "0px",
+						top: "100px"
+					});
+				}
+			});
+
+			dojo.connect(anim, "onEnd", function(){
+				dojo.style(slideTarget, {
+					backgroundColor: "blue"
+				});
+			});
+
+			anim.play();
+		});
+		dojo.connect(slideBackButton, "onclick", function(evt){
+			var anim = dojo.fx.slideTo({
+				node: slideTarget,
+				left: "0",
+				top: "100",
+				beforeBegin: function(){
+					dojo.style(slideTarget, {
+						left: "200px",
+						top: "200px"
+					});
+				}
+			});
+
+			dojo.connect(anim, "onEnd", function(){
+				dojo.style(slideTarget, {
+					backgroundColor: "red"
+				});
+			});
+
+			anim.play();
+		});
+	});
+&lt;/script&gt;
+</pre>
+<p>You might have noticed that <code>beforeBegin</code> is being passed as a property of the arguments object. The reason for passing it in more directly is that certain animations connect to <code>beforeBegin</code> when they are created. Therefore, if you connect to <code>beforeBegin</code> after the animation is created, your handler will be executed after the animation's <code>beforeBegin</code> handler, which may not be what you want to happen. By passing your handler as a property of the arguments object, you guarantee that your handler will execute first.</p>
+<a class="demoBtn demo" href="demo/connect.html">View Demo</a>
+
+<h3>Chaining</h3>
+<p>What if we want to fire animations in sequence? We could use the <code>onEnd</code> event that we just talked about to set up the next effect, but that's not very convenient. This sort of pattern is common enough that the <code>dojo.fx</code> module gives us a couple of great convenience methods to set up effects to run in sequence or in parallel, and each method returns a new <code>dojo.Animation</code> object with its own set of events and methods that represent the entire sequence. Let's first take a look at <code>dojo.fx.chain</code> to play animations one after another:</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="slideAwayButton"&gt;Slide block away&lt;/button&gt;
+&lt;button id="slideBackButton"&gt;Slide block back&lt;/button&gt;
+
+&lt;div id="slideTarget" class="red-block slide chain"&gt;
+	A red block
+&lt;/div&gt;
+&lt;script&gt;
+	dojo.require("dojo.fx");
+
+	dojo.ready(function(){
+		var slideAwayButton = dojo.byId("slideAwayButton"),
+			slideBackButton = dojo.byId("slideBackButton"),
+			slideTarget = dojo.byId("slideTarget");
+
+		dojo.connect(slideAwayButton, "onclick", function(evt){
+			dojo.fx.chain([
+				dojo.fadeIn({ node: slideTarget }),
+				dojo.fx.slideTo({ node: slideTarget, left: "200", top: "200" }),
+				dojo.fadeOut({ node: slideTarget })
+			]).play();
+		});
+		dojo.connect(slideBackButton, "onclick", function(evt){
+			dojo.fx.chain([
+				dojo.fadeIn({ node: slideTarget }),
+				dojo.fx.slideTo({ node: slideTarget, left: "0", top: "100" }),
+				dojo.fadeOut({ node: slideTarget })
+			]).play();
+		});
+	});
+&lt;/script&gt;
+</pre>
+<p>As you can see here, we create a few effects directly inline the call to <code>dojo.fx.chain</code>, and immediately call <code>play</code> on the returned <code>dojo.Animation</code> to start the chained animation. We don't start playing each individual effect within the chain: <code>dojo.fx.chain</code> handles that for us.</p>
+<a class="demoBtn demo" href="demo/chain.html">View Demo</a>
+
+<h3>Combining</h3>
+<p>The second convenience method that <code>dojo.fx</code> provides is <code>dojo.fx.combine</code> which will start multiple animations at the same time. The <code>dojo.Animation</code> returned will fire its <code>onEnd</code> event after the animation with the longest duration finishes. Let's look at another example:</p>
+<pre class="brush: js; html-script: true;">&lt;button id="slideAwayButton"&gt;Slide block away&lt;/button&gt;
+&lt;button id="slideBackButton"&gt;Slide block back&lt;/button&gt;
+
+&lt;div id="slideTarget" class="red-block slide chain"&gt;
+	A red block
+&lt;/div&gt;
+&lt;script&gt;
+	dojo.require("dojo.fx");
+
+	dojo.ready(function(){
+		var slideAwayButton = dojo.byId("slideAwayButton"),
+			slideBackButton = dojo.byId("slideBackButton"),
+			slideTarget = dojo.byId("slideTarget");
+
+		dojo.connect(slideAwayButton, "onclick", function(evt){
+			dojo.fx.combine([
+				dojo.fadeIn({ node: slideTarget }),
+				dojo.fx.slideTo({ node: slideTarget, left: "200", top: "200" })
+			]).play();
+		});
+		dojo.connect(slideBackButton, "onclick", function(evt){
+			dojo.fx.combine([
+				dojo.fx.slideTo({ node: slideTarget, left: "0", top: "100" }),
+				dojo.fadeOut({ node: slideTarget })
+			]).play();
+		});
+	});
+&lt;/script&gt;
+</pre>
+<p>In this case, rather than playing the fade and then the slideTo in sequence, they play simultaneously.</p>
+<p>Using <code>dojo.fx.chain</code> and <code>dojo.fx.combine</code>, you can build up some fairly elaborate animation sequences. Also, given that both chain and combine return animation objects, the end results of those methods can also be chained and combined, allowing for you to build everything from very simple animations to very rich and detailed sequences.</p>
+<a class="demoBtn demo" href="demo/combine.html">View Demo</a>
+
+<h3>Conclusion</h3>
+<p>Using Dojo, it's quite simple to add some flair to your pages. With nothing more than dojo.js in your page, you can easily fade DOM nodes in and out, and with a simple require, you can bring in a lot more powerful ways to simply and easily move your nodes about or wipe them in and out, and the ability to chain and combine animations means you can quickly and easily build up a rather advanced animation.</p>
+<p>However, what if you want to do something more advanced, like adjusting a DOM node's height but not necessarily shrinking it to zero, or perhaps adjusting a background color via animation? There's the more generalized <code>dojo.animateProperty</code>, which we'll be covering in the next tutorial.</p>

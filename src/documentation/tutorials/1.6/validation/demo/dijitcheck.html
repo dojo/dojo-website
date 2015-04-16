@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: DojoX Validation with Dijit Forms</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<style type="text/css" title="text/css">
+			@import "http://ajax.googleapis.com/ajax/libs/dojo/1.5/dijit/themes/claro/claro.css";
+			@import "http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojox/form/resources/CheckedMultiSelect.css";
+		</style>
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			dojo.require('dojox.validate');
+			dojo.require('dojox.validate.us');
+			dojo.require('dojox.validate.web');
+			
+			/* basic dijit classes */
+			dojo.require('dijit.form.CheckBox');
+			dojo.require('dijit.form.Textarea');
+			dojo.require('dijit.form.FilteringSelect');
+			dojo.require('dijit.form.TextBox');
+			dojo.require('dijit.form.ValidationTextBox');
+			dojo.require('dijit.form.DateTextBox');
+			dojo.require('dijit.form.TimeTextBox');
+			dojo.require('dijit.form.Button');
+			dojo.require('dijit.form.RadioButton');
+			dojo.require('dijit.form.Form');
+			dojo.require('dijit.form.DateTextBox');
+			
+			/* basic dojox classes */
+			dojo.require('dojox.form.BusyButton');
+			dojo.require('dojox.form.CheckedMultiSelect');
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: DojoX Validation with Dijit Forms</h1>
+		<p style="font-size: x-small;">
+			* denotes required fields.  Page will simply reload on a successful form submission.
+		</p>
+		<form dojoType="dijit.form.Form" method="post">
+		<script type="dojo/method" event="onSubmit">
+			if(this.validate()) {
+				return confirm('Form is valid, press OK to submit');
+			} else {
+				alert('Form contains invalid data.  Please correct first');
+				return false;
+			}
+			return true;
+		</script>
+		<table cellpadding="0" cellspacing="2">
+			<tr>
+				<td valign="top"><strong>First Name*: </strong></td>
+				<td><input type="text" required="true" name="firstName" id="firstName" placeholder="Your Name" 
+					dojoType="dijit.form.ValidationTextBox" missingMessage="Ooops!  You forgot your first name!" /></td>
+			</tr>
+			<tr>
+				<td valign="top"><strong>Website*:  </strong></td>
+				<td><input type="text" required="true" name="website" id="website" placeholder="Your Website" 
+					dojoType="dijit.form.ValidationTextBox" validator="dojox.validate.isUrl" /></td>
+			</tr>
+			<tr>
+				<td valign="top"><strong>Email*:  </strong></td>
+				<td><input type="text" required="true" name="email" id="email" dojoType="dijit.form.ValidationTextBox" 
+					validator="dojox.validate.isEmailAddress" /></td>
+			</tr>
+			<tr>
+				<td valign="top"><strong>Date of Birth*:  </strong></td>
+				<td><input type="text" required="true" name="bday" id="bday" dojoType="dijit.form.DateTextBox" value="7/5/1983" /></td>
+			</tr>
+			<tr>
+				<td valign="top"><strong>Favorite Color: </strong></td>
+				<td>
+					<select name="color" id="color" dojoType="dijit.form.FilteringSelect">
+						<option value="">Select a Color</option>
+						<option value="Red">Red</option>
+						<option value="Green">Green</option>
+						<option value="Blue">Blue</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top"><strong>Favorite Toolkits: </strong></td>
+				<td>
+				<select name="toolkits" id="toolkits" dojoType="dojox.form.CheckedMultiSelect" multiple="multiple" style="width:200px;">
+					<option value="Dojo" selected="selected">Dojo Toolkit</option>
+					<option value="Moo" selected="selected">MooTools</option>
+					<option value="Prototype">Prototype</option>
+					<option value="YUI">YUI</option>
+					<option value="jQuery" disabled>jQuery</option>
+				</select>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top"><strong>Send Emails? </strong></td>
+				<td><input type="checkbox" id="checkbox" checked="checked" dojoType="dijit.form.CheckBox" /></td>
+			</tr>
+			<tr>
+				<td valign="top"><strong>Email Format: </strong></td>
+				<td>
+				<input type="radio" id="radio1" name="format" checked="checked" dojoType="dijit.form.RadioButton" /> 
+				<label for="radio1">HTML</label>
+				&nbsp;&nbsp;&nbsp;
+				<input type="radio" id="radio2" name="format" dojoType="dijit.form.RadioButton" />
+				<label for="radio2">Text</label>
+				</td>
+			</tr>
+		</table>
+		
+		<!-- submit buttons -->
+		<input type="submit" value="Submit Form" label="Submit Form" id="submitButton" dojoType="dijit.form.Button" />
+		<input type="submit" value="Submit Form" id="busyButton" dojoType="dojox.form.BusyButton" 
+			label="Submit Form (Busy Button)" busyLabel="Submitting Form..." timeout="2000" />
+		</form>
+	</body>
+</html>

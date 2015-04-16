@@ -1,0 +1,56 @@
+require(["dojo/dom", "dojo/request", "dojo/hash", "dojo/on", "dojo/dom-attr", "dojo/topic", "dojo/query", "dojo/domReady!"], 
+function(dom, request, hash, on, domAttr, topic) {
+	// find the content element and store a reference
+	var content = dom.byId("content"),
+		prefix = "!",
+		// store the last requested page so we do not make multiple requests for the same content
+		lastPage = (/([^\/]+).php$/.exec(location.pathname) ||		
+					[])[1] || "index";		
+
+	// create a function to load new content
+	function loadContent(page){
+		// default page is "index"
+		page || (page = "index");
+	
+		// if this is the same page displayed, abandon the load	
+		if(lastPage === page){
+			return;	
+		}	
+	
+		// remember the last page that was requested	
+		lastPage = page;
+	
+		// get the page content using an Ajax GET
+		request(page + ".json", {
+			handleAs: "json",
+		}).then(function(data){
+			// change the page hash
+			hash(prefix + page);	
+			// update the page title and content
+			document.title = data.title;	
+			content.innerHTML = data.content;
+		}, function(data){					
+			// handle any errors
+			content.innerHTML = "Error! Please wait.";
+			// try navigating directly to the page
+			location.href = page + ".php";	
+		});
+	}
+
+	// for each click on an anchor inside the menu	
+	on(document.getElementById("menu"), "a:click", function (evt) {
+		// stop the browser from navigating to the page
+		evt.preventDefault();
+		// retrieve the hash that we want to load and load it
+		var page = domAttr.get(this, "href").replace(".php", "");
+		loadContent(page);
+	});
+
+	// anytime the page hash changes, load new content	
+	topic.subscribe("/dojo/hashchange", function(hash){
+		loadContent(hash.substr(prefix.length));
+	});
+
+	// set the default page hash	
+	hash(location.hash || prefix + lastPage, true);
+});

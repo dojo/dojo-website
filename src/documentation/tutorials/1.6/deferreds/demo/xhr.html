@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: dojo.Deferred with dojo.xhrGet</title>
+
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			dojo.ready(function(){
+				var def = dojo.xhrGet({
+					url: "users.json",
+					handleAs: "json"
+				});
+
+				def.then(function(res){
+					var userlist = dojo.byId("userlist");
+
+					dojo.forEach(res, function(user){
+						dojo.create("li", {
+							id: user.id,
+							innerHTML: user.username + ": " + user.name
+						}, userlist);
+					});
+				},function(err){
+					// This shouldn't occur, but it's defined just in case
+					alert("An error occurred: " + err);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: dojo.Deferred with dojo.xhrGet</h1>
+
+		<ul id="userlist"></ul>
+	</body>
+</html>

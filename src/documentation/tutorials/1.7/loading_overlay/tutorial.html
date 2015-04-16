@@ -1,0 +1,212 @@
+
+
+<!-- tutorials start with a "Getting Started" block -->
+<h3>Introduction: The Problem</h3>
+
+<p>Loading the various scripts and other resources and setting up even a relatively simple UI can take time.
+	As widgets are instantiated and data is fetched, you can get distracting re-rendering of the page.
+	So, it's common practice to overlay some or all of your page with a "loading" layer that lets your users know what's going on and hides any re-rendering or intermediate states in your UI.
+	The solution should not compound the problem bringing too many of its own dependencies, and should avoid hard-wiring its behavior to any particular event, so we can keep some flexibility in how we define "loaded".
+</p>
+
+<h3>Solution</h3>
+
+<p>Use dojo methods to inject an overlay element with CSS to style and position it.
+A simple page-level API to put the page in and out of a loading state wraps an equally simple implementation. The <code>fadeOut</code> method from the <code>dojo/_base/fx</code> module provides a smooth transition between states.</p>
+
+<p>You will need:</p>
+<ul>
+	<li><code>dojo/_base/fx</code> for animation</li>
+	<li>CSS for the overlay style</li>
+</ul>
+
+<h3>Discussion</h3>
+
+<p>One of the challenges here is not the implementation itself, but juggling the priority of requirements.
+	You can imagine a loading widget which we can hide at will, features a loading bar with %age increments, maybe even a non-modal or minimized state which allows the user to continue interacting with the rest of the screen while stuff loads in the background.
+	This not that recipe. We want to keep it light and simple and solve the common case: a potentially multi-step loading sequence during which time we don't want to allow the user to see or interact with the UI.
+</p>
+
+<h3>Building the Overlay</h3>
+<p>
+	If you use your DOM inspector of choice on the demo page, you'll see the overlay as a child element of the <code>body</code>. Its a <code>div</code> with the associated CSS to size and position it on the page.
+</p>
+
+<p class="tutorial_image"><img src="images/firebugOverlayDOM.png" alt="Overlay in the Firebug inspector"></p>
+
+<p>
+	We will hardcode this on the page to ensure that dynamic content that is loaded doesn't show when it's only partially loaded.
+</p>
+
+<pre class="brush:html; html-script:false;">
+	&lt;div id="loadingOverlay" class="loadingOverlay pageOverlay"&gt;&lt;/div&gt;
+</pre>
+<p>The stylesheet looks like this:</p>
+
+<pre class="brush:css">
+<?php include 'demo/style.css' ?>
+</pre>
+
+<p>...and you should see something like this: </p>
+<p class="tutorial_image"><img src="images/step1loading.png" alt="Step 1: Animated loading overlay"></p>
+<a class="demoBtn demo" href="demo/step1.php">View Demo (Step 1)</a>
+
+<div class="proTip">The Dijit themes each come with their own <code>images</code> directory, with icons, gradients and other handy graphic assets used by the Dijit widgets - including this loading animation.
+Even if you don't use Dijit on your page, all the graphics are licensed under the same terms as the code and ready for your use.</div>
+
+<h3>Hide the Overlay</h3>
+<p>We've hardcoded the overlay, and it is given an id we can reference it with, and the class to pick up the styling.
+This snippet is placed directly inside the <code>&lt;body&gt;</code> tag, with the <code>dojo.js</code> in the <code>&lt;head&gt;</code>.
+As we don't depend on any code outside of dojo.js (Base), we don't need to use <code>dojo/domReady!</code> to wait for dependencies to load.
+This way if the rest of the page takes a while to load in, it happens out of sight behind the loading overlay. Perception is everything: getting something in front of the user as soon as possible makes the page feel faster, even if the total time to load is exactly the same.</p>
+
+<p>Now the element is there, we just need the function to hide it.
+It frequently turns out to be handy to have an object that you can hang page-level properties and methods like this on, so we'll attach them to a '<code>demo</code>' object. We would normally not advocate a global variable, but this provides a quick and convenient way to get a reference from the console. It's a stand-in for a package for your main page or application object.
+</p>
+<p>The first cut at showing and hiding the overlay: </p>
+
+<pre class="brush:js">
+var demo;
+require([&quot;dojo/_base/declare&quot;,&quot;dojo/dom&quot;,&quot;dojo/dom-style&quot;],
+function(declare, dom, domStyle){
+	var Demo = declare(null, {
+		overlayNode:null,
+		constructor:function(){
+			// save a reference to the overlay
+			this.overlayNode = dom.byId("loadingOverlay");
+		},
+		// called to hide the loading overlay
+		endLoading:function(){
+			domStyle.set(this.overlayNode,&#039;display&#039;,&#039;none&#039;);
+		}
+	});
+	demo = new Demo();
+});
+</pre>
+
+<p>The CSS has already positioned, sized and z-indexed the overlay, we just need to toggle the <code>style.display</code> property to make it show up.
+We could also have used the <code>add</code> and <code>remove</code> methods from the <code>dojo/dom-class</code> module to the same effect if we had a class with the same <code>display:none</code> rule.
+In fact Dijit provides one in <code>dijit/themes/dijit.css</code>: <code>dijitHidden</code>, but not only do we add another dependency there, and a load of other rules we're not (yet) using,
+we also get into an issue where another class with higher specificity could override ours and have no effect.
+You could also set the <code>display</code> property directly with <code>dom.byId('loadingOverlay').style.display='none'</code>, but as <code>dojo/dom-style</code> smooths over some cross-browser issues for us, and gives us a nice syntax for setting multiple properties at once, it's a good habit to keep.
+</p>
+<p>We can test this from the console. Load up the page, and in your browser's console invoke the function:</p>
+
+<p class="tutorial_image"><a href="demo/step2.php"><img src="images/endLoadingConsole.png" alt="Invoking demo.endLoading from the Firebug console"></a></p>
+<a class="demoBtn demo" href="demo/step2.php">View Demo (Step 2)</a>
+
+<h3>Noscript Fallback</h3>
+<p>The way we are doing this, the overlay markup already in the page and z-indexed over the page content, creates a problem, as unless the function to hide the overlay runs, the overlay stays up with no way for the user to dismiss it and see the content behind.
+In that scenario, a <code>&lt;noscript&gt;</code> block might be prudent:
+</p>
+
+<pre class="brush:js; html-script:true;">
+&lt;noscript&gt;
+	&lt;style&gt;
+		/* ensure no-javascript browsers aren&apos;t obstructed */
+		#loadingOverlay { display: none !important; }
+	&lt;/style&gt;
+&lt;/noscript&gt;</pre>
+
+<h3>Adding a Transition</h3>
+<p>Simply toggling the display of the overlay makes for an abrupt transition. We can make this experience much nicer by fading it out to reveal the page behind:</p>
+
+<pre class="brush:js">
+endLoading: function() {
+	// fade the overlay gracefully
+	fx.fadeOut({
+		node: overlayNode,
+		onEnd: function(node){
+			domStyle.set(node, &#039;display&#039;, &#039;none&#039;);
+		}
+	}).play();
+},
+</pre>
+
+<p><code>fadeOut</code> is in the <code>dojo/_base/fx</code> module, but it simply animates the opacity of the node we provide. We need to add an additional step at the end of that animation to set <code>display:none</code>, otherwise the overlay would still be present but invisible and would block clicks on the page.
+Remember that animations happen asynchronously, so any statements after our <code>dojo/_base/fx.fadeOut(..)</code> will run before the animation complete. We use the onEnd hook provided by all dojo animations to add that step. Review the <a href="../effects/">effects</a> and <a href="../animation/">animation</a> tutorials for more details on how you can adjust to taste.
+</p>
+
+<h3>Defining "Loaded"</h3>
+<p>With the functions defined, we just need to pick an event or moment to call them. You're probably familiar by now with <code>dojo/domReady!</code>, so let's hook that up:</p>
+
+<pre class="brush:js;">
+require(["dojo/domReady!"], function () {
+	// layout is ready, hide the loading overlay
+	demo.endLoading();
+});
+</pre>
+
+<p>That works, and perhaps its enough. But what we've bought ourselves here is flexibility on how we define "loaded". We can call <code>demo.endLoading()</code> whenever we want.
+</p>
+<p>For that to make sense we need to put back some of the complexity into our page, and see our solution in something more like "real-world" conditions.
+The demo sets up a dijit-based layout using a TabContainer and an Editor and a bunch of ContentPanes. We should be using a build to compress the code each represents, and to minimize the number of HTTP requests being made.
+But there's no getting away from the fact that each new component adds bytes to download. </p>
+<p>Here's the list of requires:</p>
+
+<pre class="brush:js">
+require([&quot;dijit/layout/BorderContainer&quot;,
+	&quot;dijit/layout/TabContainer&quot;,
+	&quot;dijit/layout/ContentPane&quot;,
+	&quot;dijit/Editor&quot;,
+	&quot;dijit/_editor/_Plugin&quot;,
+	&quot;dijit/_editor/plugins/AlwaysShowToolbar&quot;,
+	&quot;dijit/_editor/plugins/FontChoice&quot;,
+	&quot;dijit/_editor/plugins/TextColor&quot;,
+	&quot;dijit/_editor/plugins/LinkDialog&quot;]);
+</pre>
+<p><a class="demoBtn demo" href="demo/start.php">View Demo (no overlay)</a></p>
+
+<h3>Planning a Load Sequence</h3>
+
+<p>We know we want the overlay up until at least the layout is complete. But we don't actually need the editor immediately, so we can break it out:</p>
+
+<pre class="brush:js">
+initEditor: function() {
+	// if the editor hasn&#039;t been created, create it
+	if(!registry.byId(&quot;edit&quot;)){
+		require([&quot;dijit/Editor&quot;,
+			&quot;dijit/_editor/_Plugin&quot;,
+			&quot;dijit/_editor/plugins/AlwaysShowToolbar&quot;,
+			&quot;dijit/_editor/plugins/FontChoice&quot;,
+			&quot;dijit/_editor/plugins/TextColor&quot;,
+			&quot;dijit/_editor/plugins/LinkDialog&quot;],function(Editor){
+			registry.byId(&quot;tabs&quot;).addChild(new Editor({
+				id: &quot;edit&quot;,
+				title: &quot;Edit&quot;
+			}));
+		});
+	}
+}
+</pre>
+
+<p>Now, we can load just what we initially need, take down the overlay, and load the rest in the background. The editor has gone from being created declaratively in the markup, to programmatically once its dependencies are loaded.
+Finally, a little <code>setTimeout</code> introduces a barely perceptible pause to let our older browsers catch up:</p>
+
+<pre class="brush:js">
+require(["dojo/_base/lang", "dojo/domReady!"], function (lang) {
+	// layout is ready, hide the loading overlay
+	demo.endLoading();
+	// initialize the editor, after a half-second delay for older browsers
+	setTimeout(lang.hitch(demo, &quot;initEditor&quot;), 500);
+	// page is ready to run
+});
+</pre>
+
+<p><a class="demoBtn demo" href="demo/demo.php">View Demo</a></p>
+
+<p>Other options here are to take down the overlay, and lazily-create the editor when we first click on that tab.  Experiment</p>
+
+<h3>Conclusion</h3>
+<p>Judicious application of just a few Dojo methods has created a nicer user experience, and put you the developer in control of what you load when, and what your user sees in the meantime.
+This recipe's solution is of course just one way to tackle the stated problem, but this one is simple, lightweight and readily extended in any direction your requirements take you.</p>
+
+<h3>Colophon</h3>
+<ul>
+	<li><a href="../effects/">Effects with Dojo</a> (for use of dojo/_base/fx)</li>
+	<li><a href="../dijit_layout/">Layout with Dijit</a></li>
+	<li><a href="/reference-guide/1.7/dojo/dom-construct.html">dojo/dom-construct</a></li>
+	<li><a href="/reference-guide/1.7/dojo/style.html">dojo/style</a></li>
+	<li><a href="/reference-guide/1.7/dojo/hitch.html#dojo-hitch">dojo/hitch</a></li>
+
+</ul>

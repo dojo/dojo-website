@@ -1,0 +1,366 @@
+
+<h3>Introducing Layout Management</h3>
+<!-- what is layout management and why do we need to solve it? -->
+<blockquote>"Surely CSS is the language of layout? Why is layout a problem that needs solving by JavaScript and fancy widgets?"</blockquote>
+<p>Layout widgets don't replace CSS for general purpose placement and flow of content on the page. Instead, they allow precise placement and management of areas of the page where we want to:</p>
+
+<ul>
+	<li>Respond to resize events</li>
+	<li>Provide for user control over layout and how the available space is apportioned</li>
+	<li>Adapt controls and/or contents to the currently available horizontal and vertical space</li>
+</ul>
+
+<p>Layout management is the process of actively controlling layout after a page has loaded, and responding to and propagating events, which then drive layout on the page. In Dijit, layout management is accomplished by specialized layout widgets. These are widgets whose primary purpose is to act as a container for one or more content areas or child widgets, and to control the sizing and display of those children.
+
+<h3>Getting Started</h3>
+
+<p>You can manage layout of the entire page, or just a small part of it. For this tutorial, we'll be developing a desktop application-like UI layout, with some controls and content being fixed on the page. It should end up looking like this:</p>
+
+<div class="tutDetails">
+	<div class="image_title">What you'll be creating</div>
+
+<p class="tutorial_image"><a href="demo/appLayout.html"><img src="images/appLayout.png" alt="Application Layout"></a></p>
+	<a class="demoBtn demo" href="demo/appLayout.html">View Complete Demo</a>
+</div>
+<br style="clear:both" />
+<p>Dijit provides a small collection of flexible widgets to meet common layout requirements like this. We'll prepare the ground with some HTML and CSS, then introduce those widgets to build up a typical application layout.</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;!DOCTYPE HTML&gt;
+&lt;html lang=&quot;en&quot;&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Demo: Layout with Dijit&lt;/title&gt;
+		&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot; media=&quot;screen&quot;&gt;
+		&lt;link rel=&quot;stylesheet&quot; href=&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css&quot; media=&quot;screen&quot;&gt;
+		&lt;!-- load dojo and provide config via data attribute --&gt;
+		&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;&gt;
+		&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body class=&quot;claro&quot;&gt;
+		&lt;div id=&quot;appLayout&quot; class=&quot;demoLayout&quot;&gt;
+			&lt;div class=&quot;centerPanel&quot;&gt;
+				&lt;div&gt;
+					&lt;h4&gt;Group 1 Content&lt;/h4&gt;
+					&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;
+				&lt;/div&gt;
+				&lt;div&gt;
+					&lt;h4&gt;Group 2 Content&lt;/h4&gt;
+				&lt;/div&gt;
+				&lt;div&gt;
+					&lt;h4&gt;Group 3 Content&lt;/h4&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+
+			&lt;div class=&quot;edgePanel&quot;&gt;Header content (top)&lt;/div&gt;
+			&lt;div id="leftCol" class=&quot;edgePanel&quot;&gt;Sidebar content (left)&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>The markup has our top, sidebar and center content wrapped in handy divs, and we've got the Dojo <code>script</code> tag already in place.
+Also in the <code>&lt;head&gt;</code> we load the Claro theme stylesheet and our page stylesheet. In the <code>&lt;body&gt;</code>, notice the <code>claro</code> class which is necessary to apply the Claro CSS theme to the contents. Omitting it is a common gotcha. </p>
+
+<p>The stylesheet has just a few rules that we'll need as we define the layout: </p>
+<pre class="brush: css">
+    html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+#appLayout {
+    height: 100%;
+}
+#leftCol {
+    width: 14em;
+}
+
+.claro .demoLayout .edgePanel {
+    background-color: #d0e9fc;
+}
+
+#viewsChart {
+	width: 550px;
+	height: 550px;
+}
+</pre>
+
+<p class="proTip">All demos shown here also include a demo.css file, which contains a few styles for the body, button, and h1 elements. View the source of any of the demos to see the contents of this file.</p>
+
+<p>To get the desired arrangement and behavior of content regions, we want the layout to fill the viewport. We explicitly set the document and the outermost element to 100% of the viewport height. <code>overflow: hidden</code> is used as we don't want a document scrollbar; scrolling will happen as necessary in the different regions of our layout.
+We've given the <code>DIV</code> that will become the left column a fixed width in <code>em</code>s. The other fixed regions will derive their size from their initial content.</p>
+
+<h3>Adding Widgets</h3>
+<p>To implement the layout, we'll be using three widget classes from Dijit: <code>dijit.layout.BorderContainer</code>, <code>dijit.layout.TabContainer</code> and <code>dijit.layout.ContentPane</code>.
+You can see a sampling of the available Dijit widgets on the <a href="/features/desktop">Dojo Toolkit "Features" page</a>.</p>
+
+<p>To get started, let's add the require statements for these dependencies.</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;
+		data-dojo-config=&quot;parseOnLoad: true&quot;&gt;
+&lt;/script&gt;
+&lt;script&gt;
+	dojo.require(&quot;dojo.parser&quot;);
+	dojo.require(&quot;dijit.layout.BorderContainer&quot;);
+	dojo.require(&quot;dijit.layout.TabContainer&quot;);
+	dojo.require(&quot;dijit.layout.ContentPane&quot;);
+&lt;/script&gt;
+</pre>
+
+
+<p>Notice in the <code>data-dojo-config</code> attribute in the Dojo script tag we've set <code>parseOnLoad</code> to true. This tells Dojo to run the parser automatically to "widgetize" the elements it finds. Given that we're fully relying on the parser, we have no need for <code>dojo.ready</code> or anything like that &mdash; we're just loading what we use.</p>
+<p>The widget classes will now load in the background, and the parser will walk over the DOM. But nothing is actually going to happen yet &mdash; we need to create those layout widgets.</p>
+<p>For this example, we'll be using the markup or <em>declarative</em> way of instantiating the widgets. The <code>data-dojo-</code> attributes on each element provide instruction for the Dojo parser on what widget class to instantiate, and hold the properties to configure the widget instance with.</p>
+
+<pre class="brush: js; html-script: true;">&lt;body class=&quot;claro&quot;&gt;
+	&lt;div
+			id=&quot;appLayout&quot; class=&quot;demoLayout&quot;
+			data-dojo-type=&quot;dijit.layout.BorderContainer&quot;
+			data-dojo-props=&quot;design: &#x27;headline&#x27;&quot;&gt;
+		&lt;div
+				class=&quot;centerPanel&quot;
+				data-dojo-type=&quot;dijit.layout.ContentPane&quot;
+				data-dojo-props=&quot;region: &#x27;center&#x27;&quot;&gt;
+			&lt;div&gt;
+				&lt;h4&gt;Group 1 Content&lt;/h4&gt;
+				&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;
+			&lt;/div&gt;
+			&lt;div&gt;
+				&lt;h4&gt;Group 2 Content&lt;/h4&gt;
+			&lt;/div&gt;
+			&lt;div&gt;
+				&lt;h4&gt;Group 3 Content&lt;/h4&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div
+				class=&quot;edgePanel&quot;
+				data-dojo-type=&quot;dijit.layout.ContentPane&quot;
+				data-dojo-props=&quot;region: &#x27;top&#x27;&quot;&gt;Header content (top)&lt;/div&gt;
+		&lt;div
+			id=&quot;leftCol&quot; class=&quot;edgePanel&quot;
+			data-dojo-type=&quot;dijit.layout.ContentPane&quot;
+			data-dojo-props=&quot;region: &#x27;left&#x27;, splitter: true&quot;&gt;Sidebar content (left)&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/body&gt;
+</pre>
+<a class="demoBtn demo" href="demo/borderContainer.html">View Demo</a>
+
+<p>The outer <code>appLayout</code> element has been configured as a <code>BorderContainer</code>, and the child divs are each <code>ContentPane</code>s.
+	This gives us a full-screen flexible layout. Go ahead and try resizing your Demo window, to see how the left region stays a fixed width, while the center/right region sizes to fit.
+You may also notice a handle on the vertical divider, between the left and center regions, which allows you to manually set their relative widths.
+</p>
+<p>This is what we mean by dynamic and interactive layout. We'll get to adding in the tab-strip shown in the initial demo, but first let's back up and look a bit closer at the individual layout widgets and their use.</p>
+
+<h3>BorderContainer</h3>
+<img src="images/borderContainer.png" alt="BorderContainer example" style="float: left; margin-right: 10px">
+<p>If you've used layout managers and containers in other GUI toolkits, <code>dijit.layout.BorderContainer</code> should be pretty familar to you, and if not we can soon catch you up.</p>
+<p>BorderContainer allows you to define a layout subdivided into regions. The <code>center</code> region is always flexible and auto-sized, while the other regions are fixed in size: "<code>top</code>", "<code>bottom</code>", "<code>leading</code>", "<code>trailing</code>", "<code>left</code>" or "<code>right</code>".</p>
+<p>All Dijit widgets support internationalization (i18n), so Dijit can't assume left-to-right flow of content and controls on the page. For left-to-right locales, the <code>leading</code> section will be on the left, and the <code>trailing</code> section on the right. For right-to-left locales (e.g. Arabic, Hebrew), it is reversed. That being said, you can use <code>left</code> and <code>right</code> as appropriate to ensure that sections are always on the side of your choosing, regardless of locale. Use what fits your content logically.</p>
+<p>Each region is represented by a child widget, as we saw in the App Layout example. All Dijit widgets support the <code>region</code> property, so in principle, you can use any widget in these positions, though clearly some will work better than others.
+The fixed-size regions (all but <code>center</code>) can have a end-user-moveable divider associated with them by setting a <code>splitter</code> property.</p>
+
+<p>When using BorderContainer, the initial sizes of regions are specified in the normal manner using CSS &mdash; using rules in a stylesheet or as inline style. Note that although you can set an initial size of say, 50%, it will be converted to <code>px</code> as it renders, so relative proportions in percentage units are not maintained as the BorderContainer is resized.
+	The center region should not be given style height or width; it will always occupy whatever space remains.</p>
+
+<p>Up to now as we've been building our layout, all the regions were <code>ContentPane</code>s - a very general purpose content-loading and content-containing widget, but as we saw in the first App Layout where a TabContainer occupied the center region, that needn't be so.
+In fact, BorderContainer works quite happily as a region in a BorderContainer. Here's an example of nesting BorderContainers to achieve a more complex layout.</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;div class=&quot;demoLayout&quot; style=&quot;height: 300px; width: 300px&quot; data-dojo-type=&quot;dijit.layout.BorderContainer&quot; data-dojo-props=&quot;design: &#x27;headline&#x27;&quot;&gt;
+	&lt;div class=&quot;centerPanel&quot; data-dojo-type=&quot;dijit.layout.ContentPane&quot; data-dojo-props=&quot;region: &#x27;center&#x27;&quot;&gt;center&lt;/div&gt;
+	&lt;div class=&quot;demoLayout&quot; style=&quot;height: 50%&quot; data-dojo-type=&quot;dijit.layout.BorderContainer&quot; data-dojo-props=&quot;region: &#x27;top&#x27;, splitter: true, design: &#x27;headline&#x27;&quot;&gt;
+		&lt;div class=&quot;centerPanel&quot; data-dojo-type=&quot;dijit.layout.ContentPane&quot; data-dojo-props=&quot;region: &#x27;center&#x27;&quot;&gt;center&lt;/div&gt;
+		&lt;div class=&quot;edgePanel&quot; data-dojo-type=&quot;dijit.layout.ContentPane&quot; data-dojo-props=&quot;region: &#x27;bottom&#x27;&quot;&gt;bottom&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div class=&quot;edgePanel&quot; data-dojo-type=&quot;dijit.layout.ContentPane&quot; data-dojo-props=&quot;splitter: true, region: &#x27;left&#x27;&quot;&gt;left&lt;/div&gt;
+	&lt;div class=&quot;demoLayout&quot; style=&quot;width: 50%&quot; data-dojo-type=&quot;dijit.layout.BorderContainer&quot; data-dojo-props=&quot;region: &#x27;right&#x27;, design: &#x27;headline&#x27;&quot;&gt;
+		&lt;div class=&quot;centerPanel&quot; data-dojo-type=&quot;dijit.layout.ContentPane&quot; data-dojo-props=&quot;region: &#x27;center&#x27;&quot;&gt;center&lt;/div&gt;
+		&lt;div class=&quot;edgePanel&quot; data-dojo-type=&quot;dijit.layout.ContentPane&quot; data-dojo-props=&quot;region: &#x27;left&#x27;&quot;&gt;left&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div class=&quot;edgePanel&quot; data-dojo-type=&quot;dijit.layout.ContentPane&quot; data-dojo-props=&quot;splitter: true, region: &#x27;bottom&#x27;&quot;&gt;bottom&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<a class="demoBtn demo" href="demo/nestedBorderContainer.html">View Demo</a>
+
+<p>See the <a href="http://dojotoolkit.org/reference-guide/dijit/layout/BorderContainer.html">BorderContainer documentation</a> for more details on the different options for BorderContainer and its use.</p>
+
+<h3>Making the Tabs</h3>
+<p>A layout widget's job is to layout and display its contents in the space it has available. Most expect their contents to be one or more child widgets.
+A common requirement is to display only one of those child widgets at once, and treat them as a stack that the user can move though. This maximizes the use of space and also allows for interesting possibilities like not loading content until that entry in the stack is selected.
+Dijit provides alternatives on this theme, in the form of StackContainer, TabContainer and AccordionContainer. </p>
+
+<p>The layout we are trying to create had each of the different "group" divs displayed as tabbed panels, with a tab strip at the bottom of the center region.
+This is a common, intuitive UI pattern dating back to analog filing systems. The <code>dijit.layout.TabContainer</code> widget implements this pattern. It represents the child widgets it contains as tabs in the tab strip (the tab controller), and displays their contents one at a time in the remaining space. </p>
+
+<pre class="brush: js; html-script: true;">
+&lt;div class=&quot;centerPanel&quot;
+		data-dojo-type=&quot;dijit.layout.TabContainer&quot;
+		data-dojo-props=&quot;region: &#x27;center&#x27;, tabPosition: &#x27;bottom&#x27;&quot;&gt;
+	&lt;div
+			data-dojo-type=&quot;dijit.layout.ContentPane&quot;
+			data-dojo-props=&quot;title: &#x27;Group 1&#x27;&quot;&gt;
+		&lt;h4&gt;Group 1 Content&lt;/h4&gt;
+		&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.&lt;/p&gt;
+	&lt;/div&gt;
+	&lt;div
+			data-dojo-type=&quot;dijit.layout.ContentPane&quot;
+			data-dojo-props=&quot;title: &#x27;Group Two&#x27;&quot;&gt;
+		&lt;h4&gt;Group 2 Content&lt;/h4&gt;
+	&lt;/div&gt;
+	&lt;div
+			data-dojo-type=&quot;dijit.layout.ContentPane&quot;
+			data-dojo-props=&quot;title: &#x27;Long Tab Label for this One&#x27;&quot;&gt;
+		&lt;h4&gt;Group 3 Content&lt;/h4&gt;
+	&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<p>To make the "group" sections tabs in a TabContainer, we first make the containing element a TabContainer. This widget is itself a child of the BorderContainer, so it still needs the <code>region</code> property. TabContainer provides a number of options for configuring how the tabs and their content are displayed; here we indicate we want the tab-strip at the bottom by setting the <code>tabPosition</code> property.
+TabContainer is another <em>container</em> widget - it manages child widgets - so we need to wrap each of our section blocks in a suitable widget. They don't need to do anything fancy, so a ContentPane is a good choice.
+Notice that each provides a "<code>title</code>" property. The title is what TabContainer uses as the label in the corresponding tab it creates for each child widget.</p>
+
+<a class="demoBtn demo" href="demo/appLayout.html">View Demo</a>
+
+<h3>StackContainer and Friends</h3>
+
+<p>The result completes our layout, but to understand how to vary this recipe and make your own layouts - and even your own layout widgets - we need to look under the hood a little.
+TabContainer is actually a sub-class of <code>dijit.layout.StackContainer</code>; it borrows most of its functionality from StackContainer (which in turn is an extension of <code>dijit.layout._LayoutWidget</code>.)
+Where TabContainer is specific about how the panels of content should be arranged and represented, StackContainer is a more general-purpose widget.
+There is no intrinsic controller to provide UI to navigate the stack of child widgets, but <code>dijit.layout.StackController</code> is available as a simple example. Here's how our layout looks if we swap out the TabContainer for the StackContainer, and put the controller widget in a new <code>bottom</code> region.
+To get everything to line up, we've also changed the BorderContainer to use the sidebar design layout here.</p>
+
+<div class="tutDetails">
+	<div class="image_title">Application Layout with StackContainer</div>
+
+	<p class="tutorial_image"><a href="demo/stackContainerAppLayout.html"><img src="images/stackContainerLayout.png" alt="Layout with StackContainer"></a></p>
+		<a class="demoBtn demo" href="demo/stackContainerAppLayout.html">StackContainer Demo</a>
+</div>
+<br style="clear:both" />
+<p>Dijit also provides a dijit.layout.AccordionContainer that drops in as easily, and in <code>dojox.layout</code> there are other StackContainer subclasses that may fit your requirements. Similarly, our vanilla <code>ContentPane</code> can be replaced with a <code>dojox.layout.ExpandoPane</code> to provide for collapsible panels in a layout.
+	As always, it's worth familiarizing yourself with the options provided to you before you start thinking about customizing.
+</p>
+
+<h3>Startup and Resize</h3>
+<p>So far we've been happily assembling layouts in markup, and leaning on the Dojo parser to coordinate instantiation and the startup sequence for us.
+That gets you a long way and might be all you ever need to really know about layout with Dijit. However, if you need to create and insert widgets programatically, that voodoo won't do.
+We need to understand a bit more about how and when layout happens.</p>
+
+<p>Let's review. We know that:</p>
+<ul>
+	<li>Creating widgets involves a sequence of well defined steps</li>
+	<li>Layout is intrinsically linked to the measurement of available space</li>
+	<li>A widget's <code>domNode</code> can't be guaranteed to be in the DOM until <code>startup</code> happens</li>
+	<li>Layout widgets actively lay out their child widgets</li>
+</ul>
+
+<p>When creating widgets programmatically, we have to complete the sequence by calling the <code>startup</code> method.
+This step includes anything that can only happen once a widget is in the DOM - which includes measurement and sizing.
+Layout widgets will call <code>startup</code> on their children, so it's sufficient to start the ball rolling from the top-most widget.</p>
+
+<p>By definition, all layout widgets have a <code>resize</code> method.
+This method gets called during startup, and also whenever there's a change that might require adjustment of dimensions - such as a window resize, or adding a new child widget.
+Like <code>startup</code>, <code>resize</code> also propagates down a hierarchy, allowing each widget in a layout to adjust, and pass along new dimensions to its children.</p>
+
+<p>With this in mind, lets look at some code. Here's the basic outline:</p>
+
+<pre class="brush: js; html-script: true;">&lt;head&gt;
+	&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;&gt;
+	&lt;/script&gt;
+	&lt;script&gt;
+		dojo.require(&quot;dijit.layout.BorderContainer&quot;);
+		dojo.require(&quot;dijit.layout.ContentPane&quot;);
+		dojo.require(&quot;dijit.layout.TabContainer&quot;);
+
+		dojo.ready(function(){
+			// create the main appLayout BorderContainer
+			// create the TabContainer
+			// create the BorderContainer edge regions
+		});
+	&lt;/script&gt;
+&lt;/head&gt;
+&lt;body class=&quot;claro&quot;&gt;
+	&lt;div id=&quot;appLayout&quot; class=&quot;demoLayout&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+</pre>
+
+<p>Here we've omitted <code>parseOnLoad</code>, which defaults to false; the gloves are off. The <code>dojo.require</code> statements don't change, but all our widgets and layout will be defined and created in code inside the <code>dojo.ready()</code> block:</p>
+
+<pre class="brush: js;">
+	dojo.ready(function(){
+		// create the BorderContainer and attach it to our appLayout div
+		var appLayout = new dijit.layout.BorderContainer({
+			design: "headline"
+		}, "appLayout");
+
+
+		// create the TabContainer
+		var contentTabs = new dijit.layout.TabContainer({
+			region: "center",
+			id: "contentTabs",
+			tabPosition: "bottom",
+			"class": "centerPanel"
+		})
+
+		// add the TabContainer as a child of the BorderContainer
+		appLayout.addChild( contentTabs );
+
+		// create and add the BorderContainer edge regions
+		appLayout.addChild(
+			new dijit.layout.ContentPane({
+				region: "top",
+				"class": "edgePanel",
+				content: "Header content (top)"
+			})
+		)
+		appLayout.addChild(
+			new dijit.layout.ContentPane({
+				region: "left",
+				id: "leftCol", "class": "edgePanel",
+				content: "Sidebar content (left)",
+				splitter: true
+			})
+		);
+
+		// Add initial content to the TabContainer
+		contentTabs.addChild(
+			new dijit.layout.ContentPane({
+				href: "contentGroup1.html",
+				title: "Group 1"
+			})
+		)
+
+		// start up and do layout
+		appLayout.startup();
+	});
+</pre>
+<a class="demoBtn demo" href="demo/programmaticLayout.html">View Demo</a>
+
+<p>Each widget is instantiated with the equivalent properties we were defining before in the <code>data-dojo-props</code> attributes.
+Rather than the implicit containment we get from the markup, each widget is explicitly added to its parent using its <code>addChild</code> method.
+<p>Notice that only when all the widgets are added does the startup method of the appLayout get called.
+Until startup happens, <code>addChild</code> simply registers the widget as a child. After startup, <code>addChild</code> represents a potential layout change, so it would trigger <code>resize</code> on the parent, and all other children.
+</p>
+
+<p>We can see this in action, by adding a new child after the layout is rendered. Here's a quick function to test that:</p>
+
+<pre class="brush: js;">
+function addTab(name) {
+	var pane = new dijit.layout.ContentPane({
+		title: name,
+		content: "<h4>" + name + "</h4>"
+	});
+	dijit.byId("contentTabs").addChild(pane);
+}
+</pre>
+<a class="demoBtn demo" href="demo/addTabs.html">View Demo</a>
+
+<h3>Conclusion</h3>
+
+<p>We've looked at the building blocks Dijit provides to create dynamic layouts and how they can be snapped together using the declarative markup style, as well as creating them programmatically.
+This approach allows you the full range of options for how you define and assemble your UIs. You'll find the same flexibility as we explore more of Dijit. We can multiply our options further by creating our own layout widgets, building on the infrastructure Dijit provides. These are topics for future tutorials.</p>
+

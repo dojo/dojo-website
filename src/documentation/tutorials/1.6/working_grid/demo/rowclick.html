@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: DataGrid Events</title>
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/Grid.css">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/claroGrid.css">
+		<link rel="stylesheet" href="style.css" media="screen">
+		<!-- load dojo -->
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js">
+		</script>
+		<script>
+			dojo.require("dojox.grid.DataGrid");
+			dojo.require("dojo.data.ItemFileWriteStore");
+			dojo.require("dojox.math.round");
+
+			var grid, store;
+			dojo.ready(function(){
+				store = new dojo.data.ItemFileWriteStore({
+					url: "hof-batting.json"
+				});
+				grid = new dojox.grid.DataGrid({
+					"class": "grid",
+					store: store,
+					query: { id: "*" },
+					structure: [
+						{
+							name: "Name", fields: ["first", "last"], width: "30%",
+							formatter: function(fields, rowIndex, cell){
+								var first = fields[0],
+									last = fields[1];
+
+								return last + ", " + first;
+							}
+						},
+						{
+							name: "G", field: "totalG", width: "10%",
+							formatter: function(games, rowIndex, cell){
+								return games + " <em>games</em>";
+							}
+						},
+						{ name: "AB", field: "totalAB", width: "10%" },
+						{ name: "R", field: "totalR", width: "8%" },
+						{ name: "H", field: "totalH", width: "9%" },
+						{ name: "RBI", field: "totalRBI", width: "8%" },
+						{ 
+							name: "Batting Average", field: "_item", width: "12%",
+							formatter: function(item, rowIndex, cell){
+								var store = cell.grid.store,
+									ba = store.getValue(item, "totalH") / store.getValue(item, "totalAB");
+
+								return dojox.math.round(ba, 3);
+							}
+						},
+						{ 
+							name: "Slugging %", width: "13%",
+							get: function(rowIndex, item){
+								if(!item){
+									return;
+								}
+								// |this| is the cell object
+								var store = this.grid.store,
+									hits = store.getValue(item, "totalH"),
+									doubles = store.getValue(item, "total2B"),
+									triples = store.getValue(item, "total3B"),
+									homeruns = store.getValue(item, "totalHR"),
+									total_bases = hits + doubles + (triples * 2) + (homeruns * 3),
+									at_bats = store.getValue(item, "totalAB");
+
+								return total_bases / at_bats;
+							},
+							formatter: function(slugging){
+								return dojox.math.round(slugging, 3);
+							}
+						}
+					]
+				}, "grid");
+				grid.startup();
+
+				dojo.connect(grid, "onRowClick", grid, function(evt){
+					var idx = evt.rowIndex,
+						item = this.getItem(idx);
+
+					dojo.byId("results").innerHTML = "You have clicked on " 
+						+ this.store.getValue(item, "last") + ", "
+						+ this.store.getValue(item, "first") + ".";
+				});
+			});
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: DataGrid events</h1>
+		<p>
+		The following shows how to connect to and handle the <em>onRowClick</em> event in a DataGrid.
+		</p>
+		<div id="grid"></div>
+		<div id="results" class="results"></div>
+	</body>
+</html>

@@ -39,6 +39,15 @@ module.exports = function (grunt) {
 			}
 		},
 
+		tutorial_archive: {
+			all: {
+				options: ejsOptions,
+				src: '<%= config.src %>/documentation/tutorials/',
+				dest: '<%= config.dest %>/documentation/tutorials/',
+				template: '<%= config.src %>/_templates/tutorial_archive.ejs',
+			}
+		},
+
 		// Compile the Reference Guide and API docs
 		exec: {
 			guide: {
@@ -226,8 +235,6 @@ module.exports = function (grunt) {
 			ejs: {
 				files: ['<%= config.src %>/**/*.ejs',
 						'<%= config.src %>/community/roadmap/packages.json',
-						'!<%= config.src %>/documentation/**/*',
-						'!<%= config.src %>/scripts/**/*',
 						'!<%= config.src %>/images/**/*',
 						'<%= config.src %>/documentation/tutorials/**/*.md',
 						'<%= config.src %>/documentation/index.ejs',
@@ -276,7 +283,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('css', ['stylus', 'cssmin', 'sync:assets']);
 
 	grunt.registerTask('delete', ['clean:dist'])
-	grunt.registerTask('deploy', ['delete', 'css', 'sync', 'ejs', 'tutorials', 'highlight', 'docs']);
+	grunt.registerTask('deploy', ['delete', 'css', 'sync', 'ejs', 'tutorials', 'tutorial_archive', 'highlight', 'docs']);
 	grunt.registerTask('default', ['delete', 'css', 'sync', 'ejs', 'tutorials', 'highlight']);
 	grunt.registerTask('develop', ['css', 'ejs', 'sync', 'highlight', 'tutorials', 'connect', 'watch']);
 

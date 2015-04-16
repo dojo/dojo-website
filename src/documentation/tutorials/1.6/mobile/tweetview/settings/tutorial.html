@@ -1,0 +1,333 @@
+<?php require("../../../../resources/tutHead.inc"); ?>
+<h3>"Settings" View Dependencies</h3>
+<a href="../app/images/Settings.jpg" dojoType="dojox.image.Lightbox" group="TweetViewPreview"><img src="../app/images/SettingsSmall.jpg" alt="Tweets View" style="float:right;display:block;margin-left:20px;" /></a>
+<p>
+	The Settings view is the most simple of the three views.  This view contains two headings (the main heading and a subheading), and a list of Twitter accounts, each with a switch to represent if the account should display within the other views.  In looking at the mockup, we know we'll need the following widgets:
+</p>
+<ul>
+	<li><code>dojox.mobile.ScrollableView</code> - The entire view itself</li>
+	<li><code>dojox.mobile.Heading</code> - The main "Settings" heading</li>
+	<li><code>dojox.mobile.RoundRectCategory</code> - The "Show" subheading</li>
+	<li><code>dojox.mobile.RoundRectList</code> - The account list holder</li>
+	<li><code>dojox.mobile.ListItem</code> - The account list items</li>
+	<li><code>dojox.mobile.Switch</code> - The switch widget</li>
+</ul>
+
+<p>The mockup also makes clear that we'll be interacting with Twitter to get user information (avatars), so we'll need a few more Dojo resources:</p>
+<ul>
+	<li><code>dojo.io.script</code> - JSONP solution to get information from Twitter</li>
+	<li><code>dojo.DeferredList</code> - Allows handling of multiple Twitter requests once all information is received</li>
+</ul>
+
+<p>These resources will allow us to complete the Settings view.  Much like we did with the Tweets and Mentions views, we will create a custom class for Settings:  <code>SettingsView</code>.</p>
+
+<div class="clear"></div>
+
+<p class="proTip">
+	If we weren't displaying the user's avatar in the Settings view, we wouldn't need <code>dojo.io.script</code> and <code>dojo.DeferredList</code> for this view.  We could hard-code the image paths, but then we'd need to manually update them if the user changed their avatar.  The good news is that our prior TweetView code already includes both of those resources, so using them in the Settings view does not cause code bloat -- the classes are already available!
+</p>
+
+<h3>Developing SettingsView</h3>
+<p>
+	Our <code>SettingsView</code> class will be very much like <code>TweetView</code> in that it will inherit from <code>dojox.mobile.ScrollableView</code> and <code>tweetview._ViewMixin</code>.  One important point to remember with <code>SettingsView</code> is that this class will simply act as a wrapper for the <code>tweetview.ACCOUNTS</code> object that the application gets its account information from.  With that in mind, let's dig into the Settings view!
+</p>
+
+<h4>New Class:  SettingsView</h4>
+<p>Our new class will be called <code>SettingsView</code> and will be setup, at least initially, like TweetView was:</p>
+
+<pre class="brush: js;">
+// Provide the UI class
+dojo.provide("tweetview.SettingsView");
+
+// Dependencies here
+dojo.require("dojox.mobile.ScrollableView");
+dojo.require("dojo.DeferredList");
+dojo.require("dojo.io.script");
+dojo.require("tweetview._ViewMixin");
+
+// Declare the class;  inherits from ScrollableView
+dojo.declare("tweetview.SettingsView", [dojox.mobile.ScrollableView, tweetview._ViewMixin], {
+
+// Methods and properties will go here
+
+});
+</pre>
+
+<p>Dependencies are required and the new class is provided and declared.</p>
+
+<p class="proTip">This class will be created within the following directory alongside the <code>TweetView</code> and <code>_ViewMixin</code> classes, which currently lives in <code>js/tweetview</code>.</p>
+
+<h4>SettingsView Properties</h4>
+<p>Three custom properties will be given to <code>SettingsView</code>.  The first setting is called <code>accountTemplateString</code>; a string of HTML representing the layout of each list item within the account list:</p>
+
+<pre class="brush: js;">
+// Create a template string for tweets:
+accountTemplateString: '&lt;img src="${avatar}" alt="${user}" class="tweetviewAvatar" /&gt;' +
+'&lt;div class="tweetviewContent"&gt;' + 
+'&lt;div class="tweetviewUser"&gt;${user}&lt;/div&gt;' + 
+'&lt;/div&gt;&lt;div class="tweetviewClear"&gt;&lt;/div&gt;',
+</pre>
+
+<p>The next property is called "views" which represents the <code>TweetView</code> instances.  Why does <code>SettingsView</code> need to know the IDs of our <code>TweetView</code> instances?  Because this new class will need to adjust the tweets in the <code>TweetView</code> instances when accounts are enabled and disabled.  The <code>views</code> property accepts a comma-separated list of widget IDs:</p>
+
+<pre class="brush: js;">
+// Views that this widget should have reference to
+views: "",
+</pre>
+
+<p>The last custom property is <code>serviceUrl</code>:</p>
+
+<pre class="brush: js;">
+// URL to pull user information from; simple template included
+serviceUrl: "http://api.twitter.com/1/users/show/${account}.json",
+</pre>
+
+<p>The <code>serviceURL</code> property represents the URL of the Twitter service which we can pull user account information from.  For this class, we only need to pull the user's avatar.</p>
+
+<h4>Implementing SettingsView</h4>
+<p>With the basic <code>SettingsView</code> class primitively created (it doesn't do anything <em>yet</em>), it's time to update our Settings view HTML:</p>
+
+<pre class="brush: js;">
+&lt;!-- settings view --&gt;
+&lt;div id="settings" dojoType="tweetview.SettingsView" views="tweets,mentions"&gt;
+	&lt;h1 dojoType="dojox.mobile.Heading" fixed="top"&gt;Settings&lt;/h1&gt;
+	&lt;h2 dojoType="dojox.mobile.RoundRectCategory"&gt;Show&lt;/h2&gt;
+	&lt;ul dojoType="dojox.mobile.RoundRectList" class="tweetviewList"&gt;&lt;/ul&gt;
+&lt;/div&gt;
+</pre>
+
+<p>Here's what we changed:</p>
+<ul>
+	<li>The dojoType of the widget has been changed to our new class: <code>tweetview.SettingsView</code>.</li>
+	<li>Setting the views property to "tweets,mentions";  the IDs of our TweetView instances</li>
+	<li>The RoundRectList's node has been given the <code>tweetviewList</code> CSS class so that the widget can identify and gain reference to the list.</li>
+</ul>
+
+<p>And of course we'll need to require the <code>tweetview.SettingsView</code> class at the top of our app.html page:</p>
+<pre class="brush: js;">
+// Use the lightweight parser
+dojo.require("dojox.mobile.parser");
+// Require Dojo mobile
+dojo.require("dojox.mobile");
+// Get additional, non-standard dojox.mobile widgets
+dojo.require("dojox.mobile.TabBar");
+// Require the compat if the client isn't Webkit-based
+dojo.requireIf(!dojo.isWebKit,"dojox.mobile.compat");
+// Require TweetViewUI
+dojo.require("tweetview.TweetView"); 
+dojo.require("tweetview.SettingsView"); 
+// Set accounts for tweetview directly on the namespace
+tweetview.ACCOUNTS = {
+	dojo: { enabled: true },
+	sitepen: { enabled: true }
+};
+</pre>
+
+<p>With SettingsView added to the app.html page, it's time to create the JavaScript to populate the widget.</p>
+
+<h4>SettingsView _startup()</h4>
+<p>The startup method of the <code>SettingsView</code> class will be <code>SettingsView's</code> real worker.  Let's build the class task by task to make it simple.  Start by calling the parent class' (<code>dojox.mobile.ScrollableView</code>) <code>startup</code> method to retain its original functionality:</p>
+<pre class="brush: js;">
+// Retain functionality of startup in dojox.mobile.ScrollableView
+this.inherited(arguments);
+</pre>
+
+<p>Get reference to the list widget within the view and hide it until list items are added to it:</p>
+<pre class="brush: js;">
+// Get the list child widget
+this.listNode = this.getListNode();
+// Hide the list because it's not populated with list items yet
+this.showListNode(false);
+</pre>
+
+<p>Create an array of accounts and sort them so that they will be in alphabetical order within the list:</p>
+<pre class="brush: js;">
+// Sort the accounts
+var accounts = [];
+for(var account in tweetview.ACCOUNTS) {
+	accounts.push(account);
+}
+accounts.sort();
+</pre>
+
+<p>Create an array of Deferreds created by requesting each user's information from Twitter:</p>
+<pre class="brush: js;">
+// Create an array to hold our deferreds
+var defs = [];
+// For every account....
+dojo.forEach(accounts, function(account){
+	// Make a request to Twitter to get user information
+	defs.push(dojo.io.script.get({
+		callbackParamName: "callback",
+		timeout: 3000,
+		// "substitute" comes from _ViewMixin
+		url: this.substitute(this.serviceUrl, { account: account })
+	}));
+},this);
+</pre>
+
+<p class="proTip">You'll see the URL is being generated from our <code>serviceUrl</code> parameter and an object containing the account name.  The <code>substitute</code> method was provided by <code>_ViewMixin</code>, a class that <code>SettingsView</code> inherited from.</p>
+
+<p>With the requests to Twitter fired, grab reference to the TweetView widgets:</p>
+<pre class="brush: js;">
+// Get view widgets if we don't have them already
+this.viewWidgets = dojo.map(this.views.split(","), function(id) {
+	return dijit.byId(id);
+});
+</pre>
+
+<p>The remaining functionality takes place in the dojo.DeferredList callback, after all user information has been retrieved.  For every account we receive information for, if the account was found and the user is not protected:</p>
+
+<pre class="brush: js;">
+// Create a deferred list to add a callback for user formatting
+new dojo.DeferredList(defs).then(dojo.hitch(this, function(results) {
+
+	// For every returned user array...
+	dojo.forEach(results, function(def,i) {
+
+		// If the deferred failed, the user account isn't available or doesn't exist
+		if(!def[0]) {
+			// Remove the account from the list to prevent further problems
+			// Also remove from our "local" sorted accounts list
+			delete tweetview.ACCOUNTS[accounts[i]];
+			delete accounts[i];
+			return;
+		}
+
+		// Grab the user array
+		var user = def[1];
+
+		// If the user exists and isn't suspended or protected...
+		if(user.id &amp;&amp; !user["protected"]) { // Protected is a reserved word
+
+			// Subsequent code will be here
+
+		}
+
+	},this);
+
+}));
+</pre>
+
+<p>Create a new <code>dojox.mobile.ListItem</code> and populate its HTML with our templated user information:</p>
+
+<pre class="brush: js;">
+// Create a new list item for the user, including a switch
+var item = new dojox.mobile.ListItem({}).placeAt(this.listNode, "last");
+
+// Update the list item's content using our template for tweets
+item.containerNode.innerHTML = this.substitute(this.accountTemplateString, {
+	user: user.screen_name,
+	avatar: user.profile_image_url,
+	user_id: user.id
+});
+</pre>
+
+<p>Create and inject a <code>dojox.mobile.Switch</code> widget into the list item, taking into account if the account is enabled or disabled:</p>
+
+<pre class="brush: js;">
+// Create the switch
+var userSwitch = new dojox.mobile.Switch({
+	"class": "tweetviewSwitch",
+	value: tweetview.ACCOUNTS[user.screen_name].enabled ? "on" : "off"
+}).placeAt(item.containerNode, "first");
+</pre>
+
+<p>Add an <code>onStateChange</code> event to the <code>Switch</code> widget which updates the <code>tweetview.ACCOUNTS</code> object with the new enabled state for the given account.  Additionally, notify each TweetView instance that the account has been enabled or disabled:</p>
+
+<pre class="brush: js;">
+// Add change event to the switch
+dojo.connect(userSwitch, "onStateChanged", this, function(newState) {
+	// get a true/false value 
+	var isOn = newState == "on";
+	
+	// Update our ACCOUNTS hash
+	tweetview.ACCOUNTS[user.screen_name].enabled = isOn;
+	
+	// For each Pane widget, call the onUserChange method
+	dojo.forEach(this.viewWidgets, function(viewWidget) {
+		viewWidget.onUserChange(user.screen_name,isOn);
+	});
+});
+</pre>
+
+<p>Lastly, if we received any valid accounts, show the Settings list node (because now it has content) and "refresh" each view now that the accounts are verified as available:</p>
+<pre class="brush: js;">
+// If we have any valid accounts...
+if(accounts.length) {
+	// Show the list now that we have content for it
+	this.showListNode(true);
+	// Trigger a refresh of each view
+	dojo.forEach(this.viewWidgets, function(view) {
+		view.refresh();
+	});
+}
+</pre>
+
+<p>That concludes the JavaScript code for <code>tweetview.Setting</code> -- the widget will now work beautifully.  We aren't done with all of the JavaScript code yet though!  We still need to implement the <code>onUserChange</code> method on the <code>TweetView</code> class.</p>
+
+<h4>TweetView Updates: onUserChange and Removing refresh() from startup()</h4>
+<p>
+	The reason we called <code>refresh</code> on each view within the <code>SettingsView</code> class is because we didn't want to send a request for tweets from a user we weren't sure existed yet.  Unfortunately the <code>refresh</code> call within the <code>TweetView</code> <code>startup</code> is doing just that.  Let's remove it:
+</p>
+
+<pre class="brush: js;">
+// Grab tweets right away!
+//this.refresh();
+</pre>
+
+<p>The <code>SettingsView</code> instance will call the view's refresh method when an account has been verified to exist.</p>
+
+<p>
+	The <code>onUserChange</code> method gets called by the <code>SettingsView</code> class when an account gets enabled or disabled. We have a few options for how to handle enables and disables:
+</p>
+<ul>
+	<li><strong>Refresh the entire widget</strong> - A waste of resources and Twitter API rate usage</li>
+	<li><strong>Destroy ListItem widgets, recreate them</strong> - A waste of processing, and what if the user is enabled again right away?  That would require a refresh to get all of the user's tweets.  Doing so would also break our "since" functionality.</li>
+	<li><strong>Simply show/hide ListItems using CSS</strong> - Bingo!  Very little processing and we already have the data so no more requests to re-fetch them are needed!</li>
+</ul>
+
+<p>Let's implement the new method within the <code>TweetView</code> class:</p>
+
+<pre class="brush: js;">
+// Updates a tweet's display property by user account.enable change
+onUserChange: function(account,isOn) {
+	dojo.forEach(this.getElements("user-" + account,this.domNode), function(node){ 
+		dojo[(isOn ? "remove" : "add") + "Class"](node, "tweetviewHidden"); 
+	});
+}
+</pre>
+
+<p>Remember the <code>user-{screenName}</code> CSS class we assigned to list items in the <code>tweetview.TweetView</code> widget?  We'll leverage that CSS class to find tweets from the user to be enabled/disabled, and remove/add a new <code>tweetviewHidden</code> CSS class which changes a list item to <code>display:none</code> or <code>display:block</code>.</p>
+
+<h4>Styling SettingsView</h4>
+<p>
+	With the HTML and JavaScript for <code>SettingsView</code> done, it's time to add a few CSS classes to our stylesheet to make the list items match the mockup:
+</p>
+
+<pre class="brush: js;">
+/* float the switch to the right */
+.tweetviewSwitch {
+	right:10px;
+	top:10px;
+	float:right;
+}
+
+/* define class that of a tweet for a disabled user or any other hidden node/widget */
+.tweetviewHidden {
+	display:none;
+}
+</pre>
+
+<h3>TweetView Complete!</h3>
+<p>With <code>tweetview.TweetView</code> completed in the previous tutorial, and the <code>tweetview.SettingsView</code> created within this tutorial, our working widget is complete!  <a href="./demo/">Click here</a> to see the widget in action!</p>
+
+<p>In the final tutorial in this series, we'll use Dojo's build process to squeeze the most out of TweetView's JavaScript, HTML, and CSS compression to make the widget as compact as possible!</p>
+
+<h3>Download The Source</h3>
+<div class="downlaodSource">
+	Download <a href="resources/TweetView_Settings.zip">TweetView</a>.  The archive will work as soon as you unzip the file!
+</div>
+
+
+<?php include("../series.inc"); ?>

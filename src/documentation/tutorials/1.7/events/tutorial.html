@@ -1,0 +1,235 @@
+
+
+<h3>Getting Started</h3>
+<p>Much of your JavaScript code will be preparing for events: both responding to and generating new events. This means that the key to building responsive, interactive web applications is creating effective event connections. Event connections allow your application to respond to user interaction and wait for actions to happen. Dojo's main DOM event workhorse is <code>dojo/on</code>;  let me show you how to use this module!</p>
+
+
+<h3>DOM Events</h3>
+<p>You might be asking yourself, “Doesn’t the DOM already provide a mechanism for registering event handlers?” The answer is yes—but not all browsers follow the W3C DOM specification. Between the various DOM implementations from major browser vendors there are three ways to register event handlers: <code>addEventListener</code>, <code>attachEvent</code>, and DOM 0. Beyond that, there are two different event object implementations and at least one browser engine that <a href="http://msdn.microsoft.com/en-us/library/ms536343(v=vs.85).aspx">fires registered listeners in random order</a> and <a href="http://msdn.microsoft.com/en-us/library/bb250448(VS.85).aspx">leaks memory</a>. Dojo improves the way you work with DOM events by normalizing differences between the various native APIs, preventing memory leaks, and doing it all in a single, straightforward event API called <code>dojo/on</code>.</p>
+
+<p>Let’s say we have the following markup:</p>
+
+<pre class="brush: html;">
+&lt;button id="myButton"&gt;Click me!&lt;/button&gt;
+&lt;div id="myDiv"&gt;Hover over me!&lt;/div&gt;
+</pre>
+
+<p>Let's also imagine that you want the <code>div</code> to change to blue when you click the button, red when you hover over it, and back to white when you're done hovering. <code>dojo/on</code> makes that very simple:</p>
+
+<pre class="brush: js;">
+require(["dojo/on", "dojo/dom", "dojo/dom-style", "dojo/mouse", "dojo/domReady!"],
+	function(on, dom, domStyle, mouse) {
+		var myButton = dom.byId("myButton"),
+			myDiv = dom.byId("myDiv");
+
+		on(myButton, "click", function(evt){
+			domStyle.set(myDiv, "backgroundColor", "blue");
+		});
+		on(myDiv, mouse.enter, function(evt){
+			domStyle.set(myDiv, "backgroundColor", "red");
+		});
+		on(myDiv, mouse.leave, function(evt){
+			domStyle.set(myDiv, "backgroundColor", "");
+		});
+});
+</pre>
+
+<p class="proTip">Notice that the <code>dojo/mouse</code> resource was also required. Not all browsers natively support <code>mouseenter</code> and <code>mouseleave</code> events, so <code>dojo/mouse</code> adds that support. You can write your own modules like <code>dojo/mouse</code> to enable support for other custom event types.</p>
+
+<p>This example illustrates the common pattern:
+<code>on(</code><em>element</em><code>, </code><em>event name</em><code>, </code><em>handler</em><code>)</code>.
+Or, put another way, for this event on this element, connect this handler. This pattern applies to all window, document, node, form, mouse, and keyboard events.</p>
+
+<p class="proTip">Note that unlike the older <code>dojo.connect</code> API,
+	the "on" event name prefix <em>must be omitted</em> when using the <code>dojo/on</code> module.</p>
+
+<p>The <code>on</code> method not only normalizes the API to register events, but it also normalizes how event handlers work:</p>
+<ul>
+	<li>Event handlers are always called in the order they are registered.</li>
+	<li>They are always called with an event object as their first parameter.</li>
+	<li>The event object will always be normalized to include common W3C event object properties, including things like a <code>target</code> property, a <code>stopPropagation</code> method, and a <code>preventDefault</code> method.</li>
+</ul>
+
+<p>Much like the DOM API, Dojo also provides a way to remove an event handler: <code><em>handle</em>.remove</code>. The return value of <code>on</code> is a simple object with a <code>remove</code> method, which will remove the event listener when called. For example, if you wanted to have a one-time only event, you could do something like this:</p>
+<pre class="brush: js;">
+var handle = on(myButton, "click", function(evt){
+	// Remove this event using the handle
+	handle.remove();
+
+	// Do other stuff here that you only want to happen one time
+	alert("This alert will only happen one time.");
+});
+</pre>
+
+<p class="proTip">Incidentally, <code>dojo/on</code> includes a convenience method for doing exactly this: <code>on.once</code>.  It accepts the same parameters as <code>on</code>, but will automatically remove the handler once it is fired.</p>
+
+<p>One last thing to note: by default, <code>on</code> will run event handlers in the context of the node passed in the first argument.  The one exception to this is when <code>on</code> is used for event delegation, which we will discuss shortly.</p>
+
+<p>However, you can use <code>lang.hitch</code> (from the <code>dojo/_base/lang</code> module)
+to specify the context in which to run the handler.
+Hitching is very helpful when working with object methods:</p>
+
+<pre class="brush: js;">
+require(["dojo/on", "dojo/dom", "dojo/_base/lang", "dojo/domReady!"],
+	function(on, dom, lang) {
+
+		var myScopedButton1 = dom.byId("myScopedButton1"),
+			myScopedButton2 = dom.byId("myScopedButton2"),
+			myObject = {
+				id: "myObject",
+				onClick: function(evt){
+					alert("The scope of this handler is " + this.id);
+				}
+			};
+
+		// This will alert "myScopedButton1"
+		on(myScopedButton1, "click", myObject.onClick);
+		// This will alert "myObject" rather than "myScopedButton2"
+		on(myScopedButton2, "click", lang.hitch(myObject, "onClick"));
+
+});
+</pre>
+<a class="demoBtn demo" href="demo/on.php">View Demo</a>
+
+<p class="proTip">Unlike <code>on</code>'s predecessor, <code>dojo.connect</code>, <code>on</code> does not accept the handler scope and method arguments.  You will need to make use of <code>lang.hitch</code> for the third argument if you wish to preserve execution context.</p>
+
+<h3>NodeList events</h3>
+<p>As mentioned in the previous tutorial, <code>NodeList</code> provides a way to register events to multiple nodes: the <code>on</code> method. This method follows the same pattern as <code>dojo/on</code> without the first argument (since the nodes in the <code>NodeList</code> are the objects you are connecting to).</p>
+
+<p class="proTip">The <code>on</code> method is included with <code>dojo/query</code>, so you do not have to require the <code>dojo/on</code> resource explicitly to use <code>NodeList.on</code>.</p>
+
+<p>Let's look at a more advanced example than before:</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="button1" class="clickMe"&gt;Click me&lt;/button&gt;
+&lt;button id="button2" class="clickMeAlso"&gt;Click me also&lt;/button&gt;
+&lt;button id="button3" class="clickMe"&gt;Click me too&lt;/button&gt;
+&lt;button id="button4" class="clickMeAlso"&gt;Please click me&lt;/button&gt;
+&lt;script&gt;
+require(["dojo/query", "dojo/_base/lang", "dojo/domReady!"],
+	function(query, lang) {
+
+		var myObject = {
+			id: "myObject",
+			onClick: function(evt){
+				alert("The scope of this handler is " + this.id);
+			}
+		};
+		query(".clickMe").on("click", myObject.onClick);
+		query(".clickMeAlso").on("click", lang.hitch(myObject, "onClick"));
+
+});
+&lt;/script&gt;
+</pre>
+
+<p class="proTip">Note that unlike <code>NodeList.connect</code>, the <code>NodeList.on</code> method does <em>not</em> return the NodeList back for further chaining; instead, it returns an array of <code>on</code> handles that can be <code>remove</code>d later.  The array also includes a convenient top-level <code>remove</code> method, which will remove all of the listeners at once.</p>
+<a class="demoBtn demo" href="demo/query.php">View Demo</a>
+
+
+<h3>Event Delegation</h3>
+<p>As discussed above, the <code>on</code> method of <code>NodeList</code> makes it easy
+to hook up the same handler to the same event of multiple DOM nodes.  <code>dojo/on</code> also
+makes this achievable through a more efficient means known as <em>event delegation</em>.</p>
+<p>The idea behind event delegation is that instead of attaching a listener to an event on
+each individual node of interest, you attach a single listener to a node at a higher level,
+which will check the target of events it catches to see whether they bubbled from an actual
+node of interest; if so, the handler's logic will be performed.</p>
+<p>Previously, this was (and still is) achievable through the <code>dojox/NodeList/delegate</code>
+extension to <code>NodeList</code>.  In 1.7, it is also possible using the <code>dojo/on</code>
+module, using the syntax <code>on(</code><em>parent element</em><code>,
+"</code><em>selector</em><code>:</code><em>event name</em><code>", </code><em>handler</em><code>)</code>.</p>
+
+<p>To better illustrate this, let's look at another example, based on the same premise as the
+previous one:</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;div id="parentDiv"&gt;
+	&lt;button id="button1" class="clickMe"&gt;Click me&lt;/button&gt;
+	&lt;button id="button2" class="clickMe"&gt;Click me also&lt;/button&gt;
+	&lt;button id="button3" class="clickMe"&gt;Click me too&lt;/button&gt;
+	&lt;button id="button4" class="clickMe"&gt;Please click me&lt;/button&gt;
+&lt;/div&gt;
+&lt;script&gt;
+require(["dojo/on", "dojo/dom", "dojo/query", "dojo/domReady!"],
+	function(on, dom){
+
+		var myObject = {
+			id: "myObject",
+			onClick: function(evt){
+				alert("The scope of this handler is " + this.id);
+			}
+		};
+		var div = dom.byId("parentDiv");
+		on(div, ".clickMe:click", myObject.onClick);
+
+});
+&lt;/script&gt;
+</pre>
+<p class="proTip">
+Notice that we also required the <code>dojo/query</code> module, although we don't use it
+directly.  This is because <code>dojo/on</code> needs a selector engine exposed by
+<code>dojo/query</code> in order to be able to match selectors used for event delegation.
+This is not pulled in automatically by <code>dojo/on</code> in order to reduce its footprint
+and avoid "penalizing" developers for a feature that might not always be used.
+</p>
+<a class="demoBtn demo" href="demo/delegation.php">View Demo</a>
+
+<p>When running the above demo, notice how <code>this</code> still refers to the
+actual node we are interested in, not the <code>parentDiv</code> node.
+This is an important distinction to note when using <code>on</code> for event delegation:
+<code>this</code> no longer refers to the node passed as the first argument,
+but rather to the node which the selector matched.  This can actually be quite useful,
+once you know to expect it.</p>
+
+<h3>Object Methods</h3>
+<p><code>dojo/on</code>'s predecessor, <code>dojo.connect</code>, was also responsible for function-to-function event connections.  This functionality has been broken out into its own resource called <code>dojo/aspect</code>.  Look forward to seeing a <code>dojo/aspect</code> tutorial very soon!</p>
+
+
+<h3>Publish/Subscribe</h3>
+<p>All of the examples up until this point have used an existing object as an event producer that you register with to know when something happens. But what do you do if you don't have a handle to a node or don't know if an object has been created? This is where Dojo's publish and subscribe (pub/sub) framework comes in, exposed via the <code>dojo/topic</code> module in 1.7. Pub/sub allows you to register a handler for (subscribe to) a "topic" (which is a fancy name for an event that can have multiple sources, represented as a string) which will be called when the topic is published to.</p>
+<p>Let's imagine that in an application that we're developing, we want certain buttons to alert the user of an action; we don't want to write the routine to do the alerting more than once, but we also don't want to make a wrapping object that will register this small routine with the button. Pub/sub can be used for this:</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="alertButton"&gt;Alert the user&lt;/button&gt;
+&lt;button id="createAlert"&gt;Create another alert button&lt;/button&gt;
+
+&lt;script&gt;
+require(["dojo/on", "dojo/topic", "dojo/dom-construct", "dojo/dom", "dojo/domReady!"],
+	function(on, topic, domConstruct, dom) {
+
+		var alertButton = dom.byId("alertButton"),
+			createAlert = dom.byId("createAlert");
+
+		on(alertButton, "click", function() {
+			// When this button is clicked,
+			// publish to the "alertUser" topic
+			topic.publish("alertUser", "I am alerting you.");
+		});
+
+		on(createAlert, "click", function(evt){
+			// Create another button
+			var anotherButton = domConstruct.create("button", {
+				innerHTML: "Another alert button"
+			}, createAlert, "after");
+
+			// When the other button is clicked,
+			// publish to the "alertUser" topic
+			on(anotherButton, "click", function(evt){
+				topic.publish("alertUser", "I am also alerting you.");
+			});
+		});
+
+		// Register the alerting routine with the "alertUser" topic.
+		topic.subscribe("alertUser", function(text){
+			alert(text);
+		});
+
+});
+&lt;/script&gt;
+</pre>
+<a class="demoBtn demo" href="demo/pubsub.php">View Demo</a>
+<p>One useful advantage to this pattern of events is that now our alerting routine can be tested in a unit test without the need to create any DOM objects: the routine is decoupled from the event producer.</p>
+<p>If you ever wish to stop receiving notifications of a topic, <code>topic.subscribe</code> returns an object with a <code>remove</code> method that can be used to remove the respective handler (much like <code>on</code>).</p>
+
+<p class="proTip">Note that unlike <code>dojo.publish</code>, <code>topic.publish</code> does <em>not</em> expect published arguments to be passed in an array.  For instance, <code>topic.publish("someTopic", "foo", "bar")</code> is equivalent to <code>dojo.publish("someTopic", ["foo", "bar"])</code>.</p>
+
+<h3>Conclusion</h3>
+<p>Dojo's event system is quite powerful, while being fairly simple to use. The <code>on</code> method normalizes DOM event inconsistencies between browsers. Dojo's pub/sub framework, <code>dojo/topic</code>, gives developers a way to easily decouple event handlers from the event producers. Take time to familiarize yourself with these tools &mdash; they will be a valuable asset in creating web applications.</p>

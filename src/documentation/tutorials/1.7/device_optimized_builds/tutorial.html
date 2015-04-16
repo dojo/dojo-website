@@ -1,0 +1,139 @@
+
+<style>
+
+</style>
+
+<!-- tutorials start with a "Getting Started" block -->
+<h3>Getting Started</h3>
+<p class="proTip">
+	Make sure you have reviewed the concepts presented in the <a href="../build">Creating Builds tutorial</a>.
+</p>
+
+
+<p>The mobile device revolution has placed new demands on web applications. Mobile devices generally have lower bandwidth and lower CPU capacity, forcing us to avoid large complex code. Fortunately, the mobile space has a greater percentage of users running modern browsers than on desktops, so it is feasible to write similar applications with much less code when targeting mobile browsers. However, dealing with the multitude of different platforms is non-trivial, and creating appropriately small packages of code for mobile devices, while still providing sufficient capability for older desktop browsers can be challenging. While there are different ways to deal with platform discrepancies, the hard lessons of the last decade have shown that feature detection is <strong>the</strong> mechanism for branching.</p>
+
+<p>Fortunately, Dojo 1.7 has evolved with a powerful new feature detection infrastructure. Dojo now uses the popular <a href="https://github.com/phiggins42/has.js"><code>has()</code></a> pattern for feature detection in combination with a <code>has()</code>-aware build system. While it is easy enough to write feature detection tests with ad-hoc JavaScript expressions, the <code>has()</code> pattern defines a specific syntax such that the build system can detect these feature-based branches, and one can create application builds that are highly optimized for specific devices, with known feature shims factored out.</p>
+
+
+<p>Since Dojo's codebase in 1.7 has already been significantly refactored to use the <code>has()</code> pattern, we can instantly start making platform-optimized builds without even using <code>has()</code> in our own code. Certainly the most common and likely target for an optimized build is the modern WebKit platform used on the majority of mobile devices. Now there are some small variations between different WebKit versions used in the mobile world, but there a significant number of important known features that we can rely on to create builds for WebKit browsers and mobile devices. To specify the known features, we include an object with the features in the <code>staticHasFeatures</code> property of a build profile file. Here is a sample start to a build profile that covers the major features that Dojo uses:</p>
+
+<pre class="brush:js;">
+var profile = {
+	// ...
+	action: "release",
+	layerOptimize: "closure",
+
+	staticHasFeatures: {
+		"dom-addeventlistener": true,
+		"dom-qsa": true,
+		"json-stringify": true,
+		"json-parse": true,
+		"bug-for-in-skips-shadowed": false,
+		"dom-matches-selector": true,
+		"native-xhr": true,
+		"array-extensible": true,
+		"quirks": false,
+		"dom-quirks": false
+	},
+	// ...
+</pre>
+
+<p>With this profile, the build system will find any feature branches in the code, and substitute the known features (or bugs) provided.</p>
+
+<p class="proTip">Note <code>layerOptimize: "closure"</code> in the profile above.  Use of the closure compiler is key for build profiles that include <code>staticHasFeatures</code>, as it is capable of performing dead code removal &mdash; that is, removing code blocks that won't ever be used due to the known conditional branches.</p>
+
+<p>After running a build, we now have a built version of Dojo (or our application) without any of the extra code that compensates for a lack of a standard W3C <code>addEventListener()</code>, <code>querySelectorAll()</code>, and other standard features that are missing in earlier versions of Internet Explorer. When this optimized build is run on base dojo.js, it will save us about 9KB compared to the version of Dojo equipped for running on all supported browsers. This 9KB can be an important savings for size-sensitive applications. We can use this build for a mobile version of our application, or choose this build when we detect a WebKit browser. The former option is simply a matter of pointing to this build for the mobile pages.</p>
+
+<p>If we want to create a page that actually selects the appropriate build at run-time based on the host browser, we can do that with some simple browser detection. While there are a number of different ways we could do this, this is perhaps the simplest:</p>
+
+<pre class="brush:html;">
+&lt;script&gt;
+	// choose the appropriate dojo script based on the user agent;
+	// will match FF, Safari, Chrome, mobile browsers, not IE
+	var dojoScript = /Gecko/.test(navigator.userAgent) ?
+		"dojo-webkit.js" : "dojo.js";
+	// now create and append a script element to load it:
+	var head = document.getElementsByTagName("head")[0],
+		element = document.createElement("script");
+
+	element.async=true;
+
+	// configure Dojo for async mode
+	var dojoConfig = {
+		async: true
+	};
+	element.src = "path/to/dojo/" + dojoScript;
+	// insert the script so it will load
+	head.insertBefore(element, head.firstChild);
+&lt;/script&gt;
+</pre>
+
+<p>The script above will asynchronously load Dojo, which will allow your page to load quicker. However, if you need to load Dojo synchronously, you could use document.write instead:</p>
+
+<pre class="brush:html;">
+&lt;script&gt;
+	// choose the appropriate dojo script based on the user agent
+	// will match FF, Safari, Chrome, mobile browsers, not IE
+	var dojoScript = /Gecko/.test(navigator.userAgent) ?
+  		"dojo-webkit.js" : "dojo.js";
+	document.write('&lt;script src="path/to/dojo/' + dojoScript + '"&gt;&lt;/s' + 'cript&gt;');
+&lt;/script&gt;
+</pre>
+
+<p class="proTip">You may have noticed that we used browser sniffing in this example, despite the fact that we advocate feature detection. In general, using feature detection in your source code is definitely preferred because it makes your code robust and agnostic to browser platforms. However, using code based on user agents like the example above avoids the expense of running multiple feature detections (they can be expensive in time and space) at run-time, and can be a valuable optimization. When doing this, make sure the optimization remains distinct from the code that will be using feature detection so there is a clean separation of purposes. Placing this in the HTML, separate from modules, can be a good way to achieve this organization.</p>
+
+<p>Because the build system is based on feature sets, we could go further and create even more platform-specific builds. We could define additional features and make specific builds for different versions of IE (newer versions of IE include more features of course), and separate out Firefox and Opera from WebKit. The feature set based builds allow for limitless permutations of device specific optimizations.</p>
+
+<p>Another build setting that we can also define to create lighter weight builds is the query selector engine. By default, Dojo is built with the "acme" engine that has long been a part of Dojo. However, 1.7 introduced an alternate selector engine called "lite". The "lite" engine leans much more heavily on the native <code>querySelectorAll</code> capabilities of modern browsers, and does not have full CSS3 support for older browsers. However, it does support the core CSS2 features that are the workhorse queries predominantly used for most applications (see the <a href="http://dojotoolkit.org/reference-guide/1.7/dojo/query.html">dojo/query documentation</a> for more information about the lite engine capabilities). You can choose to use the lite engine if you are targeting modern browsers or if your application does not need to use any fancy CSS3 queries. Select the lite engine in your build profile like this:</p>
+
+<pre class="brush:js;">
+var profile = {
+	selectorEngine:"lite",
+	...
+};
+</pre>
+
+<p>The lite engine will trim another 6KB from dojo.js.</p>
+
+<h2>Using has()</h2>
+
+<p>In running a build with known features, so far we have simply been taking advantage of the existing feature detection branching in the Dojo code base. However, we may want to use <code>has()</code> in our own application. While Dojo normalizes most of the major discrepancies between browsers, there may still be situations where your application needs to detect a feature or bug in the browser and respond accordingly. We can use the <code>dojo/has</code> module to access the <code>has()</code> function. If we are using an existing feature that Dojo detects, this is very simple:</p>
+
+<pre class="brush:js;">
+require(["dojo/has"], function(has){
+	if(has("touch")){
+		// show our touch interface
+	}else{
+		// show our mouse-driven interface
+	}
+});
+</pre>
+
+<p>A list of the features that Dojo detects and provides are available on the <a href="http://dojotoolkit.org/reference-guide/1.7/dojo/has.html">dojo/has reference page</a>. If the Dojo tested features are not sufficient, you can also easily create your own feature detect tests, by calling <code>has.add()</code>:</p>
+
+<pre class="brush:js;">
+require(["dojo/has"], function(has){
+	// test if we have video
+	has.add('html5-video', !!document.createElement('video').canPlayType);
+	if(has('html5-video')){
+		// show our video with a &lt;video&gt; element
+	}else{
+		// use flash or something
+	}
+});
+</pre>
+
+<p>Both of these examples use the <code>has()</code> pattern so the build system can properly identify these feature branches, and you can create builds with known features to eliminate unused branches for specific browsers.</p>
+
+<h3>Conclusion</h3>
+
+<p>The new feature detection infrastructure and integration with the build system helps modernize Dojo, using the latest and most advanced techniques for cross-browser web application development and highly optimized mobile web applications.</p>
+
+
+<!-- resources -->
+<h3>Dojo Build Resources</h3>
+<p>Looking for more detail about builds?  Check out these great resources:</p>
+<ul>
+	<li><a href="../build">Creating Builds tutorial</a></li>
+	<li><a href="/reference-guide/1.7/build/index.html#build-index">The Dojo Build System</a></li>
+</ul>

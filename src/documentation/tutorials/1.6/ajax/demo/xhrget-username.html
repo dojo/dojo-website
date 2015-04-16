@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Check a Username's Availability</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+
+			// When the DOM is ready....
+			dojo.ready(function(){
+				// Local var representing the node to be updated
+				var availabilityNode = dojo.byId("availabilityNode");
+				var usernameNode = dojo.byId("usernameInput");
+				// Connect button
+				dojo.connect(usernameNode,"onkeyup",function(){
+					// Get the value
+					var value = dojo.trim(usernameNode.value.toLowerCase());
+					// If there's code...
+					if(value != "") {
+						// Using dojo.xhrGet, as very little information is being sent
+						dojo.xhrGet({
+							// The URL of the request
+							url: "check-username.php",
+							// Allow only 2 seconds for username check
+							timeout: 2000,
+							// Send the username to check base on an INPUT node's value
+							content: {
+								username: value
+							},
+							// The success callback with result from server
+							load: function(result) {
+								if(result == "available") {
+									dojo.addClass(availabilityNode,"demoAvailable");
+									dojo.removeClass(availabilityNode,"demoTaken");
+									availabilityNode.innerHTML = "Username available!";
+								}
+								else {
+									dojo.addClass(availabilityNode,"demoTaken");
+									dojo.removeClass(availabilityNode,"demoAvailable");
+									availabilityNode.innerHTML = "Username taken!  Please try another.";
+								}
+							}
+						});
+					}
+					else {
+						availabilityNode.innerHTML = "";
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Check a Username's Availability</h1>
+
+		<p>Type a username to know its availability.  <em>("dojo" and "sitepen" are taken)</em></p>
+		<br /><br />
+
+		<strong>Desired Username:  </strong>
+		<input type="text" id="usernameInput" size="12" />
+		<span id="availabilityNode"></span>
+
+	</body>
+</html>

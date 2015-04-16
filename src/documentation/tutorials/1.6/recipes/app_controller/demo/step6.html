@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Application Controller</title>
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" media="screen">
+		<!-- 
+			load dojo and provide config via data attribute
+			NB: dojox.data.FlickrStore is broken in 1.6.0
+				so, until 1.6.3 is out, I've put up an xdomain build on my dtk sandbox
+		 -->
+		<!-- load dojo and provide config via dojoConfig global -->
+		<script>
+			dojoConfig = {
+				isDebug: true,
+				parseOnLoad: true,
+				baseUrl: '/documentation/tutorials/1.6/recipes/app_controller/',
+				modulePaths: {
+					"demo": "demo"
+				},
+				flickrRequest: {
+					apikey: "8c6803164dbc395fb7131c9d54843627",
+					sort:[{
+						attribute: 'datetaken',
+						descending: true
+					}]
+				}
+			};
+		</script>
+		<script src="http://sfoster.dojotoolkit.org/dojobox/1.6/release/debug/dojo/dojo.xd.js"></script>
+		<script>
+			dojo.require("dijit.layout.BorderContainer");
+			dojo.require("dijit.layout.TabContainer");
+			dojo.require("dijit.layout.ContentPane");
+
+			dojo.require("dojox.data.FlickrRestStore");
+			dojo.require("dojox.image.LightboxNano");
+
+			dojo.require("demo.app-step6");
+			
+			dojo.ready(function(){
+				demo.app.init();
+			});
+		</script>
+	</head>
+	<body class="claro">
+		<script>
+			// can be in the markup already, or added by script
+			(function(){
+				var wrapper = dojo.create('div', {
+					id: 'loadingOverlay',
+					'class': 'pageOverlay',
+					innerHTML: '<div class="loadingMessage">Loading...</div>'
+				}, dojo.body());
+			})();
+		</script>
+		<div id="appLayout" class="demoLayout" data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="design: 'headline'">
+			<div class="centerPanel" id="tabs" data-dojo-type="dijit.layout.TabContainer" data-dojo-props="region: 'center', tabPosition: 'bottom'">
+				<div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="title: 'About'">
+
+					<h2>Flickr keyword photo search</h2>
+					<p>Each search creates a new tab with the results as thumbnails</p>
+					<p>Click on any thumbnail to view the larger image</p>
+
+				</div>
+			</div>
+			<div class="edgePanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'top'">
+				<div class="searchInputColumn">
+					<div class="searchInputColumnInner">
+						<input id="searchTerms" placeholder="search terms">
+					</div>
+				</div>
+				<div class="searchButtonColumn">
+					<button id="searchBtn">Search</button>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

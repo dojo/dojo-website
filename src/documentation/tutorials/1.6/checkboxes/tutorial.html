@@ -1,0 +1,145 @@
+
+
+<h3>Getting Started</h3>
+
+<p>The checkbox and radio button are staples of any user interface that requires input and selection. Dijit includes the <code>dijit.form.CheckBox</code> and <code>dijit.form.RadioButton</code> widget classes that can be used as drop-in replacements for the native checkbox and radio button elements. These widgets are themed to help create a consistent look and feel when building forms and to provide a convenient set of methods for managing input value and state.</p>
+
+<p>The driving principle in Dijit's form widgets is to enhance the native controls while preserving the existing semantics and patterns of use where they make sense. So, you can expect CheckBox and RadioButton widgets to support all the same functionality you're used to in native checkbox and radio input types.</p>
+
+<h4>Declare a CheckBox</h4>
+<p>Like all Dijit widgets, <code>dijit.form.CheckBox</code> can be instantiated using markup (declaratively) or in code (programmatically). The following two examples create an initially-checked CheckBox:</p>
+
+<pre class="brush: html;">&lt;input type="checkbox" id="dbox1" checked
+	data-dojo-type="dijit.form.CheckBox"
+	data-dojo-props="checked: true">
+&lt;label for="dbox1">Want&lt;/label></pre>
+
+<pre class="brush: js;">
+dojo.require("dijit.form.CheckBox");
+
+dojo.ready(function(){
+	var box1 = new dijit.form.CheckBox({
+		id: "pbox1",
+		checked: true
+	});
+
+	// place the widget on the page
+	box1.placeAt("pbox1_container", "first");
+});
+</pre>
+<a class="demoBtn demo" href="demo/CheckBox.html">View Demo</a>
+
+<p>Clicking on either the label or the input itself toggles it between a checked and unchecked state. You can also use the tab key to navigate between controls using the keyboard and check/uncheck elements with the space bar, just as you can with native controls. By referencing the corresponding CheckBox widget's ID, HTML labels also continue to work the same as they would with a native form element.</p>
+
+<p class="proTip">One of the new features introduced in Dojo 1.6 is the ability to use HTML5 <code>data-dojo-type</code> attributes instead of <code>dojoType</code> attributes. In Dojo 1.6, however, <code>data-dojo-type</code> prevents Dojo from picking up values from standard HTML attributes, which means that you need to duplicate all of your normal HTML attribute values (<code>checked</code>, <code>disabled</code>, etc.) in <code>data-dojo-props</code> if you choose to use this attribute. This issue will be resolved in Dojo 1.7.</p>
+
+<h3>Checkbox Values</h3>
+<p>All Dijit form widgets have getter and setter methods to retrieve and update the widget's value (<code><var>widget</var>.get("value")</code> and <code><var>widget</var>.set("value")</code>). Remember that for native checkboxes, a checkbox's value is only sent to the server if it is checked. Dijit's CheckBox works somewhat similarly: if it is in a checked state, <code><var>widget</var>.get("value")</code> will return the value property of the widget. Otherwise, it returns <code>false</code>. If no value property has been provided or set, <code>dijit.form.CheckBox</code> has a default value of "on". We can infer the checked state by asking for the value and seeing if we get a boolean <code>false</code> back, or we can inspect the <code>checked</code> property itself:</p>
+
+<pre class="brush: js;">var toppings = [];
+if(dijit.byId("topping1").get("checked")){
+	toppings.push(dijit.byId("topping1").get("value"));
+}
+
+if(dijit.byId("topping2").get("value") !== false){
+	toppings.push(dijit.byId("topping2").get("value"));
+}</pre>
+<a class="demoBtn demo" href="demo/checkboxValues.html">View Demo</a>
+
+<p>This demo also wires up an additional CheckBox which modifies the value of one of the others, providing an example of the <code>value</code> property setter:</p>
+
+<pre class="brush: js;">dojo.connect(dijit.byId("deluxe"), "onChange", function(isChecked){
+	dijit.byId("topping2").set("value", isChecked ? "kalamata olives" : "olives");
+});</pre>
+
+<p class="proTip">When you pass a truthy (i.e. non-empty, non-zero) <code>value</code> to a <code>dijit.form.CheckBox</code>, the widget is automatically put into a checked state.</p>
+
+<h3>Radio Buttons</h3>
+
+<p>Much of what we've discussed so far in the context of checkboxes and <code>dijit.form.CheckBox</code> is also true of Dijit's radio button widget, <code>dijit.form.RadioButton</code>. A radio button differs from a checkbox in that it is:</p>
+
+<ul>
+	<li>Typically rendered as a disc, with or without a circular dot inside depending on its checked state</li>
+	<li>Used for single-choice selections, where only one of a series of items can be checked at a time</li>
+</ul>
+
+<p>Otherwise, its use is very similar to the checkbox. Let's see an example:</p>
+
+<pre class="brush: html;">&lt;ul>
+	&lt;li>
+		&lt;input id="topping1" type="radio" name="topping" value="anchovies" checked
+			data-dojo-type="dijit.form.RadioButton"
+			data-dojo-props="name: 'topping', value: 'anchovies', checked: true">
+		&lt;label for="topping1">Anchovies&lt;/label>
+	&lt;/li>
+	&lt;li>
+		&lt;input id="topping2" type="radio" name="topping" value="olives"
+			data-dojo-type="dijit.form.RadioButton"
+			data-dojo-props="name: 'topping', value: 'olives'">
+		&lt;label for="topping2">Olives&lt;/label>
+	&lt;/li>
+	&lt;li>
+		&lt;input id="topping3" type="radio" name="topping" value="pineapple"
+			data-dojo-type="dijit.form.RadioButton"
+			data-dojo-props="name: 'topping', value: 'pineapple'">
+		&lt;label for="topping3">Pineapple&lt;/label>
+	&lt;/li>
+&lt;/ul></pre>
+<a class="demoBtn demo" href="demo/radioButtons.html">View Demo</a>
+
+<p>The key difference here is the use of the <code>name</code> property. Just as with native HTML radio controls, you associate a group of Dijit radio buttons by having them share a <code>name</code> property. Now, when you check one of the options in the list, the others are automatically unchecked.</p>
+
+<p class="proTip">It is common to want to treat a series of radio buttons as a single control, and to get the value of whichever is checked at that time. The <a href="/reference-guide/1.6/dojox/form/CheckedMultiSelect.html">dojox.form.CheckedMultiSelect</a> widget provides this functionality.</p>
+
+<h3>Events</h3>
+<p>So, we can create and interact with these fine looking controls. What else can we do? Like many of the widgets provided by Dijit, RadioButton and CheckBox provide methods you can hook into for notification when activity occurs.
+	A full list of these events can be found in the <a href="/api/1.6/dijit/form/CheckBox">API docs</a>. For our next demo, we'll focus on the one you'll probably use most often: <code>onChange</code>.</p>
+
+<pre class="brush: js;">dojo.connect(dijit.byId("topping1"), "onChange", function(isChecked){
+	if(isChecked){
+		summaryNode.innerHTML = "Likes the salty!";
+	}
+});
+
+dojo.connect(dijit.byId("topping2"), "onChange", function(isChecked){
+	if(isChecked){
+		summaryNode.innerHTML = "Likes the sweet!";
+	}
+});
+
+dojo.connect(dijit.byId("crust"), "onChange", function(isChecked){
+	remarkNode.innerHTML = isChecked ? "Healthy gums!" : "";
+});</pre>
+<a class="demoBtn demo" href="demo/onChange.html">View Demo</a>
+
+<p>We saw a sneak preview of this in our earlier <code>value</code> getters &amp; setters demo. The pattern is simple since <code>dojo.connect</code> lets us treat the widget method just the same way that we might treat a DOM event on a regular element. The listener function receives the checked state as a sole argument, and we respond by updating a message on the screen. The many events provided by these widgets opens up a broad range of interaction and form-logic options.</p>
+
+<h3>dijit.form.ToggleButton</h3>
+
+<p>We will cover one more variation on the boolean-state button: <code>dijit.form.ToggleButton</code>. A toggle button is a button that has two states. It is functionally very similar to CheckBox and RadioButton, but the user interface is different. Each state can contain an icon, text, or both. The icon is defined using a CSS class.</p>
+
+<pre class="brush: html;">&lt;input type="checkbox" dojoType="dijit.form.ToggleButton" checked iconClass="dijitCheckBoxIcon" label="Toggle Me"></pre>
+
+<pre class="brush: js;">var myToggleButton = new dijit.form.ToggleButton({
+	checked: true,
+	iconClass: "dijitCheckBoxIcon",
+	label: "Toggle Me, Too."
+},"toggleButtonProgrammatic");</pre>
+<a class="demoBtn demo" href="demo/ToggleButton.html">View Demo</a>
+
+<p>In this widget, the <code>label</code> property is mandatory for correct functionality. Like all other properties, after initialization, <code>label</code> and <code>iconClass</code> can be updated via the <code>set</code> method:</p>
+
+<pre class="brush: js;">// provide a new label for the button
+myToggleButton.set("label", "New Label");
+
+// hook a .recent rule in our stylesheet
+myToggleButton.set("iconClass", "recent");</pre>
+
+<p class="proTip">Note that you <em>must</em> use the <code><var>widget</var>.set()</code> method; simply assigning the property will not update the widget properly.</p>
+
+<h3>Conclusion</h3>
+<p>Dijit's out-of-the-box form widgets meet many of the most common requirements for user input and selection.
+	CheckBox, RadioButton, and ToggleButton are three widget classes that help you provide a richer, more visually engaging and consistent user experience.
+	There are other widgets in Dijit that you may want to familiarize yourself with if forms are an important part of your project: <code>dijit.Menu</code> (and the <code>dijit.CheckedMenuItem</code>), <code>dijit.form.Select</code> and related widgets <code>FilteringSelect</code>, <code>ComboBox</code> and <code>MultiSelect</code>.
+	The <code>dojox.form</code> package has even more options—and when <em>that's</em> not enough, you'll find <code>dijit.form._FormWidget</code> an extremely useful base to build on.
+	That, however, is a topic for another tutorial.</p>

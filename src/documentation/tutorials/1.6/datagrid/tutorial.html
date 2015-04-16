@@ -1,0 +1,229 @@
+
+
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/image/resources/Lightbox.css">
+
+<h3>dojox.grid.DataGrid</h3>
+<p>We've all been there: your boss comes to you and asks you to display an enormous amount of data in the application you're developing. As a web developer, you know that the more data displayed at a time means more memory the browser will consume&mdash;but your boss doesn't understand, he just wants this data in the application. This is where Dojo's <code>dojox.grid.DataGrid</code> can help you. The DataGrid is able to consume and scroll through thousands of rows of data with only a minimal memory footprint. In this tutorial, we will learn about the basics of the DataGrid.</p>
+<p>To give you a taste of the DataGrid's ability to handle a massive amount of data, we've put together a grid that displays batting statistics for every person who has played professional baseball in the United States:</p>
+<a href="demo/datagrid.html"><img src="images/DataGrid.png" alt="DataGrid"></a>
+<a class="demoBtn demo" href="demo/datagrid.html">View Demo</a>
+<p>As you can see, the DataGrid easily handles this data set containing 17,452 records. For the purposes of this tutorial, we will be using a smaller set of data: batting statistics only for those players that are in the hall of fame. Let's get started.</p>
+
+<h3>Parts of the DataGrid</h3>
+<p>As you probably guessed, the DataGrid is made up of several different parts. At the highest level, a DataGrid is made up of <em>views</em>. Views break the DataGrid up into sections and render the <em>header</em> and <em>content</em> for each section. Headers and contents contain <em>rows</em> (although the header only contains one row) which are populated by <em>sub-rows</em> of <em>cells</em>. Let's look at some pictures for a better understanding:</p>
+<p>
+	<a href="images/DataGridView.png" dojoType="dojox.image.Lightbox" title="Views" group="DataGridParts"><img src="images/DataGridViewSmall.png" alt="Views"></a>
+	<a href="images/DataGridHeader.png" dojoType="dojox.image.Lightbox" title="Header" group="DataGridParts"><img src="images/DataGridHeaderSmall.png" alt="Header"></a>
+	<a href="images/DataGridContent.png" dojoType="dojox.image.Lightbox" title="Content" group="DataGridParts"><img src="images/DataGridContentSmall.png" alt="Content"></a>
+	<a href="images/DataGridRow.png" dojoType="dojox.image.Lightbox" title="Row" group="DataGridParts"><img src="images/DataGridRowSmall.png" alt="Row"></a>
+	<a href="images/DataGridSubRow.png" dojoType="dojox.image.Lightbox" title="SubRows" group="DataGridParts"><img src="images/DataGridSubRowSmall.png" alt="Sub-rows"></a>
+	<a href="images/DataGridCell.png" dojoType="dojox.image.Lightbox" title="Cell" group="DataGridParts"><img src="images/DataGridCellSmall.png" alt="Cell"></a>
+</p>
+
+<p>We'll be recreating and modifying the layout of the first demo in this tutorial. To define how a DataGrid will look, we will be passing different objects and arrays to the <code>structure</code> property of the DataGrid constructor. We'll be working from the smallest definable object &mdash; a cell &mdash; to the largest &mdash; a view. We won't be describing how to retrieve the data from the server quite yet, but we'll get to it in the next tutorial.</p>
+
+<h4>Cells</h4>
+<p>The first thing we need to do is tell the DataGrid what cells, or columns, we want to be displayed for each data record. To do this, we will pass an array of <em>cell definition</em> objects to the <code>structure</code> property. Each cell definition object can have several properties defined:</p>
+<ul>
+	<li><code>name</code>: the string to use in the header cell</li>
+	<li><code>field</code>: the name of the field of the data record to display</li>
+	<li><code>width</code>: a string containing the CSS width (with units) of the column</li>
+	<li><code>hidden</code>: a boolean that when true will hide the column</li>
+</ul>
+<pre class="brush: js;">
+grid = new dojox.grid.DataGrid({
+	store: store,
+	query: { id: "*" },
+	structure: [
+		{ name: "First Name", field: "first", width: "84px" },
+		{ name: "Last Name", field: "last", width: "84px" },
+		{ name: "Bats", field: "bats", width: "70px" },
+		{ name: "Throws", field: "throws", width: "70px" },
+		{ name: "G", field: "totalG", width: "60px" },
+		{ name: "AB", field: "totalAB", width: "60px" },
+		{ name: "Games as Batter", field: "totalGAB", width: "120px" },
+		{ name: "R", field: "totalR", width: "60px" },
+		{ name: "RBI", field: "totalRBI", width: "60px" },
+		{ name: "BB", field: "totalBB", width: "60px" },
+		{ name: "K", field: "totalK", width: "60px" },
+		{ name: "H", field: "totalH", width: "60px" },
+		{ name: "2B", field: "total2B", width: "60px" },
+		{ name: "3B", field: "total3B", width: "60px" },
+		{ name: "HR", field: "totalHR", width: "60px" }
+	]
+}, "grid");
+</pre>
+<a class="demoBtn demo" href="demo/datagrid-simple.html">View Demo</a>
+<p>The DataGrid also provides a way to control visual styling via CSS styles or CSS classes. The cell definition properties <code>headerStyles</code>, <code>cellStyles</code>, and <code>styles</code> are strings of CSS style definitions (that must be terminated with a semi-colon) that are applied to only the header cell, only the content cells, and to all cells respectively. Likewise, the cell definition properties <code>headerClasses</code>, <code>cellClasses</code>, and <code>classes</code> are space separated strings of class names to apply to the respective cells:</p>
+<pre class="brush: js; html-script: true;">
+&lt;style&gt;
+.firstName {
+	font-style: italic;
+}
+.lastName {
+	font-weight: bold;
+}
+&lt;/style&gt;
+&lt;script&gt;
+grid = new dojox.grid.DataGrid({
+	store: store,
+	query: { id: "*" },
+	structure: [
+		{ name: "First Name", field: "first", width: "84px",
+			classes: "firstName" },
+		{ name: "Last Name", field: "last", width: "84px",
+			cellClasses: "lastName" },
+		{ name: "Bats", field: "bats", width: "70px",
+			cellStyles: "text-align: right;" },
+		{ name: "Throws", field: "throws", width: "70px" },
+		{ name: "G", field: "totalG", width: "60px" },
+		{ name: "AB", field: "totalAB", width: "60px" },
+		{ name: "Games as Batter", field: "totalGAB", width: "120px",
+			styles: "text-align: center;" },
+		{ name: "R", field: "totalR", width: "60px" },
+		{ name: "RBI", field: "totalRBI", width: "60px" },
+		{ name: "BB", field: "totalBB", width: "60px" },
+		{ name: "K", field: "totalK", width: "60px" },
+		{ name: "H", field: "totalH", width: "60px" },
+		{ name: "2B", field: "total2B", width: "60px" },
+		{ name: "3B", field: "total3B", width: "60px" },
+		{ name: "HR", field: "totalHR", width: "60px" }
+	]
+}, "grid");
+&lt;/script&gt;
+</pre>
+<a class="demoBtn demo" href="demo/datagrid-style.html">View Demo</a>
+
+<h4>Sub-Row</h4>
+<p>We now have all of the fields we care about from our data records displaying, but it's not very easy to look at. Sub-rows can make some data easier to understand and read. To define sub-rows, pass an array of arrays of cell definitions to the DataGrid. Sub-rows allow us to use two more properties of cell definitions: <code>rowSpan</code> defines how many rows a cell should take up and <code>colSpan</code> defines how many columns wide a cell should be.</p>
+<p class="proTip"><code>colSpan</code> cannot be defined on cells in the first sub-row. This is a because the DataGrid uses <code>table-layout: fixed;</code> to speed up the rendering of rows.</p>
+<pre class="brush: js;">
+grid = new dojox.grid.DataGrid({
+	store: store,
+	query: { id: "*" },
+	structure: [
+		[
+			{ name: "First Name", field: "first", width: "84px", rowSpan: 2 },
+			{ name: "Last Name", field: "last", width: "84px", rowSpan: 2 },
+			{ name: "Bats", field: "bats", width: "70px", rowSpan: 2 },
+			{ name: "Throws", field: "throws", width: "70px", rowSpan: 2 },
+			{ name: "G", field: "totalG", width: "60px" },
+			{ name: "AB", field: "totalAB", width: "60px" },
+			{ name: "R", field: "totalR", width: "60px" },
+			{ name: "RBI", field: "totalRBI", width: "60px" },
+			{ name: "BB", field: "totalBB", width: "60px" },
+			{ name: "K", field: "totalK", width: "60px" }
+		],[
+			{ name: "Games as Batter", field: "totalGAB", colSpan: 2 },
+			{ name: "H", field: "totalH" },
+			{ name: "2B", field: "total2B" },
+			{ name: "3B", field: "total3B" },
+			{ name: "HR", field: "totalHR" }
+		]
+	]
+}, "grid");
+</pre>
+<a class="demoBtn demo" href="demo/datagrid-subrows.html">View Demo</a>
+
+<h4>Views</h4>
+<p>We've made it a little easier to view our data, however once you scroll to the right you can't see whose records you're looking at. By defining a <em>view definition</em>, we can lock sections of columns from scrolling left and right. A view definition is an object with some specific properties set on it:</p>
+<ul>
+	<li><code>cells</code>: an array or an array of arrays of cell definitions</li>
+	<li><code>noscroll</code>: a boolean that when true will prevent the view from scrolling horizontally</li>
+	<li><code>width</code>: a string specifying the CSS width of the view &mdash; this is only needed when your cells are defined with relative widths like percentages</li>
+</ul>
+<pre class="brush: js;">
+grid = new dojox.grid.DataGrid({
+	store: store,
+	query: { id: "*" },
+	structure: [
+		{
+			noscroll: true,
+			cells: [
+				{ name: "First Name", field: "first", width: "84px" },
+				{ name: "Last Name", field: "last", width: "84px" }
+			]
+		},{
+			cells: [
+				[
+					{ name: "Bats", field: "bats", width: "70px", rowSpan: 2 },
+					{ name: "Throws", field: "throws", width: "70px", rowSpan: 2 },
+					{ name: "G", field: "totalG", width: "60px" },
+					{ name: "AB", field: "totalAB", width: "60px" },
+					{ name: "R", field: "totalR", width: "60px" },
+					{ name: "RBI", field: "totalRBI", width: "60px" },
+					{ name: "BB", field: "totalBB", width: "60px" },
+					{ name: "K", field: "totalK", width: "60px" }
+				],[
+					{ name: "Games as Batter", field: "totalGAB", colSpan: 2 },
+					{ name: "H", field: "totalH" },
+					{ name: "2B", field: "total2B" },
+					{ name: "3B", field: "total3B" },
+					{ name: "HR", field: "totalHR" }
+				]
+			]
+		}
+	]
+}, "grid");
+</pre>
+<a class="demoBtn demo" href="demo/datagrid-noscroll.html">View Demo</a>
+<p>View definitions provide one more property that is helpful to reduce redundant code: <code>defaultCell</code>. This property allows you to define a default cell definition that the DataGrid will use if a property is missing from a cell definition:</p>
+<pre class="brush: js;">
+grid = new dojox.grid.DataGrid({
+	store: store,
+	query: { id: "*" },
+	structure: [
+		{
+			noscroll: true,
+			defaultCell: { width: "84px" },
+			cells: [
+				{ name: "First Name", field: "first" },
+				{ name: "Last Name", field: "last" }
+			]
+		},{
+			defaultCell: { width: "60px" },
+			cells: [
+				[
+					{ name: "Bats", field: "bats", width: "70px", rowSpan: 2 },
+					{ name: "Throws", field: "throws", width: "70px", rowSpan: 2 },
+					{ name: "G", field: "totalG" },
+					{ name: "AB", field: "totalAB" },
+					{ name: "R", field: "totalR" },
+					{ name: "RBI", field: "totalRBI" },
+					{ name: "BB", field: "totalBB" },
+					{ name: "K", field: "totalK" }
+				],[
+					{ name: "Games as Batter", field: "totalGAB", colSpan: 2 },
+					{ name: "H", field: "totalH" },
+					{ name: "2B", field: "total2B" },
+					{ name: "3B", field: "total3B" },
+					{ name: "HR", field: "totalHR" }
+				]
+			]
+		}
+	]
+}, "grid");
+</pre>
+<a class="demoBtn demo" href="demo/datagrid-defaultcell.html">View Demo</a>
+<p>As you can see, by defining the <code>width</code> of the <code>defaultCell</code>, we only have to specify a <code>width</code> if it differs from the default value.</p>
+<p class="proTip">The default width of a cell definition (if none is provided in either the default or main cell definition) is <code>6em</code>.</p>
+
+<h3>Paging and Virtual Scrolling</h3>
+<p>Historically, when a large set of data needed to be displayed, developers would use a method called <em>paging</em>: only a small subset (perhaps 25-50 records) of the entire set would be displayed. The user would navigate through "pages" of data using buttons or other controls. With the advent of the scroll wheel (and one could argue the mouse), paging controls started to seem cumbersome.</p>
+<p>The DataGrid takes a slightly different approach called <em>virtual scrolling</em>: to navigate, a user only needs to scroll. The reason it is called virtual scrolling is that although it may seem as though it is a long list of records, only a small subset of the data is ever rendered at one time. However, the DataGrid also uses paging: as a user scrolls, "pages" of data are requested from the data source, or "store". It also, by default, keeps the last three pages rendered intact in case you need to scroll back. The number of rows per page of data can be controlled by the <code>rowsPerPage</code> property of the DataGrid constructor, and the number of rows to keep rendered is controlled by <code>keepRows</code>.</p>
+<p class="proTip">To calculate how many pages the DataGrid will keep rendered, divide <code>keepRows</code> by <code>rowsPerPage</code>.</p>
+
+<h3>Binding DataGrid to Data Stores</h3>
+<p>To learn how to bind a data or object store to the DataGrid, be sure to read the <a href="../populating_datagrid">Populating your Grid using dojo/data</a>, <a href="../store_driven_grid">Connecting a Store to a DataGrid</a> and the <a href="../dojo_data">Using Dojo Data</a> tutorials.</p>
+<h3>Conclusion</h3>
+<p>The <code>dojox.grid.DataGrid</code> is a powerful component. Not only can it render large data sets, but you can create complex layouts of rows and sub-rows for your data. It also allows users to intuitively scroll through long lists of information without having to click controls. In the next tutorial, we will discover how <code>dojox.grid.DataGrid</code> can be coupled with Dojo's data stores.</p>
+
+<?php $useDojoVersion = '1.6' ?>
+<?php require('../../../../includes/dojo.inc'); ?>
+
+<script>
+	dojo.require("dojox.image.Lightbox");
+	dojo.ready(function(){
+		dojo.parser.parse();
+	});
+</script>

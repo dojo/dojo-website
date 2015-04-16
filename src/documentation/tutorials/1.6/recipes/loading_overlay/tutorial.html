@@ -1,0 +1,304 @@
+<?php require("../../../resources/tutHead.inc"); ?>
+
+<h3>The Problem</h3>
+
+<p>Loading various scripts and other resources and building even a relatively simple UI can take time. As widgets are instantiated and data is fetched, distracting re-rendering of the page can occur. To avoid this, it’s common practice to overlay some or all of your page with a “loading” message that lets your users know what’s going on while simultaneously hiding any re-rendering or intermediate states in your UI that you don’t want them to see. The solution should not cause significant additional load time by requiring too many of its own dependencies, and it should avoid hard-wiring its behavior to any particular event so we can keep some flexibility in how we define “loaded”.</p>
+
+<h3>The Solution</h3>
+
+<p>Using methods from Dojo Base, we’ll inject an overlay element and use CSS to style and position it. A simple API will be developed to easily switch in and out of the loading state, and some simple animation will be used to provide a smooth transition between states. This will be accomplished using <code>dojo.create</code>, <code>dojo.fadeOut</code>, <code>dojo.style</code>, and <code>dojo.ready</code>.</p>
+
+<p>Here’s what we will be building:</p>
+
+<p class="tutorial_image"><a href="demo/demo.html"><img src="images/transitionDemo.png" alt="Demo screenshot with loading overlay fading out"></a></p>
+
+<h3>Discussion</h3>
+
+<p>One of the challenges here is not the implementation itself, but juggling the priority of various requirements. 
+	One could imagine creating a complicated loader widget with a percentage bar, maybe even a non-modal or minimized state which allows the user to continue interacting with the rest of the page while other components load in the background. 
+	This not that recipe; we wanted to keep this implementation lightweight and strike a balance between demonstrating practical techniques for developing with Dojo, while keeping it simple enough to solve the most common case using a minimum of resources.</p>
+
+<h3>Step 1: Building the Overlay</h3>
+
+<p>If you use your DOM inspector of choice on the <a href="demo/demo.html">demo page</a>, you’ll see the loading overlay appears as a child element of the <code>&lt;body></code>. It’s just a plain <code>&lt;div></code>, and its size and positioning are handled by CSS.</p>
+
+<p class="tutorial_image"><img src="images/firebugOverlayDOM.png" alt="Overlay in the Firebug inspector"></p>
+
+<p>We’re creating the overlay element in JavaScript so that it doesn’t need to be hardcoded into every page we want to apply this behavior to. Since all of the ingredients to do this are included in Dojo Base, we don’t even necessarily need to wait for <code>dojo.ready</code>—as long as our code runs after <code>dojo.js</code> has been included on the page, and after the <code>&lt;body></code> element is created (but not necessarily closed/complete), we can add elements to the DOM at will.</p>
+
+<p>Our code to generate the overlay looks like this:</p>
+
+<pre class="brush: js; html-script: true;">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Demo: Loading Overlay (Step 1)&lt;/title&gt;
+		&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot; media=&quot;screen&quot;&gt;
+		&lt;!-- load dojo and provide config via data attribute --&gt;
+		&lt;script src=&quot;http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js&quot;
+			data-dojo-config=&quot;isDebug: true&quot;&gt;
+		&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;script&gt;
+		var wrapper = dojo.create(&quot;div&quot;, {
+			id: &quot;loadingOverlay&quot;,
+			&quot;class&quot;: &quot;loadingOverlay pageOverlay&quot;,
+			innerHTML: &#x27;&lt;div class=&quot;loadingMessage&quot;&gt;Loading...&lt;/div&gt;&#x27;
+		}, dojo.body());
+		&lt;/script&gt;
+		&lt;h1&gt;Demo: Loading Overlay&lt;/h1&gt;
+		&lt;p&gt;The rest of your page...&lt;/p&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<p>The corresponding stylesheet looks like this:</p>
+
+<pre class="brush: css;">.loadingOverlay {
+    background:  #fff url('/js/dojo/1.6/dijit/themes/claro/images/loadingAnimation.gif') no-repeat 10px 23px;
+    position: absolute;
+    z-index: 1001;
+    display: none;
+}
+
+.pageOverlay {
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.loadingMessage {
+    padding: 25px 40px;
+    color: #999;
+}
+</pre>
+
+<p>Because we’re injecting the overlay element using Dojo, if Dojo doesn’t load for some reason, or the user has JavaScript disabled, the overlay simply won’t be created. That’s good, because it means the site can still be used in those scenarios. The alternative approach of having the overlay element already in the page and visible on load means that, unless everything is working perfectly, the overlay remains enabled forever with no way for the user to dismiss it.</p>
+
+<div class="proTip">The Dijit themes each come with their own <code>images</code> directory, complete with icons, gradients, and other handy graphical assets used by the Dijit widgets. Even if you don’t use Dijit on your page, all these graphics are licensed under the same terms as the code and are ready for use.</div>
+
+<h3>A module structure</h3>
+<p>There are three things we will be wanting from this overlay:</p>
+<ol>
+	<li>Creation and set-up of the overlay element(s)</li>
+	<li>Show the overlay to indicate loading in progress</li>
+	<li>Hide the overlay to indicate loading complete</li>
+</ol>
+<p>We'll turn this into three methods on an overlay object: <code>init</code>, <code>show</code> and <code>hide</code>.</p>
+<p>To make management of private properties and state easier; and to avoid creating unnecessary globals, we’ll write a function that returns our <code>loadingOverlay</code> object. 
+The approach we'll use is sometimes known as the "module pattern" and looks like this:</p>
+
+<pre class="brush: js;">
+var loadingOverlay = (function(){
+
+	// local variables, only accessible to functions declared within this scope
+	var foo = null;
+
+	// return an object, with function properties (methods)
+	return {
+		init: function(){
+			// perform any initialization
+			
+			// return 'this' as a convenience to faciliate chaining
+			// e.g. overlay.init().show()
+			return this;
+		},
+		show: function(){
+			// show the overlay element
+		},
+		hide: function(){
+			// hide the overlay element
+		}
+	};
+})();
+</pre>
+<p>We can move the overlay creation code discussed earlier directly into the <code>init</code> function. The show and hide methods will reference the element we created as a <code>overlayNode</code> variable:</p>
+<pre class="brush:js; highlight:[1,6]">
+var overlayNode;
+return {
+	init: function(){
+		// create the container element for the overlay
+		// We store the reference in the overlayNode closure variable
+		overlayNode = dojo.create('div', {
+			id: 'loadingOverlay',
+			'class': 'loadingOverlay pageOverlay',
+			innerHTML: '<div class="loadingMessage">Loading...</div>'
+		}, dojo.body());
+		
+		return this;
+	},
+	...
+</pre>
+<h3>Step 2: Show and Hide the Overlay</h3>
+
+Our first attempt at adding functions to show and hide the overlay is really simple:</p>
+
+<pre class="brush: js;">{
+	init: function() { ... }
+	show: function(){
+		// show the overlay
+		dojo.style( overlayNode, {
+			display: &#x27;block&#x27;
+		});
+	},
+	hide: function(){
+		// hide the overlay
+		dojo.style( overlayNode, {
+			display: &#x27;none&#x27;
+		});
+	}
+}
+</pre>
+
+<p>Our CSS has already positioned the overlay, so all we need to do in JavaScript is toggle the <code>display</code> style property to make it show up. While there are many different methods for doing this, using <code>dojo.style</code> helps prevent accidental specificity conflicts (versus adding/removing a class) and ensures any cross-browser behavior is normalized (versus setting style properties directly on the element).</p>
+
+<p>We can now test this from the console. <a href="demo/step2.html">Load up the page</a>, and in your browser’s console type: <code>loadingOverlay.hide()</code>:</p>
+
+<p class="tutorial_image"><a href="demo/step2.html"><img src="images/endLoadingConsole.png" alt="Invoking demo.endLoading from the Firebug console"></a></p>
+
+<a class="demoBtn demo" href="demo/step2.html">View Demo (Step 2)</a>
+
+<h3>Step 3: Adding a Transition</h3>
+
+<p>Simply toggling the display of the overlay makes for an abrupt transition. We can make this experience much nicer by fading out the overlay to reveal the page:</p>
+
+<pre class="brush: js;">endLoading: function(){
+	dojo.fadeOut({
+		node: dojo.byId("loadingOverlay"),
+		onEnd: function(node){
+			dojo.style(node, "display", "none");
+		}
+	}).play();
+}, …</pre>
+<p><a class="demoBtn demo" href="demo/step3.html">View Demo</a></p>
+
+<p><code>dojo.fadeOut</code> is part of Dojo Base, so is available and ready to use immediately. However, all it does is animates the opacity of the node; we need to add an additional step at the end of the animation to set <code>display: none</code>. Without this extra step, the overlay would still be present but invisible and would block clicks on the page.</p>
+
+<p class="protip">Remember that animations happen asynchronously, so any statements after <code>dojo.fadeOut</code> will run <em>before</em> the animation completes. Review the <a href="../effects/">effects</a> and <a href="../animation/">animation</a> tutorials for more information on using animation.</p>
+
+<h3>Step 4: Defining “Loaded”</h3>
+
+<p>With the implementation of our API essentially complete, our last step is to choose when to call each function. You’re probably familiar by now with <code>dojo.ready</code>, so let’s hook that up:</p>
+
+<pre class="brush:js; highlight:[4,5,6,7]">
+// put up the loading overlay while the page initializes
+loadingOverlay.init().show();
+
+dojo.ready(function(){
+	// take down the loading overlay when the page is ready
+	loadingOverlay.hide();
+});
+</pre>
+<p><a class="demoBtn demo" href="demo/step4.html">View Demo</a></p>
+
+<p>That works, and perhaps it is enough. As you add code dependencies to your page with <code>dojo.require</code>, the overlay will stay up until they are all loaded. However, since we created an API for this overlay, we’ve got much more flexibility in how we define “loaded”. We can call <code>loadingOverlay.hide()</code> whenever we want and with its partner function <code>loadingOverlay.show()</code>, we can re-use this overlay later for other load-related events (such as Ajax requests).</p>
+
+<p>To explore this, let's add some more context and see how it plays out with a page with multiple load events. 
+	Our plain demo page now makes a Twitter search API call to fetch a list of recent mentions of a given keyword. 
+	There's an initial "loaded" event when the page, its dependencies and the initial query are loaded. 
+	By clicking a button to make a new query, the page goes back into a loading state and we need to toggle the overlay again.</p>
+
+<p><a class="demoBtn demo" href="demo/demo.html">View Demo</a></p>
+
+<p>There's a new <code>demo</code> object with <code>requestData</code> and <code>renderItems</code> methods. These are responsible for getting the query results from Twitter into the page. The piece of interest for this tutorial is the integration of the loading overlay: </p>
+
+<pre class="brush:js">dojo.ready(function(){
+	// load the initial query results
+	demo.requestData('dojotoolkit').then(function(){
+		// remove the loading overlay when complete
+		loadingOverlay.hide();
+	});
+	
+	dojo.query("#queries button").onclick(function(evt){
+		// put up the overlay at the start of a new query
+		loadingOverlay.show();
+		// clear out the old content
+		dojo.empty("demoList");
+		
+		// request the new content
+		demo.requestData( evt.target.innerHTML ).then(function(){
+			// remove the loading overlay when complete
+			loadingOverlay.hide();
+		});
+	});
+});
+</pre>
+<p>The <code>demo.requestData</code> function returns a <code>Deferred</code> object; it lets us add callbacks that will be executed when the request is complete. (You can find out more about this technique in the <a href="/documentation/tutorials/1.6/deferreds/">Getting Started with Deferreds tutorial</a>.) Up to this point, the loading overlay is still visible, so instead of simply adding the code to hide it in a dojo.ready block, we can hide it here in the requestData callback. </p>
+	
+<p>The <code>dojo.query</code> statement sets up a click handler on each of the buttons to issue a new Twitter query. We put up the loading overlay at the start of this operation and take it down in the <code>requestData</code> callback.</p>
+
+<h3>Polish and refinements</h3>
+
+<p>Although the demo is functional, to really tighten up there are a few refinements needed. If you clicked the buttons fast enough, the requests stack up and we can end up with overlapping <code>fadeOut</code> animations and even rendering the same results multiple times. 
+	To make it <em>reentrant</em> we can add guards to handle both these problems:</p>
+
+<pre class="brush:js; highlight:[8,9,10,11]">dojo.ready(function(){			
+	// load the initial query results
+	var request = demo.requestData('dojotoolkit').then(function(){
+		request = null;
+	});
+	
+	dojo.query("#queries button").onclick(function(evt){
+		if(request){
+			// cancel an in-flight request
+			request.cancel();
+		}
+		// put up the overlay at the start of a new query
+		loadingOverlay.show();
+		// clear out the old content
+		dojo.empty("demoList");
+		
+		// request the new content
+		request = demo.requestData( evt.target.innerHTML ).then(function(){
+			request = null;
+		});
+	});
+});
+</pre>
+<p>For the animation we make changes in our loadingOverlay object</p>
+<pre class="brush:js; highlight:[2,11,12,21,22,23,24,26,27]">var loadingOverlay = (function(){
+	var overlayNode = null, 	
+		hideAnim = null;
+
+	return {
+		overlayId: &quot;loadingOverlay&quot;,
+		init: function(containerNode){
+			...
+		},
+		show: function(){
+			// stop any in-progress hide animation
+			hideAnim &amp;&amp; hideAnim.stop();
+
+			// show the overlay
+			dojo.style( overlayNode, {
+				display: &#x27;block&#x27;,
+				opacity: 1
+			});
+		},
+		hide: function(){
+			if(!hideAnim){
+				// handle the case where repeated calls to hide() are made
+				// the animation object is stored in a closure variable
+				hideAnim = dojo.fadeOut({
+					...
+				}).play();
+			}
+		}
+	};
+})();		
+</pre>
+
+<h3>Conclusion</h3>
+<p>Judicious application of just a few Dojo methods has created a nicer user experience and put you the developer in control of what you load when, and what your user sees in the meantime.
+We've applied the module pattern with Dojo to contain and manage the solution; selectively exposing methods and properties for use on the page. This recipe's solution is of course just one way to tackle the stated problem, but even with the refinements with the Twitter demo integration, it remains simple, lightweight and readily extended in any direction your requirements take you.</p>
+
+<h3>Colophon</h3>
+<ul>
+	<li><a href="../../effects/">Effects with Dojo</a></li>
+	<li><a href="../../deferreds/">Getting Started with Deferreds</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojo/create.html">dojo.create</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojo/style.html">dojo.style</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojo/io/script.html">dojo.io.script</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojo/addOnLoad.html">dojo.ready</a></li>
+</ul>

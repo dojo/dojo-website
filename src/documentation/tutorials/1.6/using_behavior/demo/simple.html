@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Tutorial: dojo.behavior</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true">
+		</script>
+		<script>
+			dojo.require("dojo.behavior");
+
+			// track the number of products "bought"
+			var productCount = 0;
+			
+			// function to update rendering for the summary
+			function onUpdate(){
+				dojo.byId("summary").innerHTML = 
+					productCount + " items in cart";
+			}
+			
+			// function to handle click on 'buy' buttons
+			function onPurchaseClick(evt){
+				productCount++;
+				onUpdate();
+			}
+			
+			// a simple behavior 'sheet', which sets up event handlers on all elements 
+			// which match the '.buyButton' query
+			var myBehavior = {
+				".buyButton" : {
+					onclick: onPurchaseClick,
+					onmousedown: function(evt){
+						dojo.addClass(evt.target, "buttonDown");
+					},
+					onmouseup: function(evt){
+						dojo.removeClass(evt.target, "buttonDown");
+					}
+			    }
+			};
+
+		
+			// Wait for the DOM to be ready
+			// and dependencies loaded before working with either
+			dojo.ready(function(){
+				// register the behavior 'sheet'
+				dojo.behavior.add(myBehavior);
+
+				// apply all registered behaviors to the current document
+				dojo.behavior.apply();
+				
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Tutorial: Defining simple behaviors with dojo.behavior</h1>
+		
+		<h3>Product List</h3>
+		<ul class="productList">
+			<li>
+				<h4>Product line 1</h4>	
+				<button class="buyButton demoBtn">Buy Me</button>
+			</li>
+			<li>
+				<h4>Product line 2</h4>	
+				<button class="buyButton demoBtn">Buy Me</button>
+			</li>
+			<li>
+				<h4>Product line 3</h4>	
+				<button class="buyButton demoBtn">Buy Me</button>
+			</li>
+		</ul>
+		<div id="summary" class="summary">No items in cart</div>
+	</body>
+</html>

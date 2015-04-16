@@ -1,0 +1,87 @@
+<?php include_once($_SERVER['DOCUMENT_ROOT'] . implode('/', array_slice(explode('/', dirname($_SERVER['PHP_SELF'])), 0, 4)) . '/Utils.php') ?>
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Tutorial: fx Events</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+	</head>
+	<body>
+		<h1>Tutorial: fx Events</h1>
+		<button id="slideAwayButton">Slide block away</button>
+		<button id="slideBackButton">Slide block back</button>
+
+		<div id="slideTarget" class="red-block slide">
+			A red block
+		</div>
+		<?php
+                        Utils::printDojoScript("async: true, isDebug: true");
+                ?>
+		<script>
+			
+			require(["dojo/fx", "dojo/on", "dojo/dom-style", "dojo/dom", "dojo/domReady!"], function(fx, on, style, dom) {
+				
+				var slideAwayButton = dom.byId("slideAwayButton"),
+					slideBackButton = dom.byId("slideBackButton"),
+					slideTarget = dom.byId("slideTarget");
+					
+					on(slideAwayButton, "click", function(evt){
+						// Note that we're specifying the beforeBegin as a property of the animation
+						// rather than using connect. This ensures that our beforeBegin handler
+						// executes before any others.
+						var anim = fx.slideTo({
+							node: slideTarget,
+							left: "200",
+							top: "200",
+							beforeBegin: function(){
+								
+								console.warn("slide target is: ", slideTarget);
+								
+								style.set(slideTarget, {
+									left: "0px",
+									top: "100px"
+								});
+							}
+						});
+
+						// We could have also specified onEnd above alongside beforeBegin,
+						// but it's just as easy to connect like so
+						on(anim, "End", function(){
+							style.set(slideTarget, {
+								backgroundColor: "blue"
+							});
+						}, true);
+
+						// Don't forget to actually start the animation!
+						anim.play();
+					});
+
+					on(slideBackButton, "click", function(evt){
+						var anim = fx.slideTo({
+							node: slideTarget,
+							left: "0",
+							top: "100",
+							beforeBegin: function(){
+								
+								style.set(slideTarget, {
+									left: "200px",
+									top: "200px"
+								});
+							}
+						});
+
+						on(anim, "End", function(){
+							style.set(slideTarget, {
+								backgroundColor: "red"
+							});
+						}, true);
+
+						anim.play();
+					});
+				
+				
+			});
+		</script>
+	</body>
+</html>

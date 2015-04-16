@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: jsonp</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			dojo.require("dojo.io.script");
+			dojo.ready(function(){
+				dojo.io.script.get({
+					url: "http://search.twitter.com/search.json",
+					callbackParamName: "callback",
+					content: {q: "#dojo"}
+				}).then(function(data){
+					return data.results;
+				}).then(function(results){
+					var handle = setInterval(function(){
+						dojo.create("li", {innerHTML: results.shift().text},"tweets");	
+						if (results.length<1){
+							clearInterval(handle);
+						}
+					},500);
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: jsonp</h1>
+		<ul id="tweets">
+
+		<ul>
+	</body>
+</html>

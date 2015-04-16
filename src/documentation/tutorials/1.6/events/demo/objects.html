@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: dojo.connect with object methods</title>
+
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js">
+		</script>
+		<script>
+			dojo.ready(function(){
+				var myButtonObject = {
+					onClick: function(evt){
+						alert("The button was clicked");
+					}
+				};
+				dojo.connect(dojo.byId("myButton"), "onclick", myButtonObject, "onClick");
+				dojo.connect(myButtonObject, "onClick", function(evt){
+					alert("The button was clicked and 'onClick' was called");
+				});
+
+				var myButtonObject2 = {
+					onClickHandler: function(evt){
+						this.onClick(evt, "another argument");
+					},
+					onClick: function(){}
+				};
+				dojo.connect(dojo.byId("myButton2"), "onclick",
+					myButtonObject2, "onClickHandler");
+				dojo.connect(myButtonObject2, "onClick", function(evt, another){
+					alert("The button was clicked, we were given a second argument: " + another);
+				});
+
+				var fadeButton = dojo.byId("fadeButton"),
+					fadeTarget = dojo.byId("fadeTarget");
+
+				dojo.connect(fadeButton, "onclick", function(evt){
+					var anim = dojo.fadeOut({ node: fadeTarget });
+
+					dojo.connect(anim, "onEnd", function(){
+						alert("The fade has finished");
+					});
+
+					anim.play();
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: dojo.connect with object methods</h1>
+		<button id="myButton">My button</button>
+		<button id="myButton2">My second button</button>
+		<br/><br />
+		<button id="fadeButton">Fade block out</button>
+
+		<div id="fadeTarget" class="red-block"></div>
+	</body>
+</html>

@@ -1,0 +1,357 @@
+<?php require("../../../../resources/tutHead.inc"); ?>
+
+<h3>Introduction to Dojo Mobile</h3>
+<p>
+	Dojo Mobile is the Dojo Toolkit's answer to your mobile web application needs. It
+	is a collection of classes has been architected to be lightweight, flexible, and
+	extendable. Dojo Mobile has also been created to mimic the interface of the most
+	commonly used devices: Android, iOS, BlackBerry, WindowsPhone so that your web
+	application is seamless to your user.
+</p>
+<strong>Key features of Dojo Mobile include:</strong>
+<ul>
+	<li>Complete and consistent mobile widget library (dojox/mobile) -- no need to collect widgets
+		from multiple sources
+	</li>
+	<li>Lightweight, minimal dependencies</li>
+	<li>Native style controls and widgets</li>
+	<li>Same functional behavior on desktop and mobile devices</li>
+	<li>Responds to both orientations as well orientation changes</li>
+	<li>CSS themes for most commonly used device</li>
+	<li>Uses CSS3-based animation where possible</li>
+</ul>
+<p>
+	<strong>Check out a few quick examples of Dojo Mobile in action:</strong>
+</p>
+<ul>
+	<li>
+		<a href="http://download.dojotoolkit.org/release-1.9.6/dojo-release-1.9.6/dojox/mobile/tests/"
+			target="_blank">Browse all dojox/mobile Tests (1.9.6)</a></li>
+</ul>
+<p class="proTip">
+	These mobile interfaces also perform well in desktop browser clients, but take
+	the time to use your iOS and Android-powered devices to browse each test. You'll
+	be impressed by <strong>Dojo Mobile's widgets and CSS themes</strong>!
+</p>
+
+<h3>Structuring Your Mobile Page</h3>
+<p>
+	Consider this template to start your mobile application with:
+</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta http-equiv="Content-type" content="text/html; charset=utf-8"/&gt;
+		&lt;meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/&gt;
+		&lt;meta name="apple-mobile-web-app-capable" content="yes"/&gt;
+		&lt;title&gt;Your Application Name&lt;/title&gt;
+		&lt;!-- stylesheet will go here --&gt;
+		&lt;!-- dojo/javascript will go here --&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;!-- application will go here --&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>
+	Adding Dojo Mobile to your page requires:
+</p>
+<ul>
+	<li><strong>A theme</strong></li>
+	There are multiple <a href="http://dojotoolkit.org/reference-guide/dojox/mobile.html#themes-currently-available"
+							target="_blank">predefined themes</a>:
+	iPhone, iPad, Android 2.x, Android Holodark, BlackBerry, Windows Phone and a generic custom theme.
+	<li><strong>Dojo bootstrap and configuration</strong></li>
+	The JavaScript to use dojo mobile.
+	<li><strong>One or more views</strong></li>
+	Views will act as "pages" of your application.
+</ul>
+<p>
+	Let's set up each one of these pieces separately, discussing details about each piece as we go along.
+</p>
+
+<h4>The Theme</h4>
+<p>
+	Dojo Mobile is able to <strong>dynamically apply a visual theme</strong> to your
+	application in order to give it a native look depending on the browser user agent. To
+	apply a native theme (that is, a theme that makes your application look like a native
+	application on the mobile device on which it is displayed), you just need to include the
+	following statement in your HTML pages:
+</p>
+
+<pre class="brush: html;">
+&lt;script type="text/javascript"
+	src="//ajax.googleapis.com/ajax/libs/dojo/1.9.6/dojox/mobile/deviceTheme.js"&gt;&lt;/script&gt;
+</pre>
+
+<h4>Dojo bootstrap and configuration</h4>
+<p>
+	Including Dojo happens per the traditional <code>script</code> tag:
+</p>
+
+<pre class="brush: html;">
+&lt;script type="text/javascript"
+	src="//ajax.googleapis.com/ajax/libs/dojo/1.9.6/dojo/dojo.js"&gt;&lt;/script&gt;
+</pre>
+
+<p>
+	Dojo configuration can be specified like this:
+</p>
+
+<pre class="brush: html;">
+&lt;script type="text/javascript"&gt;
+	dojoConfig = {
+		async: true,
+		parseOnLoad: false
+	};
+&lt;/script&gt;
+</pre>
+
+<ul>
+	<li><strong>async: true</strong></li>
+	Configures the loader in asynchronous mode.
+	<li><strong>parseOnLoad: false</strong></li>
+	Lets developers explicitly require
+	<code>dojox/mobile/parser</code> and call <code>parser.parse()</code>.
+</ul>
+<p>
+	Now, the <code>require</code> part:
+</p>
+<ul>
+	<li>We explicitly require <code>dojox/mobile/parser</code> and call <code>parser.parse()</code>
+		The parser will analyze the dojo HTML tags (widgets) that we will define in the next part.
+	</li>
+	<li>The compatibility module <code>dojox/mobile/compat</code> is required to ensure functional
+		compatibility when the client is not WebKit-based, such as non-CSS3 desktop PC browsers.
+	<li>The <code>dojo/domReady!</code> is a special kind of AMD module (called a loader <em>plugin</em>
+		noticeable by the trailing ‘<strong>!</strong>’ character) and is required to ensure our
+		function that runs the parser is called once the DOM is ready.
+</ul>
+
+<pre class="brush: js;">
+require([
+	"dojox/mobile/parser",
+	"dojox/mobile/compat",
+	"dojo/domReady!"
+], function (parser) {
+	// now parse the page for widgets
+	parser.parse();
+});
+</pre>
+
+<p class="proTip">
+	Requiring <code>dojox/mobile/compat</code> is not necessary but is certainly best practice and it does not
+	degrade the performance of mobile browsers.
+</p>
+
+<h4>Dojo Mobile template</h4>
+<p>
+	Putting all together gives the following template for your Dojo Mobile application:
+</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;html&gt;
+&lt;head&gt;
+	&lt;meta http-equiv="Content-type" content="text/html; charset=utf-8"/&gt;
+	&lt;meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/&gt;
+	&lt;meta name="apple-mobile-web-app-capable" content="yes"/&gt;
+	&lt;title&gt;Your Application Name&lt;/title&gt;
+	&lt;!-- application stylesheet will go here --&gt;
+	&lt;!-- dynamically apply native visual theme according to the browser user agent --&gt;
+	&lt;script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/dojo/1.9.6/dojox/mobile/deviceTheme.js"&gt;&lt;/script&gt;
+	&lt;!-- dojo configuration options --&gt;
+	&lt;script type="text/javascript"&gt;
+		dojoConfig = {
+			async: true,
+			parseOnLoad: false
+		};
+	&lt;/script&gt;
+	&lt;!-- dojo bootstrap --&gt;
+	&lt;script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.9.6/dojo/dojo.js"&gt;&lt;/script&gt;
+	&lt;!-- dojo application code --&gt;
+	&lt;script type="text/javascript"&gt;
+		require([
+			"dojox/mobile/parser",
+			"dojox/mobile/compat",
+			"dojo/domReady!"
+		], function (parser) {
+			// now parse the page for widgets
+			parser.parse();
+		});
+	&lt;/script&gt;
+&lt;/head&gt;
+&lt;body style="visibility:hidden;"&gt;
+	&lt;!-- application will go here --&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p class="proTip">
+	Did you notice the style <code>visibility=hidden</code> in the BODY? This will
+	ensure the page is displayed only when all Dojo mobile widgets are rendered.
+</p>
+<p>
+	Now we can add some widgets to the page!
+</p>
+
+<h3>Creating Views and Widgets</h3>
+<p>
+	As you've seen, there are minimal requirements to create a Dojo Mobile-ready page;
+	adding widgets to the page is no different. Before we start creating widgets, let's
+	review a few of the widgets Dojo Mobile provides:
+</p>
+<ul>
+	<li><strong>View</strong> - A view is a virtual "page" within a mobile app.</li>
+	<li><strong>ScrollableView</strong> - Allows for a header and/or footer to be anchored to the top or bottom allowing the middle content portion to be scrolled</li>
+	<li><strong>Button</strong> - A simple button</li>
+	<li><strong>Switch</strong> - An on/off toggling switch</li>
+	<li><strong>Heading</strong> - A simple heading</li>
+	<li><strong>ListItem</strong> - A basic list item</li>
+	<li><strong>TabBar & TabBarButton</strong> - Tabbed content management</li>
+	<li>...and more!</li>
+</ul>
+<p class="proTip">
+	Remember that all widgets are styled to look like the device's OS. Also remember that you will likely want to make
+	your icons and widgets work and look like each device you intend to support.
+</p>
+<p>
+	Now that you're acquainted with some of the widgets baked into Dojo Mobile, let's
+	create a basic view with a <strong>Heading</strong>, a few
+	<strong>ListItems</strong>, and a <strong>Switch:</strong>
+</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;!-- the view or "page"; select it as the "home" screen --&gt;
+&lt;div id="settings" data-dojo-type="dojox/mobile/View" data-dojo-props="selected:true"&gt;
+&lt;!-- a sample heading --&gt;
+&lt;h1 data-dojo-type="dojox/mobile/Heading"&gt;"Homepage" View&lt;/h1&gt;
+&lt;!-- a rounded rectangle list container --&gt;
+&lt;ul data-dojo-type="dojox/mobile/RoundRectList"&gt;
+	&lt;!-- list item with an icon containing a switch --&gt;
+	&lt;li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="icon:'images/icon-1.png'"&gt;Airplane Mode
+		&lt;!-- the switch --&gt;
+		&lt;div data-dojo-type="dojox/mobile/Switch"&gt;&lt;/div&gt;
+	&lt;/li&gt;
+	&lt;!-- list item with an icon that slides this view away and then loads another page --&gt;
+	&lt;li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="icon:'images/icon-2.png', rightText:'mac'"&gt;Wi-Fi&lt;/li&gt;
+	&lt;!-- list item with an icon that slides to a view called "general" --&gt;
+	&lt;li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="icon:'images/icon-3.png', rightText:'AcmePhone', moveTo:'general'"&gt;Carrier&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+</pre>
+
+<p class="proTip">
+	Note the custom attributes used within the widgets. A complete listing of custom
+	options/attributes is available within the
+	<a href="/api/dojox/mobile.html">
+		dojox/mobile API docs</a> for each widget. Note in particular
+	<code>data-dojo-props="selected:true"</code>: It tells Dojo Mobile to display this
+	view by default. Also note that the markup provides for search engine
+	friendly content strategies!
+</p>
+<p>
+	To make this work you’ll need to require the widgets used by the application:
+</p>
+
+<pre class="brush: js;">
+require([
+	//...
+	"dojox/mobile/View",
+	"dojox/mobile/Heading",
+	"dojox/mobile/RoundRectList",
+	"dojox/mobile/ListItem",
+	"dojox/mobile/Switch"
+], function (parser) {
+	//...
+});
+</pre>
+
+<p>
+	Let see the result:
+</p>
+<p>
+	<a class="demoBtn demo" href="demo/sample1.html"  target="_blank">View Demo</a>
+</p>
+<p>
+	Above we created one simple view. Of course most mobile applications will want more
+	than one view so let's create the <strong>General</strong> view we reference in the
+	sample above, as well as a basic <strong>About</strong> view:
+</p>
+
+<pre class="brush: js; html-script: true;">
+&lt;!-- The "General" sub-page --&gt;
+&lt;div id="general" data-dojo-type="dojox/mobile/View"&gt;
+	&lt;!-- a sample heading --&gt;
+	&lt;h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="back:'Settings', moveTo:'settings'"&gt;General View&lt;/h1&gt;
+	&lt;!-- a rounded rectangle list container --&gt;
+	&lt;ul data-dojo-type="dojox/mobile/RoundRectList"&gt;
+		&lt;li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="moveTo:'about'"&gt;About&lt;/li&gt;
+		&lt;li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'2h 40m', moveTo:'about'"&gt;Usage&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+&lt;!-- And let's add another view "About" --&gt;
+&lt;div id="about" data-dojo-type="dojox/mobile/View"&gt;
+	&lt;!-- Main view heading --&gt;
+	&lt;h1 data-dojo-type="dojox/mobile/Heading" data-dojo-props="back:'General', moveTo:'general'"&gt;About&lt;/h1&gt;
+	&lt;!-- subheading --&gt;
+	&lt;h2 data-dojo-type="dojox/mobile/RoundRectCategory"&gt;Generic Mobile Device&lt;/h2&gt;
+	&lt;!-- a rounded rectangle list container --&gt;
+	&lt;ul data-dojo-type="dojox/mobile/RoundRectList"&gt;
+		&lt;li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'AcmePhone'"&gt;Network&lt;/li&gt;
+		&lt;li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'AcmePhone'"&gt;Line&lt;/li&gt;
+		&lt;li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'1024'"&gt;Songs&lt;/li&gt;
+		&lt;li data-dojo-type="dojox/mobile/ListItem" data-dojo-props="rightText:'10'"&gt;Videos&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
+</pre>
+
+<p>
+	As usual, you must require the new widget <code>dojox/mobile/RoundRectCategory</code>
+	you just declare in your HTML.
+</p>
+<p>
+	<strong>Congratulations</strong>, you've just created your first Dojo Mobile application!
+</p>
+<p>
+	<a class="demoBtn demo" href="demo/sample2.html" target="_blank">View Demo</a>
+</p>
+<p>
+	Dojo Mobile makes creating the basic elements of a mobile application
+	a breeze! While your mobile application will be more complex than our sample above,
+	it's important to note that Dojo Mobile provides the basic themes, widgets,
+	methodology for creating multi-view web applications.
+</p>
+
+<h3>Keep Going!</h3>
+<p>
+	Now that we've covered the basics of the using Dojo Mobile, the next series of
+	posts will focus on creating a dynamic, data-driven mobile application called
+	<strong>FlickrView</strong>. It will feature numerous Dojo Mobile widgets
+	and work with Android, iOS-based, BlackBerry or WindowsPhone devices.
+</p>
+
+<h3>Download The Source</h3>
+<div class="downlaodSource">
+	Download <a href="resources/DojoMobilePart1.zip">Part 1 - Getting Started with Dojo Mobile</a>.
+</div>
+
+<h3>Resources & references</h3>
+<ul>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojox/mobile.html"
+		   target="_blank">Dojo Mobile Reference Guide</a></li>
+	<li><a href="http://dojotoolkit.org/api"
+		   target="_blank">The Dojo Toolkit API</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojox/mobile/deviceTheme.html"
+		   target="_blank">dojox/mobile deviceTheme</a> (Reference Guide)</li>
+	<li><a href="http://dojotoolkit.org/reference-guide/dojox/mobile.html#themes-currently-available"
+		   target="_blank">Themes currently available</a> (Reference Guide)</li>
+	<li><a href="http://dojotoolkit.org/documentation/tutorials/1.9/dojo_config/"
+		   target="_blank">Configuring Dojo</a> (Tutorial)</li>
+	<li><a href="http://dojotoolkit.org/features/1.6/html5data-attributes"
+		   target="_blank">Dojo HTML5 Data-Attribute Support</a> (Feature)</li>
+</ul>
+
+<?php include("../series.inc"); ?>

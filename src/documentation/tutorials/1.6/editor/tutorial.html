@@ -1,0 +1,215 @@
+
+
+<h3>Getting Started</h3>
+<p>Sometimes a simple <code>textarea</code> for user content will do but often, the user needs more: the ability to make text bold or italic, add links or pictures to the content, or even choose custom color, font, and text size settings.  Popular content management systems like WordPress offer WYSIWYG editors so that creating rich text is easy for anyone.  The Dojo Tookit provides its own WYSIWYG editor widget:  <code>dijit.Editor</code>.  The <code>dijit.Editor</code> widget provides:</p>
+
+<ul>
+	<li>Numerous tools you've come to expect from a WYSIWYG editor:  bold, italic, lists, undo/redo, copy/paste, font formatting, and more</li>
+	<li>The ability to configure which tools are available to the user</li>
+	<li>Logic to enable or disable tools as appropriate</li>
+	<li>Easy access to content via <code>set</code> and <code>get</code> methods</li>
+	<li>A host of advanced plugins available within the <code>dojox.editor.plugins</code> space, including:Blockquote, ToolbarLineBreak, Emoticon, Table-centric plugins, and much more</li>
+</ul>
+
+<h3>dijit.Editor Properties and Methods</h3>
+
+<p>Important <code>dijit.Editor</code> properties include:</p>
+<ul>
+	<li><strong>disabled</strong> - Represents if the Editor should be enabled or disabled</li>
+	<li><strong>extraPlugins</strong> - An array of extra plugins to be added to the toolbar and available for use within the immediate Editor instance</li>
+	<li><strong>focusOnLoad</strong> - Represents if the editor should be focused upon loading</li>
+	<li><strong>name</strong> - Specifies the name of a (hidden) &lt;textarea&gt; node on the page that's used to save the editor content on page leave</li>
+	<li><strong>plugins</strong> - The list of plugins to be available within the instance by default</li>
+	<li><strong>toolbar</strong> - The Editor instance's toolbar object</li>
+	<li><strong>value</strong> - The HTML content within the Editor instance</li>
+</ul>
+
+<p>Important <code>dijit.Editor</code> methods include:</p>
+<ul>
+	<li><strong>addPlugin(pluginName,index)</strong> - Adds a plugin to the editor instance</li>
+	<li><strong>focus</strong> - Sets focus to the widget instance</li>
+	<li><strong>get("value")/set("value","content")</strong> - These methods set the HTML content within the editor</li>
+	<li><strong>redo/undo</strong> - These methods redo and undo recent edit actions</li>
+</ul>
+
+<p>There are lots of important properties and methods but implementing the Dijit Editor is very simple.</p>
+
+<p class="tutorial_image"><a href="demo/editor-basic.html"><img src="images/basic-editor.png" alt="dijit Basic Editor" border="0" /></a> The basic dijit.Editor instance</p>
+
+<h3>Implementing dijit.Editor</h3>
+<p>The first step in implementing the Editor widget is the same as any other widget implementation:  loading the Dijit theme and adding its name as a CSS class to the BODY element:</p>
+<pre class="brush:js;html-script:true">
+&lt;style type="text/css"&gt;
+	/* bring in the claro theme */
+	@import "//ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css";
+&lt;/style&gt;
+&lt;body class="claro"&gt;
+</pre>
+<p class="proTip">The class doesn't actually <em>have</em> to be applied to the BODY element. It can be applied to any element on the page, but only the elements within that one will receive the styling, so it's common to apply to the BODY, to ensure the full page receives the theme's styling.</p>
+
+<p>Once the Dijit theme is in place, the following code snippet is all you need to create an Editor widget instance:</p>
+<pre class="brush:js;html-script:true">
+&lt;script&gt;
+// Load the editor resource
+dojo.require("dijit.Editor");
+&lt;/script&gt;
+
+&lt;!-- declaratively create an Editor instance --&gt;
+&lt;div data-dojo-type="dijit.Editor"&gt;&lt;/div&gt;
+</pre>
+<a class="demoBtn demo" href="demo/editor-basic.html">View Demo</a>
+
+<p>While the Editor displays numerous tools by default, it's very easy to choose which tools you'd like displaying and which you'd prefer not be available:</p>
+
+<pre class="brush:js;html-script:true">
+&lt;div data-dojo-type="dijit.Editor"
+	data-dojo-props="plugins:['bold','italic','|','cut','copy','paste','|','insertUnorderedList']"&gt;&lt;/div&gt;
+</pre>
+<a class="demoBtn demo" href="demo/editor-custom.html">View Demo</a>
+
+<p>For the rest of the tutorial, we'll continue using the declarative approach, but it's quite simple to create one programmatically as well. The attributes that get set in the <code>data-dojo-props</code> are just passed through as an object to the constructor, along with a DOM node or an ID of a node to replace with the editor, like so:<p>
+
+<pre class="brush:js;html-script:true">
+&lt;div style="width:700px;min-height:100px;" id="myEditor"&gt;&lt;/div&gt;
+&lt;script&gt;
+	// Include the class
+	dojo.require("dijit.Editor");
+
+	dojo.ready(function(){
+		// Make our editor
+		new dijit.Editor({
+			plugins: ["bold","italic","|","cut","copy","paste","|","insertUnorderedList"]
+		}, "myEditor");
+	})
+&lt;/script&gt;
+</pre>
+
+<a class="demoBtn demo" href="demo/editor-programmatic.html">View Demo</a>
+
+<h3>Using Plugins</h3>
+<p>An additional set of Editor plugins is available yet within the dijit._editor.plugins object.  These additional plugins include:</p>
+<table class="info">
+	<tr>
+		<td><strong>dijit._editor.plugins.ToggleDir</strong>toggleDir</td>
+		<td><strong>dijit._editor.plugins.TextColor</strong>foreColor, hiliteColor</td>
+	</tr>
+	<tr>
+		<td><strong>dijit._editor.plugins.FontChoice</strong>fontName, fontSize, formatBlock</td>
+		<td><strong>dijit._editor.plugins.LinkDialog</strong>createLink, insertImage</td>
+	</tr>
+	<tr>
+		<td><strong>dijit._editor.plugins.FullScreen</strong>fullscreen</td>
+		<td><strong>dijit._editor.plugins.ViewSource</strong>viewsource</td>
+	</tr>
+	<tr>
+		<td><strong>dijit._editor.plugins.Print</strong>print</td>
+		<td><strong>dijit._editor.plugins.NewPage</strong>newpage</td>
+	</tr>
+</table>
+<p class="proTip">The bolded text represents the resource; the basic text represents the "short name" to be added to the extraPlugins list.</p>
+
+<p class="tutorial_image"><a href="demo/editor-dijit-plugins.html"><img src="images/middle-editor.png" alt="Intermediate Editor" border="0" /></a> Dijit Editor with extra plugins</p>
+
+<p>To use these extra plugins, require their resources and add their "short names" to the extraPlugins setting:</p>
+
+<pre class="brush:js;html-script:true">
+&lt;script&gt;
+	// Include the class
+	dojo.require("dijit.Editor");
+	// Require a few extra plugins
+	dojo.require("dijit._editor.plugins.TextColor");
+	dojo.require("dijit._editor.plugins.LinkDialog");
+	dojo.require("dijit._editor.plugins.FullScreen");
+	dojo.require("dijit._editor.plugins.ViewSource");
+	dojo.require("dijit._editor.plugins.NewPage");
+&lt;/script&gt;
+&lt;div data-dojo-type="dijit.Editor" data-dojo-props="extraPlugins:['foreColor','hiliteColor','|','createLink','insertImage','fullscreen','viewsource','newpage']"&gt;
+	This is the &lt;strong&gt;default&lt;/strong&gt; content.
+&lt;/div&gt;
+</pre>
+<a class="demoBtn demo" href="demo/editor-dijit-plugins.html">View Demo</a>
+
+<p>Along with the the host of extra plugins within the <code>dijit</code> namespace, <code>dojox.editor.plugins</code> provides numerous additional plugins for Editor:</p>
+
+<table class="info">
+	<tr><td><strong>dojox.editor.plugins.PrettyPrint</strong>prettyprint</td>
+	<td><strong>dojox.editor.plugins.PageBreak</strong>pagebreak</td></tr><tr>
+	<td><strong>dojox.editor.plugins.ShowBlockNodes</strong>showblocknodes</td>
+	<td><strong>dojox.editor.plugins.Preview</strong>preview</td></tr><tr>
+	<td><strong>dojox.editor.plugins.Save</strong>save</td>
+	<td><strong>dojox.editor.plugins.ToolbarLineBreak</strong>|| or toolbarlinebreak</td></tr><tr>
+	<td><strong>dojox.editor.plugins.NormalizeIndentOutdent</strong>normalizeindentoutdent</td>
+	<td><strong>dojox.editor.plugins.Breadcrumb</strong>breadcrumb</td></tr><tr>
+	<td><strong>dojox.editor.plugins.FindReplace</strong>findreplace</td>
+	<td><strong>dojox.editor.plugins.PasteFromWord</strong>pastefromword</td></tr><tr>
+	<td><strong>dojox.editor.plugins.InsertAnchor</strong>insertanchor</td>
+	<td><strong>dojox.editor.plugins.CollapsibleToolbar</strong>collapsibletoolbar</td></tr><tr>
+	<td><strong>dojox.editor.plugins.TextColor</strong>foreColor hiliteColor</td>
+	<td><strong>dojox.editor.plugins.Blockquote</strong>blockquote</td></tr>
+	<tr>
+		<td><strong>dojox.editor.plugins.Smiley</strong>smiley</td>
+		<td><strong>dojox.editor.plugins.UploadImage</strong>uploadImage</td>
+	</tr>
+</table>
+
+<p class="tutorial_image"><a href="demo/editor-dojox-plugins.html"><img src="images/advanced-editor.png" alt="dijit Advanced Editor" border="0" /></a> Dijit Editor with extra plugins from dojox.editor.plugins</p>
+
+<p>Requiring these resources and adding their short names to the <code>extraPlugins</code> array will allow for these plugins to be used within an Editor instance:</p>
+<pre class="brush:js;html-script:true">
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/PageBreak.css" /&gt;
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/ShowBlockNodes.css" /&gt;
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/Preview.css" /&gt;
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/Save.css" /&gt;
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/Breadcrumb.css" /&gt;
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/FindReplace.css" /&gt;
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/PasteFromWord.css" /&gt;
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/InsertAnchor.css" /&gt;
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/CollapsibleToolbar.css" /&gt;
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/Blockquote.css" /&gt;
+&lt;link rel="stylesheet" href="/js/dojox/editor/plugins/resources/css/Smiley.css" /&gt;
+
+&lt;script&gt;
+	// Include the class
+	dojo.require("dijit.Editor");
+	// Require a few extra plugins
+	dojo.require("dojox.editor.plugins.PrettyPrint");
+	dojo.require("dojox.editor.plugins.PageBreak");
+	dojo.require("dojox.editor.plugins.ShowBlockNodes");
+	dojo.require("dojox.editor.plugins.Preview");
+	dojo.require("dojox.editor.plugins.Save");
+	dojo.require("dojox.editor.plugins.ToolbarLineBreak");
+	dojo.require("dojox.editor.plugins.NormalizeIndentOutdent");
+	dojo.require("dojox.editor.plugins.Breadcrumb");
+	dojo.require("dojox.editor.plugins.FindReplace");
+	dojo.require("dojox.editor.plugins.PasteFromWord");
+	dojo.require("dojox.editor.plugins.InsertAnchor");
+	dojo.require("dojox.editor.plugins.CollapsibleToolbar");
+	dojo.require("dojox.editor.plugins.TextColor");
+	dojo.require("dojox.editor.plugins.Blockquote");
+	dojo.require("dojox.editor.plugins.Smiley");
+	dojo.require("dojox.editor.plugins.UploadImage");
+&lt;/script&gt;
+&lt;div data-dojo-type="dijit.Editor" style="width:800px;min-height:100px;" data-dojo-props="extraPlugins:['prettyprint','pagebreak','showblocknodes','preview','save','toolbarlinebreak','normalizeindentoutdent','breadcrumb','findreplace','pastefromword','insertanchor','collapsibletoolbar','foreColor', 'hiliteColor','blockquote','smiley','uploadImage']"&gt;
+	This is the &lt;strong&gt;default&lt;/strong&gt; content.
+&lt;/div&gt;
+</pre>
+<a class="demoBtn demo" href="demo/editor-dojox-plugins.html">View Demo</a>
+
+<p class="proTip">
+	Many of the Editor plugins within the dojox namespace have their own stylesheet, so don't forget to check the <code>dojox/editor/plugins/resources</code> folder to see if the given plugin has one.
+</p>
+
+<p>With the number of plugins and functionality baked right into <code>dijit.Editor</code>, this widget can match up with, if not surpass, any of the WYSIWYG editors on the web!</p>
+
+<h3>Conclusion</h3>
+<p>Dijit's Editor widget is a flexible, functional widget that allows users to create richly formatted content.  Editor comes standard with numerous useful tools but provides even more powerful plugins within <code>dojox.editor.plugins</code>.  There's no need to look outside of Dojo to find a WYSIWYG editor for your application &mdash; it's already there!</p>
+
+<h3>dijit.Editor Resources</h3>
+<p>Looking for more detail about Dijit's Editor?  Check out these great resources:</p>
+<ul>
+	<li><a href="/api/1.6/dijit/Editor">dijit.Editor API Documentation</a></li>
+	<li><a href="/api/1.6/dojox/editor/plugins">dojox.editor.plugins API Documentation</a></li>
+	<li><a href="/reference-guide/1.6/dijit/Editor.html">dijit.Editor Reference Guide</a></li>
+	<li><a href="/reference-guide/1.6/dojox/editor/plugins.html#dojox-editor-plugins">dojox.editor.plugins Reference Guide</a></li>
+	<li><a href="http://download.dojotoolkit.org/release-1.6.3/dojo-release-1.6.3/dijit/tests/editor/">dijit.Editor Tests</a></li>
+</ul>

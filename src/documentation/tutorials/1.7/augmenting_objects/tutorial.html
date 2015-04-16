@@ -1,0 +1,310 @@
+
+<style>
+.augmentingObjectsOverview th {
+	text-align: left;
+}
+.augmentingObjectsOverview th, .augmentingObjectsOverview td {
+	border-bottom: 1px solid #ccc;
+	padding: 0.25em 0.5em;
+	margin: 0;
+	vertical-align: top;
+}
+</style>
+
+<!-- tutorials start with a "Getting Started" block -->
+<h3>Getting Started</h3>
+<p class="proTip">
+	Make sure you have reviewed the concepts presented in the <a href="../modules">modules tutorial</a>.
+</p>
+
+<h3>Overview</h3>
+
+<p><code>lang.mixin</code>, <code>lang.extend</code>, and <code>declare.safeMixin</code>
+are all used to augment an original object with properties from one or more other objects.
+In this context, the other objects are called “mixins”. There are small differences
+between each of these functions that make them suitable for different use cases.
+Here's a quick overview of the differences before we dive in:</p>
+
+<table class="augmentingObjectsOverview">
+	<tr>
+		<th scope="row">Method:</th>
+		<th scope="col">lang.mixin</th>
+		<th scope="col">declare.safeMixin</th>
+		<th scope="col">lang.extend</th>
+	</tr>
+	<tr>
+		<th scope="row">Operates on</th>
+		<td>object</td>
+		<td>object</td>
+		<td>object.prototype</td>
+	</tr>
+	<tr>
+		<th scope="row">Mixes in <code>constructor</code> property</th>
+		<td>yes</td>
+		<td>no</td>
+		<td>yes</td>
+	</tr>
+	<tr>
+		<th scope="row">Mixes in multiple objects at once</th>
+		<td>yes</td>
+		<td>no</td>
+		<td>yes</td>
+	</tr>
+	<tr>
+		<th scope="row">Annotates functions to support <code>this.inherited</code></th>
+		<td>no</td>
+		<td>yes</td>
+		<td>no</td>
+	</tr>
+	<tr>
+		<th scope="row">Speed</th>
+		<td>fast</td>
+		<td>slow</td>
+		<td>fast</td>
+	</tr>
+	<tr>
+		<th scope="row">Use primarily with</th>
+		<td>A plain object</td>
+		<td>A declare instance</td>
+		<td>A constructor</td>
+	</tr>
+</table>
+
+<h3>lang.mixin</h3>
+
+<p>The <code>lang.mixin</code> method is a simple utility function that,
+given any number of objects as arguments, adds the properties of subsequent objects
+to the first object and returns it. For example, let's say we have an existing
+object to which we need to add some additional properties.
+This might be a collection of form data, some data for a template, a namespace object,
+or a settings object. In any case, without <code>lang.mixin</code>,
+copying over several properties might look like this:</p>
+
+<pre class="brush: js;">var formData = domForm.formToObject(dom.byId('form'));
+formData.name = currentUser.name;
+formData.phone = currentUser.phone;
+formData.address = currentUser.address;
+formData.city = currentUser.city;
+formData.province = currentUser.province;
+formData.country = currentUser.country;
+formData.postalCode = currentUser.postalCode;</pre>
+
+<p>That's a lot of typing just to copy data from one object to another.
+Assuming <em>all</em> the properties in the second object were meant to be
+copied to the first, <code>lang.mixin</code> makes this work much simpler:</p>
+
+<pre class="brush: js;">var formData = domForm.formToObject(dom.byId("form"));
+lang.mixin(formData, currentUser);</pre>
+
+<p>Notice how the return value of this call was discarded.  This is because
+<code>lang.mixin</code> works directly on the first object passed in,
+so we don't need to manually update the <code>formData</code> variable at all.</p>
+
+<p><code>lang.mixin</code> can also mix in multiple objects at the same time.
+For example, if you had a settings object on a prototype that always needed to
+contain certain default values whenever a new instance was created, you could
+simply write it like this:</p>
+
+<pre class="brush: js;">var defaultSettings = {
+	useTheForce: true,
+	isEvil: false,
+	length: 75,
+	color: "blue"
+};
+
+function Lightsaber(settings){
+	// `defaultSettings` is first mixed into the blank object,
+	// then `settings` is mixed into the blank object, overriding
+	// any properties from `defaultSettings` without altering
+	// the `defaultSettings` object
+	this.settings = lang.mixin({}, defaultSettings, settings);
+}
+
+var darthsaber = new Lightsaber({
+	isEvil: true,
+	color: "red"
+});
+
+// { useTheForce: true, isEvil: true, length: 75, color: "red" }
+console.log("darthsaber:", darthsaber.settings);
+</pre>
+<a class="demoBtn demo" href="demo/mixin.php">View Demo</a>
+
+<h3>declare.safeMixin</h3>
+
+<p><code>declare.safeMixin</code> primarily accomplishes the same task as
+<code>lang.mixin</code>, with three important differences:</p>
+
+<ul>
+	<li>It can only mix in one object at a time</li>
+	<li>It will not mix in the <code>constructor</code> property</li>
+	<li>It will add annotations to functions to make them function properly with
+		<code>declare</code>'s <code>this.inherited</code> function</li>
+</ul>
+
+<p>Despite what the name implies, there is nothing “unsafe” about the original
+<code>lang.mixin</code>, unless:</p>
+
+<ul>
+	<li>You are adding functions to an instance of an object created with
+		<code>declare</code>, <em>and</em>:
+		<ul>
+			<li>you rely on calls to <code>this.inherited</code> within those new functions, or</li>
+			<li>one or more of the mixins contains a <code>constructor</code> property</li>
+		</ul>
+	</li>
+</ul>
+
+<p>Thus, outside of cases involving instances of instances of
+<code>declare</code>d classes, <code>lang.mixin</code> is likely to be sufficient.</p>
+
+<p><code>declare</code>d constructors expose an <code>extend</code>
+method, which is really just an alias for calling <code>declare.safeMixin</code> with
+the declared constructor's prototype as the first argument.  This is not to be
+confused with <code>lang.extend</code>, which we will examine next.</p>
+
+<h3>lang.extend</h3>
+
+<p><code>lang.extend</code> is very similar to <code>lang.mixin</code>, except that
+it adds properties to the first object's <code>prototype</code> instead of
+directly on the object itself. Directly augmenting an object's prototype is useful
+if you want to make changes that immediately affect all inheriting instances:</p>
+
+<pre class="brush: js;">
+// Assume Lightsaber is defined as in the previous example
+
+var darthsaber = new Lightsaber({
+	isEvil: true,
+	color: "red"
+});
+
+var weaponMixin = {
+	hp: 5,
+	maxHp: 10,
+	repair: function() {
+		if(this.hp >= this.maxHp) {
+			console.log("Can't repair!");
+			return;
+		}
+
+		this.hp++;
+	},
+	swing: function() {
+		if(!this.hp) {
+			console.log("Weapon is broken!");
+			return;
+		}
+
+		this.hp--;
+		console.log(Math.random() >= 0.5 ? "hit!" : "miss!");
+	}
+};
+
+lang.extend(Lightsaber, weaponMixin);
+
+// Now we can call swing() on our Lightsaber instance,
+// even though we augmented the prototype after creating the instance.
+darthsaber.swing(); // "hit!" (or "miss!" if you are unlucky)
+</pre>
+<a class="demoBtn demo" href="demo/extend.php">View Demo</a>
+
+<p>This is much more performant than calling <code>lang.mixin</code> on every
+new object that is created, as it modifies one inherited object rather than several
+child objects.  It is also faster than using <code>declare.safeMixin</code>.
+However, should you need to augment a <code>declare</code>d constructor with
+functions that respect calls to <code>this.inherited</code>, you should use
+<code>declare.safeMixin</code>, or the <code>extend</code> method on the constructor:</p>
+
+<pre class="brush: js;">var Lightsaber = declare({
+	constructor: function(settings){
+		this.settings = lang.mixin({}, defaultSettings, settings);
+	}
+});
+
+// same augmentation, but calls to this.inherited won't break:
+Lightsaber.extend(weaponMixin); </pre>
+
+<p class="proTip">
+Note that using <code>lang.extend</code> or <code>declaredConstructor.extend</code>
+effectively modifies the prototype of the constructor in question, affecting
+<em>all</em> created instances.  Thus, it is important to limit usage of these
+functions to cases where you are certain this effect is appropriate, as it could
+otherwise produce unwanted side-effects.  In particular, remember that when
+creating customizations of out-of-the-box components, it is recommended
+to create a derivative using <code>declare</code>, rather than
+augment the existing prototype.
+</p>
+
+<p>It's important to note that all mixin functions perform "shallow" copies.
+This means that the following is true:</p>
+
+<p>It is important to note that the mixin functions we have introduced
+perform “shallow” copies.  For example:</p>
+
+<pre class="brush: js;">
+var a = {
+	name: "a",
+	subObject: {
+		foo: "bar"
+	}
+};
+var b = lang.mixin({}, a);
+
+b.name = "b";
+b.subObject.foo = "baz";
+
+console.log("a b, as expected:",
+	a.name, b.name);
+console.log("true - both subObjects reference the exact same object:",
+	a.subObject === b.subObject);
+console.log("baz baz - a change to one subObject affects both:",
+	a.subObject.foo, b.subObject.foo);
+</pre>
+
+<p>In simple cases, this behavior is not a problem; in some cases it may even be desirable.
+However, in cases where you do not want objects to be shared, you can perform a
+“deep” copy using <code>lang.clone</code>:</p>
+
+<pre class="brush: js;">
+var a = {
+	name: "a",
+	subObject: {
+		foo: "bar"
+	}
+};
+var b = lang.clone(a);
+
+b.name = "b";
+b.subObject.foo = "baz";
+
+console.log("a b, same as before:",
+	a.name, b.name);
+console.log("false - the subObjects are different now:",
+	a.subObject === b.subObject);
+console.log("bar baz - a change to one subObject no longer affects all:",
+	a.subObject.foo, b.subObject.foo);
+</pre>
+<a class="demoBtn demo" href="demo/clone.php">View Demo</a>
+
+<p>Keep in mind that deep copies can be <em>significantly</em> slower than shallow copies,
+and will cause scripts to hang if used on recursive data structures.
+Deep copies should be used only when absolutely necessary.</p>
+
+<h3>Conclusion</h3>
+
+<p>Dojo simplifies the process of creating and augmenting objects and classes.
+The <code>lang.mixin</code> and <code>declare.safeMixin</code> methods offer a
+convenient way to add and modify properties on an object, and <code>lang.extend</code>
+makes it easy to modify the prototype of an object.  Remember, though, that these
+functions perform shallow copies.</p>
+
+<!-- resources -->
+<h3>dojo/_base/lang Resources</h3>
+<p>Looking for more detail about <code>lang.mixin</code>, <code>lang.extend</code>,
+<code>declare.safeMixin</code> and <code>lang.clone</code>?  Check out these great resources:</p>
+<ul>
+	<li><a href="/reference-guide/1.7/dojo/mixin.html">lang.mixin</a></li>
+	<li><a href="/reference-guide/1.7/dojo/extend.html">lang.extend</a></li>
+	<li><a href="/reference-guide/1.7/dojo/clone.html">lang.clone</a></li>
+	<li><a href="/reference-guide/1.7/dojo/safeMixin.html">declare.safeMixin</a></li>
+</ul>

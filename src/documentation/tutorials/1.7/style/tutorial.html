@@ -1,0 +1,201 @@
+
+
+<h3>Toasted</h3>
+
+<p>We really like toast.  However, so does our roommate.  She is constantly making toast.  Every time we get up to make toast the toaster is toasting her bread.  In order to save ourselves trips to the kitchen we've decided to write a web page that informs us of the current toaster status.</p>
+
+<h3>dojo.hasClass</h3>
+
+<p>First, we create a div that will display the toaster status.</p>
+
+<pre class="brush: js; html-script: true;">&lt;h3&gt;Toaster Status&lt;/h3&gt;
+&lt;div id="toasterStatus" class="statusBox"&gt;??????&lt;/div&gt;</pre>
+
+<p>Next, we'll add a button to check if the toaster is idle, so we can get up and make toast.</p>
+
+<pre class="brush: js; highlight: [3]">var logIsIdle = function(evt){
+	var logText = "";
+	if (dojo.hasClass(dojo.byId("toasterStatus"), "toasterIdle")) {
+		logText = "The toaster is idle.  Quick, go make toast!";
+	} else {
+		logText = "Your stupid roommate is using the toaster again.  Try again later.";
+	}
+	writeToPageConsole(logText);
+};</pre>
+
+<p>Try it out in Demo One.</p>
+
+<a class="demoBtn demo" href="demo/demo.php">View Demo One</a>
+
+<h3>dojo.addClass</h3>
+
+<p>Next, we add a button to set the toaster status to idle.</p>
+
+<pre class="brush: js; highlight: [3]">var setToasterStatusIdle = function(){
+	var toasterStatusDiv = dojo.byId("toasterStatus");
+	dojo.addClass(toasterStatusDiv, "toasterIdle");
+	dojo.attr(toasterStatusDiv, "innerHTML", "Idle");
+};</pre>
+
+<p>We define the CSS class for our toaster idle state.</p>
+
+<pre class="brush: js; html-script: true;">.toasterIdle {
+	background-color: green;
+}</pre>
+
+<p>Try this out in Demo One.</p>
+
+<a class="demoBtn demo" href="demo/demo.php">View Demo One</a>
+
+<h3>dojo.removeClass</h3>
+
+<p>Next, we add a button to change the toaster status to "Toasting..."</p>
+
+<pre class="brush: js; highlight: [3]">var setToasterStatusToasting = function(){
+	var toasterStatusDiv = dojo.byId("toasterStatus");
+	dojo.removeClass(toasterStatusDiv, "toasterIdle");
+	dojo.attr(toasterStatusDiv, "innerHTML", "Toasting...");
+};</pre>
+
+<p>Again, try this out in Demo One.</p>
+
+<a class="demoBtn demo" href="demo/demo.php">View Demo One</a>
+
+<h3>dojo.toggleClass</h3>
+
+<p>There is an even easier way to toggle our toaster status.  The dojo.toggleClass method adds the CSS class if it doesn't exist and removes it if it does.</p>
+
+<pre class="brush: js;  highlight: [4]">var toggleToasterStatus = function(){
+	toasterIdle = !toasterIdle;
+	var toasterStatusDiv = dojo.byId("toasterStatus");
+	dojo.toggleClass(toasterStatusDiv, "toasterIdle");
+	if (toasterIdle) {
+		statusText = "Idle";
+	}
+	dojo.attr(toasterStatusDiv, "innerHTML", statusText);
+};</pre>
+
+<p>See it in action in Demo Two.</p>
+
+<a class="demoBtn demo" href="demo/toggleClass.php">View Demo Two</a>
+
+<h3>NodeList</h3>
+
+<p>In fact, we are so enamored with toast that we've decided to use our time waiting for the toaster to simulate the toasting process.</p>
+
+<p>Define some bread.</p>
+
+<pre class="brush: js; html-script: true;">&lt;h3&gt;Bread&lt;/h3&gt;
+&lt;div class="bread"&gt;&lt;/div&gt;
+&lt;div class="bread"&gt;&lt;/div&gt;</pre>
+
+<p>Make it look like 8-bit toast.</p>
+
+<pre class="brush: js; html-script: true;">.bread {
+	height:100px;
+	width:100px;
+	border-style:solid;
+	border-width:5px;
+	margin:10px;
+}</pre>
+
+<p>All of the above methods also work with NodeList.  We can run dojo.query and, in one step, add or remove or a class.  It also works with dojo.hasClass and dojo.toggleClass.</p>
+
+<pre class="brush: js; highlight: [3,8,13]">var toastBread = function(evt){
+	var bread = dojo.query(".bread");
+	bread.addClass("toasted");
+};
+
+var butterBread = function(evt){
+	var bread = dojo.query(".bread");
+	bread.addClass("buttered");
+};
+
+var lickOffButter = function(evt){
+	var bread = dojo.query(".bread");
+	bread.removeClass("buttered");
+};</pre>
+
+<p>Try this out in Demo Three.</p>
+
+<a class="demoBtn demo" href="demo/nodeList.php">View Demo Three</a>
+
+<h3>dojo.style</h3>
+
+<p>In the above example we properly separated our code and presentation.  In this example, we'll directly modify the CSS attributes using dojo.style.</p>
+
+<p>We update our toast and butter methods.</p>
+
+<pre class="brush: js;">var toastBread = function(evt){
+	dojo.style(dojo.byId("breadOne"),"background-color", "#A0522D");
+	dojo.style(dojo.byId("breadTwo"),"background-color", "#A0522D");
+};
+
+var butterBread = function(evt){
+	dojo.style(dojo.byId("breadOne"),"background-color", "yellow");
+	dojo.style(dojo.byId("breadTwo"),"background-color", "yellow");
+};</pre>
+
+<p>Go ahead and try this out in Demo Four.</p>
+
+<a class="demoBtn demo" href="demo/style.php">View Demo Four</a>
+
+<h3>Getting Attributes</h3>
+
+<p>We can also use dojo.style to get the current value of CSS attributes.  We can retrieve the value of one attribute or all attributes.  Demo Four demonstrates this.</p>
+
+<pre class="brush: js;  highlight: [2,3,7,12]">var getBreadColor = function(evt){
+	writeToPageConsole("Bread One: " + dojo.style(dojo.byId("breadOne"),"background-color"));
+	writeToPageConsole("Bread Two: " + dojo.style(dojo.byId("breadTwo"),"background-color"));
+};
+
+var getComputedStyle = function(evt){
+	var computedStyle = dojo.getComputedStyle(dojo.byId("breadOne"),"background-color");
+	writeToPageConsole(computedStyle["background-color"]);
+};
+
+var getAllComputedStyles = function(evt){
+	var computedStyle = dojo.getComputedStyle(dojo.byId("breadOne"));
+
+	dojo.forEach(computedStyle, function(value) {
+		writeToPageConsole(value + " : " + computedStyle[value]);
+	});
+};</pre>
+
+<a class="demoBtn demo" href="demo/style.php">View Demo Four</a>
+
+<p>Like the dojo class methods, dojo.style also works with NodeList.</p>
+
+<pre class="brush: js;">var toastBread = function(evt){
+	var bread = dojo.query(".bread");
+	bread.style("background-color", "#A0522D");
+};
+
+var butterBread = function(evt){
+	var bread = dojo.query(".bread");
+	bread.style("background-color", "yellow");
+};</pre>
+
+<p>Also, we can get and modify multiple attributes at once.</p>
+
+<pre class="brush: js;">var getBreadColor = function(evt){
+	var bread = dojo.query(".bread");
+	writeToPageConsole("Bread Color: " + bread.style("background-color"));
+}
+
+var eatToast = function(evt){
+	var bread = dojo.query(".bread");
+	bread.style({
+		"background-color" : "white",
+		"border-style" : "dashed"
+	});
+};</pre>
+
+<p>You can see the behavior in Demo Five.</p>
+
+<a class="demoBtn demo" href="demo/styleNodeList.php">View Demo Five</a>
+
+<h3>Conclusion</h3>
+
+<p>Dojo offers some handy, powerful and efficient methods for modifying CSS on the fly.  This tutorial covered some very simple cases, however the possibilities are endless.  Dijit is beyond the scope of this tutorial, however it is worth mentioning that it makes extensive use of these utility methods to create its lavish and dynamic user interface widgets.</p>
+

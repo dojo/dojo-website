@@ -1,0 +1,135 @@
+
+<script src='/highlight/scripts/shBrushBash.js' type='text/javascript'></script>
+
+<!-- tutorials start with a "Getting Started" block -->
+<h3>Why Build?</h3>
+<p>
+Dojo's modular programming model lends itself to organized small blocks of encapsulated JavaScript. With the dependency declaration system, we can write many small modules, rather than large monolithic scripts, and Dojo will handle loading the correct files. Granular modularization has the added benefit that only the code you need will be loaded. However, by itself, this modular approach can increase load times due to excessive HTTP requests and the latency involved in these requests.</p>
+<p>The Dojo build system allows us to build layers that incorporate all the modules we depend on in a single or a few files, so we can create high-performance applications (with few HTTP requests) while still enjoying modular development. The build process can give us a compact layer file for our application as well as a built dojo.js file. The build system not only combines and compresses JavaScript files, but also inlines template files into the JS (HTML snippets used for templating) and concatenates and compresses CSS as well. The build system is an essential tool for web application development; neglecting it can lead to extremely slow applications.
+</p>
+<h3>Basic Requirements</h3>
+<p>
+To use the Dojo build system, we first need make sure we have downloaded the Dojo SDK. The standard release and the CDN do not include the build tool; it is only in the source/SDK release. The build tool also relies on Java, so ensure that have you a Java runtime installed. Visit the <a href="/download/">Download</a> page and scroll down to the Source section to get a copy if you do not already have it.
+</p>
+<p class="proTip">
+When you're using Dojo off of a CDN, you're using a cross-domain built version of Dojo, which is taking full advantage of the build system. When you download the SDK, you're getting a completely unbuilt version, which is why it is so large - but remember, performing a build will minify your script, so even though the SDK is several megabytes in size, the amount of code that you'll actually be delivering to clients is going to be much, much smaller. A built version of dojo.js is around only 26k!
+</p>
+<h3>Getting Started</h3>
+<p>
+The easiest approach to organize your application code in preparation for a build is to place your application package directories as siblings to the Dojo Toolkit packages, dojo, dijit, and dojox. This allows you to load modules and run builds with a minimal amount of configuration.
+</p>
+<p>
+Next, the quickest way to start a build is to point the build script at your HTML files. This can now be done with the new htmlFiles option in the build. With this option, you provide the filename of your HTML file that loads Dojo and your application, and the build will scan the file for dependencies. You can run the build by executing the script (build.bat in windows, or build.sh in *nix/OSX):
+</p>
+<pre class="brush:bash;">
+./build.sh action=release htmlFiles=/path/to/my/index.html
+</pre>
+<p>
+The build will then scan your html file for dojo.require calls. Your HTML file should declare Dojo and load dependencies like this:
+</p>
+<pre class="brush:js; html-script:true;">
+&lt;script src="/path/to/dojo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+dojo.require("my.app");
+&lt;/script&gt;
+</pre>
+<p>
+And then my/app.js can be the top level module that includes all other necessary modules:
+</p>
+<pre class="brush:js;">
+dojo.require("dijit.ProgressBar");
+dojo.require("dijit.Tree");
+dojo.require("my.ui");
+...
+</pre>
+<p>
+When you run the build, the build tool will see this dependency and create a standard dojo.js and also a my/app.js that includes all of the dependencies specified in my/app.js. It is recommended that you use this approach of having a single top level module, as it makes it very simple to run a build. Also, you don't have to change your HTML file at all for the post-build JS files. You can still do dojo.require("my.app"), and in the built environment (your production/staging environment) this will load a single built, concatenated my/app.js layer file instead of individually requested each of it's dependencies.
+</p>
+<p class="proTip">
+Note that build is not limited to scanning .html files. Any file that contains HTML/scripts can be targeted including .php, .jsp, etc. as long as the dojo.require statements are in clear text (in the form of dojo.require("module.name")) so the scanner can find them.
+</p>
+<h3>Key Build Options</h3>
+<p>
+You may notice in the build startup that we included an action=release parameter. The action parameter tells the build what to actually do. You can do a "release" or "clean" which will clean out the built target directory. Some other commonly used options include:
+</p>
+<ul>
+<li>releaseDir and releaseName - The releaseDir option allows you to specify the target directory to put the built files in (the build creates a subdirectory based on the releaseName within the releaseDir as the final target).</li>
+<li>cssOptimize - This option enables the compression of CSS files. You typically want to specify cssOptimize=comments to compress your CSS (will remove comments and unnecessary whitespace)</li>
+<li>stripConsole - This option tells the build to strip out console.* statements. Doing stripConsole=normal will strip out all console.* calls except for console.warn and console.error.</li>
+<li>action - Again, you normally want to set this action=release to run a build.</li>
+<li>profile and profileFile - You can use this to specify the profile file. We will cover this later.</li>
+</ul>
+<p>
+There are many more options that can be used with the build that are beyond the scope of an introductory tutorial. See the <a href="http://dojotoolkit.org/reference-guide/build/">build reference page for more information</a>.
+</p>
+<h3>Multiple Layer Files</h3>
+<p>
+There are situations where it is beneficial to have multiple built layer files. A common case for this is when you have several pages that all share some common code. For example, imagine you have one page that uses the DataGrid and another page that uses the Tree. There is a substantial amount of shared Dijit code that is used by both the DataGrid and the Tree. By separating this into multiple layers, we can have a Dijit layer, a Tree layer minus the Dijit code, and a DataGrid layer minus the Dijit code. If a user visits the page with the Tree first, the Dijit and Tree layers will be loaded. If they then visit the page with the DataGrid, the Dijit layer file will already be in the browser's cache, and only the extra DataGrid code will need to be downloaded from the server. It's very easy to create this type of shared layer. We simply create two dojo.require() calls in each of our pages:
+</p>
+<strong>page-with-tree.html</strong>
+<pre class="brush:js; html-script:true;">
+&lt;script src="/path/to/dojo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+dojo.require("dijit.dijit"); // load the shared code
+dojo.require("dijit.Tree"); // load the Tree
+&lt;/script&gt;
+</pre>
+<strong>page-with-grid.html</strong>
+<pre class="brush:js; html-script:true;">
+&lt;script src="/path/to/dojo.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+dojo.require("dijit.dijit"); // load the shared code
+dojo.require("dojox.grid.DataGrid"); // load the DataGrid
+&lt;/script&gt;
+</pre>
+And now we run the build, pointing at both of the HTML files. The htmlFiles option allows us to specify multiple target HTML files, comma-delimited:
+<pre class="brush:bash;">
+./build.sh action=release htmlFiles=/path/to/page-with-tree.html,/path/to/page-with-grid.html
+</pre>
+<p>
+When we run the build this way, it scans the HTML files, and the build is able to determine the shared resources between the two pages. It then sets up a build with those shared resources as one common layer (which is essentially just one JS file with all requirements concatenated into it) containing the base of Dijit, then a separate layer for Tree and a separate layer for DataGrid. It also sets up the Tree and DataGrid layers to depend on the base layer, meaning that the base of Dijit isn't duplicated into either of them.
+</p>
+<p>
+Another common case for separate layers is when part of the JavaScript code needs to be loaded as soon as possible, but other code can be deferred until after the page is laoded and displayed to the user. For example, we could create a page that loads one module immediately and one after the page is ready:
+</p>
+<strong>page-with-tree.html</strong>
+<pre class="brush:js; html-script:true;">
+&lt;script src="/path/to/dojo.js"&gt;&lt;/script&lt;
+&lt;script&gt;
+dojo.require("my.app.Essentials");
+dojo.ready(function(){
+	dojo.require("my.app.FancyAdditions");
+});
+&lt;/script&gt;
+</pre>
+<p>
+Again, we can simply point our build to the HTML file and it will find these module references and create two separate layer files, giving us the benefit of modular development while still reducing our overall number of HTTP requests.
+</p>
+<h3>Directory of HTML Files</h3>
+<p>
+If you have a sizable or growing set of HTML files, it may be unwieldy to have to explicitly refer to each one in the build. Rather than using the htmlFiles option, you can use the htmlDir option. With htmlDir, we can point to a directory and the build tool will process and create layers for all the HTML files it finds:
+</p>
+<pre class="brush:js;">
+./build.sh action=release htmlDir=/path/to/pages/
+</pre>
+<h3>Profile Files</h3>
+<p>
+The Dojo build tool uses a profile to determine what layers to create. When we use the htmlFiles or htmlDir option, the build automatically generates this profile based on the dependencies listed in the HTML files. However, we may want to create our own profile or edit the profile ourselves for greater control over the build. If we use the htmlFiles or htmlDir in combination with the profileFile option, the build will still scan the HTML to determine the layers to create, and will autogenerate the profile file for us:
+</p>
+<pre class="brush:bash;">
+./build.sh action=release htmlFiles=/path/to/pages/ profileFile=/path/to/profile.js
+</pre>
+ <p>
+ This gives us a good starting point for editing. We can then edit profile.js and make any necessary changes. After that we can run the build process directly on the profile file, and your edited profile will be used to drive the build:
+ </p>
+<pre class="brush:bash;">
+./build.sh action=release profileFile=/path/to/profile.js
+</pre>
+<p>
+You can also create your profile from scratch. There are a number of <a href="http://svn.dojotoolkit.org/src/util/trunk/buildscripts/profiles/">example profiles available in the build's profiles directory</a>. There are numerous additional tweaks we can make by directly editing the profile. See the <a href="http://dojotoolkit.org/reference-guide/build/">build reference documentation</a> for more information. Future tutorials will be going into more depth on these options and what they do.
+</p>
+
+<h3>Conclusion</h3>
+<p>
+Again, the build system is critical for any real web application. Built applications often load around 10x faster than development applications. Load time is a key factor in user experience. Don't release an application without it!
+</p>

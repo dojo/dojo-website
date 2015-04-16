@@ -1,0 +1,231 @@
+
+
+<h3>Getting Started</h3>
+<p>When you hear the term "Deferred" for the first time, it might sound like a mystical object, when in fact it is a powerful tool for working with asynchronous operations, such as Ajax. In its simplest form, a Deferred waits until a later time to perform an action; essentially, you're deferring the action until a prior action is completed. Ajax is one such situation: We don't want to take some actions until we know that the server has successfully sent information back to us. Being able to wait for that returned value is key. For this tutorial, we will be combining our knowledge from the <a href="../ajax/">Ajax tutorial</a> and discovering how to use Deferreds to improve our interactions with all things asynchronous.</p>
+
+<h3>dojo/Deferred</h3>
+<p>Dojo's implementation of a deferred object is <code>dojo/Deferred</code> (and has been around since version 0.3). After instantiating a <code>Deferred</code>, an action, or callback as we will refer to it from now on, can be registered by passing a function to the <code>then</code> method, which will be called when the <code>Deferred</code> is resolved (a success). The <code>then</code> method also takes a second argument: a function that will be called if the <code>Deferred</code> is rejected (an error), often referred to as the <code>errback</code>. Let's take a look at an example to gain a better understanding:</p>
+<pre class="brush: js;">
+require(["dojo/_base/Deferred", "dojo/_base/xhr", "dojo/_base/array", "dojo/dom-construct", "dojo/dom", "dojo/domReady!"],
+	function(Deferred, xhr, arrayUtil, domConstruct, dom) {
+
+		// Create a deferred and get the user list
+		var deferred = new Deferred(),
+			userlist = dom.byId("userlist");
+
+		// Set up the callback and errback for the deferred
+		deferred.then(function(res){
+			arrayUtil.forEach(res, function(user){
+				domConstruct.create("li", {
+					id: user.id,
+					innerHTML: user.username + ": " + user.name
+				}, userlist);
+			});
+		},function(err){
+			domConstruct.create("li", {
+				innerHTML: "Error: " + err
+			}, userlist);
+		});
+
+		// Send an xhr request
+		xhr.get({
+			url: "users.json",
+			handleAs: "json",
+			load: function(res){
+				// Resolve when content is received
+				deferred.resolve(response);
+			},
+			error: function(err){
+				// Reject on error
+				deferred.reject(error);
+			}
+		});
+});
+</pre>
+<a class="demoBtn demo" href="demo/deferred.php">View Demo</a>
+
+<p>In this example, we create a <code>Deferred</code> and register a callback and an errback. We also call <code>xhr.get</code>, an asynchronous operation, to fetch "users.json". If our fetch succeeds, it will resolve the deferred and our callback will be called; if our fetch fails, it will reject the deferred and our errback will be called.</p>
+<p>You might be asking yourself, "Do I really have to set up <code>dojo/Deferred</code> like this every time?" The answer is, "No." All of Dojo's Ajax methods return <code>dojo/Deferred</code>'s that resolve on success and get rejected on error:</p>
+<pre class="brush: js;">
+require(["dojo/_base/xhr", "dojo/_base/array", "dojo/dom-construct", "dojo/dom", "dojo/domReady!"],
+	function(xhr, arrayUtil, domConstruct, dom) {
+
+		var deferred = xhr.get({
+			url: "users.json",
+			handleAs: "json"
+		});
+
+		deferred.then(function(res){
+			var userlist = dom.byId("userlist");
+
+			arrayUtil.forEach(res, function(user){
+				domConstruct.create("li", {
+					id: user.id,
+					innerHTML: user.username + ": " + user.name
+				}, userlist);
+			});
+		},function(err){
+			// This shouldn't occur, but it's defined just in case
+			alert("An error occurred: " + err);
+		});
+
+});
+</pre>
+<a class="demoBtn demo" href="demo/xhr.php">View Demo</a>
+<p>Instead of using the <code>load</code> property of the XHR arguments, we're registering a callback with <code>then</code>. If the Ajax call succeeds, the Deferred is resolved and the first argument that would normally be passed to the <code>load</code> function is passed to the callback. If the Ajax call fails, the Deferred is rejected and the error is passed to the errback.</p>
+<p>Within our callback, we loop through the users returned from the server and create a list item for each one, just like we might if it were set up as the <code>load</code> property. However, by using a Deferred, we're now able to decouple the retrieval action (the Ajax call) from the actions that we take with that data. This decoupling of actions is a very powerful aspect of Deferreds.</p>
+
+<h3>Chaining</h3>
+<p>Although Deferreds are a fairly simple concept once you get the hang of it, <code>dojo/Deferred</code> contains some powerful features. One of those features is chaining: the result of a <code>then</code> call acts like a new Deferred, but for the value returned by the callback. This might sound confusing at first, so let's set up an example.</p>
+<p>Let's say that instead of returning objects for users, the server is returning lists of values for each user. This isn't very practical, so we register a callback to transform the list into something a bit more usable. Each successive callback registered against the result of the first <code>then</code> call will now have the list of usable users passed to it.</p>
+<pre class="brush: js;">
+require(["dojo/_base/xhr", "dojo/_base/array", "dojo/json", "dojo/dom-construct", "dojo/dom", "dojo/domReady!"],
+	function(xhr, arrayUtil, JSON, domConstruct, dom) {
+
+		var original = xhr.get({
+			url: "users-mangled.json",
+			handleAs: "json"
+		});
+
+		var result = original.then(function(res){
+			var userlist = dom.byId("userlist1");
+
+			return arrayUtil.map(res, function(user){
+				domConstruct.create("li", {
+					innerHTML: JSON.stringify(user)
+				}, userlist);
+
+				return {
+					id: user[0],
+					username: user[1],
+					name: user[2]
+				};
+			});
+		});
+
+		// Our result object has a `then` method that accepts a callback,
+		// like our original object -- but the value handed to the callback
+		// we're registering here is *NOT* the data from the Ajax call,
+		// but the return value from the callback above!
+		result.then(function(objs){
+			var userlist = dom.byId("userlist2");
+
+			arrayUtil.forEach(objs, function(user){
+				domConstruct.create("li", {
+					innerHTML: JSON.stringify(user)
+				}, userlist);
+			});
+		});
+});
+</pre>
+<p class="proTip">The returned value from the <code>then</code> method is known more specifically as a promise, which implements a specific API. You can head to <a href="../promises/">the promises tutorial</a> to get more details, but for now, know that a promise offers up a <code>then</code> method which is identical to <code>then</code> for Deferreds.</p>
+<p>One important thing to note: The original Deferred is untouched by this chaining, and the server's list remains intact if a callback is registered with the original Deferred:</p>
+<pre class="brush: js;">
+original.then(function(res){
+	var userlist = dom.byId("userlist3");
+
+	arrayUtil.forEach(res, function(user){
+		domConstruct.create("li", {
+			innerHTML: JSON.stringify(user)
+		}, userlist);
+	});
+});
+</pre>
+<a class="demoBtn demo" href="demo/chaining.php">View Demo</a>
+<p>This example is fairly arbitrary, but chaining can be used to modify data for your application's consumption. In the case of the example, something like the following could have been done:</p>
+<pre class="brush: js;">
+require(["dojo/_base/xhr", "dojo/_base/array", "dojo/dom-construct", "dojo/dom", "dojo/domReady!"],
+	function(xhr, arrayUtil, domConstruct, dom) {
+
+		function getUserList(){
+			return xhr.get({
+				url: "users-mangled.json",
+				handleAs: "json"
+			}).then(function(response){
+				return arrayUtil.map(response, function(user){
+					return {
+						id: user[0],
+						username: user[1],
+						name: user[2]
+					};
+				});
+			});
+		}
+
+		getUserList().then(function(users){
+			var userlist = dom.byId("userlist");
+			arrayUtil.forEach(users, function(user){
+				domConstruct.create("li", {
+					id: user.id,
+					innerHTML: user.username + ": " + user.name
+				}, userlist);
+			});
+		});
+});
+</pre>
+<a class="demoBtn demo" href="demo/chaining-practical.php">View Demo</a>
+<p>Now any code that uses <code>getUserList</code> will always get a list of user objects.</p>
+
+<h3>dojo/DeferredList</h3>
+<p>Sometimes you'll need to fetch data from multiple sources in parallel, and want to be notified when all requests are complete. You could likely set up some sort of Deferreds calling Deferreds system, with counts of returns etc etc, but like the first example in this tutorial, you don't have to do it manually. Dojo takes care of you here with <code>dojo/DeferredList</code>.</p>
+<p>To use a <code>dojo/DeferredList</code>, simply pass a list of Deferreds to its constructor. The result is a <code>Deferred</code>, and you can register a callback with it like any other Deferred. The results of each of the original Deferreds will be passed to the callback as an array of tuples (a tuple is an array of two items) that correspond to the order you pass the Deferreds in: the first item of the tuple indicates success, and the second item is the response from the server. Let's look at an example:</p>
+<pre class="brush: js;">
+require(["dojo/DeferredList", "dojo/_base/xhr", "dojo/_base/array", "dojo/dom-construct", "dojo/dom", "dojo/domReady!"],
+	function(DeferredList, xhr, arrayUtil, domConstruct, dom) {
+
+		var usersDef = xhr.get({
+			url: "users.json",
+			handleAs: "json"
+		}).then(function(res){
+			var users = {};
+
+			arrayUtil.forEach(res, function(user){
+				users[user.id] = user;
+			});
+
+			return users;
+		});
+
+		var statusesDef = xhr.get({
+			url: "statuses.json",
+			handleAs: "json"
+		});
+
+		var defs = new DeferredList([usersDef, statusesDef]);
+
+		defs.then(function(results){
+			var users = results[0][1],
+				statuses = results[1][1],
+				statuslist = dom.byId("statuslist");
+
+			if(!results[0][0] || !results[1][0]){
+				domConstruct.create("li", {
+					innerHTML: "An error occurred"
+				}, statuslist);
+				return;
+			}
+
+			arrayUtil.forEach(statuses, function(status){
+				var user = users[status.userId];
+
+				domConstruct.create("li", {
+					id: status.id,
+					innerHTML: user.name + ' said, "' + status.status + '"'
+				}, statuslist);
+			});
+		});
+});</pre>
+<p>Here we want to take a list of users from the server and combine it with a list of statuses. After registering a callback that will return a hash of users by ID, we pass both Deferreds to <code>dojo/DeferredList</code> and register a callback with it. That callback then checks for an error and if it finds none, it iterates through the statuses and matches them up with a user. It doesn't matter which request finishes first, as <code>dojo/DeferredList</code> will always give us the results in the order in which the Deferreds were passed in.</p>
+<a class="demoBtn demo" href="demo/deferredlist.php">View Demo</a>
+
+<h3>Conclusion</h3>
+<p>Since most JavaScript applications work with Ajax, a simple and elegant solution for registering actions is needed, and <code>dojo/Deferred</code> gives us just that. While being simple, it adds power with chaining. On top of that, <code>dojo/DeferredList</code> allows you to handle multiple deferreds using one callback.</p>
+
+<h3>Resources</h3>
+<ul>
+<li><a href="/reference-guide/1.7/dojo/_base/Deferred.html">dojo/Deferred Reference Guide</a></li>
+<li><a href="/api/1.7/dojo/_base/Deferred.html">dojo/Deferred API</a></li>
+<li><a href="../ajax">Ajax with dojo/request Tutorial</a></li>
+<li><a href="../promises">Dojo Deferreds and Promises Tutorial</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Futures_and_promises">Future and Promises</a> Wikipedia article</li>
+</ul>

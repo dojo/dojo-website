@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Tutorial: In Style with Dojo</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			dojo.require("dojo.behavior");
+			
+			// Wait for the DOM to be ready before working with it
+			dojo.ready(function(){
+				// we are defining these functions in dojo.ready so they are not in the global scope
+				var writeToPageConsole = function(line){
+					var pageConsole = dojo.byId("console");
+					var currentConsoleValue = pageConsole.innerHTML;
+					pageConsole.innerHTML = currentConsoleValue + "<br>" + line;
+				};
+
+				var toastBread = function(evt){
+					var bread = dojo.query(".bread");
+					bread.style("background-color", "#A0522D");
+				};
+
+				var butterBread = function(evt){
+					var bread = dojo.query(".bread");
+					bread.style("background-color", "yellow");
+				};
+				
+				var eatToast = function(evt){
+					var bread = dojo.query(".bread");
+					bread.style({
+						"background-color" : "white",
+						"border-style" : "dashed"
+					});
+				};
+				
+				var getBreadColor = function(evt){
+					var bread = dojo.query(".bread");
+					writeToPageConsole("Bread Color: " + bread.style("background-color"));
+				}
+				
+				var buttonBehaviors = {
+					"#toastBread" : {
+						"onclick" : toastBread
+					},
+					"#butterBread" : {
+						"onclick" : butterBread
+					},
+					"#eatToast" : {
+						"onclick" : eatToast
+					},
+					"#getBreadColor" : {
+						"onclick" : getBreadColor
+					}				
+				};
+				
+				dojo.behavior.add(buttonBehaviors);
+				dojo.behavior.apply();
+
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Tutorial: In Style with Dojo</h1>
+		
+		<h3>Bread</h3>
+		<div id="breadOne" class="bread"></div>
+		<div id="breadTwo" class="bread"></div>
+
+		<h3>dojo.style</h3>
+		
+		<button id="toastBread">Toast Bread</button>
+
+		<button id="butterBread">Butter Bread</button>
+		
+		<button id="eatToast">Eat Toast</button> 
+		
+		<button id="getBreadColor">Log bread color</button>
+
+		<h3>Console</h3>
+		<div id="console" class="console"></div>
+				
+	</body>
+</html>

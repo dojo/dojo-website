@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: JSONP and dojo.io.script</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			// dojo.io.script is an external dependency, so it must be required
+			dojo.require("dojo.io.script");
+
+			// Gets tweets from twitter
+			function getTweets() {
+				// dojo.io.script is an external dependency, so it must be required
+				dojo.require("dojo.io.script");
+
+				// When the resource is ready
+				dojo.ready(function() {
+
+					// Output message to DOM
+					var tweetsHolder = dojo.byId("tweetsHolder");
+
+					// Use the get method
+					dojo.io.script.get({
+						// The URL to get JSON from Twitter
+						url: "http://search.twitter.com/search.json",
+						// The callback paramater
+						callbackParamName: "callback", // Twitter requires "callback"
+						// The content to send
+						content: {
+							q: "@dojo" // Searching for tweets about Dojo
+						},
+						// The success callback
+						load: function(tweetsJson) {  // Twitter sent us information!
+							// Log the result to console for inspection
+							console.info("Twitter returned: ",tweetsJson);
+
+							// Output the tweets to a DOM element
+							// Or output a "no tweets" message
+							var message = "";
+
+							// If there were tweets returned...
+							if(tweetsJson.results && tweetsJson.results.length) {
+								// Start the list
+								message += "<ul>";
+								// For every tweet returned
+								dojo.forEach(tweetsJson.results,function(tweet) {
+									message += "<li>" + tweet.from_user + " said: " + tweet.text + "</li>";
+								});
+								//End the list
+								message += "</ul>";
+							}
+							else { // Output "no tweets" message
+								message = "No tweets about Dojo were available.";
+							}
+
+							// Output message to DOM
+							tweetsHolder.innerHTML = message;
+						},
+						// Ooops!  Error!
+						error: function() {
+							tweetsHolder.innerHTML = "Error!  Tweets could not be received.";
+						}
+					});
+				});
+			}
+
+		</script>
+	</head>
+	<body>
+		<h1>Demo: JSONP and dojo.io.script</h1>
+
+		<button id="getJson" onClick="getTweets();">Get Tweets from Twitter</button>
+		<br /><br />
+
+		<div id="tweetsHolder"></div>
+
+	</body>
+</html>

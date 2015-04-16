@@ -1,0 +1,198 @@
+
+
+<h3>Getting Started</h3>
+<p>Keyboard events fire when keys are pressed on the keyboard.  This includes all keys, letters, numbers, symbols, punctuation, as well as the Escape, function, Enter, Tab, and keypad keys.  Every keypress fires an event which may be captured and handled.</p>
+<p>Browser support and implementations of keyboard event handling varies.  Using Dojo to handle keyboard events allows you to write code that will run properly across virtually all browsers.</p>
+
+
+<h3>Keyboard Events</h3>
+<p>Listening for keyboard events in the browser allows you to implement a user interface that not only feels like a native application, it gives you a greater control over the UI.</p>
+<dl>
+	<dt>onkeypress</dt>
+		<dd>Fires when any key is pressed and repeats until the key is released.  onkeypress can be used for the majority of keyboard event handling.</dd>
+	<dt>onkeydown</dt>
+		<dd>Fires when any key is pressed and repeats until the key is released.  onkeypress will fire after onkeydown in most cases.</dd>
+	<dt>onkeyup</dt>
+		<dd>Fires when the key is released.</dd>
+	</dt>
+</dl>
+<p>Most key presses fire all three events, but there may be variations between browsers.  The next demo allows you to see the keyboard events fired as you press keys.  Take some time to experiment with different keys and combinations.</p>
+<p>Dojo normalizes keyboard events, enabling you to use the <code>dojo/keys</code> constants to test for keyboard input of non-printable keys.
+	Let's say we want to create a form that will allow element traversal using the up and down arrows or enter key.  We can start with this simple example:</p>
+<pre class="brush: html;">
+&lt;script src="//ajax.googleapis.com/ajax/libs/dojo/1.7.8/dojo/dojo.js"
+				data-dojo-config="async: true"&gt; &lt;/script&gt;
+&lt;body&gt;
+	&lt;h1&gt;Press any key&lt;/h1&gt;
+	keyCode value: &lt;input type=&quot;text&quot; id=&quot;keyCode&quot; size=&quot;2&quot;&gt;
+&lt;/body&gt;
+</pre>
+
+<pre class="brush: js;">
+require(["dojo/on", "dojo/domReady!"], function(on) {
+	on(document, "keyup", function(event) {
+		document.getElementById("keyCode").value = event.keyCode;
+	});
+});
+</pre>
+<a class="demoBtn demo" href="demo/field_basic.php">View Demo</a>
+
+<p>This example shows how simple it is to capture keyboard events on form elements and doing something (logging to the console) using Dojo's normalized events and <code>dojo/keys</code>. This was accomplished using:
+<ul>
+	<li><code>dojo/on: </code> <a href="/api/?qs=1.7/dojo/on">api</a> <a href="/reference-guide/1.7/dojo/on.html">ref</a></li>
+	<li><code>dojo/keys: </code> <a href="/api/?qs=1.7/dojo/keys">api</a> <a href="/reference-guide/1.7/dojo/keys.html">ref</a></li>
+</ul>
+You will notice, however, that our example doesn't behave as expected, and some functionality is missing - such as handling the enter key. In our next example we'll fill in
+		some missing details.
+</p>
+
+<p class="proTip">Note that unlike the <code>dojo/_base/connect</code> API, the "on" event name prefix <em>must be omitted</em> when using the <code>dojo/on</code> module. See the <a href="../events/">Events with Dojo</a> for more information.
+</p>
+
+<h3>The KeyboardEvent object</h3>
+
+<p>As you can see below, when a keyboard event fires, a <code>KeyboardEvent</code> is passed to the event handler.  This event object contains a lot of information about the event, but typically the piece most needed is the <code>keyCode</code> value.  This is the Unicode value of the key pressed. <img src="./images/keyboardevent.png" /></p>
+
+<p>Moving on (pun intended), we can make this simple example more elegant and functional using the power of Dojo: </p>
+<pre class="brush: html;">
+&lt;body&gt;
+	&lt;h1&gt;Press Up or Down Arrow Keys&lt;/h1&gt;
+	&lt;input type=&quot;text&quot; id=&quot;input1&quot; value=&quot;up&quot;&gt;
+	&lt;input type=&quot;text&quot; id=&quot;input2&quot; value=&quot;down&quot;&gt;
+	&lt;input type=&quot;submit&quot; id=&quot;send&quot; value=&quot;send&quot;&gt;
+&lt;/body&gt;
+</pre>
+
+<pre class="brush: js;">
+require(["dojo/dom-construct", "dojo/on", "dojo/query", "dojo/keys", "dojo/domReady!"],
+function(domConstruct, on, query, keys) {
+	query("input[type='text']").on("keydown", function(event) {
+		//query returns a nodelist, which has an on() function available that will listen
+		//to all keydown events for each node in the list
+		switch(event.keyCode) {
+			case keys.UP_ARROW:
+				event.preventDefault();
+				//preventing the default behavior in case your browser
+				// uses autosuggest when you hit the down or up arrow.
+				log("up arrow has been pressed");
+				break;
+			case keys.DOWN_ARROW:
+				event.preventDefault();
+				//preventing the default behavior in case your browser
+				// uses autosuggest when you hit the down or up arrow.
+				log("down arrow has been pressed");
+				break;
+			case keys.ENTER:
+				log("enter has been pressed");
+				break;
+			default:
+				log("some other key: " + event.keyCode);
+		}
+	});
+});
+</pre>
+<a class="demoBtn demo" href="demo/field_traverse.php">View Demo</a>
+
+<p>With just a few changes, we've eliminated some redundant code, as well as making our script more powerful &mdash; allowing us to handle more than one type of key press in a single event handler,
+	as well as handling multiple elements.
+By using <code>dojo/query</code>, we can make full use of the <code>on</code> method for the <code>NodeList</code> that <code>dojo/query</code> returns. This works exactly the same as the normal
+<code>on()</code> function, except that all the nodes in the <code>NodeList</code> are targeted.
+</p>
+
+<p>
+The previous example uses some powerful pieces of Dojo, but in order to fully complete our task of using keyboard events to traverse our form, we need to add a couple more pieces to our example.
+See the new example for a fully functional example:
+</p>
+<pre class="brush: html;">
+&lt;body&gt;
+	&lt;h1&gt;Press Up/Down Arrow Or Enter Keys to traverse form.&lt;/h1&gt;
+	&lt;h2&gt;Home/End will go to the beginning or end.&lt;/h2&gt;
+	&lt;form id=&quot;traverseForm&quot;&gt;
+		First Name: &lt;input type=&quot;text&quot; id=&quot;firstName&quot;&gt;
+		Last Name: &lt;input type=&quot;text&quot; id=&quot;lastName&quot;&gt;
+		Email Address: &lt;input type=&quot;text&quot; id=&quot;email&quot;&gt;
+		Phone Number: &lt;input type=&quot;text&quot; id=&quot;phone&quot;&gt;
+		&lt;input type=&quot;submit&quot; id=&quot;send&quot; value=&quot;send&quot;&gt;
+	&lt;/form&gt;
+&lt;/body&gt;
+</pre>
+
+<pre class="brush: js;">
+require(["dojo/dom", "dojo/dom-construct", "dojo/on", "dojo/query", "dojo/keys", "dojo/NodeList-traverse", "dojo/domReady!"],
+function(dom, domConstruct, on, query, keys) {
+	var inputs = query("input");
+
+	on(dom.byId("traverseForm"), "keydown", function(event) {
+		var node = query.NodeList([event.target]);
+		var nextNode;
+
+		//on listens for the keydown events inside of the div node, on all form elements
+		switch(event.keyCode) {
+			case keys.UP_ARROW:
+				nextNode = node.prev("input");
+				if(nextNode[0]){
+					//if not first element
+					nextNode[0].focus();
+					//moving the focus from the current element to the previous
+				}
+				break;
+			case keys.DOWN_ARROW:
+				nextNode = node.next("input");
+				if(nextNode[0]){
+					//if not last element
+					nextNode[0].focus();
+					//moving the focus from the current element to the next
+				}
+				break;
+			case keys.HOME:
+				inputs[0].focus();
+				break;
+			case keys.END:
+				inputs[inputs.length - 2].focus();
+				break;
+			case keys.ENTER:
+				event.preventDefault();
+				//prevent default keeps the form from submitting when the enter button is pressed
+				//on the submit button
+				if(event.target.type !== "submit"){
+					nextNode = node.next("input");
+					if(nextNode[0]){
+						//if not last element
+						nextNode[0].focus();
+						//moving the focus from the current element to the next
+					}
+				}else {
+					// submit the form
+					log("form submitted!");
+				}
+				break;
+			default:
+				log("some other key: " + event.keyCode);
+		}
+	});
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/form_traverse.php">View Demo</a>
+
+<p>What just happened you say? This latest incarnation of our form traversal uses <code>dojo/on's</code> event delegation &mdash; we have registered a single event listener
+on the <code>form</code>. This listens for all <code>keydown</code> events of all the child elements of the <code>form</code> as well.
+</p>
+
+<p>The power of event delegation is apparent in that we need to only make very small changes to our script to handle both input on the text boxes as well as the submit button.
+This solution gracefully scales up as well; if more form input elements are added to our page our script will still work 100% &mdash; and with the help of <code>dojo/on</code>'s
+event normalization and <code>dojo/keys</code> it will work across browsers and platforms.</p>
+<h3>Conclusion</h3>
+<p>Dojo's event normalization using <code>dojo/on</code> makes it increasingly simple to handle keyboard input inside of the often changing and conflicting browser environment. Using
+<code>dojo/on</code> and <code>dojo/keys</code>, we created a form that expanded upon the default behavior of the up/down arrows and enter key. With this new knowledge, think of
+ways that you can use Dojo's event normalization and event delegation to increase the usability of your web application.
+
+</p>
+
+<h3>Resources</h3>
+<p>Find more details about <code>dojo/on</code> and other tools we used in this tutorial:</p>
+<ul>
+	<li><a href="http://www.sitepen.com/blog/2011/08/03/dojoon-new-event-handling-system-for-dojo/">SitePen's Blog: dojo/on</a></li>
+	<li><a href="../events/">Events with Dojo Tutorial</a></li>
+</ul>
+<br/>

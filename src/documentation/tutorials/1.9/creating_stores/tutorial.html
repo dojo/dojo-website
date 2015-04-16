@@ -1,0 +1,422 @@
+
+
+<h3>Getting Started</h3>
+<p>
+The new <a href="/reference-guide/1.9/dojo/store.html"><code>dojo/store</code></a> system is intended as a replacement for the older <code>dojo.data</code> system; being
+partially based on the new <a href="http://www.w3.org/TR/IndexedDB/#object-store">W3C Object Store API</a>, it
+is intended to make creating data storage components as simple as possible.  Creating stores compliant with
+<code>dojo/store</code> is pretty simple since most methods are optional and only need to be implemented
+if you want their functionality.
+This tutorial will help you get started and show you the most important parts of the new Dojo Stores.
+</p>
+<p>
+Basic Dojo Stores only implement part of the IndexedDB API, primarily those methods concerned with getting
+data in and out of the store.  Certain aspects of the IndexedDB API (such as indexes and cursors) are not
+implemented, mostly because they tend to be unnecessary in a pure JavaScript environment.
+</p>
+<h3>Creating your first store</h3>
+<p>
+Before creating your own store implementation, it might be useful to take a look at the simplest store in
+the Dojo Toolkit, the <a href="/api/1.9/dojo/store/Memory">Memory store</a>, which was designed to handle the
+most primitive of data management tasks.  Here is the basic API for <code>dojo/store/Memory</code>:
+</p>
+<pre class="brush: js;">
+define(["../_base/declare", "dojo/store/util/SimpleQueryEngine"],
+		function(declare, SimpleQueryEngine) {
+
+	declare("dojo.store.Memory", null, {
+		constructor: function(options){ },
+		data: null,
+		index: null,
+		queryEngine: SimpleQueryEngine,
+
+		//	what follows is the actual API signature
+		idProperty: "id",
+		get: function(id){ },
+		getIdentity: function(object){ },
+		put: function(object, options){ },
+		add: function(object, options){ },
+		remove: function(id){ },
+		query: function(query, options){ },
+		setData: function(data){ }
+	});
+});
+</pre>
+<p>
+As you can see, the signature of <code>dojo/store/Memory</code> is pretty simple.  It deals with getting
+any kind of data (<code>get</code> and <code>query</code>), makes sure that identity issues are
+addressed (<code>idProperty</code> and <code>getIdentity</code>), and allows for creating new items, deleting
+items, and updating items (<code>add</code>, <code>remove</code>, and <code>put</code>, respectively).  In
+addition, it offers a way to set an initial data set (<code>setData</code>).
+</p>
+<p class="proTip">
+You may have noticed that there are no facilities for sending notification events, such as when data may have
+been created, deleted or updated.  We'll cover this in a separate tutorial that talks about applying
+<code>dojo/store/Observable</code> to an existing Dojo Store.
+</p>
+<h3>Internal data structures</h3>
+<p>
+For anyone that has used some sort of JavaScript data structure, you'll probably notice here that a store
+<strong>does not</strong> dictate the actual data structure of a set of objects.  This is deliberate with
+<code>dojo/store</code>, as the structure of your data is usually dependent on the application of that data,
+and a store has no business dictating that structure.
+</p>
+<p>
+That being said, there is one thing you should always implement in a custom store: a unique
+identifier for each data object.  The store's <code>idProperty</code> property indicates which item property to use
+as the unique identifier; by default, it is "id", but it can be anything you want.
+</p>
+<p class="proTip">
+You <em>can</em> write a store that handles data without the use of an <strong>idProperty</strong>, but we
+strongly recommend against it.  In the end, a store without some sort of unique identifier relies on a lookup
+against all of the elements in your data structure every time, which can be very costly from a performance perspective.
+</p>
+<h3><code>query</code>: the most important method in a Store</h3>
+<p>
+By far, the most important method in any store is the <code>query</code> method.  This is the main way of
+getting information out of a store without altering any of the internal data structures. This method must
+accept two arguments: a <code>query</code> object, and an optional <code>options</code> object.
+</p>
+<p>
+The <code>query</code> object contains criteria for the query and is dependent on the underlying query engine.
+<code>dojo/store</code> comes with a built-in query engine called <code>dojo/store/util/SimpleQueryEngine</code>; this
+engine handles most basic querying needs but also serves as a template for writing more complex query engines.
+Let's take a look at it.
+</p>
+<h4>Creating a query engine</h4>
+<p>
+The <code>dojo/store/util/SimpleQueryEngine</code> demonstrates the basic approach to creating a query engine.
+The idea is to create and return a function that will do some sort of filtering (and other things, if
+needed) on an array of objects using the set of criteria originally passed to the query engine.
+</p>
+<p>
+To create a query engine, you'd follow the structure of the SimpleQueryEngine by capturing the query parameters
+in a closure and returning a function designed to take an array of elements as the sole argument.  A basic example
+would look like the following:
+</p>
+<pre class="brush: js;">
+require(["dojo/_base/array"],
+		function(arrayUtil){
+var myEngine = function(query, options){
+	var filteringFunction = function(object){
+		//	do something here based on the passed query object
+	};
+
+	var execute = function(array){
+		var results = arrayUtil.filter(array, filteringFunction);
+		//	do anything else needed, like sorting and pagination
+		return results;
+	}
+	execute.matches = filteringFunction;
+	return execute;
+}
+</pre>
+<p class="proTip">
+You can always write your own querying engine, based on the <code>SimpleQueryEngine</code>, to handle
+any explicit needs you might have.  You can also create something directly in your store's <code>query</code>
+method if you so desire&mdash;for instance, letting the query method communicate with a remote server, and
+letting the server return the results.  We'll see an example with <code>dojo/store/JsonRest</code> later on
+in this tutorial that does just that.
+</p>
+<p>
+Making sure you have a query engine that can operate on an array of data is only the first step in creating
+the <code>query</code> method in your store; the second step is making sure the <code>query</code> method wraps the
+returned results with <code>dojo/store/util/QueryResults</code>.
+</p>
+<h4>What are QueryResults?</h4>
+<p>
+<code>dojo/store/util/QueryResults</code> is simply a wrapper function that is applied to the results of a
+query. It ensures that standard iteration methods exist on the result set, including <code>forEach</code>,
+<code>map</code> and <code>filter</code> (see <a href="../arrays/">Arrays Made Easy</a> for more information).
+</p>
+<p>
+Here's where it gets interesting, though: the <code>results</code> object you pass to <code>QueryResults</code> can be
+<em>either an array or a promise</em>.  That's right, you can pass a
+<a href="../promises/"><strong>promise</strong> object</a> to the QueryResults function, and the same iterative
+methods can still be used!
+</p>
+<p>
+Let's take a look at the <code>query</code> methods in two of Dojo's stores, the Memory store and the JsonRest
+store. First up, the Memory store:
+</p>
+<pre class="brush: js;">
+define(["dojo/store/util/QueryResults"],
+		function(QueryResults){
+		....
+//	from dojo/store/Memory
+query: function(query, options){
+	return QueryResults(
+		(this.queryEngine(query, options))(this.data)
+	);
+}
+</pre>
+<p>
+The Memory store's internal data structure is an array of objects. by calling <code>QueryResults</code>, the
+all important iteration methods are added directly to the results object. That means that you'd then call
+iteration methods directly, like so:
+</p>
+<pre class="brush: js;">
+var results = myMemoryStore.query({ foo: "bar" });
+results.forEach(function(item){
+	//	do something with the item
+});
+</pre>
+<p>
+Now let's take a look at the <code>query</code> method from the JsonRest store:
+</p>
+<pre class="brush: js;">
+//	from dojo/store/JsonRest
+query: function(query, options){
+	var headers = {Accept: "application/javascript, application/json"};
+	options = options || {};
+
+	if(options.start >= 0 || options.count >= 0){
+		headers.Range = "items=" + (options.start || '0') + '-' +
+			(("count" in options && options.count != Infinity) ?
+				(options.count + (options.start || 0) - 1) : '');
+	}
+	// lang is from dojo/_base/lang
+	if(lang.isObject(query)){
+		// ioQuery from dojo/io-query
+		query = ioQuery.objectToQuery(query);
+		query = query ? "?" + query: "";
+	}
+	if(options && options.sort){
+		query += (query ? "&" : "?") + "sort(";
+		for(var i = 0; i < options.sort.length; i++) {
+			var sort = options.sort[i];
+			query += (i > 0 ? "," : "")
+				+ (sort.descending ? '-' : '+')
+				+ encodeURIComponent(sort.attribute);
+		}
+		query += ")";
+	}
+	// request from dojo/request
+	var results = request.get(this.target + (query || ""), {
+		handleAs: "json",
+		headers: headers
+	});
+	results.total = results.then(function(){
+		var range = results.response.getHeaders("Content-Range");
+		return range && (range=range.match(/\/(.*)/)) && +range[1];
+	});
+	return QueryResults(results);
+}
+</pre>
+<p>
+You'll notice that the JsonRest store doesn't use a query engine; instead, it makes a call to a REST
+service using <code>dojo/request</code>, which itself returns a promise. The QueryResults
+function then ensures that common iterative methods are available on the returned promise, and that
+those methods seemingly behave in the proper way.
+</p>
+<p class="proTip">
+Internally, <code>QueryResults</code> does this using the magic of <a href="../promises/"><code>dojo.when</code></a>,
+which we won't go into detail here.  Just keep in mind that when writing your own store, you should
+<strong>always</strong> make sure that the <code>query</code> function returns an object wrapped by
+<code>dojo/store/util/QueryResults</code>.
+</p>
+<h3>Let's create a store</h3>
+<p>
+Now that we have the basics of a query under our belt, let's go ahead and create a new store.  We'll call
+it "Example" for now, and add things as we go.  For simplicity's sake, this store will end up looking exactly
+like the Memory store, since we are going to simply keep an internal array of data and operate on it.  Let's
+set it up:
+</p>
+<pre class="brush: js;">
+define(["dojo/store/util/QueryResults", "dojo/_base/declare", "dojo/_base/lang", "dojo/request", "dojo/store/util/SimpleQueryEngine"],
+		function(QueryResults, declare, lang, request, SimpleQueryEngine){
+
+	//	Declare the initial store
+	return declare(null, {
+		data: [],
+		index: {},
+		idProperty: "id",
+		queryEngine: SimpleQueryEngine,
+
+		constructor: function(options){
+			lang.mixin(this, options || {});
+			this.setData(this.data || []);
+		},
+		query: function(query, options){
+			return QueryResults(
+				(this.queryEngine(query, options))(this.data)
+			);
+		},
+		setData: function(data){
+			this.data = data;
+			//	index our data
+			this.index = {};
+			for(var i = 0, l = data.length; i < l; i++){
+				var object = data[i];
+				this.index[object[this.idProperty]] = object;
+			}
+		}
+	});
+});
+</pre>
+<p class="proTip">
+You may have noticed the <code>lang.mixin</code> statement in the constructor. This is a common practice which allows
+for specification of instance properties via the <code>options</code> argument to the constructor; in this case,
+it would most commonly be used to set values for <code>data</code> and <code>idProperty</code>.
+</p>
+<h4>Add in our getters</h4>
+<p>
+Our Example store has the most important methods implemented: a way of setting the store's data, and
+a way of querying that data based on the <code>SimpleQueryEngine</code>.  We also have an indexing mechanism set
+up so that we can quickly return an item via its identity if we want to; let's go ahead and add those
+methods now.
+</p>
+<pre class="brush: js;">
+//	in our declare from above
+get: function(id){
+	return this.index[id];
+},
+getIdentity: function(object){
+	return object[this.idProperty];
+}
+</pre>
+<p>
+These two methods allow for direct data access without having to go through a query, and allows a user
+to get the proper unique identity for a given object.  If the purpose of our store were to be (essentially)
+read-only, this is all we'd need in our store definition.
+</p>
+<h4>Add in write capability</h4>
+<p>
+Most stores, however, are not read-only. Normally, users will want to modify existing
+objects, and add and remove objects from our store.  For this, we'll add three new methods: <code>put</code>,
+<code>add</code> and <code>remove</code>.
+</p>
+<pre class="brush: js;">
+//	in our declare from above
+put: function(object, options){
+	var id = options && options.id
+		|| object[this.idProperty];
+	this.index[id] = object;
+
+	var data = this.data,
+		idProperty = this.idProperty;
+	for(var i = 0, l = data.length; i < l; i++){
+		if(data[i][idProperty] == id){
+			data[i] = object;
+			return id;
+		}
+	}
+	this.data.push(object);
+	return id;
+},
+add: function(object, options){
+	var id = options && options.id
+		|| object[this.idProperty];
+	if(this.index[id]){
+		throw new Error("Object already exists");
+	}
+	return this.put(object, options);
+},
+remove: function(id){
+	delete this.index[id];
+	for(var i = 0, l = this.data.length; i < l; i++){
+		if(this.data[i][this.idProperty] == id){
+			this.data.splice(i, 1);
+			return;
+		}
+	}
+}
+</pre>
+<p>
+The concept is that you will use the <code>put</code> method any time you make a modification to an object, the
+<code>add</code> method any time you create a new object and want to add it to the store, and the <code>remove</code>
+method to delete an object out of the store.  The <code>put</code> method is the central one here: you'll want
+to use that when altering an object so that the store can manage what it needs to manage when doing UPDATE-like
+operations.  The only difference in implementation here between <code>put</code> and <code>add</code> is that
+our <code>add</code> method makes sure the object does not exist in our store already.
+</p>
+<h4>The final implementation</h4>
+<p>
+Here's our final store:
+</p>
+<pre class="brush: js;">
+define(["dojo/store/util/QueryResults", "dojo/_base/declare", "dojo/store/util/SimpleQueryEngine"],
+		function(QueryResults, declare, SimpleQueryEngine){
+
+	//	Declare the initial store
+	return declare(null, {
+		data: [],
+		index: {},
+		idProperty: "id",
+		queryEngine: SimpleQueryEngine,
+
+		constructor: function(options){
+			lang.mixin(this, options || {});
+			this.setData(this.data || []);
+		},
+		get: function(id){
+			return this.index[id];
+		},
+		getIdentity: function(object){
+			return object[this.idProperty];
+		},
+		put: function(object, options){
+			var id = options && options.id
+				|| object[this.idProperty];
+			this.index[id] = object;
+
+			var data = this.data,
+				idProperty = this.idProperty;
+			for(var i = 0, l = data.length; i < l; i++){
+				if(data[i][idProperty] == id){
+					data[i] = object;
+					return id;
+				}
+			}
+			this.data.push(object);
+			return id;
+		},
+		add: function(object, options){
+			var id = options && options.id
+				|| object[this.idProperty];
+			if(this.index[id]){
+				throw new Error("Object already exists");
+			}
+			return this.put(object, options);
+		},
+		remove: function(id){
+			delete this.index[id];
+			for(var i = 0, l = this.data.length; i < l; i++){
+				if(this.data[i][this.idProperty] == id){
+					this.data.splice(i, 1);
+					return;
+				}
+			}
+		},
+		query: function(query, options){
+			return QueryResults(
+				(this.queryEngine(query, options))(this.data)
+			);
+		},
+		setData: function(data){
+			this.data = data;
+			//	index our data
+			this.index = {};
+			for(var i = 0, l = data.length; i < l; i++){
+				var object = data[i];
+				this.index[object[this.idProperty]] = object;
+			}
+		}
+	});
+});
+</pre>
+<p>
+As you can see, creating a basic store using the new Dojo Store APIs is very simple and straight-forward!
+</p>
+<h3>Conclusion</h3>
+<p>
+In this tutorial, we've learned some of the history and foundation behind the new Dojo Store APIs, how to
+create our own store, and how two central pieces of the Dojo Store API&mdash;query engines and
+<code>dojo/store/util/QueryResults</code>&mdash;work.  We'd encourage you to explore the stores in the
+Dojo Toolkit (found in <code>dojo/store</code>), as well as any additional stores you might find in development in
+DojoX (found in <code>dojox/store</code>).
+</p>
+<p>
+Coming up next: using <code>dojo/store/Observable</code> with any store to handle notification events, as
+well as <a href="../realtime_stores">real-time data handling with the Dojo Store API</a>!
+</p>

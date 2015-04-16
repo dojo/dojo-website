@@ -1,0 +1,73 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Misreading the "this" variable</title>
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<style type="text/css">
+			#nodeContainer {
+				margin: 1em;
+			}
+			.myNode {
+				border: 1px solid #999;
+				margin: 1em;
+				padding: 0.5em;
+				background-color: #ccc;
+				float: left;
+			}
+
+			#console {
+				margin-top: 2em;
+				border-top: 1px solid #333;
+			}
+		</style>
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+			function log(msg){
+				var c = dojo.byId("console");
+				if(!c){
+					c = dojo.create("div", {
+						id: "console"
+					}, dojo.body());
+				}
+				c.innerHTML += '<div>' + msg + '</div>';
+			}
+
+			var myObject = {
+				foo: "bar",
+				myHandler: function(evt){
+					//	still contrived!
+					log("The value of foo is " + this.foo + ", from " + (evt && evt.target ? evt.target.id : window.event.srcElement.id));
+				}
+			};
+
+			dojo.ready(function(){
+				var container = dojo.byId("nodeContainer");
+				for(var i=0; i<10; i++){
+					dojo.create("div", {
+						id: "node-" + i,
+						className: "myNode",
+						innerHTML: "Fake button " + (i+1)
+					}, container);
+				}
+
+				dojo.query(".myNode").forEach(function(node){
+					node.onclick = myObject.myHandler;
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Misreading the "this" variable</h1>
+		<p>
+		The following demonstrates what happens when the value of the "this" variable in a script
+		is not what you would expect it to be.  Click on any of the fake button nodes below to see,
+		and view the source to see what we are doing.
+		</p>
+		<div id="nodeContainer"></div>
+		<div style="clear: both;"></div>
+	</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Chaining Deferreds</title>
+
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<script>
+
+			function getUserList(){
+				return dojo.xhrGet({
+					url: "users-mangled.json",
+					handleAs: "json"
+				}).then(function(res){
+					return dojo.map(res, function(user){
+						return {
+							id: user[0],
+							username: user[1],
+							name: user[2]
+						};
+					});
+				});
+			}
+
+			dojo.ready(function(){
+				getUserList().then(function(users){
+					var userlist = dojo.byId("userlist");
+
+					dojo.forEach(users, function(user){
+						dojo.create("li", {
+							id: user.id,
+							innerHTML: user.username + ": " + user.name
+						}, userlist);
+					});
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Demo: Chaining Deferreds</h1>
+
+		<ul id="userlist"></ul>
+	</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: DOH TestSuite - Author Bar</title>
+		<link rel="stylesheet" href="../style.css" media="screen">
+		<link rel="stylesheet" href="../../../../resources/style/demo.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script>
+			dojoConfig = {
+				isDebug: true,
+				// baseUrl: './',
+				// map the current directory as where we'll find 'demo' namespaced modules
+				modulePaths: {
+					demo: location.pathname.substring(0, location.pathname.lastIndexOf('/tests'))
+				},
+				// some config for our demo
+				authorsUrl: '../../resources/authors.json',
+				authorName: 'Sam Foster',
+			};
+		</script>
+		<script src="/js/dojo/1.6/dojo/dojo.js"></script>
+		<script>
+			dojo.require('demo.authorBar')
+			dojo.require('doh.runner');
+
+			dojo.ready(function(){
+				var initialRenderHdl = dojo.connect(demo.authorBar, "render", function(){
+					dojo.disconnect(initialRenderHdl);
+					doh.run();
+				});
+				demo.authorBar.update();
+			});
+			
+			doh.register("browser", [
+				{
+					name: "authorBar rendered",
+					runTest: function() {
+						doh.t(dojo.byId("author"), "Element exists");
+						doh.t(dojo.byId("author").innerHTML.indexOf(dojo.config.authorName) > -1, "Element has our authorName in it");
+					}
+				},
+				{
+					name: "style",
+					runTest: function() {
+						var node = dojo.byId("author");
+						// check that the node got some style from the stylesheet
+						// we'll infer that from offsetHeight
+						var styledHeight = node.offsetHeight;
+						var origClass = node.className;
+						node.className = node;
+						
+						doh.isNot(styledHeight, node.offsetHeight, "Unstyled element doesnt match styled element height");
+						// put it back
+						node.className = origClass;
+					}
+				},
+				{
+					name: "re-update",
+					runTest: function() {
+						var newAuthor = dojo.config.authorName = "Brian Arnold";
+						demo.authorBar.update();
+						var ddfd = new doh.Deferred();
+						ddfd.addCallback(function(){
+							doh.t(dojo.byId("author").innerHTML.indexOf(newAuthor) > -1, "Element has our updated authorName in it");
+						});
+						var reRenderHdl = dojo.connect(demo.authorBar, "render", function(){
+							dojo.disconnect(reRenderHdl);
+							ddfd.callback(true);
+						});
+						return ddfd;
+					}
+				},
+				{
+					name: "bad data url",
+					runTest: function() {
+						var dataUrl = dojo.config.authorsUrl; 
+						var authorName = dojo.config.authorName; 
+						dojo.config.authorsUrl = "./notthere.json";
+						// attempt to udpate w. bad data url
+						demo.authorBar.update();
+
+						var ddfd = new doh.Deferred();
+						
+						ddfd.addCallback(function(){
+							// ensure the authorBar didn't get wiped
+							doh.t(dojo.byId("author").innerHTML.indexOf(authorName) > -1, "Load error handled, element not touched");
+						});
+						ddfd.addBoth(function(){
+							console.log("restoring dataUrl");
+							dojo.config.authorsUrl = dataUrl; 
+						});
+						
+						var onLoadErrorHandle = dojo.connect(demo.authorBar, "onLoadError", function(){
+							dojo.disconnect(onLoadErrorHandle);
+							ddfd.callback(true);
+						});
+						return ddfd;
+					}
+				},
+				{
+					name: "Missing author handling",
+					runTest: function() {
+						var authorName = dojo.config.authorName, 
+							badAuthor = dojo.config.authorName = "Pliny the Elder"; 
+
+						// attempt to udpate w. bad data url
+						demo.authorBar.update();
+
+						var ddfd = new doh.Deferred();
+						
+						ddfd.addCallback(function(){
+							// ensure the authorBar didn't get wiped
+							doh.t(dojo.byId("author").innerHTML.indexOf(badAuthor) == -1, "error handled, bad author not inserted");
+							doh.t(dojo.byId("author").innerHTML.indexOf(authorName) > -1, "error handled, original author intact");
+						});
+						ddfd.addBoth(function(){
+							console.log("restoring author");
+							dojo.config.authorName = authorName; 
+						});
+						
+						var onErrorHandle = dojo.connect(demo.authorBar, "onError", function(){
+							dojo.disconnect(onErrorHandle);
+							ddfd.callback(true);
+						});
+						return ddfd;
+					}
+				}
+			]);
+		</script>
+	</head>
+	<body>
+		<h1>Demo: DOH TestSuite - Author Bar</h1>
+	</body>
+</html>

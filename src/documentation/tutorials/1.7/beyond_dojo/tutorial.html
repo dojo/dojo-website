@@ -1,0 +1,207 @@
+
+<h3>Getting Started</h3>
+
+<p>Up to this point, you may have only been working with the base functionality of Dojo.  You might have ventured off into other parts of the core of Dojo, which would be modules contained in the <code>/dojo/</code> directory of the distribution and have modules IDs that start with <code>dojo/*</code>.  If you <a href="/download/">downloaded</a> a SDK distribution of Dojo, or checked out a version from SVN, you would notice that <code>dojo</code> isn't the only package:</p>
+
+<p class="tutorial_image">
+	<img src="images/dojoRelease.png" alt="The Contents of the Dojo Toolkit release">
+</p>
+
+<p>It is unlikely you have gotten this far and not nosed around little in different parts of Dojo, but just in case, let's go over some of the basics again.</p>
+
+<h3>Packages and Modules</h3>
+
+<p>Prior to Dojo 1.7, even while modules were logically grouped into "packages", there wasn't that formal concept and similar functionality was grouped into different "namespaces".  In JavaScript, this meant that everything was declared in the global scope and you would access it via a global variable (e.g. <code>dojo.byId("someNode")</code>).  With the adoption of AMD, the concept of a "package" formally entered the lexicon and while the global variables are still available for most modules in Dojo since 1.7, the preferred method is to "forget" about namespaces and instead utilize AMD and the packages.</p>
+
+<p>A package in Dojo is strictly an AMD package, which requires it to include a <code>package.json</code> in the root of the packages directory, which describes the package.  There are three packages that are distributed with a Dojo source distribution: <code>dojo</code>, <code>dijit</code> and <code>dojox</code>.  The fourth directory in the source distribution is the <code>util</code> directly and is strictly not a package and contains useful utilities to make it easier to manage a Dojo project.</p>
+
+<p>Modules are then grouped together into packages.  A module is a JavaScript file that can be loaded via the Dojo loader (or another AMD loader) into your application.  These modules will generally start with a <code>define()</code> function.  Because of the expansive nature of Dojo, you will find many sub-directories within one of the three "root" packages.  Sometimes we refer to these as "sub-packages", but strictly speaking they cannot stand on their own as an AMD package.  A module's Module ID (MID) will map directly to the path that is occupies within the package.  For example the module <code>/dojo/fx.js</code> would have a MID of <code>dojo/fx</code>.  There will often be other resources included in the package directory, including tests, CSS, language resources and images.</p>
+
+<h3>Base vs. Core</h3>
+
+<p>Traditionally (in Dojo releases prior to 1.7), there had been a set of functionality that was automatically available by default when you loaded the <code>dojo/dojo.js</code> file into your application.  This functionality is referred to as "base" Dojo.  As of Dojo 1.7, this functionality was broken out from <code>dojo/dojo.js</code> and placed into individual modules in the <code>dojo/_base</code> directory.  If you are running your application in "legacy" mode (<code>async: false</code>) then these modules will get automatically loaded when you load <code>dojo/dojo.js</code>.  If you are running in async mode (<code>async: true</code>) then these modules will only be loaded if required in directly or if another module that is loaded depends on that module.</p>
+
+<p>The rest of the modules in the <code>dojo</code> package are referred to as the Core.  If you have been reading some of the other tutorials, you may have used other parts of the Core, such as <code>dojo/fx</code> in the <a href="../animation">animation tutorial</a>.</p>
+
+<p>Dojo Core provides a wide range of functionality, including feature detection, deferreds and promises, event handling, data store, DOM manipulation, queries, DOM effects, window lifecycle management, mouse, touch and keyboard events, drag and drop, dates and internationalization.</p>
+
+<h4>A Traditional Example</h4>
+
+<p>This example makes use of some of the more "traditional" ways you might use Dojo (and potentially other JavaScript libraries) to do a level of DOM querying and manipulation:</p>
+
+<pre class="brush: js;">
+require([
+	"dojo/query",
+	"dojo/_base/array",
+	"dojo/dom-construct",
+	"dojo/domReady!"
+], function(query, array, domConst){
+	function topLinks(){
+		var headings = query('h2,h3');
+
+		array.forEach(headings, function(elm){
+			var topLink = domConst.create("a", {
+				href: "#top",
+				innerHTML: "^top"
+			});
+
+			domConst.place(topLink, elm, "before");
+		});
+	}
+});
+</pre>
+
+<p>The snippet queries the DOM using a CSS selector to indicate that we want both <code>&lt;h2&gt;</code> and <code>&lt;h3&gt;</code> elements, and uses each as a reference node to insert a newly created <code>&lt;a&gt;</code> element.  There are dedicated tutorials for working with <a href="../using_query/"><code>dojo/query</code></a>, <a href="../dom_functions/">DOM functions</a> and <a href="../arrays/">array helpers</a> available to find out more.</p>
+
+<h4>Dojo Core Example</h4>
+
+<p>A simple example using a core module would be to create a function that compares two dates and returns the difference:</p>
+
+<pre class="brush: js;">
+require([
+	"dojo/date",
+	"dojo/dom",
+	"dojo/domReady!"
+], require(date, dom){
+	function daysSince(fromDate, target){
+
+		if(!(fromDate instanceof Date)){
+			fromDate = new Date(fromDate);
+		}
+		console.log("from date: ", fromDate);
+		var now = new Date();
+		console.log("From Date: " + fromDate.toUTCString());
+
+		console.log("Difference in days: " +
+			date.difference(fromDate, now, "day"));
+
+		var days  = date.difference(fromDate, now, "day");
+
+		dom.byId(target).innerHTML = days;
+	}
+});
+</pre>
+
+<p><a class="demoBtn demo" href="demo/basecore.php">View Demo</a></p>
+
+<p>There is a wealth of functionality in Dojo Base and Core for common web and general-purpose programming tasks. These tutorials aim to introduce you to some of it, but it should not replace the broader familiarity you'll get from browsing the <a href="/reference-guide/1.7/dojo/">Reference Guide</a> and the <a href="/api/?qs=1.7">API Reference</a>.</p>
+
+<h3>Dijit: Forms, Layout and UI Goodness</h3>
+
+<p>The <code>dijit</code> package is a sibling to Dojo Core.  It is managed and run as a sub-project of the Dojo Toolkit, with its own owner, policies and guidelines.  Dijit is designed to be a set of visual elements that are "enterprise grade" and offer stability, accessibility and internationalization (including right-to-left and left-to-right support where applicable).  It enhances native HTML controls like form fields, provides advanced layout capabilities as well as other common UI element interfaces. As well as being a set of visual UI elements, it is also a framework for defining custom widgets.</p>
+
+<p class="tutorial_image">
+	<iframe src="demo/dijitForm_iframe.php" style="height: 182px; width: 582px; border: 1px solid #CCCCCC;"></iframe>
+	Dijit provides a series of controls which enhances basic HTML form controls with usability improvements, formatting and validation, as well as data-binding using the dojo/store API
+</p>
+
+<p class="proTip">See the <a href="../themes_buttons_textboxes/">Dijit Themes, Buttons, and Textboxes</a> tutorial for additional reading.</p>
+
+<a class="demoBtn demo" href="demo/dijitForm.php">View Demo</a>
+
+<p>Dijit also has powerful tools for creating dynamic user interfaces that adapt to viewport size, and respond to resize and user interaction. It includes widgets for creating desktop-like application layouts and standard items like Tab and Accordion controls for making the best use of the space available.</p>
+
+<p class="tutorial_image">
+	<iframe src="demo/dijitLayout.php" style="height: 252px; width: 582px; border: 1px solid #CCCCCC;"></iframe>
+</p>
+
+<a class="demoBtn demo" href="demo/dijitLayout.php">View Demo</a>
+
+<p>You don't have to use Dijit when you are building interactivity, but the controls and patterns it comprises have grown out of a combined and cumulative experience of many years of building web applications, making it a great base to build on and with.</p>
+
+<p class="proTip">See the <a href="../dijit_layout/">Layout with Dijit</a> tutorial for additional reading.</p>
+
+<h3>DojoX: Dojo Extensions</h3>
+
+<p>The <code>dojox</code> package is a collection of sub-packages that extend the toolkit into common and less common areas.  Each sub-package is a directory under <code>dojox/</code>, and provides its own <code>README</code> file which outlines the functionality and status of the project.  Some code is stable and production-ready, while others are not. Here are some highlights in DojoX:</p>
+
+<h4>DojoX: Data Grid</h4>
+
+<p>One of the most widely used aspects of DojoX (let alone Dojo as a whole) is the <code>dojox/grid</code>.</p>
+
+<p class="tutorial_image">
+	<iframe src="demo/dojoxGrid_iframe.php" style="height: 231px; width: 582px; border: 1px solid #CCCCCC;"></iframe>
+	<br />
+	A highly flexible and feature-rich Dijit-based data grid control
+</p>
+
+<a class="demoBtn demo" href="demo/dojoxGrid.php" target="_blank">View Demo</a>
+
+<p class="proTip">See the <a href="../datagrid/" target="_blank">Introduction to the DataGrid</a> tutorial for additional reading.</p>
+
+<p>One of the challenges though has been that DojoX DataGrid hasn't been up to the task of a more modern world, in particular the mobile browser world.  While there had been some effort to enhance the DataGrid, ultimately it needed a fundamental rewrite.  The Dojo Community has created two new grids that are re-writes from the ground up of the DojoX Grid.  They are:</p>
+
+<ul>
+	<li><a href="http://dgrid.io/">dgrid</a> - Created and maintained by SitePen, it offers a next-generation grid component that is designed for modern browsers and the <a href="../intro_dojo_store/">Dojo Store API</a>.</li>
+	<li><a href="http://oria.github.com/gridx/">GridX</a> - A fast rendering, modularized and plugin architected grid component.</li>
+</ul>
+
+<p>If you are starting new development, you should really consider adopting one of the newer grids, as they are going to be more likely to take advantage of modern browsers and mobile computing needs in the future.</p>
+
+<h4>DojoX: GFX</h4>
+
+<p class="tutorial_image">
+	<iframe src="demo/dojoxGfx_iframe.php" style="height: 586px; width: 574px; border: 1px solid #CCCCCC;"></iframe><br /><br />
+	A cross-platform vector graphics API
+</p>
+
+<a class="demoBtn demo" href="demo/dojoxGfx.php">View Demo</a>
+
+<p class="proTip">See the <a href="../gfx/">Vector Graphics with Dojo's GFX</a> tutorial for additional reading.</a>
+
+<h4>DojoX: Charting</h4>
+
+<p class="tutorial_image">
+	<iframe src="demo/dojoxCharting_iframe.php" style="height: 266px; width: 582px; border: 1px solid #CCCCCC;"></iframe>
+	Native charting built on dojox/gfx, with a broad selection of chart types, themes and features for visualizing data.
+</p>
+
+<a class="demoBtn demo" href="demo/dojoxCharting.php">View Demo</a>
+
+<p class="proTip">See the <a href="../charting/">Dojo Charting</a> tutorial for additional reading.</p>
+
+<h4>DojoX: Mobile</h4>
+
+<p class="tutorial_image">
+	<iframe src="demo/dojoxMobile.php" style="height: 562px; width: 442px; border: 1px solid #CCCCCC;"></iframe><br />
+	A lightweight, cross platform, mobile widgets and application framework for mobile devices.
+</p>
+
+<a class="demoBtn demo" href="demo/dojoxMobile.php">View Demo</a>
+
+<p class="proTip">See the <a href="../mobile/tweetview/getting_started/">Getting Started with dojox/mobile</a> tutorial for additional reading.</p>
+
+<p>And the less photogenic, but highly useful:</p>
+<dl>
+	<dt>dojox/lang/functional</dt>
+	<dd>A library of functional programming utilities which complement the array methods in Dojo Base to make your code expressive, compact and side-effect free.</dd>
+
+	<dt>dojox/widget | dojox/layout | dojox/form</dt>
+	<dd>Further controls to augment the selection provided by Dijit.</dd>
+</dl>
+
+<p>DojoX is a treasure trove of solutions for a wide range of problems, and many a rainy afternoon can be spent poking through its projects. You are encouraged to do just that - to spare yourself the forehead-slapping we've all experienced upon discovering in DojoX the very thing we've just spent a week working on.</p>
+
+<p class="proTip">For an overview of everything contained in DojoX, the <a href="/reference-guide/1.7/dojox/">DojoX Reference Guide</a> is a good place to start.</p>
+
+<h3>Util</h3>
+
+<p>The <code>util/</code> directory contains scripts and resources for packaging, testing and documenting your project. Util is not a Dojo namespace, and the contents are typically used outside the browser and your page. There is no "right" way to create and deploy web applications, but Dojo tries to provide tooling to facilitate some of the important best practices that have emerged over the years.</p>
+
+<p>Each of the utils is <a href="/reference-guide/1.7/util/">documented in its own right</a>, but we'll give them a brief introduction here:</p>
+
+<h4>Dojo Build System</h4>
+<p>Dojo's package system allows the code in the toolkit to be modular, with the filesystem layout following the module structure. This means that for even a simple application, your browser would be issuing dozens of HTTP requests for the individual modules. This is an acceptable trade-off for developer convenience, but for production, you should <em>always</em> use the build tools to combine these individual module files down to one or more "layers".</p>
+
+<p>The build system is a JavaScript application, which runs on Rhino or NodeJS. Read more about the <a href="/reference-guide/1.7/build/index.html">build system itself</a>, and how to use it <a href="../build/">on your own code</a>.</p>
+
+<h4>D.O.H.</h4>
+<p><a href="/reference-guide/1.7/util/doh.html">D.O.H.</a> is the test harness used by Dojo for its own unit tests. It includes an in-browser test runner and a non-browser, Rhino-driven test runner. DOH supports a simple set of assertions, and strong support for asynchronous tests, including a specialized implementation of Deferreds, meaning it can be used to test non-Dojo JavaScript as well.</p>
+<p>For UI testing there is the <a href="/reference-guide/1.7/util/dohrobot.html">DOH Robot</a>, which is a Java applet-based web driver that can record and replay interactions with your pages. You can then take the recorded script and insert assertions as appropriate, making for a more complete test.</p>
+
+<h3>Extended Family</h3>
+<p>There is an extensive ecosystem of developers and resources working with and on the Dojo Toolkit.  Many of them make available their complimentary code and related projects. Most of these additional libraries are located at the <a href="http://packages.dojofoundation.org/">Dojo Foundation Package Repository</a> and are easily installable via the <a href="https://github.com/kriszyp/cpm">CommonJS Package Manager</a>.</p>
+
+<h3>Conclusion</h3>
+<p>The Dojo Toolkit is much more than a DOM and Ajax library. While it has feature and API overlaps with other libraries in this space, it is broader in its scope, and digs deeper in many areas to provide useful abstractions, widgets, and tools to help tackle the large and small, simple and complex, common and uncommon.</p>
+<p>You won't learn it all at once - or perhaps ever - but as your requirements grow, Dojo grows with you.  </p>

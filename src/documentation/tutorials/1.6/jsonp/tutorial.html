@@ -1,0 +1,115 @@
+
+
+
+<!-- tutorials start with a "Getting Started" block -->
+<h3>Getting Started</h3>
+<p>Dojo's baked-in Ajax capabilities provide a simple, yet powerful interface to access resources dynamically.  However, cross-domain security restrictions in the browser prevent you from making XHR requests to another domain.  What to do?  More modern browsers provide the ability to make cross-domain requests following the <a href="http://www.w3.org/TR/cors">Cross-Origin Resource Sharing</a> specification from the W3C.  However, this is not yet available in all browsers (of course!), and there are a plethora of existing services that don't yet take advantage of this specification.
+</p>
+<p>
+The answer to cross-domain communication is JSON with Padding, or JSONP.  Bob Ippolito <a href="http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/">originally introduced the JSONP technique</a> way back in 2005, and today many existing services from Google, Twitter, Facebook (to name a few) all offer API access to their services.  Dojo's <code>dojo.io.script</code> module provides seamless access to JSONP resources, without some of the messy setup details.</p>
+
+<p>What is this JSONP technique anyway?  Unlike XHR, the browser doesn't prevent scripts from being loaded across domains.  JSONP works by dynamically inserting a <code>&lt;script&gt;</code> element onto the page, and executing the response when it returns (as with any script).  The trick is that the parameters are included as query parameters in the url, and the respone is a JSON message wrapped in a callback function.  For example, a request may go to the <code>endpoint?q=dojo&callback=callme</code>, and its response will look like:</p>
+
+<pre class="brush:js; html-script:true;">
+callme({id: "dojo", some: "parameter"})
+</pre>
+
+<p>When the browser then evaluates the code in the script, it will call the <code>callme()</code> method&mdash;passing its data along. The local application, having defined the <code>callme</code> method, will then receive it.  Note that this is essentially executing script from a third party; because you are executing script from a third party service, it is implied that you are trusting the third party service with your application.  This is not to imply that JSONP is bad or should be avoided, only that its use should be limited to communication with trusted parties.</p>
+
+<p class="proTip">
+	Using cross-domain resources with JSONP also reduces contention for connections to your applications' webservers.  Browsers limit the number of requests that can be made to the server at one time. In the worst case, this is two concurrent connections on IE6.   This defaults to 6-8 connections in newer browsers.  When accessing a cross-domain resource, it does not count against the total number of connections to your server.
+</p>
+
+<p><code>dojo.io.script</code> automates the creation of the script element and callback methods, and provides you the familiar <a href="../deferreds/"><code>Deferred</code></a> interface you are accustomed to from Dojo. Make sure to <code>dojo.require("dojo.io.script");</code>.</p>
+
+<pre class="brush:js;">
+//include the script module
+dojo.require("dojo.io.script");
+
+//wait for the page and modules to be ready...
+dojo.ready(function(){
+
+	//Make a request to search twitter for #dojo
+	dojo.io.script.get({
+		url: "http://search.twitter.com/search.json",
+		content: {q: "#dojo"},
+		callbackParamName: "callback"
+	});
+});
+</pre>
+
+<p>This code follows the same basic pattern that you typically see with <code>dojo.xhr</code>.  The only real oddity you'll notice is <code>callbackParamName</code>; this property tells Dojo which parameter the endpoint expects you to specify the callback function's name on (not the callback function name itself). This tends to vary a bit from service to service.  From this point on, you can treat it like you would any other response.  This code retrieves the most recent set of tweets related to #dojo.  Let's flesh out the example a bit more, and show those results:
+
+<pre class="brush:js;">
+dojo.ready(function(){
+	//first do the io script request
+	dojo.io.script.get({
+		url: "http://search.twitter.com/search.json",
+		content: {q: "#dojo"},
+		callbackParamName: "callback"
+	}).then(function(data){
+
+		//Loop through the data results and create an array containing
+		//each tweet's text wrapped in an LI
+
+		var tweets=[];
+		dojo.forEach(data.results, function(item,idx){
+			tweets.push("<li>" + item.text + "</li>");
+		});
+
+		//join the array of LIs together and make them the
+		//innerHTML of the content holding node.
+
+		dojo.byId("tweets").innerHTML = tweets.join('');
+	});
+});
+</pre>
+
+<p>That's pretty much all there is to it! To make it a bit fancier, here is a version that adds each tweet one at a time slowly:</p>
+
+<pre class="brush:js;">
+dojo.require("dojo.io.script");
+dojo.ready(function(){
+	//make the request just as before
+	dojo.io.script.get({
+		url: "http://search.twitter.com/search.json",
+		callbackParamName: "callback",
+		content: {q: "#dojo"}
+	}).then(function(data){
+		//we're only interested in data.results, so strip it off and return it
+		return data.results;
+	}).then(function(results){
+		//create an interval timer that will remove the first item in
+		//the array and render it.  Stop the loop when the results have been
+		//exhausted.
+		var handle = setInterval(function(){
+			dojo.create("li", {innerHTML: results.shift().text},"tweets");
+			if (results.length &lt; 1){
+				clearInterval(handle);
+			}
+		}, 200);
+	});
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/demo.html">View Demo</a>
+
+<!-- pro-tip blocks -->
+<p class="proTip">
+The mechanism which drives JSONP (dynamically inserting a <code>&lt;script&gt;</code> tag) is unable to handle errors in the same way a standard Ajax request would. The browser never signals to the application when the script that is loading fails with an HTTP error (404, 500, etc.), and so the <code>dojo.io.script</code> callback never receives any signal for this either.  To allow your application to proceed instead of waiting on this script to return forever, you can set a <code>timeout</code> property for the <code>dojo.io.script</code> request.  If the callback hasn't been completed before the timeout is triggered, the <code>Deferred</code> will be rejected so your application can take appropriate action.
+</p>
+
+<!-- tutorials end with a "Conclusion" block -->
+<h3>Conclusion</h3>
+<p>JSONP gives you access to a rich set of resources which you can creatively mashup with your own applications to create effective and interesting interfaces with ease.  Most major web service providers provide some amount of access to their services using JSONP.  Even within a single organization, accessing services via JSONP on a different subdomain can reduce contention for the limited number of concurrent connections some browsers allow to the server.  Following the same patterns you are already used to with standard <code>dojo.xhr</code> requests, you should now be able to consume a cross-domain resource.
+</p>
+<p>If you are looking for practice, you could try to access the Flickr JSON API and display the resulting images. To help you get started, here is a Flickr URL which will return Dojo Toolkit-tagged images: <a href="http://api.flickr.com/services/feeds/photos_public.gne?tags=dojotoolkit&lang=en-us&format=json">http://api.flickr.com/services/feeds/photos_public.gne?tags=dojotoolkit&amp;lang=en-us&amp;format=json</a> </p>
+
+<h3>For further reading</h3>
+<ul>
+	<li><a href="../ajax/">Tutorial: Ajax with Dojo</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/1.6/dojo/io/script.html">Dojo Toolkit Reference Guide: dojo.io.script</a></li>
+	<li><a href="/api/?qs=1.6/dojo/io/script">Dojo Toolkit API Documentation: dojo.io.script</a></li>
+	<li><a href="http://www.ibm.com/developerworks/library/wa-aj-jsonp1/"> Cross-domain communications with JSONP, Part 1: Combine JSONP and jQuery to quickly build powerful mashups</a></li>
+	<li><a href="http://www.ibm.com/developerworks/xml/library/x-ajaxsecurity.html">Overcome security threats for Ajax applications</a></li>
+</ul>

@@ -1,0 +1,152 @@
+
+
+<h3>Getting Started</h3>
+<p>As far as browser-based JavaScript is concerned, the Document Object Model (DOM) is the glass that we paint on to put content and user interface in front of our users. If we want to augment, replace or add to the HTML once loaded into the browser, JavaScript and the DOM is how it's done. Dojo aims to make working with the DOM easy and efficient by providing a handful of convenience functions that fill some awkward cross-browser incompatibilities and make common operations simpler and less verbose.</p>
+<p>To explore those functions we will be manipulating a simple page containing an unordered list with five elements in it:</p>
+<pre class="brush: js; html-script: true;">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset=&quot;utf-8&quot;&gt;
+		&lt;title&gt;Demo: DOM Functions&lt;/title&gt;
+
+		&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js&quot;&gt;&lt;/script&gt;
+		&lt;script&gt;
+			dojo.ready(function(){			// &quot;ready&quot; entry point
+
+			});
+		&lt;/script&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;ul id=&quot;list&quot;&gt;
+			&lt;li id=&quot;one&quot;&gt;One&lt;/li&gt;
+			&lt;li id=&quot;two&quot;&gt;Two&lt;/li&gt;
+			&lt;li id=&quot;three&quot;&gt;Three&lt;/li&gt;
+			&lt;li id=&quot;four&quot;&gt;Four&lt;/li&gt;
+			&lt;li id=&quot;five&quot;&gt;Five&lt;/li&gt;
+		&lt;/ul&gt;
+	&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<p>The page already has the Dojo script tag, and you should recognize the <code>dojo.ready</code> block. All code that manipulates the DOM must wait until the DOM is ready before it can be executed.</p>
+
+<h3 id="byId">Retrieval</h3>
+<p>First things first: We need to know how to get elements from the DOM, in order to work with them. The easiest way to do that is with <code>dojo.byId</code>. When you pass the ID of the element you'd like to access to <code>dojo.byId</code>, you will receive a DOM node object if a node is found with that ID, and a null value if no matching node is found.</p>
+<p>This is the equivalent of using <code>document.getElementById</code>, but with two advantages: it is shorter to type, and it works around some browsers' buggy implementation of <code>getElementById</code>. Another nice feature of <code>dojo.byId</code> is that when it is passed a DOM node, it immediately returns that node. This helps to create APIs that take both strings and DOM nodes. Let's look at an example:</p>
+<pre class="brush: js; html-script: false;">
+function setText(node, text){
+    node = dojo.byId(node);
+    node.innerHTML = text;
+}
+
+dojo.ready(function(){
+    var one = dojo.byId("one");
+
+    setText(one, "One has been set");
+    setText("two", "Two has been set as well");
+});
+</pre>
+<a class="demoBtn demo" href="demo/byid.html">View Demo</a>
+<p>The <code>setText</code> function sets the text of a node, but since it passes the <code>node</code> argument to <code>dojo.byId</code> it will take either a node ID as a string or a DOM node.</p>
+
+<h3>Creation</h3>
+<p>Another thing you will be doing often is creating elements. Dojo doesn't prevent you from using the native <code>document.createElement</code> method to create elements, but creating the element and setting all the necessary attributes and properties on it can be verbose.
+Furthermore, there are enough cross-browser quirks to attribute setting to make <code>dojo.create</code> a more convenient and reliable option. </p>
+
+<p>The arguments to <code>dojo.create</code> are as follows: node name as a string, properties of the node as an object, an optional parent or sibling node, and an optional position in reference to the parent or sibling node (which defaults to "last").
+It returns the new DOM element node. Let's take a look at an example:</p>
+<pre class="brush: js; html-script: false;">
+dojo.ready(function(){
+    var list = dojo.byId("list"),
+        three = dojo.byId("three");
+
+    dojo.create("li", {
+        innerHTML: "Six"
+    }, list);
+
+    dojo.create("li", {
+        innerHTML: "Seven",
+        className: "seven",
+        style: {
+            fontWeight: "bold"
+        }
+    }, list);
+
+    dojo.create("li", {
+        innerHTML: "Three and a half"
+    }, three, "after");
+});
+</pre>
+<a class="demoBtn demo" href="demo/create.html">View Demo</a>
+<p>A simple list item is created with the content of "Six" and appended to the list. Next, another list item is created with the content of "Seven", its <code>className</code> property is set to "seven", it's styled so it has a bold font, and then appended to the list. Finally, a list item is created with the contents "Three and a half" and is inserted after the list item with the ID "three".</p>
+
+<p>When would you create elements explicitly like this, versus setting a container element's <code>innerHTML</code> property? If you already have your content as a string of HTML, setting the <code>innerHTML</code> property will always be faster. However, <code>dojo.create</code> comes into its own when you want to create elements but not immediately place them in the DOM, or when you want to insert or append a new element without disturbing the sibling nodes around it.</p>
+
+<h3>Placement</h3>
+<p>If you already have a node and want to place that node, you will need to use <code>dojo.place</code>. The arguments are as follows: a DOM node or string ID of a node to place, a DOM node or string ID of a node to use as a reference, and an optional position as a string which defaults to "last" if not provided. This is very similar to what we saw in <code>dojo.create</code> and, in fact, <code>dojo.create</code> uses <code>dojo.place</code> under the hood. For our example, we have added a few buttons to the page:</p>
+<pre class="brush: js; html-script: true;">
+&lt;button onclick="moveFirst();"&gt;The first item&lt;/button&gt;
+&lt;button onclick="moveBeforeTwo();"&gt;Before Two&lt;/button&gt;
+&lt;button onclick="moveAfterFour();"&gt;After Four&lt;/button&gt;
+&lt;button onclick="moveLast();"&gt;The last item&lt;/button&gt;
+</pre>
+<p>The example defines functions which move the third node around the list using <code>dojo.place</code>:</p>
+<pre class="brush: js; html-script: false;">
+function moveFirst(){
+    var list = dojo.byId("list"),
+        three = dojo.byId("three");
+
+    dojo.place(three, list, "first");
+}
+
+function moveBeforeTwo(){
+    var two = dojo.byId("two"),
+        three = dojo.byId("three");
+
+    dojo.place(three, two, "before");
+}
+
+function moveAfterFour(){
+    var four = dojo.byId("four"),
+        three = dojo.byId("three");
+
+    dojo.place(three, four, "after");
+}
+
+function moveLast(){
+    var list = dojo.byId("list"),
+        three = dojo.byId("three");
+
+    dojo.place(three, list);
+}
+</pre>
+<a class="demoBtn demo" href="demo/place.html">View Demo</a>
+<p>The possible values for the placement argument are "before", "after", "replace", "only", "first", and "last". Please see the <a href="http://dojotoolkit.org/reference-guide/dojo/place.html#placement-options">reference guide for dojo.place</a> for more details as to what each placement option does, though the names are decently intuitive.</p>
+
+
+<p>In the simple case, dojo.place does little more than the native <code>parentNode.appendChild(node)</code> might do. Its value is in being able to easily specify position, whether it is in reference to a parent or sibling node - with one consistent API.</p>
+
+<h3>Destruction</h3>
+<p>Most often you'll be creating nodes, but occasionally, you'll want to remove nodes as well. There are two ways to do this in Dojo: <code>dojo.destroy</code> which will destroy a node and all of its children, while <code>dojo.empty</code> will only destroy the children of a given node. Both take a DOM node or a string ID of a node as their only argument. We're going to add two more buttons to our page:</p>
+<pre class="brush: js; html-script: false;">
+&lt;button onclick="destroyFirst();"&gt;Destroy the first list item&lt;/button&gt;
+&lt;button onclick="destroyAll();"&gt;Destroy all list items&lt;/button&gt;
+</pre>
+<pre class="brush: js; html-script: false;">
+function destroyFirst(){
+    var list = dojo.byId("list"),
+        items = list.getElementsByTagName("li");
+
+    if(items.length){
+        dojo.destroy(items[0]);
+    }
+}
+
+function destroyAll(){
+    dojo.empty("list");
+}
+</pre>
+<a class="demoBtn demo" href="demo/destroy.html">View Demo</a>
+<p>The first button will destroy the first item in the list on each click. The second empties the list entirely.</p>
+<h3>Conclusion</h3>
+<p>So far, we have a pretty comprehensive set of tools that we can use to do simple DOM manipulation, from creating nodes, to moving them about, to getting rid of them -- but they all work on only one node at a time. What if the nodes you want to work with don't have IDs? The next tutorial will cover <code>dojo.query</code>, which allows us to search for and work with nodes based on CSS selectors!</p>
+

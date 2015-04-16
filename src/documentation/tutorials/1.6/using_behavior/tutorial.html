@@ -1,0 +1,370 @@
+
+
+<h3>The Problem</h3>
+
+<p>In this tutorial series, we've looked at using both <a href="../events/"><code>dojo.connect</code></a> and <a href="../using_query/"><code>dojo.query</code></a> to set up event listeners on elements. Each technique works well, but there are challenges when you apply them to a larger problem.
+As your DOM changes and you inject new content into the page, you need a way to set up the event listeners on new elements, while not doubling-up the event handling for ones that existed previously. This can be awkward.
+At a more general level, while you might have a nice separation of concerns in your HTML and CSS, the behavior of your page (the binding of events to elements) is mixed up with other concerns in your javascript. Or, worse, inlined into your HTML code.</p>
+
+<h3>The Behavior Layer</h3>
+<p>The behavior layer describes a conceptual grouping of all the event binding that occurs during the lifetime of a page.
+	It dates back to Ben Nolan's Behaviour.js library, and has implementations in many javascript libraries.
+	When you remove this "layer" you have a nicely degraded, universally accessible page.
+	With the layer applied you add runtime, javascript-driven interactions.
+	A "behavior sheet" is analagous to a stylesheet and offers many of the same benefits of organization and maintainability.
+	It collects together the mappings between elements, events and event-handling functions into a single object, which can be applied &mdash; and crucially &mdash; cleanly re-applied when the page content changes.
+	This is a great way to implement <a href="http://en.wikipedia.org/wiki/Unobtrusive_JavaScript">unobtrusive scripting</a>, but it goes further:
+	by structuring the code to be organized around CSS selectors and event name/handler pairs, all the code entry points and event-level interactions on a page can be quickly scanned and understood.
+</p>
+
+<h3>Getting Started</h3>
+<p>Dojo's implementation of this concept is in the <code>dojo.behavior</code> module.
+	Let's look at a simple example.
+	In the following demo, our page has a list of "products", each with its own button.
+	The desired behavior is that clicking on any button should increment the count in the summary.
+	We'll also add some style changes to highlight the button's clicked state.</p>
+
+<p>First, the markup: </p>
+<pre class="brush: js; html-script: true;">
+	&lt;h3&gt;Product List&lt;/h3&gt;
+	&lt;ul&gt;
+		&lt;li&gt;
+			&lt;h4&gt;Product line 1&lt;/h4&gt;
+			&lt;button class=&quot;buyButton demoBtn&quot;&gt;Buy Me&lt;/button&gt;
+		&lt;/li&gt;
+		&lt;li&gt;
+			&lt;h4&gt;Product line 2&lt;/h4&gt;
+			&lt;button class=&quot;buyButton demoBtn&quot;&gt;Buy Me&lt;/button&gt;
+		&lt;/li&gt;
+		&lt;li&gt;
+			&lt;h4&gt;Product line 3&lt;/h4&gt;
+			&lt;button class=&quot;buyButton demoBtn&quot;&gt;Buy Me&lt;/button&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;div id=&quot;summary&quot; class=&quot;summary&quot;&gt;No items in cart&lt;/div&gt;
+</pre>
+
+<p>The JavaScript bit looks like this:</p>
+<pre class="brush: js">
+dojo.require("dojo.behavior");
+
+// track the number of products "bought"
+var productCount = 0;
+
+// function to update rendering for the summary
+function onUpdate(){
+	dojo.byId("summary").innerHTML =
+		productCount + " items in cart";
+}
+
+// function to handle click on 'buy' buttons
+function onPurchaseClick(evt){
+	productCount++;
+	onUpdate();
+}
+
+// a simple behavior 'sheet', which sets up event handlers on all elements
+// which match the '.buyButton' query
+var myBehavior = {
+	".buyButton" : {
+		onclick: onPurchaseClick,
+		onmousedown: function(evt){
+			dojo.addClass(evt.target, "buttonDown");
+		},
+		onmouseup: function(evt){
+			dojo.removeClass(evt.target, "buttonDown");
+		}
+    }
+};
+
+
+// Wait for the DOM to be ready
+// and dependencies loaded before working with either
+dojo.ready(function(){
+	// register the behavior 'sheet'
+	dojo.behavior.add(myBehavior);
+
+	// apply all registered behaviors to the current document
+	dojo.behavior.apply();
+
+});
+</pre>
+<a class="demoBtn demo" href="demo/simple.html">View Demo</a>
+
+<p>In the code listing above, the <code>myBehavior</code> object is our "behavior sheet". A CSS selector is used as the key in the behavior definition, associated with one or more <em>event-name</em>: <strong>handler-function</strong> pairs.
+	In this simple example, we have defined <code>onclick</code>, <code>onmousedown</code> and <code>onmouseup</code> event bindings for elements matching the "<code>.buyButton</code>" selector.
+</p>
+<p>The guts of this behavior should be very familiar; all that is new here is how we've composed the behavior object.
+	The final two lines are where we register and apply the behavior.
+	Notice that the definition of the behavior can be done before the DOM is ready and even before <code>dojo.behavior</code> itself is loaded. Until we pass it to <code>dojo.behavior.add</code>, it is simply a JavaScript object with no dependencies. This turns out to be useful, as we'll see later.</p>
+
+<p class="proTip">
+Behavior is not quite the same thing as <a href="http://icant.co.uk/sandbox/eventdelegation/">event delegation</a>.
+Dojo's behavior implementation adds event listeners to each of the matched elements, rather than the event delegation approach that adds a single listener for each event type, higher up the DOM tree.
+The <a href="/reference-guide/1.6/dojox/NodeList/delegate.html">dojox.NodeList.delegate</a> module provides event delegation support for dojo.NodeList (and therefore dojo.query).
+</p>
+
+<h3>Re-applying Behavior</h3>
+<p>So far, we've not done anything we couldn't easily do with <code>dojo.query</code> (although the behavior definition has a clarity that is useful all by itself.)
+For our next demo, we'll dynamically add more content which we wish to have the same behavior:</p>
+
+<a class="demoBtn demo" href="demo/reApplying.html">View Demo</a>
+
+<p>We've added a little new markup - another list - with a link to load in more content:</p>
+<pre class="brush:html">&lt;h3&gt;Recommendations&lt;/h3&gt;
+&lt;ul id=&quot;recommendedList&quot; class=&quot;productList&quot;&gt;
+	&lt;li&gt;&lt;a class=&quot;recommendedLink&quot; href=&quot;./recommendedItems.html&quot;&gt;Get Recommendations&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+
+<p>We've extended the script with a function to load and extract out the content we need from a full HTML response:</p>
+<pre class="brush:js">
+function loadContentAsFragment(node, contentUrl){
+	// summary:
+	// 		Fetch a page and extract out the list items
+	return dojo.xhrGet({
+		url: contentUrl,
+		load: function(html){
+			// extract out the list items
+			html = html.substring(html.indexOf(&#x27;&lt;li&#x27;));
+			html = html.substring(0, html.lastIndexOf(&#x27;&lt;/li&gt;&#x27;)+5);
+
+			node.innerHTML = html;
+		}
+	}); // return the deferred
+}
+</pre>
+<p>The <code>loadContentAsFragment</code> function is a means of getting new content into the page. Notice that it returns the result of the <code>dojo.xhrGet</code> call.</p>
+
+<pre class="brush:js">
+var myBehavior = {
+	".buyButton" : {
+		onclick: onPurchaseClick,
+		onmousedown: function(evt){
+			dojo.addClass(evt.target, "buttonDown");
+		},
+		onmouseup: function(evt){
+			dojo.removeClass(evt.target, "buttonDown");
+		}
+    },
+	".recommendedLink": {
+		onclick: function(evt){
+			dojo.stopEvent(evt);
+			loadContentAsFragment(
+				dojo.byId("recommendedList"), // the target node
+				evt.target.href // the url
+			).then(function(){
+				// when the new content is loaded in,
+				// re-apply the behavior
+				dojo.behavior.apply();
+			})
+
+		}
+	}
+};
+</pre>
+<p>The "Get Recommendations" link in our markup was given a class of <code>recommendedLink</code>.
+	The '<code>.recommendedLink</code>' group in our behavior object defines a click handler for this kind of element - to inject the new content via the <code>loadContentAsFragment</code> function.
+	We know this will change the DOM, so the behavior definition is the right context for re-applying behavior, via <code>dojo.behavior.apply()</code>.
+	That leaves a clear separation of concerns:
+</p>
+<ul>
+	<li>The markup has content and links. This will degrade gracefully for search bots and non-javascript enabled browsers.</li>
+	<li>The library function <code>loadContentAsFragment</code> knows how to fetch content from a URL, and inject it into the node provided. It knows nothing about page behavior, or event handlers etc.</li>
+	<li>The behavior knows which events to wire up to which elements.</li>
+</ul>
+
+<h3>Behaviors as Modules</h3>
+<p>We can further highlight the separation of the behavior layer by defining it and loading it as its own module, using dojo.<code>provide</code> and <code>dojo.require</code>.
+This reduces our page initialization code down to: </p>
+
+<pre class="brush: js; html-script: true;">
+&lt;script&gt;
+	// map the current directory as the path for code in the &#x27;tutorial&#x27; namespace
+	dojo.registerModulePath(&#x27;tutorial&#x27;, location.pathname.replace(/\/\w+\.html$/, &#x27;&#x27;))
+
+	dojo.require(&quot;dojo.behavior&quot;);
+	dojo.require(&quot;tutorial.behavior&quot;); // load our behavior object
+
+	// Wait for the DOM to be ready
+	// and dependencies loaded before working with either
+	dojo.ready(function(){
+		// register the behavior &#x27;sheet&#x27;
+		dojo.behavior.add(tutorial.behavior);
+
+		// apply all registered behaviors to the current document
+		dojo.behavior.apply();
+	});
+&lt;/script&gt;
+</pre>
+
+<p>The module itself can be as simple as an assignment, or it can include its own related functions: </p>
+<pre class="brush: js">
+dojo.provide("tutorial.behavior");
+
+(function(){
+	// snip for brevity, see demo/behavior.js
+
+	// behavior 'sheet'
+	tutorial.behavior = {
+		".buyButton" : {
+			onclick: onPurchaseClick,
+			onmousedown: function(evt){
+				dojo.addClass(evt.target, "buttonDown");
+			},
+			onmouseup: function(evt){
+				dojo.removeClass(evt.target, "buttonDown");
+			}
+	    },
+		".recommendedLink": {
+			onclick: function(evt){
+				dojo.stopEvent(evt);
+				loadContentAsFragment(
+					dojo.byId("recommendedList"), // the target node
+					evt.target.href // the url
+				).then(function(){
+					// when the new content is loaded in,
+					// re-apply the behavior
+					dojo.behavior.apply();
+				})
+
+			}
+		}
+	};
+})();
+</pre>
+<a class="demoBtn demo" href="demo/behaviorModule.html">View Demo</a>
+
+<p>The definition of the behavior has no module dependencies, nor does it need to wait until the DOM is ready. You can define different behavior modules for different pages.
+This code can be developed, versioned, iterated and even delivered and cached as its own entity. Or, it can be minified and packaged up with your other javascript code using <a href="../build/">Dojo's build tools</a>.</p>
+
+<h3>The "found" Event</h3>
+<p>In addition to the usual DOM events, <code>dojo.behavior</code> also supports a synthetic "found" event.
+	Handler functions are invoked once for each element matched by the selector/key.
+	This proves very useful for doing initialization. Here it is in action:</p>
+<pre class="brush:js">
+// snip for brevity. See demo/found.html
+
+// function to handle 'found' event for products
+function onProductFound(elm){
+	availableCount++;
+}
+
+// a simple behavior 'sheet', which sets up event handlers on all elements
+// which match the '.buyButton' query
+var myBehavior = {
+	"button": {
+		// bindings for all button elements
+		found: function(elm){
+			console.log("button found: ", elm);
+		},
+		onmousedown: function(evt){
+			dojo.addClass(evt.target, "buttonDown");
+		},
+		onmouseup: function(evt){
+			dojo.removeClass(evt.target, "buttonDown");
+		}
+	},
+	".buyButton": {
+		// bindings for buyButtons specifically
+		found: onProductFound,
+
+		onclick: onPurchaseClick
+    },
+	"#resetButton": {
+		// wire up the reset button so it clears the products-purchased count
+		onclick: function(evt) {
+			productCount = 0;
+			onUpdate();
+		}
+	}
+};
+</pre>
+<p class="tutorial_image"><a href="demo/found.html"><img src="images/foundButtons.png" alt="Buttons"></a></p>
+	<a class="demoBtn demo" href="demo/found.html">View Demo</a>
+
+<p>In the above example, the <code>found</code> pseudo-event for the <code>.buyButton</code> group calls the <code>onProductFound</code> function, to increment the count in a visual summary.
+The <code>onProductFound</code> function therefore is invoked once for each of our "Buy Me" buttons on the page.
+
+The <code>found</code> pseudo-event fires once for each element matched by a selector in the behavior. To demonstrate this, we also have a <code>found</code> handler associated with a "<code>button</code>" CSS selector.
+This matches all &lt;button&gt; elements on the page and logs a message to the console. Even though <code>.buyButton</code> and <code>button</code> are overlapping sets, each of the behaviors is applied. In this example, our "Buy Me" buttons are 'found' twice.</p>
+
+<h3>Publish &amp; Subscribe with dojo.behavior</h3>
+<p>The <code>dojo.behavior</code> module has one more trick up its sleeve. To further facilitate a loosely-coupled component design, a behavior can be configured to publish events on a given topic.
+Pub/sub is a common programming technique in which handler functions are associated with a topic or "channel".
+In Dojo this is accomplished with <code>dojo.subscribe</code>.
+Any code can then publish events on this topic using <code>dojo.publish</code>, and all registered handlers will fire.
+Pub/sub is covered in our <a href="../events/">events tutorial</a>.</p>
+<p>In the context of <code>dojo.behavior</code>, it looks like this:</p>
+
+<pre class="brush:js">
+dojo.subscribe("/buyButton/clicked", function(evt){
+	// a default listener for click events on 'buy' buttons
+	console.log("default handler for events on the /buyButton/click topic. isActive: ", isActive);
+});
+
+var handles = {},		// where we'll store our subscribe handles
+ 	isActive = false; 	// track active state of the form
+
+function toggleActive(){
+	if(isActive) {
+		// set to inactive state
+		// unsubscribe listeners
+		dojo.query(".productList").addClass("inactive");
+		dojo.unsubscribe(handles.activate);
+	} else {
+		// set to active state
+		// start listening to the /buyButton/clicked topic
+		handles.activate = dojo.subscribe("/buyButton/clicked", purchaseProduct);
+		dojo.query(".productList").removeClass("inactive");
+	}
+	isActive = !isActive;
+}
+
+function onActiveClick(evt){
+	// update active state
+	toggleActive();
+	evt.target.innerHTML = isActive ?
+		"Deactivate" : "Activate";
+}
+
+// a simple behavior 'sheet', which sets up event handlers on all elements
+// which match the '.buyButton' query
+var myBehavior = {
+	".buyButton" : {
+		// publish an event on the '/buyButton/clicked' channel
+		onclick: "/buyButton/clicked",
+		onmousedown: function(evt){
+			dojo.addClass(evt.target, "buttonDown");
+		},
+		onmouseup: function(evt){
+			dojo.removeClass(evt.target, "buttonDown");
+		}
+    },
+	"#activate": {
+		// wire up the toggle button
+		onclick: onActiveClick
+	}
+};
+</pre>
+<a class="demoBtn demo" href="demo/pubsub.html">View Demo</a>
+<p>The demo shows how you can easily broadcast events, and stop and start listening for events, all from a simple behavior sheet.</p>
+
+<h3>Caveats</h3>
+<p>There has to be a catch, right? What you can't easily do with <code>dojo.behavior</code> is <em>unregister</em> any or all behaviors.
+	Under the hood, when you apply behavior, <code>dojo.connect</code> and <code>dojo.subscribe</code> are used. The handles they produce that would facilitate disconnection/unsubscription are not collected or made available to you.
+	For many/most use cases, that does not present a problem, but for long-lived single-page-applications where you need finer-grained control over event registration and teardown, <code>dojo.behavior</code> may not be suitable.
+	The sweet-spot for <code>dojo.behavior</code> is that for which it was originally designed: unobtrusive scripting of content-focused pages.
+</p>
+
+<h3>Conclusion</h3>
+<p>Managing event handlers and page initialization are areas that can quickly produce spaghetti code.
+The concept of the behavior layer and its implementation in <code>dojo.behavior</code> can bring clear purpose to your code, allowing you to tease apart the mechanics of event handling from the functionality that should result from the event.
+The behavior layer makes great "glue". By collecting all your event wiring together in a behavior sheet, all entry-points and the DOM structures and events they are associated with are clear and self-documenting.</p>
+
+<h3>Resources</h3>
+
+<ul>
+	<li><a href="/reference-guide/1.6/dojo/behavior.html">dojo.behavior documentation</a></li>
+	<li><a href="/api/1.6/dojo/behavior">dojo.behavior API</a></li>
+</ul>

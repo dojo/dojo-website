@@ -1,0 +1,567 @@
+
+<script src="/highlight/scripts/shBrushBash.js"></script>
+
+<p class="proTip">
+This tutorial is a follow-up to the <a href="../modules/">Introduction to AMD</a>, so make sure you understand the basics of AMD first.
+</p>
+
+<p>Throughout this tutorial, we will be referring to a hypothetical application with a filesystem structure that looks like this:</p>
+
+<pre>/
+    index.html
+    js/
+        lib/
+            dojo/
+            dijit/
+            dojox/
+        my/
+        util/
+</pre>
+
+<p>
+As you can see, this structure is different from what we discussed in the <a href="../modules/">previous tutorial</a>, so we will explain how to configure the loader to make this work. But first let's revisit <code>require</code> and <code>define</code> with a few more details...
+</p>
+
+
+<h3>Delving Deeper into <code>require</code></h3>
+
+<p>
+The <code>require</code> function accepts the following parameters:
+<ol>
+	<li><em>configuration</em> (optional, default=undefined): an object with loader configuration options - this allows you to reconfigure the loader at run-time.</li>
+	<li><em>dependencies</em> (optional, default=[]): an array of module identifiers. If specified, these modules will be resolved before your code is evaluated. They will be loaded in the order they are listed and passed as parameters to your callback function, also in order.</li>
+	<li><em>callback</em>: a function containing the code you want to run that depends on the modules in <code>dependencies</code>. You need to wrap your code in a callback function in order to support asynchronous loading and to be able to use non-global references to the modules.</li>
+</ol>
+</p>
+
+<p class="proTip">
+The <em>configuration</em> parameter can simply be omitted, no empty placeholder value is necessary.
+</p>
+
+<p>
+We'll cover configuring the loader in more detail below; for now here's an example of using the <em>configuration</em> parameter of <code>require</code>:
+</p>
+
+<pre class="brush: js;">
+require({
+	baseUrl: "/js/",
+	packages: [
+		{ name: "dojo", location: "//ajax.googleapis.com/ajax/libs/dojo/1.9.6/" },
+		{ name: "my", location: "my" }
+	]
+}, [ "my/app" ]);
+</pre>
+
+<p>Here, we’ve changed the configuration slightly to point the <code>dojo</code> package to the Google CDN. Cross-domain loading support is implicit in the AMD format.</p>
+
+<p class="proTip">Note that not all configuration options can be set at runtime. In particular, <code>async</code>, <code>tlmSiblingOfDojo</code>, and pre-existing <code>has</code> tests cannot be changed once the loader is loaded. Additionally, most configuration data is shallow copied, which means that you couldn’t use this mechanism to, for example, add more keys to a custom configuration object—the object would be overwritten.</p>
+
+
+<h3>Delving Deeper into <code>define</code></h3>
+
+<p>
+The <code>define</code> function accepts the following parameters:
+<ol>
+	<li><em>moduleId</em> (optional, default=undefined): a module identifier. This parameter is largely a historical artifact of early AMD loaders or to support pre-AMD Dojo, and <strong>should not be provided</strong>.</li>
+	<li><em>dependencies</em> (optional, default=[]): an array of module identifiers that are dependencies of your module. If specified, these modules will be resolved before your module is evaluated and they will be passed as parameters to your factory function, in order.</li>
+	<li><em>factory</em>: the value of your module, or a "factory" function that will return the value</li>
+</ol>
+</p>
+
+<p>It's important to remember that when defining a module, the factory function is only ever invoked <em>once</em>—the returned value is cached by the loader. On a practical level, this means that modules can very easily share objects (similar to <em>static</em> properties in other languages) by loading the same module.</p>
+
+<p>When defining a module, the value can be given as a plain object:</p>
+
+<pre class="brush: js;">// in "my/nls/common.js"
+define({
+	greeting: "Hello!",
+	howAreYou: "How are you?"
+});</pre>
+
+<p>Keep in mind that if you do define a module without using a factory function, you won’t be able to reference any dependencies, so this type of definition is rare and usually only gets used by <a href="../i18n/">i18n</a> bundles or simple configuration objects.</p>
+
+
+<h3>How does the loader work?</h3>
+
+<p>
+When you call <code>require</code> to load some modules, the loader has to find the code for the module and then pass it as a parameter to your callback function so you can use it.
+<ol>
+	<li>First the loader has to <em>resolve</em> the module identifier you passed. This involves putting together the <code>baseUrl</code> with the module identifier itself, plus taking into account any modifications required by other configuration options, such as <code>map</code> (discussed later in more detail).</li>
+	<li>At this point the loader has a URL for the module and can load the actual file by creating a new <code>script</code> element on the page and setting the <code>src</code> attribute to the module's URL.</li>
+	<li>Once the file is loaded and evaluated, its result is set as the value of the module.</li>
+	<li>The loader maintains a reference to each module, so the next time the module is requested the loader will return the existing reference.</li>
+</ol>
+</p>
+
+<p>
+When an AMD module is loaded, the code is inserted into a new <code>script</code> element on the page which results in the <code>define</code> function being called. The same process as above happens to load any dependencies passed to <code>define</code>, then the loader's reference to your module is set to the value returned by the factory function you passed to <code>define</code>. (If you passed a value, rather than a function to <code>define</code>, then the loader's reference to your module is set to that value.)
+</p>
+
+
+<h3>Configuring the loader</h3>
+
+<p>For legacy compatibility reasons, Dojo's loader runs by default in synchronous mode. To put the "A" in "AMD", we need to explicitly configure the loader to run asynchronously. This is done by setting the <code>async</code> configuration property to <code>true</code>:</p>
+
+<pre class="brush: js; html-script: true;">&lt;script data-dojo-config="async: true" src="js/lib/dojo/dojo.js">&lt;/script></pre>
+
+<p>You should get in the habit of enabling this as a standard practice - only disable it when you know you need synchronous behavior. The next thing we need to do is configure the loader with information about where our modules are located:</p>
+
+<pre class="brush: js;">var dojoConfig = {
+	baseUrl: "/js/",
+	tlmSiblingOfDojo: false,
+	packages: [
+		{ name: "dojo", location: "lib/dojo" },
+		{ name: "dijit", location: "lib/dijit" },
+		{ name: "dojox", location: "lib/dojox" },
+		{ name: "my", location: "my", main: "app" }
+	]
+};</pre>
+
+<p class="proTip">
+Keep in mind you must set the <code>dojoConfig</code> variable before loading <code>dojo.js</code>. Read the <a href="../dojo_config">Configuring Dojo tutorial</a> if you haven't already.
+</p>
+
+<p>
+Let's examine the configuration options we're using:
+<ul>
+	<li><code>baseUrl</code> (default = <em>the path of the folder dojo.js was loaded from</em>): defines the base URL for loading packages. For example, if you try to load the module "my/widget/Person", the loader will try to load it from:
+		<br>
+		<pre>/js/my/widget/Person.js</pre>
+		This allows us to place our files wherever is most convenient in the filesystem (in this case, the "js" folder) and still use only the relevant parts of the path in module ids - we don't need to <code>require(["js/my/widget/Person"])</code>, we can simply <code>require(["my/widget/Person"])</code> because we have configured the loader to use "/js/" as a base to prepend to all module ids when actually loading the source file.
+	</li>
+	<li><code>tlmSiblingOfDojo</code> (default = <em>true</em>): by default, the loader expects to find modules in folders that are siblings of the folder the loader was loaded from (remember, with Dojo the loader is loaded when your script element loads <code>dojo.js</code>). If your file structure is like this:
+		<br>
+		<pre>/
+    js/
+        dojo/
+        dijit/
+        dojox/
+        my/
+        util/</pre>
+		Then you don't need to configure <code>baseUrl</code> or <code>tlmSiblingOfDojo</code> &mdash; your top-level modules <em>are</em> siblings of the folder <code>dojo.js</code> was loaded from, so <code>tlmSiblingOfDojo</code> is true.
+	</li>
+	<li><code>packages</code>: an array of package configuration objects. At the most fundamental level, packages are simply collections of modules. <code>dojo</code>, <code>dijit</code>, and <code>dojox</code> are all examples of packages. Unlike a simple collection of modules in a directory, however, packages are imbued with some extra features that significantly enhance module portability and ease-of-use. A portable package is self-contained and also can be installed through tools like <a href="https://github.com/kriszyp/cpm">cpm</a>. A package configuration allows you to specify:
+		<ul>
+			<li><em>name</em>: the name of the package. This should match the name of the folder that contains the modules.</li>
+			<li><em>location</em>: the location of the package; can either be a path relative to <code>baseUrl</code> <em>or</em> an absolute path. We would like to be able to load modules from the dojo package as "dojo/dom" rather than "lib/dojo/dom" (take another look at the file structure at the beginning of this tutorial), so we specify the <code>location</code> property of the dojo package to be "lib/dojo". This informs the loader that an attempt to load the "dojo/dom" module should load the file "/js/lib/dojo/dom.js" (remember, because of <code>baseUrl</code> "js" will be prepended).</li>
+			<li><em>main</em> (optional, default = <em>main.js</em>): used to discover the correct module to load if someone tries to require the package itself. For example, if you were to try to require "dojo", the actual file that would be loaded is "/js/dojo/main.js". Since we’ve overridden this property for the "my" package, if someone required "my", they would actually load "/js/my/app.js".
+			<p class="proTip">If we tried to require "util", which is <em>not</em> a defined package, the loader would try to load "/js/util.js". You should always define all of your packages in the loader configuration.</p>
+			</li>
+		</ul>
+	</li>
+</ul>
+</p>
+
+
+<h3>Using portable modules</h3>
+
+<p>One of the most important features of the new AMD loader is the ability to create fully portable packages. For instance, if you had an application that needed to use modules from two different versions of Dojo, the new loader makes this very easy.</p>
+
+<p>
+Suppose you have an application built on an older version of Dojo and you want to update to the latest and greatest 1.9 release, but there are some updates to Dojo that render your older code non-functional. You can still update to the current release of Dojo for new code, while using a legacy release of Dojo for you older code. This can be accomplished with the <code>map</code> configuration property:
+</p>
+
+<pre class="brush: js">
+dojoConfig = {
+	packages: [
+		{ name: "dojo16", location: "lib/dojo16" },
+		{ name: "dijit16", location: "lib/dijit16" },
+		{ name: "dojox16", location: "lib/dojox16" },
+		{ name: "dojo", location: "lib/dojo" },
+		{ name: "dijit", location: "lib/dijit" },
+		{ name: "dojox", location: "lib/dojox" },
+		{ name: "myOldApp", location: "myOldApp" },
+		{ name: "my", location: "my" }
+	],
+	map: {
+		myOldApp: {
+			dojo: "dojo16",
+			dijit: "dijit16",
+			dojox: "dojox16"
+		}
+	}
+};
+</pre>
+
+<p>
+<em>What's going on here?</em>
+<ul>
+	<li>(lines 3-5) First we define 3 packages that point to folders containing a legacy release of Dojo</li>
+	<li>(lines 6-8) Next we define 3 packages for the current release of Dojo</li>
+	<li>(lines 9-10) We define packages for our old and current code</li>
+	<li>(lines 12-18) We define a <code>map</code> configuration: it applies to the "myOldApp" module, and maps requests for modules from the "dojo", "dijit", and "dojox" packages to "dojo16", "dijit16", and "dojox16", respectively.</li>
+	<li>Modules from the "my" package that load modules from dojo, dijit, dojox will get modules from the current Dojo release.</li>
+</ul>
+</p>
+
+<p>
+You can refer to the <a href="https://github.com/amdjs/amdjs-api/wiki/Common-Config#map-">AMD Configuration documentation</a> for more information about <code>map</code>.
+</p>
+
+<p class="proTip">
+If you are already familiar with the loader, specifically the <code>packageMap</code> property, it is deprecated - <code>map</code> is the configuration option to use moving forward.
+</p>
+
+
+<h3>Writing portable modules</h3>
+
+<p>
+You can (and <em>should</em>) ensure that modules within packages you create always load files from within the same package by specifying dependencies with <em>relative</em> module identifiers. Given the following code in a module in the "my" package:
+</p>
+
+<pre class="brush: js">
+// in "my/widget/NavBar.js"
+define([
+	"dojo/dom",
+	"my/otherModule",
+	"my/widget/InfoBox"
+], function(dom, otherModule, InfoBox){
+	// …
+});
+</pre>
+
+<p>
+Instead of explicitly requesting modules from the <code>my</code> package, use relative module identifiers instead:
+</p>
+
+<pre class="brush: js">
+// in "my/widget/NavBar.js"
+define([
+	"dojo/dom",
+	"../otherModule",
+	"./InfoBox"
+], function(dom, otherModule, InfoBox){
+	// …
+});
+</pre>
+
+<p>
+Relative to "my/widget/NavBar":
+<ul>
+	<li>"dojo/dom" is in a separate package, so we use the full identifier</li>
+	<li>"my/otherModule" is one directory up, so we use "../"</li>
+	<li>"my/widget/InfoBox" is in the same directory, so we use "./"
+		<p class="proTip">If you just specify "InfoBox" it is interpreted as a package name, so you must start the identifier with "./".</p>
+	</li>
+</ul>
+</p>
+
+<p class="proTip">Keep in mind that relative identifiers can only be used to refer to modules <em>within the same package</em>. Relative module ids are also only valid when defining a module - they do <em>not</em> work in the dependency list passed to <code>require</code>.</p>
+
+<p>
+Given the same-package restriction of relative identifiers, look back up at the <code>map</code> example &mdash; do you notice something wrong? For simplicity's sake, we focused on the aspects of the configuration that enabled one part of your app to use an old release of Dojo and other parts of your app to use a current release. However, we left out something important - Dijit depends on Dojo, and DojoX depends on both Dojo and Dijit. The configuration below will ensure that those dependencies are resolved correctly. For safety's sake, we've also mapped the Dojo packages to themselves (<code>map: { dojo16: { dojo: "dojo16" } }</code>) in case any of the modules failed to use relative identifiers.
+</p>
+
+<pre class="brush: js">
+var map16 = {
+	dojo: "dojo16",
+	dijit: "dijit16",
+	dojox: "dojox16"
+};
+
+dojoConfig = {
+	packages: [
+		{ name: "dojo16", location: "lib/dojo16" },
+		{ name: "dijit16", location: "lib/dijit16" },
+		{ name: "dojox16", location: "lib/dojox16" },
+		{ name: "dojo", location: "lib/dojo" },
+		{ name: "dijit", location: "lib/dijit" },
+		{ name: "dojox", location: "lib/dojox" },
+		{ name: "myOldApp", location: "myOldApp" },
+		{ name: "my", location: "my" }
+	],
+	map: {
+		dojo16: map16,
+		dijit16: map16,
+		dojox16: map16,
+		myOldApp: map16
+	}
+};
+</pre>
+
+
+<h3>Conditionally requiring modules</h3>
+
+<p>Sometimes, you may want to require a module conditionally in response to some condition. For example, you may want defer loading an optional module until an event occurs. This is pretty simple if you’re using explicit module definitions:</p>
+
+<pre class="brush: js;">// in "my/debug.js"
+define([
+	"dojo/dom",
+	"dojo/dom-construct",
+	"dojo/on"
+], function(dom, domConstruct, on){
+	on(dom.byId("debugButton"), "click", function(){
+		require([ "my/debug/console" ], function(console){
+			domConstruct.place(console, document.body);
+		});
+	});
+});</pre>
+
+<p>Unfortunately, to be completely portable, that "my/debug/console" needs to be turned into a relative identifier. Just changing it doesn’t work, however, because the context of the original module is lost by the time <code>require</code> is called. In order to resolve this problem, the Dojo loader offers something called a <strong>context-sensitive require</strong>. In order to use one of these, pass the special module identifier "require" as a dependency in your initial <code>define</code> call:</p>
+
+<pre class="brush: js; highlight: [ 2 ];">// in "my/debug.js"
+define([
+	"dojo/dom",
+	"dojo/dom-construct",
+	"dojo/on",
+	"require"
+], function(dom, domConstruct, on, require){
+	on(dom.byId("debugButton"), "click", function(){
+		require([ "./debug/console" ], function(console){
+			domConstruct.place(console, document.body);
+		});
+	});
+});</pre>
+
+<p>Now, the inner <code>require</code> call uses the locally bound, context-sensitive <code>require</code> function, so we can safely require modules relative to "my/debug".</p>
+
+<p class="proTip">
+<em>How was</em> <code>require's</code> <em>context lost?</em>
+<br>
+Remember that <code>require</code> is a globally defined function. When the handler for the "click" event executes, the only context it gets from the module it was defined in is the scope. It doesn't know what module it was defined in. There's no "require" in the local scope, so the "require" defined in the global scope is called. Recalling the file system structure referenced throughout this tutorial, if we pass "./debug/console" to <code>require</code>, it will attempt to load the file "/js/debug/console.js", which does not exist.
+<br>
+By using the context-sensitive <code>require</code>, we have a local reference to a modified <code>require</code> function that maintains the context of the module, so it correctly loads "/js/my/debug/console.js".
+</p>
+
+<p>
+Context-sensitive <code>require</code> is also very useful for loading resources (images, templates, CSS) for a module. Given the following file system structure:
+</p>
+
+<pre>/
+    js/
+	    my/
+		    widget/
+			    InfoBox.js
+				    images/
+						info.png</pre>
+
+<p>
+Within <code>InfoBox.js</code> we can call <code>require.toUrl</code> to get a complete URL referencing "info.png" that can be set as the <code>src</code> property on an <code>img</code> element.
+</p>
+
+<pre class="brush: js">
+// in my/widget/InfoBox.js
+define([
+	"dojo/dom",
+	"require"
+], function(dom, require){
+	// assume DOM structure where #infoBoxImage is an img element
+	dom.byId("infoBoxImage").src = require.toUrl("./images/info.png");
+});
+</pre>
+
+
+<h3>Handling circular dependencies</h3>
+
+<p>When you’re writing code, you may occasionally come across cases where you have two modules that need to refer to each other, and this reference creates a circular dependency. In order to resolve a circular dependency like this, the loader immediately resolves the module that recurses first. For example, given the following example:</p>
+
+<pre class="brush: js;">
+// in "my/moduleA.js"
+define([ "./moduleB" ], function(moduleB){
+	return {
+		getValue: function(){
+			return "oranges";
+		},
+
+		print: function(){
+			// dependency on moduleB
+			log(moduleB.getValue());
+		}
+	};
+});
+
+// in "my/moduleB.js"
+define([ "./moduleA" ], function(moduleA){
+	return {
+		getValue: function(){
+			// dependency on moduleA
+			return "apples and " + moduleA.getValue();
+		}
+	};
+});
+
+// in "index.html"
+require([
+	"my/moduleA"
+], function(moduleA) {
+	moduleA.print();
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/circular.php">View Demo</a>
+
+<p>
+This looks like it should print "apples and oranges", but instead you get an error in <code>moduleB</code>: <code>Object has no method 'getValue'</code>.
+Let's take a look at what the loader will do when you load and run "index.html":
+
+<ol>
+	<li>Resolve the dependencies passed to <code>require</code> (in <code>index.html</code>): <code>moduleA</code></li>
+	<li>Resolve <code>moduleA's</code> dependencies: <code>moduleB</code></li>
+	<li>Resolve <code>moduleB's</code> dependencies: <code>moduleA</code></li>
+	<li>Detect that it is currently in the process of trying to resolve <code>moduleA</code></li>
+	<li>Break out of the circular dependency by temporarily resolving <code>moduleA</code> as an empty object.</li>
+	<li>Resume resolving <code>moduleB</code> by calling its factory function; the empty object will be passed to the factory function as <code>moduleA</code>.</li>
+	<li>Set the loader's reference to <code>moduleB</code> to the return value of the factory function.</li>
+	<li>Resume resolving <code>moduleA</code> by calling its factory function.</li>
+	<li>Set the loader's reference to <code>moduleA</code> to the return value of the factory function &mdash; while the loader now refers to the valid value; <strong><code>moduleB</code> is left still referring to the empty object</strong>.</li>
+	<li>Execute <code>moduleA.print</code> &mdash; since <code>moduleB</code> has a bad reference to <code>moduleA</code>, when it calls <code>moduleA.getValue</code> an error is thrown.</li>
+</ol>
+
+</p>
+
+<p>
+To solve this problem, the loader provides a special "exports" module identifier. When used, this module will return a reference to a persistent object representing the module being defined &mdash; the object will initially be empty, but any modules involved in circular reference resolution will be passed a reference to it. The same reference will be passed into the module that has listed "exports" in its dependencies. With the reference to this persistent object, we can define our properties directly on the object. The sequence of events here can be a little difficult to follow, so take a look at the updated code below and the explanation that follows.
+</p>
+
+<pre class="brush: js; highlight: [2, 3, 7]">
+// in "my/moduleA.js"
+define([ "./moduleB", "exports" ], function(moduleB, exports){
+	exports.getValue = function(){
+		return "oranges";
+	};
+
+	exports.print = function(){
+		log(moduleB.getValue());
+	};
+});
+
+// in "my/moduleB.js"
+define([ "./moduleA" ], function(moduleA){
+	return {
+		getValue: function(){
+			return "apples and " + moduleA.getValue();
+		}
+	};
+});
+
+// in "index.html"
+require([
+	"my/moduleA"
+], function(moduleA) {
+	moduleA.print();
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/exports.php">View Demo</a>
+
+<p>
+What happens now when you load and run "index.html":
+<ol>
+	<li>Resolve the dependencies passed to <code>require</code> (in <code>index.html</code>): <code>moduleA</code></li>
+	<li>Resolve <code>moduleA's</code> dependencies: <code>moduleB</code></li>
+	<li>Resolve <code>moduleB's</code> dependencies: <code>moduleA</code></li>
+	<li>Detect that it is currently in the process of trying to resolve <code>moduleA</code>.</li>
+	<li>Break out of the circular dependency by temporarily resolving <code>moduleA</code> as an empty object.</li>
+	<li>Resume resolving <code>moduleB</code> by calling its factory function; the empty object will be passed to the factory function as <code>moduleA</code>.</li>
+	<li>Set the loader's reference to <code>moduleB</code> to the return value of the factory function.</li>
+	<li>Resume resolving <code>moduleA</code> by calling its factory function &mdash; the empty object that has been created as a placeholder for <code>moduleA</code> will be passed to the factory function as the <code>exports</code> parameter.</li>
+	<li>After resolving a module that has listed "exports" as a dependency, the loader's reference to the module is <em>not</em> set to the factory function's return value. Rather, the loader assumes the module set any necessary properties on the empty object that was created as a placeholder and passed to the factory function as the <code>exports</code> parameter.</li>
+	<li>Execute <code>moduleA.print</code> &mdash; since <code>moduleB</code> has a valid reference to the object that was eventually populated by <code>moduleA</code>, when it calls <code>moduleA.getValue</code> it works as expected.</li>
+</ol>
+
+</p>
+
+<p>
+It is important to keep in mind that although using exports provides a reference that is eventually valid, it's still just an empty object at the time the dependent module (moduleB) is resolved. When your factory function (for moduleB) is executed, it receives a reference to an empty object (for moduleA). It is only after the circular dependency has been fully resolved (moduleA is temporarily resolved as {}, moduleB is resolved, then moduleA is fully resolved) that the object is updated with the module's (moduleA) methods and properties, which will then be available to functions defined in your factory function (for moduleB), but called later. The following code demonstrates this distinction:
+</p>
+
+<pre class="brush: js">
+// in "my/moduleA.js"
+define([ "./moduleB", "exports" ], function(moduleB, exports){
+	exports.isValid = true;
+
+	exports.getValue = function(){
+		return "oranges";
+	};
+
+	exports.print = function(){
+		// dependency on moduleB
+		log(moduleB.getValue());
+	}
+});
+
+// in "my/moduleB.js"
+define([ "./moduleA" ], function(moduleA){
+	// this code will run at resolution time, when the reference to
+	// moduleA is an empty object, so moduleA.isValid will be undefined
+	if(moduleA.isValid){
+		return {
+			getValue: function(){
+				return "won't happen";
+			}
+		};
+	}
+
+	// this code returns an object with a method that references moduleA
+	// the "getValue" method won't be called until after moduleA has
+	// actually been resolved, and since it uses exports, the "getValue"
+	// method will be available
+	return {
+		getValue: function(){
+			return "apples and " + moduleA.getValue();
+		}
+	};
+});
+
+// in "index.html"
+require([
+	"my/moduleA"
+], function(moduleA) {
+	moduleA.print();
+});
+</pre>
+
+<a class="demoBtn demo" href="demo/exports2.php">View Demo</a>
+
+
+<h3>Loading non-AMD code</h3>
+
+<p>As mentioned in the section on module identifiers, the AMD loader can also be used to load non-AMD code by passing an identifier that is actually a path to a JavaScript file. The loader identifies these special identifiers in one of three ways:</p>
+
+<ul>
+	<li>The identifier starts with a “/”</li>
+	<li>The identifier starts with a protocol (e.g. “http:”, “https:”)</li>
+	<li>The identifier ends with “.js”</li>
+</ul>
+
+<p>When arbitrary code is loaded as a module, the module’s resolved value is <code>undefined</code>; you will need to directly access whatever code was defined globally by the script.</p>
+
+<p>One feature exclusive to the Dojo loader is the ability to mix-and-match legacy Dojo modules with AMD-style modules. This makes it possible to slowly and methodically transition from a legacy codebase to an AMD codebase instead of needing to convert everything immediately. This works both when the loader is in sync mode <em>and</em> when it is in async mode. When in async mode, the resolved value of a legacy module is whatever object exists in the global scope that matches the file’s first <code>dojo.provide</code> call once the script is done being evaluated. For example:</p>
+
+<pre class="brush: js;">// in "my/legacyModule.js"
+dojo.provide("my.legacyModule");
+my.legacyModule = {
+	isLegacy: true
+};</pre>
+
+<p>When loading this code via the AMD loader through a call to <code>require(["my/legacyModule"])</code>, the resolved value of this module will be the object assigned to <code>my.legacyModule</code>.</p>
+
+
+<h3>Server-side JavaScript</h3>
+
+<p>One final feature of the new AMD loader is the ability to load JavaScript on the server using either <a href="http://nodejs.org">node.js</a> or <a href="https://www.mozilla.org/rhino/">Rhino</a>. Loading Dojo via command-line looks like this:</p>
+
+<pre class="brush: bash;"># node.js:
+node path/to/dojo.js load=my/serverConfig load=my/app
+
+# rhino:
+java -jar rhino.jar path/to/dojo.js load=my/serverConfig load=my/app</pre>
+
+<p>See the <a href="../node">Dojo and Node.js</a> tutorial for more details.</p>
+
+<p>Each <code>load=</code> arguments add modules to a dependency list that is automatically resolved once the loader is ready. In a browser, the equivalent code would look like this:</p>
+
+<pre class="brush: js; html-script: true;">&lt;script data-dojo-config="async: true" src="path/to/dojo.js">&lt;/script>
+&lt;script>require(["my/serverConfig", "my/app"]);&lt;/script></pre>
+
+
+<h3>Conclusion</h3>
+
+<p>The new AMD format brings many exciting new features and capabilities to Dojo; despite its length, this tutorial gives only a very brief overview of everything that the new loader has to offer. To learn more details about all of the new features of the AMD loader, be sure to check out the <a href="/reference-guide/1.9/loader/">Dojo loader reference guide</a>.</p>
+
+
+<h3>Resources</h3>
+
+<ul>
+	<li><a href="https://github.com/amdjs/amdjs-api/wiki/AMD">AMD Specification</a></li>
+</ul>

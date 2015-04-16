@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Progammatic Layout</title>
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="//ajax.googleapis.com/ajax/libs/dojo/1.6.3/dojo/dojo.xd.js">
+		</script>
+		<script>
+			dojo.require("dijit.layout.BorderContainer");
+			dojo.require("dijit.layout.ContentPane");
+			dojo.require("dijit.layout.TabContainer");
+
+			function addTab(name) {
+				var pane = new dijit.layout.ContentPane({
+					title: name,
+					content: "<h4>" + name + "</h4>"
+				});
+				dijit.byId("contentTabs").addChild(pane);
+			}
+
+			dojo.ready(function(){
+				// create the BorderContainer and attach it to our appLayout div
+				var appLayout = new dijit.layout.BorderContainer({
+					design: "headline"
+				}, "appLayout");
+
+
+				// create the TabContainer
+				var contentTabs = new dijit.layout.TabContainer({
+					region: "center",
+					id: "contentTabs",
+					tabPosition: "bottom",
+					"class": "centerPanel",
+					href: "contentCenter.html"
+				})
+
+				// add the TabContainer as a child of the BorderContainer
+				appLayout.addChild( contentTabs );
+
+				// create and add the BorderContainer edge regions
+				appLayout.addChild(
+					new dijit.layout.ContentPane({
+						region: "top",
+						"class": "edgePanel",
+						content: "Header content (top)"
+					})
+				)
+				appLayout.addChild(
+					new dijit.layout.ContentPane({
+						region: "left",
+						id: "leftCol", "class": "edgePanel",
+						content: "Sidebar content (left)",
+						splitter: true
+					})
+				);
+
+				// Add initial content to the TabContainer
+				contentTabs.addChild(
+					new dijit.layout.ContentPane({
+						title: "Start"
+					}, "startContent")
+				);
+
+				var tabCounter = 1;
+				dojo.connect(dojo.byId("createTabBtn"), "onclick", function(evt){
+					addTab("Tab " + (++tabCounter));
+				});
+
+				// start up and do layout
+				appLayout.startup();
+			});
+		</script>
+	</head>
+	<body class="claro">
+		<div id="appLayout" class="demoLayout"></div>
+		<div id="startContent">
+			<h4>Starting Content</h4>
+			<button id="createTabBtn">Add another tab</button>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: Store Adapter</title>
+		<link rel="stylesheet" href="style.css" media="screen">
+		<link rel="stylesheet" href="../../../resources/style/demo.css" media="screen">
+		<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojox/grid/resources/claroGrid.css";
+
+		<!-- load dojo and provide config via data attribute -->
+		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"
+				data-dojo-config="isDebug: true,parseOnLoad: true">
+		</script>
+		<style>
+			#grid {
+				width: 330px;
+			}
+		</style>
+		<script>
+			dojo.require("dojo.store.Memory");
+			dojo.require("dojo.data.ObjectStore");
+			dojo.require("dojox.grid.DataGrid");
+			dojo.ready(function(){
+				data = [
+					{ abbr:'ec', name:'Ecuador',           capital:'Quito' },
+					{ abbr:'eg', name:'Egypt',             capital:'Cairo' },
+					{ abbr:'sv', name:'El Salvador',       capital:'San Salvador' },
+					{ abbr:'gq', name:'Equatorial Guinea', capital:'Malabo' },
+					{ abbr:'er', name:'Eritrea',           capital:'Asmara' },
+					{ abbr:'ee', name:'Estonia',           capital:'Tallinn' },
+					{ abbr:'et', name:'Ethiopia',          capital:'Addis Ababa' }
+				];
+				var objectStore = new dojo.store.Memory({
+					data: data
+				});
+				grid = new dojox.grid.DataGrid({
+					store: dojo.data.ObjectStore({objectStore: objectStore}),
+					structure: [
+						{name:"Country", field:"name", width: "150px"},
+						{name:"Abbreviation", field:"abbr"},
+						{name:"Capital", field:"capital"}
+					]
+				}, "grid");
+				grid.startup();
+			});
+		</script>
+	</head>
+	<body class="claro">
+		<h1>Demo: Store Adapter</h1>
+		<div id="grid">
+		</div>
+	</body>
+</html>

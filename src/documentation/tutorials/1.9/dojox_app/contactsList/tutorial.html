@@ -1,0 +1,255 @@
+<?php require("../../../resources/tutHead.inc"); ?>
+
+<h3>About dojox/app</h3>
+
+<p><strong>dojox/app</strong> is an extensible, configuration based, application framework which is built on Dojo.
+<strong>dojox/app</strong> helps application developers create applications more quickly, increases maintainability and
+	reduces coding effort by providing:</p>
+<ul>
+	<li>Support for a predefined JSON-based configuration file</li>
+	<li>A typical application structure</li>
+	<li>A set of application controllers that the application can leverage or extend, including layout and transition controllers</li>
+	<li>A notion of views, with view templates, and view controllers in addition to the application controllers</li>
+	<li>A build system to bundle your application with a limited set of files to be downloaded or installed onto the system</li>
+</ul>
+<p>The documentation for dojox/app can be found here:</p>
+<ul>
+	<li><a href="http://dojotoolkit.org/reference-guide/1.9/dojox/app.html" target="_blank">Dojo Reference Guide section for dojox/app</a></li>
+	<li><a href="http://dojotoolkit.org/api/" target="_blank">Dojo API Guide</a></li>
+	<li><a href="http://download.dojotoolkit.org/release-1.9.6/dojo-release-1.9.6/dojox/app/tests/" target="_blank">Run the dojox/app tests here</a></li>
+	<li><a href="https://github.com/dmachi/dojox_application/tree/dojo19/tests" target="_blank">View the dojox/app tests source here</a></li>
+</ul>
+
+<p>Even though dojox/app is built on top of Dojo, it is UI Toolkit agnostic.  The application views can be developed with:</p>
+<ul>
+	<li>Dijit</li>
+	<li>Dojo Mobile</li>
+	<li>Any other JavaScript/HTML5 toolkit like jQuery Mobile</li>
+</ul>
+<p>dojox/app works well with dojox/mvc</p>
+<ul>
+	<li>dojox/app includes support for creating <a href="http://dojotoolkit.org/reference-guide/dojox/mvc.html" target="_blank">dojox/mvc</a> models via the JSON Config, and accessing those models from the views</li>
+	<li>Since dojox/mvc is still experimental we will not be using it in this tutorial</li>
+</ul>
+
+
+<h3 id="createAnApp">Contacts Data Structure</h3>
+
+<p>Before starting on the application let's see how the <strong>Contacts List Application data</strong> will be structured.
+	We chose this data structure because it is a subset of the contacts data structure
+	used by <a href="http://docs.phonegap.com/en/2.8.0/cordova_contacts_contacts.md.html#Contacts" target="_blank">Cordova/PhoneGap</a>.
+	The data will include an array of contacts with the following:</p>
+<ul>
+	<li><strong>"id"</strong>: a unique id</li>
+	<li><strong>"name"</strong>: which includes sub-fields of <strong>"givenName"</strong> and <strong>"familyName"</strong></li>
+	<li><strong>"displayName"</strong>: which is created by joining the <strong>"givenName"</strong> and <strong>"familyName"</strong></li>
+	<li><strong>"emails"</strong>: an array which contains entries which include sub-fields of <strong>"type"</strong> and <strong>"value"</strong></li>
+	<li><strong>"phoneNumbers"</strong>: an array which contains entries which include sub-fields of <strong>"type"</strong> and <strong>"value"</strong></li>
+</ul>
+
+
+<h3 id="FirstList">The Contacts List Application</h3>
+<div style="float: left; width: 100%; margin-top: 20px; margin-bottom: 20px;">
+	<p>The <strong>Contacts List Application</strong> on an <strong>iPhone</strong> iOS Simulator.</p>
+	<div style="float: left; width: 50%;">
+		<label  style="margin-left: 90px;">Contacts List</label>
+		<img src="images/contactsList.png" alt="Phone Contacts List View" style="margin:0 auto;display:block;" />
+	</div>
+</div>
+
+<p>The <strong>Contacts List Application</strong> has the following file structure:</p>
+
+<pre>
+	/contactsList/
+			contacts.js
+			contacts.json
+			contacts.php
+			/views/
+				list.html
+				list.js
+</pre>
+
+<h3 id="createhtml">The main HTML file</h3>
+
+<p>The main HTML file includes the Dojo Mobile CSS.</p>
+<pre class="brush: js; html-script: true;">
+&lt;script src="{path-to-dojox}/dojox/mobile/deviceTheme.js"&gt;
+ &lt;/script&gt;
+</pre>
+
+<p>The main HTML file loads dojo.js</p>
+<pre class="brush: js; html-script: true;">
+&lt;script src="{path-to-dojo}/dojo/dojo.js" data-dojo-config= "async: true"&gt;
+ &lt;/script&gt;
+</pre>
+
+<p>The main HTML file loads the main application module.</p>
+<pre class="brush: js; html-script: true;">
+&lt;script&gt
+	require(["contactsList/contacts"]);
+ &lt;/script&gt;
+</pre>
+
+<h3 id="jsonConfig">The JSON configuration file</h3>
+<p>The JSON Configuration file contains the following:</p>
+<ul>
+	<li>An application ID</li>
+	<li>A set of application controllers</li>
+	<li>A set of application dependencies</li>
+	<li>A set of views with:</li>
+		<ul>
+			<li>Templates (View rendering)</li>
+			<li>Controllers (View controllers)</li>
+			<li>View Translation Files</li>
+			<li>Possibly custom parameters</li>
+		</ul>
+	<li>A set of data stores that can be shared at application level or specific to a view</li>
+</ul>
+<p>See the dojox/app documentation for more information about the <a href="http://dojotoolkit.org/reference-guide/dojox/app.html#the-configuration-file" target="_blank">JSON configuration</a>.</p>
+<p class="proTip">The JSON configuration can leverage <a href="http://dojotoolkit.org/reference-guide/dojo/has.html" target="_blank">"dojo/has"</a> support
+to use different sections of configuration based on the targeted platform or other "dojo/has" features.</p>
+
+<h3 id="createconfig1">The JSON configuration file for the <strong>Contacts List Application</strong></h3>
+
+<p>The JSON configuration for the Contacts List Application is named contacts.json, it includes the dependencies, controllers, store,
+	defaultView and the list view, as follows:</p>
+<pre class="brush: js; html-script: true; highlight: [2,3,10,16,17,56,57]">
+	{
+		"id": "contactsApp",
+		"dependencies": [
+			"dojo/store/Observable",
+			"dojox/mobile/Heading",
+			"dojox/mobile/ScrollableView",
+			"dojox/mobile/ToolBarButton",
+			"dojo/store/Memory"
+		],
+		"controllers": [
+			"dojox/app/controllers/Load",
+			"dojox/app/controllers/Transition",
+			"dojox/app/controllers/Layout"
+		],
+		"defaultView": "list",
+		"stores": {
+			"contacts": {
+				"type": "dojo/store/Memory",
+				"observable": true,
+				"params": {
+					"data": [
+						{
+							"id": "1",
+							"displayName": "Ed Chatelain",
+							"name": {
+								"givenName": "Ed",
+								"familyName": "Chatelain"
+							},
+							"emails": [
+								{
+									"type": "home",
+									"value": "me@myhome.com"
+								}
+							],
+							"phoneNumbers": [
+								{
+									"type": "home",
+									"value": "10-20-30-40"
+								},
+								{
+									"type": "work",
+									"value": "11-22-33-44"
+								}
+							],
+							"organizations": []
+						},
+						{
+							"id": "2",
+							"displayName": "Christophe Jolif",
+							:   :   :
+						}
+					]
+				}
+			}
+		},
+		"views": {
+			"list": {
+				"controller": "contactsList/views/list",
+				"template": "contactsList/views/list.html"
+			}
+		}
+	}
+</pre>
+
+<h3 id="createmain">The main module for the application</h3>
+<p>The main module (contacts.js) will load the configuration file using "dojo/text", and instantiate the application using the parsed JSON config.</p>
+<pre class="brush: js; html-script: true; highlight: [4]">
+	define(["dojo/json", "dojo/text!contactsList/contacts.json",
+		"dojox/app/main"],
+		function(json, config, Application){
+			Application(json.parse(config));
+	});
+</pre>
+
+<h3 id="createviews">The "list" view</h3>
+<p>The <strong>"list"</strong> view includes a template, and a controller.</p>
+<p>The <strong>"list" view template</strong> (list.html) contains:</p>
+<ul>
+	<li>A dojox/mobile/Heading.</li>
+	<li>A div used to show which item was selected.</li>
+	<li>A dojox/mobile/EdgeToEdgeStoreList with a dojox/mobile/FilteredListMixin.</li>
+	<li>The contacts list store comes from stores defined in the JSON config which are accessed by name via the views loadedStores.</li>
+	<li>displayName is used as the labelProperty to match the data in the store.</li>
+	<li>The ContactListItem defined in the view controller is used as the itemRender to set the "clickable" property true.</li>
+</ul>
+
+<pre class="brush: html; highlight: [2,6,7,8,10,11,12]">
+	&lt;div class="mblBackground"&gt;
+		&lt;div data-dojo-type="dojox/mobile/Heading"
+			data-dojo-props="fixed: 'top'"&gt;
+			Contacts
+		&lt;/div&gt;
+		&lt;div id="selectionMade"&gt;None selected.&lt;/div&gt;
+		&lt;div data-dojo-type="dojox/mobile/EdgeToEdgeStoreList"
+				data-dojo-mixins="dojox/mobile/FilteredListMixin"
+				data-dojo-attach-point="contacts"
+				data-dojo-props="store: this.loadedStores.contacts,
+								labelProperty: 'displayName',
+								itemRenderer: this.ContactListItem,
+								placeHolder: 'Search', stateful: false"&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+</pre>
+
+<p>The <strong>"list" view controller</strong> (list.js):</p>
+<ul>
+	<li>The <strong>ContactListItem</strong> is used to set clickable property true for the items shown in the list, so the arrow will be displayed.</li>
+	<li>The <strong>init</strong> function is only called when the view is loaded for the first time.</li>
+	<li>The init function will watch for clicks on the contacts list and use dom.byId and innerHTML to set the text to indicate which item was clicked.</li>
+</ul>
+<pre class="brush: js; html-script: true; highlight: [4,9,10,11,12]">
+	define(["dojo/_base/declare", "dojo/dom", "dojox/mobile/ListItem",
+		"dojox/mobile/EdgeToEdgeStoreList", "dojox/mobile/FilteredListMixin"],
+		function(declare, dom, ListItem){
+		var ContactListItem = declare(ListItem, {
+			clickable: true
+		});
+
+		return {
+			ContactListItem: ContactListItem,
+			init: function(){
+				this.contacts.on("click", function(e){
+					dom.byId("selectionMade").innerHTML = e.target.innerHTML + ": was selected.";
+				});
+			}
+		};
+	});
+</pre>
+
+<a class="demoBtn demo" href="demos/contactsList/contacts.php" target="_blank">Run the Contacts List Application App</a>
+<a class="demoBtn demo" href="https://github.com/edchat/dojox_app_tutorial/tree/master/contactsList/demos/contactsList" target="_blank">View the Contacts List Application source on github</a>
+
+<h3>Conclusion</h3>
+
+<p>In this tutorial, we've learned how to build a simple one page Contacts List Application with dojox/app.
+In the next part of this series we will create a Details View, and add support to Edit, Add, and Delete contacts.
+</p>
+
+<?php include("../series.inc"); ?>

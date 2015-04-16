@@ -1,0 +1,73 @@
+
+
+<h3>Introduction</h3>
+
+<p>From time to time, it is useful to load Dojo modules from a content delivery network—for example, to create a simple test case that works anywhere, or to offer example code that is easy to distribute and run. Unfortunately, using Dojo from a CDN with custom modules isn't a terribly intuitive process due to the way that module paths are resolved. In order to use a CDN with custom, local modules, some additional configuration needs to occur.</p>
+
+<p class="proTip">Studies of library CDN usage (such as the article <a href="http://zoompf.com/blog/2010/01/should-you-use-javascript-library-cdns">Should You Use JavaScript Library CDNs?</a>) show that using CDNs usually offers <em>worse</em> performance than locally hosted scripts, especially since local scripts can be built into layers to significantly reduce HTTP round trips. If you’re trying to use library CDNs to increase the performance of your application, you may want to weigh the decision more carefully.</p>
+
+<h3>Loading our Modules</h3>
+
+<p>To use a CDN, start with a simple HTML page that includes the Dojo loader from a CDN:</p>
+
+<pre class="brush: html;">
+&lt;!DOCTYPE html>
+&lt;html>
+	&lt;head>
+		&lt;title>Demo&lt;/title>
+	&lt;/head>
+	&lt;body>
+		&lt;script data-dojo-config="async: 1"
+			src="//ajax.googleapis.com/ajax/libs/dojo/1.8.9/dojo/dojo.js">&lt;/script>
+	&lt;/body>
+&lt;/html>
+</pre>
+
+<p>This code ensures the AMD-enabled Dojo loader is available to make <code>require</code> calls to load other modules.</p>
+
+<p class="proTip">Prior to Dojo 1.7, the cross-domain Dojo loader script was named <code>dojo.xd.js</code>. Due to AMD’s native support for cross-domain loading, this special version is no longer necessary. Also, note that there is no <code>http:</code> in the script URL; this means that the same protocol will be used to load from the CDN as is used for the current page (i.e. if the current page loads over HTTPS, so will the code from the CDN).</p>
+
+<p>Next, we need to make sure that Dojo has access to a local copy of the <code>dojo/resources/blank.html</code> file, which is used by certain modules (like <code>dojo/hash</code>) to enable functionality across domains, by setting the <code>dojoBlankHtmlUrl</code> configuration property:</p>
+
+<pre class="brush: html;">
+&lt;script data-dojo-config="async: 1, dojoBlankHtmlUrl: '/path/to/blank.html'"
+	src="//ajax.googleapis.com/ajax/libs/dojo/1.8.9/dojo/dojo.js">&lt;/script>
+</pre>
+
+<p>Finally, we need to define the location of our local module package(s):</p>
+
+<pre class="brush: html;">
+&lt;script data-dojo-config="async: 1, dojoBlankHtmlUrl: '/blank.html',
+		packages: [ {
+			name: 'custom',
+			location: location.pathname.replace(/\/[^/]+$/, '') + '/js/custom'
+		} ]"
+	src="//ajax.googleapis.com/ajax/libs/dojo/1.8.9/dojo/dojo.js">&lt;/script>
+</pre>
+
+<p>Note that the local package location is using a little JavaScript trickery to create an absolute path that is derived from the path of the current HTML file. Using absolute paths is necessary for the Dojo 1.8 loader to resolve local modules correctly. This same trickery can be used for the <code>dojoBlankHtmlUrl</code> key as well, if necessary.</p>
+
+<p>Now that we’ve defined the package that contains our local modules, we’re done! We can simply require them like normal modules:</p>
+
+<pre class="brush: js;">require([ 'custom/thinger' ], function(thinger){ … });</pre>
+
+<p><a class="demoBtn demo" href="demo/index.php">View Demo</a></p>
+
+<h3>Caveats</h3>
+
+<p>Unlike the old Dojo loader, nothing different needs to be done when using built modules from CDN. However, there is an issue that you may run into when using Dojo loaded from CDN:</p>
+
+<ul>
+	<li>Attempting to load unbuilt, <em>remote</em> AMD modules that use the <code>dojo/text</code> plugin will fail due to cross-origin security restrictions. (Built versions of AMD modules are unaffected because the calls to <code>dojo/text</code> are eliminated by the build system.)</li>
+</ul>
+
+<h3>Conclusion</h3>
+
+<p>CDN-based versions of Dojo can be useful in some circumstances.  By making a few simple configuration changes, it is possible to use custom local modules while loading Dojo from a CDN, thanks to the new AMD-based module system.</p>
+
+<h3>Links</h3>
+<ul>
+	<li><a href="http://dojotoolkit.org/reference-guide/1.8/quickstart/cross-domain.html">Cross-domain loading reference guide</a></li>
+	<li><a href="http://dojotoolkit.org/reference-guide/1.8/dojo/config.html">Dojo configuration reference guide</a></li>
+	<li>More information on the library CDNs that Dojo uses: <a href="http://code.google.com/apis/libraries/devguide.html">Google CDN</a> and <a href="http://api.yandex.ru/jslibs/">Yandex CDN</a>.</li>
+</ul>

@@ -1,0 +1,191 @@
+
+
+<h3>Getting Started</h3>
+<p>Much of your JavaScript code will be preparing for events: both responding to and generating new events. This means that the key to building responsive, interactive web applications is creating effective event connections. Event connections allow your application to respond to user interaction and wait for actions to happen. In a browser context, we have <abbr title="Document Object Model">DOM</abbr> events, but we can also think of function calls as events: "when this happens, do this". That is the job of Dojo's main event workhorse: <code>dojo.connect</code>.</p>
+
+
+<h3>DOM Events</h3>
+<p>You might be asking yourself, "Doesn't the DOM already provide a mechanism for registering event handlers?" It does, but not all browsers follow the DOM specifications: between all of the DOM implementations from the major browsers there are three (3) ways to register event handlers (addEventListener, attachEvent, and DOM0). Add to that two different event object implementations and one browser that fires registered functions in <a href="http://msdn.microsoft.com/en-us/library/ms536343(v=vs.85).aspx">"random order"</a> and <a href="http://msdn.microsoft.com/en-us/library/bb250448(VS.85).aspx">causes memory leaks</a> when registering event handlers and you have a recipe for disaster.</p>
+<p>Thankfully, Dojo normalizes the way you work with DOM events: it irons out the differences between DOM APIs and prevents memory leaks with one API: <code>dojo.connect</code>. Let's say we have the following markup:</p>
+<pre class="brush: html;">
+&lt;button id="myButton"&gt;Click me!&lt;/button&gt;
+&lt;div id="myDiv"&gt;Hover over me!&lt;/div&gt;
+</pre>
+<p>Let's also imagine that you want the <code>div</code> to change to blue when you click the button, red when you hover over it, and back to white when you're done hovering. <code>dojo.connect</code> makes that very simple:</p>
+<pre class="brush: js;">
+var myButton = dojo.byId("myButton"),
+	myDiv = dojo.byId("myDiv");
+
+dojo.connect(myButton, "onclick", function(evt){
+	dojo.style(myDiv, "backgroundColor", "blue");
+});
+dojo.connect(myDiv, "onmouseenter", function(evt){
+	dojo.style(myDiv, "backgroundColor", "red");
+});
+dojo.connect(myDiv, "onmouseleave", function(evt){
+	dojo.style(myDiv, "backgroundColor", "");
+});
+</pre>
+<p>This example illustrates the common pattern: <code>dojo.connect</code>(<em>element</em>, <em>event name</em>, <em>handler</em>). Or, put another way, for this event on this element, connect this handler. This pattern applies to all window, document, node, form, mouse, and keyboard events. Note that in the examples shown here we include the "on" prefix in our event names. This is not required, and Dojo will normalize this parameter as necessary for each browser.</p>
+<p>The <code>dojo.connect</code> method not only normalizes the API to register events, but it also normalizes how event handlers are called:</p>
+<ul>
+	<li>Event handlers are always called in the order they are registered.</li>
+	<li>They are always called with an event object as their first parameter.</li>
+	<li>The event object will have a <code>.target</code> property, a <code>stopPropagation</code> method, and a <code>preventDefault</code> method.</li>
+</ul>
+<p>Much like the DOM API, Dojo provides a way to unregister, or disconnect, an event handler: <code>dojo.disconnect</code>. The return value of <code>dojo.connect</code> is a handle that can be passed to <code>dojo.disconnect</code> to stop an event handler from running. For example, if you wanted to have a one-time only event, you could do something like this:</p>
+<pre class="brush: js;">
+var handle = dojo.connect(myButton, "onclick", function(evt){
+	// Disconnect this event using the handle
+	dojo.disconnect(handle);
+
+	// Do other stuff here that you only want to happen one time
+	alert("This alert will only happen one time.");
+});
+</pre>
+<p>One last thing to note: <code>dojo.connect</code> takes an optional argument that can be inserted before the handler argument to specify the scope in which to run the handler. Without this parameter, event handlers will run with their scope set to the node passed in the first argument. This argument is very helpful when working with object methods like in widgets:</p>
+<pre class="brush: js;">
+var myScopedButton1 = dojo.byId("myScopedButton1"),
+	myScopedButton2 = dojo.byId("myScopedButton2"),
+	myObject = {
+		id: "myObject",
+		onClick: function(evt){
+			alert("The scope of this handler is " + this.id);
+		}
+	};
+
+// This will alert "myScopedButton1"
+dojo.connect(myScopedButton1, "onclick", myObject.onClick);
+// This will alert "myObject" rather than "myScopedButton2"
+dojo.connect(myScopedButton2, "onclick", myObject, "onClick");
+</pre>
+<a class="demoBtn demo" href="demo/connect.html">View Demo</a>
+<p>When a scope object is passed, the handler argument can either be a string specifiying the method name of the scope object or an actual function object. The last line of the last example could have been written <code>dojo.connect(myDiv, "onclick", myObject, myObject.onClick);</code>. If the handler argument is a string, it must be the case-sensitive name of the method of the scope object; Dojo does not (and cannot) normalize this argument since it is a reference to a method of an object.</p>
+
+
+<h3>NodeList events</h3>
+<p>As mentioned in the previous tutorial, <code>dojo.NodeList</code> provides a way to register events to multiple nodes: the <code>connect</code> method. This method follows the same pattern as <code>dojo.connect</code> without the first argument (since the nodes in the <code>dojo.NodeList</code> are the objects you are connecting to). Let's look at a more advanced example than before:</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="button1" class="clickMe"&gt;Click me&lt;/button&gt;
+&lt;button id="button2" class="clickMeAlso"&gt;Click me also&lt;/button&gt;
+&lt;button id="button3" class="clickMe"&gt;Click me too&lt;/button&gt;
+&lt;button id="button4" class="clickMeAlso"&gt;Please click me&lt;/button&gt;
+&lt;script&gt;
+var myObject = {
+	id: "myObject",
+	onClick: function(evt){
+		alert("The scope of this handler is " + this.id);
+	}
+};
+dojo.query(".clickMe").connect("onclick", myObject.onClick);
+dojo.query(".clickMeAlso").connect("onclick", myObject, "onClick");
+&lt;/script&gt;
+</pre>
+<p>Don't forget that you can also use the event name as a method as long as it is a common event name: <code>.onclick(<em>handler</em>)</code> or <code>.onclick(<em>scope</em>, <em>handler or method name</em>)</code>. There is one disadvantage to using this method for event handler registration: there is no way to disconnect the handlers registered. <code>dojo.NodeList.connect</code> returns the <code>dojo.NodeList</code> for easy chaining rather than a list of handles to use with <code>dojo.disconnect</code>. If you don't foresee yourself needing to disconnect your event handlers, you can safely use the <code>connect</code> method.</p>
+<a class="demoBtn demo" href="demo/query.html">View Demo</a>
+
+
+<h3>Object Methods</h3>
+<p>As mentioned before, <code>dojo.connect</code> is the workhorse of events in Dojo. This includes native objects as well. For native objects, however, you can think of methods as events. Let's say there is a button on a page and we have an object in JavaScript that will represent (or wrap) that button:</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="myButton"&gt;My button&lt;/button&gt;
+&lt;script&gt;
+	var myButtonObject = {
+		onClick: function(evt){
+			alert("The button was clicked");
+		}
+	};
+	dojo.connect(dojo.byId("myButton"), "onclick", myButtonObject, "onClick");
+&lt;/script&gt;
+</pre>
+<p>Let's also imagine that in another bit of code we would like to be notified when that button is clicked. Rather than adding another event handler to the button's DOM node, we can connect to <code>myButtonObject</code>'s <code>onClick</code> function:</p>
+<pre class="brush: js;">
+dojo.connect(myButtonObject, "onClick", function(evt){
+	alert("The button was clicked and 'onClick' was called");
+});
+</pre>
+<p>It must be noted that when working with native objects, no normalization is done on the event name (second) argument. Another more useful caveat is that any arguments passed to the original method are passed to the handlers:</p>
+<pre class="brush: js;">
+var myButtonObject2 = {
+	onClickHandler: function(evt){
+		this.onClick(evt, "another argument");
+	},
+	onClick: function(){}
+};
+dojo.connect(dojo.byId("myButton2"), "onclick",
+	myButtonObject2, "onClickHandler");
+dojo.connect(myButtonObject2, "onClick", function(evt, another){
+	alert("The button was clicked, we were given a second argument: " + another);
+});
+</pre>
+<p>Since event handlers for DOM nodes are only given one argument, event handlers registered with <code>dojo.connect</code> are only called with one argument; event handlers registered for native objects will be called with as many arguments as are passed to the original method. Other than these two caveats mentioned, <code>dojo.connect</code> works the same for DOM nodes and native objects.</p>
+<p>Connecting to native object methods might not seem useful right now, but later on we will start to work with widgets and this technique will be increasingly useful. Another application for this technique is with effects; we will dive deeper into effects in a later tutorial, but we'll touch on them now for a more concrete example:</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="fadeButton"&gt;Fade block out&lt;/button&gt;
+&lt;div id="fadeTarget" class="red-block"&gt;&lt;/div&gt;
+&lt;script&gt;
+    var fadeButton = dojo.byId("fadeButton"),
+        fadeTarget = dojo.byId("fadeTarget");
+
+    dojo.connect(fadeButton, "onclick", function(evt){
+        var anim = dojo.fadeOut({ node: fadeTarget });
+
+        dojo.connect(anim, "onEnd", function(){
+            alert("The fade has finished");
+        });
+
+        anim.play();
+    });
+&lt;/script&gt;
+</pre>
+<a class="demoBtn demo" href="demo/objects.html">View Demo</a>
+<p>For our purposes, know that <code>dojo.fadeOut</code> returns an object with an <code>onEnd</code> method that runs when the effect is done. Using what we just learned about <code>dojo.connect</code> and native objects, we connect to the object's <code>onEnd</code> method to alert the user that the animation has finished. In this case, as soon as the red block has faded out, our function will run.</p>
+
+
+<h3>Publish/Subscribe</h3>
+<p>All of the examples up until this point have used a created object (a DOM node, a "widget", and an effect object) as an event producer that you register with to know when something happens. But what do you do if you don't have a handle to an object or don't know if an object has been created? This is where Dojo's publish and subscribe (pub/sub) framework comes in. Pub/sub allows you to register a handler for (subscribe to) a "topic" (which is a fancy name for an event that can have multiple sources, represented as a string) which will be called when the topic is published to.</p>
+<p>Let's imagine that in an application that we're developing, we want certain buttons to alert the user of an action; we don't want to write the routine to do the alerting more than once, but we also don't want to make a wrapping object that will register this small routine with the button. Pub/sub can be used for this:</p>
+<pre class="brush: js; html-script: true;">
+&lt;button id="alertButton"&gt;Alert the user&lt;/button&gt;
+&lt;button id="createAlert"&gt;Create another alert button&lt;/button&gt;
+
+&lt;script&gt;
+	var alertButton = dojo.byId("alertButton"),
+		createAlert = dojo.byId("createAlert");
+
+	dojo.connect(alertButton, "onclick", function(evt){
+		// When this button is clicked,
+		// publish to the "alertUser" topic
+		dojo.publish("alertUser", ["I am alerting you."]);
+	});
+	dojo.connect(createAlert, "onclick", function(evt){
+		// Create another button
+		var anotherButton = dojo.create("button", {
+			innerHTML: "Another alert button"
+		}, createAlert, "after");
+
+		// When the other button is clicked,
+		// publish to the "alertUser" topic
+		dojo.connect(anotherButton, "onclick", function(evt){
+			dojo.publish("alertUser", ["I am also alerting you."]);
+		});
+	});
+
+	// Register the alerting routine with the "alertUser"
+	// topic.
+    dojo.subscribe("alertUser", function(text){
+		alert(text);
+    });
+&lt;/script&gt;
+</pre>
+<a class="demoBtn demo" href="demo/pubsub.html">View Demo</a>
+<p>One useful advantage to this pattern of events is that now our alerting routine can be tested in a unit test without the need to create any DOM objects: the routine is decoupled from the event producer. There are a few things to note about pub/sub:</p>
+<ul>
+	<li><code>dojo.subscribe</code> can be called similarly to <code>dojo.connect</code> (<code>dojo.subscribe(<em>topic</em>, <em>handler</em>)</code> or <code>dojo.subscribe(<em>topic</em>, <em>scope</em>, <em>handler or method name</em>)</code>).</li>
+	<li>The second argument to <code>dojo.publish</code> must be an array and the items in that array will be the arguments to topic's handler functions.</li>
+	<li><code>dojo.subscribe</code> returns a handle that can be used with <code>dojo.unsubscribe</code> to deregister a handler from a topic (much like <code>dojo.connect</code> and <code>dojo.disconnect</code>).</li>
+</ul>
+
+
+<h3>Conclusion</h3>
+<p>Dojo's event system is quite powerful, while being fairly simple to use. The <code>dojo.connect</code> method normalizes events between the DOM and native objects while also normalizing inconsistencies between browsers. Dojo's pub/sub framework gives developers a way to easily decouple event handlers from the event producers. Take time to familiarize yourself with these tools &mdash; they will be a valuable asset in creating web applications.</p>

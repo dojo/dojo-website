@@ -1,0 +1,171 @@
+
+
+<h3>Getting Started</h3>
+<p>When working with the DOM, it's important to be able to retrieve nodes quickly and efficiently. We've <a href="../dom_functions/#byId">covered one option</a>: <code>dom.byId</code>. However, coming up with unique IDs for every interesting node in your application can be a daunting and impractical task. It would also be inefficient to find and operate on multiple nodes by ID alone. Thankfully, there is another solution: <code>dojo/query</code>. The <code>dojo/query</code> module uses familiar CSS queries (which you use in your stylesheets) to retrieve a list of nodes, including support for advanced CSS3 selectors!</p>
+<h3>Queries</h3>
+<p>To demonstrate some of the most common queries, we'll be using the following HTML, which might be something you would see if you were developing a list of links for a website:</p>
+<pre class="brush: html;">&lt;ul id="list"&gt;
+	&lt;li class="odd"&gt;
+		&lt;div class="bold"&gt;
+			&lt;a class="odd"&gt;Odd&lt;/a&gt;
+		&lt;/div&gt;
+	&lt;/li&gt;
+	&lt;li class="even"&gt;
+		&lt;div class="italic"&gt;
+			&lt;a class="even"&gt;Even&lt;/a&gt;
+		&lt;/div&gt;
+	&lt;/li&gt;
+	&lt;li class="odd"&gt;
+		&lt;a class="odd"&gt;Odd&lt;/a&gt;
+	&lt;/li&gt;
+	&lt;li class="even"&gt;
+		&lt;div class="bold"&gt;
+			&lt;a class="even"&gt;Even&lt;/a&gt;
+		&lt;/div&gt;
+	&lt;/li&gt;
+	&lt;li class="odd"&gt;
+		&lt;div class="italic"&gt;
+			&lt;a class="odd"&gt;Odd&lt;/a&gt;
+		&lt;/div&gt;
+	&lt;/li&gt;
+	&lt;li class="even"&gt;
+		&lt;a class="even"&gt;Even&lt;/a&gt;
+	&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ul id="list2"&gt;
+	&lt;li class="odd"&gt;Odd&lt;/li&gt;
+&lt;/ul&gt;
+</pre>
+<br /><br />
+<p>The first thing you might want to do is get a handle for the entire list. As we've seen before, you can use <code>dom.byId</code>, but you can also use <code>query</code>. At first glance, this approach isn't that useful, but we'll be building from this example:</p>
+<pre class="brush: js;">
+// require the query and domReady modules
+require(["dojo/query", "dojo/domReady!"], function(query) {
+	// retrieve an array of nodes with the ID "list"
+	var list = query("#list")[0];
+})
+
+</pre>
+<p>By prepending an identifier with "#", we are telling <code>query</code> to look for nodes with that ID property. This convention should be familiar from CSS. One thing to note: <code>query</code> always returns an array. We'll talk more about this array later, but since there is only one (and <strong>should</strong> only be one) node with the ID "list", we fetch that element out of the array.</p>
+<br /><br />
+<p>Fetching nodes by ID is nice, but it's no more powerful than using <code>dom.byId</code>. However, <code>query</code> allows you to select nodes by class names as well. Let's say we wanted to retrieve only the nodes with the "odd" class name:</p>
+<pre class="brush: js;">
+// retrieve an array of nodes with the class name "odd"
+var odds = query(".odd");
+</pre>
+<p>By prepending an identifier with ".", we are telling <code>query</code> to look for nodes with that identifier in their <code>className</code> property. Again, this is exactly like CSS. Using our example markup, <code>query</code> will return an array containing 4 <code>&lt;li&gt;</code>'s and 3 <code>&lt;a&gt;</code>'s.</p>
+<h3>Restricting your query</h3>
+<p>You might have noticed that <code>odds</code> in the prior example contains nodes from both lists that are in the DOM. Let's say we only wanted the odd nodes from the first list. There are two ways to do this:</p>
+<pre class="brush: js;">
+// retrieve an array of nodes with the class name "odd"
+// from the first list using a selector
+var odds1 = query("#list .odd");
+
+// retrieve an array of nodes with the class name "odd"
+// from the first list using a DOM node
+var odds2 = query(".odd", document.getElementById("list"));
+</pre>
+<p>Both arrays contain the same elements, but through different methods: the first by using selector syntax and letting the query engine limit the results from all of the DOM; the second by limiting the scope of the query engine to a specific DOM node.</p>
+<p>When <code>query</code> is executed without a second parameter, it will search the entire DOM structure, going through effectively every node under &lt;html&gt;. When a DOM node is specified as the second argument, it restricts the query to that node and its children.</p>
+<p>If your DOM is relatively small, such as in our example, omitting the second argument is acceptable. However, for pages with a larger DOM structure, it's preferable to restrict your <code>query</code> calls with the second argument. It makes for more specific selections that execute more quickly than searches across the full document.</p>
+<p>For the rest of our examples here, we will be omitting the second scoping argument, but keep the previous paragraph in mind when using <code>query</code> yourself &mdash; keeping your searches quick and lean results in faster code and better user experience.</p>
+
+<h3>More advanced selections</h3>
+<p>Our previous query results contained a mix of <code>&lt;li&gt;</code>'s and <code>&lt;a&gt;</code>'s, but what if we're only concerned about the <code>&lt;a&gt;</code>'s? You can combine tag names with class names:</p>
+<pre class="brush: js;">
+var oddA = query("a.odd");
+</pre>
+<p>Instead of separating identifiers (which shows hierarchy), you can combine identifiers to target nodes more specifically; this includes combining class names, which has varying effects in stylesheets cross-browser, but works using <code>query</code>.</p>
+
+<p>Another selector that works in <code>query</code> across browsers, but isn't supported everywhere in stylesheets, is "&gt;". This will look only immediately below the first selector for the second. For instance:</p>
+<pre class="brush: js;">
+// Retrieve an array of any a element that has an
+// li as its ancestor.
+var allA = query("li a");
+// Retrieve an array of any a element that has an
+// li as its direct ancestor.
+var someA = query("li &gt; a");
+</pre>
+<a class="demoBtn demo" href="demo/queries.php">View Demo</a>
+<p><code>allA</code> will contain a total of 6 <code>&lt;a&gt;</code>'s, whereas <code>someA</code> will only contain 2 <code>&lt;a&gt;</code>'s. Any selector can be on either side of "&gt;", including class selectors. We've only covered a few of the more common selectors here, but <code>query</code> is fully CSS3 compliant and accepts <a href="http://dojotoolkit.org/reference-guide/dojo/query.html#standard-css3-selectors">many more selectors</a> which you can experiment with on your own.</p>
+
+
+
+<h3>NodeList</h3>
+<p>As mentioned before, <code>query</code> returns an array of nodes that match the selector; this array is actually a special array called a <code>NodeList</code> and has methods for interacting with the nodes contained in it. The demo for the previous examples used a couple of these methods, but let's take a look at some of the ones you'll most likely use in your applications. For this set of examples, we'll be using the following markup:</p>
+<pre class="brush: html;">
+&lt;div id="list"&gt;
+	&lt;div class="odd"&gt;One&lt;/div&gt;
+	&lt;div class="even"&gt;Two&lt;/div&gt;
+	&lt;div class="odd"&gt;Three&lt;/div&gt;
+	&lt;div class="even"&gt;Four&lt;/div&gt;
+	&lt;div class="odd"&gt;Five&lt;/div&gt;
+	&lt;div class="even"&gt;Six&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<p><code>NodeList</code> has methods that match the Dojo array helper methods. One such method is <code>forEach</code>, which will execute a function for each node in the array:<p>
+<pre class="brush: js;">
+// Wait for the DOM to be ready before working with it
+require(["dojo/query", "dojo/dom-class", "dojo/domReady!"],
+	function(query, domClass) {
+
+		query(".odd").forEach(function(node, index, nodelist){
+			// for each node in the array returned by query,
+			// execute the following code
+			domClass.add(node, "red");
+		});
+
+});
+</pre>
+<p>The function passed to <code>forEach</code>, also known as a callback, is called for each item in the array with the following arguments: the node it's currently on, the index of the node, and the <code>NodeList</code> being iterated. For most developers, the third argument can be ignored; however, in instances where the array isn't stored in a variable for easy access (such as in this example), the third argument can be useful for getting other items from the array. The <code>forEach</code> method also accepts a second argument to specify what scope the callback should be called in.</p>
+
+<p>Other array helper functions that are defined for <code>NodeList</code>s are <code>map</code>, <code>filter</code>, <code>every</code>, and <code>some</code>. Each of these methods returns a <code>NodeList</code> for easy chaining, except for <code>every</code> and <code>some</code>, which return a boolean.</p>
+
+<p>Dojo 1.7 has class and style helpers in the <code>dojo/NodeList-dom</code> resource.  <code>dojo/NodeList-dom</code> provides convenience methods that match various DOM methods in Dojo, so the prior example could be simplified:</p>
+<pre class="brush: js;">
+require(["dojo/query", "dojo/NodeList-dom", "dojo/domReady!"], function(query) {
+	// Add "red" to the className of each node matching
+	// the selector ".odd"
+	query(".odd").addClass("red");
+	// Add "blue" to the className of each node matching
+	// the selector ".even"
+	query(".even").addClass("blue");
+});
+</pre>
+<p>The DOM methods are executed for each node in the <code>NodeList</code> and return a <code>NodeList</code> for easy chaining:</p>
+<pre class="brush: js;">
+// Remove "red" from and add "blue" to the className
+// of each node matching the selector ".odd"
+query(".odd").removeClass("red").addClass("blue");
+</pre>
+<p>Other DOM methods that are defined by <code>dojo/NodeList-dom</code> are <code>style</code>, <code>toggleClass</code>, <code>replaceClass</code>, <code>place</code>, and <code>empty</code>. Each of these methods returns a <code>NodeList</code> as well:</p>
+<pre class="brush: js;">
+// Change the font color to "white" and add "italic" to
+// the className of each node matching the selector ".even"
+query(".even").style("color", "white").addClass("italic");
+</pre>
+<a class="demoBtn demo" href="demo/nodelist.php">View Demo</a>
+
+<h3>Events</h3>
+<p>Another convenience method that <code>NodeList</code> provides is <code>on</code> for connecting to DOM events. Although DOM events are covered in the next tutorial, we'll cover the syntax of using <code>NodeList</code>'s <code>on</code> method. It should also be noted that even though this is a convenient syntax, this approach should not be used with a <code>NodeList</code> that contains a large number of nodes; instead, a technique called event delegation should be used in those instances, which we'll be covering in a future tutorial.</p>
+<pre class="brush: js; html-script: true;">
+&lt;button class="hookUp demoBtn"&gt;Click Me!&lt;/button&gt;
+&lt;button class="hookUp demoBtn"&gt;Click Me!&lt;/button&gt;
+&lt;button class="hookUp demoBtn"&gt;Click Me!&lt;/button&gt;
+&lt;button class="hookUp demoBtn"&gt;Click Me!&lt;/button&gt;
+&lt;script&gt;
+	// Wait for the DOM to be ready before working with it
+	require(["dojo/query", "dojo/domReady!"], function(query) {
+		query(".hookUp").on("click", function(){
+			alert("This button is hooked up!");
+		});
+	});
+&lt;/script&gt;
+</pre>
+<a class="demoBtn demo" href="demo/events.php">View Demo</a>
+<p>This convenient <code>on</code> method attaches to every node returned by the query!</p>
+
+<h3>Conclusion</h3>
+<p>As you can see, working with DOM nodes in bulk is fairly simple. Using <code>query</code>, we can quickly and easily get a collection of the nodes that we want to work with. Being able to adjust styles and change classes in bulk is pretty handy, but where Dojo really starts to shine is adding interaction to a page. We've shown a simple example of how to handle a click event, but in the next tutorial, we'll dive deeper into handling events with Dojo.</p>
