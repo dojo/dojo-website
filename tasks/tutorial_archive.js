@@ -4,7 +4,6 @@ var path = require('path');
 var fs = require('fs');
 
 
-
 /* global module:false*/
 module.exports = function (grunt) {
 
@@ -20,23 +19,72 @@ module.exports = function (grunt) {
 	 *	}
 	 *
 	 **/
-	grunt.registerMultiTask('tutorial_archive', 'Compile 1.6-1.9 tutorials to HTML', function () {
+	grunt.registerMultiTask('tutorial_archive', 'Compile old archived tutorials to HTML', function () {
 		var done = this.async(),
 			self = this;
-			//grunt.log.ok(path.relative(self.data.src, "./src"));
 
 
-		function generateTutorials() {
-			grunt.log.ok('Generating tutorials...');
-			var names = grunt.file.expand({cwd: self.data.src}, ['**/**/tutorial.html']);
+		function generateIndex(ver) {
+			var tutorialData = [];
+			var order = require(path.join('../',self.data.src, ver, '/tutorialOrder.js'))(grunt);
+
+			order.forEach(function(sect, idx){
+				tutorialData[idx] = {
+					title: sect.category,
+					titleId: '',
+					data: []
+				};
+
+				sect.tutorials.forEach(function(tut){
+
+					var fileBase = path.join('./',self.data.src, ver, tut);
+					var meta = grunt.file.readJSON(path.join(fileBase, '/meta.json'));
+
+					tutorialData[idx].data.push({
+						folderName: tut,
+						meta: meta,
+						description: grunt.file.read(path.join(fileBase, '/summary.html')),
+						content: grunt.file.read(path.join(fileBase, '/tutorial.html')),
+						tutUrl: path.join(self.data.options.url.docs, 'tutorials',ver,tut,'/index.html'),
+						title: meta.title,
+						cssClass:'',
+						category:'',
+						rev: self.data.options.rev,
+						dojo: self.data.options.dojo,
+						url: self.data.options.url,
+						dojoVersion: meta.dojoVersion
+					});
+				});
+			});
+
+			var file = self.data.indexTemplate;
+			var dest = path.join(self.data.indexDest, ver, 'index.html');
+
+			var templateData = {
+				url: self.data.options.url,
+				rev: self.data.options.rev,
+				dojo: self.data.options.dojo,
+				tutorials: tutorialData
+			};
+
+			var comp = ejs.compile(grunt.file.read(file), {filename: file})(templateData);
+
+			grunt.file.write(dest, comp);
+
+			generateTutorials(ver, tutorialData)
+		}
+
+		function generateTutorials(ver, tutorials) {
+			grunt.log.ok('Generating archived tutorials...');
+			//var names = grunt.file.expand({cwd: self.data.src}, ['**/**/tutorial.html']);
 
 			// copy tutorial support files
 			grunt.file.expand({
-				cwd: self.data.src,
+				cwd: path.join(self.data.src, ver),
 				filter: 'isFile'
 			}, ['**', '!**/**/tutorial.html']).forEach(function (file) {
-				var src = path.join(self.data.src, file);
-				var dest = path.join(self.data.dest, file);
+				var src = path.join(self.data.src, ver, file);
+				var dest = path.join(self.data.dest, ver, file);
 				grunt.file.copy(src, dest);
 			});
 
@@ -44,34 +92,25 @@ module.exports = function (grunt) {
 			// Copy each file from the source to the destination,
 			// parsing the markdown of each tutorial and rendering
 			// inside a tutorial template specified via the task config
-			names.forEach(function (name) {
 
-				var src = path.join(self.data.src, name);
-				var meta = grunt.file.readJSON(path.join(self.data.src, path.dirname(name), 'meta.json'));
-				var summary = grunt.file.read(path.join(self.data.src, path.dirname(name), 'summary.html'));
-				var dest = path.join(self.data.dest, path.dirname(name), 'index.html');
+			var file = self.data.template;
 
-				//console.log(meta);
-				grunt.log.ok('Converting: ' + name + ' -> ' + dest);
 
-				var file = self.data.template;
-				var templateData = Object.create(self.data.options);
-				templateData.title = meta.title;
-				templateData.dojoVersion = meta.dojoVersion;
-				templateData.summary = summary;
-				templateData.content = grunt.file.read(src);
-				var comp = ejs.compile(grunt.file.read(file), {filename: file})(templateData);
-
-				grunt.file.write(dest, comp);
+			tutorials.forEach(function(cat) {
+				cat.data.forEach(function(tutData) {
+					var comp = ejs.compile(grunt.file.read(file), {filename: file})(tutData);
+					var dest = path.join(self.data.dest, ver, tutData.folderName, 'index.html');
+					grunt.file.write(dest, comp);
+					grunt.log.ok('Created: '+ dest);
+				});
 			});
 
-
-			// tell everyone we are done
-			grunt.log.ok('Created ' + names.length + ' files.');
 
 			done(true);
 		}
 
-		generateTutorials();
+		self.data.versions.forEach(function(ver) {
+			generateIndex(ver);
+		});
 	});
 };

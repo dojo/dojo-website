@@ -42,9 +42,12 @@ module.exports = function (grunt) {
 		tutorial_archive: {
 			all: {
 				options: ejsOptions,
+				versions: ['1.6','1.7','1.8','1.9'],
 				src: '<%= config.src %>/documentation/tutorials/',
 				dest: '<%= config.dest %>/documentation/tutorials/',
 				template: '<%= config.src %>/_templates/tutorial_archive.ejs',
+				indexTemplate: '<%= config.src %>/_templates/tutorial_archive_index.ejs',
+				indexDest: '<%= config.dest %>/documentation/tutorials/'
 			}
 		},
 
@@ -121,7 +124,8 @@ module.exports = function (grunt) {
 					'<%= config.dest %>/css/index.css': '<%= config.src %>/css/index.styl',
 					'<%= config.dest %>/css/api.css': '<%= config.src %>/css/views/api.styl',
 					'<%= config.dest %>/css/guide.css': '<%= config.src %>/css/views/guide.styl',
-					'<%= config.dest %>/css/blog.css' : '<%= config.src %>/css/views/blog.styl'
+					'<%= config.dest %>/css/blog.css' : '<%= config.src %>/css/views/blog.styl',
+					'<%= config.dest %>/css/tutorial_archive.css' : '<%= config.src %>/css/views/tutorial_archive.styl'
 				}
 			},
 		},
@@ -235,12 +239,17 @@ module.exports = function (grunt) {
 			ejs: {
 				files: ['<%= config.src %>/**/*.ejs',
 						'<%= config.src %>/community/roadmap/packages.json',
-						'!<%= config.src %>/images/**/*',
 						'<%= config.src %>/documentation/tutorials/**/*.md',
-						'<%= config.src %>/documentation/index.ejs',
-						'<%= config.src %>/_templates/tutorial.ejs',
+						'!<%= config.src %>/images/**/*',
+						'!<%= config.src %>/_templates/tutorial_archive.ejs',
+						'!<%= config.src %>/_templates/tutorial_archive_index.ejs',
 						'!<%= config.src %>/**/README.md'],
 				tasks: ['ejs', 'tutorials', 'highlight']
+			},
+
+			tutorial_archive: {
+				files: ['<%= config.src %>/_templates/tutorial_archive.ejs'],
+				tasks: ['tutorial_archive']
 			},
 
 			blog: {
@@ -278,13 +287,12 @@ module.exports = function (grunt) {
 
 	grunt.loadTasks('tasks');
 
-	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn', 'sync:apiArchive']);
-	grunt.registerTask('up', ['css', 'sync', 'ejs', 'tutorials', 'highlight']);
+	grunt.registerTask('default', ['develop']);
+	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn', 'sync:apiArchive', 'tutorials', 'tutorial_archive']);
+	grunt.registerTask('up', ['css', 'sync', 'ejs', 'tutorials', 'tutorial_archive', 'highlight']);
 	grunt.registerTask('css', ['stylus', 'cssmin', 'sync:assets']);
-
 	grunt.registerTask('delete', ['clean:dist'])
 	grunt.registerTask('deploy', ['delete', 'css', 'sync', 'ejs', 'tutorials', 'tutorial_archive', 'highlight', 'docs']);
-	grunt.registerTask('default', ['delete', 'css', 'sync', 'ejs', 'tutorials', 'highlight']);
-	grunt.registerTask('develop', ['css', 'ejs', 'sync', 'highlight', 'tutorials', 'connect', 'watch']);
+	grunt.registerTask('develop', ['css', 'ejs', 'sync', 'highlight', 'tutorials', 'tutorial_archive', 'connect', 'watch']);
 
 };
