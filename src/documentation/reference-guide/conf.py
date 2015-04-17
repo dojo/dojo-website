@@ -49,7 +49,7 @@ copyright = u'2005-2015, Dojo Foundation'
 # built documents.
 #
 # The short X.Y version.
-version = '1.10'
+#version = '1.10'
 # The full version, including alpha/beta/rc tags.
 release = time.time()
 
