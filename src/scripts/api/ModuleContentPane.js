@@ -167,7 +167,7 @@ define(["dojo/_base/declare",
             });
         },
         _bugDbReport : function (context, link) {
-            var reportlink = query("a.feedback", context)[0];
+            /*var reportlink = query("a.feedback", context)[0];
             on(reportlink, 'click', function (event) {
                 event.preventDefault();
                 if (!event.button && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
@@ -182,7 +182,7 @@ define(["dojo/_base/declare",
                     }));
                     helpDialog.show();
                 }
-            });
+            });*/
         },
         _createCheckBoxes : function (toolbardiv, context) {
             var _this = this, position = "last";
