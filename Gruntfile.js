@@ -33,7 +33,7 @@ module.exports = function (grunt) {
 				options: ejsOptions,
 				src: '<%= config.src %>/documentation/tutorials/',
 				dest: '<%= config.dest %>/documentation/tutorials/',
-				template: '<%= config.src %>/_templates/tutorial.ejs',
+				template: '<%= config.src %>/documentation/tutorials/templates/tutorial.ejs',
 				indexTemplate: '<%= config.src %>/documentation/index.ejs',
 				indexDest: '<%= config.dest %>/documentation/'
 			}
@@ -45,9 +45,17 @@ module.exports = function (grunt) {
 				versions: ['1.6','1.7','1.8','1.9'],
 				src: '<%= config.src %>/documentation/tutorials/',
 				dest: '<%= config.dest %>/documentation/tutorials/',
-				template: '<%= config.src %>/_templates/tutorial_archive.ejs',
-				indexTemplate: '<%= config.src %>/_templates/tutorial_archive_index.ejs',
+				template: '<%= config.src %>/documentation/tutorials/templates/tutorial_archive.ejs',
+				indexTemplate: '<%= config.src %>/documentation/tutorials/templates/tutorial_archive_index.ejs',
 				indexDest: '<%= config.dest %>/documentation/tutorials/'
+			}
+		},
+
+		refguide: {
+			all: {
+				versions: ['1.6','1.7','1.8','1.9', '1.10'],
+				src: '<%= config.src %>/documentation/reference-guide',
+				dest: '<%= config.dest %>/reference-guide/'
 			}
 		},
 
@@ -245,14 +253,14 @@ module.exports = function (grunt) {
 						'<%= config.src %>/community/roadmap/packages.json',
 						'<%= config.src %>/documentation/tutorials/**/*.md',
 						'!<%= config.src %>/images/**/*',
-						'!<%= config.src %>/_templates/tutorial_archive.ejs',
-						'!<%= config.src %>/_templates/tutorial_archive_index.ejs',
+						'!<%= config.src %>/documentation/tutorials/templates/tutorial_archive.ejs',
+						'!<%= config.src %>/documentation/tutorials/templates/tutorial_archive_index.ejs',
 						'!<%= config.src %>/**/README.md'],
 				tasks: ['ejs', 'tutorials', 'highlight']
 			},
 
 			tutorial_archive: {
-				files: ['<%= config.src %>/_templates/tutorial_archive.ejs'],
+				files: ['<%= config.src %>/documentation/tutorials/templates/tutorial_archive.ejs'],
 				tasks: ['tutorial_archive']
 			},
 

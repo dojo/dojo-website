@@ -69,7 +69,7 @@ module.exports = {
 	/**
 	 * viewsDirectory used for extending/rebranding for your own UI needs. The default location is 'views', if you want to rebrand the application, copy the views directory to another and set the relevant name.
 	 **/
-	viewsDirectory: '../../src/_templates/api',
+	viewsDirectory: '../../src/documentation/api/templates',
 
 	/**
 	 * moduleExtension is used to append a suffix to the module file name; it's unlikely you'll need to change this.

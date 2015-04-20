@@ -29,7 +29,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "_ext"))
 extensions = ['sphinx.ext.todo', 'dojowiki']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['../../_templates/refguide']
+templates_path = ['./']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -93,14 +93,14 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  Major themes that come with
 # Sphinx are currently 'default' and 'sphinxdoc'.
-html_theme = 'refguide'
+html_theme = 'dtk_theme'
 
 html_context = {
 	'root': '/'
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
-html_theme_path = ['../../_templates/']
+html_theme_path = ['./']
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -164,37 +164,3 @@ html_show_sourcelink = False
 htmlhelp_basename = 'DojoToolkitdoc'
 
 html_translator_class = "dojowiki.DojoHTMLTranslator"
-
-
-# Options for LaTeX output
-# ------------------------
-
-# The paper size ('letter' or 'a4').
-#latex_paper_size = 'letter'
-
-# The font size ('10pt', '11pt' or '12pt').
-#latex_font_size = '10pt'
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title, author, document class [howto/manual]).
-#latex_documents = [
-#  ('contents', 'DojoToolkit.tex', ur'Dojo Toolkit Documentation',
-#   ur'Dojo Foundation', 'manual'),
-#]
-
-# The name of an image file (relative to this directory) to place at the top of
-# the title page.
-#latex_logo = None
-
-# For "manual" documents, if this is true, then toplevel headings are parts,
-# not chapters.
-#latex_use_parts = False
-
-# Additional stuff for the LaTeX preamble.
-#latex_preamble = ''
-
-# Documents to append as an appendix to all manuals.
-#latex_appendices = []
-
-# If false, no module index is generated.
-#latex_use_modindex = True
