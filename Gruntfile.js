@@ -55,23 +55,23 @@ module.exports = function (grunt) {
 		exec: {
 			guide: {
 				cwd: '<%= config.src %>/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -D release="1.10" -a -c ./ ./1.10 ../../../<%= config.dest %>/reference-guide/1.10'
+				cmd: 'sphinx-build -b html -D release="1.10" -D html_static_path="1.10/_static" -a -c ./ ./1.10 ../../../<%= config.dest %>/reference-guide/1.10'
 			},
 			guide19: {
 				cwd: '<%= config.src %>/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -D release="1.9" -a -c ./ ./1.9/ ../../../<%= config.dest %>/reference-guide/1.9'
+				cmd: 'sphinx-build -b html -D release="1.9" -D html_static_path="1.9/_static" -a -c ./ ./1.9/ ../../../<%= config.dest %>/reference-guide/1.9'
 			},
 			guide18: {
 				cwd: '<%= config.src %>/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -D release="1.8" -a -c ./ ./1.8/ ../../../<%= config.dest %>/reference-guide/1.8'
+				cmd: 'sphinx-build -b html -D release="1.8" -D html_static_path="1.8/_static" -a -c ./ ./1.8/ ../../../<%= config.dest %>/reference-guide/1.8'
 			},
 			guide17: {
 				cwd: '<%= config.src %>/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -D release="1.7" -a -c ./ ./1.7/ ../../../<%= config.dest %>/reference-guide/1.7'
+				cmd: 'sphinx-build -b html -D release="1.7" -D html_static_path="1.7/_static" -a -c ./ ./1.7/ ../../../<%= config.dest %>/reference-guide/1.7'
 			},
 			guide16: {
 				cwd: '<%= config.src %>/documentation/reference-guide',
-				cmd: 'sphinx-build -b html -D release="1.6" -a -c ./ ./1.6/ ../../../<%= config.dest %>/reference-guide/1.6'
+				cmd: 'sphinx-build -b html -D release="1.6" -D html_static_path="1.6/_static" -a -c ./ ./1.6/ ../../../<%= config.dest %>/reference-guide/1.6'
 			},
 		},
 

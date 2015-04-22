@@ -1,0 +1,8 @@
+/*
+	Copyright (c) 2004-2011, The Dojo Foundation All Rights Reserved.
+	Available via Academic Free License >= 2.1 OR the modified BSD license.
+	see: http://dojotoolkit.org/license for details
+*/
+
+
+google.load("search","1");dojo.ready(function(){var _1=dojo.byId("query");var _2=dojo.byId("resultbox");dojo.connect(_1,"onfocus",function(_3){if(_1.value=="Search"){_1.value="";}});dojo.connect(_1,"onblur",function(_4){if(_1.value==""){_1.value="Search";dojo.style(dojo.byId("resultbox"),"display","none");}});if(dojo.isIE<8){}else{dojo.connect(_1,"onkeyup",function(){_5();dojo.query(".googleheader")[0].innerHtml="Loading Results from Google...";var _6=new GSearchControl();var _7=new google.search.WebSearch();_7.setUserDefinedClassSuffix("siteSearch");_7.setSiteRestriction("www.dojotoolkit.org");_6.addSearcher(_7);var _8=new GdrawOptions();_8.setDrawMode(GSearchControl.DRAW_MODE_TABBED);var _9;_6.setSearchCompleteCallback(_9,function(){dojo.query(".googleheader")[0].innerHTML="Results from Google:";});_6.setNoResultsString(GSearchControl.NO_RESULTS_DEFAULT_STRING);_6.draw(dojo.byId("googlesearch"),_8);_6.execute(_1.value);if(_1.value==""){_a();}});}dojo.connect(dojo.byId("searchClose"),"onclick",function(){_a();});function _5(){dojo.fadeIn({node:_2,duration:800,onEnd:function(){dojo.style(_2,"display","");}}).play();};function _a(){dojo.fadeOut({node:_2,duration:500,onEnd:function(){dojo.style(_2,"display","none");}}).play();};});
