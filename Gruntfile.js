@@ -94,7 +94,7 @@ module.exports = function (grunt) {
 			all: {
 				options: ejsOptions,
 				cwd: config.src,
-				src: ['index.ejs', 'community/**/*.ejs', 'download/**/*.ejs'],
+				src: ['index.ejs', 'license.ejs', 'community/**/*.ejs', 'download/**/*.ejs'],
 				dest: config.dest,
 				expand: true,
 				ext: '.html'
@@ -293,7 +293,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('default', ['develop']);
 	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn', 'sync:apiArchive', 'tutorials', 'tutorial_archive']);
-	grunt.registerTask('up', ['css', 'sync', 'ejs', 'tutorials', 'tutorial_archive', 'highlight']);
+	grunt.registerTask('up', ['css', 'ejs', 'highlight','sync', 'tutorials', 'tutorial_archive']);
 	grunt.registerTask('css', ['stylus', 'cssmin', 'sync:assets']);
 	grunt.registerTask('delete', ['clean:dist'])
 	grunt.registerTask('deploy', ['delete', 'css', 'sync', 'ejs', 'tutorials', 'tutorial_archive', 'highlight', 'docs']);
