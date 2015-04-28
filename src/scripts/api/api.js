@@ -110,12 +110,15 @@ require([
     }
 
     function setTreePath(page) {
+
         // Select the TreeNode corresponding to this tab's object.   For dijit/form/Button the path must be
         // ["root", "dijit/", "dijit/form/", "dijit/form/Button"]
         var parts = page.match(/[^/\.]+[/\.]?/g), path = "";
+
         path = ["root"].concat(array.map(parts, function (part, idx) {
             return parts.slice(0, idx + 1).join("").replace(/\.$/, "");
         }));
+
 
         moduleTree.set("path", path).then(function () {
                 var selectednode = moduleTree.selectedNode;
