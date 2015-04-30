@@ -3,6 +3,7 @@ var highlighter = require('highlight.js');
 var marked = require('meta-marked');
 var path = require('path');
 var cheerio = require('cheerio');
+var Entities = require('html-entities').XmlEntities;
 
 
 /* global module:false*/
@@ -20,6 +21,9 @@ module.exports = function (grunt) {
 	 *	}
 	 *
 	 **/
+
+	entities = new Entities();
+
 	grunt.registerMultiTask('tutorials', 'Compile tutorials to HTML', function () {
 		var done = this.async(),
 			self = this;
@@ -92,8 +96,8 @@ module.exports = function (grunt) {
 								templateData.category = rendered.meta.Category;
 							}
 
-							templateData.title = $('h2').first().text();
-							templateData.description = $('p').first().text();
+							templateData.title = entities.encode($('h2').first().text());
+							templateData.description = entities.encode($('p').first().text());
 							templateData.tutUrl = path.join('tutorials/', path.dirname(name), 'index.html');
 							var category = templateData.category.replace(/\s/g, '-').toLowerCase().split(',');
 
