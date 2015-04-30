@@ -12,20 +12,19 @@ module.exports = function (grunt) {
 		var done = this.async(),
 			self = this;
 
-		function generateGuide(versions) {
-			versions.forEach(function(ver){
-
-				grunt.util.spawn({
-				  cmd: 'sphinx-build',
-				  args: ['-b', 'html', '-D', 'release="'+ver+'"', '-a', '-c', self.data.src, path.join(self.data.src, ver), path.join(self.data.dest, ver) ],
-				  opts: {stdio: 'inherit'}
-				}, function done() {
-				  grunt.log.ok('reference-guide '+ver+' created');
-				  done(true);
-				});
+		function generateGuide(ver) {
+			grunt.util.spawn({
+			  cmd: 'sphinx-build',
+			  args: ['-b', 'html', '-D', 'release="'+ver+'"', '-a', '-c', self.data.src, path.join(self.data.src, ver), path.join(self.data.dest, ver) ],
+			  opts: {stdio: 'inherit'}
+			}, function done() {
+			  grunt.log.ok('reference-guide '+ver+' created');
+			  done(true);
 			});
 		}
 
-		generateGuide(self.data.versions);
+		self.data.versions.forEach(function(ver){
+			generateGuide(ver);
+		});
 	});
 };

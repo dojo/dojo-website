@@ -60,7 +60,7 @@ module.exports = function (grunt) {
 		},
 
 		// Compile the Reference Guide and API docs
-		exec: {
+		/*exec: {
 			guide: {
 				cwd: '<%= config.src %>/documentation/reference-guide',
 				cmd: 'sphinx-build -b html -D release="1.10" -D html_static_path="1.10/_static" -a -c ./ ./1.10 ../../../<%= config.dest %>/reference-guide/1.10'
@@ -81,7 +81,7 @@ module.exports = function (grunt) {
 				cwd: '<%= config.src %>/documentation/reference-guide',
 				cmd: 'sphinx-build -b html -D release="1.6" -D html_static_path="1.6/_static" -a -c ./ ./1.6/ ../../../<%= config.dest %>/reference-guide/1.6'
 			},
-		},
+		},*/
 
 		spawn: {
 			api: {
@@ -300,11 +300,11 @@ module.exports = function (grunt) {
 	grunt.loadTasks('tasks');
 
 	grunt.registerTask('default', ['develop']);
-	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn', 'sync:apiArchive', 'tutorials', 'tutorial_archive']);
+	grunt.registerTask('docs',['ejs:docs', 'spawn', 'sync:apiArchive', 'tutorials', 'tutorial_archive']);
 	grunt.registerTask('up', ['css', 'ejs', 'highlight','sync', 'tutorials', 'tutorial_archive']);
 	grunt.registerTask('css', ['stylus', 'cssmin', 'sync:assets']);
 	grunt.registerTask('delete', ['clean:dist'])
-	grunt.registerTask('deploy', ['delete', 'css', 'sync', 'ejs', 'tutorials', 'tutorial_archive', 'highlight', 'docs']);
+	grunt.registerTask('deploy', ['delete', 'css', 'sync', 'ejs', 'refguide', 'tutorials', 'tutorial_archive', 'highlight', 'docs']);
 	grunt.registerTask('develop', ['css', 'ejs', 'sync', 'highlight', 'tutorials', 'tutorial_archive', 'connect', 'watch']);
 
 };
