@@ -51,6 +51,14 @@ module.exports = function (grunt) {
 			}
 		},
 
+		/*refguide: {
+			all: {
+				src: '<%= config.src %>/documentation/reference-guide',
+				dest: '../../../<%= config.dest %>/reference-guide',
+				versions: ['1.6','1.7','1.8','1.9', '1.10']
+			}
+		},*/
+
 		// Compile the Reference Guide and API docs
 		exec: {
 			guide: {
