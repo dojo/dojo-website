@@ -48,10 +48,25 @@ html {
 .dijitTabListContainer-top,
 .selector {
 	background:$subnavBg;
+	background:$softBlack;
 	margin-top:0;
 	height: $subnavHeight;
 	min-height: $subnavHeight;
 	z-index:100;
+
+	.tabStripButton {
+		background:$softBlack;
+
+		&:hover {
+			background:$dojoBlue;
+		}
+	}
+
+	.tabStripButtonDisabled {
+		&:hover {
+			background:$softBlack;
+		}
+	}
 }
 
 .selector {
@@ -65,6 +80,10 @@ html {
 		height:29px;
 		margin-left:1em;
 		z-index:1002;
+	}
+
+	#widget_apiSearchWidget * {
+		max-height: 29px;
 	}
 }
 
@@ -158,18 +177,32 @@ html {
 
 #content .dijitTabContainerTop-dijitContentPane {
 	min-width:100%;
-	padding:0.5em 2em 0 2em;
+	padding:0.5em 0 0 0;
 }
+
+
+.jsdoc-mixins {
+	padding-left: 1.5rem;
+	padding-right: 1.5rem;
+}
+
+.jsdoc-property-list {
+	border-top: 1px solid $lightBorder;
+}
+
 
 h2.jsdoc-summary-heading {
 	cursor: pointer;
 	background:$lightBg;
 	border-bottom:1px solid $lightBorder;
 	margin-bottom:0 !important;
+	margin-left: 1.5rem;
+	margin-right: 1.5rem;
 	padding:0.5em;
 
 	& + .jsdoc-summary-list {
-		background:$lightBg;
+		margin-left: 1.5rem;
+		margin-right: 1.5rem;
 	}
 
 	&:hover {
@@ -398,13 +431,17 @@ span.stringIcon {
 
 /* toolbar, to show/hide private, inherited, and extension properties */
 .jsdoc-toolbar {
-	background: rgba(#fff,0.9);
+	background: #fff;
 	padding: 1em;
-	position: fixed;
-    right: 0;
-   	top: $navHeight + $subnavHeight;
+	height:40px;
+   	top: 0;
+   	position: absolute;
+   	right:0;
     z-index: 1000;
     font-size:0.8rem;
+    width: 100%;
+
+    box-shadow: $navShadow
 
     .dijitCheckBox {
     	width: 15px;
@@ -474,11 +511,24 @@ span.stringIcon {
 
 
 h1.jsdoc-title{
+	background-color: $sectionAltBg;
+	background-position: 20px 45%;
 	font-size: $pageHeadingSize * 0.8;
 	font-weight: $pageHeadingWeight;
-	margin: 0.75em 0 0.35em 0;
-	background-position: 0 45%;
+	margin: 40px 0 0 0;
+	padding-top:1.6rem;
+	padding-bottom:1.6rem;
+	padding-left:4.5rem;
+	border-bottom:1px dotted $lightBorder;
+
+	& + .jsdoc-mixins {
+		background-color: darken($sectionAltBg, 3%);
+		margin-bottom:2em;
+		padding-top:0.2rem;
+		padding-bottom:1rem;
+	}
 }
+
 h1.jsdoc-title img {
 	float: left;
 	padding-right: 0.25em;
@@ -487,11 +537,50 @@ h1.jsdoc-title img {
 div.jsdoc-prototype,
 div.jsdoc-mixins,
 .jsdoc-inheritance {
-	font-size: 0.8em;
+	font-size: 0.9em;
+	font-weight:bold;
 	label {
+		margin-top: 1em;
 		margin-right: 1em;
 	}
+
+	a {
+		font-size:1rem;
+		font-family:$codeFont;
+		font-weight: normal;
+	}
 }
+
+
+.jsdoc-function-information {
+	border:1px solid $lightBorder;
+	border-width:1px 0;
+	margin-bottom:2em;
+	padding:1em 0;
+
+	.function-signature {
+		background: $codeBg;
+		border-radius: 6px;
+		color: #fff;
+		display: inline-block;
+		font-family: $codeFont;
+		margin:1.5rem 0;
+		padding: 1em;
+
+		.keyword {
+			color: $keyword;
+		}
+
+		.parameters {
+			color: $params;
+		}
+
+		.jsdoc-inheritance {
+
+		}
+	}
+}
+
 
 div.jsdoc-prototype a,
 div.jsdoc-mixins a,
@@ -509,38 +598,78 @@ span.jsdoc-inheritance {
 	font-weight: normal;
 }
 div.jsdoc-require,
-span.jsdoc-comment-type,
-span.jsdoc-return-type {
+span.jsdoc-comment-type {
 	font-family: $codeFont;
 	font-weight: normal;
 }
 span.parameters{ font-weight: normal; }
-span.jsdoc-comment-type,
-span.jsdoc-return-type {
-	color: #963;
+span.jsdoc-comment-type {
+	color: $dojoOrange;
 }
 div.jsdoc-require {
 	margin: 1em 0;
 }
 div.jsdoc-full-summary {
 	margin: 1em 0;
+	p {
+		line-height: $lineHeight;
+		margin: 0.5em 0;
+	}
+
+	ul,
+	ol {
+		margin-bottom:2em;
+	}
+
+	li {
+		line-height:$lineHeight;
+		margin-bottom:0.5em;
+		max-width:$maxWidth;
+	}
 }
 
 div.jsdoc-children {
 	padding-bottom: 1.5em;
 }
 
-div.jsdoc-children div.jsdoc-fields h2 {
-	font-size: 2rem;
-	font-weight:$pageHeadingWeight;
-	font-family:$headingFont;
+div.jsdoc-children div.jsdoc-fields h2,
+h2.summary,
+h2.usage {
 	color:$headingColor;
+	font-size: 2rem;
 	font-weight:400;
+	font-family:$headingFont;
+	margin-top:0;
+	padding-top:0.5em;
 }
 
-.returns {
-	margin-right:0.5em;
+.returnsInfo {
+	font-family: $codeFont;
+
+
+	.returns {
+		background-color:darken($dojoBlue, 10%);
+		color:#fff;
+		text-transform: uppercase;
+		padding:0.25em 0.5em;
+		display:inline-block;
+		font-weight:normal;
+	}
+
+	span.jsdoc-return-type {
+		background-color:$softBlack;
+		color:#fff;
+		padding:0.25em 0.5em;
+		display:inline-block;
+
+		link(#fff);
+		a {
+			text-decoration: underline;
+		}
+	}
 }
+
+
 
 
 div.jsdoc-children div.jsdoc-field-list div.jsdoc-field {
@@ -548,19 +677,66 @@ div.jsdoc-children div.jsdoc-field-list div.jsdoc-field {
 	clear: both;
 }
 div.jsdoc-children div.jsdoc-fields div.jsdoc-field {
-	padding: 2em 1em;
+	padding: 1.5em 1em;
 	clear: both;
 	border-bottom: 1px solid $lightBorder;
 }
 div.jsdoc-children .odd {
-	background-color: #fff;
+	background-color: $sectionAltBg;
+}
+
+.jsdoc-fields {
+	h2 {
+		padding-left:2rem;
+	}
+}
+
+.jsdoc-field {
+	ul,
+	ol {
+		li {
+			p {
+				margin:0.2em 0;
+			}
+		}
+	}
+	.jsdoc-inheritance {
+		margin-bottom: 1.5em;
+	}
+
+	.syntaxhighlighter .line .content {
+		margin-left: 1em !important;
+	}
+
+
+	.jsdoc-inheritance,
+	.jsdoc-full-summary {
+
+	}
+
+	table.jsdoc-parameters {
+
+	}
+
+	.syntaxhighlighter {
+		
+	}
+
+	.jsdoc-example,
+	.jsdoc-full-summary {
+		.syntaxhighlighter {
+		}
+	}
+}
+
+.jsdoc-wrapper {
+	padding:0 2rem;
 }
 
 div.jsdoc-field div.jsdoc-title {
-	font-weight: bold;
 	margin-bottom:0.5em;
 	font-family:$codeFont;
-	font-size:1.2rem;
+	font-size:1.3rem;
 
 	[class*='Icon'] {
 		background-position:0 2px;
@@ -580,11 +756,22 @@ div.jsdoc-field div.jsdoc-return-type {
     margin-top: 0.5em;
 }
 .jsdoc-summary {
-	margin: 1em 0;
+	margin: 0;
+
+	p {
+		margin:0.5em 0;
+	}
 }
 
+table.jsdoc-parameters,
 table.jsdoc-parameters {
 	codeTable();
+}
+
+.dijitTabPane {
+	p {
+		margin-right:1.5rem;
+	}
 }
 
 
@@ -594,10 +781,13 @@ div.jsdoc-fields .jsdoc-example {
 
 div.jsdoc-children div.jsdoc-fields .jsdoc-examples {
 
+	//border-left: 5px solid $lightBorder;
+
 	h2 {
 		color:#000;
 		font-size:1.3rem;
 		font-weight:400;
+		padding-left:0;
 	}
 }
 
@@ -619,7 +809,6 @@ div.jsdoc-summary-list ul li {
 	}
 }
 div.jsdoc-summary-list ul li a {
-	font-weight: bold;
 	font-family:$codeFont;
 }
 div.jsdoc-summary-list ul li span {
@@ -698,7 +887,7 @@ ul.jsdoc-legend img, ul.jsdoc-legend li > span:first-child {
 	.dtk-objects {
 
 		h2 {
-			color: $dojoOrange;
+			color: $secondaryColor;
 			font-size: 1.7rem;
 			font-weight: 300;
 			margin:0.5em 0 0.25em 0;
@@ -718,7 +907,7 @@ ul.jsdoc-legend img, ul.jsdoc-legend li > span:first-child {
 			}
 
 			.dtk-object-description {
-				line-height:1.5;
+				line-height:$lineHeight;
 				font-size: 0.9em;
 			}
 		}
