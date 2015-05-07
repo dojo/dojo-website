@@ -55,7 +55,7 @@ html {
 	z-index:100;
 
 	.tabStripButton {
-		background:$softBlack;
+		background:mix($dojoBlue, $softBlack);
 
 		&:hover {
 			background:$dojoBlue;
@@ -194,36 +194,37 @@ html {
 h2.jsdoc-summary-heading {
 	cursor: pointer;
 	background:$lightBg;
-	border-bottom:1px solid $lightBorder;
+	//border-bottom:1px solid $lightBorder;
 	margin-bottom:0 !important;
-	margin-left: 1.5rem;
-	margin-right: 1.5rem;
 	padding:0.5em;
 
 	& + .jsdoc-summary-list {
-		margin-left: 1.5rem;
-		margin-right: 1.5rem;
+		.jsdoc-property-list {
+			border-top:0;
+		}
+	}
+
+	&:before {
+		content:"\f0da";
+		font-family:"FontAwesome";
+		margin-right:5px;
 	}
 
 	&:hover {
-		background: $sectionAltBg;
+		background: lighten($dojoBlue, 95%);
 	}
 
 	&.open {
-		background:$softBlack;
+		background:$dojoBlue;
 		color:$selectedTextColor;
+		&:before {
+			content:"\f0d7";
+		}
 	}
 
 }
 
-h2.jsdoc-summary-heading span {
-	display: inline-block;
-	width: 16px;
-	height: 16px;
-	background-image: url($imgPath+"/16x16/collapse-sprite.png");
-	background-repeat: no-repeat;
-	background-position: -16px 0;
-}
+
 
 h2.jsdoc-summary-heading .closed {
 	background-position: 0 0;
@@ -431,7 +432,7 @@ span.stringIcon {
 
 /* toolbar, to show/hide private, inherited, and extension properties */
 .jsdoc-toolbar {
-	background: #fff;
+	background: rgba(#fff, 0.92);
 	padding: 1em;
 	height:40px;
    	top: 0;
@@ -464,6 +465,11 @@ span.stringIcon {
 
 
 	.jsdoc-permalink {
+		margin-right:1em;
+	}
+
+	.jsdoc-anchor-link {
+		font-size:1rem;
 		margin-right:1em;
 	}
 
@@ -500,10 +506,10 @@ span.stringIcon {
 	}
 
 	.jsdoc-permalink {
+		font-size:0.9rem;
 	    position : initial;
 	    top : initial;
 	    left : initial;
-	    float : left;
 	    border : none;
 	    width: initial;
 	}
@@ -526,6 +532,10 @@ h1.jsdoc-title{
 		margin-bottom:2em;
 		padding-top:0.2rem;
 		padding-bottom:1rem;
+	}
+
+	& + .summary {
+		margin-top: 1em;
 	}
 }
 
@@ -553,10 +563,16 @@ div.jsdoc-mixins,
 
 
 .jsdoc-function-information {
-	border:1px solid $lightBorder;
+	
 	border-width:1px 0;
-	margin-bottom:2em;
-	padding:1em 0;
+	margin-bottom:1em;
+	padding:1rem 0;
+
+	h2.usage {
+		padding:0;
+		margin:0;
+		font-size:1.4rem;
+	}
 
 	.function-signature {
 		background: $codeBg;
@@ -564,7 +580,7 @@ div.jsdoc-mixins,
 		color: #fff;
 		display: inline-block;
 		font-family: $codeFont;
-		margin:1.5rem 0;
+		margin:1rem 0;
 		padding: 1em;
 
 		.keyword {
@@ -574,9 +590,17 @@ div.jsdoc-mixins,
 		.parameters {
 			color: $params;
 		}
+		.paren,
+		.semi {
+			color: $paren;
+		}
 
-		.jsdoc-inheritance {
+		.eq {
+			color: $eq;
+		}
 
+		.new {
+			color: $new;
 		}
 	}
 }
@@ -636,25 +660,38 @@ div.jsdoc-children div.jsdoc-fields h2,
 h2.summary,
 h2.usage {
 	color:$headingColor;
-	font-size: 2rem;
+	font-size: 1.8rem;
 	font-weight:400;
 	font-family:$headingFont;
 	margin-top:0;
 	padding-top:0.5em;
 }
 
+h2#properties,
+h2#methods,
+h2#events,
+h2.summary {
+	color:#fff;
+	background-color: $dojoBlue;
+	font-size: 2rem;
+	font-weight:300;
+	margin:0;
+	padding-top:1rem;
+	padding-bottom:1rem;
+	idScrollFix(50px);
+}
+
+h2.summary {
+	color: $headingColorAlt;
+	background-color: transparent;
+}
+
+.jsdoc-link {
+	font-family: $codeFont;
+}
+
 .returnsInfo {
 	font-family: $codeFont;
-
-
-	.returns {
-		background-color:darken($dojoBlue, 10%);
-		color:#fff;
-		text-transform: uppercase;
-		padding:0.25em 0.5em;
-		display:inline-block;
-		font-weight:normal;
-	}
 
 	span.jsdoc-return-type {
 		background-color:$softBlack;
@@ -669,7 +706,16 @@ h2.usage {
 	}
 }
 
-
+.returns,
+.jsdoc-mixins label,
+.jsdoc-inheritance label {
+	background-color:darken($dojoBlue, 10%);
+	color:#fff;
+	text-transform: uppercase;
+	padding:0.25em 0.5em;
+	display:inline-block;
+	font-weight:normal;
+}
 
 
 div.jsdoc-children div.jsdoc-field-list div.jsdoc-field {
@@ -701,7 +747,14 @@ div.jsdoc-children .odd {
 		}
 	}
 	.jsdoc-inheritance {
+		color:$softBlack;
+		font-size:0.8rem;
+		margin-top:1rem;
 		margin-bottom: 1.5em;
+
+		a {
+			font-size:0.9rem;
+		}
 	}
 
 	.syntaxhighlighter .line .content {
@@ -726,6 +779,12 @@ div.jsdoc-children .odd {
 	.jsdoc-full-summary {
 		.syntaxhighlighter {
 		}
+	}
+}
+
+.jsdoc-inheritance {
+	label {
+		background-color:$dojoPurple;
 	}
 }
 
@@ -911,5 +970,42 @@ ul.jsdoc-legend img, ul.jsdoc-legend li > span:first-child {
 				font-size: 0.9em;
 			}
 		}
+	}
+}
+
+
+.feedback {
+	margin-left:2rem;
+	font-size:0.9rem;
+}
+
+div[id$='1.3'],
+div[id$='1.4'],
+div[id$='1.5'],
+div[id$='1.6'],
+div[id$='1.7'] {
+	.jsdoc-full-summary,
+	.jsdoc-prototype,
+	.jsdoc-require,
+	.jsdoc-children .jsdoc-field-list,
+	.jsdoc-children .jsdoc-title,
+	.jsdoc-children .jsdoc-inheritance
+	.jsdoc-children .jsdoc-return-type
+	.jsdoc-children .jsdoc-summary,
+	.jsdoc-function-information {
+		padding-left: 1.7rem;
+		padding-right: 1.7rem;
+	}
+
+	.jsdoc-children table.jsdoc-parameters {
+		margin-left: 1.7rem;
+	}
+
+	.jsdoc-prototype {
+		padding-top:1.5rem;
+	}
+
+	div.jsdoc-field div.jsdoc-title {
+		font-size:1rem;
 	}
 }

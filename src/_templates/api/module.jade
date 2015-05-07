@@ -15,7 +15,7 @@ if module.mixins != null
             a.jsdoc-link(href='#{config.contextPath}#{module !=null ? module.version : config.defaultVersion}/#{item.location}') #{item.location}#{idx < module.mixins.length-1 ? ", " : ""}
 div.jsdoc-wrapper.summary
     if module.summary != null
-          h2.summary Summary
+          h2.summary#summary Summary
           div.jsdoc-full-summary !{autoHyperlink(module.summary, config, module.version)}
     if module.description != null
           div.jsdoc-full-summary !{autoHyperlink(module.description, config, module.version)}
@@ -28,13 +28,23 @@ div.jsdoc-wrapper.summary
             h2.usage Usage
             div.function-signature
                 if module.usage.isTopLevelFunction == false
-                    span.keyword var
-                    |  foo = new #{module.location.replace(/.*\//, "")}
+                    span.sig
+                        span.keyword var 
+                        span.var foo 
+                        span.eq = 
+                        span.new new 
+                        span.args #{module.location.replace(/.*\//, "")}
                 else
                     | #{module.location.replace(/.*\//, "")}
-                span.parameters (#{module.usage.parameterList});
+                span.parameters
+                    span.paren (
+                    span.args #{module.usage.parameterList}
+                    span.paren )
+                    span.semi ;
         if module.usage && module.usage.isTopLevelFunction == false
-          div.jsdoc-inheritance Defined by !{autoHyperlink(module.usage.from, config, module.version)}
+          div.jsdoc-inheritance 
+            label Defined by 
+            span !{autoHyperlink(module.usage.from, config, module.version)}
           if module.usage.description !=null
             div.jsdoc-summary
                 #{module.usage.description}
@@ -50,7 +60,7 @@ div.jsdoc-wrapper.summary
                     |  for more information.
     - examples = module.examples
 div.jsdoc-children
-    div.jsdoc-field-list
+    div.jsdoc-field-list.jsdoc-wrapper
         include module/examples.jade
         include module/propertiessummary.jade
         include module/methodssummary.jade
