@@ -33,7 +33,7 @@ module.exports = function (grunt) {
 				options: ejsOptions,
 				src: '<%= config.src %>/documentation/tutorials/',
 				dest: '<%= config.dest %>/documentation/tutorials/',
-				template: '<%= config.src %>/_templates/tutorial.ejs',
+				template: '<%= config.src %>/documentation/tutorials/templates/tutorial.ejs',
 				indexTemplate: '<%= config.src %>/documentation/index.ejs',
 				indexDest: '<%= config.dest %>/documentation/'
 			}
@@ -45,8 +45,8 @@ module.exports = function (grunt) {
 				versions: ['1.6','1.7','1.8','1.9'],
 				src: '<%= config.src %>/documentation/tutorials/',
 				dest: '<%= config.dest %>/documentation/tutorials/',
-				template: '<%= config.src %>/_templates/tutorial_archive.ejs',
-				indexTemplate: '<%= config.src %>/_templates/tutorial_archive_index.ejs',
+				template: '<%= config.src %>/documentation/tutorials/templates/tutorial_archive.ejs',
+				indexTemplate: '<%= config.src %>/documentation/tutorials/templates/tutorial_archive_index.ejs',
 				indexDest: '<%= config.dest %>/documentation/tutorials/'
 			}
 		},
