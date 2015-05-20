@@ -29,6 +29,7 @@ module.exports = function(grunt){
 		guide: config.root+'reference-guide/',
 		license: config.root+'license.html',
 		community: config.root+'community/',
+		guidelines: config.root+'community/guidelines/',
 		roadmap: config.root+'community/roadmap/',
 		vision: config.root+'community/roadmap/vision.html',
 		support: config.root+'community/#support',
@@ -82,6 +83,7 @@ module.exports = function(grunt){
 			{ url: config.urls.support, label: 'Help & Support' },
 			{ url: config.urls.related, label: 'Related Projects'},
 			{ url: config.urls.contribute, label: 'Become a Contributor'},
+			{ url: config.urls.guidelines, label: 'Community Guidelines'},
 		],
 		roadmap: [
 			{ url: config.urls.vision, label: 'Vision'},

@@ -251,6 +251,7 @@ module.exports = function (grunt) {
 			ejs: {
 				files: ['<%= config.src %>/**/*.ejs',
 						'<%= config.src %>/community/roadmap/packages.json',
+						'<%= config.src %>/community/**/*.ejs',
 						'<%= config.src %>/documentation/tutorials/**/*.md',
 						'!<%= config.src %>/images/**/*',
 						'!<%= config.src %>/_templates/tutorial_archive.ejs',
