@@ -20,7 +20,7 @@ module.exports = function (grunt) {
 	 *
 	 **/
 	grunt.registerMultiTask('tutorial_archive', 'Compile old archived tutorials to HTML', function () {
-		var done = this.async(),
+		var //done = this.async(),
 			self = this;
 
 
@@ -107,11 +107,11 @@ module.exports = function (grunt) {
 			});
 
 
-			done(true);
 		}
 
 		self.data.versions.forEach(function(ver) {
 			generateIndex(ver);
+			//done(true);
 		});
 	});
 };

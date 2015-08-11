@@ -51,14 +51,6 @@ module.exports = function (grunt) {
 			}
 		},
 
-		/*refguide: {
-			all: {
-				src: '<%= config.src %>/documentation/reference-guide',
-				dest: '../../../<%= config.dest %>/reference-guide',
-				versions: ['1.6','1.7','1.8','1.9', '1.10']
-			}
-		},*/
-
 		// Compile the Reference Guide and API docs
 		exec: {
 			guide: {
@@ -301,6 +293,8 @@ module.exports = function (grunt) {
 	grunt.loadTasks('tasks');
 
 	grunt.registerTask('default', ['develop']);
+	grunt.registerTask('api', ['spawn']);
+	grunt.registerTask('guide', ['ejs:docs','exec']);
 	grunt.registerTask('docs',['ejs:docs', 'exec', 'spawn', 'sync:apiArchive', 'tutorials', 'tutorial_archive']);
 	grunt.registerTask('up', ['css', 'ejs', 'highlight','sync', 'tutorials', 'tutorial_archive']);
 	grunt.registerTask('css', ['stylus', 'cssmin', 'sync:assets']);

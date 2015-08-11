@@ -25,7 +25,7 @@ module.exports = function (grunt) {
 	entities = new Entities();
 
 	grunt.registerMultiTask('tutorials', 'Compile tutorials to HTML', function () {
-		var done = this.async(),
+		var //done = this.async(),
 			self = this;
 			//grunt.log.ok(path.relative(self.data.src, "./src"));
 
@@ -132,7 +132,7 @@ module.exports = function (grunt) {
 			// tell everyone we are done
 			grunt.log.ok('Created ' + names.length + ' files.');
 
-			done(true);
+			//done(true);
 		}
 
 		function generateIndex() {

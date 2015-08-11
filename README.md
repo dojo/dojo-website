@@ -20,16 +20,16 @@
 
 ### Reference Guide
 
-* Sphinx
+* Requirement: Sphinx
 
 1. `sudo easy_install pip`
 2. `sudo pip install sphinx`
-3. `grunt docs:guide`
+3. `grunt guide`
 
 
 ### API Docs
 
-1. `grunt docs:api`
+1. `grunt api`
 
 
 ## Deployment
