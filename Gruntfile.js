@@ -246,7 +246,7 @@ module.exports = function (grunt) {
 						'<%= config.src %>/community/**/*.ejs',
 						'<%= config.src %>/documentation/tutorials/**/*.md',
 						'!<%= config.src %>/images/**/*',
-						'!<%= config.src %>/_templates/tutorial_archive.ejs',
+						'!**/*/tutorial_archive.ejs',
 						'!<%= config.src %>/_templates/tutorial_archive_index.ejs',
 						'!<%= config.src %>/**/README.md'],
 				tasks: ['ejs', 'tutorials', 'highlight']
