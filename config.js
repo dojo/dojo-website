@@ -11,7 +11,8 @@ module.exports = function(grunt){
 			get major(){ return '1.11' },
 			get minor(){ return '.1'},
 			get full(){ return this.major + this.minor},
-			get cdn(){ return this.full },
+			//get cdn(){ return this.full },
+			get cdn(){ return '1.10.4' },
 		}
 	};
 
