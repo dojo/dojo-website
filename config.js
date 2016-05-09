@@ -1,6 +1,6 @@
 module.exports = function(grunt){
 
-	var config = { }
+	var config = { };
 
 	config.src = 'src';
 	config.dest = 'dist';
@@ -8,8 +8,8 @@ module.exports = function(grunt){
 
 	config.dojo = {
 		ver: {
-			get major(){ return '1.10' },
-			get minor(){ return '.4'},
+			get major(){ return '1.11' },
+			get minor(){ return '.1'},
 			get full(){ return this.major + this.minor},
 			get cdn(){ return this.full },
 		}
@@ -90,7 +90,7 @@ module.exports = function(grunt){
 			{ url: config.urls.roadmap + '#packageStatus', label: 'Package Status'},
 			{ url: config.urls.roadmap + '#getInvolved', label: 'Get Involved'},
 		]
-	}
+	};
 
 	return config;
 }
