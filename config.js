@@ -56,7 +56,8 @@ module.exports = function(grunt){
 		},
 
 		tuts: {
-			hello_dojo: config.root+'documentation/tutorials/'+config.dojo.ver.major+'/hello_dojo',
+			//hello_dojo: config.root+'documentation/tutorials/'+config.dojo.ver.major+'/hello_dojo',
+			hello_dojo: config.root+'documentation/tutorials/1.10/hello_dojo'
 		},
 
 		//Dojo Release URLs
