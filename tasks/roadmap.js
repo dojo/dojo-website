@@ -8,6 +8,8 @@ module.exports = function(grunt){
 	    total: roadmap.packages.length,
 	    planning: 0,
 	    dev: 0,
+	    alpha: 0,
+	    beta: 0,
 	    complete: 0
 	};
 
@@ -20,7 +22,12 @@ module.exports = function(grunt){
 	        case 'dev':
 	            	roadmap.counts.dev++;
 	            	break;
-
+    	 	case 'alpha':
+	        		roadmap.counts.alpha++;
+	        		break;
+	        case 'beta':
+	        		roadmap.counts.beta++;
+	        		break;
 	        case 'complete':
 					roadmap.counts.complete++;
 	            	break;
