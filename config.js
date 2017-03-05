@@ -9,10 +9,10 @@ module.exports = function(grunt){
 	config.dojo = {
 		ver: {
 			get major(){ return '1.12' },
-			get minor(){ return '.1'},
+			get minor(){ return '.2'},
 			get full(){ return this.major + this.minor},
 			//get cdn(){ return this.full },
-			get cdn(){ return '1.11.3' },
+			get cdn(){ return '1.12.1' },
 		}
 	};
 
