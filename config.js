@@ -31,8 +31,6 @@ module.exports = function(grunt){
 		license: config.root+'license.html',
 		community: config.root+'community/',
 		guidelines: config.root+'community/guidelines/',
-		roadmap: config.root+'community/roadmap/',
-		vision: config.root+'community/roadmap/vision.html',
 		support: config.root+'community/#support',
 		related: config.root+'community/#related',
 		tutorials: config.root+'documentation/#tutorials',
@@ -46,7 +44,6 @@ module.exports = function(grunt){
 			github: 'https://github.com/dojo',
 			googlePlus: 'https://plus.google.com/106701567946037375891/posts',
 			irc: 'http://irc.lc/freenode/dojo/dtk_web_client@@@',
-			gitter: 'https://gitter.im/dojo/dojo2',
 			mailingList: 'http://mail.dojotoolkit.org/mailman/listinfo/dojo-interest',
 			stackoverflow: 'http://stackoverflow.com/questions/tagged/dojo',
 			twitter: 'http://twitter.com/dojo',
@@ -89,11 +86,6 @@ module.exports = function(grunt){
 			{ url: config.urls.contribute, label: 'Become a Contributor'},
 			{ url: config.urls.guidelines, label: 'Community Guidelines'},
 		],
-		roadmap: [
-			{ url: config.urls.vision, label: 'Vision'},
-			{ url: config.urls.roadmap + '#packageStatus', label: 'Package Status'},
-			{ url: config.urls.roadmap + '#getInvolved', label: 'Get Involved'},
-		]
 	};
 
 	return config;
