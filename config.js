@@ -50,7 +50,8 @@ module.exports = function(grunt){
 			mailingList: 'http://mail.dojotoolkit.org/mailman/listinfo/dojo-interest',
 			stackoverflow: 'http://stackoverflow.com/questions/tagged/dojo',
 			twitter: 'http://twitter.com/dojo',
-			dojoFoundation: 'http://dojofoundation.org',
+			dojoFoundation: 'https://js.foundation/',
+			dojoio: 'https://dojo.io/',
 			dstore: 'http://dstorejs.io',
 			dgrid: 'http://dgrid.io',
 			intern: 'http://theintern.io'
