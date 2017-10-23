@@ -44,6 +44,7 @@ module.exports = function(grunt){
 			github: 'https://github.com/dojo',
 			googlePlus: 'https://plus.google.com/106701567946037375891/posts',
 			irc: 'http://irc.lc/freenode/dojo/dtk_web_client@@@',
+			gitter: 'https://gitter.im/dojo/dojo',
 			mailingList: 'http://mail.dojotoolkit.org/mailman/listinfo/dojo-interest',
 			stackoverflow: 'http://stackoverflow.com/questions/tagged/dojo',
 			twitter: 'http://twitter.com/dojo',
