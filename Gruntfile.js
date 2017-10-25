@@ -7,15 +7,11 @@ module.exports = function (grunt) {
 	// Build config variables
 	var config = require('./config.js')(grunt);
 
-	// Reads and parses the roadmap json
-	var roadmap = require('./tasks/roadmap.js')(grunt);
-
 
 	var ejsOptions = {
 		dojo: config.dojo,
 		url: config.urls,
 		rev: Date.now(),
-		roadmap: roadmap
 	};
 
 
@@ -242,7 +238,6 @@ module.exports = function (grunt) {
 		watch: {
 			ejs: {
 				files: ['<%= config.src %>/**/*.ejs',
-						'<%= config.src %>/community/roadmap/packages.json',
 						'<%= config.src %>/community/**/*.ejs',
 						'<%= config.src %>/documentation/tutorials/**/*.md',
 						'!<%= config.src %>/images/**/*',
