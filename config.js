@@ -38,14 +38,14 @@ module.exports = function(grunt){
 
 		//External
 		ext: {
-			bugTracker: 'https://bugs.dojotoolkit.org/',
+			bugTracker: 'https://github.com/dojo/dojo',
 			commercialSupport: 'http://www.sitepen.com/support/index.html',
 			facebook: 'https://www.facebook.com/groups/4375511291/',
 			github: 'https://github.com/dojo',
 			googlePlus: 'https://plus.google.com/106701567946037375891/posts',
 			irc: 'http://irc.lc/freenode/dojo/dtk_web_client@@@',
 			gitter: 'https://gitter.im/dojo/dojo',
-			mailingList: 'http://mail.dojotoolkit.org/mailman/listinfo/dojo-interest',
+			mailingList: 'https://discourse.dojo.io/c/dojo1',
 			stackoverflow: 'http://stackoverflow.com/questions/tagged/dojo',
 			twitter: 'http://twitter.com/dojo',
 			jsFoundation: 'https://js.foundation/',
