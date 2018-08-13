@@ -8,11 +8,11 @@ module.exports = function(grunt){
 
 	config.dojo = {
 		ver: {
-			get major(){ return '1.13' },
+			get major(){ return '1.14' },
 			get minor(){ return '.0'},
 			get full(){ return this.major + this.minor},
 			//get cdn(){ return this.full },
-			get cdn(){ return '1.12.2' },
+			get cdn(){ return '1.13.0' },
 		}
 	};
 
