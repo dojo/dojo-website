@@ -12,7 +12,7 @@ module.exports = function(grunt){
 			get minor(){ return '.1'},
 			get full(){ return this.major + this.minor},
 			//get cdn(){ return this.full },
-			get cdn(){ return '1.13.0' },
+			get cdn(){ return '1.14.1' },
 		}
 	};
 
