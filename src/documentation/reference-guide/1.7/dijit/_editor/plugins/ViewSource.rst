@@ -23,7 +23,7 @@ Once required in and enabled, this plugin provides the following features to dij
 * Button with icon in toolbar for switching the view of the content from RTE to Source mode and back
 * Keyboard hotkey: CTRL-SHIFT-F12 toggles between source and RTE mode of the content.
 * Works well when paired with the FullScreen plugin.  This plugin is 'FullScreen' aware and will behave appropriately.
-* Built-in filters to strip out potentially dangerous input from being inserted, such as <script> tags, <iframe> tags, and comment tags, which are often used as a way to do XSS (Cross-SiteScripting hijacks).
+* Built-in filters to strip out potentially dangerous input from being inserted, such as <script> tags, <iframe> tags, and comment tags, which are often used as a way to do XSS (Cross-SiteScripting hijacks).  The filters are applied to the editor's initial content and any time the editor's value is set or retrieved.
 * When enabled, all other RTE plugins are disabled for the duration of the source view.  This is because in source view mode, the other plugins  do not apply.
 * Provides a 'readOnly' mode that, if enabled on the plugin, allows the user to see the source, but they cannot change it.
 
