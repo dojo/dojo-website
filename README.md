@@ -1,4 +1,4 @@
-# dojo-website
+# Introduction to dojo-website
 
 ## Development
 
