@@ -1,4 +1,4 @@
-# dojo-website
+# amazing website
 
 ## Development
 
