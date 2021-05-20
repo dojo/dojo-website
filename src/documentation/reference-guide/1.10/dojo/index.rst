@@ -31,6 +31,12 @@ This package and associated modules break out the functionality that formally wa
 module.  Many of the modules in this package define the "legacy" APIs for modules and packages that now sit in the root
 of the ``dojo`` package.
 
+Content Security Policy
+=======================
+
+Context Security Policy (CSP) is not a Dojo technology, but a security standard that affects how Dojo functions.
+Information about using Dojo with a strict CSP configuration is in the :ref:`CSP guide <dojo/csp>`.
+
 Areas of Functionality
 ======================
 
