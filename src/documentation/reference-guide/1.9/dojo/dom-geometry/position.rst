@@ -18,7 +18,7 @@ window scrolling), otherwise they are relative to the current viewport. The retu
 
 .. js ::
 
-  { w: 300: h: 150, x: 700, y: 900, }
+  { w: 300, h: 150, x: 700, y: 900, }
 
 for a node with a width of 300px and a height of 150px, with page absolute coordinates of 700px on the x-axis and 900px
 on the y-axis.
