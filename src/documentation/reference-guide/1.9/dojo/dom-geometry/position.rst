@@ -30,8 +30,10 @@ Usage
 
   require(["dojo/dom-geometry", "dojo/dom", "dojo/dom-style"], function(domGeom, dom, style){
     var node = dom.byId("someNode");
-    var includeScroll = false;
-    var output = domGeom.position(node, includeScroll);
+    if(node){
+        var includeScroll = false;
+        var output = domGeom.position(node, includeScroll);
+    }
   });
 
 Attributes
@@ -60,8 +62,10 @@ Basic usage
     function(domGeom, dom, on, JSON){
       on(dom.byId("command"), "click", function(){
         var node = dom.byId("example");
-        var output = domGeom.position(node);
-        dom.byId("output").innerHTML = JSON.stringify(output);
+        if(node){
+            var output = domGeom.position(node);
+            dom.byId("output").innerHTML = JSON.stringify(output);
+        }
       });
     });
 
