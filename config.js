@@ -39,7 +39,7 @@ module.exports = function(grunt){
 		//External
 		ext: {
 			bugTracker: 'https://github.com/dojo/dojo',
-			commercialSupport: 'http://www.sitepen.com/support/index.html',
+			commercialSupport: 'https://www.sitepen.com',
 			facebook: 'https://www.facebook.com/groups/4375511291/',
 			github: 'https://github.com/dojo',
 			googlePlus: 'https://plus.google.com/106701567946037375891/posts',
@@ -50,8 +50,8 @@ module.exports = function(grunt){
 			twitter: 'http://twitter.com/DojoFramework',
 			jsFoundation: 'https://openjsf.org/',
 			dojoio: 'https://dojo.io/',
-			dstore: 'http://dstorejs.io',
-			dgrid: 'http://dgrid.io',
+			dstore: 'https://dstorejs.io',
+			dgrid: 'https://dgrid.io',
 			intern: 'http://theintern.io'
 		},
 
@@ -63,7 +63,7 @@ module.exports = function(grunt){
 		//Dojo Release URLs
 		dojo: {
 			get cdn(){ return '//ajax.googleapis.com/ajax/libs/dojo/'+config.dojo.ver.cdn+'/dojo/dojo.js'},
-			download: 'http://download.dojotoolkit.org',
+			download: 'https://download.dojotoolkit.org',
 			get release(){ return this.download+'/release-'+config.dojo.ver.full },
 			get sourceTar() { return this.release+'/dojo-release-'+config.dojo.ver.full+'-src.tar.gz'},
 			get sourceZip() { return this.release+'/dojo-release-'+config.dojo.ver.full+'-src.zip'},
